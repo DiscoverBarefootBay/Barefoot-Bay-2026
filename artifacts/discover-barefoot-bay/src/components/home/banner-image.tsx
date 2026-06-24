@@ -152,7 +152,7 @@ export function BannerImage({
       const isImagePath = normalizedPath.match(/\.(jpg|jpeg|png|gif|webp|svg|avif)$/i);
       if (!isImagePath) {
         console.error(`Invalid banner image format: ${normalizedPath}. Must be jpg, jpeg, png, gif, webp, svg, or avif.`);
-        return '/public/banner-placeholder.jpg';
+        return '/banner-placeholder.jpg';
       }
     }
 
@@ -168,7 +168,7 @@ export function BannerImage({
   // Completely rewritten with anti-cycle protection
   const tryAlternatePath = () => {
     // Don't retry if already using placeholder or component is unmounting
-    if (imageSrc === '/public/banner-placeholder.jpg' || !isMounted.current) {
+    if (imageSrc === '/banner-placeholder.jpg' || !isMounted.current) {
       if (isMounted.current) {
         setError(true);
       }
@@ -192,7 +192,7 @@ export function BannerImage({
       // Hard cap on attempts to prevent runaway loops
       if (fallbackAttempt >= 2) {
         console.log(`[Banner] Max fallback attempts (${fallbackAttempt}) reached for ${filename}, using placeholder`);
-        setImageSrc('/public/banner-placeholder.jpg');
+        setImageSrc('/banner-placeholder.jpg');
         setError(true);
         return;
       }
@@ -261,7 +261,7 @@ export function BannerImage({
       // Use an even longer timeout for the placeholder to give other attempts time
       setTimeout(() => {
         if (isMounted.current) {
-          setImageSrc('/public/banner-placeholder.jpg');
+          setImageSrc('/banner-placeholder.jpg');
           setError(true);
         }
       }, 100);
@@ -272,7 +272,7 @@ export function BannerImage({
       // In case of error, use placeholder with delay
       setTimeout(() => {
         if (isMounted.current) {
-          setImageSrc('/public/banner-placeholder.jpg');
+          setImageSrc('/banner-placeholder.jpg');
           setError(true);
         }
       }, 50);
@@ -284,7 +284,7 @@ export function BannerImage({
     if (!isMounted.current) return;
     
     // If this is already the placeholder, don't try to handle error
-    if (imageSrc === '/public/banner-placeholder.jpg') {
+    if (imageSrc === '/banner-placeholder.jpg') {
       setError(true);
       setLoaded(true);
       return;

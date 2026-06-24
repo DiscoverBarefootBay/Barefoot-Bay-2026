@@ -474,7 +474,7 @@ export function BannerSlideEditor({ slide, index, isOpen, onClose, onSave, onDel
                       loop
                       muted
                       autoPlay
-                      poster="/public/banner-placeholder.jpg"
+                      poster="/banner-placeholder.jpg"
                       onError={(e) => {
                         console.error("Video preview error:", e);
                         
@@ -589,7 +589,7 @@ export function BannerSlideEditor({ slide, index, isOpen, onClose, onSave, onDel
                         
                         // If all else fails, use a placeholder
                         console.error("Could not load image from any source");
-                        imgElement.src = '/public/banner-placeholder.jpg';
+                        imgElement.src = '/banner-placeholder.jpg';
                         
                         // Show a visual indicator overlaid on the image
                         const container = imgElement.parentElement;

@@ -11,7 +11,7 @@ export function clearMediaCache(paths: string[] = []) {
   // Default paths to clear
   const defaultPaths = [
     '/uploads/banner-slides/placeholder-banner.png',
-    '/public/banner-placeholder.jpg'
+    '/banner-placeholder.jpg'
   ];
   
   // Combine default and custom paths

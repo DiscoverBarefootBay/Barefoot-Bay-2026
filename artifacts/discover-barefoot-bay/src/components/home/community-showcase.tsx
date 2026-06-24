@@ -57,28 +57,28 @@ export interface BannerSlide {
 // Initial banner slides data
 const defaultCommunityImages: BannerSlide[] = [
   {
-    src: "/public/banner-placeholder.jpg",
+    src: "/banner-placeholder.jpg",
     alt: "Barefoot Bay Golf Course",
     caption: "World-Class Golf Course",
     link: "/banner#slide1",
     buttonText: "Explore Amenities"
   },
   {
-    src: "/public/banner-placeholder.jpg",
+    src: "/banner-placeholder.jpg",
     alt: "Barefoot Bay Tennis Courts",
     caption: "Premier Tennis & Pickleball Facilities",
     link: "/banner#slide2",
     buttonText: "Explore Amenities"
   },
   {
-    src: "/public/banner-placeholder.jpg",
+    src: "/banner-placeholder.jpg",
     alt: "Barefoot Bay Community Pool",
     caption: "Resort-Style Swimming Pools",
     link: "/banner#slide3",
     buttonText: "Explore Amenities"
   },
   {
-    src: "/public/banner-placeholder.jpg",
+    src: "/banner-placeholder.jpg",
     alt: "Barefoot Bay Clubhouse",
     caption: "Elegant Community Clubhouse",
     link: "/banner#slide4",
@@ -291,7 +291,7 @@ export function CommunityShowcase() {
     try {
       // Create a new blank slide
       const newSlide: BannerSlide = {
-        src: "/public/banner-placeholder.jpg", // Use a reliable placeholder image
+        src: "/banner-placeholder.jpg", // Use a reliable placeholder image
         alt: "New Banner Slide",
         caption: "New Banner Slide",
         link: "/",

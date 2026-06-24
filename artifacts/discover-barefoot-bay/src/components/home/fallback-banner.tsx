@@ -44,7 +44,7 @@ const FallbackBanner: React.FC<FallbackBannerProps> = ({
       `/api/storage-proxy/BANNER/banner-slides/${filename}`,
       `/api/storage-proxy/DEFAULT/banner-slides/${filename}`,
       // Fallback placeholder
-      '/public/banner-placeholder.jpg'
+      '/banner-placeholder.jpg'
     ];
     
     setAlternativePaths(paths);
@@ -82,7 +82,7 @@ const FallbackBanner: React.FC<FallbackBannerProps> = ({
           className={`w-full h-full object-cover ${loaded ? 'opacity-100' : 'opacity-0'}`}
           onLoadedData={handleLoad}
           onError={handleError}
-          poster="/public/banner-placeholder.jpg"
+          poster="/banner-placeholder.jpg"
         />
       ) : (
         // Try all alternative paths using multiple img elements with only the first visible

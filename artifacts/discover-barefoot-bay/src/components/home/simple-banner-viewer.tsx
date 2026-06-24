@@ -82,7 +82,7 @@ export const SimpleBannerViewer: React.FC<SimpleBannerViewerProps> = ({
           muted
           loop
           playsInline
-          poster="/public/banner-placeholder.jpg"
+          poster="/banner-placeholder.jpg"
           onError={handleError}
           onLoadedData={handleLoad}
           aria-label={alt}

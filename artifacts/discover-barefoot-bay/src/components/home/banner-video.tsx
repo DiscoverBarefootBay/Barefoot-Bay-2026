@@ -732,7 +732,7 @@ export const BannerVideo = forwardRef<HTMLVideoElement, BannerVideoProps>((props
       playsInline
       controls={controls}
       preload={preload}
-      poster="/public/banner-placeholder.jpg" // Show placeholder until video loads
+      poster="/banner-placeholder.jpg" // Show placeholder until video loads
       aria-label={alt}
       onError={handleVideoError}
       onLoadedData={handleVideoLoaded}
