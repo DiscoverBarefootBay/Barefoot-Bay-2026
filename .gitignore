@@ -47,3 +47,6 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Migration backups — never commit large backup archives to git
+.migration-backup/
