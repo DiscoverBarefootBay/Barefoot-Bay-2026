@@ -1,0 +1,222 @@
+3530-a988af0b1a0bc335.js:1 Replit version 645a5c8c, pid2 version 0.0.1312
+_app-0b73230d9fff652f.js:38 
+      /////////////////////
+   ///////////////////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////        Curious and driven?
+  ///////////////@@@@@@@///////        Work with us!
+  ///////////////@@@@@@@///////
+  ///////////////@@@@@@@///////        https://join.replit.com/hack.with.us
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@#//////////////
+   ///////////////////////////
+      /////////////////////
+      
+_app-0b73230d9fff652f.js:38 [LaunchDarkly] LaunchDarkly client initialized
+_app-0b73230d9fff652f.js:38 [LaunchDarkly] Opening stream connection to https://clientstream.launchdarkly.com/eval/62b35a865152ab14c5942820/eyJrZXkiOiIzNjgzMjE3MCIsImtpbmQiOiJ1c2VyIiwibmFtZSI6Im1hZzA5MjU5MyIsInJvbGVzIjpbImV4cGxvcmVyIiwib25ib2FyZGluZ19leHBlcmllbmNlX2xvdyIsImludGVudF9wZXJzb25hbCJdLCJlbWFpbCI6Im1hZzA5MjU5M0BnbWFpbC5jb20iLCJ0aW1lX2NyZWF0ZWQiOjE3Mjc0NjAzNTE1NzgsIl9tZXRhIjp7InByaXZhdGVBdHRyaWJ1dGVzIjpbImVtYWlsIl19fQ
+Grammarly-check.js:1 [Violation] Permissions policy violation: unload is not allowed in this document.
+(anonymous) @ Grammarly-check.js:1
+Barefoot-Bay:1 Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+framework-baa5188623bf7a1a.js:1 Unrecognized feature: 'ambient-light-sensor'.
+_ @ framework-baa5188623bf7a1a.js:1
+framework-baa5188623bf7a1a.js:1 Unrecognized feature: 'battery'.
+_ @ framework-baa5188623bf7a1a.js:1
+framework-baa5188623bf7a1a.js:1 Unrecognized feature: 'execution-while-not-rendered'.
+_ @ framework-baa5188623bf7a1a.js:1
+framework-baa5188623bf7a1a.js:1 Unrecognized feature: 'execution-while-out-of-viewport'.
+_ @ framework-baa5188623bf7a1a.js:1
+framework-baa5188623bf7a1a.js:1 Unrecognized feature: 'layout-animations'.
+_ @ framework-baa5188623bf7a1a.js:1
+framework-baa5188623bf7a1a.js:1 Unrecognized feature: 'legacy-image-formats'.
+_ @ framework-baa5188623bf7a1a.js:1
+framework-baa5188623bf7a1a.js:1 Unrecognized feature: 'navigation-override'.
+_ @ framework-baa5188623bf7a1a.js:1
+framework-baa5188623bf7a1a.js:1 Unrecognized feature: 'oversized-images'.
+_ @ framework-baa5188623bf7a1a.js:1
+framework-baa5188623bf7a1a.js:1 Unrecognized feature: 'publickey-credentials'.
+_ @ framework-baa5188623bf7a1a.js:1
+framework-baa5188623bf7a1a.js:1 Unrecognized feature: 'speaker-selection'.
+_ @ framework-baa5188623bf7a1a.js:1
+framework-baa5188623bf7a1a.js:1 Unrecognized feature: 'unoptimized-images'.
+_ @ framework-baa5188623bf7a1a.js:1
+framework-baa5188623bf7a1a.js:1 Unrecognized feature: 'unsized-media'.
+_ @ framework-baa5188623bf7a1a.js:1
+framework-baa5188623bf7a1a.js:1 Unrecognized feature: 'pointer-lock'.
+_ @ framework-baa5188623bf7a1a.js:1
+framework-baa5188623bf7a1a.js:1 Allow attribute will take precedence over 'allowfullscreen'.
+_ @ framework-baa5188623bf7a1a.js:1
+framework-baa5188623bf7a1a.js:1 Allow attribute will take precedence over 'allowpaymentrequest'.
+_ @ framework-baa5188623bf7a1a.js:1
+_app-0b73230d9fff652f.js:38 Invalid href 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev//messages' passed to next/router in page: '/replEnvironmentDesktop'. Repeated forward-slashes (//) or backslashes \ are not valid in the href.
+(anonymous) @ _app-0b73230d9fff652f.js:38
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1e4%3A:32 Unrecognized feature: 'ambient-light-sensor'.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1e4%3A:32 Unrecognized feature: 'battery'.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1e4%3A:32 Unrecognized feature: 'execution-while-not-rendered'.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1e4%3A:32 Unrecognized feature: 'execution-while-out-of-viewport'.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1e4%3A:32 Unrecognized feature: 'layout-animations'.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1e4%3A:32 Unrecognized feature: 'legacy-image-formats'.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1e4%3A:32 Unrecognized feature: 'navigation-override'.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1e4%3A:32 Unrecognized feature: 'oversized-images'.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1e4%3A:32 Unrecognized feature: 'publickey-credentials'.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1e4%3A:32 Unrecognized feature: 'speaker-selection'.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1e4%3A:32 Unrecognized feature: 'unoptimized-images'.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1e4%3A:32 Unrecognized feature: 'unsized-media'.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1e4%3A:32 Allow attribute will take precedence over 'allowfullscreen'.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1e4%3A:32 Allow attribute will take precedence over 'allowpaymentrequest'.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/replit-ready.js:1 Failed to load module script: Expected a JavaScript module script but the server responded with a MIME type of "text/html". Strict MIME type checking is enforced for module scripts per HTML spec.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/:1 Refused to execute script from 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/clear-cache.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747440908133-453593972.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746642868323-813961429.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747440908133-453593972.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747440908133-453593972.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747440908133-453593972.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746642868323-813961429.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747440908133-453593972.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747440908133-453593972.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+_app-0b73230d9fff652f.js:38 Invalid href 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev//messages' passed to next/router in page: '/replEnvironmentDesktop'. Repeated forward-slashes (//) or backslashes \ are not valid in the href.
+(anonymous) @ _app-0b73230d9fff652f.js:38
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/replit-ready.js:1 Failed to load module script: Expected a JavaScript module script but the server responded with a MIME type of "text/html". Strict MIME type checking is enforced for module scripts per HTML spec.
+messages:1 Refused to execute script from 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/clear-cache.js?_t=1747676233307' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.
+messages:1 Refused to execute script from 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/clear-cache.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.
+index-CL5mRiPL.js:41 Uncaught ReferenceError: format is not defined
+    at j (chat-Cz_XmaUw.js:1:9718)
+    at X (chat-Cz_XmaUw.js:1:10066)
+    at Zj (index-CL5mRiPL.js:39:17018)
+    at GT (index-CL5mRiPL.js:41:44058)
+    at VT (index-CL5mRiPL.js:41:39790)
+    at IB (index-CL5mRiPL.js:41:39718)
+    at zg (index-CL5mRiPL.js:41:39570)
+    at z1 (index-CL5mRiPL.js:41:35934)
+    at BT (index-CL5mRiPL.js:41:34883)
+    at w (index-CL5mRiPL.js:26:1543)
+
+                
+          
+          
+          
+         Chrome is moving towards a new experience that allows users to choose to browse without third-party cookies.
+
+                
+          
+          
+          
+         Chrome is moving towards a new experience that allows users to choose to browse without third-party cookies.

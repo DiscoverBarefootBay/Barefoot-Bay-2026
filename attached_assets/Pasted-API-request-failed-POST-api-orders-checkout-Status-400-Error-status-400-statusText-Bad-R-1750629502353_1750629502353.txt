@@ -1,0 +1,66 @@
+API request failed: POST /api/orders/checkout - Status: 400 
+Error {status: 400, statusText: "Bad Request", response: Response}
+response: Response
+status: 400
+statusText: "Bad Request"
+message: "HTTP error! Status: 400"
+stack: "Error: HTTP error! Status: 400↵ at Ie (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CFfCJ5VQ.js:58:1603)↵ at async Object.mutationFn (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CFfCJ5VQ.js:2499:47213)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object
+
+API request failed: POST /api/orders/checkout 
+Error {status: 400, statusText: "Bad Request", response: Response}
+response: Response
+status: 400
+statusText: "Bad Request"
+message: "HTTP error! Status: 400"
+stack: "Error: HTTP error! Status: 400↵ at Ie (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CFfCJ5VQ.js:58:1603)↵ at async Object.mutationFn (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CFfCJ5VQ.js:2499:47213)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object
+
+Checkout error: 
+Error {status: 400, statusText: "Bad Request", response: Response}
+response: Response
+status: 400
+statusText: "Bad Request"
+message: "HTTP error! Status: 400"
+stack: "Error: HTTP error! Status: 400↵ at Ie (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CFfCJ5VQ.js:58:1603)↵ at async Object.mutationFn (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CFfCJ5VQ.js:2499:47213)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object
+
+API request failed: POST /api/orders/checkout - Status: 400 
+Error {status: 400, statusText: "Bad Request", response: Response}
+response: Response
+status: 400
+statusText: "Bad Request"
+message: "HTTP error! Status: 400"
+stack: "Error: HTTP error! Status: 400↵ at Ie (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CFfCJ5VQ.js:58:1603)↵ at async Object.mutationFn (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CFfCJ5VQ.js:2499:47213)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object
+
+API request failed: POST /api/orders/checkout 
+Error {status: 400, statusText: "Bad Request", response: Response}
+response: Response
+status: 400
+statusText: "Bad Request"
+message: "HTTP error! Status: 400"
+stack: "Error: HTTP error! Status: 400↵ at Ie (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CFfCJ5VQ.js:58:1603)↵ at async Object.mutationFn (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CFfCJ5VQ.js:2499:47213)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object
+
+Checkout error: 
+Error {status: 400, statusText: "Bad Request", response: Response}
+response: Response
+status: 400
+statusText: "Bad Request"
+message: "HTTP error! Status: 400"
+stack: "Error: HTTP error! Status: 400↵ at Ie (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CFfCJ5VQ.js:58:1603)↵ at async Object.mutationFn (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CFfCJ5VQ.js:2499:47213)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object
+

@@ -1,0 +1,27 @@
+# Only exclude backups folder and development files
+# but keep all media that's needed for the site
+uploads/backups/
+
+# Development files
+node_modules/
+.git/
+
+# Generated files not needed in deployment
+ai-generate-*.js
+*.log
+logs/
+
+# Documentation and non-essential files
+*.md
+*.txt
+*.csv
+*.xlsx
+*.xls
+*.zip
+*.tar.gz
+
+# Keep critical files
+!README.md
+!package.json
+!deploy.sh
+!deployment.js

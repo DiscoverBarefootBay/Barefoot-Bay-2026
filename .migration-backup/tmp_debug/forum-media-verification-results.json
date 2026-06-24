@@ -1,0 +1,52 @@
+{
+  "timestamp": "2025-05-04T23:11:02.309Z",
+  "testFile": {
+    "bucket": "FORUM",
+    "filename": "forum-test-1746400260423.txt",
+    "storageKey": "forum/forum-test-1746400260423.txt"
+  },
+  "results": [
+    {
+      "format": "Standard storage proxy",
+      "url": "/api/storage-proxy/FORUM/forum/forum-test-1746400260423.txt",
+      "status": 200,
+      "success": false,
+      "content": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"800..."
+    },
+    {
+      "format": "Direct forum endpoint",
+      "url": "/api/storage-proxy/direct-forum/forum-test-1746400260423.txt",
+      "status": 200,
+      "success": true,
+      "content": "This is a test file for forum media verification. ..."
+    },
+    {
+      "format": "Simple forum format",
+      "url": "/api/storage-proxy/forum/forum-test-1746400260423.txt",
+      "status": 200,
+      "success": true,
+      "content": "This is a test file for forum media verification. ..."
+    },
+    {
+      "format": "Legacy forum-media",
+      "url": "/forum-media/forum-test-1746400260423.txt",
+      "status": 200,
+      "success": true,
+      "content": "This is a test file for forum media verification. ..."
+    },
+    {
+      "format": "Legacy uploads/forum",
+      "url": "/uploads/forum/forum-test-1746400260423.txt",
+      "status": 200,
+      "success": true,
+      "content": "This is a test file for forum media verification. ..."
+    },
+    {
+      "format": "Direct FORUM bucket",
+      "url": "/FORUM/forum/forum-test-1746400260423.txt",
+      "status": 200,
+      "success": true,
+      "content": "This is a test file for forum media verification. ..."
+    }
+  ]
+}

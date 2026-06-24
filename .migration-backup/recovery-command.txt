@@ -1,0 +1,1 @@
+node run-personalization-batches.cjs 33 10 2

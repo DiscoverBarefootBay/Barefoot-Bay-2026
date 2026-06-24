@@ -1,0 +1,300 @@
+3530-bc9da353737ea253.js:1 Replit version dfdee6c9, pid2 version 0.0.1312
+_app-469d78abcda00912.js:38 
+      /////////////////////
+   ///////////////////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////        Curious and driven?
+  ///////////////@@@@@@@///////        Work with us!
+  ///////////////@@@@@@@///////
+  ///////////////@@@@@@@///////        https://join.replit.com/hack.with.us
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@#//////////////
+   ///////////////////////////
+      /////////////////////
+      
+_app-469d78abcda00912.js:38 [LaunchDarkly] LaunchDarkly client initialized
+Barefoot-Bay:1 Access to fetch at 'https://sp.replit.com/v1/i' from origin 'https://replit.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+sp.replit.com/v1/i:1 
+            
+            
+           Failed to load resource: net::ERR_FAILED
+_app-469d78abcda00912.js:38 [LaunchDarkly] Opening stream connection to https://clientstream.launchdarkly.com/eval/62b35a865152ab14c5942820/eyJrZXkiOiIzNjgzMjE3MCIsImtpbmQiOiJ1c2VyIiwibmFtZSI6Im1hZzA5MjU5MyIsInJvbGVzIjpbImV4cGxvcmVyIiwib25ib2FyZGluZ19leHBlcmllbmNlX2xvdyIsImludGVudF9wZXJzb25hbCJdLCJlbWFpbCI6Im1hZzA5MjU5M0BnbWFpbC5jb20iLCJ0aW1lX2NyZWF0ZWQiOjE3Mjc0NjAzNTE1NzgsIl9tZXRhIjp7InByaXZhdGVBdHRyaWJ1dGVzIjpbImVtYWlsIl19fQ
+Grammarly-check.js:1 [Violation] Permissions policy violation: unload is not allowed in this document.
+(anonymous) @ Grammarly-check.js:1
+Barefoot-Bay:1 Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner.
+framework-9212ebbed4e4b182.js:1 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-9212ebbed4e4b182.js:1
+framework-9212ebbed4e4b182.js:1 Unrecognized feature: 'ambient-light-sensor'.
+_ @ framework-9212ebbed4e4b182.js:1
+framework-9212ebbed4e4b182.js:1 Unrecognized feature: 'battery'.
+_ @ framework-9212ebbed4e4b182.js:1
+framework-9212ebbed4e4b182.js:1 Unrecognized feature: 'execution-while-not-rendered'.
+_ @ framework-9212ebbed4e4b182.js:1
+framework-9212ebbed4e4b182.js:1 Unrecognized feature: 'execution-while-out-of-viewport'.
+_ @ framework-9212ebbed4e4b182.js:1
+framework-9212ebbed4e4b182.js:1 Unrecognized feature: 'layout-animations'.
+_ @ framework-9212ebbed4e4b182.js:1
+framework-9212ebbed4e4b182.js:1 Unrecognized feature: 'legacy-image-formats'.
+_ @ framework-9212ebbed4e4b182.js:1
+framework-9212ebbed4e4b182.js:1 Unrecognized feature: 'navigation-override'.
+_ @ framework-9212ebbed4e4b182.js:1
+framework-9212ebbed4e4b182.js:1 Unrecognized feature: 'oversized-images'.
+_ @ framework-9212ebbed4e4b182.js:1
+framework-9212ebbed4e4b182.js:1 Unrecognized feature: 'publickey-credentials'.
+_ @ framework-9212ebbed4e4b182.js:1
+framework-9212ebbed4e4b182.js:1 Unrecognized feature: 'speaker-selection'.
+_ @ framework-9212ebbed4e4b182.js:1
+framework-9212ebbed4e4b182.js:1 Unrecognized feature: 'unoptimized-images'.
+_ @ framework-9212ebbed4e4b182.js:1
+framework-9212ebbed4e4b182.js:1 Unrecognized feature: 'unsized-media'.
+_ @ framework-9212ebbed4e4b182.js:1
+framework-9212ebbed4e4b182.js:1 Unrecognized feature: 'pointer-lock'.
+_ @ framework-9212ebbed4e4b182.js:1
+framework-9212ebbed4e4b182.js:1 Allow attribute will take precedence over 'allowfullscreen'.
+_ @ framework-9212ebbed4e4b182.js:1
+framework-9212ebbed4e4b182.js:1 Allow attribute will take precedence over 'allowpaymentrequest'.
+_ @ framework-9212ebbed4e4b182.js:1
+workspace_iframe.html:32 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+workspace_iframe.html:32 Unrecognized feature: 'ambient-light-sensor'.
+workspace_iframe.html:32 Unrecognized feature: 'battery'.
+workspace_iframe.html:32 Unrecognized feature: 'execution-while-not-rendered'.
+workspace_iframe.html:32 Unrecognized feature: 'execution-while-out-of-viewport'.
+workspace_iframe.html:32 Unrecognized feature: 'layout-animations'.
+workspace_iframe.html:32 Unrecognized feature: 'legacy-image-formats'.
+workspace_iframe.html:32 Unrecognized feature: 'navigation-override'.
+workspace_iframe.html:32 Unrecognized feature: 'oversized-images'.
+workspace_iframe.html:32 Unrecognized feature: 'publickey-credentials'.
+workspace_iframe.html:32 Unrecognized feature: 'speaker-selection'.
+workspace_iframe.html:32 Unrecognized feature: 'unoptimized-images'.
+workspace_iframe.html:32 Unrecognized feature: 'unsized-media'.
+workspace_iframe.html:32 Allow attribute will take precedence over 'allowfullscreen'.
+workspace_iframe.html:32 Allow attribute will take precedence over 'allowpaymentrequest'.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/replit-ready.js:1 Failed to load module script: Expected a JavaScript module script but the server responded with a MIME type of "text/html". Strict MIME type checking is enforced for module scripts per HTML spec.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/:1 Refused to execute script from 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/clear-cache.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747440908133-453593972.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746642868323-813961429.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747440908133-453593972.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747440908133-453593972.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747440908133-453593972.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746642868323-813961429.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747440908133-453593972.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747440908133-453593972.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747440908133-453593972.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746642868323-813961429.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746642868323-813961429.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746642868323-813961429.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746642868323-813961429.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747440908133-453593972.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747440908133-453593972.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+_app-469d78abcda00912.js:38 Invalid href 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev//messages' passed to next/router in page: '/replEnvironmentDesktop'. Repeated forward-slashes (//) or backslashes \ are not valid in the href.
+(anonymous) @ _app-469d78abcda00912.js:38
+index-BD4xrHAC.js:41 Uncaught TypeError: Cannot read properties of undefined (reading 'split')
+    at te (chat-EP4BYlNK.js:1:10905)
+    at Zj (index-BD4xrHAC.js:39:17018)
+    at GT (index-BD4xrHAC.js:41:44058)
+    at VT (index-BD4xrHAC.js:41:39790)
+    at IB (index-BD4xrHAC.js:41:39718)
+    at zg (index-BD4xrHAC.js:41:39570)
+    at z1 (index-BD4xrHAC.js:41:35934)
+    at BT (index-BD4xrHAC.js:41:34883)
+    at w (index-BD4xrHAC.js:26:1543)
+    at MessagePort.R (index-BD4xrHAC.js:26:1902)
+
+                
+          
+          
+          
+         Chrome is moving towards a new experience that allows users to choose to browse without third-party cookies.
+
+                
+          
+          
+          
+         Chrome is moving towards a new experience that allows users to choose to browse without third-party cookies.

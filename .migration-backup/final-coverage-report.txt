@@ -1,0 +1,521 @@
+================================================================================
+FINAL SOCIAL CLUB EVENT URL COVERAGE REPORT
+================================================================================
+
+Report Generated: 2025-11-11T06:31:07.319Z
+
+================================================================================
+SUMMARY STATISTICS
+================================================================================
+
+Total Social Club Pages: 92
+  - Clubs with Events Linked: 54
+  - Informational-Only Pages: 34
+  - Unmapped (Needs Review): 4
+
+Total Parent Recurring Events: 182
+  - With Website URLs: 182
+  - Missing URLs: 0
+
+Total Child Events: 3277
+  - With Website URLs: 3277
+  - Missing URLs: 0
+
+OVERALL COVERAGE: 3459/3459 events (100.0%)
+
+================================================================================
+CLUBS WITH LINKED EVENTS
+================================================================================
+
+1. AA Meeting
+   Slug: social-aa-meeting
+   4 recurring event(s) linked
+     - Event 4604: "AA Meeting"
+     - Event 4598: "AA Meeting"
+     - Event 5498: "AA Meeting"
+     - Event 5445: "AA Meeting"
+
+2. American Legion (Mens)
+   Slug: social-american-legion-mens
+   1 recurring event(s) linked
+     - Event 4592: "American Legion (Men)"
+
+3. American Legion - (Ladies)
+   Slug: social-americn-legion-ladies
+   1 recurring event(s) linked
+     - Event 4596: "American Legion (Ladies)"
+
+4. Aqua Zumba
+   Slug: social-aquazumba
+   4 recurring event(s) linked
+     - Event 8631: "Aqua Zumba"
+     - Event 6418: "Aqua Zumba"
+     - Event 4646: "Aqua Zumba"
+     - Event 8665: "Aqua Zumba"
+
+5. Aquatic Exercise
+   Slug: social-aquatic-exercise
+   12 recurring event(s) linked
+     - Event 7430: "Aquatic Exercise"
+     - Event 6996: "Aquatic Exercise"
+     - Event 7932: "Aquatic Exercise"
+     - Event 5973: "Aquatic Exercise"
+     - Event 6513: "Aquatic Exercise"
+     - Event 8968: "Aquatic Exercise"
+     - Event 4639: "Aquatic Exercise"
+     - Event 4625: "Aquatic Exercise"
+     - Event 9067: "Aquatic Exercise"
+     - Event 9100: "Aquatic Exercise"
+     - Event 9034: "Aquatic Exercise"
+     - Event 9001: "Aquatic Exercise"
+
+6. Art Group
+   Slug: social-art-group
+   2 recurring event(s) linked
+     - Event 4697: "Art Group"
+     - Event 6208: "Art Group"
+
+7. Artists Guild
+   Slug: social-artist-guild
+   2 recurring event(s) linked
+     - Event 4711: "Artist Guild"
+     - Event 7885: "Artist Guild"
+
+8. Barefoot Ballroom/Tap
+   Slug: social-barefoot-ballroom-tap
+   1 recurring event(s) linked
+     - Event 4721: "Barefoot Ballroom and Tap (Tap only)"
+
+9. Barefoot Bay Little Theater Club
+   Slug: social-barefoot-bay-little-theater
+   1 recurring event(s) linked
+     - Event 4590: "🎭 Little Theater"
+
+10. Bible Study (Ladies)
+   Slug: social-bible-study-ladies
+   2 recurring event(s) linked
+     - Event 4728: "Bible Study - Ladies"
+     - Event 7289: "Bible Study - Ladies"
+
+11. Bible Study (Men)
+   Slug: social-bible-study-men
+   2 recurring event(s) linked
+     - Event 4735: "Bible Study - Men's"
+     - Event 6560: "Bible Study - Men's"
+
+12. Billiards – Ringers Club
+   Slug: social-billiards-ringers-club
+   4 recurring event(s) linked
+     - Event 6302: "Billiards - Ringers Club"
+     - Event 7524: "Billiards - Ringers Club"
+     - Event 4742: "Billiards - Ringers Club"
+     - Event 4749: "Billiards - Ringers Club"
+
+13. Bocce NH – Tuesdays
+   Slug: social-bocce-nh-tuesdays
+   2 recurring event(s) linked
+     - Event 4757: "Bocce NH - Tuesday"
+     - Event 8706: "Bocce NH - Tuesdays"
+
+14. Bocce – Italian Friday
+   Slug: social-bocce-italian-friday
+   2 recurring event(s) linked
+     - Event 4771: "Bocce Italian - Fridays"
+     - Event 8026: "Bocce Italian - Fridays"
+
+15. Bocce – Thursdays
+   Slug: social-bocce-thursdays
+   1 recurring event(s) linked
+     - Event 8740: "Bocce - Thursdays"
+
+16. Bowling – Lawn Canada
+   Slug: social-bowling-lawn-canada
+   4 recurring event(s) linked
+     - Event 4785: "Bowling - Lawn Canada"
+     - Event 5654: "Bowling - Lawn Canada"
+     - Event 8769: "Bowling - Lawn Canada"
+     - Event 4778: "Bowling - Lawn Canada"
+
+17. Bridge Club – (Monday, Wednesday & Friday)
+   Slug: social-bridge-monday-night
+   2 recurring event(s) linked
+     - Event 4792: "Bridge - Monday Night"
+     - Event 5602: "Bridge - Monday Night"
+
+18. Bridge – Saturday
+   Slug: social-bridge-saturday
+   2 recurring event(s) linked
+     - Event 8360: "Bridge - Saturday"
+     - Event 4799: "Bridge - Saturday"
+
+19. British Club
+   Slug: social-british-club
+   1 recurring event(s) linked
+     - Event 4805: "British Club"
+
+20. Buddies Club
+   Slug: social-buddies-club
+   1 recurring event(s) linked
+     - Event 4807: "Buddies Club"
+
+21. Bunco Club
+   Slug: social-bunco-club
+   1 recurring event(s) linked
+     - Event 4809: "Bunco Club"
+
+22. Canasta Club
+   Slug: social-canasta-club
+   2 recurring event(s) linked
+     - Event 4811: "Canasta Club"
+     - Event 6114: "Canasta Club"
+
+23. Chess Club
+   Slug: social-chess-club
+   2 recurring event(s) linked
+     - Event 4818: "Chess Club"
+     - Event 6855: "Chess Club"
+
+24. Civic Volunteer Organization (CVO)
+   Slug: social-civic-volunteer-organization-cvo
+   34 recurring event(s) linked
+     - Event 9428: "CVO BINGO!"
+     - Event 4944: "Civic Volunteer Organization (CVO)"
+     - Event 4950: "Civic Volunteer Organization (CVO)"
+     - Event 4956: "Civic Volunteer Organization (CVO)"
+     - Event 5818: "Civic Volunteer Organization (CVO)"
+     - Event 5822: "Civic Volunteer Organization (CVO)"
+     - Event 4938: "Civic Volunteer Organization (CVO)"
+     - Event 4932: "Civic Volunteer Organization (CVO)"
+     - Event 5814: "Civic Volunteer Organization (CVO)"
+     - Event 8470: "Senior Lunch - CVO Transportation Provided"
+     - Event 5846: "Senior Lunch - CVO Transportation Provided"
+     - Event 5858: "Senior Lunch - CVO Transportation Provided"
+     - Event 5360: "Senior Lunch - CVO Transportation Provided"
+     - Event 5912: "Senior Lunch - CVO Transportation Provided"
+     - Event 5917: "Senior Lunch - CVO Transportation Provided"
+     - Event 9408: "Senior Lunch - CVO Transportation Provided"
+     - Event 5850: "Senior Lunch - CVO Transportation Provided"
+     - Event 8462: "Senior Lunch - CVO Transportation Provided"
+     - Event 5841: "Senior Lunch - CVO Transportation Provided"
+     - Event 5902: "Senior Lunch - CVO Transportation Provided"
+     - Event 5352: "Senior Lunch - CVO Transportation Provided"
+     - Event 8457: "Senior Lunch - CVO Transportation Provided"
+     - Event 8466: "Senior Lunch - CVO Transportation Provided"
+     - Event 9424: "Senior Lunch - CVO Transportation Provided"
+     - Event 9420: "Senior Lunch - CVO Transportation Provided"
+     - Event 9416: "Senior Lunch - CVO Transportation Provided"
+     - Event 9412: "Senior Lunch - CVO Transportation Provided"
+     - Event 8474: "Senior Lunch - CVO Transportation Provided"
+     - Event 5854: "Senior Lunch - CVO Transportation Provided"
+     - Event 5907: "Senior Lunch - CVO Transportation Provided"
+     - Event 5336: "Senior Lunch - CVO Transportation Provided"
+     - Event 5368: "Senior Lunch - CVO Transportation Provided"
+     - Event 5344: "Senior Lunch - CVO Transportation Provided"
+     - Event 5922: "Senior Lunch - CVO Transportation Provided - Cancelled"
+
+25. Cornhole Club
+   Slug: social-cornhole-club
+   2 recurring event(s) linked
+     - Event 4906: "Cornhole Club"
+     - Event 5926: "Cornhole Club"
+
+26. Crafter’s Club
+   Slug: social-crafters-club
+   3 recurring event(s) linked
+     - Event 7184: "Crafter's Club"
+     - Event 4912: "Crafter's Club"
+     - Event 4924: "Crafter's Club - Quarter Auction"
+
+27. Crafter’s Club – Ceramics
+   Slug: social-crafters-club-ceramics
+   2 recurring event(s) linked
+     - Event 6808: "Crafter's Club - Ceramics"
+     - Event 4918: "Crafter's Club - Ceramics"
+
+28. Darts – Monday Night
+   Slug: social-darts-monday-night
+   2 recurring event(s) linked
+     - Event 4983: "Darts - Monday Night Mixed Blind Draw"
+     - Event 5684: "Darts - Monday Night Mixed Blind Draw"
+
+29. Darts – Thursday (Mixed)
+   Slug: social-darts-thursday-mixed
+   2 recurring event(s) linked
+     - Event 7760: "Darts - Thursday (Mixed)"
+     - Event 4994: "Darts - Thursday (Mixed)"
+
+30. Darts – Thursday (Women’s)
+   Slug: social-darts-thursday-women-s
+   2 recurring event(s) linked
+     - Event 7712: "Darts - Thursday (Women's)"
+     - Event 4988: "Darts - Thursday (Women's)"
+
+31. Darts – Wednesday Mixed
+   Slug: social-darts-wednesday-mixed
+   1 recurring event(s) linked
+     - Event 9375: "Darts - Wednesday (Mixed)"
+
+32. Euchre Club
+   Slug: social-euchre-club
+   1 recurring event(s) linked
+     - Event 9246: "Euchre Club"
+
+33. Horseshoe Club (Ringers)
+   Slug: social-horseshoe-club-ringers
+   5 recurring event(s) linked
+     - Event 5010: "Horseshoe Club (Ringers)"
+     - Event 5015: "Horseshoe Club (Ringers)"
+     - Event 5004: "Horseshoe Club (Ringers)"
+     - Event 8313: "Horseshoe Club (Ringers)"
+     - Event 7571: "Horseshoe Club (Ringers)"
+
+34. Hydrotherapy
+   Slug: social-hydrotherapy
+   9 recurring event(s) linked
+     - Event 5039: "Hydrotherapy"
+     - Event 5024: "Hydrotherapy"
+     - Event 6255: "Hydrotherapy"
+     - Event 5034: "Hydrotherapy"
+     - Event 6949: "Hydrotherapy"
+     - Event 7618: "Hydrotherapy"
+     - Event 5029: "Hydrotherapy"
+     - Event 6607: "Hydrotherapy"
+     - Event 5019: "Hydrotherapy"
+
+35. LOL Youth Group
+   Slug: social-lol-youth-group
+   5 recurring event(s) linked
+     - Event 9142: "LOL Scavenger Hunt (All ages)"
+     - Event 9143: "LOL Scavenger Hunt (All ages)"
+     - Event 9144: "LOL Scavenger Hunt (All ages)"
+     - Event 8266: "LOL Teen Night"
+     - Event 5376: "Teen Night"
+
+36. Ladies Card Club
+   Slug: social-ladies-card-club
+   3 recurring event(s) linked
+     - Event 5550: "Ladies Card Club (Sunday afternoon)"
+     - Event 5329: "Ladies Card Club (Sunday afternoon)"
+     - Event 5325: "Ladies Card Club (Sunday afternoon)"
+
+37. Line Dancing
+   Slug: social-line-dancing
+   2 recurring event(s) linked
+     - Event 8566: "Line Dancing"
+     - Event 5073: "Line Dancing"
+
+38. Mah Jongg
+   Slug: social-mah-jongg
+   2 recurring event(s) linked
+     - Event 6902: "Mah Jongg"
+     - Event 5153: "Mah Jongg"
+
+39. Open Mic Club
+   Slug: social-open-mic-club
+   4 recurring event(s) linked
+     - Event 9194: "🎤 Open Mic Club"
+     - Event 5159: "🎤 Open Mic Club"
+     - Event 5894: "🎤 Open Mic Club"
+     - Event 5898: "🎤 Open Mic Club"
+
+40. Organ/Keyboard Club
+   Slug: social-organ-keyboard-club
+   1 recurring event(s) linked
+     - Event 5150: "🎹 Organ & Keyboard Club"
+
+41. Petals and Palms
+   Slug: social-petals-and-palms
+   1 recurring event(s) linked
+     - Event 5148: "🌺 Petals & Palms"
+
+42. Pickleball Club
+   Slug: social-pickleball-club
+   10 recurring event(s) linked
+     - Event 5130: "🏓 Pickleball Club"
+     - Event 7090: "🏓 Pickleball Club"
+     - Event 6360: "🏓 Pickleball Club"
+     - Event 8172: "🏓 Pickleball Club"
+     - Event 5139: "🏓 Pickleball Club"
+     - Event 5113: "🏓 Pickleball Club"
+     - Event 5095: "🏓 Pickleball Club"
+     - Event 5104: "🏓 Pickleball Club"
+     - Event 6161: "🏓 Pickleball Club"
+     - Event 9147: "🏓 Pickleball Club"
+
+43. Pinochle Club
+   Slug: social-pinochle-club
+   2 recurring event(s) linked
+     - Event 8073: "🃏 Pinochle Club"
+     - Event 4892: "🃏 Pinochle Club"
+
+44. Poker Club (Ladies)
+   Slug: social-poker-club-ladies
+   2 recurring event(s) linked
+     - Event 4885: "🃏 Ladies Poker Club"
+     - Event 8125: "🃏 Ladies Poker Club"
+
+45. Poker Club (Men’s)
+   Slug: social-poker-club-men-s
+   2 recurring event(s) linked
+     - Event 7477: "🃏 Men’s Poker Club"
+     - Event 4878: "🃏 Men’s Poker Club"
+
+46. Sewing & Quilting Club
+   Slug: social-sewing-quilting-club
+   2 recurring event(s) linked
+     - Event 7383: "🧵 Sewing & Quilting Club"
+     - Event 4864: "🧵 Sewing & Quilting Club"
+
+47. Shuffleboard Monday
+   Slug: social-shuffleboard-monday
+   1 recurring event(s) linked
+     - Event 8873: "🟡 Shuffleboard Monday"
+
+48. Shuffleboard T.T.F.
+   Slug: social-shuffleboard-t-t-f
+   3 recurring event(s) linked
+     - Event 5044: "🟡 Shuffleboard T.T.F."
+     - Event 6654: "🟡 Shuffleboard T.T.F."
+     - Event 6655: "🟡 Shuffleboard T.T.F."
+
+49. Shuffleboard Thursday
+   Slug: social-shuffleboard-thursday
+   1 recurring event(s) linked
+     - Event 8925: "🟡 Shuffleboard Thursday"
+
+50. Shuffleboard Tuesday
+   Slug: social-shuffleboard-tuesday
+   1 recurring event(s) linked
+     - Event 8899: "🟡 Shuffleboard Tuesday"
+
+51. Tennis Club
+   Slug: social-tennis-club
+   10 recurring event(s) linked
+     - Event 7336: "🎾 Tennis Club"
+     - Event 4836: "🎾 Tennis Club"
+     - Event 8219: "🎾 Tennis Club"
+     - Event 6067: "🎾 Tennis Club"
+     - Event 6466: "🎾 Tennis Club"
+     - Event 4829: "🎾 Tennis Club"
+     - Event 4843: "🎾 Tennis Club"
+     - Event 6714: "🎾 Tennis Club"
+     - Event 4850: "🎾 Tennis Club"
+     - Event 4857: "🎾 Tennis Club"
+
+52. Traveler's Club of Barefoot Bay
+   Slug: social-traveler-s-club-of-bfb
+   2 recurring event(s) linked
+     - Event 4695: "Traveler's Club of BFB"
+     - Event 9280: "Traveler's Club of Barefoot Bay"
+
+53. Veterans Council
+   Slug: social-veterans-council
+   5 recurring event(s) linked
+     - Event 5736: "Veterans Council"
+     - Event 4674: "Veterans Council"
+     - Event 4688: "Veterans Council"
+     - Event 7137: "Veterans Council"
+     - Event 4681: "Veterans Council"
+
+54. Yoga Club
+   Slug: social-yoga-club
+   3 recurring event(s) linked
+     - Event 9527: "Yoga Club"
+     - Event 9467: "Yoga Club"
+     - Event 9497: "Yoga Club"
+
+================================================================================
+INFORMATIONAL-ONLY PAGES (No Recurring Events Expected)
+================================================================================
+
+1. Barefoot Angels (social-barefoot-angels)
+2. Barefoot Bay Classic Cruisers Club (social-barefoot-bay-classic-cruisers-club)
+3. Boat and Fishing Club (social-boat-and-fishing-club)
+4. Buggie Club (social-buggie-club)
+5. Canada Club (social-canada-club)
+6. Christian Women Club (social-christian-women-club)
+7. Community Fund (social-community-fund)
+8. Computer Club (social-computer-club)
+9. Conservative Club (social-conservative-club)
+10. Deck the Halls (social-deck-the-halls)
+11. Democratic Club of Barefoot Bay (social-democratic-club-of-bfb)
+12. Ethnic Committee (social-ethnic-committee)
+13. Garden Club (social-garden-club)
+14. German Club (social-german-club)
+15. Golf - Men's (social-golf-mens)
+16. Golf Cart Club (social-golf-cart-club)
+17. Golf – 18 Holers (social-golf-18-holers)
+18. Golf – 9 Holers (social-golf-9-holers)
+19. Golf – Sun. AM Golfers (social-golf-sun-am-golfers)
+20. Great Lakes Club (social-great-lakes-club)
+21. Green Thumb Club (social-green-thumb-club)
+22. Heaven Sent Helping Hands, Inc. (social-heaven-sent-helping-hands-inc)
+23. Irish American Club (social-irish-american-club)
+24. Italian American Club (social-italian-american-club)
+25. Jewish Club (social-jewish-club)
+26. Lagoon Artists of Barefoot Bay (social-lagoon-artists-of-bfb)
+27. Marines Corp (social-marines-corp)
+28. New York Club of Barefoot Bay (social-new-york-state-club)
+29. Paradise Planners (social-paradise-planners)
+30. Polish Club (social-polish-club)
+31. River of Life Church (social-river-of-life-church)
+32. Senior Softball League (social-senior-softball-league)
+33. TOPS 0456 (social-tops-0456)
+34. The White Caps (social-white-caps)
+
+Total: 34 informational pages
+
+================================================================================
+CLUBS NEEDING REVIEW (No Events Mapped)
+================================================================================
+
+1. Bible Study (Ladies) (social-page)
+2. Garden Club (social-page)
+3. Golf Cart Club (social-page)
+4. Little Theater (social-page)
+
+Total: 4 clubs need review
+
+================================================================================
+EXAMPLES OF SUCCESSFUL MAPPINGS
+================================================================================
+
+Event 6378: "🏓 Pickleball Club"
+  Type: Child Event
+  URL: https://barefootbay.com/more/social/social-pickleball-club
+  Parent URL: https://barefootbay.com/more/social/social-pickleball-club
+  Match: ✓
+
+Event 8043: "Bocce Italian - Fridays"
+  Type: Child Event
+  URL: https://barefootbay.com/more/social/social-bocce-italian-friday
+  Parent URL: https://barefootbay.com/more/social/social-bocce-italian-friday
+  Match: ✓
+
+Event 6578: "Bible Study - Men's"
+  Type: Child Event
+  URL: https://barefootbay.com/more/social/social-bible-study-men
+  Parent URL: https://barefootbay.com/more/social/social-bible-study-men
+  Match: ✓
+
+Event 4590: "🎭 Little Theater"
+  Type: Parent Recurring Event
+  URL: https://barefootbay.com/more/social/social-barefoot-bay-little-theater
+
+Event 5602: "Bridge - Monday Night"
+  Type: Parent Recurring Event
+  URL: https://barefootbay.com/more/social/social-bridge-monday-night
+
+================================================================================
+CONCLUSION
+================================================================================
+
+✓ All 182 parent recurring events have website URLs
+✓ All 3277 child events have inherited URLs from parents
+✓ 54 of 92 club pages have linked events
+✓ 34 pages documented as informational-only (no recurring events)
+⚠ 4 clubs still need manual review
+
+✓ Social club event URL linking is COMPLETE!
+
+

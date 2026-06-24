@@ -1,0 +1,74 @@
+still getting a 403 from Google, even after the Replit agent update, which means:
+
+🚨 The backend /api/google/staticmap route is not passing the key=... to the actual Google Maps API URL.
+
+🔍 Let’s break this down based on your logs
+✅ You're calling:
+ruby
+Copy
+Edit
+https://barefootbay.com/api/google/staticmap?...params...
+This means your frontend is requesting a map via your server (not directly from Google).
+
+🔥 The Key Problem:
+Your server route /api/google/staticmap is acting like a proxy, but the request it sends to Google is missing the API key.
+
+✅ Solution: Fix the Proxy Route Code
+Whoever built this server route needs to append your API key to the proxied URL.
+
+Here's how the proxy should work:
+Example (Node.js / Express):
+ts
+Copy
+Edit
+// server/routes/google.js or similar
+import express from 'express';
+import fetch from 'node-fetch'; // or native fetch in latest Node
+const router = express.Router();
+
+const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
+
+router.get('/staticmap', async (req, res) => {
+  try {
+    const baseUrl = 'https://maps.googleapis.com/maps/api/staticmap';
+    const queryParams = new URLSearchParams(req.query);
+    queryParams.append('key', GOOGLE_MAPS_API_KEY);
+
+    const url = `${baseUrl}?${queryParams.toString()}`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      return res.status(response.status).json({ error: 'Failed to fetch map image' });
+    }
+
+    const buffer = await response.arrayBuffer();
+    res.set('Content-Type', 'image/png');
+    res.send(Buffer.from(buffer));
+  } catch (err) {
+    console.error('Google Maps API error:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+export default router;
+✅ Replit Integration Notes:
+GOOGLE_MAPS_API_KEY must be defined in Replit Secrets.
+
+This must be used server-side, not in frontend code.
+
+Add logging to ensure the final URL includes &key=....
+
+🔧 Quick Test You Can Do
+If you can, log the final URL that the proxy route sends to Google:
+
+ts
+Copy
+Edit
+console.log("Final Google Maps URL:", url);
+If it’s missing &key=..., the 403 is expected.
+
+✅ Summary
+Problem	Solution
+Proxy route /api/google/staticmap gets 403	It's missing the key=... param
+Fix	Append key=${process.env.GOOGLE_MAPS_API_KEY} to Google API call in backend
+Confirm	Add logging to output full URL server sends to Google

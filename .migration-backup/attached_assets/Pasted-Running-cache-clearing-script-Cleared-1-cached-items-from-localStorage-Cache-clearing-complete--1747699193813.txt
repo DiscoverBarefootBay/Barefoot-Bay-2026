@@ -1,0 +1,53 @@
+Running cache clearing script...
+Cleared 1 cached items from localStorage
+Cache clearing complete - errors should be resolved on next page refresh.
+[Maps Polyfill] Initializing enhanced Google Maps polyfill
+[Maps Polyfill] Installing fetch polyfill
+[WebSocket] WebSocket functionality is disabled to prevent conflicts with Object Storage
+Listing fetch error: 
+Object {message: "You don't have permission to view this draft listing", status: "DRAFT"}
+message: "You don't have permission to view this draft listing"
+status: "DRAFT"
+[[Prototype]]: Object
+
+Error fetching listing: 
+Error {}
+
+at t.value (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+REPLIT_APP_LOADED
+REPLIT_PAGE_LOADED
+Listing fetch error: 
+Object {message: "You don't have permission to view this draft listing", status: "DRAFT"}
+message: "You don't have permission to view this draft listing"
+status: "DRAFT"
+[[Prototype]]: Object
+
+Error fetching listing: 
+Error {}
+message: "You don't have permission to view this draft listing"
+stack: "Error: You don't have permission to view this draft listing↵ at queryFn (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-8PuTGGf0.js:2352:53399)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object
+
+Listing fetch error: 
+Object {message: "You don't have permission to view this draft listing", status: "DRAFT"}
+
+Error fetching listing: 
+Error {}
+
+at t.value (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Error in listing detail page: 
+Error {}
+
+at t.value (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+REPLIT_PAGE_LOADED

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Direct Media Backup Tools</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+    }
+    .card {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+    .card h2 {
+      margin-top: 0;
+      color: #0066cc;
+      font-size: 18px;
+    }
+    .card p {
+      margin-bottom: 15px;
+      color: #666;
+    }
+    .btn-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background-color 0.2s;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    .btn-calendar { background-color: #4CAF50; }
+    .btn-calendar:hover { background-color: #388E3C; }
+    
+    .btn-forum { background-color: #9C27B0; }
+    .btn-forum:hover { background-color: #7B1FA2; }
+    
+    .btn-community { background-color: #00BCD4; }
+    .btn-community:hover { background-color: #00ACC1; }
+    
+    .btn-vendor { background-color: #FF9800; }
+    .btn-vendor:hover { background-color: #F57C00; }
+    
+    .btn-banner { background-color: #F44336; }
+    .btn-banner:hover { background-color: #D32F2F; }
+    
+    .btn-real-estate { background-color: #2196F3; }
+    .btn-real-estate:hover { background-color: #1976D2; }
+    
+    .instructions {
+      padding: 15px;
+      background-color: #fffaf0;
+      border-left: 4px solid #ff9800;
+      margin-top: 30px;
+    }
+    .instructions h2 {
+      margin-top: 0;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Direct Media Backup Tools</h1>
+  <p>These direct backup tools bypass the Vite development server to avoid the "Body is disturbed or locked" error.</p>
+  
+  <div class="card">
+    <h2>🖼️ Backup Media Files</h2>
+    <p>Each button below will take you to a direct backup tool for a specific media type.</p>
+    <div class="btn-container">
+      <a href="backup-calendar.html" class="btn btn-calendar">Calendar Media</a>
+      <a href="backup-forum.html" class="btn btn-forum">Forum Media</a>
+      <a href="backup-community.html" class="btn btn-community">Community Media</a>
+      <a href="backup-vendors.html" class="btn btn-vendor">Vendor Media</a>
+      <a href="backup-banner-slides.html" class="btn btn-banner">Banner Slides</a>
+      <a href="backup-real-estate.html" class="btn btn-real-estate">Real Estate Media</a>
+    </div>
+  </div>
+
+  <div id="result" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 4px; background-color: #f5f5f5;"></div>
+  
+  <div class="instructions">
+    <h2>📝 Instructions</h2>
+    <p>1. Click the button corresponding to the media type you want to back up.</p>
+    <p>2. Wait for the backup process to complete.</p>
+    <p>3. The backup files will be stored in the <code>/uploads/backups/</code> folder with a timestamp.</p>
+    <p>4. You can restore these backups from the main Advanced Settings page if needed.</p>
+    <p><strong>Note:</strong> These tools directly access the server API, bypassing the Vite middleware that was causing the "Body is disturbed or locked" error.</p>
+  </div>
+
+  <script>
+    async function backupMedia(folder) {
+      try {
+        // Show result area
+        const resultDiv = document.getElementById('result');
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `<p>Backing up ${folder} media files... Please wait.</p>`;
+        
+        // Make the direct API call
+        const response = await fetch(`/api/admin/backup/${folder}-media`, {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        
+        // Get the content type
+        const contentType = response.headers.get('content-type');
+        
+        // Check for JSON response
+        if (contentType && contentType.includes('application/json')) {
+          const data = await response.json();
+          
+          if (data.success) {
+            resultDiv.innerHTML = `
+              <h3 style="color: green; margin-top: 0;">✅ Backup Successful!</h3>
+              <p><strong>Media Type:</strong> ${folder}</p>
+              <p><strong>Files Backed Up:</strong> ${data.backupCount}</p>
+              <p><strong>Backup Location:</strong> ${data.backupPath}</p>
+            `;
+          } else {
+            resultDiv.innerHTML = `
+              <h3 style="color: red; margin-top: 0;">❌ Backup Failed</h3>
+              <p><strong>Media Type:</strong> ${folder}</p>
+              <p><strong>Error:</strong> ${data.message || 'Unknown error'}</p>
+            `;
+          }
+        } else {
+          // Handle non-JSON response
+          const text = await response.text();
+          resultDiv.innerHTML = `
+            <h3 style="color: orange; margin-top: 0;">⚠️ Non-JSON Response</h3>
+            <p><strong>Media Type:</strong> ${folder}</p>
+            <p><strong>Content-Type:</strong> ${contentType || 'unknown'}</p>
+            <p><strong>Response:</strong></p>
+            <pre style="max-height: 200px; overflow: auto; background: #eee; padding: 10px; font-size: 12px;">${text.substring(0, 500)}...</pre>
+          `;
+        }
+      } catch (error) {
+        const resultDiv = document.getElementById('result');
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `
+          <h3 style="color: red; margin-top: 0;">❌ Error</h3>
+          <p><strong>Media Type:</strong> ${folder}</p>
+          <p><strong>Error Message:</strong> ${error.message}</p>
+        `;
+        console.error('Backup error:', error);
+      }
+    }
+  </script>
+</body>
+</html>

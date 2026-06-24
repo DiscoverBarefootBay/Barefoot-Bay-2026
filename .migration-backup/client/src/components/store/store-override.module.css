@@ -1,0 +1,17 @@
+/* CSS module to hide Featured Products section */
+
+.hideFeaturedProducts h2:first-of-type,
+.hideFeaturedProducts h2:first-of-type + div {
+  display: none !important;
+}
+
+.hideFeaturedProducts section:first-of-type,
+.hideFeaturedProducts div:has(> h2:contains('FEATURED PRODUCTS')),
+.hideFeaturedProducts section:has(> h2:contains('FEATURED PRODUCTS')) {
+  display: none !important;
+}
+
+/* Hide by attribute selector - any class containing 'featured' */
+.hideFeaturedProducts [class*="featured"] {
+  display: none !important;
+}

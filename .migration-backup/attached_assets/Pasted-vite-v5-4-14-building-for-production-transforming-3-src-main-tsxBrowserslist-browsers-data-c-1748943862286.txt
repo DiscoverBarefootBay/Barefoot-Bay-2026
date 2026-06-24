@@ -1,0 +1,28 @@
+vite v5.4.14 building for production...
+transforming (3) src/main.tsxBrowserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+✓ 3097 modules transformed.
+x Build failed in 7.14s
+error during build:
+client/src/components/admin/credit-management-dashboard.tsx (27:9): "apiRequest" is not exported by "client/src/lib/api.ts", imported by "client/src/components/admin/credit-management-dashboard.tsx".
+file: /home/runner/workspace/client/src/components/admin/credit-management-dashboard.tsx:27:9
+
+25: } from '@/components/ui/dialog';
+26: import { useToast } from '@/hooks/use-toast';
+27: import { apiRequest } from '@/lib/api';
+             ^
+28: import { Plus, CreditCard, History, Users, DollarSign, Search } from 'lucide-react';
+29: import { format } from 'date-fns';
+
+    at getRollupError (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/parseAst.js:396:41)
+    at error (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/parseAst.js:392:42)
+    at Module.error (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:15588:16)
+    at Module.traceVariable (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:16037:29)
+    at ModuleScope.findVariable (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:13820:39)
+    at FunctionScope.findVariable (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:5283:38)
+    at FunctionBodyScope.findVariable (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:5283:38)
+    at ReturnValueScope.findVariable (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:5283:38)
+    at FunctionBodyScope.findVariable (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:5283:38)
+    at Identifier.bind (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:5066:40)
+~/workspace$ 

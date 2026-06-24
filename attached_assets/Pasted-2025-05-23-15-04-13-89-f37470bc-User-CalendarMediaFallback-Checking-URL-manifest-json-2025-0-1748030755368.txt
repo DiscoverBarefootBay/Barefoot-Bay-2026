@@ -1,0 +1,196 @@
+2025-05-23 15:04:13.89
+f37470bc
+User
+[CalendarMediaFallback] Checking URL: /manifest.json
+2025-05-23 15:04:13.89
+f37470bc
+User
+[SPA Fallback] Handling path: /manifest.json
+2025-05-23 15:04:13.89
+f37470bc
+User
+[SPA Fallback] Treating as non-SPA route: /manifest.json
+2025-05-23 15:04:42.11
+f37470bc
+User
+Storage proxy: Accessing exclusively from Object Storage for BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4
+2025-05-23 15:04:42.11
+f37470bc
+User
+Processing range request: bytes=1540096-
+2025-05-23 15:04:42.11
+f37470bc
+User
+[StorageProxy] Attempting to get file directly with client: BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4 from bucket BANNER
+2025-05-23 15:04:42.11
+f37470bc
+User
+[ObjectStorage] Getting file: BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4 from bucket BANNER
+2025-05-23 15:04:42.15
+f37470bc
+User
+Error getting file BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4 from bucket BANNER: Error: Failed to download file: No such object: replit-objstore-5aea4964-e97d-4955-90f5-8ed0b6618a15/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4
+2025-05-23 15:04:42.15
+f37470bc
+User
+at ObjectStorageService.getFile (file:///home/runner/workspace/dist/index.js:7844:19)
+2025-05-23 15:04:42.15
+f37470bc
+User
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-05-23 15:04:42.15
+f37470bc
+User
+at async file:///home/runner/workspace/dist/index.js:13296:24
+2025-05-23 15:04:42.15
+f37470bc
+User
+[StorageProxy] Client error getting file: Failed to download file: No such object: replit-objstore-5aea4964-e97d-4955-90f5-8ed0b6618a15/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4
+2025-05-23 15:04:42.18
+f37470bc
+User
+Object Storage response status: 404
+2025-05-23 15:04:42.18
+f37470bc
+User
+File not found in Object Storage: BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4
+2025-05-23 15:04:42.18
+f37470bc
+User
+CRITICAL DEBUG: Attempted to access: https://object-storage.replit.app/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4
+2025-05-23 15:04:42.18
+f37470bc
+User
+[StorageProxy] Banner slide media detected: BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4
+2025-05-23 15:04:42.18
+f37470bc
+User
+[StorageProxy] Using dedicated BANNER bucket for: bannerImage-1747881799464-29191037.mp4
+2025-05-23 15:04:42.18
+f37470bc
+User
+[StorageProxy] Checking BANNER path: https://object-storage.replit.app/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4
+2025-05-23 15:04:42.18
+f37470bc
+User
+[StorageProxy] Trying DEFAULT bucket fallback: https://object-storage.replit.app/DEFAULT/banner-slides/bannerImage-1747881799464-29191037.mp4
+2025-05-23 15:04:42.19
+f37470bc
+User
+[ObjectStorage] Getting file: banner-slides/bannerImage-1747881799464-29191037.mp4 from bucket BANNER
+2025-05-23 15:04:42.59
+f37470bc
+User
+[StorageProxy] Retrieved banner slide from Object Storage client: bannerImage-1747881799464-29191037.mp4 (16467443 bytes)
+2025-05-23 15:04:42.64
+f37470bc
+User
+⚠️ Slow request detected (533ms): {
+2025-05-23 15:04:42.64
+f37470bc
+User
+"method": "GET",
+2025-05-23 15:04:42.64
+f37470bc
+User
+"path": "/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4",
+2025-05-23 15:04:42.64
+f37470bc
+User
+"params": {
+2025-05-23 15:04:42.64
+f37470bc
+User
+"0": "banner-slides/bannerImage-1747881799464-29191037.mp4",
+2025-05-23 15:04:42.64
+f37470bc
+User
+"bucket": "BANNER",
+2025-05-23 15:04:42.64
+f37470bc
+User
+"filename": "banner-slides/bannerImage-1747881799464-29191037.mp4"
+2025-05-23 15:04:42.64
+f37470bc
+User
+},
+2025-05-23 15:04:42.64
+f37470bc
+User
+"query": {},
+2025-05-23 15:04:42.64
+f37470bc
+User
+"statusCode": 200,
+2025-05-23 15:04:42.64
+f37470bc
+User
+"duration": "533ms",
+2025-05-23 15:04:42.64
+f37470bc
+User
+"user": "unauthenticated",
+2025-05-23 15:04:42.64
+f37470bc
+User
+"userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
+2025-05-23 15:04:42.64
+f37470bc
+User
+}
+2025-05-23 15:04:42.64
+f37470bc
+User
+⚠️ Slow request detected (532ms): {
+2025-05-23 15:04:42.64
+f37470bc
+User
+"method": "GET",
+2025-05-23 15:04:42.64
+f37470bc
+User
+"path": "/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4",
+2025-05-23 15:04:42.64
+f37470bc
+User
+"params": {
+2025-05-23 15:04:42.64
+f37470bc
+User
+"0": "banner-slides/bannerImage-1747881799464-29191037.mp4",
+2025-05-23 15:04:42.64
+f37470bc
+User
+"bucket": "BANNER",
+2025-05-23 15:04:42.64
+f37470bc
+User
+"filename": "banner-slides/bannerImage-1747881799464-29191037.mp4"
+2025-05-23 15:04:42.64
+f37470bc
+User
+},
+2025-05-23 15:04:42.64
+f37470bc
+User
+"query": {},
+2025-05-23 15:04:42.64
+f37470bc
+User
+"statusCode": 200,
+2025-05-23 15:04:42.64
+f37470bc
+User
+"duration": "532ms",
+2025-05-23 15:04:42.64
+f37470bc
+User
+"user": "unauthenticated",
+2025-05-23 15:04:42.64
+f37470bc
+User
+"userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
+2025-05-23 15:04:42.64
+f37470bc
+User
+}

@@ -1,0 +1,145 @@
+[
+  {
+    "event_id": 5095,
+    "event_title": "🏓 Pickleball Club",
+    "event_time": "Wednesday 16:00",
+    "event_start_utc": "12",
+    "event_end_utc": "15",
+    "club_url": "https://barefootbay.com/community/social/pickleball-club",
+    "club_title": "Pickleball Club",
+    "meeting_time": "Per Schedule",
+    "status": "MATCHED"
+  },
+  {
+    "event_id": 8408,
+    "event_title": "CANCELLED - LoL vs Adults Basketball Tournament",
+    "event_time": "Sunday    00:00",
+    "event_start_utc": "20",
+    "event_end_utc": "22",
+    "club_url": "https://barefootbay.com/community/social/lol-youth-group",
+    "club_title": "LOL Youth Group",
+    "meeting_time": "Per Event",
+    "status": "MATCHED"
+  },
+  {
+    "event_id": 9428,
+    "event_title": "CVO BINGO!",
+    "event_time": "Thursday  03:00",
+    "event_start_utc": "22",
+    "event_end_utc": "2",
+    "club_url": "https://barefootbay.com/community/social/civic-volunteer-organization-cvo",
+    "club_title": "Civic Volunteer Organization (CVO)",
+    "meeting_time": "",
+    "status": "MATCHED"
+  },
+  {
+    "event_id": 4932,
+    "event_title": "Civic Volunteer Organization (CVO)",
+    "event_time": "Monday    18:00",
+    "event_start_utc": "14",
+    "event_end_utc": "18",
+    "club_url": "https://barefootbay.com/community/social/civic-volunteer-organization-cvo",
+    "club_title": "Civic Volunteer Organization (CVO)",
+    "meeting_time": "",
+    "status": "MATCHED"
+  },
+  {
+    "event_id": 9278,
+    "event_title": "Golf Cart Club - Under the Oaks",
+    "event_time": "Saturday  18:00",
+    "event_start_utc": "14",
+    "event_end_utc": "16",
+    "club_url": "https://barefootbay.com/community/social/golf-cart-club",
+    "club_title": "Golf Cart Club",
+    "meeting_time": "—",
+    "status": "MATCHED"
+  },
+  {
+    "event_id": 8965,
+    "event_title": "LOL Art Day",
+    "event_time": "Saturday  18:00",
+    "event_start_utc": "14",
+    "event_end_utc": "16",
+    "club_url": "https://barefootbay.com/community/social/lol-youth-group",
+    "club_title": "LOL Youth Group",
+    "meeting_time": "Per Event",
+    "status": "MATCHED"
+  },
+  {
+    "event_id": 8966,
+    "event_title": "LOL Art Day - CANCELLED",
+    "event_time": "Saturday  18:00",
+    "event_start_utc": "14",
+    "event_end_utc": "16",
+    "club_url": "https://barefootbay.com/community/social/lol-youth-group",
+    "club_title": "LOL Youth Group",
+    "meeting_time": "Per Event",
+    "status": "MATCHED"
+  },
+  {
+    "event_id": 8967,
+    "event_title": "LOL Christmas Party",
+    "event_time": "Saturday  20:00",
+    "event_start_utc": "15",
+    "event_end_utc": "17",
+    "club_url": "https://barefootbay.com/community/social/lol-youth-group",
+    "club_title": "LOL Youth Group",
+    "meeting_time": "Per Event",
+    "status": "MATCHED"
+  },
+  {
+    "event_id": 9142,
+    "event_title": "LOL Scavenger Hunt (All ages)",
+    "event_time": "Wednesday 02:30",
+    "event_start_utc": "22",
+    "event_end_utc": "22",
+    "club_url": "https://barefootbay.com/community/social/lol-youth-group",
+    "club_title": "LOL Youth Group",
+    "meeting_time": "Per Event",
+    "status": "MATCHED"
+  },
+  {
+    "event_id": 8266,
+    "event_title": "LOL Teen Night",
+    "event_time": "Saturday  02:00",
+    "event_start_utc": "22",
+    "event_end_utc": "0",
+    "club_url": "https://barefootbay.com/community/social/lol-youth-group",
+    "club_title": "LOL Youth Group",
+    "meeting_time": "Per Event",
+    "status": "MATCHED"
+  },
+  {
+    "event_id": 5336,
+    "event_title": "Senior Lunch - CVO Transportation Provided",
+    "event_time": "Monday    17:30",
+    "event_start_utc": "13",
+    "event_end_utc": "17",
+    "club_url": "https://barefootbay.com/community/social/civic-volunteer-organization-cvo",
+    "club_title": "Civic Volunteer Organization (CVO)",
+    "meeting_time": "",
+    "status": "MATCHED"
+  },
+  {
+    "event_id": 5922,
+    "event_title": "Senior Lunch - CVO Transportation Provided - Cancelled",
+    "event_time": "Friday    17:30",
+    "event_start_utc": "13",
+    "event_end_utc": "17",
+    "club_url": "https://barefootbay.com/community/social/civic-volunteer-organization-cvo",
+    "club_title": "Civic Volunteer Organization (CVO)",
+    "meeting_time": "",
+    "status": "MATCHED"
+  },
+  {
+    "event_id": 5376,
+    "event_title": "Teen Night",
+    "event_time": "Saturday  02:00",
+    "event_start_utc": "22",
+    "event_end_utc": "0",
+    "club_url": "https://barefootbay.com/community/social/lol-youth-group",
+    "club_title": "LOL Youth Group",
+    "meeting_time": "Per Event",
+    "status": "MATCHED"
+  }
+]

@@ -1,0 +1,40 @@
+Mutation error details: 
+Object {errorType: "object", errorObject: Error, errorString: "Error: HTTP error! Status: 500", errorStack: "Error: HTTP error! Status: 500↵    at _e…", errorMessage: "HTTP error! Status: 500"}
+errorMessage: "HTTP error! Status: 500"
+errorObject: Error
+errorStack: "Error: HTTP error! Status: 500↵ at _e (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-4Th4yojG.js:58:1603)↵ at async Object.mutationFn (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-4Th4yojG.js:2300:65026)"
+errorString: "Error: HTTP error! Status: 500"
+errorType: "object"
+[[Prototype]]: Object
+
+Create listing error: 
+Error {status: 500, statusText: "Internal Server Error", response: Response}
+
+at t.value (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Create listing error details: 
+Object {errorType: "object", errorObject: Error, errorString: "Error: HTTP error! Status: 500", errorStack: "Error: HTTP error! Status: 500↵    at _e…", errorMessage: "HTTP error! Status: 500"}
+errorMessage: "HTTP error! Status: 500"
+errorObject: Error
+errorStack: "Error: HTTP error! Status: 500↵ at _e (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-4Th4yojG.js:58:1603)↵ at async Object.mutationFn (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-4Th4yojG.js:2300:65026)"
+errorString: "Error: HTTP error! Status: 500"
+errorType: "object"
+[[Prototype]]: Object
+
+Failed to parse response JSON in onError: 
+TypeError {message: "Failed to execute 'clone' on 'Response': Response body is already used"}
+message: "Failed to execute 'clone' on 'Response': Response body is already used"
+stack: "TypeError: Response body is already used↵ at Object.onError (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-4Th4yojG.js:2304:936)↵ at tC.execute (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-4Th4yojG.js:49:21162)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object
+
+API Response data: 
+Object {message: "Failed to create listing", error: "column "status" of relation "real_estate_listings" does not exist"}
+error: "column "status" of relation "real_estate_listings" does not exist"
+message: "Failed to create listing"
+[[Prototype]]: Object
+
+REPLIT_PAGE_LOADED

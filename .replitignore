@@ -1,0 +1,25 @@
+# The format of this file is identical to `.dockerignore`.
+# It is used to reduce the size of deployed images to make the
+# process of publishing faster.
+
+# Replit / pnpm caches and agent state (not needed in deploy image)
+.local
+.cache
+.git
+
+# Leftover migration artifacts from the original Replit→pnpm port.
+# Kept in the repo for reference; not used at runtime.
+.migration-backup
+
+# Repo-root scratch assets (screenshots, chat attachments). Each
+# artifact ships its own public/ dir; this root one is dev-only.
+# All runtime references to `/attached_assets/` are URL paths
+# served via the storage proxy, not file reads from this directory.
+attached_assets
+
+# Editor / state directories
+.canvas
+.config
+
+# Misc
+screenshots

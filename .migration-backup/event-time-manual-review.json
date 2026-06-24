@@ -1,0 +1,290 @@
+[
+  {
+    "event_id": 8699,
+    "event_title": "Boat and Fishing Club",
+    "club_meeting_time": "2nd Friday, 7:30 pm",
+    "current_start": "2025-10-10T23:30:00.000Z",
+    "current_end": "2025-10-11T00:30:00.000Z",
+    "proposed_date": "2025-10-10",
+    "proposed_start_time": "19:30:00",
+    "proposed_end_time": "21:30:00",
+    "parsed": {
+      "startHour": 19,
+      "startMin": 30,
+      "endHour": 21,
+      "endMin": 30,
+      "originalText": "2nd Friday, 7:30 pm",
+      "method": "single_time_assumed_duration"
+    }
+  },
+  {
+    "event_id": 4771,
+    "event_title": "Bocce Italian - Fridays",
+    "club_meeting_time": "Friday, 9:00 am",
+    "current_start": "2025-04-18T13:00:00.000Z",
+    "current_end": "2025-04-18T16:00:00.000Z",
+    "proposed_date": "2025-04-18",
+    "proposed_start_time": "09:00:00",
+    "proposed_end_time": "11:00:00",
+    "parsed": {
+      "startHour": 9,
+      "startMin": 0,
+      "endHour": 11,
+      "endMin": 0,
+      "originalText": "Friday, 9:00 am",
+      "method": "single_time_assumed_duration"
+    }
+  },
+  {
+    "event_id": 4757,
+    "event_title": "Bocce NH - Tuesday",
+    "club_meeting_time": "Tuesday, 9:30 am–12:00 noon",
+    "current_start": "2025-04-15T13:30:00.000Z",
+    "current_end": "2025-04-15T16:00:00.000Z",
+    "proposed_date": "2025-04-15",
+    "proposed_start_time": "09:30:00",
+    "proposed_end_time": "11:30:00",
+    "parsed": {
+      "startHour": 9,
+      "startMin": 30,
+      "endHour": 11,
+      "endMin": 30,
+      "originalText": "Tuesday, 9:30 am–12:00 noon",
+      "method": "single_time_assumed_duration"
+    }
+  },
+  {
+    "event_id": 8706,
+    "event_title": "Bocce NH - Tuesdays",
+    "club_meeting_time": "Tuesday, 9:30 am–12:00 noon",
+    "current_start": "2025-10-07T13:30:00.000Z",
+    "current_end": "2025-10-07T16:00:00.000Z",
+    "proposed_date": "2025-10-07",
+    "proposed_start_time": "09:30:00",
+    "proposed_end_time": "11:30:00",
+    "parsed": {
+      "startHour": 9,
+      "startMin": 30,
+      "endHour": 11,
+      "endMin": 30,
+      "originalText": "Tuesday, 9:30 am–12:00 noon",
+      "method": "single_time_assumed_duration"
+    }
+  },
+  {
+    "event_id": 4778,
+    "event_title": "Bowling - Lawn Canada",
+    "club_meeting_time": "Mondays & Thursdays, 9:00 am – 12:00 noon",
+    "current_start": "2025-04-14T13:15:00.000Z",
+    "current_end": "2025-04-15T16:00:00.000Z",
+    "proposed_date": "2025-04-14",
+    "proposed_start_time": "09:00:00",
+    "proposed_end_time": "11:00:00",
+    "parsed": {
+      "startHour": 9,
+      "startMin": 0,
+      "endHour": 11,
+      "endMin": 0,
+      "originalText": "Mondays & Thursdays, 9:00 am – 12:00 noon",
+      "method": "single_time_assumed_duration"
+    }
+  },
+  {
+    "event_id": 4792,
+    "event_title": "Bridge - Monday Night",
+    "club_meeting_time": "Every Monday, Wednesday &amp; Friday, 12:15 pm",
+    "current_start": "2025-04-14T22:00:00.000Z",
+    "current_end": "2025-04-15T01:00:00.000Z",
+    "proposed_date": "2025-04-14",
+    "proposed_start_time": "12:15:00",
+    "proposed_end_time": "14:15:00",
+    "parsed": {
+      "startHour": 12,
+      "startMin": 15,
+      "endHour": 14,
+      "endMin": 15,
+      "originalText": "Every Monday, Wednesday &amp; Friday, 12:15 pm",
+      "method": "single_time_assumed_duration"
+    }
+  },
+  {
+    "event_id": 4818,
+    "event_title": "Chess Club",
+    "club_meeting_time": "Every Wednesday, 8:30 am–12:00 noon",
+    "current_start": "2025-04-16T12:30:00.000Z",
+    "current_end": "2025-04-16T13:30:00.000Z",
+    "proposed_date": "2025-04-16",
+    "proposed_start_time": "08:30:00",
+    "proposed_end_time": "10:30:00",
+    "parsed": {
+      "startHour": 8,
+      "startMin": 30,
+      "endHour": 10,
+      "endMin": 30,
+      "originalText": "Every Wednesday, 8:30 am–12:00 noon",
+      "method": "single_time_assumed_duration"
+    }
+  },
+  {
+    "event_id": 4918,
+    "event_title": "Crafter's Club - Ceramics",
+    "club_meeting_time": "Every Wednesday, 6:30 pm",
+    "current_start": "2025-04-23T22:30:00.000Z",
+    "current_end": "2025-04-24T01:00:00.000Z",
+    "proposed_date": "2025-04-23",
+    "proposed_start_time": "18:30:00",
+    "proposed_end_time": "20:30:00",
+    "parsed": {
+      "startHour": 18,
+      "startMin": 30,
+      "endHour": 20,
+      "endMin": 30,
+      "originalText": "Every Wednesday, 6:30 pm",
+      "method": "single_time_assumed_duration"
+    }
+  },
+  {
+    "event_id": 9246,
+    "event_title": "Euchre Club",
+    "club_meeting_time": "Every Wednesday, 6pm (Recommended 5:45 arrival, until max players reached)",
+    "current_start": "2025-10-22T22:00:00.000Z",
+    "current_end": "2025-10-22T23:00:00.000Z",
+    "proposed_date": "2025-10-22",
+    "proposed_start_time": "18:00:00",
+    "proposed_end_time": "20:00:00",
+    "parsed": {
+      "startHour": 18,
+      "startMin": 0,
+      "endHour": 20,
+      "endMin": 0,
+      "originalText": "Every Wednesday, 6pm (Recommended 5:45 arrival, until max players reached)",
+      "method": "single_time_assumed_duration"
+    }
+  },
+  {
+    "event_id": 8810,
+    "event_title": "German Club",
+    "club_meeting_time": "4th Tuesday, 5:00 pm & 1st Tuesday, 4:00 pm Board Meeting",
+    "current_start": "2025-10-28T21:00:00.000Z",
+    "current_end": "2025-10-28T22:00:00.000Z",
+    "proposed_date": "2025-10-28",
+    "proposed_start_time": "17:00:00",
+    "proposed_end_time": "19:00:00",
+    "parsed": {
+      "startHour": 17,
+      "startMin": 0,
+      "endHour": 19,
+      "endMin": 0,
+      "originalText": "4th Tuesday, 5:00 pm & 1st Tuesday, 4:00 pm Board Meeting",
+      "method": "single_time_assumed_duration"
+    }
+  },
+  {
+    "event_id": 8817,
+    "event_title": "German Club - Board Meeting",
+    "club_meeting_time": "4th Tuesday, 5:00 pm & 1st Tuesday, 4:00 pm Board Meeting",
+    "current_start": "2025-11-04T22:00:00.000Z",
+    "current_end": "2025-11-04T23:00:00.000Z",
+    "proposed_date": "2025-11-04",
+    "proposed_start_time": "17:00:00",
+    "proposed_end_time": "19:00:00",
+    "parsed": {
+      "startHour": 17,
+      "startMin": 0,
+      "endHour": 19,
+      "endMin": 0,
+      "originalText": "4th Tuesday, 5:00 pm & 1st Tuesday, 4:00 pm Board Meeting",
+      "method": "single_time_assumed_duration"
+    }
+  },
+  {
+    "event_id": 8828,
+    "event_title": "Green Thumb Club",
+    "club_meeting_time": "1st Saturday, 10:00am",
+    "current_start": "2025-10-04T14:00:00.000Z",
+    "current_end": "2025-10-04T15:00:00.000Z",
+    "proposed_date": "2025-10-04",
+    "proposed_start_time": "10:00:00",
+    "proposed_end_time": "12:00:00",
+    "parsed": {
+      "startHour": 10,
+      "startMin": 0,
+      "endHour": 12,
+      "endMin": 0,
+      "originalText": "1st Saturday, 10:00am",
+      "method": "single_time_assumed_duration"
+    }
+  },
+  {
+    "event_id": 5158,
+    "event_title": "Marine Corp",
+    "club_meeting_time": "3rd Thursday, 7:00 pm",
+    "current_start": "2025-05-15T23:00:00.000Z",
+    "current_end": "2025-05-16T01:00:00.000Z",
+    "proposed_date": "2025-05-15",
+    "proposed_start_time": "19:00:00",
+    "proposed_end_time": "21:00:00",
+    "parsed": {
+      "startHour": 19,
+      "startMin": 0,
+      "endHour": 21,
+      "endMin": 0,
+      "originalText": "3rd Thursday, 7:00 pm",
+      "method": "single_time_assumed_duration"
+    }
+  },
+  {
+    "event_id": 8843,
+    "event_title": "New York Club of Barefoot Bay",
+    "club_meeting_time": "1st Tuesday, 5:00 pm",
+    "current_start": "2025-11-04T22:00:00.000Z",
+    "current_end": "2025-11-04T23:00:00.000Z",
+    "proposed_date": "2025-11-04",
+    "proposed_start_time": "17:00:00",
+    "proposed_end_time": "19:00:00",
+    "parsed": {
+      "startHour": 17,
+      "startMin": 0,
+      "endHour": 19,
+      "endMin": 0,
+      "originalText": "1st Tuesday, 5:00 pm",
+      "method": "single_time_assumed_duration"
+    }
+  },
+  {
+    "event_id": 4695,
+    "event_title": "Traveler's Club of BFB",
+    "club_meeting_time": "&nbsp;4th Thursday, 12:00 pm",
+    "current_start": "2025-04-04T13:00:00.000Z",
+    "current_end": "2025-04-04T14:00:00.000Z",
+    "proposed_date": "2025-04-04",
+    "proposed_start_time": "12:00:00",
+    "proposed_end_time": "14:00:00",
+    "parsed": {
+      "startHour": 12,
+      "startMin": 0,
+      "endHour": 14,
+      "endMin": 0,
+      "originalText": "&nbsp;4th Thursday, 12:00 pm",
+      "method": "single_time_assumed_duration"
+    }
+  },
+  {
+    "event_id": 9280,
+    "event_title": "Traveler's Club of Barefoot Bay",
+    "club_meeting_time": "&nbsp;4th Thursday, 12:00 pm",
+    "current_start": "2026-01-22T17:00:00.000Z",
+    "current_end": "2026-01-22T18:00:00.000Z",
+    "proposed_date": "2026-01-22",
+    "proposed_start_time": "12:00:00",
+    "proposed_end_time": "14:00:00",
+    "parsed": {
+      "startHour": 12,
+      "startMin": 0,
+      "endHour": 14,
+      "endMin": 0,
+      "originalText": "&nbsp;4th Thursday, 12:00 pm",
+      "method": "single_time_assumed_duration"
+    }
+  }
+]

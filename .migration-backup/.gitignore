@@ -1,0 +1,113 @@
+# Dependencies
+node_modules
+/.pnp
+.pnp.js
+
+# Build outputs
+dist
+build
+.vercel
+*.tar.gz
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*
+!.env.example
+
+# Runtime files
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+server/public
+logs
+*.log
+
+# Config files
+vite.config.ts.*
+
+# API keys and secrets
+*.pem
+*.key
+*.p8
+*.p12
+*.pfx
+*.crt
+*.cer
+*.der
+*.priv
+*.keystore
+*.jks
+google-credentials.json
+*-credentials.json
+*-key.json
+*-service-account.json
+service-account.json
+*_private_key.json
+.secrets
+.api_keys
+secrets.json
+secrets.*.json
+config.prod.json
+api-keys.json
+.npmrc
+.env.dev.local
+.env.staging
+.env.prod
+auth_config.json
+auth.config.json
+config.private.*
+oauth.json
+oauth.*.json
+credentials/
+keys/
+oauth/
+secret*
+secrets/
+private/
+.aws/
+aws-config.json
+aws-credentials.json
+token.json
+tokens.json
+*_token.json
+*_tokens.json
+
+# Database files
+*.sqlite
+*.sqlite3
+*.db
+db.json
+*.sqlitedb
+.postgres/
+.mysql/
+.redis/
+
+# Session files
+sessions/
+.sessions/
+.cache/
+.tmp/
+
+# Cloud provider config
+firebase.json
+gcloud.json
+azure.json
+aws.json
+digitalocean.json
+heroku.json
+vercel.json
+netlify.toml
+cloudflare.json
+.firebase/
+
+# IDE and local config
+.idea/
+.vscode/
+.history/
+*.sublime-*
+.editorconfig

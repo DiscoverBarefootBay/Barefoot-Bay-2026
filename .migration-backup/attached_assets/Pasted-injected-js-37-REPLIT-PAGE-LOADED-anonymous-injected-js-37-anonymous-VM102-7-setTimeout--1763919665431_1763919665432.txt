@@ -1,0 +1,952 @@
+injected.js:37 REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+(anonymous) @ VM102:7
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+injected.js:37 🏠 [FOR SALE BADGE] Making API call to /api/real-estate/new-listings-count
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/real-estate/new-listings-count
+injected.js:37 REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+signalReady @ replit-ready.js:29
+setTimeout
+(anonymous) @ replit-ready.js:38
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+injected.js:37 🏠 [FOR SALE BADGE] API response: {count: 0}
+injected.js:37 Query fetch: /api/messages
+injected.js:37 Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+injected.js:37 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/messages
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/auth/check
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/messages
+injected.js:37 Query auth check: {isAuthenticated: true, user: {…}, authToken: '6.1763919655859.CHECKSUM', tokenExpires: '2025-11-23T17:55:55.859Z'}
+injected.js:37 🏬 [VENDOR BADGE] Making API call to /api/vendors/unvisited
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/vendors/unvisited
+injected.js:37 Submit button clicked directly
+injected.js:37 HoursOperationPicker:  {value: '', isVisible: false, schedule: {…}}
+injected.js:37 Submit button clicked directly
+injected.js:37 HoursOperationPicker:  {value: '', isVisible: false, schedule: {…}}
+injected.js:37 Submit button clicked directly
+injected.js:37 HoursOperationPicker:  {value: '', isVisible: false, schedule: {…}}
+injected.js:37 🏬 [VENDOR BADGE] API response: {unvisitedSlugs: Array(0)}
+injected.js:37 Submit button clicked directly
+injected.js:37 HoursOperationPicker:  {value: '', isVisible: false, schedule: {…}}
+injected.js:37 Submit button clicked directly
+injected.js:37 HoursOperationPicker:  {value: '', isVisible: false, schedule: {…}}
+injected.js:37 Submit button clicked directly
+injected.js:37 HoursOperationPicker:  {value: '', isVisible: false, schedule: {…}}
+injected.js:37 REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+(anonymous) @ VM102:7
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+injected.js:37 Submit button clicked directly
+injected.js:37 HoursOperationPicker:  {value: '', isVisible: false, schedule: {…}}
+injected.js:37 REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+signalReady @ replit-ready.js:29
+setTimeout
+(anonymous) @ replit-ready.js:38
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+injected.js:37 Submit button clicked directly
+injected.js:37 HoursOperationPicker:  {value: '', isVisible: false, schedule: {…}}
+injected.js:37 REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+(anonymous) @ VM102:7
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+injected.js:37 REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+signalReady @ replit-ready.js:29
+setTimeout
+(anonymous) @ replit-ready.js:38
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+injected.js:37 Query fetch: /api/forum/posts/267/unread-comments
+injected.js:37 Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+injected.js:37 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/forum/posts/267/unread-comments
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/auth/check
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/forum/posts/267/unread-comments
+injected.js:37 Query auth check: {isAuthenticated: true, user: {…}, authToken: '6.1763919659852.CHECKSUM', tokenExpires: '2025-11-23T17:55:59.852Z'}
+injected.js:37 REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+(anonymous) @ VM102:7
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+injected.js:37 REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+signalReady @ replit-ready.js:29
+setTimeout
+(anonymous) @ replit-ready.js:38
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+injected.js:37 Query fetch: /api/messages
+injected.js:37 Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+injected.js:37 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/messages
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/auth/check
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/messages
+injected.js:37 Query auth check: {isAuthenticated: true, user: {…}, authToken: '6.1763919661748.CHECKSUM', tokenExpires: '2025-11-23T17:56:01.748Z'}
+injected.js:37 REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+(anonymous) @ VM102:7
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24
+setTimeout
+(anonymous) @ VM102:6
+(anonymous) @ VM102:24

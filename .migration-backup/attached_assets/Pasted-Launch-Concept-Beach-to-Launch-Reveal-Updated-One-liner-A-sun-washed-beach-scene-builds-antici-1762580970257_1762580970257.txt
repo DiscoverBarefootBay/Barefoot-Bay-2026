@@ -1,0 +1,109 @@
+Launch Concept: “Beach-to-Launch Reveal” (Updated)
+One-liner
+
+A sun-washed beach scene builds anticipation. You tap Launch, a mission-style countdown appears with playful comms, the rocket lifts off and pulls the landing screen away like a curtain, revealing the live Barefoot Bay homepage beneath.
+
+Experience arc (8–12 seconds total)
+
+Quiet shoreline
+Golden-hour beach: gentle waves, soft clouds, warm sun. Everything feels relaxed and premium.
+
+Rocket prep (idle)
+A compact rocket with surfboard-style fins idles on a tiki pad at the bottom center—tiny smoke puffs, subtle bob, two little nav lights blinking out of sync.
+
+Host taps “Launch” → countdown begins
+The scene tightens. A bold T-10 countdown appears at the top with a slim “Mission Control” text strip beside it (or directly underneath on mobile). From T-10 to T-0, the mood escalates: smoke grows a touch thicker, a faint rumble enters, and the screen has a barely-there tremble near T-3.
+
+Ignition beat
+At T-1 → T-0, lights flicker once, the rumble swells for half a second, and we get a crisp, celebratory whoosh (sound is optional and off by default).
+
+The pull-away reveal
+A thin tow line appears above the rocket. As it lifts, the rocket yanks the entire landing screen upward like a banner. The live Barefoot Bay homepage is already loaded below, fully interactive.
+
+Hand-off flourish
+The rocket arcs to a corner and its contrail resolves into a gentle underline near the hero headline or navigation—like it “signed” the page.
+
+Settle state
+Ambient life remains subtle: a faint wave shimmer and slow cloud drift. “Replay launch” sits politely in a corner; “Skip intro” is always available.
+
+Variant (if you prefer): Instead of pulling the screen, the launch smoke blooms into a soft haze that dissolves the landing layer and clears to reveal the live site underneath.
+
+Mission-style copy next to the countdown
+
+Use a clean, high-contrast “comms strip” beside the timer (or stacked on mobile). It should feel like friendly mission control—short lines, confident tone, little beach wink.
+
+Option A — Classic mission vibe (with your line included)
+
+T-10: “Barefoot Bay, we are clear for launch.”
+
+T-7: “Go/No-Go poll complete—Barefoot Bay is go for launch.”
+
+T-5: “Range green. Weather is a go.”
+
+T-4: “Auto-sequence start.”
+
+T-3: “Guidance is internal.”
+
+T-2: “Main engine arm enabled.”
+
+T-1: “Ignition sequence start.”
+
+T-0: “Liftoff—Barefoot Bay is live!”
+
+Option B — Beach-town flavor (playful but tight)
+
+T-10: “Barefoot Bay, we are clear for launch.”
+
+T-7: “Skies clear, surf mellow—range is green.”
+
+T-5: “Boards stowed. Tiki pad secure.”
+
+T-3: “Guidance locked. All hands barefoot.”
+
+T-2: “Engines humming.”
+
+T-1: “Spark on deck.”
+
+T-0: “Liftoff! Welcome to Barefoot Bay.”
+
+Presentation notes (non-technical):
+
+Keep each line on screen for ~0.8–1.2s; let it advance with the timer.
+
+Add a tiny “comms chirp” or soft type-on effect for personality (still readable from across a room).
+
+Make “Barefoot Bay, we are clear for launch.” the first line after the button click so it feels like the official call.
+
+Copy & on-screen elements
+
+Primary CTA: “Launch” (starts the countdown).
+
+Secondary: “Skip intro” (always visible), “Replay” (after reveal).
+
+Post-reveal headline: “Barefoot Bay is live.” or “Welcome to Barefoot Bay.”
+
+Accessibility courtesy: If a visitor prefers reduced motion, skip the animation entirely; offer a “Play animation” button.
+
+Art direction & tone (quick)
+
+Warm beach palette (seafoam, sky, sand, coral). Soft gradients with a touch of texture so it feels human, not sterile. “Retro NASA meets beach town”—optimistic, social, welcoming.
+
+Party-mode extras (optional)
+
+Host control: Park on the pre-launch scene before the event, then tap Launch live for the room.
+
+Projector loop: After reveal, auto-scroll a few highlight sections, then gracefully reset to the beach pre-launch state.
+
+Light celebratory confetti: A handful of shells or starfish sparkle for one second at reveal—minimal and classy.
+
+Acceptance checklist (for the team)
+
+Countdown begins when Launch is clicked and includes the comms strip.
+
+The line “Barefoot Bay, we are clear for launch.” appears right after the click.
+
+The reveal (pull-away or smoke dissolve) feels unmistakable and delightful.
+
+Live homepage is fully interactive the instant it appears.
+
+Skip + Replay + Sound toggle are present; experience holds up with sound off and with reduced motion

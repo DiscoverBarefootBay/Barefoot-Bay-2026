@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#e6f2ff"/>
+  <rect x="150" y="100" width="500" height="400" rx="15" fill="#cce0ff"/>
+  <line x1="250" y1="200" x2="550" y2="200" stroke="#6699cc" stroke-width="10" stroke-linecap="round"/>
+  <line x1="250" y1="250" x2="450" y2="250" stroke="#6699cc" stroke-width="10" stroke-linecap="round"/>
+  <line x1="250" y1="300" x2="500" y2="300" stroke="#6699cc" stroke-width="10" stroke-linecap="round"/>
+  <line x1="250" y1="350" x2="350" y2="350" stroke="#6699cc" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="350" cy="430" r="30" fill="#6699cc"/>
+  <text x="400" y="500" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" fill="#336699">Forum Post</text>
+</svg>

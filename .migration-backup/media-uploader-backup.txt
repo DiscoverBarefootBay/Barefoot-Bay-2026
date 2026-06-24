@@ -1,0 +1,493 @@
+import { useState, useRef, useEffect } from 'react';
+import { Upload, Image as ImageIcon, X, Crop, Move, AlignCenter, AlignLeft, AlignRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+import { Spinner } from '@/components/ui/spinner';
+import { Slider } from '@/components/ui/slider';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+interface MediaUploaderProps {
+  onMediaInsert: (url: string, altText?: string, styles?: ImageStyles) => void;
+}
+
+interface ImageStyles {
+  width?: string;
+  height?: string;
+  align?: 'left' | 'center' | 'right';
+  marginTop?: string;
+  marginBottom?: string;
+  marginLeft?: string;
+  marginRight?: string;
+}
+
+export function MediaUploader({ onMediaInsert }: MediaUploaderProps) {
+  const [open, setOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>('upload');
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+  const [imageAltText, setImageAltText] = useState('');
+  const [existingUrl, setExistingUrl] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const [activeSubTab, setActiveSubTab] = useState<string>('basic');
+  const { toast } = useToast();
+  
+  // Image style states
+  const [imageStyles, setImageStyles] = useState<ImageStyles>({
+    width: '100%',
+    align: 'center',
+  });
+  const [imageSizeOption, setImageSizeOption] = useState<'custom' | 'small' | 'medium' | 'large' | 'full'>('medium');
+
+  // Image size presets
+  const sizePresets = {
+    small: { width: '25%' },
+    medium: { width: '50%' },
+    large: { width: '75%' },
+    full: { width: '100%' },
+  };
+
+  // Update image size based on preset selection
+  useEffect(() => {
+    if (imageSizeOption !== 'custom') {
+      const preset = sizePresets[imageSizeOption];
+      setImageStyles(prev => ({ ...prev, ...preset }));
+    }
+  }, [imageSizeOption]);
+
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files || event.target.files.length === 0) {
+      return;
+    }
+
+    const file = event.target.files[0];
+    setIsUploading(true);
+    setUploadedImageUrl(null);
+
+    try {
+      const formData = new FormData();
+      formData.append('mediaFile', file);
+
+      const response = await fetch('/api/content/upload-media', {
+        method: 'POST',
+        credentials: 'include',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to upload image');
+      }
+
+      const data = await response.json();
+      setUploadedImageUrl(data.url);
+      
+      // Set alt text to filename without extension as default
+      const fileName = file.name.split('.').slice(0, -1).join('.');
+      setImageAltText(fileName);
+
+      // Reset image size to medium (default)
+      setImageSizeOption('medium');
+      setImageStyles({
+        width: '50%',
+        align: 'center',
+      });
+
+      toast({
+        title: 'Success',
+        description: 'Image uploaded successfully',
+      });
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast({
+        title: 'Error',
+        description: error instanceof Error ? error.message : 'Failed to upload image',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleInsert = () => {
+    if (activeTab === 'upload' && uploadedImageUrl) {
+      onMediaInsert(uploadedImageUrl, imageAltText, imageStyles);
+      resetForm();
+      setOpen(false);
+    } else if (activeTab === 'url' && existingUrl) {
+      onMediaInsert(existingUrl, imageAltText, imageStyles);
+      resetForm();
+      setOpen(false);
+    } else {
+      toast({
+        title: 'Missing information',
+        description: 'Please upload an image or provide a URL first',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const resetForm = () => {
+    setUploadedImageUrl(null);
+    setImageAltText('');
+    setExistingUrl('');
+    setImageSizeOption('medium');
+    setImageStyles({
+      width: '50%',
+      align: 'center',
+    });
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  // Handle custom width change
+  const handleWidthChange = (value: number) => {
+    // Convert slider value (0-100) to percentage
+    const widthPercentage = `${value}%`;
+    setImageStyles(prev => ({ ...prev, width: widthPercentage }));
+    setImageSizeOption('custom');
+  };
+
+  // Apply alignment
+  const handleAlignmentChange = (alignment: 'left' | 'center' | 'right') => {
+    setImageStyles(prev => ({ ...prev, align: alignment }));
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button 
+          variant="outline" 
+          size="icon" 
+          title="Insert image"
+          className="hover:bg-gray-100 dark:hover:bg-gray-800"
+        >
+          <ImageIcon className="h-4 w-4" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[600px]">
+        <DialogHeader>
+          <DialogTitle>Insert Media</DialogTitle>
+        </DialogHeader>
+        
+        <Tabs 
+          defaultValue="upload" 
+          value={activeTab} 
+          onValueChange={setActiveTab}
+          className="mt-4"
+        >
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="upload">Upload New</TabsTrigger>
+            <TabsTrigger value="url">Use URL</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="upload" className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="image-upload">Upload image</Label>
+              <Input 
+                id="image-upload" 
+                ref={fileInputRef}
+                type="file" 
+                accept="image/*" 
+                onChange={handleUpload} 
+                disabled={isUploading}
+              />
+            </div>
+            
+            {isUploading && (
+              <div className="flex justify-center py-8">
+                <Spinner size="lg" />
+              </div>
+            )}
+            
+            {uploadedImageUrl && !isUploading && (
+              <div className="space-y-4">
+                {/* Image Preview */}
+                <div className="relative border rounded-md overflow-hidden">
+                  <div 
+                    className="p-4 flex justify-center" 
+                    style={{ 
+                      textAlign: imageStyles.align || 'center'
+                    }}
+                  >
+                    <img 
+                      ref={imageRef}
+                      src={uploadedImageUrl} 
+                      alt="Preview" 
+                      className="h-auto max-h-[200px] object-contain"
+                      style={{ 
+                        width: imageStyles.width || '50%',
+                        marginLeft: imageStyles.align === 'center' ? 'auto' : (imageStyles.align === 'right' ? 'auto' : '0'),
+                        marginRight: imageStyles.align === 'center' ? 'auto' : (imageStyles.align === 'left' ? 'auto' : '0')
+                      }}
+                    />
+                  </div>
+                  
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    className="absolute top-2 right-2 h-6 w-6 rounded-full"
+                    onClick={() => {
+                      setUploadedImageUrl(null);
+                      if (fileInputRef.current) {
+                        fileInputRef.current.value = '';
+                      }
+                    }}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+                
+                {/* Image settings tabs */}
+                <Tabs 
+                  defaultValue="basic" 
+                  value={activeSubTab} 
+                  onValueChange={setActiveSubTab}
+                >
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="basic">Basic Info</TabsTrigger>
+                    <TabsTrigger value="appearance">Size & Alignment</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="basic" className="space-y-3 mt-3">
+                    <div className="space-y-2">
+                      <Label htmlFor="alt-text">Alt text</Label>
+                      <Input 
+                        id="alt-text" 
+                        value={imageAltText} 
+                        onChange={(e) => setImageAltText(e.target.value)} 
+                        placeholder="Describe this image" 
+                      />
+                      <p className="text-xs text-gray-500">
+                        Alternative text describes your image to people who can't see it. Good alt text is concise and descriptive.
+                      </p>
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="appearance" className="space-y-5 mt-3">
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
+                        <Label>Image size</Label>
+                        <Select
+                          value={imageSizeOption}
+                          onValueChange={(value) => setImageSizeOption(value as any)}
+                        >
+                          <SelectTrigger className="w-[120px]">
+                            <SelectValue placeholder="Size" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="small">Small</SelectItem>
+                            <SelectItem value="medium">Medium</SelectItem>
+                            <SelectItem value="large">Large</SelectItem>
+                            <SelectItem value="full">Full width</SelectItem>
+                            <SelectItem value="custom">Custom</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      
+                      <div className="flex items-center gap-2 pt-2">
+                        <WidthIcon size={18} className="text-gray-500" />
+                        <Slider
+                          defaultValue={[50]}
+                          value={[parseInt(imageStyles.width || '50')]}
+                          max={100}
+                          step={1}
+                          onValueChange={(values) => handleWidthChange(values[0])}
+                          className="flex-grow"
+                        />
+                        <span className="text-sm w-12 text-right">
+                          {imageStyles.width || '50%'}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <Label>Alignment</Label>
+                      <div className="flex gap-2">
+                        <Button
+                          type="button"
+                          variant={imageStyles.align === 'left' ? 'default' : 'outline'}
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => handleAlignmentChange('left')}
+                        >
+                          <AlignLeft size={16} className="mr-1" /> Left
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={imageStyles.align === 'center' ? 'default' : 'outline'}
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => handleAlignmentChange('center')}
+                        >
+                          <AlignCenter size={16} className="mr-1" /> Center
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={imageStyles.align === 'right' ? 'default' : 'outline'}
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => handleAlignmentChange('right')}
+                        >
+                          <AlignRight size={16} className="mr-1" /> Right
+                        </Button>
+                      </div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </div>
+            )}
+          </TabsContent>
+          
+          <TabsContent value="url" className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="image-url">Image URL</Label>
+              <Input 
+                id="image-url" 
+                value={existingUrl} 
+                onChange={(e) => setExistingUrl(e.target.value)} 
+                placeholder="https://example.com/image.jpg" 
+              />
+            </div>
+            
+            {existingUrl && (
+              <>
+                <div className="relative border rounded-md overflow-hidden">
+                  <div 
+                    className="p-4 flex justify-center" 
+                    style={{ 
+                      textAlign: imageStyles.align || 'center'
+                    }}
+                  >
+                    <img 
+                      src={existingUrl} 
+                      alt="Preview" 
+                      className="h-auto max-h-[200px] object-contain"
+                      style={{ 
+                        width: imageStyles.width || '50%',
+                        marginLeft: imageStyles.align === 'center' ? 'auto' : (imageStyles.align === 'right' ? 'auto' : '0'),
+                        marginRight: imageStyles.align === 'center' ? 'auto' : (imageStyles.align === 'left' ? 'auto' : '0')
+                      }}
+                      onError={(e) => {
+                        e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0yNCAxMC4xMTZjMCAyLjk0LTEuMTg3IDUuMzI0LTIuNzcxIDcuMTMycy0zLjYyMiAyLjc1Mi01LjY4NyAyLjc1MmMtMi4wMjMgMC00LjA1MS0uODgyLTUuNjc4LTIuNzUyQzguMzM4IDE1LjQ0IDcgMTMuMDU2IDcgMTAuMTE2YzAtNS4wNDUgMy42MDctOS4xMTYgOC40MjItOS4xMTZTMjQgNS4wNzEgMjQgMTAuMTE2ek0xMC44NjkgMTkuMTY0YzIuMTA4IDEuNjg5IDQuNzE5IDEuODMzIDYuODQyIDBsMy4xMDktMi40MDJjLjU4MS0uNDUxLjY2OS0xLjMuMTU3LTEuODYtLjUxMy0uNTU5LTEuMzgtLjY0Ny0xLjk2MS0uMTk2bC0zLjEwOSAyLjQwMmMtMS40IDEuMTIyLTMuMDk5IDEuMDIyLTQuNDg2IDBsLTMuMTMtMi40MjRjLS41ODEtLjQ1MS0xLjQ0OC0uMzYzLTEuOTYxLjE5Ni0uNTEyLjU2LS40MjQgMS40MDkuMTU3IDEuODZsMy4xMDkgMi40MDJ6Ii8+PC9zdmc+';
+                        e.currentTarget.alt = 'Failed to load image';
+                      }}
+                    />
+                  </div>
+                </div>
+                
+                <Tabs 
+                  defaultValue="basic" 
+                  value={activeSubTab} 
+                  onValueChange={setActiveSubTab}
+                >
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="basic">Basic Info</TabsTrigger>
+                    <TabsTrigger value="appearance">Size & Alignment</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="basic" className="space-y-3 mt-3">
+                    <div className="space-y-2">
+                      <Label htmlFor="alt-text-url">Alt text</Label>
+                      <Input 
+                        id="alt-text-url" 
+                        value={imageAltText} 
+                        onChange={(e) => setImageAltText(e.target.value)} 
+                        placeholder="Describe this image" 
+                      />
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="appearance" className="space-y-5 mt-3">
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
+                        <Label>Image size</Label>
+                        <Select
+                          value={imageSizeOption}
+                          onValueChange={(value) => setImageSizeOption(value as any)}
+                        >
+                          <SelectTrigger className="w-[120px]">
+                            <SelectValue placeholder="Size" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="small">Small</SelectItem>
+                            <SelectItem value="medium">Medium</SelectItem>
+                            <SelectItem value="large">Large</SelectItem>
+                            <SelectItem value="full">Full width</SelectItem>
+                            <SelectItem value="custom">Custom</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      
+                      <div className="flex items-center gap-2 pt-2">
+                        <WidthIcon size={18} className="text-gray-500" />
+                        <Slider
+                          defaultValue={[50]}
+                          value={[parseInt(imageStyles.width || '50')]}
+                          max={100}
+                          step={1}
+                          onValueChange={(values) => handleWidthChange(values[0])}
+                          className="flex-grow"
+                        />
+                        <span className="text-sm w-12 text-right">
+                          {imageStyles.width || '50%'}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <Label>Alignment</Label>
+                      <div className="flex gap-2">
+                        <Button
+                          type="button"
+                          variant={imageStyles.align === 'left' ? 'default' : 'outline'}
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => handleAlignmentChange('left')}
+                        >
+                          <AlignLeft size={16} className="mr-1" /> Left
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={imageStyles.align === 'center' ? 'default' : 'outline'}
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => handleAlignmentChange('center')}
+                        >
+                          <AlignCenter size={16} className="mr-1" /> Center
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={imageStyles.align === 'right' ? 'default' : 'outline'}
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => handleAlignmentChange('right')}
+                        >
+                          <AlignRight size={16} className="mr-1" /> Right
+                        </Button>
+                      </div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </>
+            )}
+          </TabsContent>
+        </Tabs>
+        
+        <div className="flex justify-end space-x-2 mt-4">
+          <Button variant="outline" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button onClick={handleInsert}>
+            Insert Image
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}

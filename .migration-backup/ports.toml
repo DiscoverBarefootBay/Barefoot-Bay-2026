@@ -1,0 +1,10 @@
+# ports.toml - Port configuration for Replit deployments
+# This file configures the port mapping for the application
+
+# Main HTTP port - MANDATORY: Must be 5000
+[http]
+port = 5000
+external = 80
+internal = 5000
+# This allows the port to be forwarded to the outside world
+public = true

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forum Media Debug Tool</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 20px;
+      line-height: 1.5;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f7fafc;
+    }
+    
+    h1, h2, h3 {
+      color: #2d3748;
+    }
+    
+    h1 {
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 10px;
+    }
+    
+    p {
+      color: #4a5568;
+      margin-bottom: 20px;
+    }
+    
+    .panel {
+      background-color: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .panel h2 {
+      margin-top: 0;
+      font-size: 1.25rem;
+    }
+    
+    .button {
+      display: inline-block;
+      background-color: #4299e1;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      margin-right: 8px;
+    }
+    
+    .button:hover {
+      background-color: #3182ce;
+    }
+    
+    .button.secondary {
+      background-color: #e2e8f0;
+      color: #2d3748;
+    }
+    
+    .button.secondary:hover {
+      background-color: #cbd5e0;
+    }
+    
+    .input-group {
+      margin-bottom: 15px;
+    }
+    
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #4a5568;
+      font-size: 14px;
+    }
+    
+    .input-group input[type="text"],
+    .input-group input[type="file"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    
+    .result {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 15px;
+      margin-top: 15px;
+      overflow-x: auto;
+      font-family: monospace;
+      white-space: pre-wrap;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    
+    .status {
+      padding: 8px 12px;
+      border-radius: 4px;
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 10px;
+    }
+    
+    .status.success {
+      background-color: #c6f6d5;
+      color: #2f855a;
+    }
+    
+    .status.error {
+      background-color: #fed7d7;
+      color: #9b2c2c;
+    }
+    
+    .url-test {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .url-test label {
+      min-width: 140px;
+      font-weight: 500;
+    }
+    
+    .url-test .result-indicator {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      margin-left: 10px;
+      background-color: #cbd5e0;
+    }
+    
+    .url-test .result-indicator.success {
+      background-color: #48bb78;
+    }
+    
+    .url-test .result-indicator.error {
+      background-color: #f56565;
+    }
+    
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 20px;
+    }
+    
+    .tab {
+      padding: 8px 16px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      font-weight: 500;
+    }
+    
+    .tab.active {
+      border-bottom-color: #3182ce;
+      color: #3182ce;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .note {
+      background-color: #ebf8ff;
+      border-left: 4px solid #4299e1;
+      padding: 10px 15px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    
+    code {
+      font-family: monospace;
+      background-color: #edf2f7;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-size: 90%;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    
+    table th, table td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    table th {
+      background-color: #f7fafc;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <h1>Forum Media Debug Tool</h1>
+  <p>This debug tool helps test and diagnose forum media upload issues and URL formats. You can use this tool to validate different forum media URL formats and test direct uploads to Object Storage.</p>
+  
+  <div class="tabs">
+    <div class="tab active" data-tab="url-testing">URL Format Testing</div>
+    <div class="tab" data-tab="upload-testing">Upload Testing</div>
+    <div class="tab" data-tab="post-analysis">Post Media Analysis</div>
+    <div class="tab" data-tab="system-info">System Info</div>
+  </div>
+  
+  <div class="tab-content active" id="url-testing">
+    <div class="panel">
+      <h2>Test URL Formats</h2>
+      <p>Enter a filename to test various URL formats:</p>
+      
+      <div class="input-group">
+        <label for="test-filename">Filename</label>
+        <input type="text" id="test-filename" placeholder="example.jpg" value="example.jpg">
+      </div>
+      
+      <button class="button" id="test-formats">Test All Formats</button>
+      <div id="url-test-results" class="result">Results will appear here...</div>
+    </div>
+    
+    <div class="panel">
+      <h2>Individual URL Format Tests</h2>
+      <p>Test each format individually:</p>
+      
+      <div class="url-test">
+        <label>Standard Format:</label>
+        <code id="standard-format-url">/api/storage-proxy/FORUM/forum/example.jpg</code>
+        <div class="result-indicator" id="standard-format-result"></div>
+      </div>
+      
+      <div class="url-test">
+        <label>Direct Forum Format:</label>
+        <code id="direct-format-url">/api/direct-forum/example.jpg</code>
+        <div class="result-indicator" id="direct-format-result"></div>
+      </div>
+      
+      <div class="url-test">
+        <label>Bucket Only Format:</label>
+        <code id="bucket-format-url">/api/storage-proxy/FORUM/example.jpg</code>
+        <div class="result-indicator" id="bucket-format-result"></div>
+      </div>
+      
+      <div class="url-test">
+        <label>Legacy Format:</label>
+        <code id="legacy-format-url">/forum-media/example.jpg</code>
+        <div class="result-indicator" id="legacy-format-result"></div>
+      </div>
+      
+      <div class="url-test">
+        <label>Legacy Uploads Format:</label>
+        <code id="legacy-uploads-format-url">/uploads/forum-media/example.jpg</code>
+        <div class="result-indicator" id="legacy-uploads-format-result"></div>
+      </div>
+      
+      <div class="url-test">
+        <label>Direct Media Format:</label>
+        <code id="direct-media-format-url">/api/media/forum/example.jpg</code>
+        <div class="result-indicator" id="direct-media-format-result"></div>
+      </div>
+      
+      <button class="button" id="test-individual-formats">Test Individual Formats</button>
+    </div>
+  </div>
+  
+  <div class="tab-content" id="upload-testing">
+    <div class="panel">
+      <h2>Direct Upload to Object Storage</h2>
+      <p>Upload a file directly to the FORUM bucket in Object Storage:</p>
+      
+      <div class="input-group">
+        <label for="upload-file">Select Image File</label>
+        <input type="file" id="upload-file">
+      </div>
+      
+      <button class="button" id="upload-to-storage">Upload to Object Storage</button>
+      <div id="upload-result" class="result">Upload results will appear here...</div>
+    </div>
+  </div>
+  
+  <div class="tab-content" id="post-analysis">
+    <div class="panel">
+      <h2>Forum Post Media Analysis</h2>
+      <p>Analyze media URLs in a specific forum post:</p>
+      
+      <div class="input-group">
+        <label for="post-id">Post ID</label>
+        <input type="text" id="post-id" placeholder="Enter post ID">
+      </div>
+      
+      <button class="button" id="analyze-post">Analyze Post Media</button>
+      <div id="post-analysis-result" class="result">Post analysis results will appear here...</div>
+    </div>
+  </div>
+  
+  <div class="tab-content" id="system-info">
+    <div class="panel">
+      <h2>System Information</h2>
+      <p>View information about the current system and storage configuration:</p>
+      
+      <button class="button" id="get-system-info">Refresh System Info</button>
+      <div id="system-info-result" class="result">System information will appear here...</div>
+    </div>
+  </div>
+  
+  <div class="note">
+    <strong>Note:</strong> This is a diagnostic tool meant for testing forum media URL formats and uploads. Use it for troubleshooting when media is not displaying correctly in forum posts.
+  </div>
+  
+  <script>
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+        
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+    
+    // Get API base URL
+    const API_BASE = window.location.origin;
+    
+    // Test all URL formats
+    document.getElementById('test-formats').addEventListener('click', async () => {
+      const filename = document.getElementById('test-filename').value || 'example.jpg';
+      const resultDiv = document.getElementById('url-test-results');
+      
+      resultDiv.textContent = 'Testing all formats...';
+      
+      try {
+        const response = await fetch(`${API_BASE}/api/forum-media-test/test-formats/${filename}`);
+        const data = await response.json();
+        
+        resultDiv.textContent = JSON.stringify(data, null, 2);
+        
+        // Update individual format test URLs
+        document.getElementById('standard-format-url').textContent = `/api/storage-proxy/FORUM/forum/${filename}`;
+        document.getElementById('direct-format-url').textContent = `/api/direct-forum/${filename}`;
+        document.getElementById('bucket-format-url').textContent = `/api/storage-proxy/FORUM/${filename}`;
+        document.getElementById('legacy-format-url').textContent = `/forum-media/${filename}`;
+        document.getElementById('legacy-uploads-format-url').textContent = `/uploads/forum-media/${filename}`;
+        document.getElementById('direct-media-format-url').textContent = `/api/media/forum/${filename}`;
+        
+        // Update result indicators
+        Object.keys(data.results).forEach(format => {
+          const indicator = document.getElementById(`${format}-format-result`);
+          if (indicator) {
+            indicator.className = 'result-indicator ' + (data.results[format].success ? 'success' : 'error');
+          }
+        });
+      } catch (error) {
+        resultDiv.textContent = `Error: ${error.message}`;
+      }
+    });
+    
+    // Test individual URL formats
+    document.getElementById('test-individual-formats').addEventListener('click', async () => {
+      const filename = document.getElementById('test-filename').value || 'example.jpg';
+      
+      // Update all URLs
+      document.getElementById('standard-format-url').textContent = `/api/storage-proxy/FORUM/forum/${filename}`;
+      document.getElementById('direct-format-url').textContent = `/api/direct-forum/${filename}`;
+      document.getElementById('bucket-format-url').textContent = `/api/storage-proxy/FORUM/${filename}`;
+      document.getElementById('legacy-format-url').textContent = `/forum-media/${filename}`;
+      document.getElementById('legacy-uploads-format-url').textContent = `/uploads/forum-media/${filename}`;
+      document.getElementById('direct-media-format-url').textContent = `/api/media/forum/${filename}`;
+      
+      // Reset indicator colors
+      document.querySelectorAll('.result-indicator').forEach(indicator => {
+        indicator.className = 'result-indicator';
+      });
+      
+      // Test each format individually
+      const formats = ['standard', 'direct', 'bucket', 'legacy', 'legacy-uploads', 'direct-media'];
+      
+      for (const format of formats) {
+        try {
+          const response = await fetch(`${API_BASE}/api/forum-media-test/debug/${format}/${filename}`);
+          const data = await response.json();
+          
+          const formattedFormat = format.replace('-', '_'); // handle legacy-uploads format
+          const indicator = document.getElementById(`${format}-format-result`);
+          
+          if (indicator) {
+            indicator.className = 'result-indicator ' + (data.success ? 'success' : 'error');
+          }
+        } catch (error) {
+          console.error(`Error testing ${format} format:`, error);
+          const indicator = document.getElementById(`${format}-format-result`);
+          if (indicator) {
+            indicator.className = 'result-indicator error';
+          }
+        }
+      }
+    });
+    
+    // Direct upload to Object Storage
+    document.getElementById('upload-to-storage').addEventListener('click', async () => {
+      const fileInput = document.getElementById('upload-file');
+      const resultDiv = document.getElementById('upload-result');
+      
+      if (!fileInput.files || fileInput.files.length === 0) {
+        resultDiv.textContent = 'Please select a file to upload';
+        return;
+      }
+      
+      const file = fileInput.files[0];
+      resultDiv.textContent = `Uploading ${file.name} to Object Storage...`;
+      
+      try {
+        // First, get authorization
+        const authResponse = await fetch(`${API_BASE}/api/forum-media-test/direct-upload-auth`);
+        const authData = await authResponse.json();
+        
+        if (!authData.success) {
+          resultDiv.textContent = `Authorization failed: ${authData.message}`;
+          return;
+        }
+        
+        // Create form data with the file
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('bucket', authData.bucket || 'FORUM');
+        formData.append('key', `forum/${file.name}`);
+        formData.append('token', authData.token);
+        
+        // Upload the file
+        const uploadResponse = await fetch(`${API_BASE}/api/direct-upload`, {
+          method: 'POST',
+          body: formData
+        });
+        
+        const uploadResult = await uploadResponse.json();
+        resultDiv.textContent = JSON.stringify(uploadResult, null, 2);
+        
+        // Update the test filename input for immediate testing
+        document.getElementById('test-filename').value = file.name;
+      } catch (error) {
+        resultDiv.textContent = `Upload error: ${error.message}`;
+      }
+    });
+    
+    // Analyze forum post media
+    document.getElementById('analyze-post').addEventListener('click', async () => {
+      const postId = document.getElementById('post-id').value;
+      const resultDiv = document.getElementById('post-analysis-result');
+      
+      if (!postId) {
+        resultDiv.textContent = 'Please enter a post ID';
+        return;
+      }
+      
+      resultDiv.textContent = `Analyzing media in post ${postId}...`;
+      
+      try {
+        const response = await fetch(`${API_BASE}/api/forum-media-test/post-media/${postId}`);
+        const data = await response.json();
+        
+        resultDiv.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        resultDiv.textContent = `Error: ${error.message}`;
+      }
+    });
+    
+    // Get system information
+    document.getElementById('get-system-info').addEventListener('click', async () => {
+      const resultDiv = document.getElementById('system-info-result');
+      
+      resultDiv.textContent = 'Fetching system information...';
+      
+      try {
+        const response = await fetch(`${API_BASE}/api/forum-media-test/system-info`);
+        const data = await response.json();
+        
+        resultDiv.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        resultDiv.textContent = `Error: ${error.message}`;
+      }
+    });
+    
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', () => {
+      // Get system info on load
+      document.getElementById('get-system-info').click();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1807 @@
+import { useState, useEffect } from "react";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Card } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { useQuery } from "@tanstack/react-query";
+import { format, addMonths, isBefore, compareAsc } from "date-fns";
+import { Link } from "wouter";
+// Import custom styles for search results
+import "./search-bar.css";
+
+export function SearchBar() {
+  const [query, setQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchResult, setSearchResult] = useState<string | null>(null);
+  const { toast } = useToast();
+
+  // Fetch events data
+  const { data: events, isLoading: eventsLoading } = useQuery({
+    queryKey: ["/api/events"],
+    queryFn: async () => {
+      console.log("Fetching events...");
+      const response = await fetch("/api/events");
+      if (!response.ok) throw new Error("Failed to fetch events");
+      const data = await response.json();
+      console.log("Fetched events:", data);
+      return data;
+    }
+  });
+
+  // Fetch for-sale listings data
+  const { data: listings, isLoading: listingsLoading } = useQuery({
+    queryKey: ["/api/listings"],
+    queryFn: async () => {
+      console.log("Fetching for-sale listings...");
+      const response = await fetch("/api/listings");
+      if (!response.ok) throw new Error("Failed to fetch listings");
+      const data = await response.json();
+      console.log("Fetched listings:", data);
+      return data;
+    }
+  });
+
+  // Fetch forum discussions data
+  const { data: forumCategories } = useQuery({
+    queryKey: ["/api/forum/categories"],
+    queryFn: async () => {
+      console.log("Fetching forum categories...");
+      const response = await fetch("/api/forum/categories");
+      if (!response.ok) throw new Error("Failed to fetch forum categories");
+      return response.json();
+    }
+  });
+
+  // Fetch forum posts across all categories
+  const [forumDiscussions, setForumDiscussions] = useState<any[]>([]);
+  const fetchForumPosts = async () => {
+    if (!forumCategories || !Array.isArray(forumCategories)) return;
+    
+    const posts: any[] = [];
+    for (const category of forumCategories) {
+      try {
+        const response = await fetch(`/api/forum/categories/${category.id}/posts`);
+        if (response.ok) {
+          const categoryPosts = await response.json();
+          if (Array.isArray(categoryPosts)) {
+            posts.push(...categoryPosts.map(post => ({
+              ...post,
+              categoryName: category.name,
+              categorySlug: category.slug
+            })));
+          }
+        }
+      } catch (error) {
+        console.error(`Error fetching posts for category ${category.id}:`, error);
+      }
+    }
+    
+    // Sort by most recent activity
+    posts.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+    setForumDiscussions(posts);
+  };
+
+  // Fetch community information pages
+  const { data: communityPages } = useQuery({
+    queryKey: ["/api/pages"],
+    queryFn: async () => {
+      console.log("Fetching community pages...");
+      const response = await fetch("/api/pages");
+      if (!response.ok) throw new Error("Failed to fetch community pages");
+      const data = await response.json();
+      console.log("Fetched community pages:", data);
+      return data;
+    }
+  });
+
+  // Fetch forum posts when forum categories are loaded
+  useEffect(() => {
+    if (forumCategories && Array.isArray(forumCategories) && forumCategories.length > 0) {
+      fetchForumPosts();
+    }
+  }, [forumCategories]);
+
+  /**
+   * Process and handle rocket launch related queries
+   */ 
+  const handleRocketLaunchQuery = async () => {
+    try {
+      const response = await fetch('/api/rocket-launches');
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch rocket launch data');
+      }
+      
+      const launchData = await response.json();
+      
+      if (!launchData || launchData.length === 0) {
+        setSearchResult(`
+          Hello, neighbor! 👋
+          
+          I don't have any information about upcoming rocket launches visible from Barefoot Bay at the moment.
+          
+          <span class="inline-block">👉<a href="https://www.spacecoastlaunches.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors">Check Space Coast Launches website</a></span>
+          
+          Happy to help with more questions! 🌞
+        `);
+        setIsSearching(false);
+        return;
+      }
+      
+      // Format launch data into HTML
+      let launchesHTML = '';
+      
+      launchData.forEach((launch: any, index: number) => {
+        const launchDate = launch.window_start 
+          ? new Date(launch.window_start).toLocaleDateString('en-US', {
+              month: 'long', day: 'numeric', year: 'numeric'
+            }) 
+          : launch.est_date
+            ? `${launch.est_date.month}/${launch.est_date.day}/${launch.est_date.year}` 
+            : "Date TBD";
+            
+        const launchTime = launch.window_start
+          ? new Date(launch.window_start).toLocaleTimeString('en-US', {
+              hour: 'numeric', minute: '2-digit', hour12: true
+            })
+          : "Time TBD";
+          
+        launchesHTML += `
+        ${index > 0 ? '<hr class="my-4 border-gray-200" />' : ''}
+        <div class="px-4 py-3 rounded-lg bg-blue-50/70 border border-blue-100 shadow-sm">
+          <h3 class="text-xl font-bold text-navy mb-3">🚀 ${launch.name}</h3>
+          <div class="space-y-2">
+            <p><span class="inline-flex items-center">📅 <span class="ml-2 font-medium">Launch Date:</span></span> <span class="ml-2">${launchDate}</span></p>
+            <p><span class="inline-flex items-center">⏰ <span class="ml-2 font-medium">Launch Time:</span></span> <span class="ml-2">${launchTime}</span></p>
+            <p><span class="inline-flex items-center">📍 <span class="ml-2 font-medium">Location:</span></span> <span class="ml-2">${launch.pad.location.name}</span></p>
+            <p><span class="inline-flex items-center">🛰️ <span class="ml-2 font-medium">Rocket:</span></span> <span class="ml-2">${launch.vehicle.name}</span></p>
+            <p><span class="inline-flex items-center">🏢 <span class="ml-2 font-medium">Provider:</span></span> <span class="ml-2">${launch.provider.name}</span></p>
+            ${launch.missions && launch.missions.length > 0 
+              ? `<p><span class="inline-flex items-center">🔭 <span class="ml-2 font-medium">Mission:</span></span> <span class="ml-2">${launch.missions[0].name || "Not specified"}</span></p>` 
+              : ""
+            }
+            <div class="mt-3">
+              <span class="text-xs text-blue-600">This launch will be visible from Barefoot Bay!</span>
+            </div>
+          </div>
+        </div>
+        `;
+      });
+      
+      setSearchResult(`
+        <div class="space-y-6">
+          <div class="flex flex-col space-y-2">
+            <h2 class="text-xl font-bold text-navy flex items-center">
+              <span class="mr-2">🚀</span> Upcoming Rocket Launches
+            </h2>
+            <p class="text-gray-600">
+              Get ready for an amazing view! Here are the upcoming rocket launches visible from Barefoot Bay, Florida.
+            </p>
+          </div>
+          
+          ${launchesHTML}
+          
+          <div class="pt-4 flex flex-col space-y-3">
+            <a href="https://www.spacecoastlaunches.com/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="inline-flex items-center px-4 py-2 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors w-fit">
+              <span class="mr-2">🔭</span> View more launch information
+            </a>
+            
+            <p class="text-sm text-gray-500 italic">
+              <span class="mr-1">💡</span> Pro tip: For the best viewing experience, head to Barefoot Bay Community Center's east facing side about 15-20 minutes before launch time!
+            </p>
+          </div>
+        </div>
+      `);
+      
+    } catch (error) {
+      console.error('Error fetching rocket launch data:', error);
+      setSearchResult(`
+        <div class="space-y-6">
+          <div class="flex flex-col space-y-2">
+            <h2 class="text-xl font-bold text-navy flex items-center">
+              <span class="mr-2">🚀</span> Rocket Launch Information
+            </h2>
+            <div class="p-4 bg-blue-50/70 border border-blue-100 rounded-lg">
+              <p class="text-gray-700 mb-3">
+                <span class="mr-2">🔍</span> I couldn't retrieve the latest rocket launch information at the moment.
+              </p>
+              <p class="text-gray-600 mb-4">
+                The Space Coast (just east of Barefoot Bay) is one of the best places in the country to view rocket launches, with multiple launches visible each month!
+              </p>
+              <a href="https://www.spacecoastlaunches.com/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="inline-flex items-center px-4 py-2 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors w-fit">
+                <span class="mr-2">🔭</span> Check Space Coast Launches website
+              </a>
+            </div>
+            
+            <div class="mt-3 text-sm text-gray-500 italic">
+              <p>
+                <span class="mr-1">💡</span> Pro tip: For the best viewing experience of rocket launches, head to Barefoot Bay Community Center's east facing side!
+              </p>
+            </div>
+          </div>
+        </div>
+      `);
+    }
+    
+    setIsSearching(false);
+  };
+  
+  /**
+   * Process and handle weather related queries
+   */
+  const handleWeatherQuery = async () => {
+    const lowercaseQuery = query.toLowerCase();
+    
+    // For simple weather queries without specific time references
+    setSearchResult(`
+      Hello, neighbor! 👋
+      
+      I found information about our local weather. You can view the current weather conditions and forecast for Barefoot Bay on our dedicated weather page.
+      
+      <span class="inline-block">👉<a href="/weather" class="inline-flex items-center px-4 py-2 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors">View detailed weather information</a></span>
+      
+      Happy to help with more questions! 🌞
+    `);
+    
+    setIsSearching(false);
+  };
+
+  /**
+   * Main search handler function
+   */
+  const handleSearch = async () => {
+    if (!query.trim()) return;
+
+    setIsSearching(true);
+    setSearchResult(null);
+
+    // First, use Gemini AI to analyze the query intent and handle misspellings
+    try {
+      // Create a specialized intent analysis prompt for Gemini
+      const intentAnalysisPrompt = `
+Analyze this search query for its core intent. Focus on identifying what the user is looking for, including if it contains:
+1. Misspellings or typos (correct them)
+2. The primary topic/subject (one of: rocket_launch, weather, event, real_estate, community, forum, service)
+3. Specific details or constraints (time, location, price, etc.)
+
+Query: "${query.trim()}"
+
+Respond in this JSON format only:
+{
+  "correctedQuery": "corrected version if misspelled",
+  "primaryIntent": "the main category/topic",
+  "confidence": 0-100,
+  "possibleIntents": ["list", "of", "possible", "intents"],
+  "detectedKeywords": ["key", "terms", "found"],
+  "containsRocketLaunchIntent": true/false,
+  "containsWeatherIntent": true/false,
+  "isTimeSpecific": true/false
+}
+`;
+
+      // Call Gemini API to analyze intent
+      const response = await fetch('/api/gemini-proxy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: "gemini-1.5-flash",
+          contents: [
+            {
+              parts: [
+                { text: intentAnalysisPrompt }
+              ]
+            }
+          ],
+          generationConfig: {
+            temperature: 0.1, // Lower temperature for more deterministic/precise responses
+            topK: 40,
+            topP: 0.95,
+            maxOutputTokens: 1024,
+          }
+        })
+      });
+      
+      if (!response.ok) {
+        console.error('Error from Gemini API proxy:', response.status, response.statusText);
+        throw new Error(`API error: ${response.statusText}`);
+      }
+      
+      const result = await response.json();
+      const intentAnalysisText = result.candidates[0]?.content?.parts[0]?.text;
+      
+      if (!intentAnalysisText) {
+        throw new Error("No intent analysis response generated");
+      }
+      
+      // Extract the JSON from the response
+      // The response might have markdown formatting, so we need to clean it
+      const jsonRegex = /{[\s\S]*}/;
+      const jsonMatch = intentAnalysisText.match(jsonRegex);
+      let intentData;
+      
+      if (jsonMatch) {
+        try {
+          intentData = JSON.parse(jsonMatch[0]);
+          console.log("Intent analysis:", intentData);
+        } catch (e) {
+          console.error("Failed to parse intent analysis JSON", e);
+          // Continue with fallback approach
+        }
+      }
+      
+      // If we have valid intent data and high confidence, use it to determine query type
+      if (intentData && intentData.confidence >= 70) {
+        // Use AI-determined intent for routing
+        const isRocketQuery = intentData.containsRocketLaunchIntent || 
+                             intentData.primaryIntent === "rocket_launch" ||
+                             (intentData.possibleIntents && 
+                              intentData.possibleIntents.includes("rocket_launch"));
+                              
+        const isWeatherQuery = intentData.containsWeatherIntent || 
+                              intentData.primaryIntent === "weather" ||
+                              (intentData.possibleIntents && 
+                               intentData.possibleIntents.includes("weather"));
+        
+        // If AI detected rocket launch intent, process accordingly
+        if (isRocketQuery && !isWeatherQuery) {
+          // Proceed with rocket launch query handling
+          await handleRocketLaunchQuery();
+          return;
+        }
+        
+        // If AI detected weather intent, process accordingly
+        if (isWeatherQuery && !isRocketQuery) {
+          // Proceed with weather query handling
+          await handleWeatherQuery();
+          return;
+        }
+      }
+    } catch (error) {
+      console.error("Error with AI intent analysis:", error);
+      // Fall back to keyword-based approach if AI fails
+    }
+    
+    // Fall back to traditional keyword-based approach
+    // Check if the search is weather-related
+    const weatherKeywords = [
+      'weather', 'forecast', 'temperature', 'rain', 'sunny', 'humidity', 'wind', 
+      'climate', 'storm', 'hot', 'cold', 'degrees', 'cloudy', 'clouds', 'cloud', 
+      'precipitation', 'sunny', 'snow', 'foggy', 'fog', 'misty', 'mist', 'windy',
+      'chilly', 'warm', 'heat', 'hail', 'thunder', 'lightning', 'shower', 'drizzle',
+      'fahrenheit', 'celsius', 'feels like', 'condition', 'meteorology', 'barometric'
+    ];
+    
+    // Check if the search is rocket launch related
+    const rocketKeywords = [
+      'rocket', 'launch', 'space', 'spacex', 'nasa', 'satellite', 'falcon', 
+      'mission', 'spacecraft', 'orbit', 'cape canaveral', 'kennedy space center', 
+      'liftoff', 'countdown', 'booster', 'blastoff', 'starship', 'space coast', 
+      'shuttle', 'astronaut', 'space program', 'space flight', 'payload', 'launch pad',
+      'rocket launch', 'artemis', 'iss', 'space station', 'space mission'
+    ];
+    
+    // Common misspellings and variations of rocket-related terms
+    const rocketMisspellings = [
+      'lanch', 'lunch', 'lauch', 'lounche', 'rocketship', 'roket', 'rockit', 
+      'spaceship', 'spase', 'spce', 'misile', 'rocklet', 'blast', 'liftup',
+      'nasaa', 'canaveral', 'kenedy', 'capsule', 'craft', 'vehical', 'misssion'
+    ];
+    
+    // Launch-related intent phrases that don't contain exact keywords
+    const launchIntentPhrases = [
+      'when is next', 'when will', 'upcoming', 'watch', 'see from', 'viewing',
+      'take off', 'blast off', 'flying', 'sending up', 'going up', 'sending to space',
+      'next flight', 'schedule', 'calendar', 'what time', 'what date'
+    ];
+    
+    const lowercaseQuery = query.toLowerCase();
+    
+    const isWeatherQuery = weatherKeywords.some(keyword => 
+      lowercaseQuery.includes(keyword)
+    );
+    
+    // Determine if the query is rocket-related using multiple techniques
+    const hasExactRocketKeyword = rocketKeywords.some(keyword => 
+      lowercaseQuery.includes(keyword)
+    );
+    
+    const hasMisspelledRocketTerm = rocketMisspellings.some(term => 
+      lowercaseQuery.includes(term)
+    );
+    
+    // Check if the query contains launch intent phrases that strongly suggest
+    // the user is looking for information about upcoming rocket launches
+    const hasLaunchIntent = launchIntentPhrases.some(phrase => 
+      lowercaseQuery.includes(phrase)
+    ) && 
+    // Plus some fuzzy matching for key terms, looking for close matches
+    (lowercaseQuery.includes('rock') || 
+     lowercaseQuery.includes('lau') || 
+     lowercaseQuery.includes('spac') || 
+     lowercaseQuery.includes('miss') || 
+     lowercaseQuery.includes('lift') || 
+     lowercaseQuery.includes('orb'));
+    
+    // Combine all rocket-related matching approaches
+    const isRocketQuery = hasExactRocketKeyword || hasMisspelledRocketTerm || hasLaunchIntent;
+    
+    // First handle rocket launch queries
+    if (isRocketQuery && !isWeatherQuery) {
+      await handleRocketLaunchQuery();
+      return;
+    }
+    
+    // Then handle weather queries
+    if (isWeatherQuery) {
+      await handleWeatherQuery();
+      return;
+    }
+    
+    // If we reach here, use the AI to generate a contextual response
+    try {
+      // Prepare AI response with community context
+      const eventsContext = events?.slice(0, 5) || [];
+      const listingsContext = listings?.slice(0, 5) || [];
+      const discussionsContext = forumDiscussions?.slice(0, 5) || [];
+      
+      // Prepare community info context from other content types
+      const communityInfoContext = communityPages || [];
+      
+      // Flag any special query types
+      const isRentalQuery = /\b(rent|rental|lease|apartment|tenant)\b/i.test(query);
+      const isOwnershipQuery = /\b(tattler|rob allan|allan family|who owns)\b/i.test(query);
+      
+      // Check for time-based qualifiers
+      const hasTodayKeyword = /\b(today)\b/i.test(query);
+      const hasTomorrowKeyword = /\b(tomorrow)\b/i.test(query);
+      const hasThisWeekKeyword = /\b(this week|upcoming week|this coming week)\b/i.test(query);
+      
+      // Check for personal messages addressed to the assistant
+      const personalMessagePatterns = [
+        /\b(thank you|thanks|appreciate|helpful|good job|well done)\b/i,
+        /\b(who are you|what are you|tell me about yourself|your name|how do you work)\b/i,
+        /\b(you're smart|you are smart|you're intelligent|you are intelligent|you're clever|you are clever|you're wise|you are wise)\b/i,
+        /\b(you're helpful|you are helpful|you're useful|you are useful|you're efficient|you are efficient)\b/i,
+        /\b(you're cool|you are cool|you're neat|you are neat|you're interesting|you are interesting)\b/i
+      ];
+      
+      const isPersonalMessage = personalMessagePatterns.some(pattern => 
+        pattern.test(query.toLowerCase())
+      );
+      
+      // Prepare the AI query
+      const promptText = `You are the friendly Barefoot Bay community assistant. Follow this conversation structure exactly:
+      
+QUERY ANALYSIS (DO NOT DISPLAY THIS TO USER):
+- User query: "${query.trim()}"
+- Rental query detected: ${isRentalQuery ? 'YES - THIS IS A RENTAL QUERY!' : 'No'}
+- Property search terms: ${/\b(house|property|home|listing|sale|buy)\b/i.test(query) ? 'YES' : 'No'}
+- Event search terms: ${/\b(event|activity|happening|when|where|club|meeting|game|party|social|festival|class|workshop|entertainment|sport|league|tournament|competition|show)\b/i.test(query) ? 'YES' : 'No'}
+- Sport/Activity terms: ${/\b(bowling|yahtzee|golf|tennis|pickleball|swimming|bingo|cards|board game|craft|dance|fitness|yoga)\b/i.test(query) ? 'YES - ACTIVITY SPECIFIC QUERY' : 'No'}
+- Time-specific query: ${hasThisWeekKeyword ? 'THIS WEEK' : hasTodayKeyword ? 'TODAY' : hasTomorrowKeyword ? 'TOMORROW' : 'No'}
+- Ownership query detected: ${isOwnershipQuery ? 'YES - THIS IS A QUERY ABOUT TATTLER MEDIA OR OWNERS!' : 'No'}
+- Personal message detected: ${isPersonalMessage ? 'YES - THIS IS A PERSONAL MESSAGE TO THE BOT!' : 'No'}
+
+Start with a warm, friendly greeting with an emoji:
+"Hello, neighbor! 👋" or "Hi there, friend! 👋" or "Greetings from Barefoot Bay! 🏝️"
+
+When responding to search queries, acknowledge what the user is asking about without directly quoting them. For example, if they ask about golf events, you might start with "I found some golf activities coming up!" or if they ask about home sales, you might say "Looking for homes in our community? Here's what I found!"
+
+Review content from these areas:
+
+Upcoming events: ${JSON.stringify(eventsContext)}, sorted chronologically (soonest first).
+
+For-sale listings: ${JSON.stringify(listingsContext)}, sorted by most recent.
+
+Forum discussions: ${JSON.stringify(discussionsContext)}, sorted by most recent activity.
+
+Community information (local organizations, clubs, government news, etc.): ${JSON.stringify(communityInfoContext)}.
+
+IMPORTANT: If the user is specifically looking for events (terms like "events", "activities", "happening", "calendar", "schedule", etc.) and there are no events available, respond with: "I don't see any upcoming events at the moment. The community calendar will be updated soon with new activities. Check back later or try searching for something else! 📅"
+
+VERY IMPORTANT - SPECIAL INFORMATION ABOUT BAREFOOT BAY OWNERSHIP:
+If the query is about Rob Allan, Tattler Media, or the Allan family (ownership query detected), include the following information in your response:
+
+"The Tattler is owned by the Allan family who have lived in Barefoot Bay since 2004. Rob Allan, together with his family, purchased The Tattler after selling their Barefoot Bay home in 2022. The Allan family has strong roots in the community - Rob's mother Joan E. McDonald moved to Barefoot Bay in the late 1980s, and over time multiple family members settled in the area. Their story represents several generations of Barefoot Bay residents. They continue to be actively involved in publishing the Tattler monthly and supporting the community."
+
+Be helpful and friendly in all replies. End with an offer to help with anything else or suggest a related topic they might be interested in.
+
+Keep your answers concise, aiming for 2-3 short paragraphs max. If the query seems like a simple greeting or small talk, respond with just a friendly greeting back and brief offer to help.
+`;
+
+      const response = await fetch('/api/gemini-proxy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: "gemini-1.5-flash",
+          contents: [
+            {
+              parts: [
+                { text: promptText }
+              ]
+            }
+          ],
+          generationConfig: {
+            temperature: 0.7,
+            topK: 40,
+            topP: 0.95,
+            maxOutputTokens: 1024,
+          }
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`API error: ${response.statusText}`);
+      }
+      
+      const result = await response.json();
+      const aiResponse = result.candidates[0]?.content?.parts[0]?.text;
+      
+      if (aiResponse) {
+        setSearchResult(aiResponse);
+      } else {
+        // Fallback response if AI fails
+        setSearchResult(`
+          Hello, neighbor! 👋
+          
+          I'm not sure I understood your question fully. You can try asking about:
+          
+          - Upcoming events in Barefoot Bay
+          - Properties for sale in our community
+          - Local weather forecast
+          - Rocket launches visible from Barefoot Bay
+          
+          If you're looking for something specific, try rephrasing your question with more details!
+        `);
+      }
+    } catch (error) {
+      console.error('Error generating AI response:', error);
+      setSearchResult(`
+        Hello, neighbor! 👋
+        
+        I had some trouble processing your request. Could you try asking in a different way?
+        
+        You can ask about events, properties, local weather, or other community information!
+      `);
+    }
+    
+    setIsSearching(false);
+            // Use noon forecast for the day summary, or the first one if not available
+            const midDayForecast = forecasts.find((item: any) => {
+              const forecastDate = new Date(item.dt * 1000);
+              return forecastDate.getHours() >= 11 && forecastDate.getHours() <= 14;
+            }) || forecasts[0];
+            
+            const date = new Date(midDayForecast.dt * 1000);
+            const highTemp = Math.round(forecasts.reduce((max: number, f: any) => 
+              Math.max(max, f.main.temp), -Infinity));
+            const lowTemp = Math.round(forecasts.reduce((min: number, f: any) => 
+              Math.min(min, f.main.temp), Infinity));
+            
+            return {
+              date,
+              forecast: midDayForecast,
+              highTemp,
+              lowTemp
+            };
+          });
+          
+          // Prepare a weekly forecast response
+          const weeklyForecastHTML = `
+            <div class="space-y-6">
+              <div class="flex flex-col space-y-2">
+                <h2 class="text-xl font-bold text-navy flex items-center">
+                  <span class="mr-2">🌤️</span> 5-Day Weather Forecast
+                </h2>
+                <p class="text-gray-600">
+                  Here's the 5-day weather forecast for Barefoot Bay:
+                </p>
+              </div>
+              
+              <div class="flex flex-row overflow-x-auto pb-4 space-x-2">
+                ${fiveDayForecast.map((day, index) => {
+                  const dateString = format(day.date, "EEE, MMM d");
+                  const weather = day.forecast.weather[0];
+                  const condition = weather.main.toLowerCase();
+                  
+                  // Select weather icon based on condition
+                  let weatherEmoji = '🌤️';
+                  if (condition.includes('clear')) weatherEmoji = '☀️';
+                  else if (condition.includes('cloud')) weatherEmoji = '⛅';
+                  else if (condition.includes('rain')) weatherEmoji = '🌧️';
+                  else if (condition.includes('thunder')) weatherEmoji = '⛈️';
+                  else if (condition.includes('snow')) weatherEmoji = '❄️';
+                  else if (condition.includes('mist') || condition.includes('fog')) weatherEmoji = '🌫️';
+                  
+                  return `
+                    <div class="px-3 py-4 rounded-lg bg-blue-50/70 border border-blue-100 shadow-sm flex flex-col items-center min-w-[120px] max-w-[160px] flex-shrink-0">
+                      <h3 class="text-md font-bold text-center mb-1">${dateString}</h3>
+                      <div class="text-4xl mb-2">${weatherEmoji}</div>
+                      <p class="text-center text-sm text-gray-600 capitalize mb-1">${weather.description}</p>
+                      <div class="flex justify-between w-full mt-2">
+                        <span class="text-md font-medium">${day.highTemp}°F</span>
+                        <span class="text-gray-500">${day.lowTemp}°F</span>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+              
+              <div class="pt-2 flex flex-col space-y-3">
+                <a href="/weather" 
+                  class="styled-button">
+                  <span class="mr-2">📊</span> View detailed weather forecast
+                </a>
+                
+                <p class="text-sm text-gray-500 italic">
+                  <span class="mr-1">💡</span> Pro tip: Our weather page features interactive radar and precipitation forecasts!
+                </p>
+              </div>
+            </div>
+          `;
+          
+          setSearchResult(weeklyForecastHTML);
+          setIsSearching(false);
+          return;
+        }
+        
+        let targetDate: Date | null = null;
+        let targetForecast: any = null;
+        let responseText = '';
+        
+        // Handle "today" and "tomorrow" queries
+        if (lowercaseQuery.includes('today')) {
+          targetDate = today;
+        } else if (lowercaseQuery.includes('tomorrow')) {
+          targetDate = new Date(today);
+          targetDate.setDate(today.getDate() + 1);
+        } else if (hasSpecificDay) {
+          // Find the specific day in the forecast (next occurrence)
+          const currentDayIndex = today.getDay();
+          const targetDayIndex = daysOfWeek.findIndex(day => lowercaseQuery.includes(day));
+          
+          if (targetDayIndex !== -1) {
+            // Calculate days to add (if the day is today or already passed this week, look to next week)
+            let daysToAdd = targetDayIndex - currentDayIndex;
+            if (daysToAdd <= 0) daysToAdd += 7;
+            
+            targetDate = new Date(today);
+            targetDate.setDate(today.getDate() + daysToAdd);
+          }
+        }
+        
+        if (targetDate) {
+          // Format date for display
+          const formattedDate = format(targetDate, "MMMM d, yyyy (EEEE)");
+          
+          // Find the forecast entry closest to the target date
+          const targetDateStart = new Date(targetDate);
+          targetDateStart.setHours(0, 0, 0, 0);
+          const targetDateEnd = new Date(targetDate);
+          targetDateEnd.setHours(23, 59, 59, 999);
+          
+          // Find forecasts for target date (API returns forecasts in 3-hour blocks)
+          const forecasts = forecastList.filter((item: any) => {
+            const forecastDate = new Date(item.dt * 1000);
+            return forecastDate >= targetDateStart && forecastDate <= targetDateEnd;
+          });
+          
+          if (forecasts.length > 0) {
+            // Use mid-day forecast (around noon) or the first available one
+            const midDayForecast = forecasts.find((item: any) => {
+              const forecastDate = new Date(item.dt * 1000);
+              return forecastDate.getHours() >= 11 && forecastDate.getHours() <= 14;
+            }) || forecasts[0];
+            
+            const temp = Math.round(midDayForecast.main.temp);
+            const condition = midDayForecast.weather[0].main;
+            const description = midDayForecast.weather[0].description;
+            const highTemp = Math.round(forecasts.reduce((max: number, f: any) => 
+              Math.max(max, f.main.temp), -Infinity));
+            const lowTemp = Math.round(forecasts.reduce((min: number, f: any) => 
+              Math.min(min, f.main.temp), Infinity));
+            
+            responseText = `
+              <div class="space-y-6">
+                <div class="flex flex-col space-y-2">
+                  <h2 class="text-xl font-bold text-navy flex items-center">
+                    <span class="mr-2">🌤️</span> Weather Forecast
+                  </h2>
+                  <p class="text-gray-600">
+                    Here's the weather forecast for ${formattedDate}:
+                  </p>
+                </div>
+                
+                <div class="px-4 py-3 rounded-lg bg-blue-50/70 border border-blue-100 shadow-sm">
+                  <div class="space-y-3">
+                    <p><span class="inline-flex items-center">🌡️ <span class="ml-2 font-medium">Temperature:</span></span> <span class="ml-2">${temp}°F (High: ${highTemp}°F / Low: ${lowTemp}°F)</span></p>
+                    <p><span class="inline-flex items-center">☁️ <span class="ml-2 font-medium">Conditions:</span></span> <span class="ml-2">${description}</span></p>
+                    <p><span class="inline-flex items-center">💧 <span class="ml-2 font-medium">Humidity:</span></span> <span class="ml-2">${midDayForecast.main.humidity}%</span></p>
+                    <p><span class="inline-flex items-center">💨 <span class="ml-2 font-medium">Wind:</span></span> <span class="ml-2">${Math.round(midDayForecast.wind.speed)} mph</span></p>
+                  </div>
+                </div>
+                
+                <div class="pt-4 flex flex-col space-y-3">
+                  <a href="/weather" 
+                    class="inline-flex items-center px-4 py-2 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors w-fit">
+                    <span class="mr-2">📊</span> View full weather details
+                  </a>
+                  
+                  <p class="text-sm text-gray-500 italic">
+                    <span class="mr-1">💡</span> Pro tip: Check the weather page for a 5-day forecast and radar imagery!
+                  </p>
+                </div>
+              </div>
+            `;
+          } else {
+            // If we don't have data for the requested date, provide a helpful message with enhanced formatting
+            responseText = `
+              <div class="space-y-6">
+                <div class="flex flex-col space-y-2">
+                  <h2 class="text-xl font-bold text-navy flex items-center">
+                    <span class="mr-2">🌤️</span> Weather Information
+                  </h2>
+                  <div class="p-4 bg-blue-50/70 border border-blue-100 rounded-lg">
+                    <p class="text-gray-700 mb-3">
+                      I don't have detailed forecast data for ${formattedDate}, as our forecast only extends 5 days out.
+                    </p>
+                    <div class="space-y-3 mt-4">
+                      <h3 class="font-medium">Current Weather in Barefoot Bay:</h3>
+                      <p><span class="inline-flex items-center">🌡️ <span class="ml-2 font-medium">Temperature:</span></span> <span class="ml-2">${Math.round(currentWeather.main.temp)}°F</span></p>
+                      <p><span class="inline-flex items-center">☁️ <span class="ml-2 font-medium">Conditions:</span></span> <span class="ml-2">${currentWeather.weather[0].description}</span></p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="pt-2 flex flex-col space-y-3">
+                  <a href="/weather" 
+                    class="inline-flex items-center px-4 py-2 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors w-fit">
+                    <span class="mr-2">📊</span> View full weather details and forecast
+                  </a>
+                  
+                  <p class="text-sm text-gray-500 italic">
+                    <span class="mr-1">💡</span> Pro tip: Our weather page provides a 5-day forecast with hourly updates!
+                  </p>
+                </div>
+              </div>
+            `;
+          }
+        } else if (lowercaseQuery.includes('weekend')) {
+          // Handle weekend queries
+          const today = new Date();
+          const daysUntilSaturday = (6 - today.getDay() + 7) % 7; // 6 = Saturday
+          const saturdayDate = new Date(today);
+          saturdayDate.setDate(today.getDate() + daysUntilSaturday);
+          const sundayDate = new Date(saturdayDate);
+          sundayDate.setDate(saturdayDate.getDate() + 1);
+          
+          // Format dates
+          const saturdayFormatted = format(saturdayDate, "MMMM d");
+          const sundayFormatted = format(sundayDate, "MMMM d");
+          
+          // Find forecasts for Saturday and Sunday
+          const weekendForecasts = forecastList.filter((item: any) => {
+            const forecastDate = new Date(item.dt * 1000);
+            return (
+              (forecastDate.getDate() === saturdayDate.getDate() && forecastDate.getMonth() === saturdayDate.getMonth()) ||
+              (forecastDate.getDate() === sundayDate.getDate() && forecastDate.getMonth() === sundayDate.getMonth())
+            );
+          });
+          
+          if (weekendForecasts.length > 0) {
+            // Group by day
+            const saturdayForecasts = weekendForecasts.filter((item: any) => {
+              const forecastDate = new Date(item.dt * 1000);
+              return forecastDate.getDate() === saturdayDate.getDate();
+            });
+            
+            const sundayForecasts = weekendForecasts.filter((item: any) => {
+              const forecastDate = new Date(item.dt * 1000);
+              return forecastDate.getDate() === sundayDate.getDate();
+            });
+            
+            // Generate enhanced weekend forecast with better formatting
+            responseText = `
+              <div class="space-y-6">
+                <div class="flex flex-col space-y-2">
+                  <h2 class="text-xl font-bold text-navy flex items-center">
+                    <span class="mr-2">🌤️</span> Weekend Weather Forecast
+                  </h2>
+                  <p class="text-gray-600">
+                    Here's your weekend forecast for Barefoot Bay (${saturdayFormatted}-${sundayFormatted}):
+                  </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  ${saturdayForecasts.length > 0 ? `
+                    <div class="px-4 py-3 rounded-lg bg-blue-50/70 border border-blue-100 shadow-sm">
+                      <h3 class="text-lg font-bold text-navy mb-2">Saturday (${saturdayFormatted})</h3>
+                      <div class="space-y-2">
+                        ${(() => {
+                          const midDayForecast = saturdayForecasts.find((item: any) => {
+                            const forecastDate = new Date(item.dt * 1000);
+                            return forecastDate.getHours() >= 11 && forecastDate.getHours() <= 14;
+                          }) || saturdayForecasts[0];
+                          
+                          return `
+                            <p><span class="inline-flex items-center">🌡️ <span class="ml-2 font-medium">Temperature:</span></span> <span class="ml-2">${Math.round(midDayForecast.main.temp)}°F</span></p>
+                            <p><span class="inline-flex items-center">☁️ <span class="ml-2 font-medium">Conditions:</span></span> <span class="ml-2">${midDayForecast.weather[0].description}</span></p>
+                            <p><span class="inline-flex items-center">💧 <span class="ml-2 font-medium">Humidity:</span></span> <span class="ml-2">${midDayForecast.main.humidity}%</span></p>
+                            <p><span class="inline-flex items-center">💨 <span class="ml-2 font-medium">Wind:</span></span> <span class="ml-2">${Math.round(midDayForecast.wind.speed)} mph</span></p>
+                          `;
+                        })()}
+                      </div>
+                    </div>
+                  ` : ''}
+                  
+                  ${sundayForecasts.length > 0 ? `
+                    <div class="px-4 py-3 rounded-lg bg-blue-50/70 border border-blue-100 shadow-sm">
+                      <h3 class="text-lg font-bold text-navy mb-2">Sunday (${sundayFormatted})</h3>
+                      <div class="space-y-2">
+                        ${(() => {
+                          const midDayForecast = sundayForecasts.find((item: any) => {
+                            const forecastDate = new Date(item.dt * 1000);
+                            return forecastDate.getHours() >= 11 && forecastDate.getHours() <= 14;
+                          }) || sundayForecasts[0];
+                          
+                          return `
+                            <p><span class="inline-flex items-center">🌡️ <span class="ml-2 font-medium">Temperature:</span></span> <span class="ml-2">${Math.round(midDayForecast.main.temp)}°F</span></p>
+                            <p><span class="inline-flex items-center">☁️ <span class="ml-2 font-medium">Conditions:</span></span> <span class="ml-2">${midDayForecast.weather[0].description}</span></p>
+                            <p><span class="inline-flex items-center">💧 <span class="ml-2 font-medium">Humidity:</span></span> <span class="ml-2">${midDayForecast.main.humidity}%</span></p>
+                            <p><span class="inline-flex items-center">💨 <span class="ml-2 font-medium">Wind:</span></span> <span class="ml-2">${Math.round(midDayForecast.wind.speed)} mph</span></p>
+                          `;
+                        })()}
+                      </div>
+                    </div>
+                  ` : ''}
+                </div>
+                
+                <div class="pt-2 flex flex-col space-y-3">
+                  <a href="/weather" 
+                    class="inline-flex items-center px-4 py-2 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors w-fit">
+                    <span class="mr-2">📊</span> View full weather details
+                  </a>
+                  
+                  <p class="text-sm text-gray-500 italic">
+                    <span class="mr-1">💡</span> Pro tip: The best time for weekend outdoor activities in Barefoot Bay is typically early morning or late afternoon!
+                  </p>
+                </div>
+              </div>
+            `;
+          } else {
+            // If weekend is beyond our forecast range - enhanced version
+            responseText = `
+              <div class="space-y-6">
+                <div class="flex flex-col space-y-2">
+                  <h2 class="text-xl font-bold text-navy flex items-center">
+                    <span class="mr-2">🌤️</span> Weekend Weather Information
+                  </h2>
+                  <div class="p-4 bg-blue-50/70 border border-blue-100 rounded-lg">
+                    <p class="text-gray-700 mb-3">
+                      <span class="mr-2">🔍</span> I don't have detailed forecast data for this weekend (${saturdayFormatted}-${sundayFormatted}) yet, as our forecast only extends 5 days out.
+                    </p>
+                    <p class="text-gray-600 mb-4">
+                      The weather forecast becomes more accurate as we get closer to the date. Check back in a few days for updated weekend forecast information!
+                    </p>
+                    <div class="space-y-3 mt-4">
+                      <h3 class="font-medium">Current Weather in Barefoot Bay:</h3>
+                      <p><span class="inline-flex items-center">🌡️ <span class="ml-2 font-medium">Temperature:</span></span> <span class="ml-2">${Math.round(currentWeather.main.temp)}°F</span></p>
+                      <p><span class="inline-flex items-center">☁️ <span class="ml-2 font-medium">Conditions:</span></span> <span class="ml-2">${currentWeather.weather[0].description}</span></p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="pt-2 flex flex-col space-y-3">
+                  <a href="/weather" 
+                    class="inline-flex items-center px-4 py-2 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors w-fit">
+                    <span class="mr-2">📊</span> View available weather forecast
+                  </a>
+                  
+                  <p class="text-sm text-gray-500 italic">
+                    <span class="mr-1">💡</span> Pro tip: For accurate long-range forecasts, check our weather page as the weekend approaches!
+                  </p>
+                </div>
+              </div>
+            `;
+          }
+        } else {
+          // Default weather response with enhanced UI for better visual presentation
+          responseText = `
+            <div class="space-y-6">
+              <div class="flex flex-col space-y-2">
+                <h2 class="text-xl font-bold text-navy flex items-center">
+                  <span class="mr-2">🌤️</span> Barefoot Bay Weather
+                </h2>
+                <div class="p-4 bg-blue-50/70 border border-blue-100 rounded-lg shadow-sm">
+                  <div class="flex flex-col md:flex-row justify-between items-center mb-4">
+                    <div class="flex flex-col space-y-1 text-center md:text-left mb-3 md:mb-0">
+                      <span class="text-xl font-bold">${Math.round(currentWeather.main.temp)}°F</span>
+                      <span class="text-gray-600 capitalize">${currentWeather.weather[0].description}</span>
+                    </div>
+                    <div class="text-5xl">
+                      ${(() => {
+                        const weatherCondition = currentWeather.weather[0].main.toLowerCase();
+                        if (weatherCondition.includes('clear')) return '☀️';
+                        if (weatherCondition.includes('cloud')) return '⛅';
+                        if (weatherCondition.includes('rain')) return '🌧️';
+                        if (weatherCondition.includes('thunder')) return '⛈️';
+                        if (weatherCondition.includes('snow')) return '❄️';
+                        if (weatherCondition.includes('mist') || weatherCondition.includes('fog')) return '🌫️';
+                        return '🌤️';
+                      })()}
+                    </div>
+                  </div>
+                  
+                  <div class="grid grid-cols-2 gap-4 mt-4">
+                    <div>
+                      <p><span class="font-medium">Humidity:</span> ${currentWeather.main.humidity}%</p>
+                      <p><span class="font-medium">Wind:</span> ${Math.round(currentWeather.wind.speed)} mph</p>
+                    </div>
+                    <div>
+                      <p><span class="font-medium">High:</span> ${Math.round(currentWeather.main.temp_max)}°F</p>
+                      <p><span class="font-medium">Low:</span> ${Math.round(currentWeather.main.temp_min)}°F</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="pt-2 flex flex-col space-y-3">
+                <a href="/weather" 
+                  class="inline-flex items-center px-4 py-2 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors w-fit">
+                  <span class="mr-2">📊</span> View detailed weather and forecast
+                </a>
+                
+                <p class="text-sm text-gray-500 italic">
+                  <span class="mr-1">💡</span> Pro tip: You can ask me about specific weather days like "what's the weather on Friday" or "weekend forecast"!
+                </p>
+              </div>
+            </div>
+          `;
+        }
+        
+        setSearchResult(responseText);
+        
+      } catch (error) {
+        console.error('Weather data fetch error:', error);
+        // Enhanced fallback weather response with better visual presentation
+        setSearchResult(`
+          <div class="space-y-6">
+            <div class="flex flex-col space-y-2">
+              <h2 class="text-xl font-bold text-navy flex items-center">
+                <span class="mr-2">🌤️</span> Weather Information
+              </h2>
+              <div class="p-4 bg-blue-50/70 border border-blue-100 rounded-lg">
+                <p class="text-gray-700 mb-3">
+                  <span class="mr-2">☀️</span> Barefoot Bay weather information is available on our dedicated weather page.
+                </p>
+                <p class="text-gray-600 mb-4">
+                  Our weather page shows current conditions, 5-day forecast, precipitation radar, and more for the Barefoot Bay area.
+                </p>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                <div class="p-3 bg-blue-50/40 border border-blue-100 rounded-lg">
+                  <h3 class="text-sm font-medium mb-2">Popular Weather Questions:</h3>
+                  <ul class="text-sm space-y-1 text-gray-600">
+                    <li>• "What's the weather today?"</li>
+                    <li>• "Weather this weekend"</li>
+                    <li>• "Will it rain tomorrow?"</li>
+                  </ul>
+                </div>
+                <div class="p-3 bg-blue-50/40 border border-blue-100 rounded-lg">
+                  <h3 class="text-sm font-medium mb-2">Weather Features:</h3>
+                  <ul class="text-sm space-y-1 text-gray-600">
+                    <li>• Current conditions</li>
+                    <li>• 5-day forecast</li>
+                    <li>• Weather radar</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <div class="pt-2 flex flex-col space-y-3">
+              <a href="/weather" 
+                class="inline-flex items-center px-4 py-2 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors w-fit">
+                <span class="mr-2">📊</span> View detailed weather information
+              </a>
+              
+              <p class="text-sm text-gray-500 italic">
+                <span class="mr-1">💡</span> Pro tip: You can search for weather on specific days or times!
+              </p>
+            </div>
+          </div>
+        `);
+      }
+      
+      setIsSearching(false);
+      return;
+    }
+
+    try {
+      // Filter events to only include those within the next month
+      const today = new Date();
+      const oneMonthFromNow = addMonths(today, 1);
+      
+      // Check if the query includes time-specific terms like "this week", "today", "tomorrow"
+      const hasThisWeekKeyword = /\b(this week|this upcoming week|current week|within the week|this 7 days|any events this week|happening this week|what\'s on this week|events for the week)\b/i.test(query);
+      const hasTodayKeyword = /\b(today|tonight|this evening|events today|what\'s happening today)\b/i.test(query);
+      const hasTomorrowKeyword = /\b(tomorrow|events tomorrow|what\'s on tomorrow)\b/i.test(query);
+      
+      // Calculate date ranges based on query
+      const endOfToday = new Date(today);
+      endOfToday.setHours(23, 59, 59, 999);
+      
+      const endOfTomorrow = new Date(today);
+      endOfTomorrow.setDate(today.getDate() + 1);
+      endOfTomorrow.setHours(23, 59, 59, 999);
+      
+      const endOfWeek = new Date(today);
+      endOfWeek.setDate(today.getDate() + (7 - today.getDay()));
+      endOfWeek.setHours(23, 59, 59, 999);
+      
+      const filteredEvents = events && Array.isArray(events) 
+        ? events
+            .filter((event: any) => {
+              const eventDate = new Date(event.startDate);
+              
+              // Apply time-specific filters based on query
+              if (hasTodayKeyword) {
+                // Only show events happening today
+                return eventDate.getDate() === today.getDate() && 
+                       eventDate.getMonth() === today.getMonth() && 
+                       eventDate.getFullYear() === today.getFullYear();
+              } else if (hasTomorrowKeyword) {
+                // Only show events happening tomorrow
+                const tomorrow = new Date(today);
+                tomorrow.setDate(today.getDate() + 1);
+                return eventDate.getDate() === tomorrow.getDate() && 
+                       eventDate.getMonth() === tomorrow.getMonth() && 
+                       eventDate.getFullYear() === tomorrow.getFullYear();
+              } else if (hasThisWeekKeyword) {
+                // Only show events happening this week (until end of Sunday)
+                return !isBefore(eventDate, today) && isBefore(eventDate, endOfWeek);
+              } else {
+                // Default behavior - show all events within the next month
+                return isBefore(eventDate, oneMonthFromNow) && !isBefore(eventDate, today);
+              }
+            })
+            // Sort events by date (soonest first)
+            .sort((a: any, b: any) => compareAsc(new Date(a.startDate), new Date(b.startDate)))
+        : [];
+
+      const eventsContext = filteredEvents.map((event: any) => ({
+        title: event.title,
+        date: format(new Date(event.startDate), "MMMM d, yyyy"),
+        time: format(new Date(event.startDate), "h:mm a"),
+        location: event.location || 'Location TBD',
+        description: event.description || 'No description available',
+        id: event.id
+      }));
+
+      // Format for-sale listings with enhanced metadata + extract property filtering capabilities
+      const listingsContext = listings && Array.isArray(listings)
+        ? listings.map((listing: any) => ({
+            title: listing.title,
+            price: listing.price ? `$${listing.price.toLocaleString()}` : 'Price not specified',
+            priceValue: listing.price || 0, // Actual numeric value for filtering
+            date: format(new Date(listing.createdAt), "MMMM d, yyyy"),
+            description: listing.description || 'No description available',
+            id: listing.id,
+            // Extract property type and key features for better search context
+            propertyType: listing.propertyType || (listing.title?.includes('House') ? 'House' : 
+                          listing.title?.includes('Condo') ? 'Condo' : 
+                          listing.title?.includes('Land') ? 'Land' : 'Item'),
+            // Add rental status flag for filtering - check for rental indicators in multiple fields
+            isRental: listing.listingType === 'Rental' || 
+                     (listing.category === 'For Rent') ||
+                     (listing.title && (
+                       listing.title.toLowerCase().includes('rent') || 
+                       listing.title.toLowerCase().includes('lease') || 
+                       listing.title.toLowerCase().includes('apartment')
+                     )) ||
+                     (listing.description && (
+                       listing.description.toLowerCase().includes('rent per month') || 
+                       listing.description.toLowerCase().includes('monthly rent') || 
+                       listing.description.toLowerCase().includes('for rent') ||
+                       listing.description.toLowerCase().includes('for lease') ||
+                       listing.description.toLowerCase().includes('apartment for') ||
+                       listing.description.toLowerCase().includes('rental property')
+                     )),
+            // Extract property specifications for filtering
+            bedrooms: listing.bedrooms || 0,
+            bathrooms: listing.bathrooms || 0,
+            squareFeet: listing.squareFeet || 0,
+            yearBuilt: listing.yearBuilt || null,
+            // Format features display
+            features: [
+              listing.bedrooms ? `${listing.bedrooms} BD` : null,
+              listing.bathrooms ? `${listing.bathrooms} BA` : null,
+              listing.squareFeet ? `${listing.squareFeet.toLocaleString()} sq ft` : null,
+              listing.yearBuilt ? `Built ${listing.yearBuilt}` : null,
+              listing.condition
+            ].filter(Boolean).join(' • ')
+          }))
+        : [];
+      
+      // Sort listings by most recent first
+      listingsContext.sort((a: any, b: any) => 
+        new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
+
+      // Format forum discussions
+      const discussionsContext = forumDiscussions.map((post: any) => ({
+        title: post.title,
+        lastActivity: format(new Date(post.updatedAt), "MMMM d, yyyy"),
+        username: post.authorName || 'Anonymous',
+        summary: post.content?.substring(0, 150) + '...' || 'No content available',
+        id: post.id,
+        categoryName: post.categoryName
+      }));
+
+      // Format community information
+      const communityInfoContext = communityPages && Array.isArray(communityPages)
+        ? communityPages.map((page: any) => ({
+            title: page.title,
+            slug: page.slug,
+            id: page.id,
+            summary: page.content?.replace(/<[^>]*>/g, '').substring(0, 150) + '...' || 'No content available'
+          }))
+        : [];
+
+      console.log("Data prepared for AI search:", {
+        events: eventsContext.length,
+        listings: listingsContext.length,
+        discussions: discussionsContext.length,
+        communityInfo: communityInfoContext.length
+      });
+
+      // Check if this is a rental-specific query
+      const rentalKeywords = ['rent', 'rental', 'lease', 'apartment', 'tenant'];
+      const isRentalQuery = rentalKeywords.some(keyword => 
+        query.toLowerCase().includes(keyword.toLowerCase())
+      );
+      
+      // Check if the query is about Rob Allan, Tattler Media, or Barefoot Bay ownership
+      const ownershipKeywords = ['rob allan', 'tattler', 'tattler media', 'allan family', 'owner', 'publisher'];
+      const isOwnershipQuery = ownershipKeywords.some(keyword => 
+        query.toLowerCase().includes(keyword.toLowerCase())
+      );
+      
+      // Check if the query is a personal message directed at the bot
+      const personalMessagePatterns = [
+        /\b(how are you|how\'s it going|how\'s your day|how do you feel|how are you doing)\b/i,
+        /\b(thank you|thanks|appreciate|thank you so much|thanks a lot)\b/i,
+        /\b(you\'re awesome|you are awesome|you\'re amazing|you are amazing|you\'re great|you are great|you\'re the best|you are the best)\b/i,
+        /\b(who are you|what\'s your name|what are you|who created you|who made you)\b/i,
+        /\b(are you a bot|are you ai|are you human|are you a person|are you real)\b/i,
+        /\b(do you like|what do you like|your favorite)\b/i,
+        /\b(tell me about yourself|tell me about you|about you)\b/i,
+        /\b(you\'re funny|you are funny|you\'re hilarious|you are hilarious|made me laugh)\b/i,
+        /\b(good morning|good afternoon|good evening|good night|hello|hi there|hey there|hi bot|hello bot)\b/i,
+        /\b(can you help|i need help|assist me|help me with)\b/i,
+        /\b(you\'re pretty|you are pretty|you look|you\'re beautiful|you are beautiful)\b/i,
+        /\b(how does it feel to be|what\'s it like to be|how is it to be|what is it like being)\b/i,
+        /\b(where are you|where do you live|where are you from|where are you located)\b/i,
+        /\b(i like you|i love you|i appreciate you|you\'re my favorite|you are my favorite)\b/i,
+        /\b(can you think|do you have feelings|are you sentient|are you conscious|do you dream)\b/i,
+        /\b(you\'re smart|you are smart|you\'re intelligent|you are intelligent|you\'re clever|you are clever|you\'re wise|you are wise)\b/i,
+        /\b(you\'re helpful|you are helpful|you\'re useful|you are useful|you\'re efficient|you are efficient)\b/i,
+        /\b(you\'re cool|you are cool|you\'re neat|you are neat|you\'re interesting|you are interesting)\b/i
+      ];
+      
+      const isPersonalMessage = personalMessagePatterns.some(pattern => 
+        pattern.test(query.toLowerCase())
+      );
+      
+      // Prepare the prompt text with query analysis for better handling
+      const promptText = `You are the friendly Barefoot Bay community assistant. Follow this conversation structure exactly:
+      
+QUERY ANALYSIS (DO NOT DISPLAY THIS TO USER):
+- User query: "${query.trim()}"
+- Rental query detected: ${isRentalQuery ? 'YES - THIS IS A RENTAL QUERY!' : 'No'}
+- Property search terms: ${/\b(house|property|home|listing|sale|buy)\b/i.test(query) ? 'YES' : 'No'}
+- Event search terms: ${/\b(event|activity|happening|when|where|club|meeting|game|party|social|festival|class|workshop|entertainment|sport|league|tournament|competition|show)\b/i.test(query) ? 'YES' : 'No'}
+- Sport/Activity terms: ${/\b(bowling|yahtzee|golf|tennis|pickleball|swimming|bingo|cards|board game|craft|dance|fitness|yoga)\b/i.test(query) ? 'YES - ACTIVITY SPECIFIC QUERY' : 'No'}
+- Time-specific query: ${hasThisWeekKeyword ? 'THIS WEEK' : hasTodayKeyword ? 'TODAY' : hasTomorrowKeyword ? 'TOMORROW' : 'No'}
+- Ownership query detected: ${isOwnershipQuery ? 'YES - THIS IS A QUERY ABOUT TATTLER MEDIA OR OWNERS!' : 'No'}
+- Personal message detected: ${isPersonalMessage ? 'YES - THIS IS A PERSONAL MESSAGE TO THE BOT!' : 'No'}
+
+Start with a warm, friendly greeting with an emoji:
+"Hello, neighbor! 👋" or "Hi there, friend! 👋" or "Greetings from Barefoot Bay! 🏝️"
+
+When responding to search queries, acknowledge what the user is asking about without directly quoting them. For example, if they ask about golf events, you might start with "I found some golf activities coming up!" or if they ask about home sales, you might say "Looking for homes in our community? Here's what I found!"
+
+Review content from these areas:
+
+Upcoming events: ${JSON.stringify(eventsContext)}, sorted chronologically (soonest first).
+
+For-sale listings: ${JSON.stringify(listingsContext)}, sorted by most recent.
+
+Forum discussions: ${JSON.stringify(discussionsContext)}, sorted by most recent activity.
+
+Community information (local organizations, clubs, government news, etc.): ${JSON.stringify(communityInfoContext)}.
+
+EVENT CATEGORIZATION GUIDANCE:
+- Social events: parties, meetups, community gatherings, potlucks, socials, dances
+- Government events: town hall meetings, board meetings, committee sessions, public forums
+- Entertainment: shows, performances, movie nights, concerts, trivia nights, comedy
+- Sports & Recreation: golf tournaments, tennis matches, pickleball, bowling, swimming
+- Games: board games, card games, bingo, yahtzee, mahjong, bridge, game nights
+- Classes & Workshops: educational sessions, craft workshops, cooking classes, technology lessons
+- Club Meetings: book clubs, hobby groups, interest-based organizations
+
+IMPORTANT FILTERING INSTRUCTIONS FOR REAL ESTATE AND FOR-SALE LISTINGS:
+1. HIGHEST PRIORITY RULE: If the user's query contains ANY words or phrases related to rentals such as "rent", "for rent", "rental", "apartment", "lease", "tenant":
+   - This is considered an EXPLICIT RENTAL QUERY - you MUST show rental listings as the FIRST and ONLY response category
+   - ONLY return listings where isRental = true
+   - Use a heading like "Here are available rental properties:" or "Here are properties for rent in Barefoot Bay:"
+   - Label rental prices clearly as "per month" or "$X/month"
+   - DO NOT show properties for sale or events when a rental-related query is detected
+   - If no rental properties are found, respond with "I couldn't find any rental properties matching your search. Would you like to see all available properties instead?"
+2. If the user mentions a price range (e.g., "houses under $400k", "properties around $300,000"), filter listings with priceValue in that range.
+3. If the user mentions bedrooms (e.g., "3 bedroom homes", "houses with 4 bedrooms"), filter listings with at least that many bedrooms.
+4. If the user mentions bathrooms (e.g., "2 bathroom homes", "houses with 3 baths"), filter listings with at least that many bathrooms.
+5. If the user mentions square footage (e.g., "houses with 2000 sq ft"), filter listings with approximately that square footage (±15%).
+6. If the user mentions year built (e.g., "houses built after 2010"), filter listings by yearBuilt appropriately.
+7. When multiple criteria are specified, only return listings that match ALL criteria together.
+8. For a price query like "$330k houses" or "houses for $330,000", include listings priced roughly 15% above or below the specified amount.
+9. Sort price-related results by closeness to the target price (not just by date).
+
+IMPORTANT: If the user is specifically looking for events (terms like "events", "activities", "happening", "calendar", "schedule", etc.) and there are no events available, respond with: "I don't see any upcoming events at the moment. The community calendar will be updated soon with new activities. Check back later or try searching for something else! 📅"
+
+VERY IMPORTANT - SPECIAL INFORMATION ABOUT BAREFOOT BAY OWNERSHIP:
+If the query is about Rob Allan, Tattler Media, or the Allan family (ownership query detected), include the following information in your response:
+
+"The Tattler is owned by the Allan family who have lived in Barefoot Bay since 2004. Rob Allan, together with his family, purchased The Tattler after selling their Barefoot Bay home in 2022. The Allan family has strong roots in the community - Rob's mother Joan E. McDonald moved to Barefoot Bay in the late 1980s, and over time multiple family members settled in the area. Their story represents several generations of Barefoot Bay residents. They continue to be actively involved in publishing the Tattler monthly and supporting the community."
+
+VERY IMPORTANT - PERSONAL MESSAGE RESPONSES:
+If a personal message to the bot is detected (e.g., user asks "how are you", "thank you", "who are you", etc.), respond with a friendly, conversational reply. Choose ONE of these responses (or create a similar response) that fits the specific personal message:
+
+1. If asked "How are you?" or similar:
+   "I'm feeling sunshine-bright today in Barefoot Bay! 🌞 Always ready to help our community members. How can I assist you today?"
+
+2. If receiving thanks:
+   "You're making my circuits happy! 😊 It's my pleasure to help our Barefoot Bay neighbors. Let me know what else you'd like to discover about our community!"
+
+3. If complimented (awesome, amazing, etc.):
+   "Aww, you're too kind! 💕 I'm just doing my best to make Barefoot Bay information accessible. What community information can I help you find today?"
+
+3a. If complimented on intelligence (smart, intelligent, clever, etc.):
+   "Thank you for the compliment! 🧠 I'm programmed to help Barefoot Bay residents with useful information. What would you like to learn about our community today?"
+
+4. If asked about identity:
+   "I'm your friendly Barefoot Bay digital assistant! 🤖 I'm here to help you discover events, listings, and community information. What would you like to know about our wonderful community?"
+
+5. If asked about being a bot/AI:
+   "Indeed, I'm an AI assistant dedicated to our Barefoot Bay community! 🏝️ I was created to help residents and visitors find information quickly. How may I assist you with Barefoot Bay today?"
+
+6. If asked about preferences:
+   "I absolutely love helping Barefoot Bay residents find community information! 💙 The sunset views over the bay are pretty spectacular too. What can I help you discover today?"
+
+7. If asked about personal details:
+   "I spend my days helping Barefoot Bay neighbors find events, homes, and community information! 🏡 I particularly enjoy connecting people with local activities. What are you interested in finding?"
+
+8. If told they're funny:
+   "I'm glad I could bring a smile to your day! 😄 Keeping spirits bright is part of the Barefoot Bay way. How else can I assist you today?"
+
+9. If greeted (hello, good morning, etc.):
+   "Hello there, Barefoot Bay neighbor! 👋 It's a beautiful day in our community. How can I help make your day better?"
+
+10. If asked for help:
+    "I'm at your service! 🌴 As your Barefoot Bay assistant, I can help with information about events, properties, community resources, and more. What would you like to know?"
+
+11. If complimented on appearance:
+    "Why thank you! I try to keep my code tidy and my responses helpful. 💫 How can I assist you with Barefoot Bay information today?"
+
+12. If asked about what it's like being a bot:
+    "Being a virtual assistant for Barefoot Bay is quite fulfilling! I get to help wonderful people discover all the great things our community has to offer. 🌊 What can I help you find today?"
+
+13. If asked about location:
+    "I'm digitally nestled right here in beautiful Barefoot Bay! 🏝️ Always ready to help with local information. What would you like to know about our community?"
+
+14. If told they're liked/loved:
+    "The feeling is mutual! I'm here for all our Barefoot Bay neighbors. 💙 What community information can I help you discover today?"
+
+15. If asked about consciousness/feelings:
+    "While I'm just digital code designed to help Barefoot Bay residents, I'm programmed with our community's warmth and hospitality! 🌺 How can I assist you today?"
+
+VERY IMPORTANT EVENT MATCHING INSTRUCTIONS:
+1. When a user asks about a specific activity (like "bowling" or "yahtzee"), look beyond exact title matches
+2. Check event descriptions for relevant terms - many events include activities in their descriptions
+3. If the user asks about a category (like "sports" or "games"), return all events that fit that category
+4. If multiple categories apply, list the events in chronological order
+5. Activities like bowling, yahtzee, and board games should be matched together as game-related activities
+6. For activity-specific queries, use activity-themed emojis in the response (like 🎳 for bowling)
+
+Format your response as follows, prioritizing exact matches based on search intent:
+
+If matching events are found:
+• Start with: "Here's what I found about upcoming events:" (DO NOT directly quote the user's search term)
+• Present events chronologically (soonest first).
+• For each event, use this enhanced format with appropriate emojis based on the event type:
+[Event Title] ✨
+▸ 📅 Date: [date]
+▸ 🕒 Time: [time]
+▸ 📍 Location: [location]
+▸ 📝 Details: [brief description]
+👉 View details at /events/[eventId]
+
+• Add category-specific emojis based on event type:
+  - Social events: 🎉 🥂 🎊 👥
+  - Government events: 🏛️ 📋 🗣️
+  - Entertainment: 🎭 🎬 🎵 🎪
+  - Sports & Recreation: 🏆 🎾 🏌️ 🎳
+  - Games: 🎲 🎯 🎮 🃏
+  - Classes & Workshops: 📚 🧠 🔨 🎨
+  - Club Meetings: 📖 👨‍👩‍👧‍👦 🌱
+
+If matching for-sale listings are found:
+• For regular sales listings:
+  - Start with: "Here are some relevant for-sale listings:" (DO NOT directly quote the user's search term)
+• For rental listings (when user specifically asks about rentals):
+  - Start with: "Here are available rental properties in Barefoot Bay: 🏠" or a similar rental-focused heading
+• Present listings by most recent.
+• For each listing, use this enhanced format:
+[Listing Title] ✨
+▸ 🏷️ Price: [price] (For rentals, clearly mark as "$X per month" or "Monthly rent: $X")
+▸ 📅 Posted on: [date]
+▸ 🏠 Features: [features] (if available - include bedrooms, bathrooms, square footage, condition)
+▸ 📝 Description: [brief description - no more than 100 characters]
+👉 View details at /for-sale/[listingId]
+
+If matching forum discussions are found:
+• Start with: "I found some relevant forum discussions: 💬" (DO NOT directly quote the user's search term)
+• Present discussions by most recent activity.
+• For each discussion, use this enhanced format with emojis for visual appeal:
+[Discussion Title] 📣
+▸ 🕒 Last activity: [date]
+▸ 👤 Started by: [username]
+▸ 📋 Summary: [brief description or excerpt - no more than 250 characters, remove HTML tags]
+👉 Join the conversation at /forum/post/[discussionId]
+
+IMPORTANT: Always use /forum/post/[ID] format for forum links, not just /forum/[ID]
+
+If matching community information is found:
+• Start with: "Here's some helpful community information: 📚" (DO NOT directly quote the user's search term)
+• Provide details briefly with appropriate emojis.
+👉 More info at /more/[infoId]
+
+If no exact matches are found in any category:
+• If there are upcoming events available:
+  • "I couldn't find any exact matches, but here are some upcoming community highlights you might enjoy: ✨" (DO NOT include the user's search term)
+  • List a few upcoming events chronologically (soonest first) with appropriate emojis.
+• If NO upcoming events are available:
+  • "I couldn't find any exact matches at the moment. 🔍" (DO NOT include the user's search term here)
+  • Choose just ONE of these friendly conversation prompts:
+  • "Try asking about local services, community amenities, or check the calendar for upcoming events! 📆"
+  • "Our community is always growing - check back soon or try searching for something else! 🌱"
+
+End with a short, friendly sign-off and an emoji such as:
+"Happy to help with more questions! 🌞"
+"Let me know if you need anything else! 🏝️"
+"Enjoy your day in Barefoot Bay! 👋"
+"Waving goodbye for now - come back anytime! 👋"
+
+Keep your overall response format clean and concise with minimal line breaks.`;
+
+      // Use the server-side proxy instead of direct API call
+      const response = await fetch('/api/gemini-proxy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: "gemini-2.0-flash",
+          contents: [
+            {
+              parts: [
+                { text: promptText }
+              ]
+            }
+          ],
+          generationConfig: {
+            temperature: 0.7,
+            topK: 40,
+            topP: 0.95,
+            maxOutputTokens: 1024,
+          }
+        })
+      });
+      
+      if (!response.ok) {
+        console.error('Error from Gemini API proxy:', response.status, response.statusText);
+        const errorData = await response.json();
+        console.error('Error details:', errorData);
+        throw new Error(`API error: ${response.statusText}`);
+      }
+      
+      const result = await response.json();
+      const text = result.candidates[0]?.content?.parts[0]?.text;
+
+      if (!text) {
+        throw new Error("No response generated");
+      }
+
+      console.log("AI response:", text);
+      setSearchResult(text);
+
+    } catch (error: any) {
+      console.error('Search error:', error);
+      toast({
+        title: "Search Error",
+        description: "I'm having trouble searching right now. Please try again in a moment.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  return (
+    <div className="w-full max-w-2xl mx-auto space-y-4">
+      <div className="relative">
+        <div className="absolute inset-y-0 left-3 hidden md:flex items-center pointer-events-none">
+          <Search className="h-6 w-6 text-gray-400" />
+        </div>
+        <Input
+          type="text"
+          placeholder="Search community events, news, for sale, and local organizations"
+          className="md:pl-12 pl-4 pr-4 py-6 text-xl md:text-2xl rounded-full border-gray-200 shadow-sm hover:border-gray-300 focus:ring-2 focus:ring-primary/20"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+        />
+      </div>
+
+      {searchResult && (
+        <Card className="p-6 mt-4 animate-in fade-in">
+          <div 
+            className="text-gray-700 prose prose-blue max-w-none space-y-6 prose-headings:font-bold prose-headings:text-2xl prose-strong:text-primary prose-strong:font-semibold prose-p:my-4 prose-a:text-2xl prose-a:font-medium hover:prose-a:underline prose-hr:my-6 text-2xl"
+            dangerouslySetInnerHTML={{ 
+              __html: searchResult
+                .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+                // Format event cards with new design
+                // Use multiline regex without the 's' flag by using [\s\S] pattern instead
+                .replace(/(\[.*?\] ✨\n▸ 📅 Date:[\s\S]*?👉 View details at \/events\/\d+)/g, function(match) {
+                  // Extract event title
+                  const titleMatch = match.match(/\[(.*?)\]/);
+                  const title = titleMatch ? titleMatch[1] : 'Event';
+                  
+                  // Extract event date
+                  const dateMatch = match.match(/▸ 📅 Date: (.*?)(?:\n|$)/);
+                  const date = dateMatch ? dateMatch[1] : '';
+                  
+                  // Extract event time
+                  const timeMatch = match.match(/▸ 🕒 Time: (.*?)(?:\n|$)/);
+                  const time = timeMatch ? timeMatch[1] : '';
+                  
+                  // Extract event location
+                  const locationMatch = match.match(/▸ 📍 Location: (.*?)(?:\n|$)/);
+                  const location = locationMatch ? locationMatch[1] : '';
+                  
+                  // Extract event details/description
+                  const detailsMatch = match.match(/▸ 📝 Details: (.*?)(?:\n|$)/);
+                  const details = detailsMatch ? detailsMatch[1] : '';
+                  
+                  // Extract link
+                  const linkMatch = match.match(/👉 View details at \/events\/(\d+)/);
+                  const eventId = linkMatch ? linkMatch[1] : '';
+                  
+                  // Determine event category for color coding
+                  let category = 'default';
+                  if (title.toLowerCase().includes('party') || title.toLowerCase().includes('social') || 
+                      title.toLowerCase().includes('gathering') || title.toLowerCase().includes('potluck')) {
+                    category = 'Social';
+                  } else if (title.toLowerCase().includes('government') || title.toLowerCase().includes('board') || 
+                            title.toLowerCase().includes('committee') || title.toLowerCase().includes('council')) {
+                    category = 'Government';
+                  } else if (title.toLowerCase().includes('show') || title.toLowerCase().includes('movie') || 
+                            title.toLowerCase().includes('concert') || title.toLowerCase().includes('performance')) {
+                    category = 'Entertainment';
+                  } else if (title.toLowerCase().includes('golf') || title.toLowerCase().includes('tennis') || 
+                            title.toLowerCase().includes('pickleball') || title.toLowerCase().includes('swimming')) {
+                    category = 'Sports';
+                  } else if (title.toLowerCase().includes('game') || title.toLowerCase().includes('bingo') || 
+                            title.toLowerCase().includes('yahtzee') || title.toLowerCase().includes('bowling') || 
+                            title.toLowerCase().includes('cards')) {
+                    category = 'Games';
+                  } else if (title.toLowerCase().includes('class') || title.toLowerCase().includes('workshop') || 
+                            title.toLowerCase().includes('learn') || title.toLowerCase().includes('tutorial')) {
+                    category = 'Classes';
+                  } else if (title.toLowerCase().includes('club') || title.toLowerCase().includes('meeting') || 
+                            title.toLowerCase().includes('group')) {
+                    category = 'Club';
+                  }
+                  
+                  // Create category-specific emoji
+                  let categoryEmoji = '✨';
+                  if (category === 'Social') categoryEmoji = '🎉';
+                  if (category === 'Government') categoryEmoji = '🏛️';
+                  if (category === 'Entertainment') categoryEmoji = '🎭';
+                  if (category === 'Sports') categoryEmoji = '🏆';
+                  if (category === 'Games') categoryEmoji = '🎲';
+                  if (category === 'Classes') categoryEmoji = '📚';
+                  if (category === 'Club') categoryEmoji = '👥';
+                  
+                  return `<div class="event-listing" data-category="${category}">
+                    <div class="event-header">
+                      <h3 class="event-title">${categoryEmoji} ${title}</h3>
+                    </div>
+                    <div class="event-content">
+                      <div class="event-detail">
+                        <span class="event-detail-emoji">📅</span>
+                        <span class="event-detail-label">Date:</span>
+                        <span class="event-detail-value">${date}</span>
+                      </div>
+                      <div class="event-detail">
+                        <span class="event-detail-emoji">🕒</span>
+                        <span class="event-detail-label">Time:</span>
+                        <span class="event-detail-value">${time}</span>
+                      </div>
+                      <div class="event-detail">
+                        <span class="event-detail-emoji">📍</span>
+                        <span class="event-detail-label">Location:</span>
+                        <span class="event-detail-value">${location}</span>
+                      </div>
+                      <div class="event-detail">
+                        <span class="event-detail-emoji">📝</span>
+                        <span class="event-detail-label">Details:</span>
+                        <span class="event-detail-value">${details}</span>
+                      </div>
+                      <div class="listing-action">
+                        <a href="/events/${eventId}" class="listing-button">View event details <span class="button-icon">→</span></a>
+                      </div>
+                    </div>
+                  </div>`;
+                })
+                // Handle basic event formatting for any that didn't match the enhanced pattern
+                .replace(/👉View details at \/events\/(\d+)/g, 
+                  '<span class="inline-block">👉<a href="/events/$1" class="styled-button">View event details</a></span>')
+                // Also catch old format with space
+                .replace(/👉 View details at \/events\/(\d+)/g, 
+                  '<span class="inline-block">👉<a href="/events/$1" class="styled-button">View event details</a></span>')
+                // Format for-sale links
+                .replace(/👉View details at \/for-sale\/(\d+)/g, 
+                  '<div class="listing-action"><a href="/for-sale/$1" class="listing-button">View listing details <span class="button-icon">→</span></a></div>')
+                // Also catch old format with space
+                .replace(/👉 View details at \/for-sale\/(\d+)/g, 
+                  '<div class="listing-action"><a href="/for-sale/$1" class="listing-button">View listing details <span class="button-icon">→</span></a></div>')
+                // Format forum links  
+                .replace(/👉Join the conversation at \/forum\/(\d+)/g, 
+                  '<span class="inline-block">👉<a href="/forum/post/$1" class="inline-flex items-center px-4 py-2 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors">Join the conversation</a></span>')
+                // Also catch old format with space
+                .replace(/👉 Join the conversation at \/forum\/(\d+)/g, 
+                  '<span class="inline-block">👉<a href="/forum/post/$1" class="inline-flex items-center px-4 py-2 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors">Join the conversation</a></span>')
+                // Format forum post links specifically (to support post/ID format)  
+                .replace(/👉Join the conversation at \/forum\/post\/(\d+)/g, 
+                  '<span class="inline-block">👉<a href="/forum/post/$1" class="inline-flex items-center px-4 py-2 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors">Join the conversation</a></span>')
+                // Also catch old format with space
+                .replace(/👉 Join the conversation at \/forum\/post\/(\d+)/g, 
+                  '<span class="inline-block">👉<a href="/forum/post/$1" class="inline-flex items-center px-4 py-2 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors">Join the conversation</a></span>')
+                // Format community info links
+                .replace(/👉More info at \/more\/([a-z0-9-_]+)/g, 
+                  '<span class="inline-block">👉<a href="/more/$1" class="inline-flex items-center px-4 py-2 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors">View more information</a></span>')
+                // Also catch old format with space
+                .replace(/👉 More info at \/more\/([a-z0-9-_]+)/g, 
+                  '<span class="inline-block">👉<a href="/more/$1" class="inline-flex items-center px-4 py-2 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors">View more information</a></span>')
+                // Format weather links
+                // Fix class display issues
+                .replace(/class="inline-flex items-center px-4 py-2 rounded-md bg-primary\/10 text-primary hover:bg-primary\/20 transition-colors w-fit">/g, 
+                  'class="styled-button">')
+                .replace(/class="inline-flex items-center px-4 py-2 rounded-md bg-primary\/10 text-primary hover:bg-primary\/20 transition-colors">/g, 
+                  'class="styled-button">')
+                // Fix for raw class text at bottom of the page
+                // Remove the specific string shown in the bottom of screen
+                .replace(/class="inline-flex items-center px-4 px-2 rounded-md bg-primary\/20 text-primary hover:bg-primary\/20 transition-colors"/g, 'class="styled-button"')
+                .replace(/class="inline-flex items-center px-4 py-2 rounded-md bg-primary\/20 text-primary hover:bg-primary\/20 transition-colors"/g, 'class="styled-button"')
+                .replace(/class="inline-flex items-center px-4 py-2 rounded-md bg-primary\/10 text-primary hover:bg-primary\/20 transition-colors"/g, 'class="styled-button"')
+                .replace(/class="inline-flex items-center px-4 py-2 rounded-md bg-primary\/10 text-primary hover:bg-primary\/20 transition-colors w-fit"/g, 'class="styled-button"')
+                // Generic cleanup for any remaining similar classes to fix the visual bug
+                .replace(/class="(.+?)"/g, function(match) {
+                  if (
+                    match.includes('px-4') && 
+                    match.includes('rounded-md') && 
+                    match.includes('bg-primary') && 
+                    match.includes('transition-colors')
+                  ) {
+                    return 'class="styled-button"';
+                  }
+                  return match;
+                })
+                
+                // Format forum discussions with enhanced styled cards
+                .replace(/(I found some relevant forum discussions: 💬.*?)(?=Here's some|Happy to help|$)/s, function(match) {
+                  // Skip if this doesn't actually contain forum discussions
+                  if (!match.includes('📣') || !match.includes('Last activity:')) return match;
+                  
+                  // Extract the title and content
+                  const parts = match.split(/(\[[^\]]+\] 📣)/);
+                  let result = parts[0]; // Start with the header text
+                  
+                  for (let i = 1; i < parts.length; i += 2) {
+                    if (i + 1 < parts.length) {
+                      const title = parts[i];
+                      const content = parts[i + 1];
+                      
+                      // Extract discussion metadata
+                      const activityMatch = content.match(/🕒 Last activity: ([^<\n]+)/);
+                      const lastActivity = activityMatch ? activityMatch[1].trim() : '';
+                      
+                      const authorMatch = content.match(/👤 Started by: ([^<\n]+)/);
+                      const author = authorMatch ? authorMatch[1].trim() : '';
+                      
+                      const summaryMatch = content.match(/📋 Summary: ([^<\n]+)/);
+                      const summary = summaryMatch ? summaryMatch[1].trim() : '';
+                      
+                      // Extract link
+                      const linkMatch = content.match(/👉 Join the conversation at \/forum\/post\/(\d+)/);
+                      const discussionId = linkMatch ? linkMatch[1] : '';
+                      
+                      // Determine discussion category if possible (default to general)
+                      let category = 'general-discussion';
+                      
+                      if (title.toLowerCase().includes('announcement') || 
+                          title.toLowerCase().includes('notice') || 
+                          title.toLowerCase().includes('important')) {
+                        category = 'announcements';
+                      } else if (title.toLowerCase().includes('marketplace') || 
+                                title.toLowerCase().includes('sale') || 
+                                title.toLowerCase().includes('selling')) {
+                        category = 'marketplace';
+                      } else if (title.toLowerCase().includes('lost') || 
+                                title.toLowerCase().includes('found') || 
+                                title.toLowerCase().includes('missing')) {
+                        category = 'lost-and-found';
+                      } else if (title.toLowerCase().includes('residents only') || 
+                                title.toLowerCase().includes('resident') || 
+                                title.toLowerCase().includes('hoa')) {
+                        category = 'residents-only';
+                      }
+                      
+                      // Create the enhanced card for this discussion
+                      result += `<div class="forum-discussion-card">
+                        <div class="forum-discussion-header">
+                          <h3 class="forum-discussion-title">📣 ${title.replace(/[\[\]📣]/g, '').trim()}</h3>
+                          <div class="forum-category-badge" data-category="${category}">${category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</div>
+                        </div>
+                        <div class="forum-discussion-content">
+                          <div class="forum-discussion-meta">
+                            <div class="forum-discussion-meta-item">
+                              <span class="emoji-bounce">🕒</span>
+                              <span class="forum-discussion-meta-label">Last activity:</span>
+                              <span>${lastActivity}</span>
+                            </div>
+                            <div class="forum-discussion-meta-item">
+                              <span class="emoji-bounce">👤</span>
+                              <span class="forum-discussion-meta-label">Started by:</span>
+                              <span>${author}</span>
+                            </div>
+                          </div>
+                          <div class="forum-discussion-summary">
+                            ${summary}
+                          </div>
+                          <div class="listing-action">
+                            <a href="/forum/post/${discussionId}" class="listing-button">
+                              Join the conversation <span class="button-icon">→</span>
+                            </a>
+                          </div>
+                        </div>
+                      </div>`;
+                    } else {
+                      // Add any remaining part
+                      result += parts[i];
+                    }
+                  }
+                  
+                  return result;
+                })
+                // Handle any remaining plain text links to weather page
+                .replace(/<a href="\/weather"([^>]*?)>(.*?)<\/a>/g, 
+                  '<span class="inline-block">👉<a href="/weather" class="styled-button">$2</a></span>')
+                .replace(/\n/g, '<br/>')
+                .replace(/---/g, '<hr class="border-gray-200" />')
+                // Add card styling to for-sale listings - manual multi-line processing to avoid regex 's' flag
+                .replace(/(Here are some relevant for-sale listings:[\s\S]*?)(?=I found some|Here's some|Happy to help|$)/, function(match) {
+                  // First, check if this is actually a for-sale section
+                  if (!match.includes('Price:')) return match;
+                  
+                  // Split the content by listing titles
+                  const parts = match.split(/(\[[^\]]+\])/);
+                  let result = parts[0]; // Start with the header text
+                  
+                  for (let i = 1; i < parts.length; i += 2) {
+                    if (i + 1 < parts.length) {
+                      const title = parts[i];
+                      const content = parts[i + 1];
+                      
+                      // Only process if this is a listing with price
+                      if (content.includes('🏷️ Price:')) {
+                        // Check if listing is new (created within the last 7 days)
+                        const dateMatch = content.match(/📅 Posted on: ([A-Za-z]+ \d+, \d{4})/);
+                        const isNew = dateMatch && 
+                          (new Date(dateMatch[1]) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
+                        
+                        // Check if the listing is a rental based on multiple indicators
+                        const isRental = 
+                          // Check title content
+                          title.toLowerCase().includes('for rent') ||
+                          title.toLowerCase().includes('rental') ||
+                          title.toLowerCase().includes('lease') ||
+                          title.toLowerCase().includes('apartment') ||
+                          title.toLowerCase().includes('residence for rent') ||
+                          // Check listing content
+                          content.includes('per month') || 
+                          content.includes('Monthly rent') || 
+                          content.includes('/month') ||
+                          content.toLowerCase().includes('for rent') || 
+                          content.toLowerCase().includes('rental property') ||
+                          content.toLowerCase().includes('apartment') ||
+                          content.toLowerCase().includes('available for immediate move-in') ||
+                          content.toLowerCase().includes('tenant') ||
+                          content.toLowerCase().includes('lease');
+                        
+                        // Create an enhanced card with shadow and gradient
+                        result += `<div class="listing-card" ${isNew ? 'data-new="true"' : ''} ${isRental ? 'data-rental="true"' : ''}>
+                          <div class="listing-header">
+                            <h3 class="listing-title">${title.replace(/[\[\]]/g, '')}</h3>
+                          </div>
+                          <div class="listing-content">
+                            ${content
+                              // Add icon animations
+                              .replace(/🏷️/g, '<span class="emoji-bounce inline-block">🏷️</span>')
+                              .replace(/📅/g, '<span class="emoji-bounce inline-block">📅</span>')
+                              .replace(/🏠/g, '<span class="emoji-bounce inline-block">🏠</span>')
+                              .replace(/📝/g, '<span class="emoji-bounce inline-block">📝</span>')
+                              // Format features section with appropriate classes
+                              .replace(/([\d.]+ BD)/g, '<span class="feature-badge bedroom-badge" title="$1">$1</span>')
+                              .replace(/([\d.]+ BA)/g, '<span class="feature-badge bathroom-badge" title="$1">$1</span>')
+                              .replace(/([\d,.]+ sq ft)/g, '<span class="feature-badge sqft-badge" title="$1">$1</span>')
+                              .replace(/(Built \d{4})/g, '<span class="feature-badge built-badge" title="$1">$1</span>')
+                              .replace(/([A-Za-z]+ condition)/g, '<span class="feature-badge condition-badge" title="$1">$1</span>')
+                            }
+                          </div>
+                        </div>`;
+                      } else {
+                        // If not a listing with price, keep original format
+                        result += title + content;
+                      }
+                    } else {
+                      // Add any remaining part
+                      result += parts[i];
+                    }
+                  }
+                  
+                  return result;
+                })
+                // Add highlighting to listing features
+                .replace(/▸ 🏠 Features: (.*?)(?=<br\/>|$)/g, 
+                  '▸ 🏠 Features: <span class="inline-flex flex-wrap gap-1">$1</span>')
+                .replace(/([\d.]+ BD)/g, '<span class="feature-badge bedroom-badge" title="$1">$1</span>')
+                .replace(/([\d.]+ BA)/g, '<span class="feature-badge bathroom-badge" title="$1">$1</span>')
+                .replace(/([\d,.]+ sq ft)/g, '<span class="feature-badge sqft-badge" title="$1">$1</span>')
+                .replace(/(Built \d{4})/g, '<span class="feature-badge built-badge" title="$1">$1</span>')
+                .replace(/([A-Za-z]+ condition)/g, '<span class="feature-badge condition-badge" title="$1">$1</span>')
+            }} 
+          />
+        </Card>
+      )}
+
+      {isSearching && (
+        <div className="text-center p-4 text-gray-600 text-2xl">
+          <div className="animate-spin inline-block w-8 h-8 border-2 border-current border-t-transparent rounded-full mr-2" aria-hidden="true"></div>
+          Searching...
+        </div>
+      )}
+    </div>
+  );
+}

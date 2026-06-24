@@ -1,0 +1,911 @@
+2025-05-23 15:39:22.14
+
+11075f95
+
+System
+
+starting up user application
+
+2025-05-23 15:39:22.38
+
+11075f95
+
+System
+
+forwarding local port 5000 to external port 80 (mapped as 1104)
+
+2025-05-23 15:40:00.51
+
+11075f95
+
+User
+
+connectionTimeoutMillis: 5000,
+
+2025-05-23 15:40:00.51
+
+11075f95
+
+User
+
+allowExitOnIdle: false
+
+2025-05-23 15:40:00.51
+
+11075f95
+
+User
+
+}
+
+2025-05-23 15:40:00.51
+
+11075f95
+
+User
+
+✓ Performance optimizations applied
+
+2025-05-23 15:40:00.51
+
+11075f95
+
+User
+
+Setting up analytics middleware...
+
+2025-05-23 15:40:00.51
+
+11075f95
+
+User
+
+Setting up public analytics API routes...
+
+2025-05-23 15:40:00.51
+
+11075f95
+
+User
+
+Setting up message templates API routes...
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+PostgreSQL connection pool optimized for production with settings: {
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+max: 20,
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+idleTimeoutMillis: 30000,
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+connectionTimeoutMillis: 5000,
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+allowExitOnIdle: false
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+}
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+✓ Performance optimizations applied
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+WebSocket server configuration already includes chat support
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up disable cache middleware...
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up calendar media fallback middleware for Object Storage...
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up forum media redirect middleware...
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up attachment media middleware...
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up attachment storage proxy middleware...
+
+
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up direct attachment access route...
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up attachment URL fix route...
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up direct file server middleware...
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up calendar media test endpoints...
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static file routes...
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /media -> /home/runner/workspace/media
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /uploads -> /home/runner/workspace/uploads
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /icons -> /home/runner/workspace/icons
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /banner-slides -> /home/runner/workspace/uploads/banner-slides
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /uploads/banner-slides -> /home/runner/workspace/uploads/banner-slides
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /uploads/calendar -> /home/runner/workspace/uploads/calendar
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /calendar -> /home/runner/workspace/uploads/calendar
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /images -> /home/runner/workspace/uploads
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /assets -> /home/runner/workspace/dist/public/assets
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /attached_assets -> /home/run5-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /assets -> /home/runner/workspace/dist/public/assets
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /attached_assets -> /home/runner/workspace/attached_assets
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /content-media -> /home/runner/workspace/content-media
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /uploads/content-media -> /home/runner/workspace/content-media
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /forum-media -> /home/runner/workspace/forum-media
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /uploads/forum-media -> /home/runner/workspace/forum-media
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /community-media -> /home/runner/workspace/community-media
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /uploads/community-media -> /home/runner/workspace/community-media
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /vendor-media -> /home/runner/workspace/vendor-media
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /uploads/vendor-media -> /home/runner/workspace/vendor-media
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /real-estate-media -> /home/runner/workspace/real-estate-media
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /uploads/real-estate-media -> /home/runner/workspace/uploads/real-estate-media
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /public -> /home/runner/workspace/public
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /event-media-test.html -> /home/runner/workspace/public
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /avatars -> /home/runner/workspace/avatars
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /uploads/avatars -> /home/runner/workspace/uploads/avatars
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /uploads/attachments -> /home/runner/workspace/uploads/attachments
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /attachments -> /home/runner/workspace/uploads/attachments
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /media-placeholder -> /home/runner/workspace/public/media-placeholder
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /static -> /home/runner/workspace/dist/public/static
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Setting up static route: /static/videos -> /home/runner/workspace/dist/public/static/videos
+
+2025-05-23 15:40:00.52
+
+11075f95
+
+User
+
+Static routes setup completed
+
+2025-05-23 15:40:00.53
+
+11075f95
+
+User
+
+NODE_ENV: production
+
+2025-05-23 15:40:00.53
+
+11075f95
+
+User
+
+Server is running on http://0.0.0.0:5000
+
+2025-05-23 15:40:00.53
+
+11075f95
+
+User
+
+Media URLs will be served from multiple paths including /uploads, /media, /icons, /attached_assets, etc.
+
+2025-05-23 15:40:00.53
+
+11075f95
+
+User
+
+WebSocket server available at ws://0.0.0.0:5000/ws
+
+2025-05-23 15:40:05.02
+
+11075f95
+
+User
+
+[Server] ✅ Database connected successfully
+
+2025-05-23 15:40:05.76
+
+11075f95
+
+User
+
+[AnalyticsService] New session started: 39147b31-095e-4985-b19b-2be240ffd4f2
+
+2025-05-23 15:40:05.84
+
+11075f95
+
+User
+
+Error tracking page view: TypeError: Cannot read properties of undefined (reading 'url')
+
+2025-05-23 15:40:05.84
+
+11075f95
+
+User
+
+at AnalyticsService.trackPageView (file:///home/runner/workspace/dist/index.js:18039:20)
+
+2025-05-23 15:40:05.84
+
+11075f95
+
+User
+
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+2025-05-23 15:40:05.84
+
+11075f95
+
+User
+
+Error tracking page view in middleware: TypeError: Cannot read properties of undefined (reading 'url')
+
+2025-05-23 15:40:05.84
+
+11075f95
+
+User
+
+at AnalyticsService.trackPageView (file:///home/runner/worksp2025-05-23 15:41:25.50
+
+11075f95
+
+User
+
+Error tracking page view in middleware: TypeError: Cannot read properties of undefined (reading 'url')
+
+2025-05-23 15:41:25.50
+
+11075f95
+
+User
+
+at AnalyticsService.trackPageView (file:///home/runner/workspace/dist/index.js:18039:20)
+
+2025-05-23 15:41:25.50
+
+11075f95
+
+User
+
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+2025-05-23 15:41:25.64
+
+11075f95
+
+User
+
+[Server] ✅ Database connected successfully
+
+2025-05-23 15:41:25.72
+
+11075f95
+
+User
+
+[AnalyticsService] New session started: 344e2d98-fc99-4df2-b802-7cc3ac32ea22
+
+2025-05-23 15:41:25.72
+
+11075f95
+
+User
+
+[CalendarMediaFallback] Checking URL: /events/4588
+
+2025-05-23 15:41:25.73
+
+11075f95
+
+User
+
+[SPA Fallback] Handling path: /events/4588
+
+2025-05-23 15:41:25.81
+
+11075f95
+
+User
+
+Error tracking page view: TypeError: Cannot read properties of undefined (reading 'url')
+
+2025-05-23 15:41:25.81
+
+11075f95
+
+User
+
+at AnalyticsService.trackPageView (file:///home/runner/workspace/dist/index.js:18039:20)
+
+2025-05-23 15:41:25.81
+
+11075f95
+
+User
+
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+2025-05-23 15:41:25.81
+
+11075f95
+
+User
+
+Error tracking page view in middleware: TypeError: Cannot read properties of undefined (reading 'url')
+
+2025-05-23 15:41:25.81
+
+11075f95
+
+User
+
+at AnalyticsService.trackPageView (file:///home/runner/workspace/dist/index.js:18039:20)
+
+2025-05-23 15:41:25.81
+
+11075f95
+
+User
+
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+2025-05-23 15:42:01.95
+
+11075f95
+
+User
+
+[Server] ✅ Database connected successfully
+
+2025-05-23 15:42:02.04
+
+11075f95
+
+User
+
+[AnalyticsService] New session started: 0d8740e8-46ad-4031-9009-5043f6b2180e
+
+2025-05-23 15:42:02.12
+
+11075f95
+
+User
+
+Error tracking page view: TypeError: Cannot read properties of undefined (reading 'url')
+
+2025-05-23 15:42:02.12
+
+11075f95
+
+User
+
+at AnalyticsService.trackPageView (file:///home/runner/workspace/dist/index.js:18039:20)
+
+2025-05-23 15:42:02.12
+
+11075f95
+
+User
+
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+2025-05-23 15:42:02.12
+
+11075f95
+
+User
+
+Error tracking page view in middleware: TypeError: Cannot read properties of undefined (reading 'url')
+
+2025-05-23 15:42:02.12
+
+11075f95
+
+User
+
+at AnalyticsService.trackPageView (file:///home/runner/workspace/dist/index.js:18039:20)
+
+2025-05-23 15:42:02.12
+
+11075f95
+
+User
+
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+2025-05-23 15:42:55.69
+
+11075f95
+
+User
+
+[CalendarMediaFallback] Checking URL: /apple-touch-icon-76x76.png
+
+2025-05-23 15:42:55.69
+
+11075f95
+
+User
+
+[SPA Fallback] Handling path: /apple-touch-icon-76x76.png
+
+2025-05-23 15:42:55.69
+
+11075f95
+
+User
+
+[SPA Fallback] Treating as non-SPA route: /apple-touch-icon-76x76.png
+
+2025-05-23 15:44:04.91
+
+11075f95
+
+User
+
+[Server] ✅ Database connected successfully
+
+2025-05-23 15:44:07.95
+
+11075f95
+
+User
+
+"id": 7745,
+
+2025-05-23 15:44:07.95
+
+11075f95
+
+User
+
+"name": "Starlink (12-22)",
+
+2025-05-23 15:44:07.95
+
+11075f95
+
+User
+
+"description": null
+
+2025-05-23 15:44:07.95
+
+11075f95
+
+User
+
+}
+
+2025-05-23 15:44:07.95
+
+11075f95
+
+User
+
+],
+
+2025-05-23 15:44:07.95
+
+11075f95
+
+User
+
+"mission_description": null,
+
+2025-05-23 15:44:07.95
+
+11075f95
+
+User
+
+"launch_description": "A SpaceX Falcon 9 rocket will launch the Starlink (12-22) mission on Saturday, May 24, 2025 at 5:19 PM (UTC).",
+
+2025-05-23 15:44:07.95
+
+11075f95
+
+User
+
+"win_open": null,
+
+
+
+2025-05-23 15:44:07.95
+
+11075f95
+
+User
+
+"t0": "2025-05-24T17:19Z",
+
+2025-05-23 15:44:07.95
+
+11075f95
+
+User
+
+"win_close": null,
+
+2025-05-23 15:44:07.95
+
+11075f95
+
+User
+
+"est_date": {
+
+2025-05-23 15:44:07.95
+
+11075f95
+
+User
+
+"month": 5,
+
+2025-05-23 15:44:07.95
+
+11075f95
+
+User
+
+"day": 24,
+
+2025-05-23 15:44:07.95
+
+11075f95
+
+User
+
+"year": 2025,
+
+2025-05-23 15:44:07.95
+
+11075f95
+
+User
+
+"quarter": null
+
+2025-05-23 15:44:07.95
+
+11075f95
+
+User
+
+},
+
+2025-05-23 15:44:07.95
+
+11075f95
+
+User
+
+"date_str": "May 24",
+
+
+
+Show thinking
+
+
+
+
+
+Deep Research
+
+Canvas
+
+Video
+
+Gemini can make mistakes, so double-check i

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendar Backup</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #f8f8f8;
+      white-space: pre-wrap;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Direct Calendar Backup</h1>
+  <p>This page will directly backup your calendar media files without going through Vite.</p>
+  
+  <button id="backupBtn">Backup Calendar Media</button>
+  
+  <div id="result" class="result" style="display: none;"></div>
+  
+  <script>
+    document.getElementById('backupBtn').addEventListener('click', async function() {
+      try {
+        // Show loading state
+        const resultDiv = document.getElementById('result');
+        resultDiv.style.display = 'block';
+        resultDiv.textContent = 'Backing up calendar media files...';
+        
+        // Make the request directly to the server
+        const response = await fetch('/api/admin/backup/calendar-media', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        
+        // Get the response content
+        const contentType = response.headers.get('content-type');
+        let data;
+        
+        if (contentType && contentType.includes('application/json')) {
+          data = await response.json();
+        } else {
+          const text = await response.text();
+          resultDiv.innerHTML = `<strong>Non-JSON response received:</strong><br>${text.substring(0, 500)}...`;
+          return;
+        }
+        
+        // Display the result
+        if (data.success) {
+          resultDiv.innerHTML = `<strong>Backup Successful!</strong><br>
+            Backed up ${data.backupCount} files to:<br>
+            ${data.backupPath}`;
+        } else {
+          resultDiv.innerHTML = `<strong>Backup Failed:</strong><br>${data.message || 'Unknown error'}`;
+        }
+      } catch (error) {
+        document.getElementById('result').innerHTML = `<strong>Error:</strong><br>${error.message}`;
+        console.error('Backup error:', error);
+      }
+    });
+  </script>
+</body>
+</html>

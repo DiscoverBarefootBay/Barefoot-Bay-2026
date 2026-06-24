@@ -1,0 +1,95 @@
+Prompt for Replit Agent
+
+Task: Implement a press-and-hold Rocket Easter Egg that works on every page, using the attached rocket image (barefoot-bay-rocket.png, attached to this prompt). Do not break or change existing click behavior for the rocket icon.
+
+Goal (high level)
+
+When a user presses and holds the rocket icon in the main navbar for 5 seconds, a full-screen overlay plays a short “launch” sequence featuring the attached rocket image. The page beneath becomes non-interactive during the sequence, then fully interactive again when the smoke clears.
+
+Asset
+
+Use the attached image of the rocket: barefoot-bay-rocket.png.
+
+Ensure it renders crisp on retina/hi-dpi and scales gracefully on mobile.
+
+Trigger & Controls
+
+Icon: Use the existing rocket icon in the main navbar (keep its current single-click action untouched).
+
+Easter egg trigger: Press & hold the icon for 5 seconds (mouse, touch, and keyboard hold on Space/Enter).
+
+Show a subtle hold progress indicator around the icon (ring fill or similar).
+
+Cancel the hold if the pointer leaves the icon, is released early, or focus changes.
+
+Feature must be route-agnostic (works on whatever page the user is on).
+
+Sequence (overlay)
+
+Overlay appears (covers the whole viewport; high z-index). Page beneath is temporarily non-interactive.
+
+Rocket Emergence: The attached rocket image rises slowly from the bottom until fully visible near center/bottom.
+
+Ready State: Rocket has a gentle shake/jitter to feel “powered up.”
+
+Smoke starts emitting from beneath the rocket (light, looping puffs).
+
+Countdown: A large countdown (T-5 … T-0) is overlaid on top of the page/overlay.
+
+Optional single line of “mission control” copy at T-5: “Barefoot Bay, we are clear for launch.”
+
+Liftoff (T-0):
+
+Smoke intensity increases, flame appears beneath the rocket.
+
+Rocket flies upward and off-screen toward the top.
+
+Smoke briefly fills the lower screen to sell the lift.
+
+Clear & Return: The smoke dissipates, the overlay is removed, and the underlying page is again fully interactive.
+
+Non-goals / Constraints
+
+Do not add heavy new dependencies unless they’re already standard in the project. Prefer what the codebase uses today; otherwise keep it simple (CSS/JS).
+
+Keep the total experience short and lightweight (~6–10s total). Avoid large assets.
+
+Do not alter existing navbar layout or click behavior beyond adding the long-press easter egg.
+
+Accessibility & UX
+
+Respect prefers-reduced-motion: skip complex motion; show a quick appear/disappear sequence instead.
+
+Keyboard: holding Space/Enter on the icon should behave like the long press.
+
+High-contrast, readable countdown; works on mobile and desktop.
+
+Overlay must be dismissible automatically at the end (no dead ends).
+
+Integration details (defer to codebase patterns)
+
+Mount the overlay in whatever “global/root” place the app uses for modals/portals so it appears above all routes.
+
+Ensure clean teardown: remove timers, animation loops, event listeners, and restore pointer events.
+
+Ensure it can be re-triggered after completion (no stale state).
+
+Provide a simple way to configure: hold duration (default 5000ms) and countdown start (default T-5).
+
+QA / Acceptance Criteria
+
+Normal click on the rocket icon still performs its existing action.
+
+Press-and-hold for 5s reliably triggers the sequence on mouse, touch, and keyboard.
+
+Rocket image emerges from the bottom, shakes, emits smoke, shows a T-5…T-0 countdown, then at T-0 shows stronger smoke + flame and flies up/off screen.
+
+During the sequence, the underlying page is non-interactive; after the smoke clears, it is fully interactive again.
+
+Works on small screens and large displays; looks crisp with the provided image.
+
+Honors reduced motion preferences.
+
+No console errors; no memory leaks; can be triggered multiple times in one session.
+
+Use the attached image named barefoot-bay-rocket.png for the rocket. If you need a different format or size, generate it from this source asset within the project’s existing asset pipeline.

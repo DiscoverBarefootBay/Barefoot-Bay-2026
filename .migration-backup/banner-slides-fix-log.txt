@@ -1,0 +1,20 @@
+[2025-04-19T18:20:53.843Z] Connected to database successfully
+[2025-04-19T18:20:53.845Z] ==== BANNER SLIDES MEDIA FIX ====
+[2025-04-19T18:20:53.845Z] Starting banner slides media fix process...
+[2025-04-19T18:20:53.845Z] Starting banner slide file copy process...
+[2025-04-19T18:20:53.845Z] Found 9 files in ./uploads/banner-slides
+[2025-04-19T18:20:53.846Z] Skipped bannerImage-1743591277841-110589692.mp4 (already exists with same size and timestamp)
+[2025-04-19T18:20:53.846Z] Skipped bannerImage-1743591372911-438837143.mp4 (already exists with same size and timestamp)
+[2025-04-19T18:20:53.847Z] Skipped bannerImage-1743595152309-999488918.png (already exists with same size and timestamp)
+[2025-04-19T18:20:53.847Z] Skipped bannerImage-1743595589741-190651491.mp4 (already exists with same size and timestamp)
+[2025-04-19T18:20:53.847Z] Skipped bannerImage-1744807792017-944062710.png (already exists with same size and timestamp)
+[2025-04-19T18:20:53.847Z] Skipped bannerImage-1744807807378-313383698.png (already exists with same size and timestamp)
+[2025-04-19T18:20:53.847Z] Skipped bannerImage-1744807820118-975611251.png (already exists with same size and timestamp)
+[2025-04-19T18:20:53.847Z] Skipped bannerImage-1744807830685-597252034.png (already exists with same size and timestamp)
+[2025-04-19T18:20:53.848Z] Skipped bannerImage-1744890936873-990389248.mp4 (already exists with same size and timestamp)
+[2025-04-19T18:20:53.848Z] Copied/updated 0 banner slide files
+[2025-04-19T18:20:53.848Z] Checking for banner slide references in database...
+[2025-04-19T18:20:54.408Z] Found banner-slides content with ID 4
+[2025-04-19T18:20:54.408Z] No path issues found in banner slides content
+[2025-04-19T18:20:54.409Z] Detecting all banner slide images referenced in database...
+[2025-04-19T18:20:54.483Z] Detected banner slide image: bannerImage-1745085744160-652699406.png

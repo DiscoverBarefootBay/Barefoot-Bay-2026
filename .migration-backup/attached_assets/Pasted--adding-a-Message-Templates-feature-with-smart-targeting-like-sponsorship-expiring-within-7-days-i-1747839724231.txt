@@ -1,0 +1,79 @@
+ adding a Message Templates feature with smart targeting like “sponsorship expiring within 7 days” is entirely doable — and actually a very practical enhancement to your message system. Here's how it can work:
+
+✅ Feature: Message Templates with Auto-Populated Recipients
+🔧 Functional Capabilities
+1. Template Selection Dropdown
+Add a Template dropdown above the To field:
+
+“Select a template”
+
+“7-Day Sponsorship Renewal Reminder”
+
+“Welcome Message for New Paid Users”
+
+“Badge Holder Upgrade Offer”
+
+“Custom (No Template)”
+
+2. Auto-populate Fields When Template Is Selected
+When a template is selected:
+
+Recipients field is auto-filled (e.g. Paid Users expiring in next 7 days)
+
+Subject is set (e.g. Reminder: Renew Your Sponsorship Benefits)
+
+Message body is pre-filled with customizable content
+
+3. Dynamic Recipient Fetching
+Backend logic identifies users:
+
+sql
+Copy
+Edit
+SELECT * FROM users
+WHERE role = 'paid'
+  AND sponsorship_expiration BETWEEN NOW() AND NOW() + INTERVAL 7 DAY;
+4. Admin Override
+Admins can still adjust recipients, subject, and message content after the template is applied.
+
+✉️ Example Template: "7-Day Sponsorship Renewal Reminder"
+📌 Recipients
+All users with sponsorship_expiration within the next 7 days.
+
+📌 Subject
+Reminder: Renew Your Sponsorship Benefits
+
+📌 Message
+plaintext
+Copy
+Edit
+Hi {{first_name}},
+
+We noticed your sponsorship benefits are set to expire on {{sponsorship_expiration}}. 
+
+To maintain your access to exclusive features and support the platform, please renew your sponsorship by visiting your [Account Page](https://example.com/account).
+
+Thank you for being part of our community!
+
+— The Admin Team
+(You can dynamically insert user-specific variables like {{first_name}}, {{sponsorship_expiration}}, etc.)
+
+🔐 Access Control
+Only admins can view and use templates that target a group.
+
+Regular users still only see "Admin Team" in recipients.
+
+🚀 Implementation Outline
+Component	Update Needed
+Frontend	Add Template dropdown; preload fields when selected
+Backend	Create /templates endpoint and support for query-based recipient resolution
+DB	Ensure sponsorship_expiration field is indexed and up to date
+Security	Confirm only authorized users can use group-targeted templates
+
+✅ Optional Enhancements
+Add Scheduled Send (e.g., send 3 days before expiration).
+
+Save custom templates to a DB table (message_templates) for reuse.
+
+Include preview mode with variable resolution.
+

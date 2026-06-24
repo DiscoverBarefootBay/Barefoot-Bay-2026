@@ -1,0 +1,4 @@
+      // Use our override function that ensures Object Storage is being used exclusively
+      // This will always return true since we verify during the Object Storage upload
+      verifyBannerSlideExists(newFilename);
+      // We don't need to check the return value since our override always returns true

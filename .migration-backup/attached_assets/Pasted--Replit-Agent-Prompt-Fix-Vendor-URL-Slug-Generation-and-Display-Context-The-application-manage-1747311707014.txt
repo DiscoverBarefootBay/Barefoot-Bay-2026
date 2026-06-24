@@ -1,0 +1,100 @@
+🔧 Replit Agent Prompt: Fix Vendor URL Slug Generation and Display
+🧠 Context
+The application manages vendor pages for a community platform. Each vendor page has:
+
+A Title (free text)
+
+A Vendor Category (dropdown)
+
+A URL Slug field (currently editable and improperly generated)
+
+❌ Current Problem
+The URL Slug:
+
+Is editable by users (it shouldn't be)
+
+Is auto-generated in the wrong format (e.g., vendors-anchor-and-vapor-barrier-and-vapor-barrier-underhome-armor-anchor-and-vapor-barrier)
+
+Often repeats the category and doesn’t follow the intended URL structure
+
+Is stored with hyphens throughout, instead of separating category and title
+
+✅ Target Behavior
+The slug should be auto-generated and non-editable
+
+Slugs should follow this exact structure in the frontend display and backend DB:
+
+css
+Copy
+Edit
+vendors/[category]/[unique-identifier]
+The slug should be stored internally using hyphens only within the category or title, like:
+
+cpp
+Copy
+Edit
+vendors-anchor-and-vapor-barrier-underhome-armor-anchor-and-vapor-barrier
+No user input should be required or allowed for the slug field.
+
+🧩 Expected Implementation Details
+🔁 Slug Generation Logic
+Watch the Vendor Category and Title fields.
+
+Slugify both:
+
+Lowercase
+
+Replace spaces with hyphens
+
+Remove special characters
+
+Remove duplication:
+
+If the title begins with the category, strip it out of the title part of the slug.
+
+Format the slug like:
+
+ts
+Copy
+Edit
+vendors-[category-slug]-[title-slug]
+✅ Frontend Form Changes
+Remove or make the slug field read-only in the form UI.
+
+Auto-generate the slug in a useEffect hook whenever title or category changes.
+
+Use a VendorUrlDisplay preview component to show users the formatted path:
+
+css
+Copy
+Edit
+/vendors/[category]/[unique-identifier]
+✅ Backend/Database Behavior
+Store the slug with hyphens in the DB.
+
+Never store slashes in the slug field to avoid routing conflicts.
+
+📂 Files to Modify
+client/src/pages/admin/manage-vendors.tsx:
+
+useEffect hook for slug generation
+
+Make slug field read-only or remove it
+
+Update <VendorUrlDisplay /> to show correct structure
+
+Optional utility update:
+
+utils/slugify.ts or equivalent
+
+🧪 Testing Criteria
+Create a vendor with category: Home Services, title: Dan Hess - Antiques & Estate Sales
+
+Should generate slug: vendors-home-services-dan-hess-antiques-estate-sales
+
+Displayed path should be: /vendors/home-services/dan-hess-antiques-estate-sales
+
+Ensure vendor slugs don’t repeat the category or contain malformed separators.
+
+Validate that users cannot manually modify the slug field.
+

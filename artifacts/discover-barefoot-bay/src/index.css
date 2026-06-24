@@ -1,0 +1,2573 @@
+@font-face {
+  font-family: 'Anchorage';
+  src: url('/fonts/AnchorageBold.woff') format('woff'),
+       url('/fonts/AnchorageBold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Advent Pro';
+  src: url('/fonts/AdventPro-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Advent Pro';
+  src: url('/fonts/AdventPro-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Advent Pro';
+  src: url('/fonts/AdventPro-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Advent Pro';
+  src: url('/fonts/AdventPro-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Advent Pro';
+  src: url('/fonts/AdventPro-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Advent Pro';
+  src: url('/fonts/AdventPro-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Advent Pro';
+  src: url('/fonts/AdventPro-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/Nunito-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/Nunito-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/Nunito-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/Nunito-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Production-specific CSS fixes for layout issues */
+@layer base {
+  /* Ensure proper box-sizing for all elements */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box !important;
+  }
+  
+  /* Force proper flex behavior in production */
+  .flex {
+    display: flex !important;
+  }
+  
+  .flex-col {
+    flex-direction: column !important;
+  }
+  
+  .min-h-screen {
+    min-height: 100vh !important;
+  }
+  
+  /* Container and layout fixes */
+  .container {
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  /* Navigation fixes */
+  nav {
+    position: relative !important;
+    z-index: 50 !important;
+  }
+  
+  /* Main content area fixes */
+  main {
+    flex: 1 !important;
+    width: 100% !important;
+  }
+}
+
+/* Calendar global fixes - Apply to all calendar views */
+.rdp-months {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.rdp-table {
+  table-layout: fixed !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+}
+
+.rdp-cell, .rdp-head_cell {
+  width: 14.285% !important;
+  max-width: 14.285% !important;
+  min-width: 14.285% !important;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+  position: relative !important;
+  overflow: visible !important;
+  flex: 1 1 14.285% !important;
+}
+
+.rdp-day {
+  position: relative !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 4px 0 !important;
+}
+
+/* Custom slider styling - simple and effective approach */
+.custom-slider [data-orientation="horizontal"] {
+  height: 6px;
+}
+
+.custom-slider [role="slider"] {
+  height: 18px;
+  width: 18px;
+  background-color: white;
+  border: 2px solid #0ea5e9;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  touch-action: none;
+}
+
+.custom-slider [role="slider"]:hover {
+  background-color: #0ea5e9;
+  transform: scale(1.1);
+}
+
+.custom-slider [role="slider"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
+}
+
+/* Make track more visible with gradient */
+.custom-slider [data-orientation="horizontal"] > span {
+  background: linear-gradient(to right, #0ea5e9, #38bdf8);
+  border-radius: 9999px;
+}
+
+/* Ensure popover content has a solid background */
+[data-radix-popper-content-wrapper] {
+  background-color: white !important;
+  backdrop-filter: none !important;
+}
+
+/* Override any transparent backgrounds in popovers */
+.popover-content-wrapper * {
+  background-color: white !important;
+}
+
+@layer base {
+  :root {
+    --ocean: 144 201 212;     /* #90C9D4 - Vibrant blue */
+    --coral: 225 90 79;       /* #e15a4f - Warm accent */
+    --navy: 67 64 84;         /* #434054 - Deep contrast */
+    --grey: 244 244 245;      /* #f4f4f5 - Soft neutral */
+    --charcoal: 39 39 42;     /* #27272a - Text color */
+    --white: 255 255 255;     /* #ffffff - Pure white */
+
+    /* Shadcn/ui component variables — must be defined so bg-background,
+       text-foreground, etc. resolve to explicit colors instead of transparent */
+    --background: 0 0% 100%;          /* white — DialogContent, cards, popovers */
+    --foreground: 202 24% 9%;         /* near-black — matches theme.json #11181C */
+    --card: 0 0% 100%;                /* white card backgrounds */
+    --card-foreground: 202 24% 9%;
+    --popover: 0 0% 100%;             /* white popover/dropdown backgrounds */
+    --popover-foreground: 202 24% 9%;
+    --radius: 0.75rem;                /* matches theme.json radius: 0.75 */
+    --input: 214 32% 91%;             /* light input border/bg */
+    --ring: 189 45% 79%;              /* focus ring — ocean color */
+  }
+
+  * {
+    border-color: rgba(16, 42, 67, 0.1);
+  }
+  
+  /* Fix text cursor issue throughout the site */
+  a, button, [role="button"], .cursor-pointer, [aria-haspopup="true"], 
+  nav span, nav div, .dropdown-menu-content, [data-radix-popper-content-wrapper],
+  h1, h2, h3, h4, h5, h6, .navbar-item {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    cursor: pointer;
+  }
+  
+  /* Make sure search inputs have text cursor */
+  input[type="search"], input[type="text"], [role="searchbox"], .search-input {
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    cursor: text;
+  }
+  
+  .writing-mode-horizontal {
+    writing-mode: horizontal-tb !important;
+  }
+  
+  .text-orientation-upright {
+    text-orientation: upright !important;
+  }
+
+  /* Apply fonts globally */
+  html {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 400;
+    height: 100%;
+    overflow-x: hidden;
+    color-scheme: light;
+  }
+
+  body {
+    color: rgb(39 39 42);
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    line-height: 1.625;
+    background: white;
+    height: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: default;
+  }
+  
+  /* Allow text selection in form inputs and editable content */
+  input, textarea, [contenteditable="true"], select, 
+  .selectable-text, article p, article li, article h1, article h2, article h3, 
+  article h4, article h5, article h6, .rich-text, .event-description, 
+  .post-content, .comment-content, .detail-text, .allow-select {
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    cursor: text;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Anchorage', serif;
+    color: rgb(16 42 67);
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  p, li, input, textarea, button, label {
+    font-family: 'Nunito', sans-serif;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.2, 1) infinite 5s;
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeToNavy {
+  0% {
+    color: white;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+    color: white;
+  }
+  100% {
+    opacity: 1;
+    color: rgb(var(--navy));
+  }
+}
+
+/* Rocket animation keyframes */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes flicker {
+  0%, 100% {
+    opacity: 1;
+    height: 100%;
+  }
+  50% {
+    opacity: 0.8;
+    height: 90%;
+  }
+}
+
+@keyframes flameMove {
+  0%, 100% {
+    transform: scaleX(1) scaleY(1);
+  }
+  25% {
+    transform: scaleX(1.1) scaleY(0.9);
+  }
+  50% {
+    transform: scaleX(0.9) scaleY(1.1);
+  }
+  75% {
+    transform: scaleX(1.05) scaleY(0.95);
+  }
+}
+
+@keyframes sparks {
+  0% {
+    opacity: 1;
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(10px) translateX(5px) scale(0.1);
+  }
+}
+
+@keyframes smoke {
+  0% {
+    opacity: 0.4;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(5px) scale(2);
+  }
+}
+
+@keyframes blink-red {
+  0%, 40% {
+    opacity: 1;
+    box-shadow: 0 0 6px 2px rgba(255, 0, 0, 0.7), 0 0 10px 4px rgba(255, 0, 0, 0.4);
+  }
+  60%, 100% {
+    opacity: 0.3;
+    box-shadow: 0 0 2px 1px rgba(255, 0, 0, 0.3);
+  }
+}
+
+/* Blinking indicator for imminent rocket launch */
+.imminent-launch-indicator {
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background-color: #ff3333;
+  border-radius: 50%;
+  animation: blink-red 1.2s ease-in-out infinite;
+  z-index: 10;
+  box-shadow: 0 0 6px 2px rgba(255, 0, 0, 0.6), 0 0 10px 4px rgba(255, 0, 0, 0.3);
+}
+
+.animate-slide-up {
+  opacity: 0;
+  animation: 
+    slideUp 1.2s ease-out 0.3s forwards,
+    fadeToNavy 1.5s ease-out 0.3s forwards,
+    pulse 5s cubic-bezier(0.4, 0, 0.2, 1) infinite 1.8s;
+}
+
+.animate-slide-up-delayed {
+  opacity: 0;
+  animation: slideUp 1.2s ease-out 0.5s forwards, fadeToNavy 1.5s ease-out 0.5s forwards;
+}
+
+/* Custom scrollbar styles */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-thumb-color) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #CBD5E1;
+  border-radius: 20px;
+}
+
+.scrollbar-thumb-gray-300::-webkit-scrollbar-thumb {
+  background-color: #CBD5E1;
+}
+
+.scrollbar-track-transparent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Custom styles for Community dropdown menu scrollbar */
+.community-dropdown {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(67, 64, 84, 0.2) transparent;
+  max-height: 65vh !important;
+}
+
+.community-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.community-dropdown::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 6px 0;
+}
+
+.community-dropdown::-webkit-scrollbar-thumb {
+  background-color: rgba(67, 64, 84, 0.2);
+  border-radius: 20px;
+  border: 2px solid transparent;
+}
+
+.community-dropdown::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(67, 64, 84, 0.5);
+}
+
+/* Special fix for calendar event titles to ensure horizontal text */
+.horizontal-only {
+  display: block !important;
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+  direction: ltr !important;
+  letter-spacing: normal !important;
+  text-overflow: ellipsis !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  word-break: break-word !important;
+  white-space: normal !important;
+  font-size: 1rem !important;
+  line-height: 1.4 !important;
+  text-align: center !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+}
+
+/* Additional class for mobile event titles */
+.mobile-event-title {
+  font-size: 0.9rem !important;
+  line-height: 1.3 !important;
+  padding: 1px 0 !important;
+  margin: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  display: block !important;
+  text-align: center !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+}
+
+/* Fix for text-overflow */
+.text-overflow-ellipsis {
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+
+/* Mobile responsive styles */
+/* Mobile calendar specific styles */
+.mobile-calendar-event {
+  display: flex;
+  flex-direction: column;
+  min-height: auto;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.mobile-calendar-category-label {
+  width: 100%;
+  display: block;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.mobile-calendar-title {
+  width: 100%;
+  display: block;
+  word-break: break-word;
+  white-space: normal;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Styles for mobile overlapping events in weekly view */
+.mobile-event-overlap {
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1px !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  min-height: 24px !important; /* Minimum height to ensure event is visible */
+}
+
+.mobile-event-overlap:active,
+.mobile-event-overlap:focus,
+.mobile-event-overlap:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 40 !important; /* Override any inline z-index */
+}
+
+/* Add an event counter label to better indicate multiple events */
+.mobile-event-counter {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: white;
+  font-size: 0.6rem;
+  padding: 1px 3px;
+  border-radius: 0 0 0 4px;
+  line-height: 1;
+}
+
+/* Apply a staggered effect to overlapping events in mobile */
+.mobile-event-index-1 {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1) inset;
+  border-bottom-width: 2px;
+}
+
+.mobile-event-index-2 {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15), 0 1px 0 rgba(255, 255, 255, 0.1) inset;
+  border-bottom-width: 2px;
+}
+
+/* Mobile-optimized admin buttons for event detail page */
+@media (max-width: 640px) {
+  .max-w-4xl.mx-auto.space-y-8.p-4 > div:first-child {
+    /* Target the admin button container */
+    padding: 0.75rem 0 !important;
+  }
+  
+  .max-w-4xl.mx-auto.space-y-8.p-4 > div:first-child button {
+    /* Enhanced mobile button styling */
+    min-height: 44px !important; /* Minimum touch target size */
+    padding: 0.75rem 1rem !important;
+    font-size: 0.875rem !important;
+    line-height: 1.25rem !important;
+  }
+  
+  .max-w-4xl.mx-auto.space-y-8.p-4 > div:first-child button span {
+    /* Text handling in mobile buttons */
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: calc(100% - 2rem) !important;
+  }
+  
+  .max-w-4xl.mx-auto.space-y-8.p-4 > div:first-child button svg {
+    /* Icon sizing in mobile buttons */
+    flex-shrink: 0 !important;
+    margin-right: 0.5rem !important;
+  }
+}
+
+.mobile-event-index-3,
+.mobile-event-index-4,
+.mobile-event-index-5 {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.1) inset;
+  border-bottom-width: 2px;
+}
+
+/* Support for vertical text in narrow mobile events */
+.vertical-text {
+  /* Changed from vertical-rl to horizontal-tb for consistent text direction */
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed;
+  /* Keep other styling for proper display */
+  max-height: 100%;
+  overflow: hidden;
+  white-space: normal; /* Allow wrapping */
+  word-break: break-word;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+  position: relative; /* Changed from absolute for better layout */
+  display: block; /* Changed from flex for horizontal text */
+  text-align: center;
+  padding: 4px 2px; /* Reduced horizontal padding for narrow columns */
+  font-size: 0.9rem; /* Increased font size to match other event titles */
+  width: 100%; /* Ensure full width */
+  box-sizing: border-box;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* Rocket Launch Dialog Mobile Responsiveness */
+.rocket-launch-dialog {
+  /* Mobile-first approach */
+  width: calc(100vw - 1rem) !important;
+  max-width: 95vw !important;
+  max-height: 90vh !important;
+  margin: 0.5rem !important;
+  
+  /* Ensure proper positioning */
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  
+  /* Content handling */
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  
+  /* Typography for mobile */
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Tablet and desktop */
+@media (min-width: 640px) {
+  .rocket-launch-dialog {
+    width: auto !important;
+    max-width: 500px !important;
+    margin: 0 !important;
+  }
+}
+
+/* Dialog content specific to rocket launches */
+.rocket-launch-dialog .dialog-title {
+  font-size: 1rem;
+  line-height: 1.25;
+  margin-bottom: 0.5rem;
+  /* Ensure title and status badge stay together */
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+
+/* Mobile-specific padding to prevent title cutoff */
+@media (max-width: 639px) {
+  .rocket-launch-dialog .dialog-title {
+    padding-top: 0.75rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .rocket-launch-dialog .dialog-title {
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .rocket-launch-dialog .dialog-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* Status badge styling to prevent text wrapping */
+.rocket-launch-dialog .dialog-title span {
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  display: inline-block !important;
+}
+
+/* Ensure all text content is readable */
+.rocket-launch-dialog p,
+.rocket-launch-dialog div {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* TinyMCE Text Direction Fixes */
+.tox-tinymce, 
+.tox-edit-area__iframe, 
+.mce-content-body {
+  direction: ltr !important;
+  unicode-bidi: embed !important;
+}
+
+/* Fix for backward text in content editable containers */
+[contenteditable="true"] {
+  direction: ltr !important;
+  unicode-bidi: embed !important;
+  text-align: left !important;
+}
+
+/*
+ * Forum/announcement post content containment.
+ *
+ * The WYSIWYG editor injects images with inline `float: left|right` styles and
+ * sometimes large intrinsic widths. Without these rules, a big right-aligned
+ * image bursts out of the post card and overlaps the Like/Share/Comments UI
+ * (see Task #145). We:
+ *   1. Cap rendered images at the container width on every device.
+ *   2. Make the post container a flow-root so floated children are contained
+ *      and the card grows to fit them.
+ * Applied to both the saved post view and the live editor surface so what the
+ * author sees while editing matches the published result.
+ */
+.forum-content-container {
+  display: flow-root;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.forum-content-container img,
+.forum-content-image,
+[contenteditable="true"] img {
+  max-width: 100%;
+  height: auto;
+}
+
+[contenteditable="true"] {
+  display: flow-root;
+}
+
+/* Ensure all editor content follows LTR rules */
+.wysiwyg-editor-content,
+.editor-container,
+.rich-editor,
+.forum-editor,
+.tox-editor-container {
+  direction: ltr !important;
+  unicode-bidi: embed !important;
+}
+
+/* Admin Calendar Management Mobile Responsiveness */
+@media (max-width: 640px) {
+  /* Mobile-specific layout constraints */
+  * {
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+  
+  /* Ensure admin calendar page doesn't overflow */
+  [class*="calendar-management"] {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  
+  /* Force word breaks for long titles */
+  h1, .text-2xl, .text-3xl {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  
+  /* Container constraints for mobile */
+  .container {
+    max-width: 100vw !important;
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* DataTable mobile constraints */
+  .data-table-wrapper {
+    width: 100% !important;
+    max-width: calc(100vw - 1rem) !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Button mobile constraints */
+  button {
+    min-width: 0 !important;
+    word-break: break-word;
+  }
+  
+  /* Card mobile constraints */
+  .card {
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+  
+  /* Flex mobile constraints */
+  .flex {
+    min-width: 0 !important;
+  }
+  
+  /* Grid mobile constraints */
+  .grid {
+    min-width: 0 !important;
+  }
+}
+
+/* Admin Calendar Management Table Responsiveness */
+.data-table {
+  @apply w-full border-collapse;
+}
+
+.data-table th,
+.data-table td {
+  @apply text-left align-top;
+}
+
+/* Ensure table cells respect responsive classes */
+@media (max-width: 640px) {
+  .hidden.sm\:table-cell {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .hidden.md\:table-cell {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .hidden.lg\:table-cell {
+    display: none !important;
+  }
+}
+
+/* Mobile calendar override: completely different layout for mobile */
+/* Special styles for landscape mode on mobile devices */
+@media (orientation: landscape) and (max-height: 900px) and (hover: none) and (pointer: coarse) {
+  /* Force mobile menu behavior in landscape mode on touch devices */
+  .md\:flex {
+    display: none !important;
+  }
+  
+  .md\:hidden {
+    display: block !important; 
+  }
+  
+  /* Only show the mobile menu button in landscape mode, but not FAB buttons */
+  header [class*="md:hidden"] button,
+  nav [class*="md:hidden"] button {
+    display: flex !important;
+  }
+  
+  /* Fix for FAB buttons to ensure only one appears in landscape mode */
+  .fab-container .single-fab {
+    display: flex !important;
+    position: relative !important;
+    z-index: 100 !important;
+  }
+  
+  .fab-container::before,
+  .fab-container::after {
+    display: none !important;
+  }
+  
+  /* Fix duplicate "Events for" titles in calendar - ensure only one is shown */
+  h2 span.md\:hidden:nth-of-type(2) {
+    display: none !important;
+  }
+  
+  /* Weekly view: Make day headers more compact in weekly view for landscape */
+  [role="columnheader"],
+  .h-12.border-b.bg-white.sticky {
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0 !important;
+  }
+  
+  /* Reduce font size for day headers in weekly view */
+  .font-bold.text-\[10px\] {
+    font-size: 9px !important;
+    line-height: 1 !important;
+    margin-bottom: 2px !important;
+  }
+  
+  .text-\[10px\].text-gray-500 {
+    font-size: 8px !important;
+    line-height: 1 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Mobile calendar layout fixes */
+  [role="grid"] {
+    width: 100% !important;
+    table-layout: fixed !important;
+  }
+  
+  [role="row"] {
+    display: flex !important;
+    width: 100% !important;
+  }
+  
+  [role="columnheader"],
+  [role="gridcell"] {
+    flex: 1 !important;
+    width: 14.28% !important; /* 1/7 of the width */
+    max-width: 14.28% !important;
+    min-width: 30px !important;
+    height: auto !important;
+    aspect-ratio: 1/1 !important; /* Make cells square */
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+  
+  /* Fix the calendar event display */
+  [role="gridcell"] a {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: auto !important;
+    margin-bottom: 2px !important;
+    padding: 0 !important;
+  }
+  
+  /* Fix day header alignment for mobile */
+  [role="columnheader"] abbr,
+  [role="columnheader"] span,
+  .head_cell {
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
+    font-size: 0.75rem !important;
+    transform: none !important;
+    letter-spacing: normal !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Force horizontal text on all calendar elements */
+  [role="gridcell"] a span,
+  [role="gridcell"] a div,
+  .mobile-calendar-title span,
+  .mobile-calendar-category-label span {
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    display: block !important;
+    transform: none !important;
+    max-width: 100% !important;
+    letter-spacing: normal !important;
+    text-align: center !important;
+    font-size: 0.7rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Make days in calendar smaller and more compact */
+  .rdp-day {
+    width: 30px !important;
+    height: 30px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Fix for calendar-specific display issues */
+  .rdp-table {
+    table-layout: fixed !important;
+    width: 100% !important;
+  }
+
+  .rdp-head_cell, .rdp-cell {
+    width: 14.285% !important;
+    max-width: 14.285% !important; 
+    box-sizing: border-box !important;
+  }
+  
+  /* General mobile styles */
+  h1 {
+    font-size: 1.75rem;
+    line-height: 1.2;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    line-height: 1.2;
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+    line-height: 1.2;
+  }
+  
+  .card-container {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+  
+  .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+  
+  /* Adjust tables for mobile */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  /* Fix image sizing on mobile */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Improve form fields on mobile */
+  input, select, textarea {
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+    padding: 0.75rem !important;
+    width: 100%;
+  }
+  
+  /* Mobile form optimization in dialogs */
+  [role="dialog"] form {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+  
+  [role="dialog"] input,
+  [role="dialog"] select,
+  [role="dialog"] textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    font-size: 16px !important;
+  }
+  
+  /* Fix for dialog form labels and text elements */
+  [role="dialog"] label,
+  [role="dialog"] .form-label,
+  [role="dialog"] .space-y-0\.5 div,
+  [role="dialog"] .text-base,
+  [role="dialog"] .text-sm,
+  [role="dialog"] h3,
+  [role="dialog"] h4 {
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    direction: ltr !important;
+    display: block !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+  
+  /* Specific fix for toggle components in dialogs */
+  [role="dialog"] .flex.flex-row.items-center.justify-between div,
+  [role="dialog"] .space-y-0\.5 div {
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    direction: ltr !important;
+  }
+  
+  /* Mobile location display fix */
+  .mobile-location-display {
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    direction: ltr !important;
+    word-break: break-word !important;
+    white-space: normal !important;
+    display: block !important;
+    text-align: left !important;
+    overflow-wrap: break-word !important;
+  }
+  
+  /* Mobile toggle text fixes for Badge Required and Recurring Event sections */
+  .mobile-toggle-text,
+  .mobile-toggle-label,
+  .mobile-toggle-description {
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    direction: ltr !important;
+    display: block !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    text-align: left !important;
+    overflow-wrap: break-word !important;
+  }
+  
+  .mobile-toggle-text * {
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    direction: ltr !important;
+  }
+  
+  /* Dialog button styling for mobile */
+  [role="dialog"] button,
+  [role="alertdialog"] button {
+    min-height: 44px !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.875rem !important;
+    width: 100% !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  /* Stack dialog buttons vertically on mobile */
+  [role="dialog"] .flex.gap-2,
+  [role="alertdialog"] .flex.gap-2 {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+  
+  /* Fix datetime-local inputs on mobile */
+  input[type="datetime-local"] {
+    padding: 0.5rem !important;
+    font-size: 14px !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Make buttons more tappable */
+  button, .btn, [role="button"] {
+    min-height: 44px; /* Apple recommended minimum tap target size */
+    padding: 0.75rem 1rem;
+  }
+  
+  /* Media gallery mobile optimizations */
+  .media-gallery {
+    touch-action: pan-y pinch-zoom !important;
+  }
+  
+  .media-gallery button {
+    touch-action: manipulation !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    min-height: 48px !important;
+    min-width: 48px !important;
+  }
+  
+  .media-gallery .media-content {
+    pointer-events: none !important;
+  }
+  
+  .media-gallery .media-content img,
+  .media-gallery .media-content video {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+  }
+  
+  /* Fix padding on containers */
+  .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  /* Improve dialog scrolling on mobile */
+  [role="dialog"] > div {
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+  }
+  
+  /* Mobile dialog responsiveness for event forms */
+  [role="dialog"] {
+    width: calc(100vw - 1rem) !important;
+    max-width: 95vw !important;
+    max-height: 90vh !important;
+    margin: 0.5rem !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    position: fixed !important;
+  }
+  
+  /* Alert dialog mobile responsiveness */
+  [role="alertdialog"] {
+    width: calc(100vw - 2rem) !important;
+    max-width: 90vw !important;
+    margin: 1rem !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    position: fixed !important;
+  }
+  
+  /* Dialog content scrolling */
+  [role="dialog"] > div,
+  [role="alertdialog"] > div {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    word-wrap: break-word !important;
+  }
+  
+  /* Adjust dropdown menus for mobile */
+  .dropdown-menu-content {
+    max-width: 90vw !important;
+  }
+  
+  /* Responsive padding/margin adjustments */
+  .md\:px-6 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  .md\:mx-6 {
+    margin-left: 1rem !important;
+    margin-right: 1rem !important;
+  }
+  
+  /* Improve readability for long text on mobile */
+  p, li {
+    word-break: break-word;
+  }
+  
+  /* Fix calendar event titles on mobile - very specific targeting */
+  [role="gridcell"] a div,
+  .grid-cols-1 .event-title {
+    word-break: break-word !important;
+    white-space: normal !important;
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+  }
+  
+  /* Very targeted fix - only for specific calendar elements, not dialogs */
+  .calendar-grid [role="gridcell"] {
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    direction: ltr !important;
+  }
+  
+  .mobile-calendar-title {
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    direction: ltr !important;
+  }
+  
+  /* AGGRESSIVE MOBILE DIALOG FIXES - Maximum CSS specificity */
+  @media (max-width: 768px) {
+    /* Nuclear option: Force horizontal text for ALL elements in dialogs */
+    html body div[role="dialog"] *,
+    html body div[role="dialog"] input,
+    html body div[role="dialog"] textarea,
+    html body div[role="dialog"] select,
+    html body div[role="dialog"] label,
+    html body div[role="dialog"] span,
+    html body div[role="dialog"] div,
+    html body div[role="dialog"] button,
+    html body div[role="dialog"] p,
+    html body div[role="dialog"] h1,
+    html body div[role="dialog"] h2,
+    html body div[role="dialog"] h3 {
+      writing-mode: horizontal-tb !important;
+      text-orientation: mixed !important;
+      direction: ltr !important;
+      text-align: left !important;
+    }
+
+    /* Override any grid layouts causing vertical text */
+    html body div[role="dialog"] .grid,
+    html body div[role="dialog"] .grid-cols-2,
+    html body div[role="dialog"] .grid-cols-1 {
+      grid-template-columns: 1fr !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 1rem !important;
+    }
+
+    /* Force flex containers to be column layout */
+    html body div[role="dialog"] .flex,
+    html body div[role="dialog"] .flex-col,
+    html body div[role="dialog"] .space-y-4 > div {
+      display: flex !important;
+      flex-direction: column !important;
+      writing-mode: horizontal-tb !important;
+    }
+
+    /* Current media delete buttons with high specificity */
+    html body div[role="dialog"] button[aria-label*="Remove"],
+    html body div[role="dialog"] .bg-red-50,
+    html body div[role="dialog"] .bg-red-50 button {
+      min-width: 32px !important;
+      min-height: 32px !important;
+      flex-shrink: 0 !important;
+      writing-mode: horizontal-tb !important;
+    }
+
+    /* Specific targeting for problematic sections */
+    html body div[role="dialog"] .intervals,
+    html body div[role="dialog"] .intervals *,
+    html body div[role="dialog"] .recurring-event-section,
+    html body div[role="dialog"] .recurring-event-section *,
+    html body div[role="dialog"] .badge-section,
+    html body div[role="dialog"] .badge-section * {
+      writing-mode: horizontal-tb !important;
+      text-orientation: mixed !important;
+      direction: ltr !important;
+    }
+
+    /* Fix dropdown/select elements text truncation */
+    html body div[role="dialog"] select,
+    html body div[role="dialog"] option,
+    html body div[role="dialog"] [role="combobox"],
+    html body div[role="dialog"] [role="listbox"],
+    html body div[role="dialog"] [role="option"] {
+      writing-mode: horizontal-tb !important;
+      text-orientation: mixed !important;
+      direction: ltr !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: none !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+    }
+
+    /* Fix Radix UI Select components specifically - including portaled content */
+    html body div[role="dialog"] [data-radix-select-content],
+    html body div[role="dialog"] [data-radix-select-content] *,
+    html body div[role="dialog"] [data-radix-select-item],
+    html body div[role="dialog"] [data-radix-select-item] *,
+    html body div[role="dialog"] [data-radix-select-trigger],
+    html body div[role="dialog"] [data-radix-select-trigger] *,
+    html body [data-radix-select-content],
+    html body [data-radix-select-content] *,
+    html body [data-radix-select-item],
+    html body [data-radix-select-item] *,
+    html body [data-radix-select-trigger],
+    html body [data-radix-select-trigger] * {
+      writing-mode: horizontal-tb !important;
+      text-orientation: mixed !important;
+      direction: ltr !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+    }
+
+    /* Specific fix for SelectTrigger text display */
+    html body div[role="dialog"] [data-radix-select-trigger] [data-radix-select-value],
+    html body div[role="dialog"] [data-radix-select-trigger] span,
+    html body div[role="dialog"] .select-trigger,
+    html body div[role="dialog"] .select-trigger *,
+    html body div[role="dialog"] button[role="combobox"],
+    html body div[role="dialog"] button[role="combobox"] *,
+    html body div[role="dialog"] [class*="SelectTrigger"],
+    html body div[role="dialog"] [class*="SelectTrigger"] *,
+    html body div[role="dialog"] [class*="select-trigger"],
+    html body div[role="dialog"] [class*="select-trigger"] * {
+      writing-mode: horizontal-tb !important;
+      text-orientation: mixed !important;
+      direction: ltr !important;
+      display: inline-block !important;
+      width: auto !important;
+      min-width: fit-content !important;
+      overflow: visible !important;
+      text-overflow: initial !important;
+      white-space: nowrap !important;
+    }
+
+    /* Additional comprehensive fix for all select-related classes */
+    html body div[role="dialog"] .select-none,
+    html body div[role="dialog"] .select-none *,
+    html body div[role="dialog"] [class*="Select"],
+    html body div[role="dialog"] [class*="Select"] * {
+      writing-mode: horizontal-tb !important;
+      text-orientation: mixed !important;
+      direction: ltr !important;
+      overflow: visible !important;
+      text-overflow: initial !important;
+      white-space: nowrap !important;
+    }
+
+    /* Additional fix for portaled select content that appears outside dialog */
+    html body [data-radix-popper-content-wrapper],
+    html body [data-radix-popper-content-wrapper] *,
+    body > div[data-radix-select-content],
+    body > div[data-radix-select-content] * {
+      writing-mode: horizontal-tb !important;
+      text-orientation: mixed !important;
+      direction: ltr !important;
+      min-width: 120px !important;
+      width: auto !important;
+    }
+
+    /* Fix for dropdown item text spacing to prevent icon overlap */
+    html body [data-radix-select-content] [data-radix-select-item],
+    body > div[data-radix-select-content] [data-radix-select-item],
+    html body div[role="dialog"] [data-radix-select-content] [data-radix-select-item] {
+      padding-right: 8px !important;
+      justify-content: flex-start !important;
+      align-items: center !important;
+    }
+
+    /* Ensure select item text doesn't overlap with checkmark */
+    html body [data-radix-select-content] [data-radix-select-item] span,
+    body > div[data-radix-select-content] [data-radix-select-item] span,
+    html body div[role="dialog"] [data-radix-select-content] [data-radix-select-item] span {
+      width: calc(100% - 24px) !important;
+      max-width: none !important;
+      flex: 1 !important;
+      margin-right: 8px !important;
+    }
+  }
+  
+  /* Rocket animation fixes - specifically restore transform properties */
+  .flame-container {
+    transform: translateX(-50%) !important;
+  }
+  
+  .imminent-launch-indicator {
+    transform: translate(-50%, -50%) !important;
+  }
+  
+  /* Ensure animation transforms still work */
+  [class*="flame-"], 
+  [class*="spark"],
+  [class*="smoke"] {
+    transform: none; /* Reset to default, let the animations work */
+  }
+}
+
+/* Rocket flame animation styles */
+.rocket-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Imminent launch indicator (red light at top of rocket) */
+.imminent-launch-indicator {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #ff3333;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  animation: blink 1s ease-in-out infinite;
+  box-shadow: 0 0 8px 2px rgba(255, 51, 51, 0.6);
+}
+
+/* Amber-colored indicator for scrubbed launches */
+.imminent-launch-indicator.bg-amber-500 {
+  background-color: rgb(245, 158, 11);
+  animation: amber-blink 2s ease-in-out infinite;
+  box-shadow: 0 0 8px 2px rgba(245, 158, 11, 0.6);
+}
+
+/* Blinking animation for the red launch indicator */
+@keyframes blink {
+  0%, 100% { opacity: 0.4; box-shadow: 0 0 5px 1px rgba(255, 51, 51, 0.4); }
+  50% { opacity: 1; box-shadow: 0 0 10px 3px rgba(255, 51, 51, 0.8), 0 0 15px 5px rgba(255, 51, 51, 0.3); }
+}
+
+/* Blinking animation for the amber scrubbed launch indicator */
+@keyframes amber-blink {
+  0%, 100% { opacity: 0.5; box-shadow: 0 0 5px 1px rgba(245, 158, 11, 0.4); }
+  50% { opacity: 1; box-shadow: 0 0 10px 3px rgba(245, 158, 11, 0.8), 0 0 15px 5px rgba(245, 158, 11, 0.3); }
+}
+
+.flame-container {
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: visible;
+  z-index: -1;
+}
+
+/* Ensure flames display correctly on mobile landscape mode */
+@media (orientation: landscape) and (max-height: 500px) {
+  .flame-container {
+    bottom: -10px;
+    height: 16px;
+  }
+}
+
+.flame-base {
+  width: 10px;
+  height: 14px;
+  background: linear-gradient(to bottom, #ffeb3b, #ff9800);
+  border-radius: 45% 45% 45% 45% / 60% 60% 40% 40%;
+  animation: flameMove 0.5s ease-in-out infinite;
+  filter: blur(0.5px);
+  transform-origin: center bottom;
+  opacity: 0.9;
+}
+
+.flame-middle {
+  position: absolute;
+  bottom: 2px;
+  width: 8px;
+  height: 12px;
+  background: linear-gradient(to bottom, white, #ffeb3b);
+  border-radius: 45% 45% 45% 45% / 60% 60% 40% 40%;
+  animation: flameMove 0.5s ease-in-out infinite;
+  filter: blur(0.5px);
+  transform-origin: center bottom;
+  opacity: 0.95;
+}
+
+.flame-tip {
+  position: absolute;
+  bottom: 4px;
+  width: 6px;
+  height: 10px;
+  background: linear-gradient(to bottom, white, transparent);
+  border-radius: 45% 45% 45% 45% / 60% 60% 40% 40%;
+  animation: flameMove 0.3s ease-in-out infinite;
+  filter: blur(0.5px);
+  transform-origin: center bottom;
+  opacity: 0.9;
+}
+
+.spark {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: #ffeb3b;
+  opacity: 0;
+}
+
+.spark1 {
+  bottom: 0;
+  left: 0;
+  animation: sparks 0.5s ease-out infinite;
+  animation-delay: 0.1s;
+}
+
+.spark2 {
+  bottom: 0;
+  right: 0;
+  animation: sparks 0.7s ease-out infinite;
+  animation-delay: 0.2s;
+}
+
+.spark3 {
+  bottom: 2px;
+  left: 0;
+  animation: sparks 0.6s ease-out infinite;
+  animation-delay: 0.3s;
+}
+
+.smoke {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: rgba(220, 220, 220, 0.3);
+  opacity: 0;
+}
+
+.smoke1 {
+  bottom: 0;
+  left: -2px;
+  animation: smoke 2s ease-out infinite;
+  animation-delay: 0.1s;
+}
+
+.smoke2 {
+  bottom: 0;
+  right: -2px;
+  animation: smoke 2s ease-out infinite;
+  animation-delay: 0.5s;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Custom styles for calendar cells with scrollbars */
+.calendar-cell {
+  /* Firefox scrollbar styles */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(203, 213, 225, 0.15) transparent;
+  max-width: 14.285% !important;
+  width: 14.285% !important;
+  flex: 0 0 14.285% !important;
+}
+
+/* Webkit (Chrome, Safari, Edge) scrollbar styles */
+.calendar-cell::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.calendar-cell::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.calendar-cell::-webkit-scrollbar-thumb {
+  background-color: rgba(203, 213, 225, 0.15);
+  border-radius: 10px;
+}
+
+.calendar-cell:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(203, 213, 225, 0.3);
+}
+
+/* Enhanced styles for the hover state */
+.calendar-cell:hover {
+  overflow: auto !important;
+}
+
+/* Improved calendar day content styles for mobile */
+/* Also apply landscape mode fixes for the second mobile media query */
+@media (orientation: landscape) and (max-height: 900px) and (hover: none) and (pointer: coarse) {
+  /* Make header elements show the mobile hamburger menu */
+  .md\:flex {
+    display: none !important;
+  }
+  
+  .md\:hidden {
+    display: block !important; 
+  }
+  
+  /* Only show the mobile menu button in header and nav, not on FAB buttons */
+  header [class*="md:hidden"] button,
+  nav [class*="md:hidden"] button {
+    display: flex !important;
+  }
+  
+  /* Fix for FAB buttons to ensure only one appears in landscape mode */
+  .fab-container .single-fab {
+    display: flex !important;
+    position: relative !important;
+    z-index: 100 !important;
+  }
+  
+  .fab-container::before,
+  .fab-container::after {
+    display: none !important;
+  }
+  
+  /* Ensure logo displays properly */
+  .h-16.md\:h-24 {
+    height: 4rem !important; /* 16px, force mobile size */
+  }
+  
+  /* Fix duplicate "Events for" titles in calendar - ensure only one is shown */
+  h2 span.md\:hidden:nth-of-type(2) {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Make day numbers more visible */
+  [role="gridcell"] > button > time,
+  [role="gridcell"] > button > div {
+    font-size: 0.8rem !important;
+    font-weight: bold !important;
+    padding: 0 !important;
+    margin-top: 2px !important;
+    display: block !important;
+    text-align: center !important;
+  }
+  
+  /* Fix the width of today and selected days */
+  [role="gridcell"] > button {
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    border-radius: 0 !important;
+  }
+  
+  /* Fix today's date background */
+  .day_today {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: rgb(var(--ocean)) !important;
+  }
+  
+  /* Fix selected day background */
+  .day_selected {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  /* Daily view specific mobile fixes */
+  .space-y-6 > .border.rounded-lg.overflow-hidden {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+  
+  /* Ensure event list items don't overflow */
+  .space-y-6 ul.divide-y {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Fix event title truncation in day view */
+  .space-y-6 h4.font-semibold.text-base.truncate {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+  
+  /* Fix for event display in selected day */
+  [aria-selected="true"] {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+  }
+  
+  /* Make event content display more compact */
+  [role="gridcell"] [data-event-type] {
+    font-size: 0.65rem !important;
+    padding: 1px 2px !important;
+    margin: 1px 0 !important;
+    max-height: none !important;
+    min-height: 16px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: normal !important;
+    width: 100% !important;
+    z-index: 10 !important;
+    position: relative !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+    word-break: break-word !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Fix event container width */
+  [role="gridcell"] a {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Adjust padding on calendar container */
+  .rdp-month {
+    padding: 0 !important;
+  }
+  
+  /* Fix event box backgrounds */
+  [data-event-type] {
+    width: 100% !important;
+    border-radius: 3px !important;
+    display: block !important;
+    padding: 2px 4px !important;
+    box-sizing: border-box !important;
+    margin: 1px auto !important;
+    opacity: 0.9 !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    word-break: break-word !important;
+    min-height: 18px !important;
+  }
+  
+  /* Ensure header row is properly displayed */
+  .rdp-head_row {
+    display: flex !important;
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+  
+  /* Make head cell text readable */
+  .rdp-head_cell {
+    font-size: 0.7rem !important;
+    text-align: center !important;
+    flex: 1 !important;
+  }
+  
+  /* Make day cells equal width */
+  .rdp-cell {
+    flex: 1 !important;
+    width: calc(100% / 7) !important;
+    aspect-ratio: 1 / 1 !important;
+    position: relative !important;
+    min-height: 60px !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    padding: 1px !important;
+  }
+  
+  /* Fix day content */
+  .rdp-cell > button > div {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    overflow: visible !important;
+  }
+  
+  /* Style "more events" link to span the full width */
+  .calendar-day-content {
+    width: 100% !important;
+    display: block !important;
+    box-sizing: border-box !important;
+  }
+  
+  .calendar-day-content a {
+    width: 100% !important;
+    display: block !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Ensure event indicators are properly sized and visible */
+  .calendar-event-indicator {
+    width: 100% !important;
+    margin: 1px 0 !important;
+    height: auto !important;
+  }
+}
+
+/* Additional row and head row styles to ensure proper alignment */
+.rdp-row, .rdp-head_row {
+  display: flex !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  justify-content: space-between !important;
+  flex-wrap: nowrap !important;
+}
+
+/* Typing dots animation for chat bubble - pulsing effect */
+@keyframes typing-pulse {
+  0%, 60%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+.animate-typing-pulse-1 {
+  animation: typing-pulse 1.4s infinite;
+  animation-delay: 0s;
+}
+
+.animate-typing-pulse-2 {
+  animation: typing-pulse 1.4s infinite;
+  animation-delay: 0.2s;
+}
+
+.animate-typing-pulse-3 {
+  animation: typing-pulse 1.4s infinite;
+  animation-delay: 0.4s;
+}
+
+/* Chat glitch effect - subtle and quick */
+@keyframes chat-glitch {
+  0% {
+    transform: translate(0);
+    filter: hue-rotate(0deg);
+  }
+  20% {
+    transform: translate(-1px, 0.5px);
+    filter: hue-rotate(45deg);
+  }
+  40% {
+    transform: translate(0.5px, -0.5px);
+    filter: hue-rotate(90deg);
+  }
+  60% {
+    transform: translate(-0.5px, 1px);
+    filter: hue-rotate(45deg);
+  }
+  80% {
+    transform: translate(1px, 0px);
+    filter: hue-rotate(90deg);
+  }
+  100% {
+    transform: translate(0);
+    filter: hue-rotate(0deg);
+  }
+}
+
+.animate-chat-glitch {
+  animation: chat-glitch 0.3s ease-in-out;
+}
+
+/* Gold shine animation for Promotional category - Premium look */
+/* Shine sweep animation - moves from left to right */
+@keyframes shine-sweep {
+  0% {
+    left: -100%;
+  }
+  10% {
+    left: 100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes gold-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.3), 0 0 16px rgba(212, 175, 55, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.5), 0 0 24px rgba(212, 175, 55, 0.2);
+  }
+}
+
+/* Solid gold background with shine overlay effect */
+.animate-gold-shine {
+  position: relative;
+  overflow: hidden;
+  background-color: #FFF3CD !important;
+  border: 1px solid #F1E1BA !important;
+}
+
+.animate-gold-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  animation: shine-sweep 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Compact shine for small calendar chips */
+.animate-gold-shine-compact {
+  position: relative;
+  overflow: hidden;
+  background-color: #FFF3CD !important;
+  border: 1px solid #F1E1BA !important;
+}
+
+.animate-gold-shine-compact::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  animation: shine-sweep 10s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Premium glow effect for promotional cards */
+.promotional-glow {
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.3), 0 0 16px rgba(212, 175, 55, 0.1);
+  animation: gold-glow-pulse 4s ease-in-out infinite;
+}
+
+/* Hover enhancement for promotional items */
+.promotional-hover-effect {
+  transition: all 0.3s ease;
+}
+
+.promotional-hover-effect:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 30px rgba(212, 175, 55, 0.2);
+}
+
+/* Gold border accent with subtle glow */
+.promotional-border {
+  border: 2px solid rgba(212, 175, 55, 0.6);
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.15), 0 0 16px rgba(212, 175, 55, 0.08);
+}
+
+/* Enhanced promotional styling for event detail pages and cards */
+.promotional-detail-card {
+  position: relative;
+  background: linear-gradient(135deg, #fffef7 0%, #fef9e7 50%, #fdf6e3 100%) !important;
+  border: 2px solid rgba(212, 175, 55, 0.6) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.15), 0 0 16px rgba(212, 175, 55, 0.08);
+}
+
+/* Star sparkle micro-animation for promotional badges */
+@keyframes star-twinkle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.15);
+  }
+}
+
+.promotional-star-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #d4a017 0%, #f4c542 50%, #d4a017 100%);
+  background-size: 200% 100%;
+  color: #1a1a2e;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: shimmer-badge 3s ease-in-out infinite;
+  box-shadow: 0 2px 8px rgba(212, 160, 23, 0.4);
+}
+
+@keyframes shimmer-badge {
+  0% {
+    background-position: 100% 0;
+  }
+  50% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+
+.promotional-star-badge .star-icon {
+  animation: star-twinkle 2s ease-in-out infinite;
+}
+
+/* Subtle floating effect for promotional content */
+@keyframes subtle-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.promotional-float {
+  animation: subtle-float 4s ease-in-out infinite;
+}
+
+/* Accessibility: Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .promotional-star-badge,
+  .promotional-star-badge .star-icon,
+  .promotional-float {
+    animation: none;
+  }
+}
+
+/* ==================== PRINT STYLES ==================== */
+@media print {
+  /* Reset page margins and setup */
+  @page {
+    margin: 0.75in;
+    size: auto;
+  }
+
+  /* Hide interactive UI elements (but preserve read-only content) */
+  nav,
+  header:not(.print-show),
+  footer:not(.print-show),
+  aside:not(.print-show),
+  [role="navigation"],
+  [role="banner"]:not(.print-show),
+  [role="contentinfo"]:not(.print-show),
+  [data-radix-dialog-overlay],
+  [data-radix-dialog-content],
+  [data-radix-popover-content],
+  [data-radix-dropdown-menu-content],
+  [data-radix-toast-viewport],
+  .navbar,
+  .sidebar,
+  .menu,
+  .fab-button,
+  .floating-action-button,
+  button:not(.print-show),
+  .share-button,
+  .edit-button,
+  .delete-button,
+  .action-buttons,
+  .toolbar,
+  .breadcrumb,
+  .pagination,
+  .scroll-to-top,
+  .back-button,
+  .admin-controls,
+  .comment-form,
+  .reply-form,
+  .form-container,
+  form,
+  input,
+  textarea,
+  select,
+  .search-bar,
+  .filters,
+  .tabs,
+  .modal,
+  .dialog,
+  .tooltip,
+  .dropdown,
+  .notification,
+  .alert:not(.print-show),
+  .like-button,
+  .reaction-buttons,
+  .load-more,
+  .show-more,
+  .expand-button,
+  .collapse-button {
+    display: none !important;
+  }
+  
+  /* Keep social/contact links visible but format them for print */
+  .social-links,
+  .contact-info,
+  .vendor-contact {
+    display: block !important;
+    background: transparent !important;
+  }
+  
+  /* Keep essential embedded content visible */
+  iframe.print-show,
+  .video-embed.print-show {
+    display: block !important;
+  }
+
+  /* Force light colors for printing */
+  * {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Body and main content */
+  html,
+  body {
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: white !important;
+    font-size: 12pt !important;
+    line-height: 1.5 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body {
+    max-width: 100% !important;
+  }
+
+  /* Main content container */
+  main,
+  article,
+  .main-content,
+  .content-wrapper,
+  .page-content {
+    display: block !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    page-break-inside: avoid;
+  }
+
+  /* Remove excessive spacing in containers */
+  .max-w-4xl,
+  .max-w-6xl,
+  .max-w-7xl,
+  .container {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Reduce spacing between sections */
+  .space-y-8 > *,
+  .space-y-6 > *,
+  .space-y-4 > * {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Ensure first child starts at top of page */
+  .space-y-8 > *:first-child,
+  .space-y-6 > *:first-child,
+  .space-y-4 > *:first-child {
+    margin-top: 0 !important;
+  }
+
+  /* Cards and containers */
+  .card,
+  [class*="card"] {
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+    margin-bottom: 1rem !important;
+    padding: 1rem !important;
+  }
+
+  /* Typography */
+  h1 {
+    font-size: 24pt !important;
+    margin-bottom: 0.5rem !important;
+    page-break-after: avoid;
+  }
+
+  h2 {
+    font-size: 20pt !important;
+    margin-top: 1rem !important;
+    margin-bottom: 0.5rem !important;
+    page-break-after: avoid;
+  }
+
+  h3 {
+    font-size: 16pt !important;
+    margin-top: 0.75rem !important;
+    margin-bottom: 0.5rem !important;
+    page-break-after: avoid;
+  }
+
+  h4,
+  h5,
+  h6 {
+    font-size: 14pt !important;
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.25rem !important;
+    page-break-after: avoid;
+  }
+
+  p {
+    font-size: 12pt !important;
+    line-height: 1.5 !important;
+    margin-bottom: 0.75rem !important;
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Links */
+  a {
+    color: #000 !important;
+    text-decoration: underline !important;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 10pt;
+    color: #666 !important;
+  }
+
+  /* Don't show URL for anchor links or javascript links */
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+
+  /* Images */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid;
+    display: block !important;
+    margin: 0.5rem 0 !important;
+  }
+
+  /* Lists */
+  ul,
+  ol {
+    margin-left: 1.5rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  li {
+    margin-bottom: 0.25rem !important;
+  }
+
+  /* Tables */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    page-break-inside: avoid;
+    margin-bottom: 1rem !important;
+  }
+
+  th,
+  td {
+    border: 1px solid #ddd !important;
+    padding: 0.5rem !important;
+    text-align: left !important;
+  }
+
+  th {
+    font-weight: bold !important;
+    background: #f5f5f5 !important;
+  }
+
+  /* Page breaks */
+  .page-break {
+    page-break-before: always;
+  }
+
+  .avoid-break {
+    page-break-inside: avoid;
+  }
+
+  /* Calendar event details */
+  .event-detail,
+  .event-header,
+  .event-info,
+  .event-description {
+    page-break-inside: avoid;
+    margin-bottom: 1rem !important;
+  }
+
+  .event-date,
+  .event-time,
+  .event-location {
+    display: block !important;
+    font-size: 12pt !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Forum post content */
+  .forum-post,
+  .post-content,
+  .forum-header {
+    page-break-inside: avoid;
+    margin-bottom: 1rem !important;
+  }
+
+  .post-title {
+    font-size: 18pt !important;
+    font-weight: bold !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .post-meta {
+    font-size: 10pt !important;
+    color: #666 !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Real estate listing */
+  .listing-detail,
+  .property-info,
+  .property-header {
+    page-break-inside: avoid;
+    margin-bottom: 1rem !important;
+  }
+
+  .property-price {
+    font-size: 20pt !important;
+    font-weight: bold !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .property-address,
+  .property-details {
+    display: block !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Vendor/Community pages */
+  .vendor-content,
+  .community-content,
+  .page-header,
+  .page-body {
+    page-break-inside: avoid;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Ensure rich text content is visible */
+  .rich-text,
+  .wysiwyg-content,
+  .tinymce-content,
+  [class*="prose"] {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  /* Badges and labels - simplified for print */
+  .badge,
+  .label,
+  .tag {
+    border: 1px solid #000 !important;
+    padding: 2px 6px !important;
+    display: inline-block !important;
+    margin: 0 4px 4px 0 !important;
+    font-size: 10pt !important;
+  }
+
+  /* Gallery images - grid layout for print */
+  .gallery,
+  .image-gallery {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+    page-break-inside: avoid;
+  }
+
+  /* Print-specific utilities */
+  .print-only {
+    display: block !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  /* Header for each page when printing */
+  .print-header {
+    display: block !important;
+    text-align: center !important;
+    font-size: 10pt !important;
+    color: #666 !important;
+    margin-bottom: 1rem !important;
+    padding-bottom: 0.5rem !important;
+    border-bottom: 1px solid #ddd !important;
+  }
+
+  /* Optimize spacing for print */
+  .container,
+  .max-w-4xl,
+  .max-w-6xl,
+  .max-w-7xl {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Remove flex/grid gaps that waste space */
+  .space-y-4,
+  .space-y-6,
+  .space-y-8 > * {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Ensure code blocks are readable */
+  pre,
+  code {
+    background: #f5f5f5 !important;
+    border: 1px solid #ddd !important;
+    padding: 0.5rem !important;
+    font-family: 'Courier New', monospace !important;
+    font-size: 10pt !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    page-break-inside: avoid;
+  }
+
+  /* Remove any fixed positioning */
+  * {
+    position: static !important;
+  }
+
+  /* Ensure all text is selectable for copying */
+  * {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+  }
+}

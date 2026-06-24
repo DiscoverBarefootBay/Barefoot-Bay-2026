@@ -1,0 +1,4 @@
+Event Title,Description,Start Date,End Date,Location,Category,Business Name,Contact Name,Contact Phone,Contact Email,Contact Website,Is Recurring,Frequency,End Recurrence Date,Media URLs
+Test CSV Event 1,This is a test event imported from CSV file,2025-04-01 09:00,2025-04-01 12:00,Barefoot Bay Community Center,social,Barefoot Bay Org,John Doe,(555) 123-4567,john@example.com,http://example.com,FALSE,,,http://example.com/image1.jpg
+Test CSV Event 2,Another test event with multiple media URLs,2025-04-15 14:00,2025-04-15 16:00,Barefoot Bay Golf Course,entertainment,Golf Group,Jane Smith,(555) 987-6543,jane@example.com,http://golfgroup.com,FALSE,,,http://example.com/image2.jpg|http://example.com/image3.jpg
+Recurring Test Event,This is a recurring test event,2025-05-01 10:00,2025-05-01 11:00,Barefoot Bay Library,government,Barefoot Bay Council,Admin Team,(555) 555-5555,admin@example.com,http://council.com,TRUE,weekly,2025-06-01,

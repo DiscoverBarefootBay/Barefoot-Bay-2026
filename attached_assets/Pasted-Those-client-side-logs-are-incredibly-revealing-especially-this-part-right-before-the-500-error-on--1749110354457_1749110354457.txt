@@ -1,0 +1,45 @@
+Those client-side logs are incredibly revealing, especially this part right before the 500 error on the contact API:
+
+Debug: Making POST request to /api/listings/80/contact with data: Object
+Request hostname: barefootbay.com, isDeploy: true
+Authentication debug:
+    Cookie exists: false
+    Full cookie string:
+    URL: /api/listings/80/contact
+    Method: POST
+    Headers: {"Accept":"application/json","Content-Type":"application/json","X-Requested-With":"XMLHttpRequest"}
+    Hostname: barefootbay.com
+    Origin: https://barefootbay.com
+    Protocol: https:
+The line Cookie exists: false is the smoking gun here.
+
+This tells us that when your frontend JavaScript makes the POST request to /api/listings/80/contact, it's not sending the authentication cookie.
+
+If the backend route /api/listings/:id/contact requires user authentication (which it almost certainly does, to know who is sending the message and to prevent abuse), and it doesn't receive the auth cookie, it will either:
+
+Immediately reject the request (which might result in a 401 or 403, though a misconfigured error handler could turn it into a 500).
+Attempt to proceed without a req.user object (or similar), and then crash when it tries to access a property of this undefined user (e.g., req.user.email), leading to a 500 error.
+This means that even if the OAuth2 credentials for sending email are perfect, and even if the email service itself is perfect, the request is failing before it even gets to the point of properly trying to send an email because the user making the request isn't properly authenticated from the server's perspective for that specific API call.
+
+Why this might be happening in production:
+
+Cookie Configuration on Login: The primary suspect is how the authentication cookie is set when the user logs in. For production HTTPS sites, the cookie must be set with the Secure: true flag. It also needs appropriate SameSite, Path, and possibly Domain attributes.
+Secure: true: Ensures the cookie is only sent over HTTPS.
+Path: '/': Ensures the cookie is sent for all paths on your domain.
+SameSite: 'Lax' is common. If it were 'Strict', it might cause issues with certain navigations. If it's 'None', Secure: true is mandatory. Given your request origin and URL are the same, 'Lax' should be fine.
+Mismatched Domains/Subdomains in Cookie Settings: If the cookie was set for www.barefootbay.com but the API request goes to barefootbay.com (or vice-versa) and the Domain attribute isn't set correctly to cover both.
+Frontend State vs. Actual Cookie: The frontend might think the user is logged in, but the browser might have discarded the cookie or isn't sending it for the reasons above.
+Immediate Next Steps:
+
+I need to examine the Replit server logs right now. The detailed logging I added to the server/routes.ts (for the contact route) and server/email-service.ts will show us exactly what the server sees (or doesn't see) regarding req.user and how it attempts to proceed. This will confirm if the lack of a cookie is leading directly to the 500 error and at what line of code.
+
+Review Cookie Setting Code: We need to find the part of your server code where the authentication cookie is set (likely in an /api/auth/login or similar route). We must verify its attributes:
+
+secure: process.env.NODE_ENV === 'production' (or simply true if always HTTPS)
+httpOnly: true (good for security)
+path: '/'
+sameSite: 'Lax' (or 'None' if strictly necessary, but then secure is vital)
+Check the domain attribute as well.
+The gallery-utils.js 404 error is a separate issue, likely a misconfigured static asset path or the file not being included in the production build/deployment. While it should be fixed, the "Cookie exists: false" is almost certainly the root cause of your contact form 500 error.
+
+Please let me check the server logs now on Replit. I'm expecting to see logs from server/routes.ts showing an undefined req.user or a failed authentication check right at the start of the contact form handler.

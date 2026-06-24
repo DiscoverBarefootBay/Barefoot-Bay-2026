@@ -1,0 +1,298 @@
+import path from 'path';
+import fs from 'fs';
+import { Request, Response, NextFunction } from 'express';
+
+/**
+ * Middleware for redirecting media requests to the correct location and normalizing paths
+ * 
+ * This middleware handles multiple tasks:
+ * 1. Redirects media requests to the correct file location
+ * 2. Normalizes all media paths in API responses (/uploads/path → /path)
+ * 3. Handles both development and production path formats
+ * 
+ * This solves the problem where paths are different between environments:
+ * - In development: /uploads/category/file.ext
+ * - In production: /category/file.ext
+ */
+/**
+ * Recursively normalize all media paths in an object
+ * This converts /uploads/path/file.jpg to /path/file.jpg
+ */
+function normalizeMediaPathsInObject(obj: any): void {
+  if (!obj || typeof obj !== 'object') return;
+  
+  // Handle arrays
+  if (Array.isArray(obj)) {
+    for (let i = 0; i < obj.length; i++) {
+      if (typeof obj[i] === 'string') {
+        // Fix string paths in arrays
+        if (obj[i].startsWith('/uploads/')) {
+          obj[i] = obj[i].replace('/uploads/', '/');
+        }
+      } else if (typeof obj[i] === 'object') {
+        // Recursively process objects in arrays
+        normalizeMediaPathsInObject(obj[i]);
+      }
+    }
+    return;
+  }
+  
+  // Process each property of the object
+  for (const key in obj) {
+    const value = obj[key];
+    
+    if (typeof value === 'string') {
+      // Fix string paths
+      if (value.startsWith('/uploads/')) {
+        obj[key] = value.replace('/uploads/', '/');
+      }
+    } else if (Array.isArray(value)) {
+      // Process each item in arrays
+      normalizeMediaPathsInObject(value);
+    } else if (value && typeof value === 'object') {
+      // Recursively process nested objects
+      normalizeMediaPathsInObject(value);
+    }
+  }
+}
+
+/**
+ * Main middleware function for handling media requests and normalizing paths
+ */
+export const mediaRedirectMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  // Intercept API responses to normalize media paths
+  if (req.path.startsWith('/api/')) {
+    const originalSend = res.send;
+    const originalJson = res.json;
+    
+    // Override send to normalize paths in JSON string responses
+    res.send = function(body: any) {
+      if (typeof body === 'string' && body.includes('/uploads/')) {
+        try {
+          // Try to parse as JSON 
+          const data = JSON.parse(body);
+          // Normalize all media paths in the response
+          normalizeMediaPathsInObject(data);
+          // Re-stringify with normalized paths
+          body = JSON.stringify(data);
+        } catch (e) {
+          // Not valid JSON or couldn't parse, continue with original body
+        }
+      }
+      
+      // Call original send with possibly modified body
+      return originalSend.call(this, body);
+    };
+    
+    // Override json to normalize paths in object responses
+    res.json = function(body: any) {
+      // Normalize all media paths in the response object
+      if (body && typeof body === 'object') {
+        normalizeMediaPathsInObject(body);
+      }
+      
+      // Call original json with normalized body
+      return originalJson.call(this, body);
+    };
+  }
+  
+  // Handle banner-slides specially - this is a common case for homepage banners
+  if (req.path.includes('/banner-slides/')) {
+    console.log(`Banner slide request: ${req.path} (full URL: ${req.originalUrl})`);
+    
+    // Extract the filename part (example: bannerImage-1743591277841-110589692.mp4)
+    const filenameMatch = req.path.match(/\/banner-slides\/([^\/]+)$/);
+    if (!filenameMatch) {
+      return next();
+    }
+    
+    const filename = filenameMatch[1];
+    console.log(`Banner slide filename: ${filename}`);
+    
+    // First try the direct path in uploads/banner-slides/
+    const directPath = path.join(process.cwd(), 'uploads', 'banner-slides', filename);
+    if (fs.existsSync(directPath)) {
+      console.log(`Found banner slide at direct path: ${directPath}`);
+      return res.sendFile(directPath);
+    }
+    
+    // If not found, try other common subdirectories as fallback
+    const fallbackDirs = ['', 'calendar/', 'content-media/', 'Real Estate/'];
+    for (const dir of fallbackDirs) {
+      const fallbackPath = path.join(process.cwd(), 'uploads', dir, filename);
+      if (fs.existsSync(fallbackPath)) {
+        console.log(`Found banner slide in alternate location: ${fallbackPath}`);
+        return res.sendFile(fallbackPath);
+      }
+    }
+    
+    console.log(`Banner slide not found: ${filename}`);
+  }
+  
+  // Handle avatar requests
+  if (req.path.startsWith('/avatars/')) {
+    const filename = req.path.substring('/avatars/'.length);
+    if (!filename) {
+      return next();
+    }
+    
+    console.log(`Avatar request for: ${filename}`);
+    
+    // Try both locations - uploads/avatars (development) and /avatars (production)
+    const uploadsPath = path.join(process.cwd(), 'uploads', 'avatars', filename);
+    const rootPath = path.join(process.cwd(), 'avatars', filename);
+    
+    // Check uploads/avatars first (development path)
+    if (fs.existsSync(uploadsPath)) {
+      console.log(`Found avatar at: ${uploadsPath}`);
+      res.set({
+        'Cache-Control': 'public, max-age=86400', // 24 hours
+        'Access-Control-Allow-Origin': '*'
+      });
+      return res.sendFile(uploadsPath);
+    }
+    
+    // Then check /avatars (production path)
+    if (fs.existsSync(rootPath)) {
+      console.log(`Found avatar at root path: ${rootPath}`);
+      res.set({
+        'Cache-Control': 'public, max-age=86400', // 24 hours
+        'Access-Control-Allow-Origin': '*'
+      });
+      return res.sendFile(rootPath);
+    }
+    
+    // If we get here, the avatar wasn't found
+    console.log(`Avatar not found: ${filename}`);
+    return res.status(404).send('Avatar not found');
+  }
+
+  // New centralized media endpoint to handle all media files
+  if (req.path.startsWith('/media/')) {
+    const filename = req.path.substring('/media/'.length);
+    if (!filename) {
+      return next();
+    }
+    
+    console.log(`Media service request for: ${filename}`);
+    
+    // Special case - if this is a full path that was passed incorrectly
+    if (filename.includes('/')) {
+      console.log(`Media service received path instead of filename: ${filename}`);
+      const actualFilename = filename.split('/').pop();
+      if (actualFilename) {
+        console.log(`Extracting actual filename: ${actualFilename}`);
+        
+        // Recursively call the same endpoint with just the filename
+        req.url = `/media/${actualFilename}`;
+        return mediaRedirectMiddleware(req, res, next);
+      }
+    }
+    
+    // Try to match different media file patterns common in our system
+    const isMediaFile = filename.startsWith('media-') || 
+                     filename.startsWith('bannerImage-') || 
+                     filename.includes('ChatGPT Image');
+    
+    // Add all possible subdirectories where files might be stored
+    const subdirectories = ['', 'calendar/', 'banner-slides/', 'content-media/', 'Real Estate/', 'generated/', 'avatars/'];
+    
+    // Build list of possible paths
+    const possiblePaths = [];
+    
+    // Add all possible subdirectory combinations
+    for (const subdir of subdirectories) {
+      possiblePaths.push(path.join(process.cwd(), 'uploads', subdir, filename));
+    }
+    
+    // If we have a media file, also check pattern variations (with or without extensions)
+    if (isMediaFile) {
+      const baseMediaName = filename.split('.')[0]; // Strip extension if any
+      const commonExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.mp4', '.mov', '.webm'];
+      
+      // Try different extensions if none was provided
+      if (!filename.includes('.')) {
+        for (const ext of commonExtensions) {
+          for (const subdir of subdirectories) {
+            possiblePaths.push(path.join(process.cwd(), 'uploads', subdir, `${baseMediaName}${ext}`));
+          }
+        }
+      }
+    }
+    
+    console.log(`Media service checking ${possiblePaths.length} possible paths for ${filename}`);
+    
+    // Try to find the file in one of the possible locations
+    for (const filePath of possiblePaths) {
+      if (fs.existsSync(filePath)) {
+        console.log(`Media service found file at: ${filePath}`);
+        // Serve the file directly with caching headers
+        res.set({
+          'Cache-Control': 'public, max-age=86400', // 24 hours
+          'Access-Control-Allow-Origin': '*'
+        });
+        return res.sendFile(filePath);
+      }
+    }
+    
+    console.log(`Media service could not find file: ${filename}`);
+    // Return a 404 but also include useful debug info in the response
+    return res.status(404).send(`
+      <h1>Media File Not Found</h1>
+      <p>The requested file "${filename}" could not be found in any of the expected locations.</p>
+      <p>We checked the following paths:</p>
+      <ul>
+        ${possiblePaths.map(p => `<li>${p}</li>`).join('')}
+      </ul>
+    `);
+  }
+  
+  // Legacy path-based media redirect (for backward compatibility)
+  if (req.path.includes('/media-') || req.path.includes('/bannerImage-') || req.path.includes('ChatGPT Image')) {
+    console.log(`Media request path: ${req.path} (full URL: ${req.originalUrl})`);
+    
+    // Extract the filename part (media-timestamp-random.ext)
+    const filenameMatch = req.path.match(/\/([^\/]+)$/);
+    if (!filenameMatch) {
+      return next();
+    }
+    
+    const filename = filenameMatch[1];
+    
+    // Add all possible subdirectories where files might be stored
+    const subdirectories = ['', 'calendar/', 'banner-slides/', 'content-media/', 'Real Estate/', 'generated/', 'avatars/'];
+    
+    // Build list of possible paths
+    const possiblePaths = [];
+    
+    // Add all possible subdirectory combinations
+    for (const subdir of subdirectories) {
+      possiblePaths.push(path.join(process.cwd(), 'uploads', subdir, filename));
+    }
+    
+    // Try to find the file in one of the possible locations
+    for (const filePath of possiblePaths) {
+      if (fs.existsSync(filePath)) {
+        console.log(`Found media file at: ${filePath}`);
+        // Serve the file directly with caching headers
+        res.set({
+          'Cache-Control': 'public, max-age=86400', // 24 hours
+          'Access-Control-Allow-Origin': '*'
+        });
+        return res.sendFile(filePath);
+      }
+    }
+    
+    // If we get here, the file wasn't found in any location
+    console.log(`Media file not found: ${filename}`);
+    
+    // Redirect to the central media endpoint for a more thorough search
+    if (filename.startsWith('media-') || filename.startsWith('bannerImage-') || filename.includes('ChatGPT Image')) {
+      console.log(`Redirecting legacy media request to central /media/ endpoint`);
+      return res.redirect(`/media/${filename}`);
+    }
+  }
+  
+  // Continue to the next middleware if this one couldn't handle the request
+  return next();
+};

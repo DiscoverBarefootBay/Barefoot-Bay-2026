@@ -1,0 +1,35 @@
+The issue of media attachments not displaying in messages persists even after the latest fixes and the script to update existing database URLs. We need to definitively verify if newly uploaded attachments are being processed and stored correctly.
+
+Please perform the following steps meticulously:
+
+Target server/routes/messages.ts: This file is responsible for handling new message creation and saving attachment information.
+
+Add Verbose Logging (Crucial): Inside the route handler in server/routes/messages.ts that processes new messages with attachments, add logging statements immediately before the database operation that saves the attachment URL. This log must capture:
+The value of process.env.NODE_ENV.
+The original filename of the uploaded attachment.
+The exact string value of the attachmentUrl variable that is about to be written to the database.
+If you are calling a function from object-storage-service.ts or attachment-storage-proxy.ts to get this URL, log the input to that function and its direct output.
+Test with a NEW Attachment (Development Environment):
+
+Ensure all previous server instances are stopped (pkill -f "node dist/index.js" if necessary).
+Restart the server to activate the new logging.
+Upload a brand new image file as an attachment to a new message.
+Provide the full server console output showing the verbose logs you added in step 1 for this specific upload.
+After the upload, immediately run the debug-attachment-urls.js script (or an equivalent SQL query SELECT * FROM message_attachments ORDER BY id DESC LIMIT 1;) to show the actual URL record stored in the database for this newest attachment.
+Take a screenshot of the message in the UI attempting to display this new attachment.
+Analyze the Result for the NEW Attachment:
+
+Compare the attachmentUrl logged from server/routes/messages.ts (before saving) with the URL actually stored in the database for the new attachment. Are they identical?
+Crucially, is the URL stored in the database for this NEW attachment in the format /api/attachments/FILENAME.ext? This is the format your latest fix strategy relies on.
+If the Stored URL for the NEW Attachment is NOT /api/attachments/FILENAME.ext:
+
+This confirms that the root cause – incorrect URL generation/storage for new uploads – has not been resolved.
+The problem lies within the logic in server/routes/messages.ts (or functions it calls in object-storage-service.ts/attachment-storage-proxy.ts) that determines the attachmentUrl for new uploads.
+Please meticulously review and correct THAT specific section of code in server/routes/messages.ts to ensure it unfailingly generates an attachmentUrl in the format /api/attachments/UNIQUE_FILENAME.ext before saving to the database for all new attachments, in both development and production. Do not proceed to other files until this is confirmed via logging and database inspection.
+If the Stored URL IS /api/attachments/FILENAME.ext but it's still not displaying:
+
+Then the issue might be with the /api/attachments/:filename endpoint in server/index.ts or the client-side media-helper.ts.
+In this case, provide the exact code for the /api/attachments/:filename route handler.
+And provide the relevant sections of media-helper.ts showing how it constructs the final URL to fetch.
+The primary goal is to verify that the URL for new uploads is being correctly generated as /api/attachments/FILENAME.ext and saved as such. The previous debug script indicated this was not happening."
+

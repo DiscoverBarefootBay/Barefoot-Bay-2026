@@ -1,0 +1,192 @@
+2025-05-23 07:38:44.92
+90de94e9
+User
+Setting up static route: /banner-slides -> /home/runner/workspace/uploads/banner-slides
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /uploads/banner-slides -> /home/runner/workspace/uploads/banner-slides
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /uploads/calendar -> /home/runner/workspace/uploads/calendar
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /calendar -> /home/runner/workspace/uploads/calendar
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /images -> /home/runner/workspace/uploads
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /assets -> /home/runner/workspace/dist/public/assets
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /attached_assets -> /home/runner/workspace/attached_assets
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /content-media -> /home/runner/workspace/content-media
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /uploads/content-media -> /home/runner/workspace/content-media
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /forum-media -> /home/runner/workspace/forum-media
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /uploads/forum-media -> /home/runner/workspace/forum-media
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /community-media -> /home/runner/workspace/community-media
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /uploads/community-media -> /home/runner/workspace/community-media
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /vendor-media -> /home/runner/workspace/vendor-media
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /uploads/vendor-media -> /home/runner/workspace/vendor-media
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /real-estate-media -> /home/runner/workspace/real-estate-media
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /uploads/real-estate-media -> /home/runner/workspace/uploads/real-estate-media
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /public -> /home/runner/workspace/public
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /event-media-test.html -> /home/runner/workspace/public
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /avatars -> /home/runner/workspace/avatars
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /uploads/avatars -> /home/runner/workspace/uploads/avatars
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /uploads/attachments -> /home/runner/workspace/uploads/attachments
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /attachments -> /home/runner/workspace/uploads/attachments
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /media-placeholder -> /home/runner/workspace/public/media-placeholder
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /static -> /home/runner/workspace/dist/public/static
+2025-05-23 07:38:44.93
+90de94e9
+User
+Setting up static route: /static/videos -> /home/runner/workspace/dist/public/static/videos
+2025-05-23 07:38:44.93
+90de94e9
+User
+Static routes setup completed
+2025-05-23 07:38:44.93
+90de94e9
+User
+NODE_ENV: production
+2025-05-23 07:38:44.93
+90de94e9
+User
+Server is running on http://0.0.0.0:5000
+2025-05-23 07:38:44.93
+90de94e9
+User
+Media URLs will be served from multiple paths including /uploads, /media, /icons, /attached_assets, etc.
+2025-05-23 07:38:44.93
+90de94e9
+User
+WebSocket server available at ws://0.0.0.0:5000/ws
+2025-05-23 07:38:47.02
+90de94e9
+User
+[Server] ✅ Database connected successfully
+2025-05-23 07:38:47.78
+90de94e9
+User
+[AnalyticsService] New session started: 0d7c612e-6dc8-474f-b064-8a5c42c59833
+2025-05-23 07:38:47.78
+90de94e9
+User
+Error tracking page view: TypeError: Cannot read properties of undefined (reading 'x-forwarded-for')
+2025-05-23 07:38:47.78
+90de94e9
+User
+at AnalyticsService.getClientIp (file:///home/runner/workspace/dist/index.js:18620:37)
+2025-05-23 07:38:47.78
+90de94e9
+User
+at AnalyticsService.getOrCreateSession (file:///home/runner/workspace/dist/index.js:18555:21)
+2025-05-23 07:38:47.78
+90de94e9
+User
+at AnalyticsService.trackPageView (file:///home/runner/workspace/dist/index.js:18030:36)
+2025-05-23 07:38:47.78
+90de94e9
+User
+at analyticsMiddleware (file:///home/runner/workspace/dist/index.js:19016:22)
+2025-05-23 07:38:47.78
+90de94e9
+User
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-05-23 07:38:47.78
+90de94e9
+User
+Error tracking page view in middleware: TypeError: Cannot read properties of undefined (reading 'x-forwarded-for')
+2025-05-23 07:38:47.78
+90de94e9
+User
+at AnalyticsService.getClientIp (file:///home/runner/workspace/dist/index.js:18620:37)
+2025-05-23 07:38:47.78
+90de94e9
+User
+at AnalyticsService.getOrCreateSession (file:///home/runner/workspace/dist/index.js:18555:21)
+2025-05-23 07:38:47.78
+90de94e9
+User
+at AnalyticsService.trackPageView (file:///home/runner/workspace/dist/index.js:18030:36)
+2025-05-23 07:38:47.78
+90de94e9
+User
+at analyticsMiddleware (file:///home/runner/workspace/dist/index.js:19016:22)
+2025-05-23 07:38:47.78
+90de94e9
+User
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-05-23 07:38:49.27
+d63f2bfd
+System
+system: received signal terminated
+2025-05-23 07:38:49.30
+d63f2bfd
+System
+command finished with error [sh -c NODE_ENV=production node dist/index.js]: signal: terminated
+2025-05-23 07:38:49.31
+d63f2bfd
+System
+main done, exiting

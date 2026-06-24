@@ -1,0 +1,229 @@
+<!-- 
+Improved Scrolling Text HTML with Mobile/Desktop Responsive Design
+Copy this entire block and paste it into your WYSIWYG editor
+-->
+
+<div id="modemContainer" style="width:0; height:0; overflow:hidden;">
+  <iframe id="modemPlayer"
+    width="0" height="0"
+    src="https://www.youtube.com/embed/QDS4B0mM-ew?autoplay=1&enablejsapi=1"
+    frameborder="0" allow="autoplay"
+    allowfullscreen>
+  </iframe>
+</div>
+
+<script>
+  // Wait for the iframe to load, then hide it again after YouTube fires
+  function onYouTubeIframeAPIReady() {
+    const player = new YT.Player('modemPlayer', {
+      events: {
+        'onReady': function (event) {
+          event.target.playVideo();
+          setTimeout(() => {
+            document.getElementById('modemContainer').style.display = 'none';
+          }, 500); // Hide shortly after playback starts
+        }
+      }
+    });
+  }
+
+  // Load the YouTube API
+  const tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  document.body.appendChild(tag);
+</script>
+
+<style>
+  .scroll-box {
+    position: relative;
+    height: 60vh;
+    min-height: 400px;
+    overflow: hidden;
+    background: #000;
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .scroll-content {
+    position: absolute;
+    top: 100%;
+    animation: scrollUp 25s linear forwards;
+    white-space: pre;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Desktop version - larger text and spacing */
+  .desktop-content {
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+  }
+
+  /* Mobile version - smaller text and tighter spacing */
+  .mobile-content {
+    font-size: 10px;
+    line-height: 1.1;
+    letter-spacing: 0.2px;
+    display: none;
+  }
+
+  /* Media queries for responsive behavior */
+  @media (max-width: 768px) {
+    .desktop-content {
+      display: none;
+    }
+    .mobile-content {
+      display: block;
+    }
+    .scroll-box {
+      height: 50vh;
+      min-height: 300px;
+    }
+    .scroll-content {
+      animation: scrollUp 20s linear forwards;
+    }
+  }
+
+  @keyframes scrollUp {
+    0% { 
+      top: 100%; 
+      opacity: 0;
+    }
+    5% {
+      opacity: 1;
+    }
+    95% {
+      opacity: 1;
+    }
+    100% { 
+      top: -50%; 
+      opacity: 0;
+    }
+  }
+
+  /* Ensure perfect centering */
+  .scroll-content pre {
+    margin: 0;
+    text-align: center;
+    display: block;
+    width: 100%;
+  }
+</style>
+
+<div class="scroll-box">
+  <div class="scroll-content">
+    <!-- Desktop Content -->
+    <div class="desktop-content">
+      <pre>
+░░░ Barefoot Bay's ░░░
+
+███████╗ ██████╗ ██╗   ██╗███╗   ██╗██████╗      ██████╗ ███████╗███████╗
+██╔════╝██╔═══██╗██║   ██║████╗  ██║██╔══██╗    ██╔═══██╗██╔════╝██╔════╝
+███████╗██║   ██║██║   ██║██╔██╗ ██║██║  ██║    ██║   ██║█████╗  █████╗  
+╚════██║██║   ██║██║   ██║██║╚██╗██║██║  ██║    ██║   ██║██╔══╝  ██╔══╝  
+███████║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝    ╚██████╔╝██║     ██║     
+╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝      ╚═════╝ ╚═╝     ╚═╝     
+                                                                            
+                                                                                              
+────────────────────────────────────────────
+    Real-time Rants, Raves, and Respect
+ ⌐■_■ A LIVE BarefootBay.com Feature ⌐■_■
+────────────────────────────────────────────
+
+    ▓▒▒▒▒▒▒▒▒▒▒▒▒▓
+    ▒▒▒  WELCOME TO  ▒▒▒
+   ▓▒▒   THE BB BBS!  ▒▒▓
+   ▒   CHAT. CONNECT.   ▒
+   ▒   SOUND OFF LIVE!  ▒
+  ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+
+    Type like it's 1989...
+   ...but act like it's 2025.
+
+────────────────────────────────────────────
+   ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+    ▒   CREDITS + ADMIN  ▒
+   ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+
+ Rob Allan  
+ Publisher. Editor. Creator. Neighbor.
+
+ Becky Culp  
+ Everything, Everywhere, Everytime, Exhausted.
+ 
+ Michael Godoy  
+ Website Wizard, Bug Annihilator
+────────────────────────────────────────────
+  Created with ❤️ by The Tattler Team  
+  ASCII by ChatGPT | Inspired by ANSI BBS
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+      </pre>
+    </div>
+
+    <!-- Mobile Content - Condensed Version -->
+    <div class="mobile-content">
+      <pre>
+░░░ Barefoot Bay's ░░░
+
+███████╗ ██████╗ ██╗   ██╗███╗   ██╗██████╗ 
+██╔════╝██╔═══██╗██║   ██║████╗  ██║██╔══██╗
+███████╗██║   ██║██║   ██║██╔██╗ ██║██║  ██║
+╚════██║██║   ██║██║   ██║██║╚██╗██║██║  ██║
+███████║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝
+╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝ 
+
+██████╗ ███████╗███████╗
+██╔═══██╗██╔════╝██╔════╝
+██║   ██║█████╗  █████╗  
+██║   ██║██╔══╝  ██╔══╝  
+╚██████╔╝██║     ██║     
+ ╚═════╝ ╚═╝     ╚═╝     
+                          
+──────────────────────────
+Real-time Rants & Respect
+⌐■_■ LIVE BB Feature ⌐■_■
+──────────────────────────
+
+  ▓▒▒▒▒▒▒▒▒▒▒▒▒▓
+  ▒▒  WELCOME  ▒▒
+ ▓▒▒ TO BB BBS! ▒▒▓
+ ▒  CHAT & CONNECT ▒
+ ▒  SOUND OFF LIVE ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+
+Type like it's 1989...
+...act like it's 2025.
+
+──────────────────────────
+ ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+  ▒ CREDITS & ADMIN ▒
+ ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+
+Rob Allan
+Publisher & Creator
+
+Becky Culp
+Everything, Everywhere
+
+Michael Godoy
+Website Wizard
+──────────────────────────
+Created with ❤️ by Team
+ASCII | Inspired by BBS
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+      </pre>
+    </div>
+  </div>
+</div>

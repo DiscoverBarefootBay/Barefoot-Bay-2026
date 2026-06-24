@@ -1,0 +1,56 @@
+Running cache clearing script...
+Cleared 7 cached items from localStorage
+Cache clearing complete - errors should be resolved on next page refresh.
+[Maps Polyfill] Initializing enhanced Google Maps polyfill
+[Maps Polyfill] Installing fetch polyfill
+[WebSocket] WebSocket functionality is disabled to prevent conflicts with Object Storage
+REPLIT_APP_LOADED
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+Video playback issue (attempt 1/3): play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+Video playback issue (attempt 2/3): play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD
+Video playback issue (attempt 3/3): play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD
+Maximum play attempts reached, marking as error
+Minified React error #300; visit https://reactjs.org/docs/error-decoder.html?invariant=300 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
+Banner error caught by boundary: 
+Error {}
+
+Component stack: 
+    at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-DlBMwujO.js:835:30776
+    at o6 (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-DlBMwujO.js:835:37978)
+    at div
+    at div
+    at div
+    at div
+    at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-DlBMwujO.js:785:245911
+    at div
+    at div
+    at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-DlBMwujO.js:785:245633
+    at div
+    at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-DlBMwujO.js:785:244627
+    at div
+    at See (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-DlBMwujO.js:835:39551)
+    at section
+    at div
+    at Cse (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-DlBMwujO.js:2219:74040)
+    at ft (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-DlBMwujO.js:49:3233)
+    at AU (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-DlBMwujO.js:49:4046)
+    at main
+    at div
+    at div
+    at Ixe
+    at _xe
+    at lK (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-DlBMwujO.js:785:31797)
+    at iK (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-DlBMwujO.js:785:23478)
+    at QU (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-DlBMwujO.js:49:40627)
+    at dK (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-DlBMwujO.js:785:36638)
+    at Mxe (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-DlBMwujO.js:2766:12475)
+REPLIT_PAGE_LOADED

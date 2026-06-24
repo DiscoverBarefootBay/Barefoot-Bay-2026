@@ -1,0 +1,41 @@
+Agent, STOP focusing on internal index changes or auto-advance logs. The VISUAL OUTPUT on mobile is still showing ONLY ONE SLIDE CONTENT ("Where is Barefoot Bay?") and is NOT cycling through 8 different slides.
+
+Despite your claims of updating banner slides with diverse content and clearing caches, this is not reflected in the UI.
+
+Your immediate tasks are:
+
+CONFIRM THE DATA SOURCE FOR RENDERED SLIDES on Mobile:
+
+Inside CommunityShowcase.tsx, specifically where the visual part of a single slide is rendered (e.g., the <img> tag, the caption text): Log the actual data (image URL, caption) of the slide that is supposedly being rendered based on the currentSlideIndex.
+When the currentSlideIndex changes (according to your other logs), does this rendered data log also change to reflect different slide content for slide 0, slide 1, slide 2, etc.?
+Is the data logged here coming from the API response (/api/pages/banner-slides) or from a hardcoded fallback array within the component? Verify this by logging a distinguishing characteristic.
+ADDRESS THE PERSISTENT startTime is not defined Error:
+
+This error from sidePanelUtil.js is still present in my latest console log.
+You MUST re-investigate its origin. Use the mobile browser's Network Tab to find the exact Request URL for sidePanelUtil.js. This is crucial.
+If it's from an external source (likely a browser extension as you hypothesized, but we need proof of which one and from where it's loaded), the only reliable way to test our application's carousel is if I (the user) can test in a browser environment where that extension/script is disabled (e.g., Incognito mode, or by me manually disabling extensions). Acknowledge this limitation.
+SIMPLIFY RENDERING LOGIC:
+
+If the currentSlideIndex is changing, and the data source for that index appears to have diverse content, but the UI still shows only one slide, then the issue is in the mapping between the index and the rendered output.
+Temporarily, make the rendered output extremely simple: just display the currentSlideIndex and the image_url (or a title) for that index directly in the visible part of the carousel to see if it visually updates.
+Do NOT tell me the carousel is "working" based on background logs if the visual content is not changing for the user on mobile. The primary bug is that ALL SLIDES DISPLAY THE SAME CONTENT."
+
+Honestly, the startTime error being consistently present suggests that the JavaScript environment is not stable. If you can test in an Incognito window on your mobile device (which usually disables extensions), and the startTime error disappears, that would be a very strong indicator that it's an extension problem. If the carousel then works, your app code might be mostly okay, and the issue is your specific browser environment. If it still doesn't work even without the startTime error (in Incognito), then the problem is definitely still within your app's client-side logic for the carousel.
+
+
+
+
+
+
+
+
+
+
+
+Video
+
+Deep Research
+
+Canvas
+
+Gemini can make mistakes, so double-check it

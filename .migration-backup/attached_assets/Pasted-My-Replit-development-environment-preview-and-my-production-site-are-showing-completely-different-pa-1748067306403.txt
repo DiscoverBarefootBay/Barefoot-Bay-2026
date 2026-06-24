@@ -1,0 +1,32 @@
+My Replit development environment preview and my production site are showing completely different pages at their root URLs, even though they are on the same Git commit (`a489109e`) and my dev server workflow also sets `NODE_ENV=production`.
+
+The production site (`barefootbay.com`) shows the main homepage.
+The dev preview (`<your-repl-id>.replit.dev/`, specifically at the root `/`) shows a "Calendar Media Test Interface".
+
+My dev server is started using the following command in a Replit Workflow:
+`cd /home/runner/workspace && NODE_ENV=production PORT=5000 tsx server/index.ts`
+
+My `server/index.ts` file defines `const publicDir = path.join(__dirname, 'public');` and uses this path for `app.use(express.static(publicDir));` and for the SPA fallback route `app.get('*', ...)`.
+My Vite frontend builds to the `dist/public/` directory.
+
+I suspect the issue is that when running `tsx server/index.ts`, `__dirname` is `/home/runner/workspace/server/`, so `publicDir` becomes `/home/runner/workspace/server/public/`. This is not where my Vite-built `index.html` (the real homepage) is located.
+
+Please help me investigate and fix this:
+
+1.  **Verify `publicDir` Path:**
+    * In the context of `server/index.ts` being run by the `tsx` command, confirm the runtime value of `__dirname` and the resulting `publicDir`.
+    * List the contents of the calculated `publicDir` (i.e., `/home/runner/workspace/server/public/`). Does an `index.html` exist there? If so, what is it?
+
+2.  **Investigate `directFileServerMiddleware`:**
+    * My `server/index.ts` uses a `directFileServerMiddleware`. Can you analyze its code (if it's in a separate file, locate `direct-file-server.ts` or similar)?
+    * Specifically, determine if this middleware could be serving `event-media-test.html` (or a similar test page that matches the "Calendar Media Test Interface" description) at the root path (`/`) when the main application `index.html` isn't found by `express.static(publicDir)`.
+
+3.  **Propose Solutions to Serve the Correct Frontend in Dev:**
+    My goal is for the `replit.dev` preview (when running `tsx server/index.ts` via the workflow) to serve the main application homepage from `dist/public/index.html`. Suggest modifications to `server/index.ts` or my development setup to achieve this. Consider these approaches:
+    * a. Modifying `publicDir` conditionally when running with `tsx` to correctly point to `../dist/public` relative to `server/index.ts`. Provide the code snippet for this. This would require me to have run `npm run build` (which includes `vite build`) beforehand.
+    * b. Alternatively, advise if I should change my development strategy to use Vite's dev server for the frontend (and proxy API calls to this Express backend) instead of having Express serve static files when running with `tsx`. If so, outline the general steps or changes required in my Replit configuration (e.g., modifying the Run command/workflow, Vite config for proxy).
+
+4.  **Check SPA Fallback:**
+    * In `server/index.ts`, the SPA fallback `app.get('*', ...)` tries to serve `index.html` from `publicDir`. If this path (`server/public/index.html` in the `tsx` context) doesn't exist, what is the exact behavior? Does it error out, or could it allow another handler (like `directFileServerMiddleware`) to take over?
+
+Please provide code examples for suggested modifications where applicable.

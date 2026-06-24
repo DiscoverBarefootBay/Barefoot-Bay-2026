@@ -1,0 +1,23 @@
+{
+  "name": "@workspace/scripts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "hello": "tsx ./src/hello.ts",
+    "backfill-avatar-urls": "tsx ./src/backfill-avatar-urls.ts",
+    "backfill-media-urls": "tsx ./src/backfill-media-urls.ts",
+    "sweep-missing-avatars": "tsx ./src/sweep-missing-avatars.ts",
+    "restore-banner-slides": "tsx ./src/restore-banner-slides.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@replit/object-storage": "^1.0.0",
+    "@workspace/db": "workspace:*",
+    "drizzle-orm": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "tsx": "catalog:"
+  }
+}

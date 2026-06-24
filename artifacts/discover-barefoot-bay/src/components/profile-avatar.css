@@ -1,0 +1,84 @@
+.profile-wrapper {
+  position: relative;
+  display: inline-block;
+  /* Use transform-style to maintain 3D positioning for child elements */
+  transform-style: preserve-3d;
+}
+
+.profile-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.badge-overlay {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background-color: #4FB3CF; /* Using a color similar to the one in the example (teal/blue) */
+  color: white;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: bold;
+  height: 24px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  /* Ensure the badge appears above the image */
+  z-index: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .badge-overlay {
+    height: 20px;
+    width: 20px;
+    font-size: 8px;
+    bottom: -3px;
+    right: -3px;
+  }
+}
+
+/* Size variations */
+.profile-wrapper.small {
+  width: 32px;
+  height: 32px;
+}
+
+.profile-wrapper.medium {
+  width: 48px;
+  height: 48px;
+}
+
+.profile-wrapper.large {
+  width: 64px;
+  height: 64px;
+}
+
+/* Badge size adjustments based on avatar size */
+.profile-wrapper.small .badge-overlay {
+  height: 16px;
+  width: 16px;
+  font-size: 8px;
+  bottom: -3px;
+  right: -3px;
+}
+
+.profile-wrapper.medium .badge-overlay {
+  height: 20px;
+  width: 20px;
+  font-size: 10px;
+}
+
+.profile-wrapper.large .badge-overlay {
+  height: 24px;
+  width: 24px;
+  font-size: 12px;
+  bottom: -5px;
+  right: -5px;
+}

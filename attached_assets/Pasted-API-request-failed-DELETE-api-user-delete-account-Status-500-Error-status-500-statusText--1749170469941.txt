@@ -1,0 +1,38 @@
+API request failed: DELETE /api/user/delete-account - Status: 500 
+Error {status: 500, statusText: "Internal Server Error", response: Response}
+
+at t.value (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+API request failed: DELETE /api/user/delete-account 
+Error {status: 500, statusText: "Internal Server Error", response: Response}
+response: Response
+status: 500
+statusText: "Internal Server Error"
+message: "HTTP error! Status: 500"
+stack: "Error: HTTP error! Status: 500↵ at Ie (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CRvbrsdc.js:58:1603)↵ at async Object.mutationFn (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CRvbrsdc.js:2302:59143)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object
+
+HTTP error! Status: 500
+at Ie (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CRvbrsdc.js:58:1603)
+at async Object.mutationFn (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CRvbrsdc.js:2302:59143)
+API request failed: DELETE /api/user/delete-account - Status: 500 
+Error {status: 500, statusText: "Internal Server Error", response: Response}
+
+at t.value (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+API request failed: DELETE /api/user/delete-account 
+Error {status: 500, statusText: "Internal Server Error", response: Response}
+
+at t.value (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+HTTP error! Status: 500
+at Ie (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CRvbrsdc.js:58:1603)
+at async Object.mutationFn (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CRvbrsdc.js:2302:59143)

@@ -1,0 +1,33 @@
+API request failed: POST /api/subscriptions/expire-now - Status: 404 
+Error {status: 404, statusText: "Not Found", response: Response}
+
+at t.value (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+API request failed: POST /api/subscriptions/expire-now 
+Error {status: 404, statusText: "Not Found", response: Response}
+response: Response
+status: 404
+statusText: "Not Found"
+message: "HTTP error! Status: 404"
+stack: "Error: HTTP error! Status: 404↵ at Ie (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BzF1VT2p.js:58:1603)↵ at async y (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BzF1VT2p.js:2306:14778)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object
+
+at t.value (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Error updating subscription: 
+Error {status: 404, statusText: "Not Found", response: Response}
+response: Response
+status: 404
+statusText: "Not Found"
+message: "HTTP error! Status: 404"
+stack: "Error: HTTP error! Status: 404↵ at Ie (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BzF1VT2p.js:58:1603)↵ at async y (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BzF1VT2p.js:2306:14778)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object
+

@@ -1,0 +1,30 @@
+Running cache clearing script...
+Cleared 1 cached items from localStorage
+Cache clearing complete - errors should be resolved on next page refresh.
+[Maps Polyfill] Initializing enhanced Google Maps polyfill
+[Maps Polyfill] Installing fetch polyfill
+[WebSocket] WebSocket functionality is disabled to prevent conflicts with Object Storage
+Cannot read properties of undefined (reading '0')
+at KM (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:2352:11951)
+at Jj (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:39:17018)
+at KT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:41:44058)
+at qT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:41:39790)
+at _B (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:41:39718)
+at Ug (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:41:39570)
+at B1 (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:41:35934)
+at LN (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:41:36738)
+at hl (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:39:3279)
+at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:41:34263
+Cannot read properties of undefined (reading '0')
+at KM (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:2352:11951)
+at Jj (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:39:17018)
+at KT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:41:44058)
+at qT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:41:39790)
+at _B (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:41:39718)
+at Ug (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:41:39570)
+at B1 (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:41:35934)
+at LN (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:41:36738)
+at hl (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:39:3279)
+at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Ve__V7EM.js:41:34263
+REPLIT_APP_LOADED
+REPLIT_PAGE_LOADED

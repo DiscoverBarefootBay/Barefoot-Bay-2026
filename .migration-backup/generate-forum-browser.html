@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forum Content Generator</title>
+  <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai"></script>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    button {
+      background-color: #4285f4;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+      background-color: #3367d6;
+    }
+    textarea {
+      width: 100%;
+      height: 300px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: monospace;
+      margin-top: 10px;
+    }
+    .result {
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 4px;
+      border-left: 4px solid #4285f4;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+    .log {
+      height: 200px;
+      overflow-y: auto;
+      background-color: #f9f9f9;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: monospace;
+      margin-top: 10px;
+    }
+    .category {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+    }
+    .category h3 {
+      margin-top: 0;
+    }
+    .post {
+      border-left: 3px solid #4285f4;
+      padding-left: 12px;
+      margin-bottom: 15px;
+    }
+    .post-title {
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .post-content {
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Barefoot Bay Forum Content Generator</h1>
+  
+  <div class="container">
+    <div>
+      <label for="api-key">Gemini API Key:</label>
+      <input type="text" id="api-key" style="width: 100%; padding: 8px; margin-top: 5px;" 
+        placeholder="Enter your Gemini API key" value="">
+    </div>
+    
+    <div>
+      <label for="model-select">Gemini Model:</label>
+      <select id="model-select" style="width: 100%; padding: 8px; margin-top: 5px;">
+        <option value="gemini-pro">gemini-pro (Original)</option>
+        <option value="gemini-1.5-pro-latest">gemini-1.5-pro-latest</option>
+        <option value="gemini-1.5-pro-001">gemini-1.5-pro-001</option>
+        <option value="gemini-1.5-pro-002">gemini-1.5-pro-002</option>
+        <option value="gemini-1.0-pro-vision-latest">gemini-1.0-pro-vision-latest</option>
+      </select>
+    </div>
+    
+    <div>
+      <button id="generate-content">Generate Forum Content</button>
+      <button id="download-content">Download JSON</button>
+    </div>
+    
+    <div>
+      <h3>Log:</h3>
+      <div id="log" class="log"></div>
+    </div>
+    
+    <div>
+      <h3>Generated Content Preview:</h3>
+      <div id="content-preview">
+        <em>Content will appear here after generation...</em>
+      </div>
+    </div>
+    
+    <div>
+      <h3>Raw JSON:</h3>
+      <textarea id="json-output" readonly></textarea>
+    </div>
+  </div>
+
+  <script>
+    // Barefoot Bay community context for AI
+    const COMMUNITY_CONTEXT = `
+Barefoot Bay is a residential community located in Brevard County, Florida, near Sebastian. 
+It's primarily a retirement and vacation community with many amenities including:
+- Community pool and recreation center
+- Golf courses
+- Tennis and pickleball courts
+- Walking trails
+- Community events and activities
+- Close to beaches, fishing, and water activities
+
+Residents are typically aged 55+, though there are some younger families. 
+The community is known for its friendly atmosphere, active lifestyle options, and natural Florida beauty.
+Common topics of discussion include:
+- Community events and activities
+- Local services and recommendations
+- Home maintenance and improvement specific to Florida climate
+- Wildlife and nature in the area
+- Weather concerns (hurricane preparedness, etc.)
+- Local government and community management
+`;
+
+    // Forum categories
+    const CATEGORIES = [
+      { id: 1, name: "General Discussion", slug: "general-discussion", description: "General topics related to Barefoot Bay community" },
+      { id: 2, name: "Announcements", slug: "announcements", description: "Official announcements from the Barefoot Bay community" },
+      { id: 3, name: "Events & Activities", slug: "events-activities", description: "Discussions about upcoming events and activities" },
+      { id: 4, name: "Neighbors Helping Neighbors", slug: "neighbors-helping-neighbors", description: "A place to offer or request help from fellow residents" },
+      { id: 5, name: "Recommendations", slug: "recommendations", description: "Recommendations for local services and businesses" },
+    ];
+    
+    // Sample users for content
+    const USERS = [
+      { id: 6, username: "Bob the Builder", role: "admin" },
+      { id: 7, username: "registereduser", role: "registered" },
+      { id: 9, username: "John Watson", role: "registered" },
+      { id: 10, username: "mag092593", role: "registered" },
+      { id: 11, username: "firstuser", role: "registered" },
+      { id: 12, username: "adminuser", role: "admin" },
+    ];
+    
+    // DOM elements
+    const apiKeyInput = document.getElementById('api-key');
+    const modelSelect = document.getElementById('model-select');
+    const generateBtn = document.getElementById('generate-content');
+    const downloadBtn = document.getElementById('download-content');
+    const logEl = document.getElementById('log');
+    const previewEl = document.getElementById('content-preview');
+    const jsonOutput = document.getElementById('json-output');
+    
+    // Log helper function
+    function log(message) {
+      const logItem = document.createElement('div');
+      logItem.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      logEl.appendChild(logItem);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+    
+    // Get random items from arrays helper functions
+    function getRandomUser() {
+      return USERS[Math.floor(Math.random() * USERS.length)];
+    }
+    
+    function getRandomDate(startDays = 30, endDays = 0) {
+      const now = new Date();
+      const start = new Date(now);
+      start.setDate(now.getDate() - startDays);
+      const end = new Date(now);
+      end.setDate(now.getDate() - endDays);
+      
+      return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+    }
+    
+    // Main content generation function
+    async function generateContent() {
+      const apiKey = apiKeyInput.value.trim();
+      if (!apiKey) {
+        log('Error: Please enter a valid Gemini API key');
+        return;
+      }
+      
+      log('Starting forum content generation...');
+      previewEl.innerHTML = '<em>Generating content...</em>';
+      jsonOutput.value = '';
+      
+      try {
+        // Initialize Gemini API
+        const genAI = new google.ai.GenerativeAI(apiKey);
+        const selectedModel = modelSelect.value;
+        log(`Using model: ${selectedModel}`);
+        const model = genAI.getGenerativeModel({ model: selectedModel });
+        
+        // Structure to hold all generated content
+        const allContent = [];
+        
+        // Generate content for each category
+        for (const category of CATEGORIES) {
+          log(`Generating content for ${category.name}...`);
+          
+          const categoryContent = {
+            category,
+            posts: []
+          };
+          
+          // Generate posts for this category
+          const posts = await generateCategoryPosts(model, category);
+          
+          // Process each post
+          for (const post of posts) {
+            log(`Generated post: ${post.title}`);
+            
+            // Add metadata to post
+            const processedPost = {
+              ...post,
+              userId: getRandomUser().id,
+              category_id: category.id,
+              views: Math.floor(Math.random() * 150) + 20,
+              is_pinned: Math.random() < 0.1,
+              is_locked: Math.random() < 0.05,
+              created_at: getRandomDate(),
+              updated_at: getRandomDate(),
+              comments: []
+            };
+            
+            // Generate comments for this post
+            const comments = await generatePostComments(model, post.title, category.slug);
+            
+            // Process each comment
+            for (const comment of comments) {
+              const processedComment = {
+                ...comment,
+                post_id: null, // This would be the DB ID once inserted
+                author_id: getRandomUser().id,
+                created_at: getRandomDate(20, 1),
+                updated_at: getRandomDate(20, 1)
+              };
+              
+              processedPost.comments.push(processedComment);
+              log(`Generated comment for post: ${post.title}`);
+            }
+            
+            categoryContent.posts.push(processedPost);
+          }
+          
+          allContent.push(categoryContent);
+        }
+        
+        // Update preview
+        updatePreview(allContent);
+        
+        // Update JSON output
+        jsonOutput.value = JSON.stringify(allContent, null, 2);
+        
+        log('Content generation complete!');
+      } catch (error) {
+        log(`Error generating content: ${error.message}`);
+        console.error(error);
+      }
+    }
+    
+    // Generate posts for a category
+    async function generateCategoryPosts(model, category) {
+      try {
+        const prompt = `
+You are creating realistic forum posts for a community platform for Barefoot Bay, a residential community in Florida.
+Generate 3-5 realistic forum posts for the "${category.name}" category. The description of this category is: "${category.description}".
+
+${COMMUNITY_CONTEXT}
+
+For each post, include:
+1. A realistic, specific title relevant to the category
+2. Content in HTML format with paragraphs using <p> tags and lists using <ul> or <ol> where appropriate
+3. Make sure the content is realistic, helpful, and representative of actual community discussions
+4. Ensure posts are between 50-200 words
+5. Format your response as a JSON array of objects with the following properties:
+   - title: the post title
+   - content: the post content in HTML format
+
+Current date: ${new Date().toLocaleDateString()}
+
+Response format example:
+[
+  {
+    "title": "Example Post Title",
+    "content": "<p>This is an example post content.</p><p>It has multiple paragraphs.</p>"
+  }
+]
+`;
+
+        const result = await model.generateContent(prompt);
+        const responseText = result.response.text();
+        
+        // Extract JSON from potential text wrapping
+        const jsonMatch = responseText.match(/\[\s*\{[\s\S]*\}\s*\]/);
+        const jsonStr = jsonMatch ? jsonMatch[0] : responseText;
+        
+        // Parse the JSON response
+        return JSON.parse(jsonStr);
+      } catch (error) {
+        log(`Error generating posts for ${category.name}: ${error.message}`);
+        console.error(error);
+        
+        // Return fallback content
+        return [
+          {
+            title: `${category.name} Discussion Topic`,
+            content: `<p>This is a sample discussion topic for the ${category.name} category.</p><p>The AI content generation failed, so this is a fallback post.</p>`
+          },
+          {
+            title: `Another ${category.name} Topic`,
+            content: `<p>Another sample discussion topic for the ${category.name} category.</p><p>Share your thoughts and experiences with the community!</p>`
+          }
+        ];
+      }
+    }
+    
+    // Generate comments for a post
+    async function generatePostComments(model, postTitle, categorySlug) {
+      try {
+        const prompt = `
+You are creating realistic comments for a community forum post in Barefoot Bay, a residential community in Florida.
+The post title is: "${postTitle}" in the category "${categorySlug}".
+
+${COMMUNITY_CONTEXT}
+
+Generate 3-6 realistic comments that community members might make on this post.
+Make the comments conversational, helpful, and representative of an active community discussion.
+Ensure some comments respond to the post topic and some might respond to other comments.
+
+For each comment, include content in HTML format with paragraphs using <p> tags.
+Keep comments between 20-100 words.
+
+Format your response as a JSON array of objects with one property:
+- content: the comment content in HTML format
+
+Response format example:
+[
+  {
+    "content": "<p>This is an example comment content.</p>"
+  }
+]
+`;
+
+        const result = await model.generateContent(prompt);
+        const responseText = result.response.text();
+        
+        // Extract JSON from potential text wrapping
+        const jsonMatch = responseText.match(/\[\s*\{[\s\S]*\}\s*\]/);
+        const jsonStr = jsonMatch ? jsonMatch[0] : responseText;
+        
+        // Parse the JSON response
+        return JSON.parse(jsonStr);
+      } catch (error) {
+        log(`Error generating comments for post "${postTitle}": ${error.message}`);
+        console.error(error);
+        
+        // Return fallback comments
+        return [
+          {
+            content: "<p>Thanks for sharing this information with the community!</p>"
+          },
+          {
+            content: "<p>This is very helpful. I've been wondering about this topic for a while.</p>"
+          },
+          {
+            content: "<p>I have a question related to this - can anyone provide more details?</p>"
+          }
+        ];
+      }
+    }
+    
+    // Update the preview pane with generated content
+    function updatePreview(allContent) {
+      let html = '';
+      
+      for (const categoryContent of allContent) {
+        const { category, posts } = categoryContent;
+        
+        html += `
+          <div class="category">
+            <h3>${category.name}</h3>
+            <p><em>${category.description}</em></p>
+        `;
+        
+        for (const post of posts) {
+          html += `
+            <div class="post">
+              <div class="post-title">${post.title}</div>
+              <div class="post-content">${post.content}</div>
+              <div style="margin-top: 10px; font-size: 14px; color: #666;">
+                <strong>Comments:</strong> ${post.comments.length}
+              </div>
+            </div>
+          `;
+        }
+        
+        html += `</div>`;
+      }
+      
+      previewEl.innerHTML = html;
+    }
+    
+    // Download content as JSON file
+    function downloadContent() {
+      const jsonContent = jsonOutput.value;
+      if (!jsonContent) {
+        log('No content to download. Generate content first.');
+        return;
+      }
+      
+      const blob = new Blob([jsonContent], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `forum-content-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+    
+    // Event listeners
+    generateBtn.addEventListener('click', generateContent);
+    downloadBtn.addEventListener('click', downloadContent);
+    
+    // Initialize
+    log('Forum content generator loaded. Enter your Gemini API key, select the model type, and click "Generate Forum Content".');
+    log('Note: If "gemini-pro" model returns an error, try using "gemini-1.5-pro-latest" instead.');
+  </script>
+</body>
+</html>

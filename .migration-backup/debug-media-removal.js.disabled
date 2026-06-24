@@ -1,0 +1,170 @@
+/**
+ * THIS SCRIPT IS DISABLED PER USER REQUEST - DO NOT RUN
+ * 
+ * Debug script for testing media removal from events
+ * 
+ * This script has been intentionally disabled to prevent any
+ * automated media cleanup or deletion. Keep this file for reference only.
+ * DO NOT run this script as it may delete media files.
+ * 
+ * If you need to use this functionality in the future, rename this file
+ * back to 'debug-media-removal.js' and use with caution.
+ */
+
+console.error('⛔ ERROR: This script has been disabled per user request.');
+console.error('⛔ Media deletion functionality has been disabled to prevent accidental media loss.');
+console.error('⛔ If you need to enable this script, please consult with the administrator first.');
+process.exit(1);
+
+/* Original code below - intentionally deactivated
+
+import pg from 'pg';
+import dotenv from 'dotenv';
+
+const { Pool } = pg;
+
+// Load environment variables
+dotenv.config();
+
+// Create PostgreSQL client
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+
+*/
+
+/* Rest of original code below - intentionally commented out to prevent execution
+
+// The event ID to update
+const EVENT_ID = 4217; // The event ID in the screenshot
+
+// Function to get current event data
+async function getEvent(id) {
+  try {
+    const result = await pool.query(
+      `SELECT * FROM events WHERE id = $1`,
+      [id]
+    );
+    
+    if (result.rows.length === 0) {
+      console.error(`No event found with ID ${id}`);
+      return null;
+    }
+    
+    return result.rows[0];
+  } catch (err) {
+    console.error('Error fetching event:', err);
+    throw err;
+  }
+}
+
+// Function to update event media directly in the database
+async function updateEventMedia(id, mediaUrls) {
+  try {
+    // Test if media_urls is a JSONB, array, or text column
+    const columnTypeResult = await pool.query(`
+      SELECT data_type 
+      FROM information_schema.columns 
+      WHERE table_name = 'events' AND column_name = 'media_urls'
+    `);
+    
+    const dataType = columnTypeResult.rows[0]?.data_type;
+    console.log(`Column 'media_urls' has data type: ${dataType}`);
+    
+    // Adjust query based on data type
+    let query;
+    let params;
+    
+    if (dataType === 'ARRAY') {
+      query = `UPDATE events SET media_urls = $1::text[] WHERE id = $2 RETURNING *`;
+      params = [mediaUrls, id];
+    } else if (dataType === 'jsonb') {
+      query = `UPDATE events SET media_urls = $1::jsonb WHERE id = $2 RETURNING *`;
+      params = [JSON.stringify(mediaUrls), id];
+    } else {
+      // Text or other type - use a JSON string
+      query = `UPDATE events SET media_urls = $1 WHERE id = $2 RETURNING *`;
+      params = [JSON.stringify(mediaUrls), id];
+    }
+    
+    const result = await pool.query(query, params);
+    
+    if (result.rows.length === 0) {
+      console.error(`Update failed for event ID ${id}`);
+      return null;
+    }
+    
+    return result.rows[0];
+  } catch (err) {
+    console.error('Error updating event media:', err);
+    throw err;
+  }
+}
+
+// Main function
+async function main() {
+  try {
+    console.log(`\n--- Starting media removal debug for event ID ${EVENT_ID} ---\n`);
+    
+    // Get the current event
+    const event = await getEvent(EVENT_ID);
+    if (!event) {
+      console.error('Cannot continue - event not found');
+      process.exit(1);
+    }
+    
+    console.log('Current event media URLs:');
+    console.log(JSON.stringify(event.media_urls, null, 2));
+    
+    // Get the first media URL as an example to remove
+    let mediaToRemove = null;
+    let currentMediaUrls = [];
+    
+    if (Array.isArray(event.media_urls)) {
+      currentMediaUrls = [...event.media_urls];
+      if (currentMediaUrls.length > 0) {
+        mediaToRemove = currentMediaUrls[0];
+      }
+    } else if (typeof event.media_urls === 'string') {
+      try {
+        currentMediaUrls = JSON.parse(event.media_urls);
+        if (Array.isArray(currentMediaUrls) && currentMediaUrls.length > 0) {
+          mediaToRemove = currentMediaUrls[0];
+        }
+      } catch (e) {
+        console.log('Media URLs is a string but not valid JSON');
+        currentMediaUrls = event.media_urls ? [event.media_urls] : [];
+        mediaToRemove = event.media_urls;
+      }
+    }
+    
+    if (!mediaToRemove) {
+      console.log('No media to remove - the event has no media URLs');
+      process.exit(0);
+    }
+    
+    console.log(`\nAttempting to remove media URL: ${mediaToRemove}\n`);
+    
+    // Remove the first media URL
+    const updatedMediaUrls = currentMediaUrls.filter(url => url !== mediaToRemove);
+    console.log('Updated media URLs will be:');
+    console.log(JSON.stringify(updatedMediaUrls, null, 2));
+    
+    // Update the event
+    const updatedEvent = await updateEventMedia(EVENT_ID, updatedMediaUrls);
+    
+    console.log('\nUpdate complete. Media URLs after update:');
+    console.log(JSON.stringify(updatedEvent.media_urls, null, 2));
+    
+    console.log(`\n--- Media removal debug complete ---\n`);
+  } catch (err) {
+    console.error('Error in main function:', err);
+  } finally {
+    await pool.end();
+  }
+}
+
+// main() function call removed to prevent execution
+// main();
+
+*/

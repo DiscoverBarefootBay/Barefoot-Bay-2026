@@ -1,0 +1,540 @@
+ Running cache clearing script...
+ Cleared 1 cached items from localStorage
+ Cache clearing complete - errors should be resolved on next page refresh.
+index-Bj3dea7w.js:18 [Maps Polyfill] Initializing enhanced Google Maps polyfill
+index-Bj3dea7w.js:18 [Maps Polyfill] Installing fetch polyfill
+index-Bj3dea7w.js:835 [WebSocket] WebSocket functionality is disabled to prevent conflicts with Object Storage
+index-Bj3dea7w.js:2766 REPLIT_APP_LOADED
+(anonymous) @ index-Bj3dea7w.js:2766
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+bannerImage-1747918143132-922929174.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+index-Bj3dea7w.js:2766 REPLIT_PAGE_LOADED
+(anonymous) @ index-Bj3dea7w.js:2766
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+bannerImage-1747918143132-922929174.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+/uploads/icons/Asset1.svg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 ()
+/uploads/icons/rocket-icon.svg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 ()
+/uploads/icons/Asset1.svg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 ()
+index-Bj3dea7w.js:2762 Failed to preload: /uploads/icons/Asset1.svg
+R.onerror @ index-Bj3dea7w.js:2762
+/uploads/icons/rocket-icon.svg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 ()
+index-Bj3dea7w.js:2762 Failed to preload: /uploads/icons/rocket-icon.svg
+R.onerror @ index-Bj3dea7w.js:2762
+index-Bj3dea7w.js:835 Video playback issue (attempt 1/3): play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD
+Z @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 Video playback issue (attempt 2/3): play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD
+Z @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 Video playback issue (attempt 3/3): play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD
+Z @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 Maximum play attempts reached, marking as error
+Z @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:41 Error: Minified React error #300; visit https://reactjs.org/docs/error-decoder.html?invariant=300 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
+    at eb (index-Bj3dea7w.js:39:17223)
+    at AN (index-Bj3dea7w.js:41:1571)
+    at nP (index-Bj3dea7w.js:41:46033)
+    at JT (index-Bj3dea7w.js:41:39790)
+    at BB (index-Bj3dea7w.js:41:39718)
+    at Wg (index-Bj3dea7w.js:41:39570)
+    at B1 (index-Bj3dea7w.js:41:35934)
+    at QT (index-Bj3dea7w.js:41:34883)
+    at S (index-Bj3dea7w.js:26:1543)
+    at MessagePort.R (index-Bj3dea7w.js:26:1902)
+P1 @ index-Bj3dea7w.js:41
+index-Bj3dea7w.js:835 Banner error caught by boundary: Error: Minified React error #300; visit https://reactjs.org/docs/error-decoder.html?invariant=300 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
+    at eb (index-Bj3dea7w.js:39:17223)
+    at AN (index-Bj3dea7w.js:41:1571)
+    at nP (index-Bj3dea7w.js:41:46033)
+    at JT (index-Bj3dea7w.js:41:39790)
+    at BB (index-Bj3dea7w.js:41:39718)
+    at Wg (index-Bj3dea7w.js:41:39570)
+    at B1 (index-Bj3dea7w.js:41:35934)
+    at QT (index-Bj3dea7w.js:41:34883)
+    at S (index-Bj3dea7w.js:26:1543)
+    at MessagePort.R (index-Bj3dea7w.js:26:1902)
+componentDidCatch @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 Component stack: 
+    at https://barefootbay.com/assets/index-Bj3dea7w.js:835:30497
+    at o6 (https://barefootbay.com/assets/index-Bj3dea7w.js:835:37009)
+    at div
+    at div
+    at div
+    at div
+    at https://barefootbay.com/assets/index-Bj3dea7w.js:785:245558
+    at div
+    at div
+    at https://barefootbay.com/assets/index-Bj3dea7w.js:785:245280
+    at div
+    at https://barefootbay.com/assets/index-Bj3dea7w.js:785:244274
+    at div
+    at See (https://barefootbay.com/assets/index-Bj3dea7w.js:835:38582)
+    at section
+    at div
+    at Cse (https://barefootbay.com/assets/index-Bj3dea7w.js:2219:74040)
+    at ft (https://barefootbay.com/assets/index-Bj3dea7w.js:49:3233)
+    at AU (https://barefootbay.com/assets/index-Bj3dea7w.js:49:4046)
+    at main
+    at div
+    at div
+    at Ixe
+    at _xe
+    at lK (https://barefootbay.com/assets/index-Bj3dea7w.js:785:31608)
+    at iK (https://barefootbay.com/assets/index-Bj3dea7w.js:785:23478)
+    at QU (https://barefootbay.com/assets/index-Bj3dea7w.js:49:40627)
+    at dK (https://barefootbay.com/assets/index-Bj3dea7w.js:785:36449)
+    at Mxe (https://barefootbay.com/assets/index-Bj3dea7w.js:2766:12475)
+componentDidCatch @ index-Bj3dea7w.js:835
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747918143132-922929174.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747918143132-922929174.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747918143132-922929174.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747918143132-922929174.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+index-Bj3dea7w.js:835 Video preview error: n
+onError @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 Video error details: Code 4 
+onError @ index-Bj3dea7w.js:835
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747918143132-922929174.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747918143132-922929174.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747918143132-922929174.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747918143132-922929174.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747918143132-922929174.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747918143132-922929174.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           GET https://object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg 404 (Not Found)
+Image
+(anonymous) @ index-Bj3dea7w.js:835
+(anonymous) @ index-Bj3dea7w.js:835
+P @ index-Bj3dea7w.js:835
+(anonymous) @ index-Bj3dea7w.js:785
+a @ index-Bj3dea7w.js:785
+l @ index-Bj3dea7w.js:785
+d @ index-Bj3dea7w.js:785
+F @ index-Bj3dea7w.js:785
+H @ index-Bj3dea7w.js:785
+(anonymous) @ index-Bj3dea7w.js:835
+bannerImage-1747918143132-922929174.mp4:1 
+            
+            
+           GET https://object-storage.replit.app/BANNER/banner-slides/bannerImage-1747918143132-922929174.mp4 404 (Not Found)
+bannerImage-1747918143132-922929174.mp4:1 
+            
+            
+           GET https://object-storage.replit.app/BANNER/banner-slides/bannerImage-1747918143132-922929174.mp4 404 (Not Found)

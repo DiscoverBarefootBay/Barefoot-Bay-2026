@@ -1,0 +1,40 @@
+Running cache clearing script...
+Cleared 1 cached items from localStorage
+Cache clearing complete - errors should be resolved on next page refresh.
+[Maps Polyfill] Initializing enhanced Google Maps polyfill
+[Maps Polyfill] Installing fetch polyfill
+[WebSocket] WebSocket functionality is disabled to prevent conflicts with Object Storage
+REPLIT_APP_LOADED
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+S.toISOString is not a function
+at Txe (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B1HJnjMQ.js:2765:9693)
+at eb (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B1HJnjMQ.js:39:17018)
+at A1 (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B1HJnjMQ.js:41:3139)
+at nP (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B1HJnjMQ.js:41:44833)
+at JT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B1HJnjMQ.js:41:39790)
+at BB (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B1HJnjMQ.js:41:39718)
+at Wg (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B1HJnjMQ.js:41:39570)
+at B1 (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B1HJnjMQ.js:41:35934)
+at BN (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B1HJnjMQ.js:41:36738)
+at xl (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B1HJnjMQ.js:39:3279)
+Error caught by boundary: 
+TypeError {}
+ 
+Object {componentStack: "↵    at Txe…"}
+componentStack: "↵ at Txe (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B1HJnjMQ.js:2765:7413)↵ at div↵ at Pxe (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B1HJnjMQ.js:2765:20049)↵ at div↵ at div↵ at Ixe↵ at _xe↵ at lK (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B1HJnjMQ.js:785:31797)↵ at iK (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B1HJnjMQ.js:785:23478)↵ at QU (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B1HJnjMQ.js:49:40627)↵ at dK (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B1HJnjMQ.js:785:36638)↵ at Mxe (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B1HJnjMQ.js:2766:12475)"
+[[Prototype]]: Object
+
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED

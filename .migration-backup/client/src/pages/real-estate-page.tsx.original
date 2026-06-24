@@ -1,0 +1,1429 @@
+import { useState, useEffect } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form"; 
+import { zodResolver } from "@hookform/resolvers/zod"; 
+import { Plus, DollarSign, Filter, Home, Bath, SquareIcon, Calendar } from "lucide-react";
+import { Link, useLocation } from "wouter";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+  DrawerFooter,
+  DrawerClose,
+} from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { CreateListingForm } from "@/components/real-estate/create-listing-form";
+import { ListingCard } from "@/components/real-estate/listing-card";
+import { PaymentDialog } from "@/components/real-estate/payment-dialog";
+
+import { insertListingSchema, type RealEstateListing } from "@shared/schema";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
+import { usePermissions } from "@/hooks/use-permissions";
+
+const LISTING_TYPES = [
+  { value: 'FSBO', label: 'For Sale By Owner' },
+  { value: 'Agent', label: 'For Sale By Agent' },
+  { value: 'Rent', label: 'For Rent' },
+  { value: 'OpenHouse', label: 'Open House' },
+  { value: 'Wanted', label: 'Wanted' },
+  { value: 'Classified', label: 'Classified' }
+] as const;
+
+export default function RealEstatePage() {
+  const { user } = useAuth();
+  const { canCreateListing } = usePermissions();
+  const { toast } = useToast();
+  const [location] = useLocation();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
+  const [currentPaymentId, setCurrentPaymentId] = useState<number | null>(null);
+  const [selectedType, setSelectedType] = useState<string>("all");
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000000]);
+  const [isPriceFilterActive, setIsPriceFilterActive] = useState(false);
+  const [isPriceOpen, setIsPriceOpen] = useState(false);
+  
+  // New filters
+  const [bedroomsRange, setBedroomsRange] = useState<[number, number]>([0, 10]);
+  const [isBedroomsFilterActive, setIsBedroomsFilterActive] = useState(false);
+  const [isBedroomsOpen, setIsBedroomsOpen] = useState(false);
+  
+  const [bathroomsRange, setBathroomsRange] = useState<[number, number]>([0, 10]);
+  const [isBathroomsFilterActive, setIsBathroomsFilterActive] = useState(false);
+  const [isBathroomsOpen, setIsBathroomsOpen] = useState(false);
+  
+  const [sqftRange, setSqftRange] = useState<[number, number]>([0, 5000]);
+  const [isSqftFilterActive, setIsSqftFilterActive] = useState(false);
+  const [isSqftOpen, setIsSqftOpen] = useState(false);
+  
+  const [yearBuiltRange, setYearBuiltRange] = useState<[number, number]>([1950, new Date().getFullYear()]);
+  const [isYearBuiltFilterActive, setIsYearBuiltFilterActive] = useState(false);
+  const [isYearBuiltOpen, setIsYearBuiltOpen] = useState(false);
+  
+  const [viewingMyListings, setViewingMyListings] = useState(false);
+  
+  // Parse URL query params to check if we should show "My Listings"
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.split('?')[1]);
+    const filter = queryParams.get('filter');
+    setViewingMyListings(filter === 'my-listings');
+  }, [location]);
+  
+  const { 
+    data: listings = [], 
+    isLoading,
+    isError,
+    error,
+  } = useQuery<RealEstateListing[]>({
+    queryKey: ["/api/listings", viewingMyListings ? user?.id : null],
+    queryFn: async () => {
+      try {
+        // Use fetch directly instead of apiRequest to avoid authentication errors
+        let url = "/api/listings";
+        
+        // Add user ID filter for "My Listings"
+        if (viewingMyListings && user?.id) {
+          url += `?userId=${user.id}`;
+        }
+        
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+        return response.json();
+      } catch (err) {
+        console.error("Error fetching listings:", err);
+        throw err;
+      }
+    },
+    // Re-fetch when the viewingMyListings state changes or user changes
+    enabled: !viewingMyListings || !!user,
+  });
+
+  const createListingMutation = useMutation({
+    mutationFn: async (data: typeof insertListingSchema._type) => {
+      try {
+        if (!currentPaymentId) {
+          throw new Error("Payment required to create a listing");
+        }
+        
+        let uploadedUrls: string[] = [];
+
+        // Handle file uploads first
+        if (selectedFiles.length > 0) {
+          const formData = new FormData();
+          selectedFiles.forEach((file) => {
+            formData.append("media", file);
+          });
+
+          const response = await fetch("/api/upload/media", {
+            method: "POST",
+            credentials: 'include',
+            body: formData,
+          });
+
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || "Failed to upload images");
+          }
+
+          const uploadData = await response.json();
+          if (uploadData.success) {
+            uploadedUrls = uploadData.urls;
+          } else {
+            throw new Error(uploadData.message || "Failed to upload images");
+          }
+        }
+
+        // Prepare listing data
+        const listingData = {
+          ...data,
+          // Ensure numeric fields are properly typed
+          price: Number(data.price) || 0,
+          bedrooms: Number(data.bedrooms) || 0,
+          bathrooms: Number(data.bathrooms) || 0,
+          squareFeet: Number(data.squareFeet) || 0,
+          yearBuilt: Number(data.yearBuilt) || 0,
+          // Include uploaded photos
+          photos: uploadedUrls,
+          // Ensure contact info is properly formatted
+          contactInfo: {
+            name: data.contactInfo?.name?.trim() || '',
+            phone: data.contactInfo?.phone?.trim() || '',
+            email: data.contactInfo?.email?.trim() || '',
+          }
+        };
+
+        // Include the payment ID with the listing data
+        const payload = {
+          listingData,
+          paymentId: currentPaymentId
+        };
+
+        console.log("Submitting listing data:", JSON.stringify(payload, null, 2));
+        const res = await apiRequest("POST", "/api/listings", payload);
+
+        if (!res.ok) {
+          const errorData = await res.json();
+          console.error("Server validation errors:", JSON.stringify(errorData, null, 2));
+
+          const errorMessage = errorData.errors?.map((err: any) => 
+            `${err.path}: ${err.message}`
+          ).join('\n') || errorData.message || "Failed to create listing";
+
+          throw new Error(errorMessage);
+        }
+
+        return await res.json();
+      } catch (error) {
+        console.error("Mutation error:", error);
+        throw error instanceof Error ? error : new Error(String(error));
+      }
+    },
+    onSuccess: () => {
+      // Invalidate both the main listings query and any filtered queries
+      queryClient.invalidateQueries({ queryKey: ["/api/listings"] });
+      setIsDialogOpen(false);
+      setSelectedFiles([]);
+      setCurrentPaymentId(null);
+      toast({
+        title: "Success",
+        description: "Listing created successfully. It will be visible after approval.",
+      });
+      
+      // If creating a listing while viewing "My Listings", make sure those get refreshed too
+      if (viewingMyListings && user?.id) {
+        queryClient.invalidateQueries({ queryKey: ["/api/listings", user.id] });
+      }
+    },
+    onError: (error: Error) => {
+      console.error("Create listing error:", error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to create listing. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Calculate price range for slider
+  useEffect(() => {
+    if (listings.length > 0) {
+      const pricesWithValues = listings
+        .filter(listing => listing.price !== null && listing.price !== undefined)
+        .map(listing => listing.price as number);
+      
+      if (pricesWithValues.length > 0) {
+        const minPrice = Math.min(...pricesWithValues);
+        const maxPrice = Math.max(...pricesWithValues);
+        
+        // Only update if the user hasn't adjusted the price filter
+        if (!isPriceFilterActive) {
+          setPriceRange([minPrice, maxPrice]);
+        }
+      }
+    }
+  }, [listings, isPriceFilterActive]);
+
+  // Calculate ranges for all attributes based on listings data
+  useEffect(() => {
+    if (listings.length > 0) {
+      // Find valid range for bedrooms
+      const bedroomsWithValues = listings
+        .filter(listing => listing.bedrooms !== null && listing.bedrooms !== undefined)
+        .map(listing => listing.bedrooms as number);
+      
+      if (bedroomsWithValues.length > 0 && !isBedroomsFilterActive) {
+        const minBedrooms = Math.min(...bedroomsWithValues);
+        const maxBedrooms = Math.max(...bedroomsWithValues);
+        setBedroomsRange([minBedrooms, maxBedrooms]);
+      }
+
+      // Find valid range for bathrooms
+      const bathroomsWithValues = listings
+        .filter(listing => listing.bathrooms !== null && listing.bathrooms !== undefined)
+        .map(listing => listing.bathrooms as number);
+      
+      if (bathroomsWithValues.length > 0 && !isBathroomsFilterActive) {
+        const minBathrooms = Math.min(...bathroomsWithValues);
+        const maxBathrooms = Math.max(...bathroomsWithValues);
+        setBathroomsRange([minBathrooms, maxBathrooms]);
+      }
+
+      // Find valid range for square feet
+      const sqftWithValues = listings
+        .filter(listing => listing.squareFeet !== null && listing.squareFeet !== undefined)
+        .map(listing => listing.squareFeet as number);
+      
+      if (sqftWithValues.length > 0 && !isSqftFilterActive) {
+        const minSqft = Math.min(...sqftWithValues);
+        const maxSqft = Math.max(...sqftWithValues);
+        setSqftRange([minSqft, maxSqft]);
+      }
+
+      // Find valid range for year built
+      const yearWithValues = listings
+        .filter(listing => listing.yearBuilt !== null && listing.yearBuilt !== undefined)
+        .map(listing => listing.yearBuilt as number);
+      
+      if (yearWithValues.length > 0 && !isYearBuiltFilterActive) {
+        const minYear = Math.min(...yearWithValues);
+        const maxYear = Math.max(...yearWithValues);
+        setYearBuiltRange([minYear, maxYear]);
+      }
+    }
+  }, [listings, isBedroomsFilterActive, isBathroomsFilterActive, isSqftFilterActive, isYearBuiltFilterActive]);
+
+  // Apply all filters
+  const filteredListings = listings.filter(listing => {
+    // Skip invalid listings
+    if (!listing || !listing.listingType) return false;
+    
+    // Type filter
+    const typeMatch = selectedType === "all" || listing.listingType === selectedType;
+    
+    // Price filter - only apply to listings with a price
+    let priceMatch = true;
+    if (listing.price !== null && listing.price !== undefined) {
+      priceMatch = listing.price >= priceRange[0] && listing.price <= priceRange[1];
+    }
+
+    // Bedrooms filter
+    let bedroomsMatch = true;
+    if (isBedroomsFilterActive && listing.bedrooms !== null && listing.bedrooms !== undefined) {
+      bedroomsMatch = listing.bedrooms >= bedroomsRange[0] && listing.bedrooms <= bedroomsRange[1];
+    }
+
+    // Bathrooms filter
+    let bathroomsMatch = true;
+    if (isBathroomsFilterActive && listing.bathrooms !== null && listing.bathrooms !== undefined) {
+      bathroomsMatch = listing.bathrooms >= bathroomsRange[0] && listing.bathrooms <= bathroomsRange[1];
+    }
+
+    // Square feet filter
+    let sqftMatch = true;
+    if (isSqftFilterActive && listing.squareFeet !== null && listing.squareFeet !== undefined) {
+      sqftMatch = listing.squareFeet >= sqftRange[0] && listing.squareFeet <= sqftRange[1];
+    }
+
+    // Year built filter
+    let yearMatch = true;
+    if (isYearBuiltFilterActive && listing.yearBuilt !== null && listing.yearBuilt !== undefined) {
+      yearMatch = listing.yearBuilt >= yearBuiltRange[0] && listing.yearBuilt <= yearBuiltRange[1];
+    }
+    
+    return typeMatch && priceMatch && bedroomsMatch && bathroomsMatch && sqftMatch && yearMatch;
+  });
+
+  // Create a safe copy for sorting
+  const sortedListings = [...filteredListings]
+    .filter(listing => listing && listing.id) // Ensure only valid listings are included
+    .sort((a, b) => {
+      // Safely access created date
+      const dateA = a?.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const dateB = b?.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return dateB - dateA;
+    });
+  
+  // Number formatter for price display
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+    notation: "compact",
+  });
+  
+  // Shorter formatter for button display (K for thousands, M for millions)
+  const shortFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    notation: "compact",
+    maximumFractionDigits: 1,
+  });
+
+  // Handler for payment success
+  const handlePaymentSuccess = (paymentId: number) => {
+    setCurrentPaymentId(paymentId);
+    setIsPaymentDialogOpen(false);
+    setIsDialogOpen(true);
+  };
+  
+  // Check if user is admin to show the Square status checker
+  const { isAdmin } = usePermissions();
+
+  return (
+    <div className="max-w-7xl mx-auto space-y-8 p-4">
+      {/* Payment Dialog */}
+      <PaymentDialog 
+        open={isPaymentDialogOpen}
+        onOpenChange={setIsPaymentDialogOpen}
+        onSuccess={handlePaymentSuccess}
+      />
+      
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="hidden sm:block">
+          <h1 className="text-3xl font-bold">
+            {viewingMyListings ? "My For Sale Listings" : "For Sale Listings"}
+          </h1>
+          <p className="text-muted-foreground">
+            {viewingMyListings 
+              ? "Manage your property listings in Barefoot Bay" 
+              : "Browse available properties and listings in Barefoot Bay"
+            }
+          </p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-4">
+          <Select value={selectedType} onValueChange={setSelectedType}>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Filter by type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Listings</SelectItem>
+              {LISTING_TYPES.map(type => (
+                <SelectItem key={type.value} value={type.value}>
+                  {type.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          
+          {/* Filters Drawer - All filters in one place */}
+          <Drawer>
+            <DrawerTrigger asChild>
+              <Button 
+                variant="outline" 
+                className="w-[180px] justify-between"
+              >
+                <div className="flex items-center">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <span>Filters</span>
+                </div>
+                <span className="ml-2 text-muted-foreground text-xs">
+                  {(isPriceFilterActive || isBedroomsFilterActive || isBathroomsFilterActive || 
+                   isSqftFilterActive || isYearBuiltFilterActive) ? 'Active' : 'None'}
+                </span>
+              </Button>
+            </DrawerTrigger>
+            <DrawerContent>
+              <DrawerHeader>
+                <DrawerTitle>Property Filters</DrawerTitle>
+              </DrawerHeader>
+              <div className="px-4 py-2 space-y-6">
+                {/* Price Filter */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium flex items-center">
+                      <DollarSign className="h-4 w-4 mr-2" />
+                      Price Range
+                    </h4>
+                    <div className="text-sm text-muted-foreground">
+                      {shortFormatter.format(priceRange[0])} - {shortFormatter.format(priceRange[1])}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label htmlFor="drawerMinPrice" className="text-sm font-medium">Min Price</label>
+                      <div className="relative">
+                        <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <input
+                          id="drawerMinPrice"
+                          type="text"
+                          placeholder="Min"
+                          value={priceRange[0] > 0 ? priceRange[0].toLocaleString() : ''}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/,/g, '');
+                            const numValue = value === '' ? 0 : parseInt(value, 10);
+                            
+                            if (value === '' || (!isNaN(numValue) && numValue >= 0)) {
+                              setPriceRange([numValue, priceRange[1]]);
+                              setIsPriceFilterActive(true);
+                            }
+                          }}
+                          className="pl-10 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <label htmlFor="drawerMaxPrice" className="text-sm font-medium">Max Price</label>
+                      <div className="relative">
+                        <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <input
+                          id="drawerMaxPrice"
+                          type="text"
+                          placeholder="Max"
+                          value={priceRange[1] > 0 ? priceRange[1].toLocaleString() : ''}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/,/g, '');
+                            const numValue = value === '' ? 0 : parseInt(value, 10);
+                            
+                            if (value === '' || (!isNaN(numValue) && numValue >= 0)) {
+                              setPriceRange([priceRange[0], numValue]);
+                              setIsPriceFilterActive(true);
+                            }
+                          }}
+                          className="pl-10 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      const pricesWithValues = listings
+                        .filter(listing => listing.price !== null && listing.price !== undefined)
+                        .map(listing => listing.price as number);
+                      
+                      if (pricesWithValues.length > 0) {
+                        const minPrice = Math.floor(Math.min(...pricesWithValues) / 1000) * 1000;
+                        const maxPrice = Math.ceil(Math.max(...pricesWithValues) / 1000) * 1000;
+                        setPriceRange([minPrice, maxPrice]);
+                      }
+                      setIsPriceFilterActive(false);
+                    }}
+                  >
+                    Reset Price
+                  </Button>
+                </div>
+                
+                {/* Bedrooms Filter */}
+                <div className="space-y-4 pt-2 border-t">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium flex items-center">
+                      <Home className="h-4 w-4 mr-2" />
+                      Bedrooms
+                    </h4>
+                    <div className="text-sm text-muted-foreground">
+                      {bedroomsRange[0]} - {bedroomsRange[1]} BD
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label htmlFor="drawerMinBedrooms" className="text-sm font-medium">Min</label>
+                      <input
+                        id="drawerMinBedrooms"
+                        type="number"
+                        min="0"
+                        placeholder="Min"
+                        value={bedroomsRange[0]}
+                        onChange={(e) => {
+                          const numValue = e.target.value === '' ? 0 : parseInt(e.target.value, 10);
+                          if (!isNaN(numValue) && numValue >= 0) {
+                            setBedroomsRange([numValue, bedroomsRange[1]]);
+                            setIsBedroomsFilterActive(true);
+                          }
+                        }}
+                        className="px-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="drawerMaxBedrooms" className="text-sm font-medium">Max</label>
+                      <input
+                        id="drawerMaxBedrooms"
+                        type="number"
+                        min="0"
+                        placeholder="Max"
+                        value={bedroomsRange[1]}
+                        onChange={(e) => {
+                          const numValue = e.target.value === '' ? 10 : parseInt(e.target.value, 10);
+                          if (!isNaN(numValue) && numValue >= 0) {
+                            setBedroomsRange([bedroomsRange[0], numValue]);
+                            setIsBedroomsFilterActive(true);
+                          }
+                        }}
+                        className="px-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      const values = listings
+                        .filter(listing => listing.bedrooms !== null && listing.bedrooms !== undefined)
+                        .map(listing => listing.bedrooms as number);
+                      
+                      if (values.length > 0) {
+                        const min = Math.min(...values);
+                        const max = Math.max(...values);
+                        setBedroomsRange([min, max]);
+                      } else {
+                        setBedroomsRange([0, 10]);
+                      }
+                      setIsBedroomsFilterActive(false);
+                    }}
+                  >
+                    Reset Bedrooms
+                  </Button>
+                </div>
+                
+                {/* Bathrooms Filter */}
+                <div className="space-y-4 pt-2 border-t">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium flex items-center">
+                      <Bath className="h-4 w-4 mr-2" />
+                      Bathrooms
+                    </h4>
+                    <div className="text-sm text-muted-foreground">
+                      {bathroomsRange[0]} - {bathroomsRange[1]} BA
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label htmlFor="drawerMinBathrooms" className="text-sm font-medium">Min</label>
+                      <input
+                        id="drawerMinBathrooms"
+                        type="number"
+                        min="0"
+                        step="0.5"
+                        placeholder="Min"
+                        value={bathroomsRange[0]}
+                        onChange={(e) => {
+                          const numValue = e.target.value === '' ? 0 : parseFloat(e.target.value);
+                          if (!isNaN(numValue) && numValue >= 0) {
+                            setBathroomsRange([numValue, bathroomsRange[1]]);
+                            setIsBathroomsFilterActive(true);
+                          }
+                        }}
+                        className="px-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="drawerMaxBathrooms" className="text-sm font-medium">Max</label>
+                      <input
+                        id="drawerMaxBathrooms"
+                        type="number"
+                        min="0"
+                        step="0.5"
+                        placeholder="Max"
+                        value={bathroomsRange[1]}
+                        onChange={(e) => {
+                          const numValue = e.target.value === '' ? 10 : parseFloat(e.target.value);
+                          if (!isNaN(numValue) && numValue >= 0) {
+                            setBathroomsRange([bathroomsRange[0], numValue]);
+                            setIsBathroomsFilterActive(true);
+                          }
+                        }}
+                        className="px-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      const values = listings
+                        .filter(listing => listing.bathrooms !== null && listing.bathrooms !== undefined)
+                        .map(listing => listing.bathrooms as number);
+                      
+                      if (values.length > 0) {
+                        const min = Math.min(...values);
+                        const max = Math.max(...values);
+                        setBathroomsRange([min, max]);
+                      } else {
+                        setBathroomsRange([0, 10]);
+                      }
+                      setIsBathroomsFilterActive(false);
+                    }}
+                  >
+                    Reset Bathrooms
+                  </Button>
+                </div>
+                
+                {/* Square Feet Filter */}
+                <div className="space-y-4 pt-2 border-t">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium flex items-center">
+                      <SquareIcon className="h-4 w-4 mr-2" />
+                      Square Feet
+                    </h4>
+                    <div className="text-sm text-muted-foreground">
+                      {sqftRange[0]} - {sqftRange[1]} sqft
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label htmlFor="drawerMinSqft" className="text-sm font-medium">Min</label>
+                      <input
+                        id="drawerMinSqft"
+                        type="number"
+                        min="0"
+                        step="100"
+                        placeholder="Min"
+                        value={sqftRange[0]}
+                        onChange={(e) => {
+                          const numValue = e.target.value === '' ? 0 : parseInt(e.target.value, 10);
+                          if (!isNaN(numValue) && numValue >= 0) {
+                            setSqftRange([numValue, sqftRange[1]]);
+                            setIsSqftFilterActive(true);
+                          }
+                        }}
+                        className="px-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="drawerMaxSqft" className="text-sm font-medium">Max</label>
+                      <input
+                        id="drawerMaxSqft"
+                        type="number"
+                        min="0"
+                        step="100"
+                        placeholder="Max"
+                        value={sqftRange[1]}
+                        onChange={(e) => {
+                          const numValue = e.target.value === '' ? 5000 : parseInt(e.target.value, 10);
+                          if (!isNaN(numValue) && numValue >= 0) {
+                            setSqftRange([sqftRange[0], numValue]);
+                            setIsSqftFilterActive(true);
+                          }
+                        }}
+                        className="px-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      const values = listings
+                        .filter(listing => listing.squareFeet !== null && listing.squareFeet !== undefined)
+                        .map(listing => listing.squareFeet as number);
+                      
+                      if (values.length > 0) {
+                        const min = Math.floor(Math.min(...values) / 100) * 100;
+                        const max = Math.ceil(Math.max(...values) / 100) * 100;
+                        setSqftRange([min, max]);
+                      } else {
+                        setSqftRange([0, 5000]);
+                      }
+                      setIsSqftFilterActive(false);
+                    }}
+                  >
+                    Reset Square Feet
+                  </Button>
+                </div>
+                
+                {/* Year Built Filter */}
+                <div className="space-y-4 pt-2 border-t">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium flex items-center">
+                      <Calendar className="h-4 w-4 mr-2" />
+                      Year Built
+                    </h4>
+                    <div className="text-sm text-muted-foreground">
+                      {yearBuiltRange[0]} - {yearBuiltRange[1]}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label htmlFor="drawerMinYear" className="text-sm font-medium">From</label>
+                      <input
+                        id="drawerMinYear"
+                        type="number"
+                        min="1900"
+                        max={new Date().getFullYear()}
+                        placeholder="Min"
+                        value={yearBuiltRange[0]}
+                        onChange={(e) => {
+                          const numValue = e.target.value === '' ? 1950 : parseInt(e.target.value, 10);
+                          if (!isNaN(numValue) && numValue >= 1900) {
+                            setYearBuiltRange([numValue, yearBuiltRange[1]]);
+                            setIsYearBuiltFilterActive(true);
+                          }
+                        }}
+                        className="px-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="drawerMaxYear" className="text-sm font-medium">To</label>
+                      <input
+                        id="drawerMaxYear"
+                        type="number"
+                        min="1900"
+                        max={new Date().getFullYear()}
+                        placeholder="Max"
+                        value={yearBuiltRange[1]}
+                        onChange={(e) => {
+                          const numValue = e.target.value === '' ? new Date().getFullYear() : parseInt(e.target.value, 10);
+                          if (!isNaN(numValue) && numValue >= 1900 && numValue <= new Date().getFullYear()) {
+                            setYearBuiltRange([yearBuiltRange[0], numValue]);
+                            setIsYearBuiltFilterActive(true);
+                          }
+                        }}
+                        className="px-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      const values = listings
+                        .filter(listing => listing.yearBuilt !== null && listing.yearBuilt !== undefined)
+                        .map(listing => listing.yearBuilt as number);
+                      
+                      if (values.length > 0) {
+                        const min = Math.min(...values);
+                        const max = Math.max(...values);
+                        setYearBuiltRange([min, max]);
+                      } else {
+                        setYearBuiltRange([1950, new Date().getFullYear()]);
+                      }
+                      setIsYearBuiltFilterActive(false);
+                    }}
+                  >
+                    Reset Year Built
+                  </Button>
+                </div>
+              </div>
+              <DrawerFooter className="flex-row justify-end space-x-2">
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    // Reset all filters
+                    setIsPriceFilterActive(false);
+                    setIsBedroomsFilterActive(false);
+                    setIsBathroomsFilterActive(false);
+                    setIsSqftFilterActive(false);
+                    setIsYearBuiltFilterActive(false);
+                    
+                    // Reset ranges to defaults from data
+                    if (listings.length > 0) {
+                      // Price
+                      const pricesWithValues = listings
+                        .filter(listing => listing.price !== null && listing.price !== undefined)
+                        .map(listing => listing.price as number);
+                      
+                      if (pricesWithValues.length > 0) {
+                        const minPrice = Math.floor(Math.min(...pricesWithValues) / 1000) * 1000;
+                        const maxPrice = Math.ceil(Math.max(...pricesWithValues) / 1000) * 1000;
+                        setPriceRange([minPrice, maxPrice]);
+                      }
+                      
+                      // Bedrooms
+                      const bedroomsWithValues = listings
+                        .filter(listing => listing.bedrooms !== null && listing.bedrooms !== undefined)
+                        .map(listing => listing.bedrooms as number);
+                      
+                      if (bedroomsWithValues.length > 0) {
+                        setBedroomsRange([Math.min(...bedroomsWithValues), Math.max(...bedroomsWithValues)]);
+                      }
+                      
+                      // Bathrooms
+                      const bathroomsWithValues = listings
+                        .filter(listing => listing.bathrooms !== null && listing.bathrooms !== undefined)
+                        .map(listing => listing.bathrooms as number);
+                      
+                      if (bathroomsWithValues.length > 0) {
+                        setBathroomsRange([Math.min(...bathroomsWithValues), Math.max(...bathroomsWithValues)]);
+                      }
+                      
+                      // Square Feet
+                      const sqftWithValues = listings
+                        .filter(listing => listing.squareFeet !== null && listing.squareFeet !== undefined)
+                        .map(listing => listing.squareFeet as number);
+                      
+                      if (sqftWithValues.length > 0) {
+                        setSqftRange([Math.min(...sqftWithValues), Math.max(...sqftWithValues)]);
+                      }
+                      
+                      // Year Built
+                      const yearWithValues = listings
+                        .filter(listing => listing.yearBuilt !== null && listing.yearBuilt !== undefined)
+                        .map(listing => listing.yearBuilt as number);
+                      
+                      if (yearWithValues.length > 0) {
+                        setYearBuiltRange([Math.min(...yearWithValues), Math.max(...yearWithValues)]);
+                      }
+                    }
+                  }}
+                >
+                  Reset All
+                </Button>
+                <DrawerClose asChild>
+                  <Button>Apply Filters</Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
+
+          {/* Create Listing Button */}
+              <div className="space-y-4">
+                <h4 className="font-medium mb-2">Price Range</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label htmlFor="minPrice" className="text-sm font-medium">Min Price</label>
+                    <div className="relative">
+                      <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <input
+                        id="minPrice"
+                        type="text"
+                        placeholder="Min"
+                        value={priceRange[0] > 0 ? priceRange[0].toLocaleString() : ''}
+                        onChange={(e) => {
+                          // Remove commas and validate as number
+                          const value = e.target.value.replace(/,/g, '');
+                          const numValue = value === '' ? 0 : parseInt(value, 10);
+                          
+                          // Only update if it's a valid number or empty
+                          if (value === '' || (!isNaN(numValue) && numValue >= 0)) {
+                            setPriceRange([numValue, priceRange[1]]);
+                            setIsPriceFilterActive(true);
+                          }
+                        }}
+                        className="pl-10 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <label htmlFor="maxPrice" className="text-sm font-medium">Max Price</label>
+                    <div className="relative">
+                      <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <input
+                        id="maxPrice"
+                        type="text"
+                        placeholder="Max"
+                        value={priceRange[1] > 0 ? priceRange[1].toLocaleString() : ''}
+                        onChange={(e) => {
+                          // Remove commas and validate as number
+                          const value = e.target.value.replace(/,/g, '');
+                          const numValue = value === '' ? 0 : parseInt(value, 10);
+                          
+                          // Only update if it's a valid number or empty
+                          if (value === '' || (!isNaN(numValue) && numValue >= 0)) {
+                            setPriceRange([priceRange[0], numValue]);
+                            setIsPriceFilterActive(true);
+                          }
+                        }}
+                        className="pl-10 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="flex justify-end gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      // Reset to the calculated min/max
+                      const pricesWithValues = listings
+                        .filter(listing => listing.price !== null && listing.price !== undefined)
+                        .map(listing => listing.price as number);
+                      
+                      if (pricesWithValues.length > 0) {
+                        // Round to the nearest 1000
+                        const minPrice = Math.floor(Math.min(...pricesWithValues) / 1000) * 1000;
+                        const maxPrice = Math.ceil(Math.max(...pricesWithValues) / 1000) * 1000;
+                        setPriceRange([minPrice, maxPrice]);
+                      }
+                      setIsPriceFilterActive(false);
+                      setIsPriceOpen(false);
+                    }}
+                  >
+                    Reset
+                  </Button>
+                  <Button 
+                    size="sm"
+                    onClick={() => setIsPriceOpen(false)}
+                  >
+                    Apply
+                  </Button>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+          
+          {/* Bedrooms Filter */}
+          <Popover open={isBedroomsOpen} onOpenChange={setIsBedroomsOpen}>
+            <PopoverTrigger asChild>
+              <Button 
+                variant={isBedroomsFilterActive ? "secondary" : "outline"} 
+                className="w-[180px] justify-between"
+              >
+                <div className="flex items-center">
+                  <span>Bedrooms</span>
+                </div>
+                <span className="ml-2 text-muted-foreground text-xs">
+                  {bedroomsRange[0]} - {bedroomsRange[1]} BD
+                </span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[280px] p-4 bg-white shadow-lg z-[100]">
+              <div className="space-y-4">
+                <h4 className="font-medium mb-2">Bedrooms</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label htmlFor="minBedrooms" className="text-sm font-medium">Min</label>
+                    <input
+                      id="minBedrooms"
+                      type="number"
+                      min="0"
+                      placeholder="Min"
+                      value={bedroomsRange[0]}
+                      onChange={(e) => {
+                        const numValue = e.target.value === '' ? 0 : parseInt(e.target.value, 10);
+                        if (!isNaN(numValue) && numValue >= 0) {
+                          setBedroomsRange([numValue, bedroomsRange[1]]);
+                          setIsBedroomsFilterActive(true);
+                        }
+                      }}
+                      className="px-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="maxBedrooms" className="text-sm font-medium">Max</label>
+                    <input
+                      id="maxBedrooms"
+                      type="number"
+                      min="0"
+                      placeholder="Max"
+                      value={bedroomsRange[1]}
+                      onChange={(e) => {
+                        const numValue = e.target.value === '' ? 10 : parseInt(e.target.value, 10);
+                        if (!isNaN(numValue) && numValue >= 0) {
+                          setBedroomsRange([bedroomsRange[0], numValue]);
+                          setIsBedroomsFilterActive(true);
+                        }
+                      }}
+                      className="px-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      const values = listings
+                        .filter(listing => listing.bedrooms !== null && listing.bedrooms !== undefined)
+                        .map(listing => listing.bedrooms as number);
+                      
+                      if (values.length > 0) {
+                        const min = Math.min(...values);
+                        const max = Math.max(...values);
+                        setBedroomsRange([min, max]);
+                      } else {
+                        setBedroomsRange([0, 10]);
+                      }
+                      setIsBedroomsFilterActive(false);
+                      setIsBedroomsOpen(false);
+                    }}
+                  >
+                    Reset
+                  </Button>
+                  <Button 
+                    size="sm"
+                    onClick={() => setIsBedroomsOpen(false)}
+                  >
+                    Apply
+                  </Button>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+          
+          {/* Bathrooms Filter */}
+          <Popover open={isBathroomsOpen} onOpenChange={setIsBathroomsOpen}>
+            <PopoverTrigger asChild>
+              <Button 
+                variant={isBathroomsFilterActive ? "secondary" : "outline"} 
+                className="w-[180px] justify-between"
+              >
+                <div className="flex items-center">
+                  <span>Bathrooms</span>
+                </div>
+                <span className="ml-2 text-muted-foreground text-xs">
+                  {bathroomsRange[0]} - {bathroomsRange[1]} BA
+                </span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[280px] p-4 bg-white shadow-lg z-[100]">
+              <div className="space-y-4">
+                <h4 className="font-medium mb-2">Bathrooms</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label htmlFor="minBathrooms" className="text-sm font-medium">Min</label>
+                    <input
+                      id="minBathrooms"
+                      type="number"
+                      min="0"
+                      step="0.5"
+                      placeholder="Min"
+                      value={bathroomsRange[0]}
+                      onChange={(e) => {
+                        const numValue = e.target.value === '' ? 0 : parseFloat(e.target.value);
+                        if (!isNaN(numValue) && numValue >= 0) {
+                          setBathroomsRange([numValue, bathroomsRange[1]]);
+                          setIsBathroomsFilterActive(true);
+                        }
+                      }}
+                      className="px-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="maxBathrooms" className="text-sm font-medium">Max</label>
+                    <input
+                      id="maxBathrooms"
+                      type="number"
+                      min="0"
+                      step="0.5"
+                      placeholder="Max"
+                      value={bathroomsRange[1]}
+                      onChange={(e) => {
+                        const numValue = e.target.value === '' ? 10 : parseFloat(e.target.value);
+                        if (!isNaN(numValue) && numValue >= 0) {
+                          setBathroomsRange([bathroomsRange[0], numValue]);
+                          setIsBathroomsFilterActive(true);
+                        }
+                      }}
+                      className="px-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      const values = listings
+                        .filter(listing => listing.bathrooms !== null && listing.bathrooms !== undefined)
+                        .map(listing => listing.bathrooms as number);
+                      
+                      if (values.length > 0) {
+                        const min = Math.min(...values);
+                        const max = Math.max(...values);
+                        setBathroomsRange([min, max]);
+                      } else {
+                        setBathroomsRange([0, 10]);
+                      }
+                      setIsBathroomsFilterActive(false);
+                      setIsBathroomsOpen(false);
+                    }}
+                  >
+                    Reset
+                  </Button>
+                  <Button 
+                    size="sm"
+                    onClick={() => setIsBathroomsOpen(false)}
+                  >
+                    Apply
+                  </Button>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+          
+          {/* Square Feet Filter */}
+          <Popover open={isSqftOpen} onOpenChange={setIsSqftOpen}>
+            <PopoverTrigger asChild>
+              <Button 
+                variant={isSqftFilterActive ? "secondary" : "outline"} 
+                className="w-[180px] justify-between"
+              >
+                <div className="flex items-center">
+                  <span>Square Feet</span>
+                </div>
+                <span className="ml-2 text-muted-foreground text-xs">
+                  {sqftRange[0]} - {sqftRange[1]} sqft
+                </span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[280px] p-4 bg-white shadow-lg z-[100]">
+              <div className="space-y-4">
+                <h4 className="font-medium mb-2">Square Feet</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label htmlFor="minSqft" className="text-sm font-medium">Min</label>
+                    <input
+                      id="minSqft"
+                      type="number"
+                      min="0"
+                      step="100"
+                      placeholder="Min"
+                      value={sqftRange[0]}
+                      onChange={(e) => {
+                        const numValue = e.target.value === '' ? 0 : parseInt(e.target.value, 10);
+                        if (!isNaN(numValue) && numValue >= 0) {
+                          setSqftRange([numValue, sqftRange[1]]);
+                          setIsSqftFilterActive(true);
+                        }
+                      }}
+                      className="px-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="maxSqft" className="text-sm font-medium">Max</label>
+                    <input
+                      id="maxSqft"
+                      type="number"
+                      min="0"
+                      step="100"
+                      placeholder="Max"
+                      value={sqftRange[1]}
+                      onChange={(e) => {
+                        const numValue = e.target.value === '' ? 5000 : parseInt(e.target.value, 10);
+                        if (!isNaN(numValue) && numValue >= 0) {
+                          setSqftRange([sqftRange[0], numValue]);
+                          setIsSqftFilterActive(true);
+                        }
+                      }}
+                      className="px-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      const values = listings
+                        .filter(listing => listing.squareFeet !== null && listing.squareFeet !== undefined)
+                        .map(listing => listing.squareFeet as number);
+                      
+                      if (values.length > 0) {
+                        const min = Math.floor(Math.min(...values) / 100) * 100;
+                        const max = Math.ceil(Math.max(...values) / 100) * 100;
+                        setSqftRange([min, max]);
+                      } else {
+                        setSqftRange([0, 5000]);
+                      }
+                      setIsSqftFilterActive(false);
+                      setIsSqftOpen(false);
+                    }}
+                  >
+                    Reset
+                  </Button>
+                  <Button 
+                    size="sm"
+                    onClick={() => setIsSqftOpen(false)}
+                  >
+                    Apply
+                  </Button>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+          
+          {/* Year Built Filter */}
+          <Popover open={isYearBuiltOpen} onOpenChange={setIsYearBuiltOpen}>
+            <PopoverTrigger asChild>
+              <Button 
+                variant={isYearBuiltFilterActive ? "secondary" : "outline"} 
+                className="w-[180px] justify-between"
+              >
+                <div className="flex items-center">
+                  <span>Year Built</span>
+                </div>
+                <span className="ml-2 text-muted-foreground text-xs">
+                  {yearBuiltRange[0]} - {yearBuiltRange[1]}
+                </span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[280px] p-4 bg-white shadow-lg z-[100]">
+              <div className="space-y-4">
+                <h4 className="font-medium mb-2">Year Built</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label htmlFor="minYear" className="text-sm font-medium">From</label>
+                    <input
+                      id="minYear"
+                      type="number"
+                      min="1900"
+                      max={new Date().getFullYear()}
+                      placeholder="Min"
+                      value={yearBuiltRange[0]}
+                      onChange={(e) => {
+                        const numValue = e.target.value === '' ? 1950 : parseInt(e.target.value, 10);
+                        if (!isNaN(numValue) && numValue >= 1900) {
+                          setYearBuiltRange([numValue, yearBuiltRange[1]]);
+                          setIsYearBuiltFilterActive(true);
+                        }
+                      }}
+                      className="px-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="maxYear" className="text-sm font-medium">To</label>
+                    <input
+                      id="maxYear"
+                      type="number"
+                      min="1900"
+                      max={new Date().getFullYear()}
+                      placeholder="Max"
+                      value={yearBuiltRange[1]}
+                      onChange={(e) => {
+                        const numValue = e.target.value === '' ? new Date().getFullYear() : parseInt(e.target.value, 10);
+                        if (!isNaN(numValue) && numValue >= 1900 && numValue <= new Date().getFullYear()) {
+                          setYearBuiltRange([yearBuiltRange[0], numValue]);
+                          setIsYearBuiltFilterActive(true);
+                        }
+                      }}
+                      className="px-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      const values = listings
+                        .filter(listing => listing.yearBuilt !== null && listing.yearBuilt !== undefined)
+                        .map(listing => listing.yearBuilt as number);
+                      
+                      if (values.length > 0) {
+                        const min = Math.min(...values);
+                        const max = Math.max(...values);
+                        setYearBuiltRange([min, max]);
+                      } else {
+                        setYearBuiltRange([1950, new Date().getFullYear()]);
+                      }
+                      setIsYearBuiltFilterActive(false);
+                      setIsYearBuiltOpen(false);
+                    }}
+                  >
+                    Reset
+                  </Button>
+                  <Button 
+                    size="sm"
+                    onClick={() => setIsYearBuiltOpen(false)}
+                  >
+                    Apply
+                  </Button>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+
+          <div className="hidden sm:flex gap-2 items-center">
+            {canCreateListing ? (
+              <Button onClick={() => setIsPaymentDialogOpen(true)}>
+                <Plus className="h-4 w-4 mr-2" />
+                Add Listing ($50)
+              </Button>
+            ) : user ? (
+              <div className="space-y-2">
+                <Button disabled>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Paid Users Only
+                </Button>
+                <p className="text-sm text-muted-foreground">
+                  Only paid users can create listings.
+                  Please upgrade your account to access this feature.
+                </p>
+              </div>
+            ) : (
+              <Link href="/auth">
+                <Button>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Login to Add Listing
+                </Button>
+              </Link>
+            )}
+          </div>
+          
+          {/* Listing dialog */}
+          <Dialog 
+            open={isDialogOpen && currentPaymentId !== null} 
+            onOpenChange={(open) => {
+              // If closing the dialog, reset everything
+              if (!open) {
+                setIsDialogOpen(false);
+                // Don't reset currentPaymentId here, as we need it for form submission
+              } else {
+                setIsDialogOpen(open);
+              }
+            }}
+          >
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>Create New Listing</DialogTitle>
+              </DialogHeader>
+              <CreateListingForm
+                onSubmit={(data) => createListingMutation.mutate(data)}
+                isSubmitting={createListingMutation.isPending}
+                selectedFiles={selectedFiles}
+                setSelectedFiles={setSelectedFiles}
+              />
+            </DialogContent>
+          </Dialog>
+        </div>
+      </div>
+
+      {isLoading ? (
+        <div className="flex justify-center items-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
+      ) : isError ? (
+        <div className="text-center py-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mb-4">
+            <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+          </div>
+          <h3 className="text-lg font-medium mb-2">Unable to Load Listings</h3>
+          <p className="text-muted-foreground max-w-md mx-auto mb-4">
+            {error instanceof Error ? error.message : "An error occurred while loading listings."}
+          </p>
+          <Link href="/auth">
+            <Button>
+              Sign In to View Listings
+            </Button>
+          </Link>
+        </div>
+      ) : sortedListings.length === 0 ? (
+        <div className="text-center py-8">
+          <p className="text-lg text-muted-foreground">No listings found matching your search criteria.</p>
+        </div>
+      ) : (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sortedListings.map((listing) => (
+            <ListingCard key={listing.id} listing={listing} />
+          ))}
+        </div>
+      )}
+      
+      {/* Payment system diagnostics moved to Advanced Settings */}
+      
+      {/* Floating Action Button for mobile */}
+      {canCreateListing && (
+        <div className="sm:hidden fixed right-6 bottom-6 z-50">
+          <Button
+            onClick={() => setIsPaymentDialogOpen(true)}
+            className="h-14 w-14 rounded-full shadow-lg"
+            size="icon"
+          >
+            <Plus className="h-6 w-6" />
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}

@@ -1,0 +1,25 @@
+Running cache clearing script...
+Cleared 3 cached items from localStorage
+Cache clearing complete - errors should be resolved on next page refresh.
+[Maps Polyfill] Initializing enhanced Google Maps polyfill
+[Maps Polyfill] Installing fetch polyfill
+[WebSocket] WebSocket functionality is disabled to prevent conflicts with Object Storage
+REPLIT_APP_LOADED
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED
+Media insertion failed: 
+DOMException {}
+stack: "InvalidNodeTypeError: Failed to execute 'setStartAfter' on 'Range': the given Node has no parent.↵ at F (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-C7P9WdO_.js:2340:23640)↵ at onMediaInsert (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-C7P9WdO_.js:2396:1390)↵ at te (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-C7P9WdO_.js:2309:44817)↵ at Object.lz (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-C7P9WdO_.js:38:9864)↵ at dz (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-C7P9WdO_.js:38:10018)↵ at uz (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-C7P9WdO_.js:38:10075)↵ at uN (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-C7P9WdO_.js:38:31462)↵ at nT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-C7P9WdO_.js:38:31879)↵ at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-C7P9WdO_.js:38:36792↵ at ib (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-C7P9WdO_.js:41:36957)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: DOMException

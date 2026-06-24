@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forum Media Backup</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      border-bottom: 2px solid #9C27B0;
+      padding-bottom: 10px;
+      color: #9C27B0;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 15px;
+      background-color: #9C27B0;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      text-decoration: none;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    .btn:hover {
+      background-color: #7B1FA2;
+    }
+    .btn-danger {
+      background-color: #dc3545;
+    }
+    .btn-danger:hover {
+      background-color: #c82333;
+    }
+    .btn-success {
+      background-color: #28a745;
+    }
+    .btn-success:hover {
+      background-color: #218838;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      background-color: #f8f9fa;
+      display: none;
+    }
+    .result.success {
+      border-color: #28a745;
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .result.error {
+      border-color: #dc3545;
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    .actions {
+      margin: 20px 0;
+    }
+    .hidden {
+      display: none;
+    }
+    #loader {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #9C27B0;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 2s linear infinite;
+      margin-top: 20px;
+      display: none;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <h1>Forum Media Backup</h1>
+  <div class="description">
+    <p>This tool creates a backup of all forum media files located in the <code>/uploads/forum</code> folder.</p>
+    <p>The backup will be stored in <code>/uploads/backups/forum/[timestamp]</code>.</p>
+  </div>
+  
+  <div class="actions">
+    <button id="backupButton" class="btn btn-success">Create Forum Media Backup</button>
+    <a href="index.html" class="btn">Back to Directory</a>
+  </div>
+  
+  <div id="loader"></div>
+  
+  <div id="resultContainer" class="result">
+    <h3 id="resultTitle"></h3>
+    <div id="resultMessage"></div>
+    <div id="additionalInfo"></div>
+  </div>
+
+  <script>
+    const backupButton = document.getElementById('backupButton');
+    const resultContainer = document.getElementById('resultContainer');
+    const resultTitle = document.getElementById('resultTitle');
+    const resultMessage = document.getElementById('resultMessage');
+    const additionalInfo = document.getElementById('additionalInfo');
+    const loader = document.getElementById('loader');
+    
+    backupButton.addEventListener('click', async () => {
+      // Clear previous results
+      resultContainer.className = 'result';
+      resultContainer.style.display = 'none';
+      resultTitle.textContent = '';
+      resultMessage.textContent = '';
+      additionalInfo.textContent = '';
+      
+      // Show loader
+      loader.style.display = 'block';
+      backupButton.disabled = true;
+      
+      try {
+        // Make the backup request
+        const response = await fetch('/api/admin/backup/forum-media', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include'
+        });
+        
+        // Parse response data
+        const data = await response.json();
+        
+        // Hide loader
+        loader.style.display = 'none';
+        backupButton.disabled = false;
+        
+        // Display result
+        resultContainer.style.display = 'block';
+        
+        if (response.ok && data.success) {
+          resultContainer.className = 'result success';
+          resultTitle.textContent = 'Backup Successful';
+          resultMessage.textContent = data.message;
+          
+          if (data.backupPath) {
+            const pathInfo = document.createElement('p');
+            pathInfo.textContent = `Backup created at: ${data.backupPath}`;
+            additionalInfo.appendChild(pathInfo);
+          }
+          
+          if (data.backupCount !== undefined) {
+            const countInfo = document.createElement('p');
+            countInfo.textContent = `Files backed up: ${data.backupCount}`;
+            additionalInfo.appendChild(countInfo);
+          }
+        } else {
+          resultContainer.className = 'result error';
+          resultTitle.textContent = 'Backup Failed';
+          resultMessage.textContent = data.message || 'Error creating backup';
+          
+          if (data.error) {
+            const errorInfo = document.createElement('p');
+            errorInfo.textContent = `Error details: ${data.error}`;
+            additionalInfo.appendChild(errorInfo);
+          }
+        }
+      } catch (error) {
+        // Hide loader
+        loader.style.display = 'none';
+        backupButton.disabled = false;
+        
+        // Display error
+        resultContainer.style.display = 'block';
+        resultContainer.className = 'result error';
+        resultTitle.textContent = 'Request Failed';
+        resultMessage.textContent = 'Failed to communicate with the server';
+        
+        const errorInfo = document.createElement('p');
+        errorInfo.textContent = `Error details: ${error.message}`;
+        additionalInfo.appendChild(errorInfo);
+      }
+    });
+  </script>
+</body>
+</html>

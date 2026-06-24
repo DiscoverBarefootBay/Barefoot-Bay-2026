@@ -1,0 +1,100 @@
+3530-688f49740740c709.js:1 Replit version 13768867, pid2 version 0.0.1310
+_app-9948a152f6ae36bb.js:38 
+      /////////////////////
+   ///////////////////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////        Curious and driven?
+  ///////////////@@@@@@@///////        Work with us!
+  ///////////////@@@@@@@///////
+  ///////////////@@@@@@@///////        https://join.replit.com/hack.with.us
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@#//////////////
+   ///////////////////////////
+      /////////////////////
+      
+_app-9948a152f6ae36bb.js:38 [LaunchDarkly] LaunchDarkly client initialized
+Grammarly-check.js:1 [Violation] Permissions policy violation: unload is not allowed in this document.
+(anonymous) @ Grammarly-check.js:1Understand this error
+Barefoot-Bay:1 Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner.
+11Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.Understand this error
+framework-1bdec0d624f9c821.js:1 Unrecognized feature: 'ambient-light-sensor'.
+_ @ framework-1bdec0d624f9c821.js:1Understand this warning
+framework-1bdec0d624f9c821.js:1 Unrecognized feature: 'battery'.
+_ @ framework-1bdec0d624f9c821.js:1Understand this warning
+framework-1bdec0d624f9c821.js:1 Unrecognized feature: 'execution-while-not-rendered'.
+_ @ framework-1bdec0d624f9c821.js:1Understand this warning
+framework-1bdec0d624f9c821.js:1 Unrecognized feature: 'execution-while-out-of-viewport'.
+_ @ framework-1bdec0d624f9c821.js:1Understand this warning
+framework-1bdec0d624f9c821.js:1 Unrecognized feature: 'layout-animations'.
+_ @ framework-1bdec0d624f9c821.js:1Understand this warning
+framework-1bdec0d624f9c821.js:1 Unrecognized feature: 'legacy-image-formats'.
+_ @ framework-1bdec0d624f9c821.js:1Understand this warning
+framework-1bdec0d624f9c821.js:1 Unrecognized feature: 'navigation-override'.
+_ @ framework-1bdec0d624f9c821.js:1Understand this warning
+framework-1bdec0d624f9c821.js:1 Unrecognized feature: 'oversized-images'.
+_ @ framework-1bdec0d624f9c821.js:1Understand this warning
+framework-1bdec0d624f9c821.js:1 Unrecognized feature: 'publickey-credentials'.
+_ @ framework-1bdec0d624f9c821.js:1Understand this warning
+framework-1bdec0d624f9c821.js:1 Unrecognized feature: 'speaker-selection'.
+_ @ framework-1bdec0d624f9c821.js:1Understand this warning
+framework-1bdec0d624f9c821.js:1 Unrecognized feature: 'unoptimized-images'.
+_ @ framework-1bdec0d624f9c821.js:1Understand this warning
+framework-1bdec0d624f9c821.js:1 Unrecognized feature: 'unsized-media'.
+_ @ framework-1bdec0d624f9c821.js:1Understand this warning
+framework-1bdec0d624f9c821.js:1 Unrecognized feature: 'pointer-lock'.
+_ @ framework-1bdec0d624f9c821.js:1Understand this warning
+framework-1bdec0d624f9c821.js:1 Allow attribute will take precedence over 'allowfullscreen'.
+_ @ framework-1bdec0d624f9c821.js:1Understand this warning
+framework-1bdec0d624f9c821.js:1 Allow attribute will take precedence over 'allowpaymentrequest'.
+_ @ framework-1bdec0d624f9c821.js:1Understand this warning
+Barefoot-Bay:1 Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was receivedUnderstand this error
+40Barefoot-Bay:1 Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was receivedUnderstand this error
+8Barefoot-Bay:1 Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was receivedUnderstand this error
+_app-9948a152f6ae36bb.js:38 Invalid href 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev//vendors/technology-and-electronics/computer-healthcare' passed to next/router in page: '/replEnvironmentDesktop'. Repeated forward-slashes (//) or backslashes \ are not valid in the href.
+(anonymous) @ _app-9948a152f6ae36bb.js:38Understand this error
+workspace_iframe.html:32 Unrecognized feature: 'ambient-light-sensor'.Understand this warning
+workspace_iframe.html:32 Unrecognized feature: 'battery'.Understand this warning
+workspace_iframe.html:32 Unrecognized feature: 'execution-while-not-rendered'.Understand this warning
+workspace_iframe.html:32 Unrecognized feature: 'execution-while-out-of-viewport'.Understand this warning
+workspace_iframe.html:32 Unrecognized feature: 'layout-animations'.Understand this warning
+workspace_iframe.html:32 Unrecognized feature: 'legacy-image-formats'.Understand this warning
+workspace_iframe.html:32 Unrecognized feature: 'navigation-override'.Understand this warning
+workspace_iframe.html:32 Unrecognized feature: 'oversized-images'.Understand this warning
+workspace_iframe.html:32 Unrecognized feature: 'publickey-credentials'.Understand this warning
+workspace_iframe.html:32 Unrecognized feature: 'speaker-selection'.Understand this warning
+workspace_iframe.html:32 Unrecognized feature: 'unoptimized-images'.Understand this warning
+workspace_iframe.html:32 Unrecognized feature: 'unsized-media'.Understand this warning
+workspace_iframe.html:32 Allow attribute will take precedence over 'allowfullscreen'.Understand this warning
+workspace_iframe.html:32 Allow attribute will take precedence over 'allowpaymentrequest'.Understand this warning
+computer-healthcare:1 Refused to execute script from 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/replit-ready.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.Understand this error
+computer-healthcare:1 Refused to execute script from 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/clear-cache.js?_t=1747436407547' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.Understand this error
+Barefoot-Bay:1 Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was receivedUnderstand this error
+computer-healthcare:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 (Bad Gateway)Understand this error
+computer-healthcare:1 Refused to execute script from 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/replit-ready.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.Understand this error
+computer-healthcare:1 Refused to execute script from 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/clear-cache.js?_t=1747436521273' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.Understand this error
+2
+                
+          
+          
+          
+         Chrome is moving towards a new experience that allows users to choose to browse without third-party cookies.Understand this warning
+_app-9948a152f6ae36bb.js:38 Measure loop restarted more than 5 times
+(anonymous) @ _app-9948a152f6ae36bb.js:38
+measure @ _app-9948a152f6ae36bb.js:26
+(anonymous) @ _app-9948a152f6ae36bb.js:26
+r @ _app-9948a152f6ae36bb.js:38
+requestAnimationFrame
+(anonymous) @ _app-9948a152f6ae36bb.js:38
+requestMeasure @ _app-9948a152f6ae36bb.js:26
+n.resizeHandle @ replEnvironmentDesktop-5bc9fd3044b3cb40.js:1Understand this warning
+2_app-9948a152f6ae36bb.js:38 Measure loop restarted more than 5 times
+(anonymous) @ _app-9948a152f6ae36bb.js:38
+measure @ _app-9948a152f6ae36bb.js:26
+onScrollChanged @ _app-9948a152f6ae36bb.js:26
+(anonymous) @ _app-9948a152f6ae36bb.js:26Understand this warning
+_app-9948a152f6ae36bb.js:38 Measure loop restarted more than 5 times

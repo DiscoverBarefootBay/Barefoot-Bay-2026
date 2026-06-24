@@ -1,0 +1,77 @@
+✅ Replit Agent Prompt: Draft-to-Publish For Sale Listings Workflow
+markdown
+Copy
+Edit
+I want to modify the For Sale listing flow to support **Draft Listings**, **Delayed Payment**, and **Republish Expired Listings**. Follow the steps below to update my existing listing system:
+
+---
+
+## 🧱 BACKEND CHANGES
+
+1. **Listing Status Support**
+   - Update the `real_estate_listings` schema to add a new `status` field.
+   - Use an enum or string with values: `"DRAFT"`, `"ACTIVE"`, `"EXPIRED"`.
+   - Default status should be `"DRAFT"` when a new listing is created.
+
+2. **Create Listing Without Payment**
+   - Allow users to submit the `CreateListingForm` without any payment information.
+   - Save listing to the database with status `"DRAFT"`.
+   - Do not require subscriptionId or expirationDate at creation time.
+
+3. **Publish Listing Endpoint**
+   - Add a new API endpoint: `POST /api/listings/:id/publish`.
+   - This should:
+     - Verify the listing belongs to the authenticated user
+     - Trigger the Square payment flow
+     - Upon successful payment, set:
+       - `status = "ACTIVE"`
+       - `expirationDate = now + selected duration (3, 7, or 30 days)`
+       - store the subscription/payment metadata
+
+4. **Expiration Handling**
+   - Implement a daily job or hook to scan for `ACTIVE` listings where `expirationDate < now()` and update them to `status = "EXPIRED"`.
+
+---
+
+## 💻 FRONTEND CHANGES
+
+1. **Create Listing Flow**
+   - Update the `CreateListingForm` so that it submits the listing immediately as `"DRAFT"` without needing to go through the payment process.
+   - After submission, redirect the user to the "My Listings" page with a status indicator of "Draft".
+
+2. **My Listings Enhancements**
+   - Group listings by status: `Draft`, `Active`, `Expired`
+   - For each listing, show a badge with its status
+   - For `Draft` or `Expired` listings, show a **"Publish"** or **"Renew"** button
+
+3. **Publish Button Behavior**
+   - When user clicks "Publish" on a `DRAFT` or `EXPIRED` listing:
+     - Open a modal to select duration and proceed with payment
+     - On success, call the `POST /api/listings/:id/publish` endpoint
+     - After publish, show listing in `/for-sale` if `ACTIVE`
+
+---
+
+## 🔄 LISTING LIFECYCLE LOGIC
+
+Support full lifecycle:
+[DRAFT] → Publish & Pay → [ACTIVE] → After Expiry → [EXPIRED]
+↑ ↓
+Renew & Pay ←–––––––––––––––––––––––––
+
+yaml
+Copy
+Edit
+
+---
+
+## 🧪 TESTING
+
+- Creating a listing without payment should show it under "My Listings" as "Draft"
+- Published listings should appear in `/for-sale` only if status is `"ACTIVE"`
+- Expired listings should disappear from `/for-sale`, but still show in "My Listings"
+- Renewing an expired listing should make it active again
+
+---
+
+Make sure all changes use the existing Drizzle ORM, authentication middleware, and frontend components (`CreateListingForm`, `ListingCard`, `for-sale-page.tsx`, etc

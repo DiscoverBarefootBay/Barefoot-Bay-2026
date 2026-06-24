@@ -1,0 +1,581 @@
+/* Custom styles for search results */
+.styled-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  background-color: rgba(var(--primary-color), 0.1);
+  color: rgb(var(--primary-color));
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.styled-button:hover {
+  background-color: rgba(var(--primary-color), 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Enhanced styles for event listings in search results */
+.event-listing {
+  background: white;
+  border-radius: 16px;
+  margin: 2rem 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  border: 1px solid rgba(var(--primary-color), 0.08);
+  position: relative;
+  animation: fadeIn 0.5s ease-in-out;
+  max-width: 100%;
+}
+
+.event-listing:hover {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+  border-color: rgba(var(--primary-color), 0.15);
+}
+
+.event-listing::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(to right, rgb(var(--primary-color)), rgba(var(--primary-color), 0.5));
+  z-index: 1;
+}
+
+/* Different color accents for event categories */
+.event-listing[data-category="Social"]::before {
+  background: linear-gradient(to right, #FF9B54, rgba(255, 155, 84, 0.5));
+}
+
+.event-listing[data-category="Government"]::before {
+  background: linear-gradient(to right, #3B82F6, rgba(59, 130, 246, 0.5));
+}
+
+.event-listing[data-category="Entertainment"]::before {
+  background: linear-gradient(to right, #EC4899, rgba(236, 72, 153, 0.5));
+}
+
+.event-listing[data-category="Sports"]::before,
+.event-listing[data-category="Recreation"]::before {
+  background: linear-gradient(to right, #10B981, rgba(16, 185, 129, 0.5));
+}
+
+.event-listing[data-category="Games"]::before {
+  background: linear-gradient(to right, #8B5CF6, rgba(139, 92, 246, 0.5));
+}
+
+.event-listing[data-category="Classes"]::before,
+.event-listing[data-category="Workshops"]::before {
+  background: linear-gradient(to right, #F59E0B, rgba(245, 158, 11, 0.5));
+}
+
+.event-listing[data-category="Club"]::before {
+  background: linear-gradient(to right, #6366F1, rgba(99, 102, 241, 0.5));
+}
+
+.event-header {
+  background: linear-gradient(to right, rgba(var(--primary-color), 0.12), rgba(var(--primary-color), 0.03));
+  padding: 1.5rem 1.75rem;
+  border-bottom: 1px solid rgba(var(--primary-color), 0.12);
+  position: relative;
+}
+
+.event-title {
+  color: rgb(var(--primary-color));
+  font-weight: 800;
+  font-size: 1.6rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.event-content {
+  padding: 1.75rem;
+  background: linear-gradient(to bottom right, #ffffff, #f9fafd);
+  line-height: 1.8;
+}
+
+.event-detail {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px dashed rgba(var(--primary-color), 0.08);
+}
+
+.event-detail:last-of-type {
+  border-bottom: none;
+  margin-bottom: 1.5rem;
+}
+
+.event-detail-label {
+  font-weight: 600;
+  color: #333;
+  min-width: 70px;
+}
+
+.event-detail-value {
+  color: #555;
+  flex: 1;
+}
+
+.event-detail-emoji {
+  font-size: 1.4rem;
+  display: inline-block;
+  animation: pulse 2s infinite;
+  margin-right: 0.25rem;
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.weather-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  background-color: rgba(var(--primary-color), 0.1);
+  color: rgb(var(--primary-color));
+  transition: all 0.2s ease;
+}
+
+.weather-link:hover {
+  background-color: rgba(var(--primary-color), 0.2);
+  transform: translateY(-1px);
+}
+
+/* Enhanced styles for listing cards */
+.listing-card {
+  background: white;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border: 1px solid rgba(var(--primary-color), 0.1);
+  position: relative;
+}
+
+.listing-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+  border-color: rgba(var(--primary-color), 0.2);
+}
+
+.listing-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(to right, rgb(var(--primary-color)), rgba(var(--primary-color), 0.5));
+  z-index: 1;
+}
+
+/* Special styles for rental listings */
+.listing-card[data-rental="true"] {
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.listing-card[data-rental="true"]::before {
+  background: linear-gradient(to right, rgb(5, 150, 105), rgba(16, 185, 129, 0.5));
+}
+
+.listing-card[data-rental="true"] .listing-header {
+  background: linear-gradient(to right, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+  border-bottom-color: rgba(16, 185, 129, 0.2);
+}
+
+.listing-card[data-rental="true"] .listing-title {
+  color: rgb(5, 150, 105);
+}
+
+/* Rental badge */
+.listing-card[data-rental="true"]::after {
+  content: 'For Rent';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgb(5, 150, 105);
+  color: white;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(5, 150, 105, 0.3);
+  z-index: 2;
+}
+
+/* Adjust for when both new and rental badges are present */
+.listing-card[data-rental="true"][data-new="true"]::after {
+  content: 'For Rent';
+  right: 55px; /* Move to the left of the New badge */
+}
+
+/* Create a pseudo element for the rental price tag */
+.listing-card[data-rental="true"] .listing-content .emoji-bounce:first-child + :first-of-type::after {
+  content: '/month';
+  font-size: 0.8rem;
+  color: rgb(5, 150, 105);
+  font-weight: 600;
+  margin-left: 0.2rem;
+}
+
+.listing-header {
+  background: linear-gradient(to right, rgba(var(--primary-color), 0.15), rgba(var(--primary-color), 0.05));
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(var(--primary-color), 0.15);
+  position: relative;
+}
+
+.listing-title {
+  color: rgb(var(--primary-color));
+  font-weight: 700;
+  font-size: 1.35rem;
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.listing-content {
+  padding: 1.5rem;
+  background: linear-gradient(to bottom right, #ffffff, #f8f9fd);
+  line-height: 1.8;
+}
+
+/* Badge styles for property features */
+.feature-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.8rem;
+  border-radius: 9999px;
+  background-color: rgba(var(--primary-color), 0.1);
+  color: rgb(var(--primary-color));
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  border: 1px solid rgba(var(--primary-color), 0.15);
+}
+
+.feature-badge:hover {
+  background-color: rgba(var(--primary-color), 0.15);
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Different badge styles based on feature types */
+.feature-badge[title*="BD"],
+.feature-badge.bedroom-badge {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: rgb(37, 99, 235);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.feature-badge[title*="BA"],
+.feature-badge.bathroom-badge {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: rgb(5, 150, 105);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.feature-badge[title*="sq ft"],
+.feature-badge.sqft-badge {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: rgb(217, 119, 6);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.feature-badge[title*="Built"],
+.feature-badge.built-badge {
+  background-color: rgba(139, 92, 246, 0.1);
+  color: rgb(124, 58, 237);
+  border-color: rgba(139, 92, 246, 0.2);
+}
+
+.feature-badge[title*="condition"],
+.feature-badge.condition-badge {
+  background-color: rgba(236, 72, 153, 0.1);
+  color: rgb(219, 39, 119);
+  border-color: rgba(236, 72, 153, 0.2);
+}
+
+/* Listing action button */
+.listing-action {
+  margin-top: 1.25rem;
+  text-align: center;
+}
+
+.styled-button,
+.listing-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  background: rgb(var(--primary-color));
+  color: white;
+  font-weight: 600;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(var(--primary-color), 0.2);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.styled-button::after,
+.listing-button::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+
+.styled-button:hover,
+.listing-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(var(--primary-color), 0.25);
+}
+
+.styled-button:hover::after,
+.listing-button:hover::after {
+  height: 100%;
+}
+
+.button-icon {
+  margin-left: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.listing-button:hover .button-icon {
+  transform: translateX(3px);
+}
+
+/* Animated emoji and interactive elements for listings */
+.emoji-bounce {
+  display: inline-block;
+  animation: bounce 1s ease infinite alternate;
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-3px);
+  }
+}
+
+/* Card entrance animations */
+.listing-card {
+  animation: cardEntrance 0.5s ease-out;
+  animation-fill-mode: backwards;
+}
+
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered animations for multiple cards */
+.listing-card:nth-child(1) { animation-delay: 0.1s; }
+.listing-card:nth-child(2) { animation-delay: 0.2s; }
+.listing-card:nth-child(3) { animation-delay: 0.3s; }
+.listing-card:nth-child(4) { animation-delay: 0.4s; }
+.listing-card:nth-child(5) { animation-delay: 0.5s; }
+
+/* Pulse effect for new listings */
+.listing-card[data-new="true"]::after {
+  content: 'New';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgb(var(--primary-color));
+  color: white;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  animation: pulse 2s infinite;
+  box-shadow: 0 0 0 rgba(var(--primary-color), 0.4);
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(var(--primary-color), 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(var(--primary-color), 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--primary-color), 0);
+  }
+}
+
+/* Forum discussion card styles */
+.forum-discussion-card {
+  background: white;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  border: 1px solid rgba(var(--primary-color), 0.1);
+  position: relative;
+  animation: cardEntrance 0.5s ease-out;
+}
+
+.forum-discussion-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+  border-color: rgba(var(--primary-color), 0.2);
+}
+
+.forum-discussion-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(to right, rgb(var(--primary-color)), rgba(var(--primary-color), 0.5));
+  z-index: 1;
+}
+
+.forum-discussion-header {
+  background: linear-gradient(to right, rgba(var(--primary-color), 0.1), rgba(var(--primary-color), 0.02));
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(var(--primary-color), 0.1);
+  position: relative;
+}
+
+.forum-discussion-title {
+  color: rgb(var(--primary-color));
+  font-weight: 700;
+  font-size: 1.35rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.forum-discussion-content {
+  padding: 1.5rem;
+  background: linear-gradient(to bottom right, #ffffff, #f8f9fd);
+  line-height: 1.8;
+}
+
+.forum-discussion-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed rgba(var(--primary-color), 0.08);
+}
+
+.forum-discussion-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.forum-discussion-meta-label {
+  font-weight: 600;
+  color: #667080;
+}
+
+.forum-discussion-summary {
+  color: #4a5568;
+  margin-bottom: 1.25rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.forum-category-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(var(--primary-color), 0.1);
+  color: rgb(var(--primary-color));
+  padding: 0.2rem 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid rgba(var(--primary-color), 0.2);
+}
+
+/* Different category badge styles */
+.forum-category-badge[data-category="announcements"] {
+  background-color: rgba(220, 38, 38, 0.1);
+  color: rgb(185, 28, 28);
+  border-color: rgba(220, 38, 38, 0.2);
+}
+
+.forum-category-badge[data-category="general-discussion"] {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: rgb(37, 99, 235);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.forum-category-badge[data-category="residents-only"] {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: rgb(5, 150, 105);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.forum-category-badge[data-category="marketplace"] {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: rgb(217, 119, 6);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.forum-category-badge[data-category="lost-and-found"] {
+  background-color: rgba(139, 92, 246, 0.1);
+  color: rgb(124, 58, 237);
+  border-color: rgba(139, 92, 246, 0.2);
+}

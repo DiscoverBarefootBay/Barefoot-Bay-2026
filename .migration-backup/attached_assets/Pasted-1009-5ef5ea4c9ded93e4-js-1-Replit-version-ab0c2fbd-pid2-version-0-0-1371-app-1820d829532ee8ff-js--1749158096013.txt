@@ -1,0 +1,109 @@
+1009-5ef5ea4c9ded93e4.js:1 Replit version ab0c2fbd, pid2 version 0.0.1371
+_app-1820d829532ee8ff.js:37 
+      /////////////////////
+   ///////////////////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////        Curious and driven?
+  ///////////////@@@@@@@///////        Work with us!
+  ///////////////@@@@@@@///////
+  ///////////////@@@@@@@///////        https://join.replit.com/hack.with.us
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@#//////////////
+   ///////////////////////////
+      /////////////////////
+      
+_app-1820d829532ee8ff.js:37 [LaunchDarkly] LaunchDarkly client initialized
+Barefoot-Bay:1 Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner.
+sidePanelUtil.js:18 Uncaught ReferenceError: startTime is not defined
+    at sidePanelUtil.js:18:885
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+framework-d918c206c5ef526a.js:1 Unrecognized feature: 'ambient-light-sensor'.
+_ @ framework-d918c206c5ef526a.js:1
+framework-d918c206c5ef526a.js:1 Unrecognized feature: 'battery'.
+_ @ framework-d918c206c5ef526a.js:1
+framework-d918c206c5ef526a.js:1 Unrecognized feature: 'execution-while-not-rendered'.
+_ @ framework-d918c206c5ef526a.js:1
+framework-d918c206c5ef526a.js:1 Unrecognized feature: 'execution-while-out-of-viewport'.
+_ @ framework-d918c206c5ef526a.js:1
+framework-d918c206c5ef526a.js:1 Unrecognized feature: 'layout-animations'.
+_ @ framework-d918c206c5ef526a.js:1
+framework-d918c206c5ef526a.js:1 Unrecognized feature: 'legacy-image-formats'.
+_ @ framework-d918c206c5ef526a.js:1
+framework-d918c206c5ef526a.js:1 Unrecognized feature: 'navigation-override'.
+_ @ framework-d918c206c5ef526a.js:1
+framework-d918c206c5ef526a.js:1 Unrecognized feature: 'oversized-images'.
+_ @ framework-d918c206c5ef526a.js:1
+framework-d918c206c5ef526a.js:1 Unrecognized feature: 'publickey-credentials'.
+_ @ framework-d918c206c5ef526a.js:1
+framework-d918c206c5ef526a.js:1 Unrecognized feature: 'speaker-selection'.
+_ @ framework-d918c206c5ef526a.js:1
+framework-d918c206c5ef526a.js:1 Unrecognized feature: 'unoptimized-images'.
+_ @ framework-d918c206c5ef526a.js:1
+framework-d918c206c5ef526a.js:1 Unrecognized feature: 'unsized-media'.
+_ @ framework-d918c206c5ef526a.js:1
+framework-d918c206c5ef526a.js:1 Unrecognized feature: 'pointer-lock'.
+_ @ framework-d918c206c5ef526a.js:1
+framework-d918c206c5ef526a.js:1 Allow attribute will take precedence over 'allowfullscreen'.
+_ @ framework-d918c206c5ef526a.js:1
+framework-d918c206c5ef526a.js:1 Allow attribute will take precedence over 'allowpaymentrequest'.
+_ @ framework-d918c206c5ef526a.js:1
+Barefoot-Bay:1 Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Barefoot-Bay:1 Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Barefoot-Bay:1 Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Barefoot-Bay:1 Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Barefoot-Bay:1 Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Barefoot-Bay:1 Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+workspace_iframe.html:32 Unrecognized feature: 'ambient-light-sensor'.
+workspace_iframe.html:32 Unrecognized feature: 'battery'.
+workspace_iframe.html:32 Unrecognized feature: 'execution-while-not-rendered'.
+workspace_iframe.html:32 Unrecognized feature: 'execution-while-out-of-viewport'.
+workspace_iframe.html:32 Unrecognized feature: 'layout-animations'.
+workspace_iframe.html:32 Unrecognized feature: 'legacy-image-formats'.
+workspace_iframe.html:32 Unrecognized feature: 'navigation-override'.
+workspace_iframe.html:32 Unrecognized feature: 'oversized-images'.
+workspace_iframe.html:32 Unrecognized feature: 'publickey-credentials'.
+workspace_iframe.html:32 Unrecognized feature: 'speaker-selection'.
+workspace_iframe.html:32 Unrecognized feature: 'unoptimized-images'.
+workspace_iframe.html:32 Unrecognized feature: 'unsized-media'.
+workspace_iframe.html:32 Allow attribute will take precedence over 'allowfullscreen'.
+workspace_iframe.html:32 Allow attribute will take precedence over 'allowpaymentrequest'.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/gallery-utils.js:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 (Not Found)
+80:1 Refused to execute script from 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/gallery-utils.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.
+main.js:37 Uncaught Error
+    at _.Nc (main.js:46:290)
+    at oaa (main.js:64:239)
+    at Re (main.js:63:172)
+    at new _.H (main.js:287:2258)
+    at new _.JA (common.js:138:2282)
+    at Object.wwb [as Eg] (search_impl.js:3:23)
+    at search.js:3:536
+main.js:37 Uncaught Error
+    at _.Nc (main.js:46:290)
+    at oaa (main.js:64:239)
+    at Re (main.js:63:172)
+    at new _.H (main.js:287:2258)
+    at new _.JA (common.js:138:2282)
+    at Object.wwb [as Eg] (search_impl.js:3:23)
+    at search.js:3:536
+main.js:37 Uncaught Error
+    at _.Nc (main.js:46:290)
+    at oaa (main.js:64:239)
+    at Re (main.js:63:172)
+    at new _.H (main.js:287:2258)
+    at new _.JA (common.js:138:2282)
+    at Object.wwb [as Eg] (search_impl.js:3:23)
+    at search.js:3:536
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/api/listings/80/contact:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 (Internal Server Error)

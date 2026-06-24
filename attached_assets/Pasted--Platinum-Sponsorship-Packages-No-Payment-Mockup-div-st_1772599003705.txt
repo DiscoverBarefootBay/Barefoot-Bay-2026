@@ -1,0 +1,173 @@
+<style>
+  .plat-wrap{border:1px solid #D1D5DB;border-radius:20px;padding:28px;margin:18px 0;background:linear-gradient(145deg,#FFFFFF 0%,#F9FAFB 40%,#F5F5F4 100%);font-family:inherit;box-shadow:0 4px 24px rgba(107,114,128,.10),0 1px 3px rgba(0,0,0,.04)}
+  .plat-header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .plat-label{font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#0f172a;background:linear-gradient(135deg,#E5E7EB,#D1D5DB);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .plat-badge{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#4B5563;background:linear-gradient(135deg,#F3F4F6,#E5E7EB);border:1px solid #D1D5DB;padding:6px 10px;border-radius:999px;white-space:nowrap;box-shadow:0 1px 2px rgba(107,114,128,.08)}
+  .plat-h2{margin:0 0 10px;font-size:26px;line-height:1.15;color:#0f172a}
+  .plat-intro{margin:0 0 14px;font-size:15px;line-height:1.6;color:#1a1a2e;max-width:80ch}
+  .plat-benefits{background:linear-gradient(135deg,#F9FAFB 0%,#F3F4F6 100%);border:1px solid #E5E7EB;border-left:6px solid #9CA3AF;border-radius:14px;padding:14px 16px;margin:0 0 18px}
+  .plat-benefits-label{font-size:13px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#6B7280;margin-bottom:8px}
+  .plat-benefits ul{margin:0;padding-left:18px;color:#0f172a;line-height:1.7;font-size:14px}
+  .plat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .plat-card{border:1px solid #D1D5DB;border-radius:20px;padding:22px;background:linear-gradient(160deg,#FFFFFF 0%,#FAFAFA 50%,#F9FAFB 100%);box-shadow:0 2px 12px rgba(107,114,128,.08),0 1px 3px rgba(0,0,0,.03);position:relative;display:flex;flex-direction:column;transition:box-shadow .3s ease,transform .2s ease}
+  .plat-card:hover{box-shadow:0 8px 30px rgba(107,114,128,.15),0 2px 6px rgba(0,0,0,.05);transform:translateY(-2px)}
+  .plat-card--featured{border:2px solid #9CA3AF;background:linear-gradient(160deg,#F9FAFB 0%,#F3F4F6 40%,#E5E7EB 100%);box-shadow:0 4px 20px rgba(107,114,128,.12),0 1px 4px rgba(0,0,0,.04)}
+  .plat-card--featured:hover{box-shadow:0 10px 36px rgba(107,114,128,.18),0 3px 8px rgba(0,0,0,.06)}
+  .plat-card-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .plat-card--featured .plat-card-header{padding-right:86px}
+  .plat-tier{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#6B7280}
+  .plat-duration{font-size:12px;font-weight:800;color:#0f172a;background:linear-gradient(135deg,#F3F4F6,#E5E7EB);border:1px solid #D1D5DB;padding:5px 10px;border-radius:999px;white-space:nowrap}
+  .plat-card--featured .plat-duration{background:linear-gradient(135deg,#E5E7EB,#D1D5DB);border-color:#9CA3AF}
+  .plat-best-value{position:absolute;top:14px;right:14px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#4B5563;background:linear-gradient(135deg,#F3F4F6,#E5E7EB);border:1px solid #D1D5DB;padding:6px 10px;border-radius:999px;box-shadow:0 1px 3px rgba(107,114,128,.1)}
+  .plat-price-row{display:flex;align-items:baseline;gap:8px;margin:2px 0 6px}
+  .plat-price{font-size:36px;font-weight:900;color:#0f172a;line-height:1}
+  .plat-per{font-size:13px;color:#6B7280;font-weight:700}
+  .plat-desc{margin:0 0 12px;color:#1a1a2e;line-height:1.6;font-size:14px}
+  .plat-features{margin:0 0 14px;padding-left:18px;color:#0f172a;line-height:1.7;font-size:14px}
+  .plat-card-body{flex:1}
+  .plat-btn{display:inline-block;text-decoration:none;font-weight:900;letter-spacing:.02em;color:#fff;background:linear-gradient(135deg,#9CA3AF 0%,#6B7280 100%);padding:12px 14px;border-radius:12px;text-align:center;width:100%;box-sizing:border-box;box-shadow:0 2px 8px rgba(107,114,128,.25);transition:all .2s ease}
+  .plat-btn:hover{box-shadow:0 4px 14px rgba(107,114,128,.35);transform:translateY(-1px)}
+  .plat-btn--dark{background:linear-gradient(135deg,#6B7280 0%,#4B5563 100%);box-shadow:0 2px 10px rgba(75,85,99,.3)}
+  .plat-btn--dark:hover{box-shadow:0 4px 16px rgba(75,85,99,.4)}
+  .plat-note{margin-top:10px;font-size:12px;color:#9CA3AF;line-height:1.5}
+  .plat-footer{margin-top:16px;border-top:1px solid #E5E7EB;padding-top:14px;display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:flex-start}
+  .plat-footer-text{flex:1;min-width:0}
+  .plat-footer-label{font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:#0f172a;margin-bottom:6px}
+  .plat-footer-text p{margin:0;color:#6B7280;line-height:1.6;font-size:14px}
+  .plat-cta-box{background:linear-gradient(145deg,#F9FAFB,#F3F4F6);border:1px solid #D1D5DB;border-radius:14px;padding:14px 16px;min-width:260px;flex:0 1 360px;box-shadow:0 2px 8px rgba(107,114,128,.06)}
+  .plat-cta-title{font-weight:900;color:#0f172a;margin-bottom:6px}
+  .plat-cta-body{color:#6B7280;font-size:14px;line-height:1.6}
+  .plat-cta-btn{display:inline-block;text-decoration:none;font-weight:900;color:#0f172a;background:linear-gradient(135deg,#FFFFFF,#F3F4F6);border:1px solid #9CA3AF;padding:10px 12px;border-radius:12px;margin-top:10px;box-shadow:0 1px 4px rgba(107,114,128,.1);transition:all .2s ease}
+  .plat-cta-btn:hover{box-shadow:0 3px 10px rgba(107,114,128,.18);transform:translateY(-1px);border-color:#6B7280}
+  .plat-shimmer{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#D1D5DB,#9CA3AF,#D1D5DB);border-radius:20px 20px 0 0;opacity:.6}
+  .plat-shimmer-bottom{position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#E5E7EB,#9CA3AF,#E5E7EB);border-radius:0 0 20px 20px;opacity:.4}
+
+  @media(max-width:768px){
+    .plat-wrap{padding:14px}
+    .plat-h2{font-size:22px}
+    .plat-intro{font-size:14px}
+    .plat-grid{grid-template-columns:1fr}
+    .plat-price{font-size:30px}
+    .plat-card--featured .plat-card-header{padding-right:0}
+    .plat-best-value{position:static;display:inline-block;margin-bottom:8px}
+    .plat-footer{flex-direction:column}
+    .plat-cta-box{min-width:0;flex:1 1 auto;max-width:100%}
+  }
+
+  @media(max-width:480px){
+    .plat-wrap{padding:10px;margin:10px 0}
+    .plat-h2{font-size:20px}
+    .plat-benefits{padding:10px 12px}
+    .plat-card{padding:14px}
+    .plat-price{font-size:26px}
+    .plat-header{flex-direction:column;align-items:flex-start}
+  }
+</style>
+
+<div class="plat-wrap">
+
+  <div class="plat-header">
+    <div class="plat-label">Platinum Sponsorships</div>
+    <div class="plat-badge">Limited Availability &bull; Subject to Approval</div>
+  </div>
+
+  <h2 class="plat-h2">Choose Your Platinum Package</h2>
+
+  <p class="plat-intro">
+    Platinum Sponsorships are the highest-visibility advertising option on BarefootBay.com.
+    Your business appears in a premium position on the homepage alongside our rotating Preferred Vendor Spotlight.
+    Platinum placements are limited to avoid overwhelming users and to protect advertiser value.
+  </p>
+
+  <div class="plat-benefits">
+    <div class="plat-benefits-label">What You Get</div>
+    <ul>
+      <li><strong>Guaranteed homepage visibility</strong> during your sponsorship term (no rotation)</li>
+      <li><strong>Premium placement</strong> next to the rotating Preferred Vendor Spotlight</li>
+      <li><strong>Dedicated Vendor Page</strong> on BarefootBay.com with contact buttons and recommendations</li>
+      <li><strong>Calendar presence</strong> to reinforce awareness and community trust</li>
+      <li><strong>Print recognition</strong> in <em>The Tattler</em> during your term as a Platinum Sponsor</li>
+      <li><strong>Approval-based program</strong> to protect the platform and community experience</li>
+    </ul>
+  </div>
+
+  <div class="plat-grid">
+
+    <div class="plat-card" style="overflow:hidden">
+      <div class="plat-shimmer"></div>
+      <div class="plat-card-header">
+        <div class="plat-tier">Junior Platinum</div>
+        <div class="plat-duration">3 Months</div>
+      </div>
+      <div class="plat-card-body">
+        <div class="plat-price-row">
+          <div class="plat-price">$1,500</div>
+          <div class="plat-per">/ 3 months</div>
+        </div>
+        <p class="plat-desc">Best for businesses who want to test-drive premium placement and see immediate, measurable awareness.</p>
+        <ul class="plat-features">
+          <li>Guaranteed top homepage placement</li>
+          <li>Platinum recognition in <em>The Tattler</em> for 3 issues</li>
+          <li>Calendar reinforcement during term</li>
+          <li>Vendor page with contact buttons</li>
+        </ul>
+      </div>
+      <a href="#request-platinum" class="plat-btn" aria-label="Choose Junior Platinum (request form)">Choose Junior</a>
+      <div class="plat-note"><strong>Note:</strong> This page does not process payments. Selecting a package opens a request form.</div>
+      <div class="plat-shimmer-bottom"></div>
+    </div>
+
+    <div class="plat-card plat-card--featured" style="overflow:hidden">
+      <div class="plat-shimmer"></div>
+      <div class="plat-best-value">Best Value</div>
+      <div class="plat-card-header">
+        <div class="plat-tier">Senior Platinum</div>
+        <div class="plat-duration">12 Months</div>
+      </div>
+      <div class="plat-card-body">
+        <div class="plat-price-row">
+          <div class="plat-price">$5,000</div>
+          <div class="plat-per">/ 12 months</div>
+        </div>
+        <p class="plat-desc">Best for businesses who want year-round top placement, long-term recognition, and maximum trust-building.</p>
+        <ul class="plat-features">
+          <li>Guaranteed top homepage placement for 12 months</li>
+          <li>Platinum recognition in <em>The Tattler</em> for 12 issues</li>
+          <li>Calendar reinforcement all year</li>
+          <li>Vendor page with contact buttons</li>
+          <li>Priority renewal consideration (availability permitting)</li>
+        </ul>
+      </div>
+      <a href="#request-platinum" class="plat-btn plat-btn--dark" aria-label="Choose Senior Platinum (request form)">Choose Senior</a>
+      <div class="plat-note"><strong>Note:</strong> This page does not process payments. Selecting a package opens a request form.</div>
+      <div class="plat-shimmer-bottom"></div>
+    </div>
+
+  </div>
+
+  <div class="plat-footer">
+    <div class="plat-footer-text">
+      <div class="plat-footer-label">Availability &amp; Approval</div>
+      <p>
+        Platinum Sponsorships are intentionally limited to protect the user experience and the value delivered to sponsors.
+        All Platinum placements are <strong>subject to availability</strong> and <strong>subject to approval</strong>.
+        We reserve the right to decline or remove sponsorships that do not align with community standards.
+      </p>
+    </div>
+    <div class="plat-cta-box">
+      <div class="plat-cta-title">Ready to request Platinum?</div>
+      <div class="plat-cta-body">
+        Email <strong>team@barefootbay.com</strong> or message <strong>Rob Allan</strong> (ADMIN) on BarefootBay.com.
+        Please include your business name, preferred package (Junior or Senior), and your website/contact info.
+      </div>
+      <div>
+        <a id="request-platinum"
+           href="mailto:team@barefootbay.com?subject=Platinum%20Sponsorship%20Request&body=Business%20Name%3A%0AContact%20Name%3A%0APhone%3A%0AEmail%3A%0AWebsite%20(if%20any)%3A%0APackage%20Requested%3A%20(Junior%20%241%2C500%20%2F%203%20months%20or%20Senior%20%245%2C000%20%2F%2012%20months)%0A%0ANotes%3A"
+           class="plat-cta-btn">
+          Request Platinum Sponsorship
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>

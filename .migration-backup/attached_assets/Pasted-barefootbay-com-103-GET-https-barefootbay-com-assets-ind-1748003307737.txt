@@ -1,0 +1,504 @@
+barefootbay.com/:103 
+            
+            
+           GET https://barefootbay.com/assets/index-Ba6UXORN.css net::ERR_ABORTED 502 (Bad Gateway)
+(index):114 Running cache clearing script...
+(index):147 Cleared 1 cached items from localStorage
+(index):184 Cache clearing complete - errors should be resolved on next page refresh.
+index-Bj3dea7w.js:18 [Maps Polyfill] Initializing enhanced Google Maps polyfill
+index-Bj3dea7w.js:18 [Maps Polyfill] Installing fetch polyfill
+index-Bj3dea7w.js:835 [WebSocket] WebSocket functionality is disabled to prevent conflicts with Object Storage
+index-Bj3dea7w.js:18 
+            
+            
+           GET https://barefootbay.com/api/messages/unread/count 401 (Unauthorized)
+u @ index-Bj3dea7w.js:18
+(anonymous) @ index-Bj3dea7w.js:65
+i @ index-Bj3dea7w.js:49
+x @ index-Bj3dea7w.js:49
+start @ index-Bj3dea7w.js:49
+fetch @ index-Bj3dea7w.js:49
+Pm @ index-Bj3dea7w.js:49
+onSubscribe @ index-Bj3dea7w.js:49
+subscribe @ index-Bj3dea7w.js:49
+(anonymous) @ index-Bj3dea7w.js:49
+vT @ index-Bj3dea7w.js:39
+nv @ index-Bj3dea7w.js:41
+ad @ index-Bj3dea7w.js:41
+BN @ index-Bj3dea7w.js:41
+xl @ index-Bj3dea7w.js:39
+HB @ index-Bj3dea7w.js:41
+kl @ index-Bj3dea7w.js:41
+QT @ index-Bj3dea7w.js:41
+S @ index-Bj3dea7w.js:26
+R @ index-Bj3dea7w.js:26
+index-Bj3dea7w.js:18 
+            
+            
+           POST https://barefootbay.com/api/analytics/track/pageview 502 (Bad Gateway)
+u @ index-Bj3dea7w.js:18
+Z0 @ index-Bj3dea7w.js:785
+cK @ index-Bj3dea7w.js:785
+(anonymous) @ index-Bj3dea7w.js:2766
+nv @ index-Bj3dea7w.js:41
+ad @ index-Bj3dea7w.js:41
+BN @ index-Bj3dea7w.js:41
+xl @ index-Bj3dea7w.js:39
+HB @ index-Bj3dea7w.js:41
+kl @ index-Bj3dea7w.js:41
+QT @ index-Bj3dea7w.js:41
+S @ index-Bj3dea7w.js:26
+R @ index-Bj3dea7w.js:26
+index-Bj3dea7w.js:785 Error tracking page view: Error: Failed to track page view: 
+    at Z0 (index-Bj3dea7w.js:785:34031)
+Z0 @ index-Bj3dea7w.js:785
+await in Z0
+cK @ index-Bj3dea7w.js:785
+(anonymous) @ index-Bj3dea7w.js:2766
+nv @ index-Bj3dea7w.js:41
+ad @ index-Bj3dea7w.js:41
+BN @ index-Bj3dea7w.js:41
+xl @ index-Bj3dea7w.js:39
+HB @ index-Bj3dea7w.js:41
+kl @ index-Bj3dea7w.js:41
+QT @ index-Bj3dea7w.js:41
+S @ index-Bj3dea7w.js:26
+R @ index-Bj3dea7w.js:26
+background-image-placeholder.jpg:1 
+            
+            
+           GET https://barefootbay.com/uploads/background-image-placeholder.jpg 502 (Bad Gateway)
+index-Bj3dea7w.js:18 
+            
+            
+           GET https://barefootbay.com/api/auth/check 502 (Bad Gateway)
+u @ index-Bj3dea7w.js:18
+(anonymous) @ index-Bj3dea7w.js:65
+(anonymous) @ index-Bj3dea7w.js:65
+i @ index-Bj3dea7w.js:49
+x @ index-Bj3dea7w.js:49
+start @ index-Bj3dea7w.js:49
+fetch @ index-Bj3dea7w.js:49
+Pm @ index-Bj3dea7w.js:49
+onSubscribe @ index-Bj3dea7w.js:49
+subscribe @ index-Bj3dea7w.js:49
+(anonymous) @ index-Bj3dea7w.js:49
+vT @ index-Bj3dea7w.js:39
+nv @ index-Bj3dea7w.js:41
+ad @ index-Bj3dea7w.js:41
+BN @ index-Bj3dea7w.js:41
+xl @ index-Bj3dea7w.js:39
+HB @ index-Bj3dea7w.js:41
+kl @ index-Bj3dea7w.js:41
+QT @ index-Bj3dea7w.js:41
+S @ index-Bj3dea7w.js:26
+R @ index-Bj3dea7w.js:26
+index-Bj3dea7w.js:18 
+            
+            
+           GET https://barefootbay.com/api/pages/banner-slides 502 (Bad Gateway)
+u @ index-Bj3dea7w.js:18
+_e @ index-Bj3dea7w.js:58
+(anonymous) @ index-Bj3dea7w.js:835
+(anonymous) @ index-Bj3dea7w.js:835
+nv @ index-Bj3dea7w.js:41
+ad @ index-Bj3dea7w.js:41
+BN @ index-Bj3dea7w.js:41
+xl @ index-Bj3dea7w.js:39
+HB @ index-Bj3dea7w.js:41
+kl @ index-Bj3dea7w.js:41
+QT @ index-Bj3dea7w.js:41
+S @ index-Bj3dea7w.js:26
+R @ index-Bj3dea7w.js:26
+index-Bj3dea7w.js:65 Query auth check error: SyntaxError: Unexpected token 'T', "The deploy"... is not valid JSON
+(anonymous) @ index-Bj3dea7w.js:65
+await in (anonymous)
+(anonymous) @ index-Bj3dea7w.js:65
+i @ index-Bj3dea7w.js:49
+x @ index-Bj3dea7w.js:49
+start @ index-Bj3dea7w.js:49
+fetch @ index-Bj3dea7w.js:49
+Pm @ index-Bj3dea7w.js:49
+onSubscribe @ index-Bj3dea7w.js:49
+subscribe @ index-Bj3dea7w.js:49
+(anonymous) @ index-Bj3dea7w.js:49
+vT @ index-Bj3dea7w.js:39
+nv @ index-Bj3dea7w.js:41
+ad @ index-Bj3dea7w.js:41
+BN @ index-Bj3dea7w.js:41
+xl @ index-Bj3dea7w.js:39
+HB @ index-Bj3dea7w.js:41
+kl @ index-Bj3dea7w.js:41
+QT @ index-Bj3dea7w.js:41
+S @ index-Bj3dea7w.js:26
+R @ index-Bj3dea7w.js:26
+index-Bj3dea7w.js:58 API request failed: GET /api/pages/banner-slides - Status: 502 Error: HTTP error! Status: 502
+    at _e (index-Bj3dea7w.js:58:1603)
+    at async index-Bj3dea7w.js:835:44464
+_e @ index-Bj3dea7w.js:58
+await in _e
+(anonymous) @ index-Bj3dea7w.js:835
+(anonymous) @ index-Bj3dea7w.js:835
+nv @ index-Bj3dea7w.js:41
+ad @ index-Bj3dea7w.js:41
+BN @ index-Bj3dea7w.js:41
+xl @ index-Bj3dea7w.js:39
+HB @ index-Bj3dea7w.js:41
+kl @ index-Bj3dea7w.js:41
+QT @ index-Bj3dea7w.js:41
+S @ index-Bj3dea7w.js:26
+R @ index-Bj3dea7w.js:26
+index-Bj3dea7w.js:58 API request failed: GET /api/pages/banner-slides Error: HTTP error! Status: 502
+    at _e (index-Bj3dea7w.js:58:1603)
+    at async index-Bj3dea7w.js:835:44464
+_e @ index-Bj3dea7w.js:58
+await in _e
+(anonymous) @ index-Bj3dea7w.js:835
+(anonymous) @ index-Bj3dea7w.js:835
+nv @ index-Bj3dea7w.js:41
+ad @ index-Bj3dea7w.js:41
+BN @ index-Bj3dea7w.js:41
+xl @ index-Bj3dea7w.js:39
+HB @ index-Bj3dea7w.js:41
+kl @ index-Bj3dea7w.js:41
+QT @ index-Bj3dea7w.js:41
+S @ index-Bj3dea7w.js:26
+R @ index-Bj3dea7w.js:26
+index-Bj3dea7w.js:835 Error fetching banner slides: Error: HTTP error! Status: 502
+    at _e (index-Bj3dea7w.js:58:1603)
+    at async index-Bj3dea7w.js:835:44464
+(anonymous) @ index-Bj3dea7w.js:835
+await in (anonymous)
+(anonymous) @ index-Bj3dea7w.js:835
+nv @ index-Bj3dea7w.js:41
+ad @ index-Bj3dea7w.js:41
+BN @ index-Bj3dea7w.js:41
+xl @ index-Bj3dea7w.js:39
+HB @ index-Bj3dea7w.js:41
+kl @ index-Bj3dea7w.js:41
+QT @ index-Bj3dea7w.js:41
+S @ index-Bj3dea7w.js:26
+R @ index-Bj3dea7w.js:26
+index-Bj3dea7w.js:18 
+            
+            
+           GET https://barefootbay.com/api/user 401 (Unauthorized)
+u @ index-Bj3dea7w.js:18
+(anonymous) @ index-Bj3dea7w.js:65
+i @ index-Bj3dea7w.js:49
+x @ index-Bj3dea7w.js:49
+start @ index-Bj3dea7w.js:49
+fetch @ index-Bj3dea7w.js:49
+Pm @ index-Bj3dea7w.js:49
+onSubscribe @ index-Bj3dea7w.js:49
+subscribe @ index-Bj3dea7w.js:49
+(anonymous) @ index-Bj3dea7w.js:49
+vT @ index-Bj3dea7w.js:39
+nv @ index-Bj3dea7w.js:41
+ad @ index-Bj3dea7w.js:41
+BN @ index-Bj3dea7w.js:41
+xl @ index-Bj3dea7w.js:39
+HB @ index-Bj3dea7w.js:41
+kl @ index-Bj3dea7w.js:41
+QT @ index-Bj3dea7w.js:41
+S @ index-Bj3dea7w.js:26
+R @ index-Bj3dea7w.js:26
+index-Bj3dea7w.js:835 Image load error for: /uploads/banner-slides/bannerImage-1741927053069-8... - trying fallback
+N @ index-Bj3dea7w.js:835
+lz @ index-Bj3dea7w.js:38
+dz @ index-Bj3dea7w.js:38
+uz @ index-Bj3dea7w.js:38
+uN @ index-Bj3dea7w.js:38
+nT @ index-Bj3dea7w.js:38
+(anonymous) @ index-Bj3dea7w.js:38
+lb @ index-Bj3dea7w.js:41
+Ek @ index-Bj3dea7w.js:38
+I0 @ index-Bj3dea7w.js:38
+Fj @ index-Bj3dea7w.js:38
+index-Bj3dea7w.js:835 Image load error for: /uploads/banner-slides/bannerImage-1741926522955-8... - trying fallback
+N @ index-Bj3dea7w.js:835
+lz @ index-Bj3dea7w.js:38
+dz @ index-Bj3dea7w.js:38
+uz @ index-Bj3dea7w.js:38
+uN @ index-Bj3dea7w.js:38
+nT @ index-Bj3dea7w.js:38
+(anonymous) @ index-Bj3dea7w.js:38
+lb @ index-Bj3dea7w.js:41
+Ek @ index-Bj3dea7w.js:38
+I0 @ index-Bj3dea7w.js:38
+Fj @ index-Bj3dea7w.js:38
+index-Bj3dea7w.js:785 
+            
+            
+           GET https://barefootbay.com/uploads/banner-slides/placeholder-banner.png net::ERR_ABORTED 502 (Bad Gateway)
+(anonymous) @ index-Bj3dea7w.js:785
+n @ index-Bj3dea7w.js:785
+requestIdleCallback
+K7 @ index-Bj3dea7w.js:785
+Y7 @ index-Bj3dea7w.js:785
+(anonymous) @ index-Bj3dea7w.js:2766
+rocket-icon.svg:1 
+            
+            
+           GET https://barefootbay.com/icons/rocket-icon.svg 502 (Bad Gateway)
+Image
+(anonymous) @ index-Bj3dea7w.js:2762
+(anonymous) @ index-Bj3dea7w.js:2762
+(anonymous) @ index-Bj3dea7w.js:2762
+nv @ index-Bj3dea7w.js:41
+ad @ index-Bj3dea7w.js:41
+BN @ index-Bj3dea7w.js:41
+xl @ index-Bj3dea7w.js:39
+HB @ index-Bj3dea7w.js:41
+kl @ index-Bj3dea7w.js:41
+QT @ index-Bj3dea7w.js:41
+S @ index-Bj3dea7w.js:26
+R @ index-Bj3dea7w.js:26
+rocket-icon.svg:1 
+            
+            
+           GET https://barefootbay.com/uploads/icons/rocket-icon.svg 502 (Bad Gateway)
+Image
+(anonymous) @ index-Bj3dea7w.js:2762
+(anonymous) @ index-Bj3dea7w.js:2762
+(anonymous) @ index-Bj3dea7w.js:2762
+nv @ index-Bj3dea7w.js:41
+ad @ index-Bj3dea7w.js:41
+BN @ index-Bj3dea7w.js:41
+xl @ index-Bj3dea7w.js:39
+HB @ index-Bj3dea7w.js:41
+kl @ index-Bj3dea7w.js:41
+QT @ index-Bj3dea7w.js:41
+S @ index-Bj3dea7w.js:26
+R @ index-Bj3dea7w.js:26
+index-Bj3dea7w.js:2762 Failed to preload: /icons/rocket-icon.svg
+R.onerror @ index-Bj3dea7w.js:2762
+index-Bj3dea7w.js:2762 Failed to preload: /uploads/icons/rocket-icon.svg
+R.onerror @ index-Bj3dea7w.js:2762
+index-Bj3dea7w.js:18 
+            
+            
+           HEAD https://barefootbay.com/uploads/banner-slides/bannerImage-1741927053069-856446994.png?_cb=1748003234757 net::ERR_ABORTED 502 (Bad Gateway)
+u @ index-Bj3dea7w.js:18
+N @ index-Bj3dea7w.js:835
+lz @ index-Bj3dea7w.js:38
+dz @ index-Bj3dea7w.js:38
+uz @ index-Bj3dea7w.js:38
+uN @ index-Bj3dea7w.js:38
+nT @ index-Bj3dea7w.js:38
+(anonymous) @ index-Bj3dea7w.js:38
+lb @ index-Bj3dea7w.js:41
+Ek @ index-Bj3dea7w.js:38
+I0 @ index-Bj3dea7w.js:38
+Fj @ index-Bj3dea7w.js:38
+index-Bj3dea7w.js:835 Image source returned status 502 for bannerImage-1741927053069-856446994.png?_cb=1748003234757
+(anonymous) @ index-Bj3dea7w.js:835
+Promise.then
+N @ index-Bj3dea7w.js:835
+lz @ index-Bj3dea7w.js:38
+dz @ index-Bj3dea7w.js:38
+uz @ index-Bj3dea7w.js:38
+uN @ index-Bj3dea7w.js:38
+nT @ index-Bj3dea7w.js:38
+(anonymous) @ index-Bj3dea7w.js:38
+lb @ index-Bj3dea7w.js:41
+Ek @ index-Bj3dea7w.js:38
+I0 @ index-Bj3dea7w.js:38
+Fj @ index-Bj3dea7w.js:38
+bannerImage-1741926522955-8756145.png:1 
+            
+            
+           GET https://barefootbay.com/api/storage-proxy/direct-banner/bannerImage-1741926522955-8756145.png?_cb=1748003234757 502 (Bad Gateway)
+Image
+Tj @ index-Bj3dea7w.js:34
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+Ea @ index-Bj3dea7w.js:41
+KT @ index-Bj3dea7w.js:41
+HB @ index-Bj3dea7w.js:41
+kl @ index-Bj3dea7w.js:41
+QT @ index-Bj3dea7w.js:41
+S @ index-Bj3dea7w.js:26
+R @ index-Bj3dea7w.js:26
+index-Bj3dea7w.js:835 Image load error for: /api/storage-proxy/direct-banner/bannerImage-17419... - trying fallback
+N @ index-Bj3dea7w.js:835
+lz @ index-Bj3dea7w.js:38
+dz @ index-Bj3dea7w.js:38
+uz @ index-Bj3dea7w.js:38
+uN @ index-Bj3dea7w.js:38
+nT @ index-Bj3dea7w.js:38
+(anonymous) @ index-Bj3dea7w.js:38
+lb @ index-Bj3dea7w.js:41
+Ek @ index-Bj3dea7w.js:38
+I0 @ index-Bj3dea7w.js:38
+Fj @ index-Bj3dea7w.js:38
+favicon-48x48.png:1 
+            
+            
+           GET https://barefootbay.com/favicon/favicon-48x48.png 502 (Bad Gateway)
+index-Bj3dea7w.js:2766 REPLIT_APP_LOADED
+(anonymous) @ index-Bj3dea7w.js:2766
+setTimeout
+(anonymous) @ index-Bj3dea7w.js:2766
+nv @ index-Bj3dea7w.js:41
+ad @ index-Bj3dea7w.js:41
+BN @ index-Bj3dea7w.js:41
+xl @ index-Bj3dea7w.js:39
+HB @ index-Bj3dea7w.js:41
+kl @ index-Bj3dea7w.js:41
+QT @ index-Bj3dea7w.js:41
+S @ index-Bj3dea7w.js:26
+R @ index-Bj3dea7w.js:26
+index-Bj3dea7w.js:18 
+            
+            
+           GET https://barefootbay.com/api/forum/categories/3/posts 502 (Bad Gateway)
+u @ index-Bj3dea7w.js:18
+v @ index-Bj3dea7w.js:835
+await in v
+(anonymous) @ index-Bj3dea7w.js:835
+nv @ index-Bj3dea7w.js:41
+ad @ index-Bj3dea7w.js:41
+HB @ index-Bj3dea7w.js:41
+kl @ index-Bj3dea7w.js:41
+BN @ index-Bj3dea7w.js:41
+xl @ index-Bj3dea7w.js:39
+(anonymous) @ index-Bj3dea7w.js:41
+setTimeout
+a @ index-Bj3dea7w.js:49
+o @ index-Bj3dea7w.js:49
+batch @ index-Bj3dea7w.js:49
+$i @ index-Bj3dea7w.js:49
+setData @ index-Bj3dea7w.js:49
+onSuccess @ index-Bj3dea7w.js:49
+u @ index-Bj3dea7w.js:49
+Promise.then
+x @ index-Bj3dea7w.js:49
+start @ index-Bj3dea7w.js:49
+fetch @ index-Bj3dea7w.js:49
+Pm @ index-Bj3dea7w.js:49
+onSubscribe @ index-Bj3dea7w.js:49
+subscribe @ index-Bj3dea7w.js:49
+(anonymous) @ index-Bj3dea7w.js:49
+vT @ index-Bj3dea7w.js:39
+nv @ index-Bj3dea7w.js:41
+ad @ index-Bj3dea7w.js:41
+BN @ index-Bj3dea7w.js:41
+xl @ index-Bj3dea7w.js:39
+HB @ index-Bj3dea7w.js:41
+kl @ index-Bj3dea7w.js:41
+QT @ index-Bj3dea7w.js:41
+S @ index-Bj3dea7w.js:26
+R @ index-Bj3dea7w.js:26
+index-Bj3dea7w.js:18 
+            
+            
+           GET https://barefootbay.com/api/forum/categories/4/posts 502 (Bad Gateway)
+u @ index-Bj3dea7w.js:18
+v @ index-Bj3dea7w.js:835
+await in v
+(anonymous) @ index-Bj3dea7w.js:835
+nv @ index-Bj3dea7w.js:41
+ad @ index-Bj3dea7w.js:41
+HB @ index-Bj3dea7w.js:41
+kl @ index-Bj3dea7w.js:41
+BN @ index-Bj3dea7w.js:41
+xl @ index-Bj3dea7w.js:39
+(anonymous) @ index-Bj3dea7w.js:41
+setTimeout
+a @ index-Bj3dea7w.js:49
+o @ index-Bj3dea7w.js:49
+batch @ index-Bj3dea7w.js:49
+$i @ index-Bj3dea7w.js:49
+setData @ index-Bj3dea7w.js:49
+onSuccess @ index-Bj3dea7w.js:49
+u @ index-Bj3dea7w.js:49
+Promise.then
+x @ index-Bj3dea7w.js:49
+start @ index-Bj3dea7w.js:49
+fetch @ index-Bj3dea7w.js:49
+Pm @ index-Bj3dea7w.js:49
+onSubscribe @ index-Bj3dea7w.js:49
+subscribe @ index-Bj3dea7w.js:49
+(anonymous) @ index-Bj3dea7w.js:49
+vT @ index-Bj3dea7w.js:39
+nv @ index-Bj3dea7w.js:41
+ad @ index-Bj3dea7w.js:41
+BN @ index-Bj3dea7w.js:41
+xl @ index-Bj3dea7w.js:39
+HB @ index-Bj3dea7w.js:41
+kl @ index-Bj3dea7w.js:41
+QT @ index-Bj3dea7w.js:41
+S @ index-Bj3dea7w.js:26
+R @ index-Bj3dea7w.js:26
+index-Bj3dea7w.js:2766 REPLIT_PAGE_LOADED
+(anonymous) @ index-Bj3dea7w.js:2766
+setTimeout
+(anonymous) @ index-Bj3dea7w.js:2766

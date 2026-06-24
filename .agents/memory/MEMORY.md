@@ -1,0 +1,4 @@
+- [API server background jobs](api-server-scheduling.md) — no cron framework; recurring jobs must self-start a setInterval at boot in index.ts; runScheduledTasks is manual-trigger only.
+- [SendGrid deliverability](sendgrid-deliverability.md) — connector only gives API key+from_email, NOT DKIM/DNS; spam happens when domain-auth CNAMEs aren't published; verify DNS with an independent resolver, not SendGrid's cached valid flag.
+- [esbuild bundling pitfalls](esbuild-bundling-runtime-data-files.md) — externalize deps that read __dirname-relative data files (e.g. geoip-lite); swallowed __esm init throws silently poison singletons; never dual `export *` the same symbol.
+- [Listing expiration emails](listing-expiration-emails.md) — sendEmail returns false (never throws) so check the boolean for idempotent cadence state; getExpiredListings returns raw snake_case rows so camelCase branches are dead.

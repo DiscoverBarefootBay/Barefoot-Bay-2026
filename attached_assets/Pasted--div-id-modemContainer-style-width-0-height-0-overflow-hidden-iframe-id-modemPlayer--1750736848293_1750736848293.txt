@@ -1,0 +1,105 @@
+<div id="modemContainer" style="width:0; height:0; overflow:hidden;">
+  <iframe id="modemPlayer"
+    width="0" height="0"
+    src="https://www.youtube.com/embed/QDS4B0mM-ew?autoplay=1&enablejsapi=1"
+    frameborder="0" allow="autoplay"
+    allowfullscreen>
+  </iframe>
+</div>
+
+<script>
+  // Wait for the iframe to load, then hide it again after YouTube fires
+  function onYouTubeIframeAPIReady() {
+    const player = new YT.Player('modemPlayer', {
+      events: {
+        'onReady': function (event) {
+          event.target.playVideo();
+          setTimeout(() => {
+            document.getElementById('modemContainer').style.display = 'none';
+          }, 500); // Hide shortly after playback starts
+        }
+      }
+    });
+  }
+
+  // Load the YouTube API
+  const tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  document.body.appendChild(tag);
+</script>
+
+
+<div style="text-align: center;"><span style="background-color: rgb(255 255 255/var(--tw-bg-opacity)); color: var(--tw-prose-body); font-size: 0.875rem;"&gt;</span></div><style>
+
+  .scroll-box {
+    position: relative;
+    height: 60vh;
+    overflow: hidden;
+    background: #000;
+    color: #00ff00;
+    font-family: monospace;
+    text-align: center;
+    padding: 1em;
+  }
+
+  .scroll-content {
+    position: absolute;
+    top: 100%;
+    animation: scrollUp 20s linear forwards;
+    white-space: pre;
+  }
+
+  @keyframes scrollUp {
+    0% { top: 100%; }
+    100% { top: 0%; }
+  }
+</style>
+
+<div class="scroll-box">
+  <div class="scroll-content">
+
+░░░ Barefoot Bay's ░░░
+
+███████╗ ██████╗ ██╗   ██╗███╗   ██╗██████╗      ██████╗ ███████╗███████╗
+██╔════╝██╔═══██╗██║   ██║████╗  ██║██╔══██╗    ██╔═══██╗██╔════╝██╔════╝
+███████╗██║   ██║██║   ██║██╔██╗ ██║██║  ██║    ██║   ██║█████╗  █████╗  
+╚════██║██║   ██║██║   ██║██║╚██╗██║██║  ██║    ██║   ██║██╔══╝  ██╔══╝  
+███████║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝    ╚██████╔╝██║     ██║     
+╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝      ╚═════╝ ╚═╝     ╚═╝     
+                                                                            
+                                                                                              
+────────────────────────────────────────────
+    Real-time Rants, Raves,and Respect
+ ⌐■_■ A LIVE BarefootBay.com Feature ⌐■_■
+────────────────────────────────────────────
+
+    ▓▒▒▒▒▒▒▒▒▒▒▒▒▓
+    ▒▒▒  WELCOME TO  ▒▒▒
+   ▓▒▒   THE BB BBS!  ▒▒▓
+   ▒   CHAT. CONNECT.   ▒
+   ▒   SOUND OFF LIVE!  ▒
+  ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+
+    Type like it's 1989...
+   ...but act like it's 2025.
+
+────────────────────────────────────────────
+   ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+    ▒   CREDITS + ADMIN  ▒
+   ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+
+ Rob Allan  
+ Publisher. Editor. Creator. Neighbor.
+
+ Becky Culp  
+ Everything, Everywhere, Everytime, Exhausted.
+ 
+ Michael Godoy  
+ Website Wizard, Bug Annihilator
+────────────────────────────────────────────
+  Created with ❤️ by The Tattler Team  
+  ASCII by ChatGPT | Inspired by ANSI BBS
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+</div>
+</div>

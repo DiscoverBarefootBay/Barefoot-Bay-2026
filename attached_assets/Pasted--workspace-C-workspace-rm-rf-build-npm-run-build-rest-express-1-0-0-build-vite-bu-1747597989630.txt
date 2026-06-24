@@ -1,0 +1,34 @@
+~/workspace$ ^C
+~/workspace$ rm -rf build && npm run build
+
+> rest-express@1.0.0 build
+> vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+vite v5.4.14 building for production...
+transforming (3) src/main.tsxBrowserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+✓ 3085 modules transformed.
+x Build failed in 8.04s
+error during build:
+client/src/components/chat/MobileChat.tsx (7:7): "default" is not exported by "client/src/components/chat/MessageDetail.tsx", imported by "client/src/components/chat/MobileChat.tsx".
+file: /home/runner/workspace/client/src/components/chat/MobileChat.tsx:7:7
+
+5: import { PlusIcon, RefreshCw, ArrowLeft } from 'lucide-react';
+6: import MessageList from './MessageList';
+7: import MessageDetail from './MessageDetail';
+          ^
+8: import MessageComposer from './MessageComposer';
+9: import { Message } from '@/types/chat';
+
+    at getRollupError (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/parseAst.js:396:41)
+    at error (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/parseAst.js:392:42)
+    at Module.error (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:15588:16)
+    at Module.traceVariable (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:16037:29)
+    at ModuleScope.findVariable (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:13820:39)
+    at ReturnValueScope.findVariable (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:5283:38)
+    at FunctionBodyScope.findVariable (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:5283:38)
+    at TrackingScope.findVariable (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:5283:38)
+    at BlockScope.findVariable (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:5283:38)
+    at Identifier.bind (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:5066:40)
+~/workspace$ ^C

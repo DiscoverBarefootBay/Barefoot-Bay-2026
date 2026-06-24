@@ -1,0 +1,46 @@
+#!/usr/bin/env node
+
+/**
+ * Create iOS-Optimized Touch Icon
+ * 
+ * This script creates a proper touch icon for iOS by adding a solid background
+ * to the BB logo and ensuring it meets all iOS requirements.
+ */
+
+import fs from 'fs';
+import path from 'path';
+
+// Create an optimized touch icon with solid background
+const createTouchIconSVG = () => {
+  return `<svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+  <!-- Solid background for iOS -->
+  <rect width="180" height="180" fill="#ffffff" rx="20" ry="20"/>
+  
+  <!-- BB Logo centered -->
+  <g transform="translate(90,90)">
+    <g transform="scale(2.5) translate(-36, -36)">
+      <!-- Recreated BB logo with proper paths -->
+      <path d="M15 10 Q25 5, 35 10 Q45 15, 35 25 Q25 30, 15 25 Q5 20, 15 10 Z" 
+            fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
+      <path d="M20 35 Q30 30, 40 35 Q50 40, 40 50 Q30 55, 20 50 Q10 45, 20 35 Z" 
+            fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
+      <path d="M5 20 Q15 15, 25 20 Q15 25, 5 20 Z" 
+            fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
+      <path d="M25 45 Q35 40, 45 45 Q35 50, 25 45 Z" 
+            fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
+    </g>
+  </g>
+  
+  <!-- Text "BB" as fallback -->
+  <text x="90" y="110" font-family="Arial, sans-serif" font-size="48" font-weight="bold" 
+        text-anchor="middle" fill="#2563eb">BB</text>
+</svg>`;
+};
+
+// Write the SVG file
+const svgContent = createTouchIconSVG();
+fs.writeFileSync('./public/touch-icon-optimized.svg', svgContent);
+
+console.log('✅ Created optimized touch icon SVG');
+console.log('📝 This creates a solid white background with the BB logo');
+console.log('🍎 iOS will now have a proper icon instead of generating one from the first letter');

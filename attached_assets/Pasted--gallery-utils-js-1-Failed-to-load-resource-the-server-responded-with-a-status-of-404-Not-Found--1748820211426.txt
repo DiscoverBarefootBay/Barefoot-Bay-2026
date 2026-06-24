@@ -1,0 +1,1035 @@
+/gallery-utils.js:1  Failed to load resource: the server responded with a status of 404 (Not Found)
+payment-complete:1 Refused to execute script from 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/gallery-utils.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ Rocket launch data received: Array(3)
+ First launch window_start: 2025-06-02T04:57Z
+ First launch date object: Sun Jun 01 2025 23:57:00 GMT-0500 (Central Daylight Time)
+ Current date object: Sun Jun 01 2025 18:23:13 GMT-0500 (Central Daylight Time)
+ Is future date? true
+ Kuiper KA-01 launch details: Object
+ Using official pad time: 2025-06-02T04:57Z for imminent check
+ Current time: 2025-06-01T23:23:13.096Z, Launch time: 2025-06-02T04:57:00.000Z
+ Time difference: 333 minutes
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ Using official pad time: 2025-06-02T04:57Z for imminent check
+ Current time: 2025-06-01T23:23:13.097Z, Launch time: 2025-06-02T04:57:00.000Z
+ Time difference: 333 minutes
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ Weather data received: Object
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ Unread messages count: 0
+ [Feature Flags] [PROD] Checking flag calendar Object
+ [Feature Flags] [PROD] nav-calendar for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag forum Object
+ [Feature Flags] [PROD] nav-forum for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag for_sale Object
+ [Feature Flags] [PROD] nav-for-sale for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag store Object
+ [Feature Flags] [PROD] nav-store for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag vendors Object
+ [Feature Flags] [PROD] nav-vendors for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for undefined: HIDDEN
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ Unread messages count: 0
+ [Feature Flags] [PROD] Checking flag calendar Object
+ [Feature Flags] [PROD] nav-calendar for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag forum Object
+ [Feature Flags] [PROD] nav-forum for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag for_sale Object
+ [Feature Flags] [PROD] nav-for-sale for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag store Object
+ [Feature Flags] [PROD] nav-store for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag vendors Object
+ [Feature Flags] [PROD] nav-vendors for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for undefined: HIDDEN
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ REPLIT_APP_LOADED
+(anonymous) @ index-CK6lB-ZB.js:2642
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ Unread messages count: 0
+ [Feature Flags] [PROD] Checking flag calendar Object
+ [Feature Flags] [PROD] nav-calendar for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag forum Object
+ [Feature Flags] [PROD] nav-forum for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag for_sale Object
+ [Feature Flags] [PROD] nav-for-sale for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag store Object
+ [Feature Flags] [PROD] nav-store for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag vendors Object
+ [Feature Flags] [PROD] nav-vendors for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for undefined: HIDDEN
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ Unread messages count: 0
+ [Feature Flags] [PROD] Checking flag calendar Object
+ [Feature Flags] [PROD] nav-calendar for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag forum Object
+ [Feature Flags] [PROD] nav-forum for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag for_sale Object
+ [Feature Flags] [PROD] nav-for-sale for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag store Object
+ [Feature Flags] [PROD] nav-store for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag vendors Object
+ [Feature Flags] [PROD] nav-vendors for undefined: HIDDEN
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for undefined: HIDDEN
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ DEBUG usePermissions - Current user role: undefined isAdmin: false isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for undefined: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+ [Feature Flags] [PROD] weather_rocket_icons for undefined: DISABLED
+ DEBUG usePermissions - Current user role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ Unread messages count: 0
+ [Feature Flags] [PROD] Checking flag calendar Object
+ [Feature Flags] [PROD] nav-calendar for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag forum Object
+ [Feature Flags] [PROD] nav-forum for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag for_sale Object
+ [Feature Flags] [PROD] nav-for-sale for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag store Object
+ [Feature Flags] [PROD] nav-store for admin: HIDDEN
+ [Feature Flags] [PROD] Checking flag vendors Object
+ [Feature Flags] [PROD] nav-vendors for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for admin: VISIBLE
+ DEBUG usePermissions - Current user role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ DEBUG usePermissions - Current user role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ Using filesystem rocket icon
+ DEBUG usePermissions - Current user role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ PaymentCompletePage mounted
+ Current location: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/for-sale/payment-complete?transactionId=uvQf8sQqtdslCq2aQnsYPgIQCmJZY&orderId=uvQf8sQqtdslCq2aQnsYPgIQCmJZY
+ Query parameters: Object
+ Attempting to verify payment with: Object
+ Debug: Making POST request to /api/payments/verify with data: Object
+ Request hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+ Authentication debug: 
+      Cookie exists: false
+      Full cookie string: MicrosoftApplicationsTelemetryDeviceId=a3314d4f-eb0a-43e2-97be-717ec2ab8dd4; MicrosoftApplicationsTelemetryFirstLaunchTime=2025-04-21T21:00:06.482Z; MicrosoftApplicationsTelemetryDeviceId=a3314d4f-eb0a-43e2-97be-717ec2ab8dd4; MicrosoftApplicationsTelemetryFirstLaunchTime=2025-04-21T21:00:06.482Z
+      URL: /api/payments/verify
+      Method: POST
+      Headers: {"Accept":"application/json","Content-Type":"application/json","X-Requested-With":"XMLHttpRequest"}
+      Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+      Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+      Protocol: https:
+    
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+ [Maps Polyfill] BYPASSING for API request: /api/payments/verify
+ [Analytics] Page view tracked: /for-sale/payment-complete
+ Query auth check: Object
+ Page view tracked: /for-sale/payment-complete
+ Successfully preloaded: /icons/Asset1.svg
+ Query auth check: Object
+ Query auth check: Object
+ API response from POST /api/payments/verify: {"success":false,"paymentId":0,"status":"failed","credits":0,"message":"Payment verification failed ...
+ DEBUG usePermissions - Current user role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ Unread messages count: 0
+ [Feature Flags] [PROD] Checking flag calendar Object
+ [Feature Flags] [PROD] nav-calendar for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag forum Object
+ [Feature Flags] [PROD] nav-forum for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag for_sale Object
+ [Feature Flags] [PROD] nav-for-sale for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag store Object
+ [Feature Flags] [PROD] nav-store for admin: HIDDEN
+ [Feature Flags] [PROD] Checking flag vendors Object
+ [Feature Flags] [PROD] nav-vendors for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for admin: VISIBLE
+ DEBUG usePermissions - Current user role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ DEBUG usePermissions - Current user role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ Using filesystem rocket icon
+ DEBUG usePermissions - Current user role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ Query auth check: Object
+ Successfully preloaded: /uploads/icons/Asset1.svg
+ API response from POST /api/payments/verify: {"success":false,"paymentId":0,"status":"failed","credits":0,"message":"Payment verification failed ...
+ DEBUG usePermissions - Current user role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ Unread messages count: 0
+ [Feature Flags] [PROD] Checking flag calendar Object
+ [Feature Flags] [PROD] nav-calendar for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag forum Object
+ [Feature Flags] [PROD] nav-forum for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag for_sale Object
+ [Feature Flags] [PROD] nav-for-sale for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag store Object
+ [Feature Flags] [PROD] nav-store for admin: HIDDEN
+ [Feature Flags] [PROD] Checking flag vendors Object
+ [Feature Flags] [PROD] nav-vendors for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for admin: VISIBLE
+ DEBUG usePermissions - Current user role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ DEBUG usePermissions - Current user role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ Using filesystem rocket icon
+ DEBUG usePermissions - Current user role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ Successfully preloaded: /icons/rocket-icon.svg
+ Query auth check: Object
+ Successfully preloaded: /uploads/icons/rocket-icon.svg
+ Server auth check: Object
+ Server auth check: Object
+ REPLIT_PAGE_LOADED_SUCCESSFULLY
+signalReady @ replit-ready.js:29
+ REPLIT_PAGE_LOADED
+(anonymous) @ payment-complete:227
+ REPLIT_PAGE_LOADED_SUCCESSFULLY
+signalReady @ replit-ready.js:29
+ REPLIT_PAGE_LOADED
+(anonymous) @ payment-complete:227
+ DEBUG usePermissions - Current user role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag admin_forum Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag featured_content Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+index-CK6lB-ZB.js:2641 Unread messages count: 0
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag calendar Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] nav-calendar for admin: VISIBLE
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag forum Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] nav-forum for admin: VISIBLE
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag for_sale Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] nav-for-sale for admin: VISIBLE
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag store Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] nav-store for admin: HIDDEN
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag vendors Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] nav-vendors for admin: VISIBLE
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag community Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] nav-community for admin: VISIBLE
+index-CK6lB-ZB.js:840 DEBUG usePermissions - Current user role: admin isAdmin: true isBlocked: false hasPermission: true
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag comments Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] comments for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag reactions Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] reactions for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag calendar_post Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag forum_post Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag for_sale_post Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag vendor_page Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag admin_access Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag admin_forum Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag featured_content Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+index-CK6lB-ZB.js:840 DEBUG usePermissions - Current user role: admin isAdmin: true isBlocked: false hasPermission: true
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag comments Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] comments for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag reactions Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] reactions for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag calendar_post Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag forum_post Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag for_sale_post Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag vendor_page Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag admin_access Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag admin_forum Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag featured_content Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+index-CK6lB-ZB.js:2638 Using filesystem rocket icon
+index-CK6lB-ZB.js:840 DEBUG usePermissions - Current user role: admin isAdmin: true isBlocked: false hasPermission: true
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag comments Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] comments for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag reactions Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] reactions for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag calendar_post Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag forum_post Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag for_sale_post Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag vendor_page Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag admin_access Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag admin_forum Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] Checking flag featured_content Object
+index-CK6lB-ZB.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+replit-ready.js:29 REPLIT_PAGE_LOADED_SUCCESSFULLY
+signalReady @ replit-ready.js:29
+payment-complete?transactionId=uvQf8sQqtdslCq2aQnsYPgIQCmJZY&orderId=uvQf8sQqtdslCq2aQnsYPgIQCmJZY:227 REPLIT_PAGE_LOADED
+(anonymous) @ payment-complete?transactionId=uvQf8sQqtdslCq2aQnsYPgIQCmJZY&orderId=uvQf8sQqtdslCq2aQnsYPgIQCmJZY:227
+replit-ready.js:29 REPLIT_PAGE_LOADED_SUCCESSFULLY
+signalReady @ replit-ready.js:29
+index-CK6lB-ZB.js:58 Query fetch: /api/messages
+index-CK6lB-ZB.js:58 Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+index-CK6lB-ZB.js:58 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: MicrosoftApplicationsTelemetryDeviceId=a3314d4f-eb0a-43e2-97be-717ec2ab8dd4; MicrosoftApplicationsTelemetryFirstLaunchTime=2025-04-21T21:00:06.482Z; MicrosoftApplicationsTelemetryDeviceId=a3314d4f-eb0a-43e2-97be-717ec2ab8dd4; MicrosoftApplicationsTelemetryFirstLaunchTime=2025-04-21T21:00:06.482Z
+          Query: /api/messages
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+index-CK6lB-ZB.js:2256 [Maps Polyfill] BYPASSING for API request: /api/auth/check
+index-CK6lB-ZB.js:2256 [Maps Polyfill] BYPASSING for API request: /api/messages
+payment-complete?transactionId=uvQf8sQqtdslCq2aQnsYPgIQCmJZY&orderId=uvQf8sQqtdslCq2aQnsYPgIQCmJZY:227 REPLIT_PAGE_LOADED
+(anonymous) @ payment-complete?transactionId=uvQf8sQqtdslCq2aQnsYPgIQCmJZY&orderId=uvQf8sQqtdslCq2aQnsYPgIQCmJZY:227
+index-CK6lB-ZB.js:65 Query auth check: Object
+replit-ready.js:29 REPLIT_PAGE_LOADED_SUCCESSFULLY
+signalReady @ replit-ready.js:29
+payment-complete?transactionId=uvQf8sQqtdslCq2aQnsYPgIQCmJZY&orderId=uvQf8sQqtdslCq2aQnsYPgIQCmJZY:227 REPLIT_PAGE_LOADED
+(anonymous) @ payment-complete?transactionId=uvQf8sQqtdslCq2aQnsYPgIQCmJZY&orderId=uvQf8sQqtdslCq2aQnsYPgIQCmJZY:227
+replit-ready.js:29 REPLIT_PAGE_LOADED_SUCCESSFULLY
+signalReady @ replit-ready.js:29
+setTimeout
+(anonymous) @ replit-ready.js:38
+(anonymous) @ payment-complete?transactionId=uvQf8sQqtdslCq2aQnsYPgIQCmJZY&orderId=uvQf8sQqtdslCq2aQnsYPgIQCmJZY:244

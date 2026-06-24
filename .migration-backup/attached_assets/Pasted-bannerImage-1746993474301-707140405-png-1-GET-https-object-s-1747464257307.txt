@@ -1,0 +1,90 @@
+bannerImage-1746993474301-707140405.png:1 
+            
+            
+           GET https://object-storage.replit.app/BANNER/banner-slides/bannerImage-1746993474301-707140405.png 404 (Not Found)
+Image
+(anonymous) @ index-DLzoiRVA.js:829
+(anonymous) @ index-DLzoiRVA.js:829
+E @ index-DLzoiRVA.js:829
+(anonymous) @ index-DLzoiRVA.js:779
+a @ index-DLzoiRVA.js:779
+l @ index-DLzoiRVA.js:779
+d @ index-DLzoiRVA.js:779
+F @ index-DLzoiRVA.js:779
+(anonymous) @ index-DLzoiRVA.js:829
+onClick @ index-DLzoiRVA.js:829
+tz @ index-DLzoiRVA.js:37
+sz @ index-DLzoiRVA.js:37
+rz @ index-DLzoiRVA.js:37
+cN @ index-DLzoiRVA.js:37
+Kk @ index-DLzoiRVA.js:37
+(anonymous) @ index-DLzoiRVA.js:37
+ob @ index-DLzoiRVA.js:40
+vk @ index-DLzoiRVA.js:37
+I0 @ index-DLzoiRVA.js:37
+Mj @ index-DLzoiRVA.js:37
+jz @ index-DLzoiRVA.js:37Understand this error
+bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           GET https://object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg 404 (Not Found)
+Image
+(anonymous) @ index-DLzoiRVA.js:829
+(anonymous) @ index-DLzoiRVA.js:829
+E @ index-DLzoiRVA.js:829
+(anonymous) @ index-DLzoiRVA.js:779
+a @ index-DLzoiRVA.js:779
+l @ index-DLzoiRVA.js:779
+d @ index-DLzoiRVA.js:779
+F @ index-DLzoiRVA.js:779
+(anonymous) @ index-DLzoiRVA.js:829
+onClick @ index-DLzoiRVA.js:829
+tz @ index-DLzoiRVA.js:37
+sz @ index-DLzoiRVA.js:37
+rz @ index-DLzoiRVA.js:37
+cN @ index-DLzoiRVA.js:37
+Kk @ index-DLzoiRVA.js:37
+(anonymous) @ index-DLzoiRVA.js:37
+ob @ index-DLzoiRVA.js:40
+vk @ index-DLzoiRVA.js:37
+I0 @ index-DLzoiRVA.js:37
+Mj @ index-DLzoiRVA.js:37
+jz @ index-DLzoiRVA.js:37Understand this error
+(index):213 REPLIT_PAGE_LOADED
+(anonymous) @ (index):213
+setTimeout
+(anonymous) @ (index):212
+(anonymous) @ (index):230
+setTimeout
+(anonymous) @ (index):212Understand this warning
+index-DLzoiRVA.js:48 Uncaught SecurityError: Failed to execute 'pushState' on 'History': A history state object with URL 'https://tattlermedia.com/' cannot be created in a document with origin 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev' and URL 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/'.
+    at history.<computed> (index-DLzoiRVA.js:48:1619)
+    at history.pushState (index-DLzoiRVA.js:779:32522)
+    at history.pushState (index-DLzoiRVA.js:779:34329)
+    at gU (index-DLzoiRVA.js:48:1441)
+    at Array.<anonymous> (index-DLzoiRVA.js:48:2226)
+    at index-DLzoiRVA.js:48:988
+    at Array.<anonymous> (index-DLzoiRVA.js:48:3722)
+    at index-DLzoiRVA.js:48:988
+    at Object.tz (index-DLzoiRVA.js:37:9864)
+    at sz (index-DLzoiRVA.js:37:10018)
+history.<computed> @ index-DLzoiRVA.js:48
+history.pushState @ index-DLzoiRVA.js:779
+history.pushState @ index-DLzoiRVA.js:779
+gU @ index-DLzoiRVA.js:48
+(anonymous) @ index-DLzoiRVA.js:48
+(anonymous) @ index-DLzoiRVA.js:48
+(anonymous) @ index-DLzoiRVA.js:48
+(anonymous) @ index-DLzoiRVA.js:48
+tz @ index-DLzoiRVA.js:37
+sz @ index-DLzoiRVA.js:37
+rz @ index-DLzoiRVA.js:37
+cN @ index-DLzoiRVA.js:37
+Kk @ index-DLzoiRVA.js:37
+(anonymous) @ index-DLzoiRVA.js:37
+ob @ index-DLzoiRVA.js:40
+vk @ index-DLzoiRVA.js:37
+I0 @ index-DLzoiRVA.js:37
+Mj @ index-DLzoiRVA.js:37
+jz @ index-DLzoiRVA.js:37Understand this error
+(index):213 REPLIT_PAGE_LOADED

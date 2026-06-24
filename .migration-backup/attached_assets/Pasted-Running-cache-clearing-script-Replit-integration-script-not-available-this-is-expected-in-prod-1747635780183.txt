@@ -1,0 +1,32 @@
+Running cache clearing script...
+Replit integration script not available - this is expected in production
+[Maps Polyfill] Initializing enhanced Google Maps polyfill
+[Maps Polyfill] Installing fetch polyfill
+[WebSocket] WebSocket functionality is disabled to prevent conflicts with Object Storage
+REPLIT_APP_LOADED
+REPLIT_PAGE_LOADED
+Failed to check for new messages, will retry later
+REPLIT_PAGE_LOADED
+Cannot read properties of undefined (reading 'filter')
+at I (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/chat-CjoJkabv.js:1:450)
+at Object.$0 [as useReducer] (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BhGjetV9.js:39:18300)
+at Zt.useReducer (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BhGjetV9.js:10:6285)
+at Q (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/chat-CjoJkabv.js:1:1539)
+at Zj (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BhGjetV9.js:39:17018)
+at P1 (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BhGjetV9.js:41:3139)
+at WT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BhGjetV9.js:41:44833)
+at HT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BhGjetV9.js:41:39790)
+at IB (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BhGjetV9.js:41:39718)
+at zg (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BhGjetV9.js:41:39570)
+Cannot read properties of undefined (reading 'filter')
+at I (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/chat-CjoJkabv.js:1:450)
+at Object.$0 [as useReducer] (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BhGjetV9.js:39:18300)
+at Zt.useReducer (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BhGjetV9.js:10:6285)
+at Q (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/chat-CjoJkabv.js:1:1539)
+at Zj (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BhGjetV9.js:39:17018)
+at P1 (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BhGjetV9.js:41:3139)
+at WT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BhGjetV9.js:41:44833)
+at HT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BhGjetV9.js:41:39790)
+at IB (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BhGjetV9.js:41:39718)
+at zg (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-BhGjetV9.js:41:39570)
+REPLIT_PAGE_LOADED

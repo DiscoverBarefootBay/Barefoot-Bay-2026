@@ -1,0 +1,50 @@
+  async deleteOldContentVersions(): Promise<{ deletedCount: number }> {
+    console.log("Content version cleanup has been DISABLED per user request");
+    console.log("All content versions will be preserved to prevent any accidental media loss");
+    
+    // Return empty results - no versions will be deleted
+    return { deletedCount: 0 };
+      
+      // Step 2: For each content, keep only the latest version
+      for (const contentId of contentIds) {
+        try {
+          // Get all versions for this content
+          const versions = await db
+            .select()
+            .from(contentVersions)
+            .where(eq(contentVersions.contentId, contentId))
+            .orderBy(desc(contentVersions.versionNumber));
+          
+          if (versions.length <= 1) {
+            console.log(`Content ID ${contentId} has ${versions.length} versions, nothing to delete`);
+            continue; // No need to delete if there's only one version
+          }
+          
+          console.log(`Content ID ${contentId} has ${versions.length} versions, keeping latest version ${versions[0].versionNumber}`);
+          
+          // Keep the first one (latest) and delete the rest
+          const versionsToDelete = versions.slice(1);
+          const versionIdsToDelete = versionsToDelete.map(v => v.id);
+          
+          // Delete the old versions
+          const deleteResult = await db
+            .delete(contentVersions)
+            .where(inArray(contentVersions.id, versionIdsToDelete));
+          
+          console.log(`Deleted ${versionsToDelete.length} old versions for content ID ${contentId}`);
+          totalDeleted += versionsToDelete.length;
+        } catch (contentErr) {
+          console.error(`Error processing versions for content ID ${contentId}:`, contentErr);
+          // Continue with other content even if this one fails
+        }
+      }
+      
+      return { deletedCount: totalDeleted };
+    } catch (error) {
+      console.error("Error cleaning up content versions:", error);
+      throw error;
+    }
+  }
+  
+  // Forum Category Operations
+  async getForumCategories(): Promise<ForumCategory[]> {

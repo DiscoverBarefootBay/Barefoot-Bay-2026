@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barefoot Bay Stock Images</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .category {
+      margin-bottom: 40px;
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .category-header {
+      background-color: #3498db;
+      color: white;
+      padding: 15px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .image-container {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 15px;
+    }
+    .image-card {
+      width: calc(50% - 20px);
+      margin: 10px;
+      border-radius: 5px;
+      overflow: hidden;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    }
+    .image-card img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+    }
+    .image-info {
+      padding: 15px;
+      background-color: #f9f9f9;
+    }
+    .image-info h3 {
+      margin-top: 0;
+      font-size: 16px;
+      color: #444;
+    }
+    .image-info p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #666;
+    }
+    .image-info a {
+      color: #3498db;
+      text-decoration: none;
+    }
+    .image-info a:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 768px) {
+      .image-card {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Barefoot Bay Community Stock Images</h1>
+
+  <div id="imageCategories">
+    <!-- This will be populated by JavaScript -->
+  </div>
+
+  <script>
+    // Fetch the download summary
+    fetch('/uploads/Stock Images/download-summary.json')
+      .then(response => response.json())
+      .then(data => {
+        const categoriesContainer = document.getElementById('imageCategories');
+        
+        // For each category in the data
+        data.categories.forEach(category => {
+          // Create category section
+          const categorySection = document.createElement('div');
+          categorySection.className = 'category';
+          
+          // Add category header
+          const header = document.createElement('div');
+          header.className = 'category-header';
+          header.textContent = category.name;
+          categorySection.appendChild(header);
+          
+          // Create image container
+          const imageContainer = document.createElement('div');
+          imageContainer.className = 'image-container';
+          
+          // Add images
+          if (category.paths && category.paths.length > 0) {
+            category.paths.forEach(path => {
+              // Get metadata file path
+              const metadataPath = path.replace('.jpg', '.json');
+              
+              // Create image card
+              const imageCard = document.createElement('div');
+              imageCard.className = 'image-card';
+              
+              // Add image
+              const img = document.createElement('img');
+              img.src = path;
+              img.alt = category.name;
+              imageCard.appendChild(img);
+              
+              // Create info section
+              const infoSection = document.createElement('div');
+              infoSection.className = 'image-info';
+              
+              // Fetch metadata for this image
+              fetch(metadataPath)
+                .then(response => response.json())
+                .then(metadata => {
+                  // Add metadata to info section
+                  infoSection.innerHTML = `
+                    <h3>${category.name}</h3>
+                    <p><strong>Description:</strong> ${metadata.description || 'No description available'}</p>
+                    <p><strong>Photographer:</strong> <a href="${metadata.photographerUrl}" target="_blank">${metadata.photographer}</a></p>
+                    <p><strong>Source:</strong> ${metadata.source}</p>
+                  `;
+                })
+                .catch(error => {
+                  console.error('Error fetching metadata:', error);
+                  infoSection.innerHTML = `
+                    <h3>${category.name}</h3>
+                    <p>Error loading image information</p>
+                  `;
+                });
+              
+              imageCard.appendChild(infoSection);
+              imageContainer.appendChild(imageCard);
+            });
+          } else {
+            // If no images, show message
+            const noImages = document.createElement('p');
+            noImages.textContent = 'No images available for this category.';
+            imageContainer.appendChild(noImages);
+          }
+          
+          categorySection.appendChild(imageContainer);
+          categoriesContainer.appendChild(categorySection);
+        });
+      })
+      .catch(error => {
+        console.error('Error loading stock images:', error);
+        document.getElementById('imageCategories').innerHTML = '<p>Error loading stock images. Please try again later.</p>';
+      });
+  </script>
+</body>
+</html>

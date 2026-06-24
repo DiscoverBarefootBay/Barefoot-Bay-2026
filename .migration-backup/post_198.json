@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style data-vite-theme="" data-inject-first="">:root {
+      --background: 0 0% 100%;
+--foreground: 20 14.3% 4.1%;
+--muted: 60 4.8% 95.9%;
+--muted-foreground: 25 5.3% 44.7%;
+--popover: 0 0% 100%;
+--popover-foreground: 20 14.3% 4.1%;
+--card: 0 0% 100%;
+--card-foreground: 20 14.3% 4.1%;
+--border: 20 5.9% 90%;
+--input: 20 5.9% 90%;
+--primary: 190 44% 70%;
+--primary-foreground: 190 26% 11%;
+--secondary: 60 4.8% 95.9%;
+--secondary-foreground: 24 9.8% 10%;
+--accent: 60 4.8% 95.9%;
+--accent-foreground: 24 9.8% 10%;
+--destructive: 0 84.2% 60.2%;
+--destructive-foreground: 60 9.1% 97.8%;
+--ring: 20 14.3% 4.1%;
+--radius: 0.75rem;
+  }
+  .dark {
+      --background: 240 10% 3.9%;
+--foreground: 0 0% 98%;
+--muted: 240 3.7% 15.9%;
+--muted-foreground: 240 5% 64.9%;
+--popover: 240 10% 3.9%;
+--popover-foreground: 0 0% 98%;
+--card: 240 10% 3.9%;
+--card-foreground: 0 0% 98%;
+--border: 240 3.7% 15.9%;
+--input: 240 3.7% 15.9%;
+--primary: 190 44% 70%;
+--primary-foreground: 190 26% 11%;
+--secondary: 240 3.7% 15.9%;
+--secondary-foreground: 0 0% 98%;
+--accent: 240 3.7% 15.9%;
+--accent-foreground: 0 0% 98%;
+--destructive: 0 62.8% 30.6%;
+--destructive-foreground: 0 0% 98%;
+--ring: 240 4.9% 83.9%;
+--radius: 0.75rem;
+  }</style>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <meta name="description" content="Barefoot Bay community platform - connecting residents through events, forums, vendor directory and more" />
+    <title>Barefoot Bay Community Platform</title>
+    <meta property="og:title" content="Barefoot Bay Community Platform" />
+    <meta property="og:description" content="A residential community platform for Barefoot Bay featuring events calendar, community forum, vendor directory, and local services" />
+    <meta name="theme-color" content="#1E3A8A" />
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="/favicon/favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="/favicon/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/favicon/favicon-48x48.png" sizes="48x48" />
+    <!-- Apple Touch Icon - using iOS standard filenames and paths -->
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png" />
+    <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-precomposed.png" />
+    <link rel="mask-icon" href="/apple-touch-icon.png" color="#1E3A8A" />
+    <!-- Ensure home screen icon is displayed correctly -->
+    <meta name="msapplication-TileImage" content="/apple-touch-icon.png" />
+    <meta name="msapplication-TileColor" content="#1E3A8A" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Barefoot Bay" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    <script type="module" crossorigin src="/assets/index-B9f7a9qh.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-4xoqsn_K.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- Cache clearing script for banner slides -->
+    <script>
+      /**
+       * Script to help users clear their browser cache for banner slides
+       */
+      (function() {
+        // Function to clear all media cache for specific URLs
+        function clearMediaCache() {
+          console.log("Running cache clearing script...");
+          
+          // List of problematic URLs to clear from cache
+          const problematicUrls = [
+            "/uploads/banner-slides/bannerImage-1745531793603-403842876.jpg",
+            "/uploads/banner-slides/bannerImage-1745531939736-842695380.jpg",
+            "/banner-slides/bannerImage-1745531793603-403842876.jpg",
+            "/banner-slides/bannerImage-1745531939736-842695380.jpg"
+          ];
+          
+          // Clear localStorage media cache
+          let clearedCount = 0;
+          
+          // First scan all localStorage keys for any that match media-cache:
+          const keysToRemove = [];
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            
+            // Check each problematic URL
+            for (const url of problematicUrls) {
+              if (key && key.includes(url)) {
+                keysToRemove.push(key);
+              }
+            }
+          }
+          
+          // Remove all matching keys
+          for (const key of keysToRemove) {
+            localStorage.removeItem(key);
+            clearedCount++;
+          }
+          
+          console.log(`Cleared ${clearedCount} cached items from localStorage`);
+          
+          // Try to clear the browser's HTTP cache for these images
+          // This doesn't work in all browsers but worth a try
+          problematicUrls.forEach(url => {
+            // Try to force reload the image
+            const img = new Image();
+            img.src = url + "?cache-bust=" + new Date().getTime();
+          });
+          
+          // For extra measure, try using the Cache API if available
+          if ('caches' in window) {
+            caches.keys().then(cacheNames => {
+              return Promise.all(
+                cacheNames.map(cacheName => {
+                  return caches.open(cacheName).then(cache => {
+                    return Promise.all(
+                      problematicUrls.map(url => {
+                        return cache.delete(url).then(deleted => {
+                          if (deleted) console.log(`Deleted ${url} from cache ${cacheName}`);
+                        });
+                      })
+                    );
+                  });
+                })
+              );
+            }).catch(err => {
+              console.warn("Error clearing Cache API:", err);
+            });
+          }
+          
+          console.log("Cache clearing complete - errors should be resolved on next page refresh.");
+        }
+        
+        // Run the clear cache function immediately 
+        clearMediaCache();
+      })();
+    </script>
+  </body>
+</html>

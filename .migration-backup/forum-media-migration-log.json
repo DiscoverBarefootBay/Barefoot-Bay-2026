@@ -1,0 +1,3611 @@
+{
+  "startTime": "2025-05-05T01:09:43.829Z",
+  "completionTime": "2025-05-05T03:45:50.986Z",
+  "migratedFiles": [
+    {
+      "success": true,
+      "filename": "BB Favicon.png",
+      "url": "/api/storage-proxy/direct-forum/BB Favicon.png",
+      "originalPath": "/home/runner/workspace/forum-media/BB Favicon.png",
+      "contentType": "image/png",
+      "size": 40672,
+      "timestamp": "2025-05-05T01:09:44.438Z"
+    },
+    {
+      "success": true,
+      "filename": "BB Favicon180.png",
+      "url": "/api/storage-proxy/direct-forum/BB Favicon180.png",
+      "originalPath": "/home/runner/workspace/forum-media/BB Favicon180.png",
+      "contentType": "image/png",
+      "size": 33148,
+      "timestamp": "2025-05-05T01:09:44.765Z"
+    },
+    {
+      "success": true,
+      "filename": "BB-Favicon 180.png",
+      "url": "/api/storage-proxy/direct-forum/BB-Favicon 180.png",
+      "originalPath": "/home/runner/workspace/forum-media/BB-Favicon 180.png",
+      "contentType": "image/png",
+      "size": 0,
+      "timestamp": "2025-05-05T01:09:44.944Z"
+    },
+    {
+      "success": true,
+      "filename": "BB-Favicon updated lg.png",
+      "url": "/api/storage-proxy/direct-forum/BB-Favicon updated lg.png",
+      "originalPath": "/home/runner/workspace/forum-media/BB-Favicon updated lg.png",
+      "contentType": "image/png",
+      "size": 0,
+      "timestamp": "2025-05-05T01:09:45.132Z"
+    },
+    {
+      "success": true,
+      "filename": "BB-Favicon-180.png",
+      "url": "/api/storage-proxy/direct-forum/BB-Favicon-180.png",
+      "originalPath": "/home/runner/workspace/forum-media/BB-Favicon-180.png",
+      "contentType": "image/png",
+      "size": 8410,
+      "timestamp": "2025-05-05T01:09:45.402Z"
+    },
+    {
+      "success": true,
+      "filename": "BB-Favicon-Lg.png",
+      "url": "/api/storage-proxy/direct-forum/BB-Favicon-Lg.png",
+      "originalPath": "/home/runner/workspace/forum-media/BB-Favicon-Lg.png",
+      "contentType": "image/png",
+      "size": 8410,
+      "timestamp": "2025-05-05T01:09:45.662Z"
+    },
+    {
+      "success": true,
+      "filename": "BB-Favicon.png",
+      "url": "/api/storage-proxy/direct-forum/BB-Favicon.png",
+      "originalPath": "/home/runner/workspace/forum-media/BB-Favicon.png",
+      "contentType": "image/png",
+      "size": 1759,
+      "timestamp": "2025-05-05T01:09:45.888Z"
+    },
+    {
+      "success": true,
+      "filename": "BB-Favicongg.png",
+      "url": "/api/storage-proxy/direct-forum/BB-Favicongg.png",
+      "originalPath": "/home/runner/workspace/forum-media/BB-Favicongg.png",
+      "contentType": "image/png",
+      "size": 8634,
+      "timestamp": "2025-05-05T01:09:46.079Z"
+    },
+    {
+      "success": true,
+      "filename": "BBLogo.png",
+      "url": "/api/storage-proxy/direct-forum/BBLogo.png",
+      "originalPath": "/home/runner/workspace/forum-media/BBLogo.png",
+      "contentType": "image/png",
+      "size": 30587,
+      "timestamp": "2025-05-05T01:09:46.336Z"
+    },
+    {
+      "success": true,
+      "filename": "ChatGPT Image Apr 10, 2025, 08_07_00 PM.png",
+      "url": "/api/storage-proxy/direct-forum/ChatGPT Image Apr 10, 2025, 08_07_00 PM.png",
+      "originalPath": "/home/runner/workspace/forum-media/ChatGPT Image Apr 10, 2025, 08_07_00 PM.png",
+      "contentType": "image/png",
+      "size": 2266528,
+      "timestamp": "2025-05-05T01:09:46.956Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0549.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0549.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0549.png",
+      "contentType": "image/png",
+      "size": 889524,
+      "timestamp": "2025-05-05T01:09:47.391Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0554.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0554.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0554.png",
+      "contentType": "image/png",
+      "size": 1131650,
+      "timestamp": "2025-05-05T01:09:47.842Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0564.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0564.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0564.png",
+      "contentType": "image/png",
+      "size": 1917500,
+      "timestamp": "2025-05-05T01:09:48.347Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0565.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0565.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0565.png",
+      "contentType": "image/png",
+      "size": 237449,
+      "timestamp": "2025-05-05T01:09:48.671Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0573.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0573.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0573.png",
+      "contentType": "image/png",
+      "size": 236734,
+      "timestamp": "2025-05-05T01:09:48.999Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0574.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0574.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0574.png",
+      "contentType": "image/png",
+      "size": 1320741,
+      "timestamp": "2025-05-05T01:09:49.459Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0581.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0581.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0581.png",
+      "contentType": "image/png",
+      "size": 267824,
+      "timestamp": "2025-05-05T01:09:49.766Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0586.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0586.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0586.png",
+      "contentType": "image/png",
+      "size": 256389,
+      "timestamp": "2025-05-05T01:09:50.091Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0595.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0595.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0595.png",
+      "contentType": "image/png",
+      "size": 1312315,
+      "timestamp": "2025-05-05T01:09:50.557Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0596.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0596.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0596.png",
+      "contentType": "image/png",
+      "size": 1586359,
+      "timestamp": "2025-05-05T01:09:51.057Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0603.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0603.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0603.png",
+      "contentType": "image/png",
+      "size": 1071008,
+      "timestamp": "2025-05-05T01:11:53.718Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0604.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0604.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0604.png",
+      "contentType": "image/png",
+      "size": 1001531,
+      "timestamp": "2025-05-05T01:11:54.386Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0605.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0605.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0605.png",
+      "contentType": "image/png",
+      "size": 3982059,
+      "timestamp": "2025-05-05T01:11:55.302Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0606.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0606.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0606.png",
+      "contentType": "image/png",
+      "size": 260127,
+      "timestamp": "2025-05-05T01:11:55.829Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0608.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0608.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0608.png",
+      "contentType": "image/png",
+      "size": 271428,
+      "timestamp": "2025-05-05T01:11:56.328Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0609.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0609.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0609.png",
+      "contentType": "image/png",
+      "size": 979338,
+      "timestamp": "2025-05-05T01:11:56.928Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0610.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0610.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0610.png",
+      "contentType": "image/png",
+      "size": 271696,
+      "timestamp": "2025-05-05T01:11:57.425Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0612.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0612.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0612.png",
+      "contentType": "image/png",
+      "size": 1728277,
+      "timestamp": "2025-05-05T01:11:58.088Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0613.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0613.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0613.png",
+      "contentType": "image/png",
+      "size": 3250623,
+      "timestamp": "2025-05-05T01:11:58.874Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0614.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0614.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0614.png",
+      "contentType": "image/png",
+      "size": 3261261,
+      "timestamp": "2025-05-05T01:11:59.656Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0615.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0615.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0615.png",
+      "contentType": "image/png",
+      "size": 3623526,
+      "timestamp": "2025-05-05T01:12:19.883Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0616.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0616.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0616.png",
+      "contentType": "image/png",
+      "size": 1383612,
+      "timestamp": "2025-05-05T01:12:20.475Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0619.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0619.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0619.png",
+      "contentType": "image/png",
+      "size": 117463,
+      "timestamp": "2025-05-05T01:12:20.842Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0620.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0620.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0620.png",
+      "contentType": "image/png",
+      "size": 1904507,
+      "timestamp": "2025-05-05T01:12:21.439Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0622.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0622.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0622.png",
+      "contentType": "image/png",
+      "size": 1132108,
+      "timestamp": "2025-05-05T01:12:22.027Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0623.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0623.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0623.png",
+      "contentType": "image/png",
+      "size": 2000268,
+      "timestamp": "2025-05-05T01:12:22.618Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0625.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0625.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0625.png",
+      "contentType": "image/png",
+      "size": 257792,
+      "timestamp": "2025-05-05T01:12:23.093Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0627.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0627.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0627.png",
+      "contentType": "image/png",
+      "size": 1860143,
+      "timestamp": "2025-05-05T01:12:23.591Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0628.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0628.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0628.png",
+      "contentType": "image/png",
+      "size": 190231,
+      "timestamp": "2025-05-05T01:12:23.894Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0629.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0629.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0629.png",
+      "contentType": "image/png",
+      "size": 195147,
+      "timestamp": "2025-05-05T01:12:24.211Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0631.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0631.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0631.png",
+      "contentType": "image/png",
+      "size": 233902,
+      "timestamp": "2025-05-05T01:12:24.544Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0632.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0632.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0632.png",
+      "contentType": "image/png",
+      "size": 217944,
+      "timestamp": "2025-05-05T01:12:24.839Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0634.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0634.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0634.png",
+      "contentType": "image/png",
+      "size": 1432616,
+      "timestamp": "2025-05-05T01:12:25.265Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0635.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0635.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0635.png",
+      "contentType": "image/png",
+      "size": 1801763,
+      "timestamp": "2025-05-05T01:12:25.751Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0639.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0639.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0639.png",
+      "contentType": "image/png",
+      "size": 231126,
+      "timestamp": "2025-05-05T01:12:26.093Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0640.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0640.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0640.png",
+      "contentType": "image/png",
+      "size": 238047,
+      "timestamp": "2025-05-05T01:12:26.439Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0641.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0641.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0641.png",
+      "contentType": "image/png",
+      "size": 223653,
+      "timestamp": "2025-05-05T01:12:26.785Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0642.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0642.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0642.png",
+      "contentType": "image/png",
+      "size": 200693,
+      "timestamp": "2025-05-05T01:12:27.086Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0643.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0643.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0643.png",
+      "contentType": "image/png",
+      "size": 207685,
+      "timestamp": "2025-05-05T01:12:27.419Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0644.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0644.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0644.png",
+      "contentType": "image/png",
+      "size": 3794147,
+      "timestamp": "2025-05-05T01:12:28.235Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0647.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0647.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0647.png",
+      "contentType": "image/png",
+      "size": 296475,
+      "timestamp": "2025-05-05T01:15:57.314Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0648.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0648.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0648.png",
+      "contentType": "image/png",
+      "size": 201495,
+      "timestamp": "2025-05-05T01:15:57.765Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0650.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0650.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0650.png",
+      "contentType": "image/png",
+      "size": 3789018,
+      "timestamp": "2025-05-05T01:15:58.767Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0656.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0656.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0656.png",
+      "contentType": "image/png",
+      "size": 1881360,
+      "timestamp": "2025-05-05T01:15:59.363Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0659.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0659.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0659.png",
+      "contentType": "image/png",
+      "size": 2145974,
+      "timestamp": "2025-05-05T01:15:59.986Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0661.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0661.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0661.png",
+      "contentType": "image/png",
+      "size": 862778,
+      "timestamp": "2025-05-05T01:16:00.509Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0662.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0662.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0662.png",
+      "contentType": "image/png",
+      "size": 1235947,
+      "timestamp": "2025-05-05T01:16:01.200Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0663.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0663.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0663.png",
+      "contentType": "image/png",
+      "size": 198022,
+      "timestamp": "2025-05-05T01:16:01.622Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0666.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0666.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0666.png",
+      "contentType": "image/png",
+      "size": 1092328,
+      "timestamp": "2025-05-05T01:16:02.189Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0669.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0669.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0669.png",
+      "contentType": "image/png",
+      "size": 196202,
+      "timestamp": "2025-05-05T01:16:02.628Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0672.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0672.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0672.png",
+      "contentType": "image/png",
+      "size": 1632123,
+      "timestamp": "2025-05-05T01:16:03.230Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0674.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0674.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0674.png",
+      "contentType": "image/png",
+      "size": 5913618,
+      "timestamp": "2025-05-05T01:16:04.401Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0680.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0680.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0680.png",
+      "contentType": "image/png",
+      "size": 1040367,
+      "timestamp": "2025-05-05T01:16:04.967Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0681.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0681.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0681.png",
+      "contentType": "image/png",
+      "size": 229800,
+      "timestamp": "2025-05-05T01:16:05.427Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0683.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0683.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0683.png",
+      "contentType": "image/png",
+      "size": 236676,
+      "timestamp": "2025-05-05T01:16:05.869Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0685.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0685.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0685.png",
+      "contentType": "image/png",
+      "size": 1860874,
+      "timestamp": "2025-05-05T01:16:56.798Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0686.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0686.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0686.png",
+      "contentType": "image/png",
+      "size": 1737034,
+      "timestamp": "2025-05-05T01:16:57.400Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0687.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0687.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0687.png",
+      "contentType": "image/png",
+      "size": 777868,
+      "timestamp": "2025-05-05T01:16:57.954Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0689.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0689.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0689.png",
+      "contentType": "image/png",
+      "size": 270394,
+      "timestamp": "2025-05-05T01:16:58.390Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0690.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0690.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0690.png",
+      "contentType": "image/png",
+      "size": 371504,
+      "timestamp": "2025-05-05T01:16:58.862Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0691.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0691.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0691.png",
+      "contentType": "image/png",
+      "size": 395687,
+      "timestamp": "2025-05-05T01:16:59.397Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0692.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0692.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0692.png",
+      "contentType": "image/png",
+      "size": 304701,
+      "timestamp": "2025-05-05T01:16:59.870Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0695.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0695.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0695.png",
+      "contentType": "image/png",
+      "size": 1873170,
+      "timestamp": "2025-05-05T01:17:00.455Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0696.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0696.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0696.png",
+      "contentType": "image/png",
+      "size": 258306,
+      "timestamp": "2025-05-05T01:17:00.928Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0697.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0697.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0697.png",
+      "contentType": "image/png",
+      "size": 317980,
+      "timestamp": "2025-05-05T01:17:01.385Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0699.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0699.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0699.png",
+      "contentType": "image/png",
+      "size": 1885589,
+      "timestamp": "2025-05-05T01:17:02.002Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0700.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0700.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0700.png",
+      "contentType": "image/png",
+      "size": 1798729,
+      "timestamp": "2025-05-05T01:17:02.590Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0702.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0702.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0702.png",
+      "contentType": "image/png",
+      "size": 1730733,
+      "timestamp": "2025-05-05T01:17:03.222Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0704.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0704.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0704.png",
+      "contentType": "image/png",
+      "size": 303479,
+      "timestamp": "2025-05-05T01:17:03.687Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0707.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0707.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0707.png",
+      "contentType": "image/png",
+      "size": 521248,
+      "timestamp": "2025-05-05T01:17:04.224Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0708.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0708.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0708.png",
+      "contentType": "image/png",
+      "size": 1749509,
+      "timestamp": "2025-05-05T01:17:14.767Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0709.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0709.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0709.png",
+      "contentType": "image/png",
+      "size": 1741176,
+      "timestamp": "2025-05-05T01:17:15.420Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0710.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0710.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0710.png",
+      "contentType": "image/png",
+      "size": 1487804,
+      "timestamp": "2025-05-05T01:17:15.994Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0712.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0712.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0712.png",
+      "contentType": "image/png",
+      "size": 2580014,
+      "timestamp": "2025-05-05T01:17:16.637Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0714.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0714.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0714.png",
+      "contentType": "image/png",
+      "size": 249002,
+      "timestamp": "2025-05-05T01:17:17.103Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0715.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0715.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0715.png",
+      "contentType": "image/png",
+      "size": 241931,
+      "timestamp": "2025-05-05T01:17:17.572Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0717.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0717.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0717.png",
+      "contentType": "image/png",
+      "size": 292638,
+      "timestamp": "2025-05-05T01:17:18.032Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0718.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0718.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0718.png",
+      "contentType": "image/png",
+      "size": 947562,
+      "timestamp": "2025-05-05T01:17:18.608Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0719.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0719.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0719.png",
+      "contentType": "image/png",
+      "size": 253470,
+      "timestamp": "2025-05-05T01:17:19.062Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0720.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0720.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0720.png",
+      "contentType": "image/png",
+      "size": 227270,
+      "timestamp": "2025-05-05T01:17:19.506Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0747.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0747.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0747.png",
+      "contentType": "image/png",
+      "size": 289729,
+      "timestamp": "2025-05-05T01:17:19.966Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0748.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0748.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0748.png",
+      "contentType": "image/png",
+      "size": 290763,
+      "timestamp": "2025-05-05T01:17:20.422Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0750.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0750.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0750.png",
+      "contentType": "image/png",
+      "size": 277998,
+      "timestamp": "2025-05-05T01:17:20.876Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0751.png",
+      "url": "/api/storage-proxy/direct-forum/IMG_0751.png",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0751.png",
+      "contentType": "image/png",
+      "size": 277325,
+      "timestamp": "2025-05-05T01:17:21.337Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0756.PNG",
+      "url": "/api/storage-proxy/direct-forum/IMG_0756.PNG",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0756.PNG",
+      "contentType": "image/png",
+      "size": 3910526,
+      "timestamp": "2025-05-05T01:17:22.172Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0757 (1).PNG",
+      "url": "/api/storage-proxy/direct-forum/IMG_0757 (1).PNG",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0757 (1).PNG",
+      "contentType": "image/png",
+      "size": 332958,
+      "timestamp": "2025-05-05T03:36:32.038Z"
+    },
+    {
+      "success": true,
+      "filename": "IMG_0788.PNG",
+      "url": "/api/storage-proxy/direct-forum/IMG_0788.PNG",
+      "originalPath": "/home/runner/workspace/forum-media/IMG_0788.PNG",
+      "contentType": "image/png",
+      "size": 344486,
+      "timestamp": "2025-05-05T03:36:32.540Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-03 020330.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-03 020330.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-03 020330.png",
+      "contentType": "image/png",
+      "size": 159592,
+      "timestamp": "2025-05-05T03:36:32.963Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-03 041315.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-03 041315.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-03 041315.png",
+      "contentType": "image/png",
+      "size": 6209,
+      "timestamp": "2025-05-05T03:36:33.278Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-03 041319.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-03 041319.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-03 041319.png",
+      "contentType": "image/png",
+      "size": 43141,
+      "timestamp": "2025-05-05T03:36:33.632Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-04 062611.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-04 062611.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-04 062611.png",
+      "contentType": "image/png",
+      "size": 638051,
+      "timestamp": "2025-05-05T03:36:34.158Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-04 072938.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-04 072938.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-04 072938.png",
+      "contentType": "image/png",
+      "size": 44648,
+      "timestamp": "2025-05-05T03:36:34.492Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-05 055139.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-05 055139.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-05 055139.png",
+      "contentType": "image/png",
+      "size": 105728,
+      "timestamp": "2025-05-05T03:36:34.896Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-05 081537.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-05 081537.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-05 081537.png",
+      "contentType": "image/png",
+      "size": 5861,
+      "timestamp": "2025-05-05T03:36:35.240Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-06 030455.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-06 030455.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-06 030455.png",
+      "contentType": "image/png",
+      "size": 43890,
+      "timestamp": "2025-05-05T03:36:35.602Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-08 164708.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-08 164708.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-08 164708.png",
+      "contentType": "image/png",
+      "size": 791202,
+      "timestamp": "2025-05-05T03:36:36.171Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-09 061819.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-09 061819.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-09 061819.png",
+      "contentType": "image/png",
+      "size": 153114,
+      "timestamp": "2025-05-05T03:36:36.588Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-09 061854.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-09 061854.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-09 061854.png",
+      "contentType": "image/png",
+      "size": 151185,
+      "timestamp": "2025-05-05T03:36:36.997Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-09 071757.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-09 071757.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-09 071757.png",
+      "contentType": "image/png",
+      "size": 79816,
+      "timestamp": "2025-05-05T03:36:37.374Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-11 081516.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-11 081516.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-11 081516.png",
+      "contentType": "image/png",
+      "size": 536408,
+      "timestamp": "2025-05-05T03:36:37.914Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-11 114514.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-11 114514.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-11 114514.png",
+      "contentType": "image/png",
+      "size": 1211273,
+      "timestamp": "2025-05-05T03:36:38.472Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-13 100139.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-13 100139.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-13 100139.png",
+      "contentType": "image/png",
+      "size": 475052,
+      "timestamp": "2025-05-05T03:36:39.008Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-13 100318.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-13 100318.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-13 100318.png",
+      "contentType": "image/png",
+      "size": 710103,
+      "timestamp": "2025-05-05T03:36:39.605Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-13 141856.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-13 141856.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-13 141856.png",
+      "contentType": "image/png",
+      "size": 58866,
+      "timestamp": "2025-05-05T03:36:39.959Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-14 142823.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-14 142823.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-14 142823.png",
+      "contentType": "image/png",
+      "size": 515931,
+      "timestamp": "2025-05-05T03:36:40.475Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-21 142440.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-21 142440.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-21 142440.png",
+      "contentType": "image/png",
+      "size": 290066,
+      "timestamp": "2025-05-05T03:37:08.948Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-23 173550.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-23 173550.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-23 173550.png",
+      "contentType": "image/png",
+      "size": 665586,
+      "timestamp": "2025-05-05T03:37:09.378Z"
+    },
+    {
+      "success": true,
+      "filename": "Screenshot 2025-04-24 022012.png",
+      "url": "/api/storage-proxy/direct-forum/Screenshot 2025-04-24 022012.png",
+      "originalPath": "/home/runner/workspace/forum-media/Screenshot 2025-04-24 022012.png",
+      "contentType": "image/png",
+      "size": 356589,
+      "timestamp": "2025-05-05T03:37:09.733Z"
+    },
+    {
+      "success": true,
+      "filename": "image0.png",
+      "url": "/api/storage-proxy/direct-forum/image0.png",
+      "originalPath": "/home/runner/workspace/forum-media/image0.png",
+      "contentType": "image/png",
+      "size": 1937651,
+      "timestamp": "2025-05-05T03:37:10.298Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743592497744.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743592497744.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743592497744.png",
+      "contentType": "image/png",
+      "size": 799559,
+      "timestamp": "2025-05-05T03:37:10.689Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743592518341.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743592518341.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743592518341.png",
+      "contentType": "image/png",
+      "size": 735830,
+      "timestamp": "2025-05-05T03:37:11.096Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743595954661.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743595954661.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743595954661.png",
+      "contentType": "image/png",
+      "size": 584980,
+      "timestamp": "2025-05-05T03:37:11.500Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743596235177.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743596235177.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743596235177.png",
+      "contentType": "image/png",
+      "size": 197465,
+      "timestamp": "2025-05-05T03:37:11.814Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743596485364.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743596485364.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743596485364.png",
+      "contentType": "image/png",
+      "size": 210611,
+      "timestamp": "2025-05-05T03:37:12.171Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743596929371.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743596929371.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743596929371.png",
+      "contentType": "image/png",
+      "size": 307931,
+      "timestamp": "2025-05-05T03:37:12.526Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743597450422.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743597450422.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743597450422.png",
+      "contentType": "image/png",
+      "size": 179858,
+      "timestamp": "2025-05-05T03:37:12.839Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743597827049.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743597827049.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743597827049.png",
+      "contentType": "image/png",
+      "size": 23106,
+      "timestamp": "2025-05-05T03:37:13.038Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743598044117.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743598044117.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743598044117.png",
+      "contentType": "image/png",
+      "size": 4904,
+      "timestamp": "2025-05-05T03:37:13.239Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743598307340.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743598307340.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743598307340.png",
+      "contentType": "image/png",
+      "size": 230201,
+      "timestamp": "2025-05-05T03:37:13.570Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743606139953.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743606139953.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743606139953.png",
+      "contentType": "image/png",
+      "size": 1536327,
+      "timestamp": "2025-05-05T03:37:14.039Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743606632046.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743606632046.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743606632046.png",
+      "contentType": "image/png",
+      "size": 899209,
+      "timestamp": "2025-05-05T03:37:14.515Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743607018691.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743607018691.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743607018691.png",
+      "contentType": "image/png",
+      "size": 6978,
+      "timestamp": "2025-05-05T03:37:14.730Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743607458986.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743607458986.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743607458986.png",
+      "contentType": "image/png",
+      "size": 749823,
+      "timestamp": "2025-05-05T03:37:15.151Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743608422109.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743608422109.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743608422109.png",
+      "contentType": "image/png",
+      "size": 647969,
+      "timestamp": "2025-05-05T03:37:15.549Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743642638474.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743642638474.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743642638474.png",
+      "contentType": "image/png",
+      "size": 596362,
+      "timestamp": "2025-05-05T03:37:15.939Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743642806562.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743642806562.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743642806562.png",
+      "contentType": "image/png",
+      "size": 593940,
+      "timestamp": "2025-05-05T03:37:50.043Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743648499454.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743648499454.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743648499454.png",
+      "contentType": "image/png",
+      "size": 2008632,
+      "timestamp": "2025-05-05T03:37:50.711Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743649229631.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743649229631.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743649229631.png",
+      "contentType": "image/png",
+      "size": 1550341,
+      "timestamp": "2025-05-05T03:37:51.369Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743660752570.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743660752570.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743660752570.png",
+      "contentType": "image/png",
+      "size": 417023,
+      "timestamp": "2025-05-05T03:37:51.903Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743660778828.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743660778828.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743660778828.png",
+      "contentType": "image/png",
+      "size": 262086,
+      "timestamp": "2025-05-05T03:37:52.392Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743661081199.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743661081199.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743661081199.png",
+      "contentType": "image/png",
+      "size": 1197163,
+      "timestamp": "2025-05-05T03:37:53.007Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743663092443.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743663092443.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743663092443.png",
+      "contentType": "image/png",
+      "size": 63624,
+      "timestamp": "2025-05-05T03:37:53.356Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743663458468.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743663458468.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743663458468.png",
+      "contentType": "image/png",
+      "size": 870898,
+      "timestamp": "2025-05-05T03:37:53.917Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743663869084.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743663869084.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743663869084.png",
+      "contentType": "image/png",
+      "size": 221647,
+      "timestamp": "2025-05-05T03:37:54.420Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743664193707.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743664193707.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743664193707.png",
+      "contentType": "image/png",
+      "size": 57404,
+      "timestamp": "2025-05-05T03:37:54.756Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743665579503.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743665579503.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743665579503.png",
+      "contentType": "image/png",
+      "size": 684678,
+      "timestamp": "2025-05-05T03:37:55.288Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743665896500.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743665896500.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743665896500.png",
+      "contentType": "image/png",
+      "size": 66195,
+      "timestamp": "2025-05-05T03:37:55.612Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743666392351.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743666392351.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743666392351.png",
+      "contentType": "image/png",
+      "size": 74844,
+      "timestamp": "2025-05-05T03:37:55.962Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743668542787.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743668542787.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743668542787.png",
+      "contentType": "image/png",
+      "size": 1726613,
+      "timestamp": "2025-05-05T03:37:56.565Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743668962903.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743668962903.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743668962903.png",
+      "contentType": "image/png",
+      "size": 112152,
+      "timestamp": "2025-05-05T03:37:56.954Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743669187168.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743669187168.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743669187168.png",
+      "contentType": "image/png",
+      "size": 1069494,
+      "timestamp": "2025-05-05T03:38:07.600Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743669605873.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743669605873.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743669605873.png",
+      "contentType": "image/png",
+      "size": 941541,
+      "timestamp": "2025-05-05T03:38:08.139Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743671547388.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743671547388.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743671547388.png",
+      "contentType": "image/png",
+      "size": 109317,
+      "timestamp": "2025-05-05T03:38:08.539Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743673375631.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743673375631.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743673375631.png",
+      "contentType": "image/png",
+      "size": 112556,
+      "timestamp": "2025-05-05T03:38:08.933Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743673737310.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743673737310.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743673737310.png",
+      "contentType": "image/png",
+      "size": 648208,
+      "timestamp": "2025-05-05T03:38:09.438Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743673782264.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743673782264.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743673782264.png",
+      "contentType": "image/png",
+      "size": 921098,
+      "timestamp": "2025-05-05T03:38:10.011Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743673804431.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743673804431.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743673804431.png",
+      "contentType": "image/png",
+      "size": 845591,
+      "timestamp": "2025-05-05T03:38:10.564Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743674334078.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743674334078.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743674334078.png",
+      "contentType": "image/png",
+      "size": 407031,
+      "timestamp": "2025-05-05T03:38:11.093Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743674939127.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743674939127.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743674939127.png",
+      "contentType": "image/png",
+      "size": 17713,
+      "timestamp": "2025-05-05T03:38:11.428Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743675655758.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743675655758.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743675655758.png",
+      "contentType": "image/png",
+      "size": 79289,
+      "timestamp": "2025-05-05T03:38:11.823Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743675730253.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743675730253.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743675730253.png",
+      "contentType": "image/png",
+      "size": 197257,
+      "timestamp": "2025-05-05T03:38:12.241Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743675785785.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743675785785.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743675785785.png",
+      "contentType": "image/png",
+      "size": 83984,
+      "timestamp": "2025-05-05T03:38:12.574Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743675848902.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743675848902.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743675848902.png",
+      "contentType": "image/png",
+      "size": 73109,
+      "timestamp": "2025-05-05T03:38:12.970Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743675904451.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743675904451.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743675904451.png",
+      "contentType": "image/png",
+      "size": 102753,
+      "timestamp": "2025-05-05T03:38:13.351Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743676247951.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743676247951.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743676247951.png",
+      "contentType": "image/png",
+      "size": 507272,
+      "timestamp": "2025-05-05T03:38:13.883Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743676309250.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743676309250.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743676309250.png",
+      "contentType": "image/png",
+      "size": 71045,
+      "timestamp": "2025-05-05T03:38:14.235Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743681720240.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743681720240.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743681720240.png",
+      "contentType": "image/png",
+      "size": 375574,
+      "timestamp": "2025-05-05T03:38:14.694Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743682086285.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743682086285.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743682086285.png",
+      "contentType": "image/png",
+      "size": 395228,
+      "timestamp": "2025-05-05T03:38:15.202Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743682521086.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743682521086.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743682521086.png",
+      "contentType": "image/png",
+      "size": 13361,
+      "timestamp": "2025-05-05T03:38:15.539Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743683522181.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743683522181.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743683522181.png",
+      "contentType": "image/png",
+      "size": 13361,
+      "timestamp": "2025-05-05T03:38:15.847Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743683540837.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743683540837.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743683540837.png",
+      "contentType": "image/png",
+      "size": 334909,
+      "timestamp": "2025-05-05T03:40:16.098Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743683727039.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743683727039.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743683727039.png",
+      "contentType": "image/png",
+      "size": 334909,
+      "timestamp": "2025-05-05T03:40:16.588Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743683742085.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743683742085.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743683742085.png",
+      "contentType": "image/png",
+      "size": 19761,
+      "timestamp": "2025-05-05T03:40:16.910Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743685687876.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743685687876.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743685687876.png",
+      "contentType": "image/png",
+      "size": 18379,
+      "timestamp": "2025-05-05T03:40:17.252Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743688630598.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743688630598.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743688630598.png",
+      "contentType": "image/png",
+      "size": 398584,
+      "timestamp": "2025-05-05T03:40:17.705Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743693490418.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743693490418.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743693490418.png",
+      "contentType": "image/png",
+      "size": 740412,
+      "timestamp": "2025-05-05T03:40:18.235Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743694893491.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743694893491.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743694893491.png",
+      "contentType": "image/png",
+      "size": 51174,
+      "timestamp": "2025-05-05T03:40:18.577Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743696513861.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743696513861.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743696513861.png",
+      "contentType": "image/png",
+      "size": 879176,
+      "timestamp": "2025-05-05T03:40:19.157Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743696535785.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743696535785.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743696535785.png",
+      "contentType": "image/png",
+      "size": 618617,
+      "timestamp": "2025-05-05T03:40:19.685Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743696803148.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743696803148.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743696803148.png",
+      "contentType": "image/png",
+      "size": 666567,
+      "timestamp": "2025-05-05T03:40:20.213Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743697143593.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743697143593.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743697143593.png",
+      "contentType": "image/png",
+      "size": 40108,
+      "timestamp": "2025-05-05T03:40:20.552Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743698132838.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743698132838.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743698132838.png",
+      "contentType": "image/png",
+      "size": 55477,
+      "timestamp": "2025-05-05T03:40:20.896Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743699218313.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743699218313.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743699218313.png",
+      "contentType": "image/png",
+      "size": 341412,
+      "timestamp": "2025-05-05T03:40:21.370Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743699229832.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743699229832.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743699229832.png",
+      "contentType": "image/png",
+      "size": 364992,
+      "timestamp": "2025-05-05T03:40:21.899Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743699834634.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743699834634.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743699834634.png",
+      "contentType": "image/png",
+      "size": 18627,
+      "timestamp": "2025-05-05T03:40:22.207Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743699859232.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743699859232.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743699859232.png",
+      "contentType": "image/png",
+      "size": 1134080,
+      "timestamp": "2025-05-05T03:40:22.795Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743700324449.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743700324449.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743700324449.png",
+      "contentType": "image/png",
+      "size": 805341,
+      "timestamp": "2025-05-05T03:40:23.359Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743755835989.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743755835989.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743755835989.png",
+      "contentType": "image/png",
+      "size": 36746,
+      "timestamp": "2025-05-05T03:40:23.690Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743756057763.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743756057763.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743756057763.png",
+      "contentType": "image/png",
+      "size": 3845,
+      "timestamp": "2025-05-05T03:40:24.034Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743757114461.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743757114461.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743757114461.png",
+      "contentType": "image/png",
+      "size": 748198,
+      "timestamp": "2025-05-05T03:40:24.567Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743757733196.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743757733196.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743757733196.png",
+      "contentType": "image/png",
+      "size": 1416655,
+      "timestamp": "2025-05-05T03:40:33.534Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743759161616.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743759161616.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743759161616.png",
+      "contentType": "image/png",
+      "size": 629115,
+      "timestamp": "2025-05-05T03:40:34.058Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743759191040.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743759191040.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743759191040.png",
+      "contentType": "image/png",
+      "size": 616970,
+      "timestamp": "2025-05-05T03:40:34.582Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743759361357.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743759361357.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743759361357.png",
+      "contentType": "image/png",
+      "size": 652708,
+      "timestamp": "2025-05-05T03:40:35.128Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743760138244.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743760138244.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743760138244.png",
+      "contentType": "image/png",
+      "size": 231874,
+      "timestamp": "2025-05-05T03:40:35.612Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743760393159.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743760393159.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743760393159.png",
+      "contentType": "image/png",
+      "size": 1275586,
+      "timestamp": "2025-05-05T03:40:36.283Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743760679364.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743760679364.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743760679364.png",
+      "contentType": "image/png",
+      "size": 885778,
+      "timestamp": "2025-05-05T03:40:36.813Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743761586560.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743761586560.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743761586560.png",
+      "contentType": "image/png",
+      "size": 18569,
+      "timestamp": "2025-05-05T03:40:37.188Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743762399205.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743762399205.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743762399205.png",
+      "contentType": "image/png",
+      "size": 148876,
+      "timestamp": "2025-05-05T03:40:37.606Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743764118789.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743764118789.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743764118789.png",
+      "contentType": "image/png",
+      "size": 13247,
+      "timestamp": "2025-05-05T03:40:37.924Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743765381903.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743765381903.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743765381903.png",
+      "contentType": "image/png",
+      "size": 93799,
+      "timestamp": "2025-05-05T03:40:38.280Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743765993856.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743765993856.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743765993856.png",
+      "contentType": "image/png",
+      "size": 638051,
+      "timestamp": "2025-05-05T03:40:38.809Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743765999390.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743765999390.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743765999390.png",
+      "contentType": "image/png",
+      "size": 13179,
+      "timestamp": "2025-05-05T03:40:39.128Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743767416137.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743767416137.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743767416137.png",
+      "contentType": "image/png",
+      "size": 178972,
+      "timestamp": "2025-05-05T03:40:39.534Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743767887573.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743767887573.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743767887573.png",
+      "contentType": "image/png",
+      "size": 367665,
+      "timestamp": "2025-05-05T03:40:40.077Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743767999163.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743767999163.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743767999163.png",
+      "contentType": "image/png",
+      "size": 16891,
+      "timestamp": "2025-05-05T03:40:40.394Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743768885943.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743768885943.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743768885943.png",
+      "contentType": "image/png",
+      "size": 65234,
+      "timestamp": "2025-05-05T03:40:40.746Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743769428058.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743769428058.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743769428058.png",
+      "contentType": "image/png",
+      "size": 30351,
+      "timestamp": "2025-05-05T03:40:41.116Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743770410782.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743770410782.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743770410782.png",
+      "contentType": "image/png",
+      "size": 63591,
+      "timestamp": "2025-05-05T03:40:41.504Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743772096402.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743772096402.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743772096402.png",
+      "contentType": "image/png",
+      "size": 45093,
+      "timestamp": "2025-05-05T03:40:41.836Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743772111409.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743772111409.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743772111409.png",
+      "contentType": "image/png",
+      "size": 45093,
+      "timestamp": "2025-05-05T03:40:50.427Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743772531763.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743772531763.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743772531763.png",
+      "contentType": "image/png",
+      "size": 43467,
+      "timestamp": "2025-05-05T03:40:50.816Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743773266674.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743773266674.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743773266674.png",
+      "contentType": "image/png",
+      "size": 33784,
+      "timestamp": "2025-05-05T03:40:51.164Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743773896768.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743773896768.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743773896768.png",
+      "contentType": "image/png",
+      "size": 63701,
+      "timestamp": "2025-05-05T03:40:51.521Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743774924534.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743774924534.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743774924534.png",
+      "contentType": "image/png",
+      "size": 55299,
+      "timestamp": "2025-05-05T03:40:51.869Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743781080669.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743781080669.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743781080669.png",
+      "contentType": "image/png",
+      "size": 32086,
+      "timestamp": "2025-05-05T03:40:52.178Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743781244251.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743781244251.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743781244251.png",
+      "contentType": "image/png",
+      "size": 29991,
+      "timestamp": "2025-05-05T03:40:52.508Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743781469588.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743781469588.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743781469588.png",
+      "contentType": "image/png",
+      "size": 40369,
+      "timestamp": "2025-05-05T03:40:52.841Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743781490593.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743781490593.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743781490593.png",
+      "contentType": "image/png",
+      "size": 40369,
+      "timestamp": "2025-05-05T03:40:53.183Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743781700145.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743781700145.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743781700145.png",
+      "contentType": "image/png",
+      "size": 6850,
+      "timestamp": "2025-05-05T03:40:53.532Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743782634707.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743782634707.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743782634707.png",
+      "contentType": "image/png",
+      "size": 201508,
+      "timestamp": "2025-05-05T03:40:53.957Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743783797186.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743783797186.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743783797186.png",
+      "contentType": "image/png",
+      "size": 28981,
+      "timestamp": "2025-05-05T03:40:54.271Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743783903111.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743783903111.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743783903111.png",
+      "contentType": "image/png",
+      "size": 403740,
+      "timestamp": "2025-05-05T03:40:54.751Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743784179051.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743784179051.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743784179051.png",
+      "contentType": "image/png",
+      "size": 693644,
+      "timestamp": "2025-05-05T03:40:55.339Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743786322716.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743786322716.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743786322716.png",
+      "contentType": "image/png",
+      "size": 4539,
+      "timestamp": "2025-05-05T03:40:55.684Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743799773626.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743799773626.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743799773626.png",
+      "contentType": "image/png",
+      "size": 38338,
+      "timestamp": "2025-05-05T03:40:56.011Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743799783960.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743799783960.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743799783960.png",
+      "contentType": "image/png",
+      "size": 769671,
+      "timestamp": "2025-05-05T03:40:56.594Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743808313386.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743808313386.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743808313386.png",
+      "contentType": "image/png",
+      "size": 95399,
+      "timestamp": "2025-05-05T03:40:56.967Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743809151333.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743809151333.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743809151333.png",
+      "contentType": "image/png",
+      "size": 75768,
+      "timestamp": "2025-05-05T03:40:57.303Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743813032212.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743813032212.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743813032212.png",
+      "contentType": "image/png",
+      "size": 1115088,
+      "timestamp": "2025-05-05T03:40:57.900Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743813069151.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743813069151.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743813069151.png",
+      "contentType": "image/png",
+      "size": 44735,
+      "timestamp": "2025-05-05T03:41:07.562Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743813120908.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743813120908.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743813120908.png",
+      "contentType": "image/png",
+      "size": 215658,
+      "timestamp": "2025-05-05T03:41:07.956Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743813806775.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743813806775.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743813806775.png",
+      "contentType": "image/png",
+      "size": 948675,
+      "timestamp": "2025-05-05T03:41:08.378Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743814319347.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743814319347.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743814319347.png",
+      "contentType": "image/png",
+      "size": 203495,
+      "timestamp": "2025-05-05T03:41:08.721Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743814360711.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743814360711.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743814360711.png",
+      "contentType": "image/png",
+      "size": 1112381,
+      "timestamp": "2025-05-05T03:41:09.133Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743815285895.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743815285895.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743815285895.png",
+      "contentType": "image/png",
+      "size": 43749,
+      "timestamp": "2025-05-05T03:41:09.351Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743816099113.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743816099113.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743816099113.png",
+      "contentType": "image/png",
+      "size": 55624,
+      "timestamp": "2025-05-05T03:41:09.614Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743817762973.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743817762973.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743817762973.png",
+      "contentType": "image/png",
+      "size": 41639,
+      "timestamp": "2025-05-05T03:41:09.830Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743817851135.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743817851135.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743817851135.png",
+      "contentType": "image/png",
+      "size": 40731,
+      "timestamp": "2025-05-05T03:41:10.075Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743818521461.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743818521461.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743818521461.png",
+      "contentType": "image/png",
+      "size": 47495,
+      "timestamp": "2025-05-05T03:41:10.285Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743818535484.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743818535484.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743818535484.png",
+      "contentType": "image/png",
+      "size": 46492,
+      "timestamp": "2025-05-05T03:41:10.534Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743819173176.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743819173176.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743819173176.png",
+      "contentType": "image/png",
+      "size": 47031,
+      "timestamp": "2025-05-05T03:41:10.791Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743819210552.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743819210552.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743819210552.png",
+      "contentType": "image/png",
+      "size": 76884,
+      "timestamp": "2025-05-05T03:41:11.024Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743819366032.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743819366032.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743819366032.png",
+      "contentType": "image/png",
+      "size": 45764,
+      "timestamp": "2025-05-05T03:41:11.267Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743820951155.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743820951155.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743820951155.png",
+      "contentType": "image/png",
+      "size": 25015,
+      "timestamp": "2025-05-05T03:41:11.509Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743822170323.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743822170323.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743822170323.png",
+      "contentType": "image/png",
+      "size": 72217,
+      "timestamp": "2025-05-05T03:41:11.747Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743822181496.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743822181496.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743822181496.png",
+      "contentType": "image/png",
+      "size": 25872,
+      "timestamp": "2025-05-05T03:41:11.937Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743823134112.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743823134112.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743823134112.png",
+      "contentType": "image/png",
+      "size": 41659,
+      "timestamp": "2025-05-05T03:41:12.146Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743823139462.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743823139462.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743823139462.png",
+      "contentType": "image/png",
+      "size": 38629,
+      "timestamp": "2025-05-05T03:41:12.357Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743823758346.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743823758346.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743823758346.png",
+      "contentType": "image/png",
+      "size": 41881,
+      "timestamp": "2025-05-05T03:41:12.566Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743823766618.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743823766618.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743823766618.png",
+      "contentType": "image/png",
+      "size": 60518,
+      "timestamp": "2025-05-05T03:41:12.799Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743824543174.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743824543174.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743824543174.png",
+      "contentType": "image/png",
+      "size": 15851,
+      "timestamp": "2025-05-05T03:41:12.990Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743824626489.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743824626489.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743824626489.png",
+      "contentType": "image/png",
+      "size": 100579,
+      "timestamp": "2025-05-05T03:41:13.279Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743825046557.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743825046557.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743825046557.png",
+      "contentType": "image/png",
+      "size": 23266,
+      "timestamp": "2025-05-05T03:41:13.476Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743825054140.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743825054140.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743825054140.png",
+      "contentType": "image/png",
+      "size": 531095,
+      "timestamp": "2025-05-05T03:41:13.829Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743825429316.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743825429316.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743825429316.png",
+      "contentType": "image/png",
+      "size": 63816,
+      "timestamp": "2025-05-05T03:41:14.080Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743825621577.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743825621577.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743825621577.png",
+      "contentType": "image/png",
+      "size": 94207,
+      "timestamp": "2025-05-05T03:41:14.326Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743826009546.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743826009546.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743826009546.png",
+      "contentType": "image/png",
+      "size": 44636,
+      "timestamp": "2025-05-05T03:41:14.542Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743827926944.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743827926944.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743827926944.png",
+      "contentType": "image/png",
+      "size": 518128,
+      "timestamp": "2025-05-05T03:41:14.905Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743827979445.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743827979445.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743827979445.png",
+      "contentType": "image/png",
+      "size": 820174,
+      "timestamp": "2025-05-05T03:41:15.305Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743829139039.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743829139039.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743829139039.png",
+      "contentType": "image/png",
+      "size": 15221,
+      "timestamp": "2025-05-05T03:42:45.857Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743829661236.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743829661236.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743829661236.png",
+      "contentType": "image/png",
+      "size": 52618,
+      "timestamp": "2025-05-05T03:42:46.208Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743829747056.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743829747056.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743829747056.png",
+      "contentType": "image/png",
+      "size": 104351,
+      "timestamp": "2025-05-05T03:42:46.575Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743829753153.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743829753153.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743829753153.png",
+      "contentType": "image/png",
+      "size": 99124,
+      "timestamp": "2025-05-05T03:42:46.952Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743830015600.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743830015600.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743830015600.png",
+      "contentType": "image/png",
+      "size": 1040502,
+      "timestamp": "2025-05-05T03:42:47.525Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743830565056.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743830565056.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743830565056.png",
+      "contentType": "image/png",
+      "size": 1141650,
+      "timestamp": "2025-05-05T03:42:48.122Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743830572551.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743830572551.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743830572551.png",
+      "contentType": "image/png",
+      "size": 223430,
+      "timestamp": "2025-05-05T03:42:48.556Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743830988509.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743830988509.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743830988509.png",
+      "contentType": "image/png",
+      "size": 55930,
+      "timestamp": "2025-05-05T03:42:48.786Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743832078461.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743832078461.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743832078461.png",
+      "contentType": "image/png",
+      "size": 1012130,
+      "timestamp": "2025-05-05T03:42:49.188Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743832754934.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743832754934.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743832754934.png",
+      "contentType": "image/png",
+      "size": 11216,
+      "timestamp": "2025-05-05T03:42:49.399Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743833132842.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743833132842.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743833132842.png",
+      "contentType": "image/png",
+      "size": 41821,
+      "timestamp": "2025-05-05T03:42:49.617Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743833306762.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743833306762.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743833306762.png",
+      "contentType": "image/png",
+      "size": 1413874,
+      "timestamp": "2025-05-05T03:42:50.040Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743833319141.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743833319141.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743833319141.png",
+      "contentType": "image/png",
+      "size": 530761,
+      "timestamp": "2025-05-05T03:42:50.438Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743836578926.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743836578926.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743836578926.png",
+      "contentType": "image/png",
+      "size": 55579,
+      "timestamp": "2025-05-05T03:42:50.643Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743836863935.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743836863935.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743836863935.png",
+      "contentType": "image/png",
+      "size": 1407489,
+      "timestamp": "2025-05-05T03:42:51.133Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743837245394.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743837245394.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743837245394.png",
+      "contentType": "image/png",
+      "size": 42110,
+      "timestamp": "2025-05-05T03:42:51.339Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743839177859.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743839177859.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743839177859.png",
+      "contentType": "image/png",
+      "size": 318696,
+      "timestamp": "2025-05-05T03:42:51.717Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743844097594.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743844097594.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743844097594.png",
+      "contentType": "image/png",
+      "size": 173062,
+      "timestamp": "2025-05-05T03:42:51.971Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743846756040.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743846756040.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743846756040.png",
+      "contentType": "image/png",
+      "size": 49380,
+      "timestamp": "2025-05-05T03:42:52.161Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743846762007.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743846762007.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743846762007.png",
+      "contentType": "image/png",
+      "size": 48734,
+      "timestamp": "2025-05-05T03:42:52.341Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743847380264.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743847380264.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743847380264.png",
+      "contentType": "image/png",
+      "size": 476958,
+      "timestamp": "2025-05-05T03:43:11.863Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743847424258.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743847424258.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743847424258.png",
+      "contentType": "image/png",
+      "size": 67458,
+      "timestamp": "2025-05-05T03:43:12.219Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743847436416.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743847436416.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743847436416.png",
+      "contentType": "image/png",
+      "size": 3461,
+      "timestamp": "2025-05-05T03:43:12.534Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743848283546.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743848283546.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743848283546.png",
+      "contentType": "image/png",
+      "size": 75692,
+      "timestamp": "2025-05-05T03:43:12.912Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743849437101.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743849437101.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743849437101.png",
+      "contentType": "image/png",
+      "size": 328155,
+      "timestamp": "2025-05-05T03:43:13.409Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743851609663.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743851609663.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743851609663.png",
+      "contentType": "image/png",
+      "size": 30792,
+      "timestamp": "2025-05-05T03:43:13.796Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743852009507.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743852009507.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743852009507.png",
+      "contentType": "image/png",
+      "size": 101939,
+      "timestamp": "2025-05-05T03:43:14.191Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743852436121.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743852436121.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743852436121.png",
+      "contentType": "image/png",
+      "size": 356673,
+      "timestamp": "2025-05-05T03:43:14.665Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743852774326.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743852774326.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743852774326.png",
+      "contentType": "image/png",
+      "size": 98342,
+      "timestamp": "2025-05-05T03:43:15.047Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743854365050.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743854365050.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743854365050.png",
+      "contentType": "image/png",
+      "size": 26150,
+      "timestamp": "2025-05-05T03:43:15.376Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743856586306.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743856586306.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743856586306.png",
+      "contentType": "image/png",
+      "size": 47264,
+      "timestamp": "2025-05-05T03:43:15.728Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743858988849.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743858988849.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743858988849.png",
+      "contentType": "image/png",
+      "size": 5861,
+      "timestamp": "2025-05-05T03:43:16.035Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743859912808.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743859912808.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743859912808.png",
+      "contentType": "image/png",
+      "size": 1027951,
+      "timestamp": "2025-05-05T03:43:16.611Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743859921691.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743859921691.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743859921691.png",
+      "contentType": "image/png",
+      "size": 97739,
+      "timestamp": "2025-05-05T03:43:17.011Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743859930534.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743859930534.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743859930534.png",
+      "contentType": "image/png",
+      "size": 33680,
+      "timestamp": "2025-05-05T03:43:17.336Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743860841246.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743860841246.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743860841246.png",
+      "contentType": "image/png",
+      "size": 1043750,
+      "timestamp": "2025-05-05T03:43:17.927Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743860849523.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743860849523.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743860849523.png",
+      "contentType": "image/png",
+      "size": 404986,
+      "timestamp": "2025-05-05T03:43:18.404Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743861194723.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743861194723.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743861194723.png",
+      "contentType": "image/png",
+      "size": 810767,
+      "timestamp": "2025-05-05T03:43:18.943Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743861208109.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743861208109.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743861208109.png",
+      "contentType": "image/png",
+      "size": 823236,
+      "timestamp": "2025-05-05T03:43:19.465Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743861525461.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743861525461.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743861525461.png",
+      "contentType": "image/png",
+      "size": 306475,
+      "timestamp": "2025-05-05T03:43:19.921Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743862860059.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743862860059.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743862860059.png",
+      "contentType": "image/png",
+      "size": 346676,
+      "timestamp": "2025-05-05T03:43:29.211Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743862876860.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743862876860.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743862876860.png",
+      "contentType": "image/png",
+      "size": 78010,
+      "timestamp": "2025-05-05T03:43:29.444Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743863116659.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743863116659.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743863116659.png",
+      "contentType": "image/png",
+      "size": 381621,
+      "timestamp": "2025-05-05T03:43:29.791Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743925831243.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743925831243.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743925831243.png",
+      "contentType": "image/png",
+      "size": 44792,
+      "timestamp": "2025-05-05T03:43:29.982Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743926111563.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743926111563.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743926111563.png",
+      "contentType": "image/png",
+      "size": 290201,
+      "timestamp": "2025-05-05T03:43:30.296Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743926727202.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743926727202.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743926727202.png",
+      "contentType": "image/png",
+      "size": 43890,
+      "timestamp": "2025-05-05T03:43:30.490Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743937373645.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743937373645.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743937373645.png",
+      "contentType": "image/png",
+      "size": 27820,
+      "timestamp": "2025-05-05T03:43:30.734Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743937563347.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743937563347.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743937563347.png",
+      "contentType": "image/png",
+      "size": 863845,
+      "timestamp": "2025-05-05T03:43:31.119Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743937573515.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743937573515.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743937573515.png",
+      "contentType": "image/png",
+      "size": 17725,
+      "timestamp": "2025-05-05T03:43:31.303Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743939447658.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743939447658.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743939447658.png",
+      "contentType": "image/png",
+      "size": 208041,
+      "timestamp": "2025-05-05T03:43:31.592Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743948219541.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743948219541.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743948219541.png",
+      "contentType": "image/png",
+      "size": 9509,
+      "timestamp": "2025-05-05T03:43:31.832Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743949169496.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743949169496.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743949169496.png",
+      "contentType": "image/png",
+      "size": 10466,
+      "timestamp": "2025-05-05T03:43:32.021Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743950476363.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743950476363.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743950476363.png",
+      "contentType": "image/png",
+      "size": 35078,
+      "timestamp": "2025-05-05T03:43:32.279Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743951118308.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743951118308.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743951118308.png",
+      "contentType": "image/png",
+      "size": 10657,
+      "timestamp": "2025-05-05T03:43:32.476Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743951168982.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743951168982.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743951168982.png",
+      "contentType": "image/png",
+      "size": 10657,
+      "timestamp": "2025-05-05T03:43:32.691Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743952956159.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743952956159.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743952956159.png",
+      "contentType": "image/png",
+      "size": 94031,
+      "timestamp": "2025-05-05T03:43:32.950Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743953030150.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743953030150.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743953030150.png",
+      "contentType": "image/png",
+      "size": 90907,
+      "timestamp": "2025-05-05T03:43:33.196Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743953557891.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743953557891.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743953557891.png",
+      "contentType": "image/png",
+      "size": 1122556,
+      "timestamp": "2025-05-05T03:43:33.567Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743954126393.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743954126393.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743954126393.png",
+      "contentType": "image/png",
+      "size": 86904,
+      "timestamp": "2025-05-05T03:43:33.785Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743955368871.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743955368871.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743955368871.png",
+      "contentType": "image/png",
+      "size": 101619,
+      "timestamp": "2025-05-05T03:43:34.041Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743959689700.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743959689700.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743959689700.png",
+      "contentType": "image/png",
+      "size": 348645,
+      "timestamp": "2025-05-05T03:43:47.486Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743959858810.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743959858810.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743959858810.png",
+      "contentType": "image/png",
+      "size": 17473,
+      "timestamp": "2025-05-05T03:43:47.813Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743962401182.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743962401182.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743962401182.png",
+      "contentType": "image/png",
+      "size": 636680,
+      "timestamp": "2025-05-05T03:43:48.301Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743962414498.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743962414498.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743962414498.png",
+      "contentType": "image/png",
+      "size": 197805,
+      "timestamp": "2025-05-05T03:43:48.753Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743962687124.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743962687124.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743962687124.png",
+      "contentType": "image/png",
+      "size": 100005,
+      "timestamp": "2025-05-05T03:43:49.148Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743962948898.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743962948898.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743962948898.png",
+      "contentType": "image/png",
+      "size": 94155,
+      "timestamp": "2025-05-05T03:43:49.518Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743964631811.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743964631811.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743964631811.png",
+      "contentType": "image/png",
+      "size": 131056,
+      "timestamp": "2025-05-05T03:43:49.918Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743964819881.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743964819881.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743964819881.png",
+      "contentType": "image/png",
+      "size": 387122,
+      "timestamp": "2025-05-05T03:43:50.370Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743964830101.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743964830101.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743964830101.png",
+      "contentType": "image/png",
+      "size": 785070,
+      "timestamp": "2025-05-05T03:43:50.931Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743964913194.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743964913194.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743964913194.png",
+      "contentType": "image/png",
+      "size": 148788,
+      "timestamp": "2025-05-05T03:43:51.352Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743965329337.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743965329337.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743965329337.png",
+      "contentType": "image/png",
+      "size": 117457,
+      "timestamp": "2025-05-05T03:43:51.769Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743965651340.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743965651340.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743965651340.png",
+      "contentType": "image/png",
+      "size": 197270,
+      "timestamp": "2025-05-05T03:43:52.174Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743965883609.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743965883609.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743965883609.png",
+      "contentType": "image/png",
+      "size": 308326,
+      "timestamp": "2025-05-05T03:43:52.657Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743965889149.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743965889149.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743965889149.png",
+      "contentType": "image/png",
+      "size": 308326,
+      "timestamp": "2025-05-05T03:43:53.116Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743965897385.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743965897385.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743965897385.png",
+      "contentType": "image/png",
+      "size": 20822,
+      "timestamp": "2025-05-05T03:43:53.486Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743966073243.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743966073243.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743966073243.png",
+      "contentType": "image/png",
+      "size": 20283,
+      "timestamp": "2025-05-05T03:43:53.845Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743966363271.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743966363271.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743966363271.png",
+      "contentType": "image/png",
+      "size": 77632,
+      "timestamp": "2025-05-05T03:43:54.184Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743966597789.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743966597789.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743966597789.png",
+      "contentType": "image/png",
+      "size": 21980,
+      "timestamp": "2025-05-05T03:43:54.496Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743966816032.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743966816032.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743966816032.png",
+      "contentType": "image/png",
+      "size": 1627723,
+      "timestamp": "2025-05-05T03:43:55.053Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743967656791.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743967656791.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743967656791.png",
+      "contentType": "image/png",
+      "size": 125278,
+      "timestamp": "2025-05-05T03:43:55.447Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743967666282.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743967666282.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743967666282.png",
+      "contentType": "image/png",
+      "size": 38377,
+      "timestamp": "2025-05-05T03:45:05.119Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743967696654.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743967696654.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743967696654.png",
+      "contentType": "image/png",
+      "size": 779358,
+      "timestamp": "2025-05-05T03:45:05.682Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743968394992.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743968394992.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743968394992.png",
+      "contentType": "image/png",
+      "size": 609517,
+      "timestamp": "2025-05-05T03:45:06.215Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743968429083.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743968429083.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743968429083.png",
+      "contentType": "image/png",
+      "size": 34961,
+      "timestamp": "2025-05-05T03:45:06.557Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743968954895.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743968954895.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743968954895.png",
+      "contentType": "image/png",
+      "size": 40244,
+      "timestamp": "2025-05-05T03:45:06.879Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743969185520.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743969185520.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743969185520.png",
+      "contentType": "image/png",
+      "size": 83170,
+      "timestamp": "2025-05-05T03:45:07.236Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743969623227.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743969623227.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743969623227.png",
+      "contentType": "image/png",
+      "size": 1627255,
+      "timestamp": "2025-05-05T03:45:07.806Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743969958324.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743969958324.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743969958324.png",
+      "contentType": "image/png",
+      "size": 626908,
+      "timestamp": "2025-05-05T03:45:08.299Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743970379763.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743970379763.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743970379763.png",
+      "contentType": "image/png",
+      "size": 113972,
+      "timestamp": "2025-05-05T03:45:08.674Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743970418603.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743970418603.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743970418603.png",
+      "contentType": "image/png",
+      "size": 85129,
+      "timestamp": "2025-05-05T03:45:09.087Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743970485113.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743970485113.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743970485113.png",
+      "contentType": "image/png",
+      "size": 121016,
+      "timestamp": "2025-05-05T03:45:09.506Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743970503344.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743970503344.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743970503344.png",
+      "contentType": "image/png",
+      "size": 1739132,
+      "timestamp": "2025-05-05T03:45:10.136Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743978488772.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743978488772.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743978488772.png",
+      "contentType": "image/png",
+      "size": 50693,
+      "timestamp": "2025-05-05T03:45:10.493Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743978496503.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743978496503.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743978496503.png",
+      "contentType": "image/png",
+      "size": 138308,
+      "timestamp": "2025-05-05T03:45:10.903Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743979515706.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743979515706.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743979515706.png",
+      "contentType": "image/png",
+      "size": 70182,
+      "timestamp": "2025-05-05T03:45:11.244Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743979935810.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743979935810.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743979935810.png",
+      "contentType": "image/png",
+      "size": 554368,
+      "timestamp": "2025-05-05T03:45:11.786Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743979974638.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743979974638.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743979974638.png",
+      "contentType": "image/png",
+      "size": 38117,
+      "timestamp": "2025-05-05T03:45:12.090Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743980109416.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743980109416.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743980109416.png",
+      "contentType": "image/png",
+      "size": 63879,
+      "timestamp": "2025-05-05T03:45:12.465Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743980113895.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743980113895.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743980113895.png",
+      "contentType": "image/png",
+      "size": 69573,
+      "timestamp": "2025-05-05T03:45:12.803Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743980381126.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743980381126.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743980381126.png",
+      "contentType": "image/png",
+      "size": 55739,
+      "timestamp": "2025-05-05T03:45:13.142Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743982968389.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743982968389.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743982968389.png",
+      "contentType": "image/png",
+      "size": 57498,
+      "timestamp": "2025-05-05T03:45:22.979Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743983394199.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743983394199.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743983394199.png",
+      "contentType": "image/png",
+      "size": 34162,
+      "timestamp": "2025-05-05T03:45:23.290Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743984251634.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743984251634.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743984251634.png",
+      "contentType": "image/png",
+      "size": 1162676,
+      "timestamp": "2025-05-05T03:45:23.871Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743985045845.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743985045845.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743985045845.png",
+      "contentType": "image/png",
+      "size": 536466,
+      "timestamp": "2025-05-05T03:45:24.356Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743985064555.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743985064555.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743985064555.png",
+      "contentType": "image/png",
+      "size": 63258,
+      "timestamp": "2025-05-05T03:45:24.707Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1743985778021.png",
+      "url": "/api/storage-proxy/direct-forum/image_1743985778021.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1743985778021.png",
+      "contentType": "image/png",
+      "size": 100365,
+      "timestamp": "2025-05-05T03:45:25.120Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744042712368.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744042712368.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744042712368.png",
+      "contentType": "image/png",
+      "size": 56970,
+      "timestamp": "2025-05-05T03:45:25.488Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744043634305.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744043634305.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744043634305.png",
+      "contentType": "image/png",
+      "size": 36756,
+      "timestamp": "2025-05-05T03:45:25.838Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744043640831.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744043640831.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744043640831.png",
+      "contentType": "image/png",
+      "size": 9962,
+      "timestamp": "2025-05-05T03:45:26.213Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744044691672.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744044691672.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744044691672.png",
+      "contentType": "image/png",
+      "size": 73335,
+      "timestamp": "2025-05-05T03:45:26.569Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744044698109.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744044698109.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744044698109.png",
+      "contentType": "image/png",
+      "size": 48514,
+      "timestamp": "2025-05-05T03:45:26.922Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744045273976.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744045273976.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744045273976.png",
+      "contentType": "image/png",
+      "size": 54814,
+      "timestamp": "2025-05-05T03:45:27.262Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744046467652.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744046467652.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744046467652.png",
+      "contentType": "image/png",
+      "size": 544441,
+      "timestamp": "2025-05-05T03:45:27.751Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744047322726.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744047322726.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744047322726.png",
+      "contentType": "image/png",
+      "size": 351974,
+      "timestamp": "2025-05-05T03:45:28.207Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744047487843.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744047487843.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744047487843.png",
+      "contentType": "image/png",
+      "size": 91208,
+      "timestamp": "2025-05-05T03:45:28.486Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744048009833.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744048009833.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744048009833.png",
+      "contentType": "image/png",
+      "size": 504419,
+      "timestamp": "2025-05-05T03:45:28.857Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744048262559.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744048262559.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744048262559.png",
+      "contentType": "image/png",
+      "size": 31161,
+      "timestamp": "2025-05-05T03:45:29.052Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744048281928.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744048281928.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744048281928.png",
+      "contentType": "image/png",
+      "size": 450954,
+      "timestamp": "2025-05-05T03:45:29.404Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744054351014.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744054351014.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744054351014.png",
+      "contentType": "image/png",
+      "size": 98029,
+      "timestamp": "2025-05-05T03:45:29.662Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744054761100.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744054761100.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744054761100.png",
+      "contentType": "image/png",
+      "size": 349630,
+      "timestamp": "2025-05-05T03:45:29.983Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744054999858.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744054999858.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744054999858.png",
+      "contentType": "image/png",
+      "size": 277000,
+      "timestamp": "2025-05-05T03:45:41.954Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744055244446.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744055244446.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744055244446.png",
+      "contentType": "image/png",
+      "size": 565882,
+      "timestamp": "2025-05-05T03:45:42.461Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744056316474.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744056316474.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744056316474.png",
+      "contentType": "image/png",
+      "size": 279164,
+      "timestamp": "2025-05-05T03:45:42.948Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744056948955.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744056948955.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744056948955.png",
+      "contentType": "image/png",
+      "size": 511169,
+      "timestamp": "2025-05-05T03:45:43.453Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744057240602.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744057240602.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744057240602.png",
+      "contentType": "image/png",
+      "size": 557645,
+      "timestamp": "2025-05-05T03:45:43.957Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744057707520.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744057707520.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744057707520.png",
+      "contentType": "image/png",
+      "size": 162070,
+      "timestamp": "2025-05-05T03:45:44.345Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744058338650.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744058338650.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744058338650.png",
+      "contentType": "image/png",
+      "size": 795233,
+      "timestamp": "2025-05-05T03:45:44.870Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744059447409.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744059447409.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744059447409.png",
+      "contentType": "image/png",
+      "size": 446527,
+      "timestamp": "2025-05-05T03:45:45.351Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744059458883.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744059458883.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744059458883.png",
+      "contentType": "image/png",
+      "size": 347053,
+      "timestamp": "2025-05-05T03:45:45.833Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744059791619.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744059791619.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744059791619.png",
+      "contentType": "image/png",
+      "size": 398881,
+      "timestamp": "2025-05-05T03:45:46.336Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744059830436.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744059830436.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744059830436.png",
+      "contentType": "image/png",
+      "size": 659546,
+      "timestamp": "2025-05-05T03:45:46.870Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744060545147.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744060545147.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744060545147.png",
+      "contentType": "image/png",
+      "size": 694971,
+      "timestamp": "2025-05-05T03:45:47.408Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744061039957.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744061039957.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744061039957.png",
+      "contentType": "image/png",
+      "size": 689786,
+      "timestamp": "2025-05-05T03:45:47.933Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744061050990.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744061050990.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744061050990.png",
+      "contentType": "image/png",
+      "size": 645937,
+      "timestamp": "2025-05-05T03:45:48.450Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744061393159.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744061393159.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744061393159.png",
+      "contentType": "image/png",
+      "size": 417903,
+      "timestamp": "2025-05-05T03:45:48.929Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744061555674.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744061555674.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744061555674.png",
+      "contentType": "image/png",
+      "size": 337915,
+      "timestamp": "2025-05-05T03:45:49.427Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744061599205.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744061599205.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744061599205.png",
+      "contentType": "image/png",
+      "size": 47378,
+      "timestamp": "2025-05-05T03:45:49.779Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744084638475.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744084638475.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744084638475.png",
+      "contentType": "image/png",
+      "size": 69258,
+      "timestamp": "2025-05-05T03:45:50.113Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744084812972.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744084812972.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744084812972.png",
+      "contentType": "image/png",
+      "size": 98358,
+      "timestamp": "2025-05-05T03:45:50.492Z"
+    },
+    {
+      "success": true,
+      "filename": "image_1744086163610.png",
+      "url": "/api/storage-proxy/direct-forum/image_1744086163610.png",
+      "originalPath": "/home/runner/workspace/forum-media/image_1744086163610.png",
+      "contentType": "image/png",
+      "size": 836821,
+      "timestamp": "2025-05-05T03:45:50.986Z"
+    }
+  ],
+  "databaseUpdates": {
+    "posts": 0,
+    "comments": 0
+  },
+  "errors": []
+}

@@ -1,0 +1,16 @@
+I am trying to fix a UI bug in the mobile view of my community website, barefootbay.com, specifically with the calendar event editing feature.
+When a user attempts to edit an event on a mobile device, the "EDIT EVENT" modal (as shown in the screenshot image_2ac80e.png which I've uploaded previously in our chat) appears, but its content is cut off. The form fields like "Event Title", "Start Date & Time", "End Date & Time", and potentially others within the "EVENT INFORMATION" section are not visible or accessible. This makes it impossible for users to edit events on mobile.
+
+The modal seems to either be too tall for the viewport or its internal content is not scrollable when it overflows. The desired behavior is for the entire modal content to be accessible, meaning if the content is taller than the available viewport height, the modal's content area should become scrollable.
+
+I want you to do the following:
+- Research deeply across my codebase for barefootbay.com.
+- Find what files (HTML, CSS, JavaScript, and any relevant frontend framework components e.g., React, Vue, Angular, Svelte, etc.) and functions are related to the rendering, styling, and behavior of the event editing modal, particularly in mobile views. Pay attention to any files associated with the `/events/` path or components responsible for modals or popups.
+- Assess reasons for why this feature might not be working correctly. This could include:
+    - CSS issues: incorrect `height`, `max-height`, `overflow`, `overflow-y` properties for the modal container or its content wrapper.
+    - Fixed positioning problems that don't account for viewport height.
+    - Issues with flexbox or grid layouts if they are used for the modal structure.
+    - JavaScript that might be dynamically setting a height that's too large or preventing scrolling.
+    - Missing or incorrectly applied responsive styles (@media queries) for smaller screens.
+- Develop a plan to fix it. The plan should ensure the modal content is fully visible and scrollable within the viewport on common mobile screen sizes. This might involve adjusting CSS `max-height` to be a percentage of the viewport height (e.g., `80vh` or `90vh`) and ensuring `overflow-y: auto;` is applied to the correct element within the modal.
+- Write this entire plan and report into a file called "Instructions.md" in my project.

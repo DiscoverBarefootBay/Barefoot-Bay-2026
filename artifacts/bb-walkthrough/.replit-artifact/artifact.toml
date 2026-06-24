@@ -1,0 +1,31 @@
+kind = "slides"
+previewPath = "/bb-walkthrough/"
+title = "Discover Barefoot Bay — Walkthrough"
+version = "1.0.0"
+id = "artifacts/bb-walkthrough"
+router = "path"
+
+[[integratedSkills]]
+name = "slides"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/bb-walkthrough/" ]
+localPort = 23070
+
+[services.development]
+run = "pnpm --filter @workspace/bb-walkthrough run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/bb-walkthrough", "run", "build" ]
+publicDir = "artifacts/bb-walkthrough/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23070"
+BASE_PATH = "/bb-walkthrough/"

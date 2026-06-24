@@ -1,0 +1,12 @@
+                      <WysiwygEditor 
+                        editorContent={field.value}
+                        setEditorContent={(value) => {
+                          field.onChange(value);
+                          setEditorContent(value);
+                          form.setValue("content", value, { shouldValidate: true });
+                        }}
+                        editorContext={{
+                          section: 'vendors',
+                          slug: selectedPage?.slug || form.getValues("slug") || 'vendor-edit'
+                        }}
+                      />

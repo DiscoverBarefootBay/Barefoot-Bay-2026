@@ -1,0 +1,94 @@
+REPLIT_PAGE_LOADED
+Video preview error: 
+n {_reactName: "onError", _targetInst: null, type: "error", nativeEvent: Event, target: HTMLVideoElement, …}
+
+Video error details: Code 4 MEDIA_ELEMENT_ERROR: Format error
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646117104
+Video preview error: 
+n {_reactName: "onError", _targetInst: null, type: "error", nativeEvent: Event, target: HTMLVideoElement, …}
+
+Video error details: Code 4 MEDIA_ELEMENT_ERROR: Format error
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646117104
+Video preview error: 
+n {_reactName: "onError", _targetInst: null, type: "error", nativeEvent: Event, target: HTMLVideoElement, …}
+
+Video error details: Code 4 MEDIA_ELEMENT_ERROR: Format error
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646117104
+Video preview error: 
+n {_reactName: "onError", _targetInst: null, type: "error", nativeEvent: Event, target: HTMLVideoElement, …}
+
+Video error details: Code 4 MEDIA_ELEMENT_ERROR: Format error
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646117104
+Video preview error: 
+n {_reactName: "onError", _targetInst: null, type: "error", nativeEvent: Event, target: HTMLVideoElement, …}
+
+Video error details: Code 4 MEDIA_ELEMENT_ERROR: Format error
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646117104
+Video preview error: 
+n {_reactName: "onError", _targetInst: null, type: "error", nativeEvent: Event, target: HTMLVideoElement, …}
+
+Video error details: Code 4 MEDIA_ELEMENT_ERROR: Format error
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646117104
+Video preview error: 
+n {_reactName: "onError", _targetInst: null, type: "error", nativeEvent: Event, target: HTMLVideoElement, …}
+
+Video error details: Code 4 MEDIA_ELEMENT_ERROR: Format error
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646117104
+REPLIT_PAGE_LOADED
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646117104
+Auth check error: 
+SyntaxError {}
+
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646117104
+Error reading response text: POST /api/direct-banner-upload 
+TypeError {}
+
+API request failed: POST /api/direct-banner-upload - Status: 502 
+Error {status: 502, statusText: "Bad Gateway", response: Response}
+
+API request failed: POST /api/direct-banner-upload 
+Error {status: 502, statusText: "Bad Gateway", response: Response}
+
+Image upload error: 
+Error {status: 502, statusText: "Bad Gateway", response: Response}
+
+Failed to fetch
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset1.svg?v=1746646125741
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646125909
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset1.svg?v=1746646126273
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646126323
+REPLIT_PAGE_LOADED
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646126323
+Auth check error: 
+SyntaxError {}
+
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646126323
+REPLIT_PAGE_LOADED
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646126323
+API request failed: POST /api/direct-banner-upload - Status: 502 
+Error {status: 502, statusText: "Bad Gateway", response: Response}
+
+API request failed: POST /api/direct-banner-upload 
+Error {status: 502, statusText: "Bad Gateway", response: Response}
+
+Image upload error: 
+Error {status: 502, statusText: "Bad Gateway", response: Response}
+
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset1.svg?v=1746646129729
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646129904
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset1.svg?v=1746646130751
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646130901
+REPLIT_PAGE_LOADED
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646130901
+REPLIT_PAGE_LOADED
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646130901
+REPLIT_PAGE_LOADED
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646130901
+REPLIT_PAGE_LOADED
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646130901
+REPLIT_PAGE_LOADED
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646130901
+REPLIT_PAGE_LOADED
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646130901
+REPLIT_PAGE_LOADED
+Image failed to load: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/icons/Asset%201.svg?v=1746646130901

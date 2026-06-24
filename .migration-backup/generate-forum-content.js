@@ -1,0 +1,568 @@
+/**
+ * Generate realistic forum content for Barefoot Bay community platform
+ * 
+ * This script:
+ * 1. Creates realistic forum posts for each category
+ * 2. Adds comments to forum posts
+ * 3. Creates reactions to posts and comments
+ * 
+ * Usage:
+ * node generate-forum-content.js
+ */
+
+import pg from 'pg';
+import dotenv from 'dotenv';
+import { format } from 'date-fns';
+
+const { Pool } = pg;
+
+// Load environment variables
+dotenv.config();
+
+// Connect to the database
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+
+// Users to use for content creation
+const USERS = [
+  { id: 6, username: "Bob the Builder", role: "admin" },
+  { id: 7, username: "registereduser", role: "registered" },
+  { id: 9, username: "John Watson", role: "registered" },
+  { id: 10, username: "mag092593", role: "registered" },
+  { id: 11, username: "firstuser", role: "registered" },
+  { id: 12, username: "adminuser", role: "admin" },
+];
+
+// Forum categories from the database
+const CATEGORIES = [
+  { id: 1, name: "General Discussion", slug: "general-discussion", description: "General topics related to Barefoot Bay community" },
+  { id: 2, name: "Announcements", slug: "announcements", description: "Official announcements from the Barefoot Bay community" },
+  { id: 3, name: "Events & Activities", slug: "events-activities", description: "Discussions about upcoming events and activities" },
+  { id: 4, name: "Neighbors Helping Neighbors", slug: "neighbors-helping-neighbors", description: "A place to offer or request help from fellow residents" },
+  { id: 5, name: "Recommendations", slug: "recommendations", description: "Recommendations for local services and businesses" },
+];
+
+// Potential media URLs
+const MEDIA_URLS = [
+  "/uploads/media-1741584498267-707261025.jpg",
+  "/uploads/media-1741588357728-170199023.png",
+  "/uploads/media-1741589455403-560444925.jpg",
+  "/uploads/media-1741629720111-89324860.png",
+  "/uploads/media-1741666015400-424090711.png",
+];
+
+// Content for each category
+function generateCategoryContent(category) {
+  // Basic fallback content for each category
+  switch (category.slug) {
+    case "general-discussion":
+      return [
+        {
+          title: "Welcome to the Barefoot Bay Community Forum!",
+          content: "<p>Hello neighbors! I'm excited to welcome everyone to our new community forum. This is a great place for us to connect, share information, and build relationships.</p><p>Feel free to introduce yourself here!</p>",
+          userId: 6,
+          views: 120,
+          isPinned: true,
+          isLocked: false,
+          mediaUrls: null,
+        },
+        {
+          title: "New resident looking for recommendations",
+          content: "<p>Hi everyone, my family and I just moved to Barefoot Bay, and we're looking for recommendations on local restaurants, services, and community activities. Thanks in advance!</p>",
+          userId: 7,
+          views: 87,
+          isPinned: false,
+          isLocked: false,
+          mediaUrls: null,
+        },
+        {
+          title: "Internet service providers in the area",
+          content: "<p>Can anyone recommend a good internet service provider in Barefoot Bay? I work from home and need reliable high-speed internet. What are you using and how is the service?</p>",
+          userId: 9,
+          views: 93,
+          isPinned: false,
+          isLocked: false,
+          mediaUrls: null,
+        },
+      ];
+      
+    case "announcements":
+      return [
+        {
+          title: "Community Town Hall - April 2025",
+          content: "<p><strong>IMPORTANT COMMUNITY ANNOUNCEMENT</strong></p><p>Mark your calendars for our quarterly Town Hall meeting on April 15, 2025 at 6:30 PM in the Community Center.</p><p>We'll be discussing upcoming infrastructure projects, community events for the summer, and taking questions from residents.</p>",
+          userId: 12,
+          views: 210,
+          isPinned: true,
+          isLocked: false,
+          mediaUrls: null,
+        },
+        {
+          title: "Pool Maintenance Schedule - Summer 2025",
+          content: "<p>The community pool will undergo routine maintenance on the following dates:</p><ul><li>May 3-4, 2025</li><li>June 12, 2025</li><li>July 17, 2025</li></ul><p>The pool will be closed during these dates. We apologize for any inconvenience.</p>",
+          userId: 6,
+          views: 165,
+          isPinned: false,
+          isLocked: false,
+          mediaUrls: [MEDIA_URLS[1]],
+        },
+      ];
+      
+    case "events-activities":
+      return [
+        {
+          title: "Weekly Walking Group - Join Us!",
+          content: "<p>Our community walking group meets every Tuesday and Thursday at 8:00 AM at the clubhouse. All fitness levels welcome!</p><p>We typically walk for about an hour around the community, enjoying the beautiful scenery and good conversation. It's a great way to stay active and meet your neighbors.</p>",
+          userId: 9,
+          views: 75,
+          isPinned: false,
+          isLocked: false,
+          mediaUrls: [MEDIA_URLS[2]],
+        },
+        {
+          title: "Barefoot Bay Annual Spring Festival",
+          content: "<p>The Spring Festival committee is looking for volunteers to help organize our annual celebration in April. We need help with:</p><ul><li>Decorations</li><li>Food vendors</li><li>Children's activities</li><li>Setup/cleanup</li></ul><p>If you're interested, please come to our planning meeting next Wednesday at 7 PM in the community center.</p>",
+          userId: 11,
+          views: 128,
+          isPinned: false,
+          isLocked: false,
+          mediaUrls: null,
+        },
+        {
+          title: "Pickleball Tournament - May 20-21",
+          content: "<p>Calling all pickleball enthusiasts! We're organizing a friendly tournament at the Barefoot Bay courts on May 20-21. Sign up as an individual or with a partner. All skill levels welcome!</p><p>Registration fee: $10/person (includes lunch and refreshments)</p><p>To register, email recreation@barefootbay.org or sign up at the community center.</p>",
+          userId: 10,
+          views: 83,
+          isPinned: false,
+          isLocked: false,
+          mediaUrls: null,
+        },
+      ];
+      
+    case "neighbors-helping-neighbors":
+      return [
+        {
+          title: "Need help with lawn maintenance",
+          content: "<p>Due to recent surgery, I'm unable to maintain my lawn for the next few weeks. Would any neighbors be willing to help or recommend an affordable service? I live on Micco Road and need basic mowing and trimming.</p>",
+          userId: 11,
+          views: 62,
+          isPinned: false,
+          isLocked: false,
+          mediaUrls: null,
+        },
+        {
+          title: "Looking for a reliable babysitter",
+          content: "<p>Hi neighbors, my wife and I are looking for a reliable babysitter for our 4-year-old daughter. We both work from home but have important meetings coming up next week where we need childcare for a few hours each day. Would prefer someone with experience and references. Please message me if you can help or know someone trustworthy in the community.</p>",
+          userId: 7,
+          views: 48,
+          isPinned: false,
+          isLocked: false,
+          mediaUrls: null,
+        },
+        {
+          title: "Free moving boxes - Just picked up from Home Depot",
+          content: "<p>I just finished moving in and have about 20 sturdy boxes of various sizes that I no longer need. They're in great condition and free to anyone who needs them. I also have some packing paper and bubble wrap. First come, first served. I'm located near the community center. Please PM me if interested.</p>",
+          userId: 9,
+          views: 51,
+          isPinned: false,
+          isLocked: false,
+          mediaUrls: [MEDIA_URLS[0]],
+        },
+      ];
+      
+    case "recommendations":
+      return [
+        {
+          title: "Best local handyman?",
+          content: "<p>I'm looking for recommendations for a reliable handyman in the area for several small projects around the house. Who have you used and been happy with?</p><p>I need someone for installing ceiling fans, fixing a leaky faucet, and some minor carpentry work.</p>",
+          userId: 7,
+          views: 105,
+          isPinned: false,
+          isLocked: false,
+          mediaUrls: null,
+        },
+        {
+          title: "Favorite restaurants near Sebastian?",
+          content: "<p>My in-laws are visiting next weekend and I'd like to take them out for a nice dinner. What are your favorite restaurants in Sebastian or nearby? Looking for something with good seafood options and a nice atmosphere.</p>",
+          userId: 10,
+          views: 92,
+          isPinned: false,
+          isLocked: false,
+          mediaUrls: null,
+        },
+        {
+          title: "Reliable AC repair service?",
+          content: "<p>With summer approaching, my AC unit needs some maintenance. Can anyone recommend a trustworthy HVAC service that won't overcharge? I've had mixed experiences in the past and would appreciate recommendations from neighbors.</p>",
+          userId: 11,
+          views: 78,
+          isPinned: false,
+          isLocked: false,
+          mediaUrls: null,
+        },
+      ];
+      
+    default:
+      return [];
+  }
+}
+
+// Generate comments for a post
+function generateCommentsForPost(postId, categorySlug) {
+  let comments = [];
+  
+  switch(categorySlug) {
+    case "general-discussion":
+      if (postId % 3 === 0) {
+        comments = [
+          {
+            content: "<p>Welcome to the community! We're glad to have you join us. This forum is a great way to stay connected with everything happening in Barefoot Bay.</p>",
+            userId: getRandomUser().id,
+            postId,
+            mediaUrls: null,
+          },
+          {
+            content: "<p>I've lived here for about 5 years now and absolutely love it. Don't hesitate to ask if you have any questions about the area!</p>",
+            userId: getRandomUser().id,
+            postId,
+            mediaUrls: null,
+          },
+          {
+            content: "<p>There's a welcome packet available at the community center that has lots of useful information for new residents. You might want to pick one up!</p>",
+            userId: getRandomUser().id,
+            postId,
+            mediaUrls: null,
+          },
+          {
+            content: "<p>The community BBQ next month would be a great opportunity to meet more neighbors. Hope to see you there!</p>",
+            userId: getRandomUser().id,
+            postId,
+            mediaUrls: null,
+          },
+        ];
+      } else {
+        comments = [
+          {
+            content: "<p>For restaurants, I highly recommend Captain Hiram's in Sebastian. Great seafood and a nice view of the water.</p>",
+            userId: getRandomUser().id,
+            postId,
+            mediaUrls: null,
+          },
+          {
+            content: "<p>The Barefoot Bay Recreation District offers lots of activities - check out their calendar on the website. They have everything from yoga to card games to ceramics classes.</p>",
+            userId: getRandomUser().id,
+            postId,
+            mediaUrls: null,
+          },
+          {
+            content: "<p>I've had good experiences with Sebastian River Plumbing for home services. They're prompt and reasonably priced.</p>",
+            userId: getRandomUser().id,
+            postId,
+            mediaUrls: null,
+          },
+        ];
+      }
+      break;
+      
+    case "announcements":
+      comments = [
+        {
+          content: "<p>Thanks for the information. I've added this to my calendar.</p>",
+          userId: getRandomUser().id,
+          postId,
+          mediaUrls: null,
+        },
+        {
+          content: "<p>Will the minutes from the meeting be posted online for those who can't attend?</p>",
+          userId: getRandomUser().id,
+          postId,
+          mediaUrls: null,
+        },
+        {
+          content: "<p>Looking forward to hearing about the summer events!</p>",
+          userId: getRandomUser().id,
+          postId,
+          mediaUrls: null,
+        },
+      ];
+      break;
+      
+    case "events-activities":
+      comments = [
+        {
+          content: "<p>I've been part of the walking group for a few months now and it's been wonderful! Great way to start the day.</p>",
+          userId: getRandomUser().id,
+          postId,
+          mediaUrls: null,
+        },
+        {
+          content: "<p>Do you ever change the route? I'd love to explore more of the community.</p>",
+          userId: getRandomUser().id,
+          postId,
+          mediaUrls: null,
+        },
+        {
+          content: "<p>Is it okay to bring my dog? She's very well-behaved and loves walks.</p>",
+          userId: getRandomUser().id,
+          postId,
+          mediaUrls: null,
+        },
+        {
+          content: "<p>What pace do you typically walk at? I'm a bit slower due to knee issues but would love to join.</p>",
+          userId: getRandomUser().id,
+          postId,
+          mediaUrls: null,
+        },
+      ];
+      break;
+      
+    case "neighbors-helping-neighbors":
+      comments = [
+        {
+          content: "<p>I'd be happy to help! I'm retired and have plenty of time. I'll send you a private message.</p>",
+          userId: getRandomUser().id,
+          postId,
+          mediaUrls: null,
+        },
+        {
+          content: "<p>I've used Green Leaf Lawn Service and they're very reasonable. About $40 for a basic mow and trim for an average yard.</p>",
+          userId: getRandomUser().id,
+          postId,
+          mediaUrls: null,
+        },
+        {
+          content: "<p>Hope your recovery goes well! Let me know if you need any groceries picked up too.</p>",
+          userId: getRandomUser().id,
+          postId,
+          mediaUrls: null,
+        },
+      ];
+      break;
+      
+    case "recommendations":
+      comments = [
+        {
+          content: "<p>I highly recommend Jim's Handyman Service. He's done several projects for us and is very reasonably priced. His number is (321) 555-1234.</p>",
+          userId: getRandomUser().id,
+          postId,
+          mediaUrls: null,
+        },
+        {
+          content: "<p>We used Mike from Reliable Home Repairs last month for similar projects. He was on time, professional, and did great work. I can PM you his contact info if you're interested.</p>",
+          userId: getRandomUser().id,
+          postId,
+          mediaUrls: null,
+        },
+        {
+          content: "<p>Whatever you do, avoid Quick Fix Handyman. They charged us for hours they didn't work and left the job half finished.</p>",
+          userId: getRandomUser().id,
+          postId,
+          mediaUrls: null,
+        },
+        {
+          content: "<p>The Barefoot Bay Community Center keeps a list of recommended service providers that have been vetted by residents. Might be worth checking that out!</p>",
+          userId: getRandomUser().id,
+          postId,
+          mediaUrls: null,
+        },
+      ];
+      break;
+      
+    default:
+      comments = [
+        {
+          content: "<p>Thanks for sharing this information with the community!</p>",
+          userId: getRandomUser().id,
+          postId,
+          mediaUrls: null,
+        },
+        {
+          content: "<p>This is exactly what I was looking for. Very helpful.</p>",
+          userId: getRandomUser().id,
+          postId,
+          mediaUrls: null,
+        },
+        {
+          content: "<p>I have a question about this - could you provide more details?</p>",
+          userId: getRandomUser().id,
+          postId,
+          mediaUrls: null,
+        },
+      ];
+  }
+  
+  return comments;
+}
+
+// Generate realistic reactions (likes, etc.)
+function generateReactions(postId, commentIds) {
+  const reactions = [];
+  
+  // Add reactions to the post
+  const postReactionCount = Math.floor(Math.random() * 10) + 1; // 1-10 reactions
+  for (let i = 0; i < postReactionCount; i++) {
+    reactions.push({
+      userId: getRandomUser().id,
+      postId,
+      commentId: null,
+      reactionType: getRandomReactionType(),
+    });
+  }
+  
+  // Add reactions to comments
+  commentIds.forEach(commentId => {
+    if (Math.random() > 0.3) { // 70% chance of a comment getting reactions
+      const commentReactionCount = Math.floor(Math.random() * 3) + 1; // 1-3 reactions
+      for (let i = 0; i < commentReactionCount; i++) {
+        reactions.push({
+          userId: getRandomUser().id,
+          postId: null,
+          commentId,
+          reactionType: getRandomReactionType(),
+        });
+      }
+    }
+  });
+  
+  return reactions;
+}
+
+// Helper to get a random user
+function getRandomUser() {
+  return USERS[Math.floor(Math.random() * USERS.length)];
+}
+
+// Helper to get a random reaction type
+function getRandomReactionType() {
+  const reactionTypes = ["like", "love", "thumbsup", "laugh", "helpful"];
+  return reactionTypes[Math.floor(Math.random() * reactionTypes.length)];
+}
+
+// Helper to get a random past date within the last 30 days
+function getRandomPastDate() {
+  const now = new Date();
+  const days = Math.floor(Math.random() * 30);
+  const hours = Math.floor(Math.random() * 24);
+  const minutes = Math.floor(Math.random() * 60);
+  
+  now.setDate(now.getDate() - days);
+  now.setHours(now.getHours() - hours);
+  now.setMinutes(now.getMinutes() - minutes);
+  
+  return now;
+}
+
+// Main function to generate and insert forum content
+async function generateForumContent() {
+  try {
+    console.log("Starting forum content generation...");
+    
+    // Track all post IDs and comment IDs for reactions
+    const allPostIds = [];
+    const allCommentIds = [];
+    
+    // Insert posts for each category
+    for (const category of CATEGORIES) {
+      console.log(`Generating content for ${category.name}...`);
+      
+      // Get content for this category
+      const posts = generateCategoryContent(category);
+      
+      // Insert each post
+      for (const post of posts) {
+        // Insert post
+        const postCreatedAt = getRandomPastDate();
+        
+        // Add a comment count field for proper display in UI
+        let commentCount = 0;
+        
+        const postResult = await pool.query(
+          `INSERT INTO forum_posts 
+           (title, content, category_id, user_id, is_pinned, is_locked, views, media_urls, created_at, updated_at, comment_count) 
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $9, $10) 
+           RETURNING id`,
+          [
+            post.title,
+            post.content,
+            category.id,
+            post.userId,
+            post.isPinned || false,
+            post.isLocked || false,
+            post.views,
+            post.mediaUrls,
+            postCreatedAt,
+            commentCount,
+          ]
+        );
+        
+        const postId = postResult.rows[0].id;
+        allPostIds.push(postId);
+        console.log(`Created post: ${post.title} (ID: ${postId})`);
+        
+        // Generate and insert comments for this post
+        const comments = generateCommentsForPost(postId, category.slug);
+        commentCount = comments.length;
+        
+        // Update the post with the correct comment count
+        await pool.query(
+          `UPDATE forum_posts SET comment_count = $1 WHERE id = $2`,
+          [commentCount, postId]
+        );
+        
+        for (const comment of comments) {
+          // Make comment dates slightly after the post date
+          const commentDate = new Date(postCreatedAt);
+          commentDate.setHours(commentDate.getHours() + Math.floor(Math.random() * 24) + 1);
+          
+          const commentResult = await pool.query(
+            `INSERT INTO forum_comments 
+             (content, post_id, user_id, media_urls, created_at, updated_at) 
+             VALUES ($1, $2, $3, $4, $5, $5) 
+             RETURNING id`,
+            [
+              comment.content,
+              comment.postId,
+              comment.userId,
+              comment.mediaUrls,
+              commentDate,
+            ]
+          );
+          
+          const commentId = commentResult.rows[0].id;
+          allCommentIds.push(commentId);
+          console.log(`Created comment for post ID ${postId}`);
+        }
+      }
+    }
+    
+    // Generate and insert reactions
+    const reactions = generateReactions(allPostIds, allCommentIds);
+    
+    for (const reaction of reactions) {
+      await pool.query(
+        `INSERT INTO forum_reactions 
+         (user_id, post_id, comment_id, reaction_type, created_at) 
+         VALUES ($1, $2, $3, $4, $5)`,
+        [
+          reaction.userId,
+          reaction.postId,
+          reaction.commentId,
+          reaction.reactionType,
+          getRandomPastDate(),
+        ]
+      );
+    }
+    
+    console.log(`Created ${reactions.length} reactions`);
+    console.log(`Forum content generation complete! Created posts for all categories.`);
+    
+  } catch (error) {
+    console.error("Error generating forum content:", error);
+  } finally {
+    // Close the database connection
+    await pool.end();
+  }
+}
+
+// Run the main function
+generateForumContent();

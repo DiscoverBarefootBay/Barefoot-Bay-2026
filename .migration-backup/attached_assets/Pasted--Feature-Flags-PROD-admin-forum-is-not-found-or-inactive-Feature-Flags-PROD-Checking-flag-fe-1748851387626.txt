@@ -1,0 +1,91 @@
+[Feature Flags] [PROD] admin_forum is not found or inactive
+[Feature Flags] [PROD] Checking flag featured_content 
+Object {userRole: "admin", isAdmin: true, environment: "production", navFeature: "not found", navRoleCheck: false}
+[Feature Flags] [PROD] featured_content is not found or inactive
+Listing data received: 
+Object {id: 111, listingType: "Classified", category: "Electronics", title: "Elecrtonics", price: 200, …}
+DEBUG usePermissions - Current user role: admin isAdmin: true isBlocked: false hasPermission: true
+[Feature Flags] [PROD] Checking flag comments 
+Object {userRole: "admin", isAdmin: true, environment: "production", navFeature: "not found", navRoleCheck: false}
+[Feature Flags] [PROD] comments for admin in production: checking roles...
+[Feature Flags] [PROD] comments for admin based on roles: ENABLED
+[Feature Flags] [PROD] Checking flag reactions 
+Object {userRole: "admin", isAdmin: true, environment: "production", navFeature: "not found", navRoleCheck: false}
+[Feature Flags] [PROD] reactions for admin in production: checking roles...
+[Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+[Feature Flags] [PROD] Checking flag calendar_post 
+Object {userRole: "admin", isAdmin: true, environment: "production", navFeature: "not found", navRoleCheck: false}
+[Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+[Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+[Feature Flags] [PROD] Checking flag forum_post 
+Object {userRole: "admin", isAdmin: true, environment: "production", navFeature: "not found", navRoleCheck: false}
+[Feature Flags] [PROD] forum_post for admin in production: checking roles...
+[Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+[Feature Flags] [PROD] Checking flag for_sale_post 
+Object {userRole: "admin", isAdmin: true, environment: "production", navFeature: "not found", navRoleCheck: false}
+[Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+[Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+[Feature Flags] [PROD] Checking flag vendor_page 
+Object {userRole: "admin", isAdmin: true, environment: "production", navFeature: "not found", navRoleCheck: false}
+[Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+[Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+[Feature Flags] [PROD] Checking flag admin_access 
+Object {userRole: "admin", isAdmin: true, environment: "production", navFeature: "not found", navRoleCheck: false}
+[Feature Flags] [PROD] admin_access for admin in production: checking roles...
+[Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+[Feature Flags] [PROD] Checking flag admin_forum 
+Object {userRole: "admin", isAdmin: true, environment: "production", navFeature: "not found", navRoleCheck: false}
+[Feature Flags] [PROD] admin_forum is not found or inactive
+[Feature Flags] [PROD] Checking flag featured_content 
+Object {userRole: "admin", isAdmin: true, environment: "production", navFeature: "not found", navRoleCheck: false}
+[Feature Flags] [PROD] featured_content is not found or inactive
+Using object storage path for real estate media: /uploads/real-estate-media/1748850998960-351816044.jpg -> /api/real-estate-media/1748850998960-351816044.jpg
+[Analytics] Page view tracked: /for-sale/111
+Query auth check: 
+Object {isAuthenticated: true, user: {…}}
+Page view tracked: /for-sale/111
+Query auth check: 
+Object {isAuthenticated: true, user: {…}}
+Successfully preloaded: /icons/Asset1.svg
+Successfully preloaded: /uploads/icons/Asset1.svg
+Query auth check: 
+Object {isAuthenticated: true, user: {…}}
+Successfully preloaded: /icons/rocket-icon.svg
+Successfully preloaded: /uploads/icons/rocket-icon.svg
+Query auth check: 
+Object {isAuthenticated: true, user: {…}}
+Query auth check: 
+Object {isAuthenticated: true, user: {…}}
+Query fetch: /api/messages
+Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/messages
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+[Maps Polyfill] BYPASSING for API request: /api/auth/check
+[Maps Polyfill] BYPASSING for API request: /api/messages
+Query auth check: 
+Object {isAuthenticated: true, user: {…}}
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+DEBUG usePermissions - Current user role: admin isAdmin: true isBlocked: false hasPermission: true
+[Feature Flags] [PROD] Checking flag comments 
+Object {userRole: "admin", isAdmin: true, environment: "production", navFeature: "not found", navRoleCheck: false}
+[Feature Flags] [PROD] comments for admin in production: checking roles...
+[Feature Flags] [PROD] comments for admin based on roles: ENABLED
+[Feature Flags] [PROD] Checking flag reactions 
+Object {userRole: "admin", isAdmin: true, environment: "production", navFeature: "not found", navRoleCheck: false}
+[Feature Flags] [PROD] reactions for admin in production: checking roles...
+[Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+[Feature Flags] [PROD] Checking flag calendar_post 
+Object {userRole: "admin", isAdmin: true, environment: "production", navFeature: "not found", navRoleCheck: false}
+[Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+[Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+[Feature Flags] [PROD] Checking flag forum_post 
+Object {userRole: "admin", isAdmin: true, environment: "production", navFeature: "not found", navRoleCheck: false}
+[Feature Flags] [PROD] forum_post for admin in production: checking roles...

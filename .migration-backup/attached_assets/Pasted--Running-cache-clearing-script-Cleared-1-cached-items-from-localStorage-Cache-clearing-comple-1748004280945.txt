@@ -1,0 +1,1083 @@
+ Running cache clearing script...
+ Cleared 1 cached items from localStorage
+ Cache clearing complete - errors should be resolved on next page refresh.
+ [Maps Polyfill] Initializing enhanced Google Maps polyfill
+ [Maps Polyfill] Installing fetch polyfill
+ [WebSocket] WebSocket functionality is disabled to prevent conflicts with Object Storage
+/api/feature-flags:1  Failed to load resource: the server responded with a status of 502 ()
+/api/vendor-categories:1  Failed to load resource: the server responded with a status of 502 ()
+ Query fetch failed: /api/feature-flags 
+(anonymous) @ index-Bj3dea7w.js:65
+/uploads/background-image-placeholder.jpg:1  Failed to load resource: the server responded with a status of 502 ()
+ Query fetch failed: /api/vendor-categories 
+(anonymous) @ index-Bj3dea7w.js:65
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for store, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendors, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for community, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+AnchorageBold.woff:1  Failed to load resource: the server responded with a status of 502 ()
+/api/analytics/track/pageview:1  Failed to load resource: the server responded with a status of 502 ()
+ Error tracking page view: 
+Z0 @ index-Bj3dea7w.js:785
+/api/community-categories:1  Failed to load resource: the server responded with a status of 502 ()
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for store, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendors, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for community, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ Query fetch failed: /api/community-categories 
+(anonymous) @ index-Bj3dea7w.js:65
+/api/pages:1  Failed to load resource: the server responded with a status of 502 ()
+/api/auth/check:1  Failed to load resource: the server responded with a status of 502 ()
+/api/forum/categories:1  Failed to load resource: the server responded with a status of 502 ()
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for store, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendors, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for community, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ Query fetch failed: /api/pages 
+(anonymous) @ index-Bj3dea7w.js:65
+ Query auth check error: 
+(anonymous) @ index-Bj3dea7w.js:65
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for store, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendors, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for community, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+/api/messages/unread/count:1  Failed to load resource: the server responded with a status of 401 ()
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for store, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendors, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for community, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+/uploads/icons/Asset1.svg:1  Failed to load resource: the server responded with a status of 502 ()
+ Failed to preload: /uploads/icons/Asset1.svg
+R.onerror @ index-Bj3dea7w.js:2762
+AnchorageBold.ttf:1  Failed to load resource: the server responded with a status of 502 ()
+/uploads/background-image-placeholder.jpg:1  Failed to load resource: the server responded with a status of 502 ()
+/uploads/banner-slides/placeholder-banner.png:1  Failed to load resource: the server responded with a status of 502 ()
+/api/user:1  Failed to load resource: the server responded with a status of 401 ()
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for store, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendors, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for community, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+/api/auth/check:1  Failed to load resource: the server responded with a status of 502 ()
+ Query auth check error: 
+(anonymous) @ index-Bj3dea7w.js:65
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+banner-placeholder.jpg:1  Failed to load resource: the server responded with a status of 502 ()
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+/api/auth/check:1  Failed to load resource: the server responded with a status of 502 ()
+/favicon/favicon-48x48.png:1  Failed to load resource: the server responded with a status of 502 ()
+ Query auth check error: 
+(anonymous) @ index-Bj3dea7w.js:65
+/uploads/banner-slides/placeholder-banner.png:1  Failed to load resource: the server responded with a status of 502 ()
+/api/auth/check:1  Failed to load resource: the server responded with a status of 502 ()
+ Auth check error: 
+(anonymous) @ index-Bj3dea7w.js:58
+/api/auth/check:1  Failed to load resource: the server responded with a status of 502 ()
+ Query auth check error: 
+(anonymous) @ index-Bj3dea7w.js:65
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+ [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+/api/storage-proxy/BANNER/banner-slides/bannerImage-1746647370983-876461691.png?_cb=1748004233621:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+/api/storage-proxy/BANNER/banner-slides/bannerImage-1747752361661-294313402.jpg?_cb=1748004233621:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+/api/storage-proxy/BANNER/banner-slides/bannerImage-1747102509843-170028248.jpg?_cb=1748004233621:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+banner-placeholder.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747918143132-922929174.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746673771236-269458171.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+/api/storage-proxy/BANNER/banner-slides/bannerImage-1746647338044-947664207.png?_cb=1748004234113:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:835 Image load error for: https://object-storage.replit.app/BANNER/banner-sl... - trying fallback
+N @ index-Bj3dea7w.js:835
+/api/storage-proxy/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg?_cb=1748004234113:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:835 Image load error for: https://object-storage.replit.app/BANNER/banner-sl... - trying fallback
+N @ index-Bj3dea7w.js:835
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647338044-947664207.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747881799464-29191037.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+/api/storage-proxy/BANNER/banner-slides/bannerImage-1746647370983-876461691.png?_cb=1748004234113:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:835 Image load error for: https://object-storage.replit.app/BANNER/banner-sl... - trying fallback
+N @ index-Bj3dea7w.js:835
+bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:835 Image load error for: https://object-storage.replit.app/BANNER/banner-sl... - trying fallback
+N @ index-Bj3dea7w.js:835
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1746647370983-876461691.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+/api/storage-proxy/BANNER/banner-slides/bannerImage-1746647338044-947664207.png?_cb=1748004234113:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:835 Image source returned status 502 for bannerImage-1746647338044-947664207.png?_cb=1748004234113
+(anonymous) @ index-Bj3dea7w.js:835
+/api/storage-proxy/direct-banner/bannerImage-1747102509843-170028248.jpg?_cb=1748004234113:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:835 Image load error for: /api/storage-proxy/direct-banner/bannerImage-17471... - trying fallback
+N @ index-Bj3dea7w.js:835
+/api/storage-proxy/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg?_cb=1748004234113:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:835 Image source returned status 502 for bannerImage-1747659587396-506755060.jpg?_cb=1748004234113
+(anonymous) @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+/api/storage-proxy/CALENDAR/events/media-1747412515502-670025064.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+/api/storage-proxy/CALENDAR/events/media-1747051375056-742284814.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+/api/storage-proxy/CALENDAR/events/media-1747197308040-338676053.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+/api/storage-proxy/CALENDAR/events/media-1746792543474-444505521.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+/api/storage-proxy/CALENDAR/events/media-1746795995616-949388690.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+banner-placeholder.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+/static/videos/BackgroundVideo.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:2765 ❌ Video URL returned status 502: /static/videos/BackgroundVideo.mp4
+(anonymous) @ index-Bj3dea7w.js:2765
+barefootbay.com/:1 Access to fetch at 'https://object-storage.replit.app/DEFAULT/videos/BackgroundVideo.mp4' from origin 'https://barefootbay.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+object-storage.replit.app/DEFAULT/videos/BackgroundVideo.mp4:1 
+            
+            
+           Failed to load resource: net::ERR_FAILED
+index-Bj3dea7w.js:2765 ❌ Failed to check video URL: https://object-storage.replit.app/DEFAULT/videos/BackgroundVideo.mp4 TypeError: Failed to fetch
+    at u (index-Bj3dea7w.js:18:3663)
+    at index-Bj3dea7w.js:2765:47824
+    at index-Bj3dea7w.js:2765:49128
+    at nv (index-Bj3dea7w.js:41:24283)
+    at ad (index-Bj3dea7w.js:41:42409)
+    at index-Bj3dea7w.js:41:40726
+    at S (index-Bj3dea7w.js:26:1543)
+    at MessagePort.R (index-Bj3dea7w.js:26:1902)
+(anonymous) @ index-Bj3dea7w.js:2765
+barefootbay.com/:1 Access to fetch at 'https://object-storage.replit.app/DEFAULT/banner-slides/background-video.mp4' from origin 'https://barefootbay.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+object-storage.replit.app/DEFAULT/banner-slides/background-video.mp4:1 
+            
+            
+           Failed to load resource: net::ERR_FAILED
+index-Bj3dea7w.js:2765 ❌ Failed to check video URL: https://object-storage.replit.app/DEFAULT/banner-slides/background-video.mp4 TypeError: Failed to fetch
+    at u (index-Bj3dea7w.js:18:3663)
+    at index-Bj3dea7w.js:2765:47824
+    at index-Bj3dea7w.js:2765:49128
+    at nv (index-Bj3dea7w.js:41:24283)
+    at ad (index-Bj3dea7w.js:41:42409)
+    at index-Bj3dea7w.js:41:40726
+    at S (index-Bj3dea7w.js:26:1543)
+    at MessagePort.R (index-Bj3dea7w.js:26:1902)
+(anonymous) @ index-Bj3dea7w.js:2765
+barefootbay.com/:1 Access to fetch at 'https://object-storage.replit.app/DEFAULT/videos/background-video.mp4' from origin 'https://barefootbay.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+object-storage.replit.app/DEFAULT/videos/background-video.mp4:1 
+            
+            
+           Failed to load resource: net::ERR_FAILED
+index-Bj3dea7w.js:2765 ❌ Failed to check video URL: https://object-storage.replit.app/DEFAULT/videos/background-video.mp4 TypeError: Failed to fetch
+    at u (index-Bj3dea7w.js:18:3663)
+    at index-Bj3dea7w.js:2765:47824
+    at index-Bj3dea7w.js:2765:49128
+    at nv (index-Bj3dea7w.js:41:24283)
+    at ad (index-Bj3dea7w.js:41:42409)
+    at index-Bj3dea7w.js:41:40726
+    at S (index-Bj3dea7w.js:26:1543)
+    at MessagePort.R (index-Bj3dea7w.js:26:1902)
+(anonymous) @ index-Bj3dea7w.js:2765
+index-Bj3dea7w.js:2766 REPLIT_APP_LOADED
+(anonymous) @ index-Bj3dea7w.js:2766
+barefootbay.com/:1 Access to fetch at 'https://object-storage.replit.app/DEFAULT/banner-slides/test-background-video.mp4' from origin 'https://barefootbay.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+object-storage.replit.app/DEFAULT/banner-slides/test-background-video.mp4:1 
+            
+            
+           Failed to load resource: net::ERR_FAILED
+index-Bj3dea7w.js:2765 ❌ Failed to check video URL: https://object-storage.replit.app/DEFAULT/banner-slides/test-background-video.mp4 TypeError: Failed to fetch
+    at u (index-Bj3dea7w.js:18:3663)
+    at index-Bj3dea7w.js:2765:47824
+    at index-Bj3dea7w.js:2765:49128
+    at nv (index-Bj3dea7w.js:41:24283)
+    at ad (index-Bj3dea7w.js:41:42409)
+    at index-Bj3dea7w.js:41:40726
+    at S (index-Bj3dea7w.js:26:1543)
+    at MessagePort.R (index-Bj3dea7w.js:26:1902)
+(anonymous) @ index-Bj3dea7w.js:2765
+barefootbay.com/:1 Access to fetch at 'https://object-storage.replit.app/DEFAULT/videos/test-background-video.mp4' from origin 'https://barefootbay.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+object-storage.replit.app/DEFAULT/videos/test-background-video.mp4:1 
+            
+            
+           Failed to load resource: net::ERR_FAILED
+index-Bj3dea7w.js:2765 ❌ Failed to check video URL: https://object-storage.replit.app/DEFAULT/videos/test-background-video.mp4 TypeError: Failed to fetch
+    at u (index-Bj3dea7w.js:18:3663)
+    at index-Bj3dea7w.js:2765:47824
+    at index-Bj3dea7w.js:2765:49128
+    at nv (index-Bj3dea7w.js:41:24283)
+    at ad (index-Bj3dea7w.js:41:42409)
+    at index-Bj3dea7w.js:41:40726
+    at S (index-Bj3dea7w.js:26:1543)
+    at MessagePort.R (index-Bj3dea7w.js:26:1902)
+(anonymous) @ index-Bj3dea7w.js:2765
+object-storage.replit.app/DEFAULT/videos/test-background-video.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+index-Bj3dea7w.js:2765 Video error event triggered (1/2): Event
+R @ index-Bj3dea7w.js:2765
+index-Bj3dea7w.js:2766 Detailed video error: Code 4: MEDIA_ERR_SRC_NOT_SUPPORTED - Media source not supported
+
+R @ index-Bj3dea7w.js:2766
+barefootbay.com/:1 Access to fetch at 'https://object-storage.replit.app/DEFAULT/videos/test-background-video.mp4' from origin 'https://barefootbay.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+object-storage.replit.app/DEFAULT/videos/test-background-video.mp4:1 
+            
+            
+           Failed to load resource: net::ERR_FAILED
+index-Bj3dea7w.js:2765 ❌ Failed to check video URL: https://object-storage.replit.app/DEFAULT/videos/test-background-video.mp4 TypeError: Failed to fetch
+    at u (index-Bj3dea7w.js:18:3663)
+    at index-Bj3dea7w.js:2765:47824
+    at index-Bj3dea7w.js:2765:49128
+    at nv (index-Bj3dea7w.js:41:24283)
+    at ad (index-Bj3dea7w.js:41:42409)
+    at index-Bj3dea7w.js:41:40726
+    at S (index-Bj3dea7w.js:26:1543)
+    at MessagePort.R (index-Bj3dea7w.js:26:1902)
+(anonymous) @ index-Bj3dea7w.js:2765
+index-Bj3dea7w.js:2765 All video sources failed
+(anonymous) @ index-Bj3dea7w.js:2765
+index-Bj3dea7w.js:2766 REPLIT_PAGE_LOADED
+(anonymous) @ index-Bj3dea7w.js:2766
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747659587396-506755060.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747918143132-922929174.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+object-storage.replit.app/BANNER/banner-slides/bannerImage-1747918143132-922929174.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for comments, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for reactions, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for calendar_post, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for forum_post, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for for_sale_post, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for vendor_page, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for admin_access, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for admin_forum, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for featured_content, environment: production
+o @ index-Bj3dea7w.js:835
+index-Bj3dea7w.js:835 [Feature Flags] Error loading flags for weather_rocket_icons, environment: production
+o @ index-Bj3dea7w.js:835
+bannerImage-1747102509843-170028248.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+bannerImage-1747752361661-294313402.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+index-Ba6UXORN.css:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()

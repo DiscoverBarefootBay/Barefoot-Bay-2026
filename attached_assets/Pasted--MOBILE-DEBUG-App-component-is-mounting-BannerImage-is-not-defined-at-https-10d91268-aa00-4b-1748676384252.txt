@@ -1,0 +1,42 @@
+🔍 [MOBILE DEBUG] App component is mounting
+BannerImage is not defined
+at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CIozg-Yu.js:835:51220
+at Array.map (<anonymous>)
+at jee (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CIozg-Yu.js:835:50395)
+at Yj (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CIozg-Yu.js:39:17018)
+at ZT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CIozg-Yu.js:41:44058)
+at YT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CIozg-Yu.js:41:39790)
+at MB (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CIozg-Yu.js:41:39718)
+at Wg (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CIozg-Yu.js:41:39570)
+at $1 (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CIozg-Yu.js:41:35934)
+at WT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CIozg-Yu.js:41:34883)
+Error caught by boundary: 
+ReferenceError {}
+ 
+Object {componentStack: "↵    at jee…"}
+componentStack: "↵ at jee (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CIozg-Yu.js:835:35952)↵ at section↵ at div↵ at bse (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CIozg-Yu.js:2219:74089)↵ at ft (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CIozg-Yu.js:49:3233)↵ at SU (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CIozg-Yu.js:49:4046)↵ at main↵ at div↵ at div↵ at Pxe↵ at Axe↵ at sK (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CIozg-Yu.js:785:31797)↵ at eK (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CIozg-Yu.js:785:23478)↵ at HU (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CIozg-Yu.js:49:40627)↵ at aK (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CIozg-Yu.js:785:36638)↵ at Rxe (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-CIozg-Yu.js:2639:12636)"
+[[Prototype]]: Object
+
+No media cache entries to clear
+Media optimization initialized
+[Maps Polyfill] BYPASSING for API request: /api/analytics/track/pageview
+Analytics tracking initialized
+[Analytics] Analytics tracking system initialized
+[System] General WebSocket functionality is disabled to prevent conflicts with Object Storage
+Running cache clearing script...
+Cache clearing complete - cleared 0 items
+Page view tracked: /
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_APP_LOADED
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY
+REPLIT_PAGE_LOADED
+REPLIT_PAGE_LOADED_SUCCESSFULLY

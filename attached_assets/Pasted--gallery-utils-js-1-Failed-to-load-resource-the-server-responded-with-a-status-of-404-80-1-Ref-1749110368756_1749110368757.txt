@@ -1,0 +1,3297 @@
+/gallery-utils.js:1  Failed to load resource: the server responded with a status of 404 ()
+
+80:1 Refused to execute script from 'https://barefootbay.com/gallery-utils.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.
+
+main.js:46 Uncaught 
+
+_.Nc @ main.js:46
+
+oaa @ main.js:64
+
+Re @ main.js:63
+
+_.H @ main.js:287
+
+_.JA @ common.js:138
+
+wwb @ search_impl.js:3
+
+(anonymous) @ search.js:3
+
+Promise.then
+
+changed @ search.js:3
+
+Zm @ main.js:172
+
+_.Xm.set @ main.js:323
+
+_.Xm.setValues @ main.js:324
+
+xF @ search.js:3
+
+pr @ init_embed.js:297
+
+(anonymous) @ init_embed.js:293
+
+u.Lb @ init_embed.js:272
+
+setTimeout
+
+u.start @ init_embed.js:271
+
+Xn @ init_embed.js:271
+
+or.changed @ init_embed.js:295
+
+Ln @ init_embed.js:269
+
+W.set @ init_embed.js:268
+
+or @ init_embed.js:293
+
+Ms @ init_embed.js:403
+
+b @ init_embed.js:409
+
+Bl @ init_embed.js:197
+
+a @ init_embed.js:196
+
+main.js:46 Uncaught 
+
+_.Nc @ main.js:46
+
+oaa @ main.js:64
+
+Re @ main.js:63
+
+_.H @ main.js:287
+
+_.JA @ common.js:138
+
+wwb @ search_impl.js:3
+
+(anonymous) @ search.js:3
+
+Promise.then
+
+changed @ search.js:3
+
+Zm @ main.js:172
+
+_.Xm.set @ main.js:323
+
+_.Xm.setValues @ main.js:324
+
+xF @ search.js:3
+
+pr @ init_embed.js:297
+
+(anonymous) @ init_embed.js:293
+
+u.Lb @ init_embed.js:272
+
+setTimeout
+
+u.start @ init_embed.js:271
+
+Xn @ init_embed.js:271
+
+or.changed @ init_embed.js:295
+
+Ln @ init_embed.js:269
+
+W.set @ init_embed.js:268
+
+or @ init_embed.js:293
+
+Ms @ init_embed.js:403
+
+b @ init_embed.js:409
+
+Bl @ init_embed.js:197
+
+a @ init_embed.js:196
+
+main.js:46 Uncaught 
+
+_.Nc @ main.js:46
+
+oaa @ main.js:64
+
+Re @ main.js:63
+
+_.H @ main.js:287
+
+_.JA @ common.js:138
+
+wwb @ search_impl.js:3
+
+(anonymous) @ search.js:3
+
+Promise.then
+
+changed @ search.js:3
+
+Zm @ main.js:172
+
+_.Xm.set @ main.js:323
+
+(anonymous) @ main.js:179
+
+pr @ init_embed.js:297
+
+(anonymous) @ init_embed.js:293
+
+u.Lb @ init_embed.js:272
+
+setTimeout
+
+u.start @ init_embed.js:271
+
+Xn @ init_embed.js:271
+
+or.changed @ init_embed.js:295
+
+Ln @ init_embed.js:269
+
+W.set @ init_embed.js:268
+
+or @ init_embed.js:293
+
+Ms @ init_embed.js:403
+
+b @ init_embed.js:409
+
+Bl @ init_embed.js:197
+
+a @ init_embed.js:196
+
+/api/listings/80/contact:1  Failed to load resource: the server responded with a status of 500 ()
+
+ [Feature Flags] [PROD] nav-community for paid: VISIBLE
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Using filesystem rocket icon
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Using object storage path for real estate media: /real-estate-media/1746535270418-441520082.jpg -> /api/real-estate-media/1746535270418-441520082.jpg
+
+ Event tracked: click
+
+ Debug: Making POST request to /api/listings/80/contact with data: Object
+
+ Request hostname: barefootbay.com, isDeploy: true
+
+ Authentication debug: 
+
+      Cookie exists: false
+
+      Full cookie string: 
+
+      URL: /api/listings/80/contact
+
+      Method: POST
+
+      Headers: {"Accept":"application/json","Content-Type":"application/json","X-Requested-With":"XMLHttpRequest"}
+
+      Hostname: barefootbay.com
+
+      Origin: https://barefootbay.com
+
+      Protocol: https:
+
+    
+
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+
+ [Maps Polyfill] BYPASSING for API request: /api/listings/80/contact
+
+ [Maps Polyfill] BYPASSING for API request: /api/analytics/track/event
+
+ Server auth check: Object
+
+/api/listings/80/contact:1  Failed to load resource: the server responded with a status of 500 ()
+
+ API response from POST /api/listings/80/contact: {"message":"Failed to send message. Please check server logs for details."}
+
+ API request failed: POST /api/listings/80/contact - Status: 500 
+
+Ie @ index-BzF1VT2p.js:58
+
+ API request failed: POST /api/listings/80/contact 
+
+Ie @ index-BzF1VT2p.js:58
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Unread messages count: 0
+
+ [Feature Flags] [PROD] Checking flag calendar Object
+
+ [Feature Flags] [PROD] nav-calendar for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag forum Object
+
+ [Feature Flags] [PROD] nav-forum for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag for_sale Object
+
+ [Feature Flags] [PROD] nav-for-sale for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag store Object
+
+ [Feature Flags] [PROD] store is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag vendors Object
+
+ [Feature Flags] [PROD] nav-vendors for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag community Object
+
+ [Feature Flags] [PROD] nav-community for paid: VISIBLE
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Using filesystem rocket icon
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Using object storage path for real estate media: /real-estate-media/1746535270418-441520082.jpg -> /api/real-estate-media/1746535270418-441520082.jpg
+
+ Debug: Making POST request to /api/listings/80/contact with data: Object
+
+ Request hostname: barefootbay.com, isDeploy: true
+
+ Authentication debug: 
+
+      Cookie exists: false
+
+      Full cookie string: 
+
+      URL: /api/listings/80/contact
+
+      Method: POST
+
+      Headers: {"Accept":"application/json","Content-Type":"application/json","X-Requested-With":"XMLHttpRequest"}
+
+      Hostname: barefootbay.com
+
+      Origin: https://barefootbay.com
+
+      Protocol: https:
+
+    
+
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+
+ [Maps Polyfill] BYPASSING for API request: /api/listings/80/contact
+
+ [Maps Polyfill] BYPASSING for API request: /api/analytics/track/event
+
+ Event tracked: click
+
+ Server auth check: Object
+
+/api/listings/80/contact:1  Failed to load resource: the server responded with a status of 500 ()
+
+ API response from POST /api/listings/80/contact: {"message":"Failed to send message. Please check server logs for details."}
+
+ API request failed: POST /api/listings/80/contact - Status: 500 
+
+Ie @ index-BzF1VT2p.js:58
+
+ API request failed: POST /api/listings/80/contact 
+
+Ie @ index-BzF1VT2p.js:58
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Unread messages count: 0
+
+ [Feature Flags] [PROD] Checking flag calendar Object
+
+ [Feature Flags] [PROD] nav-calendar for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag forum Object
+
+ [Feature Flags] [PROD] nav-forum for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag for_sale Object
+
+ [Feature Flags] [PROD] nav-for-sale for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag store Object
+
+ [Feature Flags] [PROD] store is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag vendors Object
+
+ [Feature Flags] [PROD] nav-vendors for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag community Object
+
+ [Feature Flags] [PROD] nav-community for paid: VISIBLE
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Using filesystem rocket icon
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Using object storage path for real estate media: /real-estate-media/1746535270418-441520082.jpg -> /api/real-estate-media/1746535270418-441520082.jpg
+
+ Debug: Making POST request to /api/listings/80/contact with data: Object
+
+ Request hostname: barefootbay.com, isDeploy: true
+
+ Authentication debug: 
+
+      Cookie exists: false
+
+      Full cookie string: 
+
+      URL: /api/listings/80/contact
+
+      Method: POST
+
+      Headers: {"Accept":"application/json","Content-Type":"application/json","X-Requested-With":"XMLHttpRequest"}
+
+      Hostname: barefootbay.com
+
+      Origin: https://barefootbay.com
+
+      Protocol: https:
+
+    
+
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+
+ [Maps Polyfill] BYPASSING for API request: /api/listings/80/contact
+
+ [Maps Polyfill] BYPASSING for API request: /api/analytics/track/event
+
+ Event tracked: click
+
+ Server auth check: Object
+
+/api/listings/80/contact:1  Failed to load resource: the server responded with a status of 500 ()
+
+ API response from POST /api/listings/80/contact: {"message":"Failed to send message. Please check server logs for details."}
+
+ API request failed: POST /api/listings/80/contact - Status: 500 
+
+Ie @ index-BzF1VT2p.js:58
+
+ API request failed: POST /api/listings/80/contact 
+
+Ie @ index-BzF1VT2p.js:58
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Unread messages count: 0
+
+ [Feature Flags] [PROD] Checking flag calendar Object
+
+ [Feature Flags] [PROD] nav-calendar for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag forum Object
+
+ [Feature Flags] [PROD] nav-forum for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag for_sale Object
+
+ [Feature Flags] [PROD] nav-for-sale for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag store Object
+
+ [Feature Flags] [PROD] store is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag vendors Object
+
+ [Feature Flags] [PROD] nav-vendors for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag community Object
+
+ [Feature Flags] [PROD] nav-community for paid: VISIBLE
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Using filesystem rocket icon
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Using object storage path for real estate media: /real-estate-media/1746535270418-441520082.jpg -> /api/real-estate-media/1746535270418-441520082.jpg
+
+ Debug: Making POST request to /api/listings/80/contact with data: Object
+
+ Request hostname: barefootbay.com, isDeploy: true
+
+ Authentication debug: 
+
+      Cookie exists: false
+
+      Full cookie string: 
+
+      URL: /api/listings/80/contact
+
+      Method: POST
+
+      Headers: {"Accept":"application/json","Content-Type":"application/json","X-Requested-With":"XMLHttpRequest"}
+
+      Hostname: barefootbay.com
+
+      Origin: https://barefootbay.com
+
+      Protocol: https:
+
+    
+
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+
+ [Maps Polyfill] BYPASSING for API request: /api/listings/80/contact
+
+ [Maps Polyfill] BYPASSING for API request: /api/analytics/track/event
+
+ Event tracked: click
+
+ Query fetch: /api/messages
+
+ Query hostname: barefootbay.com, isDeploy: true
+
+ Query authentication debug: 
+
+          Cookie exists: false
+
+          Full cookie string: 
+
+          Query: /api/messages
+
+          Hostname: barefootbay.com
+
+          Origin: https://barefootbay.com
+
+          Protocol: https:
+
+        
+
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+
+ [Maps Polyfill] BYPASSING for API request: /api/messages
+
+ Server auth check: Object
+
+/api/listings/80/contact:1  Failed to load resource: the server responded with a status of 500 ()
+
+ API response from POST /api/listings/80/contact: {"message":"Failed to send message. Please check server logs for details."}
+
+ API request failed: POST /api/listings/80/contact - Status: 500 
+
+Ie @ index-BzF1VT2p.js:58
+
+ API request failed: POST /api/listings/80/contact 
+
+Ie @ index-BzF1VT2p.js:58
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Unread messages count: 0
+
+ [Feature Flags] [PROD] Checking flag calendar Object
+
+ [Feature Flags] [PROD] nav-calendar for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag forum Object
+
+ [Feature Flags] [PROD] nav-forum for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag for_sale Object
+
+ [Feature Flags] [PROD] nav-for-sale for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag store Object
+
+ [Feature Flags] [PROD] store is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag vendors Object
+
+ [Feature Flags] [PROD] nav-vendors for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag community Object
+
+ [Feature Flags] [PROD] nav-community for paid: VISIBLE
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Using filesystem rocket icon
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Using object storage path for real estate media: /real-estate-media/1746535270418-441520082.jpg -> /api/real-estate-media/1746535270418-441520082.jpg
+
+ Event tracked: click
+
+ Query auth check: Object
+
+ Debug: Making POST request to /api/listings/80/contact with data: Object
+
+ Request hostname: barefootbay.com, isDeploy: true
+
+ Authentication debug: 
+
+      Cookie exists: false
+
+      Full cookie string: 
+
+      URL: /api/listings/80/contact
+
+      Method: POST
+
+      Headers: {"Accept":"application/json","Content-Type":"application/json","X-Requested-With":"XMLHttpRequest"}
+
+      Hostname: barefootbay.com
+
+      Origin: https://barefootbay.com
+
+      Protocol: https:
+
+    
+
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+
+ [Maps Polyfill] BYPASSING for API request: /api/listings/80/contact
+
+ [Maps Polyfill] BYPASSING for API request: /api/analytics/track/event
+
+ Server auth check: Object
+
+/api/listings/80/contact:1  Failed to load resource: the server responded with a status of 500 ()
+
+ API response from POST /api/listings/80/contact: {"message":"Failed to send message. Please check server logs for details."}
+
+ API request failed: POST /api/listings/80/contact - Status: 500 
+
+Ie @ index-BzF1VT2p.js:58
+
+ API request failed: POST /api/listings/80/contact 
+
+Ie @ index-BzF1VT2p.js:58
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Unread messages count: 0
+
+ [Feature Flags] [PROD] Checking flag calendar Object
+
+ [Feature Flags] [PROD] nav-calendar for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag forum Object
+
+ [Feature Flags] [PROD] nav-forum for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag for_sale Object
+
+ [Feature Flags] [PROD] nav-for-sale for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag store Object
+
+ [Feature Flags] [PROD] store is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag vendors Object
+
+ [Feature Flags] [PROD] nav-vendors for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag community Object
+
+ [Feature Flags] [PROD] nav-community for paid: VISIBLE
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Using filesystem rocket icon
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Using object storage path for real estate media: /real-estate-media/1746535270418-441520082.jpg -> /api/real-estate-media/1746535270418-441520082.jpg
+
+ Event tracked: click
+
+ Debug: Making POST request to /api/listings/80/contact with data: Object
+
+ Request hostname: barefootbay.com, isDeploy: true
+
+ Authentication debug: 
+
+      Cookie exists: false
+
+      Full cookie string: 
+
+      URL: /api/listings/80/contact
+
+      Method: POST
+
+      Headers: {"Accept":"application/json","Content-Type":"application/json","X-Requested-With":"XMLHttpRequest"}
+
+      Hostname: barefootbay.com
+
+      Origin: https://barefootbay.com
+
+      Protocol: https:
+
+    
+
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+
+ [Maps Polyfill] BYPASSING for API request: /api/listings/80/contact
+
+ [Maps Polyfill] BYPASSING for API request: /api/analytics/track/event
+
+ Server auth check: Object
+
+/api/listings/80/contact:1  Failed to load resource: the server responded with a status of 500 ()
+
+ API response from POST /api/listings/80/contact: {"message":"Failed to send message. Please check server logs for details."}
+
+ API request failed: POST /api/listings/80/contact - Status: 500 
+
+Ie @ index-BzF1VT2p.js:58
+
+ API request failed: POST /api/listings/80/contact 
+
+Ie @ index-BzF1VT2p.js:58
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Unread messages count: 0
+
+ [Feature Flags] [PROD] Checking flag calendar Object
+
+ [Feature Flags] [PROD] nav-calendar for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag forum Object
+
+ [Feature Flags] [PROD] nav-forum for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag for_sale Object
+
+ [Feature Flags] [PROD] nav-for-sale for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag store Object
+
+ [Feature Flags] [PROD] store is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag vendors Object
+
+ [Feature Flags] [PROD] nav-vendors for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag community Object
+
+ [Feature Flags] [PROD] nav-community for paid: VISIBLE
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Using filesystem rocket icon
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content Object
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Using object storage path for real estate media: /real-estate-media/1746535270418-441520082.jpg -> /api/real-estate-media/1746535270418-441520082.jpg
+
+ Event tracked: click
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments Object
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions Object
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post Object
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_access is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_forum Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag featured_content Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+index-BzF1VT2p.js:2651 Unread messages count: 0
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-calendar for paid: VISIBLE
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-forum for paid: VISIBLE
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-for-sale for paid: VISIBLE
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag store Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] store is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendors Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-vendors for paid: VISIBLE
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag community Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-community for paid: VISIBLE
+
+index-BzF1VT2p.js:840 DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag comments Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] comments for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag reactions Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] reactions for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar_post Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] calendar_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum_post Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] forum_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendor_page Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] vendor_page is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_access Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_access is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_forum Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag featured_content Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+index-BzF1VT2p.js:840 DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag comments Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] comments for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag reactions Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] reactions for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar_post Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] calendar_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum_post Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] forum_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendor_page Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] vendor_page is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_access Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_access is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_forum Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag featured_content Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+index-BzF1VT2p.js:2648 Using filesystem rocket icon
+
+index-BzF1VT2p.js:840 DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag comments Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] comments for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag reactions Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] reactions for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar_post Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] calendar_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum_post Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] forum_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendor_page Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] vendor_page is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_access Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_access is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_forum Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag featured_content Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+index-BzF1VT2p.js:840 DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag comments Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] comments for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag reactions Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] reactions for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar_post Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] calendar_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum_post Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] forum_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale_post Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendor_page Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] vendor_page is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_access Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_access is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_forum Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag featured_content Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag weather_rocket_icons Object
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+index-BzF1VT2p.js:790 Using object storage path for real estate media: /real-estate-media/1746535270418-441520082.jpg -> /api/real-estate-media/1746535270418-441520082.jpg
+
+manifest.json:1 
+
+            
+
+            
+
+           Failed to load resource: the server responded with a status of 500 ()
+
+index-BzF1VT2p.js:840 DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] comments for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] reactions for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] calendar_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] forum_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] vendor_page is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_access is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+index-BzF1VT2p.js:2651 Unread messages count: 0
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-calendar for paid: VISIBLE
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-forum for paid: VISIBLE
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-for-sale for paid: VISIBLE
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag store {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] store is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendors {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-vendors for paid: VISIBLE
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag community {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-community for paid: VISIBLE
+
+index-BzF1VT2p.js:840 DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] comments for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] reactions for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] calendar_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] forum_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] vendor_page is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_access is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+index-BzF1VT2p.js:840 DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] comments for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] reactions for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] calendar_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] forum_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] vendor_page is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_access is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+index-BzF1VT2p.js:2648 Using filesystem rocket icon
+
+index-BzF1VT2p.js:840 DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] comments for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] reactions for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] calendar_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] forum_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] vendor_page is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_access is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+index-BzF1VT2p.js:840 DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] comments for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] reactions for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] calendar_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] forum_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] vendor_page is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_access is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+index-BzF1VT2p.js:790 Using object storage path for real estate media: /real-estate-media/1746535270418-441520082.jpg -> /api/real-estate-media/1746535270418-441520082.jpg
+
+index-BzF1VT2p.js:840 DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] comments for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] reactions for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] calendar_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] forum_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] vendor_page is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_access is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+index-BzF1VT2p.js:2651 Unread messages count: 0
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-calendar for paid: VISIBLE
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-forum for paid: VISIBLE
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-for-sale for paid: VISIBLE
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag store {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] store is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendors {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-vendors for paid: VISIBLE
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag community {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-community for paid: VISIBLE
+
+index-BzF1VT2p.js:840 DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] comments for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] reactions for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] calendar_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] forum_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] vendor_page is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_access is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+index-BzF1VT2p.js:840 DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] comments for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] reactions for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] calendar_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] forum_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] vendor_page is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_access is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+index-BzF1VT2p.js:2648 Using filesystem rocket icon
+
+index-BzF1VT2p.js:840 DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] comments for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] reactions for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] calendar_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] forum_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] vendor_page is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_access is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+index-BzF1VT2p.js:840 DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] comments for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] reactions for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] calendar_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] forum_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] vendor_page is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_access is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+index-BzF1VT2p.js:790 Using object storage path for real estate media: /real-estate-media/1746535270418-441520082.jpg -> /api/real-estate-media/1746535270418-441520082.jpg
+
+index-BzF1VT2p.js:840 DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] comments for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] reactions for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] calendar_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] forum_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] vendor_page is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_access is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+index-BzF1VT2p.js:2651 Unread messages count: 0
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-calendar for paid: VISIBLE
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-forum for paid: VISIBLE
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-for-sale for paid: VISIBLE
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag store {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] store is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendors {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-vendors for paid: VISIBLE
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag community {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] nav-community for paid: VISIBLE
+
+index-BzF1VT2p.js:840 DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] comments for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] reactions for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] calendar_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] forum_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] vendor_page is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_access is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] admin_forum is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] featured_content is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+index-BzF1VT2p.js:840 DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] comments for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] reactions for paid: ENABLED
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] calendar_post is not found or inactive
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+index-BzF1VT2p.js:840 [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Using filesystem rocket icon
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Using object storage path for real estate media: /real-estate-media/1746535270418-441520082.jpg -> /api/real-estate-media/1746535270418-441520082.jpg
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Unread messages count: 0
+
+ [Feature Flags] [PROD] Checking flag calendar {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+ [Feature Flags] [PROD] nav-calendar for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+ [Feature Flags] [PROD] nav-forum for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag for_sale {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+ [Feature Flags] [PROD] nav-for-sale for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag store {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] store is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag vendors {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+ [Feature Flags] [PROD] nav-vendors for paid: VISIBLE
+
+ [Feature Flags] [PROD] Checking flag community {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: {…}, navRoleCheck: true}
+
+ [Feature Flags] [PROD] nav-community for paid: VISIBLE
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Using filesystem rocket icon
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ DEBUG usePermissions - Current user role: paid isAdmin: false isBlocked: false hasPermission: true
+
+ [Feature Flags] [PROD] Checking flag comments {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] comments for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag reactions {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] reactions for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag calendar_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] calendar_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag forum_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] forum_post is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag for_sale_post {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] for_sale_post for paid: ENABLED
+
+ [Feature Flags] [PROD] Checking flag vendor_page {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] vendor_page is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_access {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] admin_access is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag admin_forum {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] admin_forum is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag featured_content {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] featured_content is not found or inactive
+
+ [Feature Flags] [PROD] Checking flag weather_rocket_icons {userRole: 'paid', isAdmin: false, environment: 'production', navFeature: 'not found', navRoleCheck: false}
+
+ [Feature Flags] [PROD] weather_rocket_icons for paid: ENABLED
+
+ Using object storage path for real estate media: /real-estate-media/1746535270418-441520082.jpg -> /api/real-estate-media/1746535270418-441520082.jpg

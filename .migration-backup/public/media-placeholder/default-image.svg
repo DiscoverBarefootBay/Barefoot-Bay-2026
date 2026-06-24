@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800px" height="600px" viewBox="0 0 800 600" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Real Estate Placeholder</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#F8F9FA" x="0" y="0" width="800" height="600"></rect>
+        <g transform="translate(250.000000, 200.000000)">
+            <path d="M150,0 L300,100 L300,300 L0,300 L0,100 L150,0 Z" fill="#E9ECEF" stroke="#DEE2E6" stroke-width="4"></path>
+            <rect fill="#DEE2E6" x="120" y="200" width="60" height="100"></rect>
+            <rect fill="#DEE2E6" x="50" y="150" width="50" height="50"></rect>
+            <rect fill="#DEE2E6" x="200" y="150" width="50" height="50"></rect>
+        </g>
+        <text font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#6C757D" text-anchor="middle" x="400" y="160">
+            Image Unavailable
+        </text>
+        <text font-family="Arial, sans-serif" font-size="18" font-weight="normal" fill="#6C757D" text-anchor="middle" x="400" y="450">
+            This property image could not be loaded
+        </text>
+    </g>
+</svg>

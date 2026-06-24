@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Calendar Mobile View Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .results {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+    .success {
+      color: green;
+      font-weight: bold;
+    }
+    .failure {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Calendar Mobile View Test</h1>
+  <p>This test checks if the Month button is hidden on mobile view.</p>
+  
+  <div class="results" id="results">
+    Testing...
+  </div>
+  
+  <script>
+    // Fetch the calendar page and check for the conditional rendering of Month button
+    fetch("/calendar")
+      .then(response => response.text())
+      .then(html => {
+        // Check if the Month button is conditionally rendered
+        const hasConditionalMonthButton = html.includes('{!isMobile') && html.includes('Month');
+        const results = document.getElementById('results');
+        
+        if (hasConditionalMonthButton) {
+          results.innerHTML = '<span class="success">SUCCESS:</span> The Month button is conditionally rendered based on mobile detection.';
+        } else {
+          results.innerHTML = '<span class="failure">FAILURE:</span> The Month button may not be conditionally rendered correctly.';
+        }
+        
+        // Additional info
+        results.innerHTML += '<div style="margin-top: 15px;"><strong>Current screen width:</strong> ' + window.innerWidth + 'px</div>';
+        results.innerHTML += '<div><strong>Is considered mobile:</strong> ' + (window.innerWidth < 768 ? 'Yes' : 'No') + '</div>';
+      })
+      .catch(error => {
+        document.getElementById('results').innerHTML = '<span class="failure">ERROR:</span> ' + error.message;
+      });
+  </script>
+</body>
+</html>

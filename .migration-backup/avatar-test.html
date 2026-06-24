@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avatar Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .avatar-test {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .test-result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+        img {
+            max-width: 150px;
+            max-height: 150px;
+            display: block;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Avatar Image Path Tester</h1>
+    
+    <div class="avatar-test">
+        <h2>Test 1: Production Path (/avatars/...)</h2>
+        <p>Testing image path: <code id="path1">/avatars/avatar-1745516872229-283458321.jpg</code></p>
+        <div class="test-result" id="result1"></div>
+        <img id="img1" src="/avatars/avatar-1745516872229-283458321.jpg" alt="Avatar image (production path)" onerror="this.onerror=null; document.getElementById('result1').innerHTML='❌ Failed to load image'; document.getElementById('result1').className='error';" onload="document.getElementById('result1').innerHTML='✅ Image loaded successfully'; document.getElementById('result1').className='success';">
+    </div>
+    
+    <div class="avatar-test">
+        <h2>Test 2: Development Path (/uploads/avatars/...)</h2>
+        <p>Testing image path: <code id="path2">/uploads/avatars/avatar-1745516872229-283458321.jpg</code></p>
+        <div class="test-result" id="result2"></div>
+        <img id="img2" src="/uploads/avatars/avatar-1745516872229-283458321.jpg" alt="Avatar image (development path)" onerror="this.onerror=null; document.getElementById('result2').innerHTML='❌ Failed to load image'; document.getElementById('result2').className='error';" onload="document.getElementById('result2').innerHTML='✅ Image loaded successfully'; document.getElementById('result2').className='success';">
+    </div>
+
+    <div class="avatar-test">
+        <h2>Test 3: Second Avatar Image</h2>
+        <p>Testing image path: <code id="path3">/avatars/avatar-1745447757497-273110928.png</code></p>
+        <div class="test-result" id="result3"></div>
+        <img id="img3" src="/avatars/avatar-1745447757497-273110928.png" alt="Second avatar image" onerror="this.onerror=null; document.getElementById('result3').innerHTML='❌ Failed to load image'; document.getElementById('result3').className='error';" onload="document.getElementById('result3').innerHTML='✅ Image loaded successfully'; document.getElementById('result3').className='success';">
+    </div>
+
+    <div class="avatar-test">
+        <h2>Test 4: Second Avatar Image (Development Path)</h2>
+        <p>Testing image path: <code id="path4">/uploads/avatars/avatar-1745447757497-273110928.png</code></p>
+        <div class="test-result" id="result4"></div>
+        <img id="img4" src="/uploads/avatars/avatar-1745447757497-273110928.png" alt="Second avatar image (development path)" onerror="this.onerror=null; document.getElementById('result4').innerHTML='❌ Failed to load image'; document.getElementById('result4').className='error';" onload="document.getElementById('result4').innerHTML='✅ Image loaded successfully'; document.getElementById('result4').className='success';">
+    </div>
+
+    <div class="avatar-test">
+        <h2>Test 5: Manual File List</h2>
+        <div id="file-list">Loading file list...</div>
+    </div>
+
+    <script>
+        // Fetch and display all files in avatars directory
+        fetch('/api/test/avatar-files')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const fileListElement = document.getElementById('file-list');
+                if (data.success && data.files && data.files.length > 0) {
+                    const fileList = document.createElement('ul');
+                    data.files.forEach(file => {
+                        const item = document.createElement('li');
+                        item.textContent = file;
+                        fileList.appendChild(item);
+                    });
+                    fileListElement.innerHTML = '<h3>Avatar Files Available:</h3>';
+                    fileListElement.appendChild(fileList);
+                } else {
+                    fileListElement.innerHTML = '<p class="error">No files found or error fetching file list</p>';
+                }
+            })
+            .catch(error => {
+                document.getElementById('file-list').innerHTML = `<p class="error">Error: ${error.message}</p><p>API endpoint for file listing not available</p>`;
+            });
+    </script>
+</body>
+</html>

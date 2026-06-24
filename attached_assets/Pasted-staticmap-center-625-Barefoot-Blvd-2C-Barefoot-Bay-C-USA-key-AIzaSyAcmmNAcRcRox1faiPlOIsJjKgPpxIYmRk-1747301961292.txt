@@ -1,0 +1,101 @@
+staticmap?center=625+Barefoot+Blvd%2C+Barefoot+Bay…C+USA&key=AIzaSyAcmmNAcRcRox1faiPlOIsJjKgPpxIYmRk
+staticmap?center=625+Barefoot+Blvd%2C+Barefoot+Bay…%7C625+Barefoot+Blvd%2C+Barefoot+Bay%2C+FL%2C+USA
+2 / 55 requests
+0.1 kB / 104 kB transferred
+0.0 kB / 3,533 kB resources
+Finish: 543 ms
+DOMContentLoaded: 199 ms
+Request URL
+https://barefootbay.com/api/google/staticmap?center=625+Barefoot+Blvd%2C+Barefoot+Bay%2C+FL%2C+USA&zoom=15&size=600x300&markers=color%3Ared%7C625+Barefoot+Blvd%2C+Barefoot+Bay%2C+FL%2C+USA
+Request Method
+HEAD
+Status Code
+403 Forbidden
+Remote Address
+34.111.179.208:443
+Referrer Policy
+no-referrer
+access-control-allow-credentials
+true
+access-control-allow-headers
+Content-Type, Authorization
+access-control-allow-methods
+GET, OPTIONS
+access-control-allow-origin
+*
+alt-svc
+h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+content-length
+72
+content-security-policy
+default-src 'self' * data: blob:;script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.googletagmanager.com http://localhost:* https://*.replit.app https://*.replit.dev *;style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com http://localhost:* https://*.replit.app https://*.replit.dev *;img-src 'self' data: blob: https://images.unsplash.com https://cdn.jsdelivr.net http://localhost:* https://*.replit.app https://*.replit.dev *;connect-src 'self' http://localhost:* https://*.replit.app https://*.replit.dev https://barefootbay.com wss://*.replit.app wss://*.replit.dev ws://localhost:* *;font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com http://localhost:* https://*.replit.app https://*.replit.dev *;object-src 'none';media-src 'self' http://localhost:* https://*.replit.app https://*.replit.dev data: blob: *;frame-src 'self' http://localhost:* https://*.replit.app https://*.replit.dev *;base-uri 'self';form-action 'self';upgrade-insecure-requests
+content-type
+application/json; charset=utf-8
+cross-origin-opener-policy
+same-origin-allow-popups
+cross-origin-resource-policy
+cross-origin
+date
+Thu, 15 May 2025 09:38:54 GMT
+etag
+W/"48-dBlIrWhGGDoPD9TwGieBjaq1alI"
+origin-agent-cluster
+?1
+ratelimit
+limit=2000, remaining=436, reset=336
+ratelimit-policy
+2000;w=900
+referrer-policy
+no-referrer
+strict-transport-security
+max-age=63072000; includeSubDomains
+strict-transport-security
+max-age=31536000; includeSubDomains
+vary
+Origin, Accept-Encoding
+via
+1.1 google
+x-content-type-options
+nosniff
+x-dns-prefetch-control
+off
+x-download-options
+noopen
+x-frame-options
+SAMEORIGIN
+x-permitted-cross-domain-policies
+none
+x-xss-protection
+0
+:authority
+barefootbay.com
+:method
+HEAD
+:path
+/api/google/staticmap?center=625+Barefoot+Blvd%2C+Barefoot+Bay%2C+FL%2C+USA&zoom=15&size=600x300&markers=color%3Ared%7C625+Barefoot+Blvd%2C+Barefoot+Bay%2C+FL%2C+USA
+:scheme
+https
+accept
+*/*
+accept-encoding
+gzip, deflate, br, zstd
+accept-language
+en-US,en;q=0.9
+cookie
+analytics_session_id=a3cb11dd-72bd-4ab2-a0f9-76ade66f7670
+priority
+u=1, i
+sec-ch-ua
+"Chromium";v="136", "Google Chrome";v="136", "Not.A/Brand";v="99"
+sec-ch-ua-mobile
+?0
+sec-ch-ua-platform
+"Windows"
+sec-fetch-dest
+empty
+sec-fetch-mode
+cors
+sec-fetch-site
+same-origin
+user-agent
+Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36

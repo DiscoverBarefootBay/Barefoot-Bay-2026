@@ -1,0 +1,95 @@
+3530-2b04dacdfd07bcdd.js:1 Replit version 73c933d9, pid2 version 0.0.1336
+_app-6e3ca145483964b8.js:38 
+      /////////////////////
+   ///////////////////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////        Curious and driven?
+  ///////////////@@@@@@@///////        Work with us!
+  ///////////////@@@@@@@///////
+  ///////////////@@@@@@@///////        https://join.replit.com/hack.with.us
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@#//////////////
+   ///////////////////////////
+      /////////////////////
+      
+_app-6e3ca145483964b8.js:38 [LaunchDarkly] LaunchDarkly client initialized
+_app-6e3ca145483964b8.js:38 [LaunchDarkly] Opening stream connection to https://clientstream.launchdarkly.com/eval/62b35a865152ab14c5942820/eyJrZXkiOiIzNjgzMjE3MCIsImtpbmQiOiJ1c2VyIiwibmFtZSI6Im1hZzA5MjU5MyIsInJvbGVzIjpbImV4cGxvcmVyIiwib25ib2FyZGluZ19leHBlcmllbmNlX2xvdyIsImludGVudF9wZXJzb25hbCJdLCJlbWFpbCI6Im1hZzA5MjU5M0BnbWFpbC5jb20iLCJ0aW1lX2NyZWF0ZWQiOjE3Mjc0NjAzNTE1NzgsIl9tZXRhIjp7InByaXZhdGVBdHRyaWJ1dGVzIjpbImVtYWlsIl19fQ
+Grammarly-check.js:1 [Violation] Permissions policy violation: unload is not allowed in this document.
+(anonymous) @ Grammarly-check.js:1
+Barefoot-Bay:1 Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+framework-085fd574ead563dd.js:1 Unrecognized feature: 'ambient-light-sensor'.
+_ @ framework-085fd574ead563dd.js:1
+framework-085fd574ead563dd.js:1 Unrecognized feature: 'battery'.
+_ @ framework-085fd574ead563dd.js:1
+framework-085fd574ead563dd.js:1 Unrecognized feature: 'execution-while-not-rendered'.
+_ @ framework-085fd574ead563dd.js:1
+framework-085fd574ead563dd.js:1 Unrecognized feature: 'execution-while-out-of-viewport'.
+_ @ framework-085fd574ead563dd.js:1
+framework-085fd574ead563dd.js:1 Unrecognized feature: 'layout-animations'.
+_ @ framework-085fd574ead563dd.js:1
+framework-085fd574ead563dd.js:1 Unrecognized feature: 'legacy-image-formats'.
+_ @ framework-085fd574ead563dd.js:1
+framework-085fd574ead563dd.js:1 Unrecognized feature: 'navigation-override'.
+_ @ framework-085fd574ead563dd.js:1
+framework-085fd574ead563dd.js:1 Unrecognized feature: 'oversized-images'.
+_ @ framework-085fd574ead563dd.js:1
+framework-085fd574ead563dd.js:1 Unrecognized feature: 'publickey-credentials'.
+_ @ framework-085fd574ead563dd.js:1
+framework-085fd574ead563dd.js:1 Unrecognized feature: 'speaker-selection'.
+_ @ framework-085fd574ead563dd.js:1
+framework-085fd574ead563dd.js:1 Unrecognized feature: 'unoptimized-images'.
+_ @ framework-085fd574ead563dd.js:1
+framework-085fd574ead563dd.js:1 Unrecognized feature: 'unsized-media'.
+_ @ framework-085fd574ead563dd.js:1
+framework-085fd574ead563dd.js:1 Unrecognized feature: 'pointer-lock'.
+_ @ framework-085fd574ead563dd.js:1
+framework-085fd574ead563dd.js:1 Allow attribute will take precedence over 'allowfullscreen'.
+_ @ framework-085fd574ead563dd.js:1
+framework-085fd574ead563dd.js:1 Allow attribute will take precedence over 'allowpaymentrequest'.
+_ @ framework-085fd574ead563dd.js:1
+
+                
+          
+          
+          
+         Chrome is moving towards a new experience that allows users to choose to browse without third-party cookies.
+
+                
+          
+          
+          
+         Chrome is moving towards a new experience that allows users to choose to browse without third-party cookies.
+workspace_iframe.html:32 Unrecognized feature: 'ambient-light-sensor'.
+workspace_iframe.html:32 Unrecognized feature: 'battery'.
+workspace_iframe.html:32 Unrecognized feature: 'execution-while-not-rendered'.
+workspace_iframe.html:32 Unrecognized feature: 'execution-while-out-of-viewport'.
+workspace_iframe.html:32 Unrecognized feature: 'layout-animations'.
+workspace_iframe.html:32 Unrecognized feature: 'legacy-image-formats'.
+workspace_iframe.html:32 Unrecognized feature: 'navigation-override'.
+workspace_iframe.html:32 Unrecognized feature: 'oversized-images'.
+workspace_iframe.html:32 Unrecognized feature: 'publickey-credentials'.
+workspace_iframe.html:32 Unrecognized feature: 'speaker-selection'.
+workspace_iframe.html:32 Unrecognized feature: 'unoptimized-images'.
+workspace_iframe.html:32 Unrecognized feature: 'unsized-media'.
+workspace_iframe.html:32 Allow attribute will take precedence over 'allowfullscreen'.
+workspace_iframe.html:32 Allow attribute will take precedence over 'allowpaymentrequest'.
+(index):203 
+            
+            
+           GET https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/clear-cache.js net::ERR_ABORTED 404 (Not Found)
+(anonymous) @ (index):203
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/:1 Refused to execute script from 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/clear-cache.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.
+(index):203 
+            
+            
+           GET https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/clear-cache.js net::ERR_ABORTED 404 (Not Found)
+(anonymous) @ (index):203
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/:1 Refused to execute script from 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/clear-cache.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.

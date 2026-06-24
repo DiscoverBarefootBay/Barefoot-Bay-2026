@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mobile View Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .results {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+    .success {
+      color: green;
+      font-weight: bold;
+    }
+    .failure {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Mobile Calendar View Test</h1>
+  <p>Testing calendar view on mobile screens</p>
+  
+  <div class="results">
+    <p>Current screen width: <span id="width"></span>px</p>
+    <p>Is mobile according to our app: <span id="isMobile"></span></p>
+  </div>
+  
+  <div class="results">
+    <p>Expected behavior:</p>
+    <ul>
+      <li>On mobile view (width < 768px): Month button should be hidden</li>
+      <li>On desktop view (width ≥ 768px): Month button should be visible</li>
+    </ul>
+  </div>
+  
+  <script>
+    document.getElementById('width').textContent = window.innerWidth;
+    document.getElementById('isMobile').textContent = window.innerWidth < 768 ? 'Yes' : 'No';
+    
+    // Simulate resize to see if it updates
+    window.addEventListener('resize', function() {
+      document.getElementById('width').textContent = window.innerWidth;
+      document.getElementById('isMobile').textContent = window.innerWidth < 768 ? 'Yes' : 'No';
+    });
+  </script>
+</body>
+</html>

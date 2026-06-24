@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800px" height="600px" viewBox="0 0 800 600" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Barefoot Bay - Forum Image Placeholder</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#F0F4F8" x="0" y="0" width="800" height="600"></rect>
+        <g transform="translate(200.000000, 150.000000)">
+            <rect stroke="#7FB1D3" stroke-width="8" x="4" y="4" width="392" height="292" rx="12"></rect>
+            <path d="M200,100 C232.032,100 258,125.968 258,158 C258,190.032 232.032,216 200,216 C167.968,216 142,190.032 142,158 C142,125.968 167.968,100 200,100 Z" fill="#A0C8E1"></path>
+            <path d="M80,250 L320,250 L320,280 C320,286.627 314.627,292 308,292 L92,292 C85.373,292 80,286.627 80,280 L80,250 Z" fill="#A0C8E1"></path>
+            <path d="M40,60 L360,60 L360,80 C360,86.627 354.627,92 348,92 L52,92 C45.373,92 40,86.627 40,80 L40,60 Z" fill="#A0C8E1"></path>
+            <text font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#2C5E7E">
+                <tspan x="106" y="80">BAREFOOT BAY</tspan>
+            </text>
+            <text font-family="Arial, sans-serif" font-size="14" font-weight="normal" fill="#2C5E7E">
+                <tspan x="130" y="272">Forum Media Placeholder</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,5266 @@
+[
+  {
+    "title": "LAP SWIMMING",
+    "description": "Area: Pool 1: Glide through crystal-clear waters while enjoying the tranquil morning atmosphere at our community pools. Lap Swimming offers the perfect blend of gentle exercise and peaceful solitude, allowing you to start your day with renewed energy while embracing Barefoot Bay's natural beauty.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-02T09:00:00.000Z",
+    "endDate": "2025-03-02T10:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "CRIBBAGE",
+    "description": "Area: C: Join fellow residents for an afternoon of friendly competition and laughter at our weekly Cribbage gatherings. This classic card game brings together neighbors in our comfortable community spaces, creating lasting friendships while showcasing the warm, welcoming spirit that defines Barefoot Bay.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-02T12:30:00.000Z",
+    "endDate": "2025-03-02T15:30:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "RIVER OF LIFE CHURCH",
+    "description": "Area: D&E: Experience spiritual connection and community support in a serene, uplifting environment at River of Life Church. Services blend inspiration and reflection, perfectly complementing Barefoot Bay's emphasis on balanced living and meaningful connections with both nature and neighbors.",
+    "location": "1225 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-02T10:30:00.000Z",
+    "endDate": "2025-03-02T12:30:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "LADIES CARD CLUBS",
+    "description": "Area: E: Discover the joy of friendly competition and heartfelt conversation at our Ladies Card Clubs, where skill and laughter blend seamlessly. These gatherings celebrate the strong bonds between Barefoot Bay's women while providing a relaxed atmosphere to unwind and connect in our beautifully appointed community spaces.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-02T14:00:00.000Z",
+    "endDate": "2025-03-02T17:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "POOL 1",
+    "description": "Area: Pool 1: Immerse yourself in paradise at our meticulously maintained community pools, each offering its own unique charm and amenities. These refreshing oases serve as the heart of Barefoot Bay's outdoor lifestyle, inviting residents to cool off, socialize, and embrace the sun-kissed Florida atmosphere that makes our community special.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-02T09:00:00.000Z",
+    "endDate": "2025-03-02T22:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "POOL 2",
+    "description": "Area: Pool 2: Immerse yourself in paradise at our meticulously maintained community pools, each offering its own unique charm and amenities. These refreshing oases serve as the heart of Barefoot Bay's outdoor lifestyle, inviting residents to cool off, socialize, and embrace the sun-kissed Florida atmosphere that makes our community special.",
+    "location": "1080 Parkway Dr, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-02T09:00:00.000Z",
+    "endDate": "2025-03-02T19:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "POOL 3",
+    "description": "Area: Pool 3: Immerse yourself in paradise at our meticulously maintained community pools, each offering its own unique charm and amenities. These refreshing oases serve as the heart of Barefoot Bay's outdoor lifestyle, inviting residents to cool off, socialize, and embrace the sun-kissed Florida atmosphere that makes our community special.",
+    "location": "1344 Gardenia Dr, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-02T09:00:00.000Z",
+    "endDate": "2025-03-02T18:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "LAP SWIMMING",
+    "description": "Area: Pool 1 : Glide through crystal-clear waters while enjoying the tranquil morning atmosphere at our community pools. Lap Swimming offers the perfect blend of gentle exercise and peaceful solitude, allowing you to start your day with renewed energy while embracing Barefoot Bay's natural beauty.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-03T09:00:00.000Z",
+    "endDate": "2025-03-03T10:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "AQUATIC AEROBICS",
+    "description": "Area: Pool 1: Energize your body and spirit with our invigorating Aquatic Aerobics classes, combining effective low-impact exercise with the natural buoyancy of water. Instructors create a supportive, fun environment where neighbors move together against the backdrop of Barefoot Bay's stunning pool facilities and lush landscaping.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-03T10:00:00.000Z",
+    "endDate": "2025-03-03T11:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "HYDRO EXERCISE",
+    "description": "Area: Pool 3: Experience the gentle power of water-based fitness with our popular Hydro Exercise sessions, perfect for all fitness levels and abilities. These classes harness the therapeutic properties of water while fostering community connections, embodying Barefoot Bay's commitment to wellness that nurtures both body and social bonds.",
+    "location": "1344 Gardenia Dr, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-03T09:00:00.000Z",
+    "endDate": "2025-03-03T10:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "BFB YOGA",
+    "description": "Area: Building A: Find your center and connect with nature during our peaceful Barefoot Bay Yoga sessions, designed to nurture mind, body, and spirit. Classes embrace our community's natural surroundings, allowing participants to flow through poses while absorbing the tranquil energy that makes Barefoot Bay a sanctuary for balanced living.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-03T07:45:00.000Z",
+    "endDate": "2025-03-03T08:45:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "CHOIR PRACTICE",
+    "description": "Area: Building D: Raise your voice in harmony with neighbors during our uplifting Choir Practice sessions, where musical passion meets community spirit. These gatherings celebrate artistic expression while strengthening the bonds between residents, creating beautiful melodies that reflect the warm, inclusive atmosphere of Barefoot Bay.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-03T10:00:00.000Z",
+    "endDate": "2025-03-03T11:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "CANASTA",
+    "description": "Area: Building C: Shuffle into an afternoon of strategic thinking and pleasant company at our weekly Canasta gatherings. This beloved card game brings together residents in a relaxed setting where friendships flourish against the backdrop of Barefoot Bay's comfortable community spaces and welcoming atmosphere.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-03T13:00:00.000Z",
+    "endDate": "2025-03-03T16:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "RINGERS CLUB",
+    "description": "Area: Pool Rm: Perfect your toss and enjoy friendly competition at Ringers Club, where horseshoe enthusiasts gather to showcase their skills and share laughter. The satisfying clink of ringers echoes through our beautifully maintained courts, embodying the casual elegance and outdoor enjoyment that defines the Barefoot Bay lifestyle.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-03T17:00:00.000Z",
+    "endDate": "2025-03-03T19:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "BRIDGE CLUB",
+    "description": "Area: Building C: Engage your mind and connect with fellow strategic thinkers at our popular Bridge Club meetings, where cards bring neighbors together. In these gatherings, concentration meets conversation, fostering both mental acuity and social bonds in the welcoming, refined atmosphere that Barefoot Bay residents cherish.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-03T18:00:00.000Z",
+    "endDate": "2025-03-03T21:30:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "ART GROUP",
+    "description": "Area: Building E: Express your creativity alongside fellow artists in our supportive, inspiration-rich Art Group sessions. Against the backdrop of Barefoot Bay's natural beauty, participants explore various techniques and mediums while sharing their unique perspectives, celebrating the artistic spirit that enhances our community's cultural landscape.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-03T13:00:00.000Z",
+    "endDate": "2025-03-03T16:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "CORNHOLE CLUB",
+    "description": "Area: Building D&E: Embrace the playful side of outdoor recreation with our lively Cornhole Club, where friendly competition and laughter fill the air. Set against Barefoot Bay's lush surroundings, these gatherings perfectly blend casual fun with community connection, embodying our laid-back approach to active, engaged living.",
+    "location": "1225 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-03T18:00:00.000Z",
+    "endDate": "2025-03-03T21:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "MIX DART LEAGUE",
+    "description": "Area: Building L: Take aim and join the camaraderie at our Mixed Dart League, where precision meets playfulness in an atmosphere of friendly competition. These gatherings bring together residents from across Barefoot Bay, creating an energetic social environment where skills are sharpened and friendships are forged over shared moments of triumph.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-03T18:00:00.000Z",
+    "endDate": "2025-03-03T21:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "CANADA SHUFFLEBOARD",
+    "description": "Area: Courts: Connect with our Canadian residents and friends during these special shuffleboard sessions that celebrate international camaraderie. Players enjoy gentle competition while sharing stories and experiences, embodying Barefoot Bay's welcoming spirit toward seasonal residents and the rich diversity they bring to our community.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-03T13:00:00.000Z",
+    "endDate": "2025-03-03T15:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "LAWN BOWLING",
+    "description": "Area: Brit/Cana: Experience the refined pleasure of Lawn Bowling on our meticulously maintained greens, where strategy meets gentle physical activity. The elegant roll of the bowls reflects Barefoot Bay's blend of casual sophistication and outdoor enjoyment, creating moments of friendly competition against our stunning Florida backdrop.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-03T09:00:00.000Z",
+    "endDate": "2025-03-03T12:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "TENNIS CLUB",
+    "description": "Area: Tennis Courts: Rally with fellow enthusiasts at our vibrant Tennis Club, where players of all levels enjoy our well-kept courts and spirited matches. The rhythmic sound of tennis balls and friendly conversation creates the perfect soundtrack for active living in Barefoot Bay, celebrating both athletic endeavor and community connection.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-03T08:00:00.000Z",
+    "endDate": "2025-03-03T12:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "PICKLEBALL CLUB",
+    "description": "Area: Courts: Join the fastest-growing activity in Barefoot Bay at our energetic Pickleball Club, where the distinctive pop of paddles signals fun in progress. Our dedicated courts buzz with friendly competition and laughter, perfectly capturing our community's commitment to active living and social connection in the Florida sunshine.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-03T08:00:00.000Z",
+    "endDate": "2025-03-03T11:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "SOFTBALL PRACTICE",
+    "description": "Area: Ball Field: Polish your skills and bond with teammates during our energetic Softball Practice sessions on Barefoot Bay's well-maintained diamond. The crack of the bat and supportive cheers create a spirited atmosphere that celebrates both athletic achievement and the team mentality that makes our community strong.",
+    "location": "1127 Wren Circle, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-03T08:00:00.000Z",
+    "endDate": "2025-03-03T12:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "LAP SWIMMING",
+    "description": "Area: Pool 1: Glide through crystal-clear waters while enjoying the tranquil morning atmosphere at our community pools. Lap Swimming offers the perfect blend of gentle exercise and peaceful solitude, allowing you to start your day with renewed energy while embracing Barefoot Bay's natural beauty.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-04T09:00:00.000Z",
+    "endDate": "2025-03-04T10:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "AQUATIC AEROBICS",
+    "description": "Area: Pool 1: Energize your body and spirit with our invigorating Aquatic Aerobics classes, combining effective low-impact exercise with the natural buoyancy of water. Instructors create a supportive, fun environment where neighbors move together against the backdrop of Barefoot Bay's stunning pool facilities and lush landscaping.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-04T10:00:00.000Z",
+    "endDate": "2025-03-04T11:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "HYDRO EXERCISE",
+    "description": "Area: Pool 3: Experience the gentle power of water-based fitness with our popular Hydro Exercise sessions, perfect for all fitness levels and abilities. These classes harness the therapeutic properties of water while fostering community connections, embodying Barefoot Bay's commitment to wellness that nurtures both body and social bonds.",
+    "location": "1344 Gardenia Dr, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-04T09:00:00.000Z",
+    "endDate": "2025-03-04T10:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "AQUA ZUMBA",
+    "description": "Area: Pool 3: Dance in the water during our exhilarating Aqua Zumba sessions, where Latin rhythms meet refreshing pool workouts. Participants move and groove in our beautiful pools, creating a joyful atmosphere that perfectly captures Barefoot Bay's blend of fitness, fun, and Florida's vibrant energy.",
+    "location": "1344 Gardenia Dr, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-04T14:00:00.000Z",
+    "endDate": "2025-03-04T15:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "BFB OPEN MIC",
+    "description": "Area: Pool 2: Showcase your talents or simply enjoy the diverse performances at Barefoot Bay's heartwarming Open Mic nights. These gatherings celebrate our community's creative spirit in a supportive atmosphere, where neighbors share stories, songs, and laughter against the backdrop of our welcoming community spaces.",
+    "location": "1080 Parkway Dr, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-04T13:30:00.000Z",
+    "endDate": "2025-03-04T16:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "TTF SHUFFLEBOARD",
+    "description": "Area: Courts: Slide into friendly competition at our Tuesday-Thursday-Friday Shuffleboard sessions, where strategic thinking meets relaxed outdoor enjoyment. The gentle push of discs across our well-maintained courts creates a meditative rhythm, reflecting Barefoot Bay's perfect balance of activity and tranquility.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-04T08:00:00.000Z",
+    "endDate": "2025-03-04T09:30:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "TUES SHUFFLEBOARD",
+    "description": "Area: Courts: Slide into friendly competition at our Tuesday Shuffleboard sessions, where strategic thinking meets relaxed outdoor enjoyment. The gentle push of discs across our well-maintained courts creates a meditative rhythm, reflecting Barefoot Bay's perfect balance of activity and tranquility.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-04T13:00:00.000Z",
+    "endDate": "2025-03-04T16:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "NH BOCCI CLUB",
+    "description": "Area: Bocci: Roll into good times with our North Horseshoe Bocci Club, where the ancient game creates modern connections between neighbors. Set against Barefoot Bay's lush landscapes, these gatherings blend gentle competition with lively conversation, embodying our community's appreciation for timeless traditions and outdoor living.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-04T09:30:00.000Z",
+    "endDate": "2025-03-04T12:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "RINGERS CLUB",
+    "description": "Area: Pits: Perfect your toss and enjoy friendly competition at Ringers Club, where horseshoe enthusiasts gather to showcase their skills and share laughter. The satisfying clink of ringers echoes through our beautifully maintained courts, embodying the casual elegance and outdoor enjoyment that defines the Barefoot Bay lifestyle.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-04T07:00:00.000Z",
+    "endDate": "2025-03-04T10:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "TENNIS CLUB",
+    "description": "Area: Tennis: Rally with fellow enthusiasts at our vibrant Tennis Club, where players of all levels enjoy our well-kept courts and spirited matches. The rhythmic sound of tennis balls and friendly conversation creates the perfect soundtrack for active living in Barefoot Bay, celebrating both athletic endeavor and community connection.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-04T08:00:00.000Z",
+    "endDate": "2025-03-04T12:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "PICKLEBALL CLUB",
+    "description": "Area: Courts: Join the fastest-growing activity in Barefoot Bay at our energetic Pickleball Club, where the distinctive pop of paddles signals fun in progress. Our dedicated courts buzz with friendly competition and laughter, perfectly capturing our community's commitment to active living and social connection in the Florida sunshine.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-04T08:00:00.000Z",
+    "endDate": "2025-03-04T11:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "SOFTBALL GAME",
+    "description": "Area: Ball Field: Cheer on your neighbors or join the action at our spirited Softball Games, where friendly competition creates community memories. The diamond comes alive with energy and excitement, showcasing Barefoot Bay's active lifestyle and the bonds formed through shared experiences and good-natured athletic rivalry.",
+    "location": "1127 Wren Circle, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-04T09:00:00.000Z",
+    "endDate": "2025-03-04T12:30:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "LAP SWIMMING",
+    "description": "Area: Pool 1: Glide through crystal-clear waters while enjoying the tranquil morning atmosphere at our community pools. Lap Swimming offers the perfect blend of gentle exercise and peaceful solitude, allowing you to start your day with renewed energy while embracing Barefoot Bay's natural beauty.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T09:00:00.000Z",
+    "endDate": "2025-03-05T10:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "AQUATIC AEROBICS",
+    "description": "Area: Pool 1: Energize your body and spirit with our invigorating Aquatic Aerobics classes, combining effective low-impact exercise with the natural buoyancy of water. Instructors create a supportive, fun environment where neighbors move together against the backdrop of Barefoot Bay's stunning pool facilities and lush landscaping.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T10:00:00.000Z",
+    "endDate": "2025-03-05T11:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "HYDRO EXERCISE",
+    "description": "Area: Pool 3: Experience the gentle power of water-based fitness with our popular Hydro Exercise sessions, perfect for all fitness levels and abilities. These classes harness the therapeutic properties of water while fostering community connections, embodying Barefoot Bay's commitment to wellness that nurtures both body and social bonds.",
+    "location": "1344 Gardenia Dr, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T09:00:00.000Z",
+    "endDate": "2025-03-05T10:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "AQUA ZUMBA",
+    "description": "Area: Pool 3: Dance in the water during our exhilarating Aqua Zumba sessions, where Latin rhythms meet refreshing pool workouts. Participants move and groove in our beautiful pools, creating a joyful atmosphere that perfectly captures Barefoot Bay's blend of fitness, fun, and Florida's vibrant energy.",
+    "location": "1344 Gardenia Dr, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T14:00:00.000Z",
+    "endDate": "2025-03-05T15:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "PICKLEBALL CLUB",
+    "description": "Area: Courts: Join the fastest-growing activity in Barefoot Bay at our energetic Pickleball Club, where the distinctive pop of paddles signals fun in progress. Our dedicated courts buzz with friendly competition and laughter, perfectly capturing our community's commitment to active living and social connection in the Florida sunshine.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T08:00:00.000Z",
+    "endDate": "2025-03-05T11:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "BFB YOGA",
+    "description": "Area: Building A: Find your center and connect with nature during our peaceful Barefoot Bay Yoga sessions, designed to nurture mind, body, and spirit. Classes embrace our community's natural surroundings, allowing participants to flow through poses while absorbing the tranquil energy that makes Barefoot Bay a sanctuary for balanced living.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T07:45:00.000Z",
+    "endDate": "2025-03-05T08:45:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "CRAFTERS CLUB",
+    "description": "Area: Building A: Transform inspiration into creation at our welcoming Crafters Club, where artistic minds share techniques and encouragement. Set in our comfortable community spaces, these gatherings celebrate the handmade touch that makes Barefoot Bay homes unique, fostering both creativity and meaningful connections between neighbors.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T09:00:00.000Z",
+    "endDate": "2025-03-05T12:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "CHESS CLUB",
+    "description": "Area: Building C: Challenge your mind and enjoy thoughtful companionship at our Chess Club gatherings, where strategic thinking unfolds in a relaxed atmosphere. The quiet concentration and occasional triumphant exclamations create a perfect balance, reflecting Barefoot Bay's appreciation for both intellectual pursuits and friendly social engagement.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T08:30:00.000Z",
+    "endDate": "2025-03-05T12:30:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "MAH JONGG",
+    "description": "Area: Building C: Experience the ancient art of Mah Jongg in our contemporary community setting, where the click of tiles signals strategies in motion. Players enjoy this timeless game while forging modern friendships, embodying Barefoot Bay's respect for tradition while embracing the vibrant social connections that enrich our community life.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T13:00:00.000Z",
+    "endDate": "2025-03-05T16:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "AA",
+    "description": "Area: Building C: Find strength and support in our compassionate AA meetings, where neighbors help neighbors on their personal journeys. These gatherings embody Barefoot Bay's commitment to well-being and mutual support, creating a safe haven where residents can share experiences and build resilience together.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T19:00:00.000Z",
+    "endDate": "2025-03-05T21:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "EUCHRE CLUB",
+    "description": "Area: Building D: Deal yourself into the friendly competition of our popular Euchre Club, where this beloved card game brings neighbors together for strategy and smiles. The casual yet engaging atmosphere perfectly represents Barefoot Bay's approach to recreation—thoughtfully designed yet refreshingly uncomplicated.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T18:30:00.000Z",
+    "endDate": "2025-03-05T21:30:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "CERAMICS CLASS",
+    "description": "Area: Building E: Mold clay and friendships simultaneously in our creative Ceramics Classes, where artistic expression takes three-dimensional form. Against the inspirational backdrop of Barefoot Bay's natural beauty, participants craft unique pieces that reflect both personal vision and the community's appreciation for artistic endeavor.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T18:30:00.000Z",
+    "endDate": "2025-03-05T21:30:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "MIXED DARTS",
+    "description": "Area: Building L: Hit the bullseye of fun at our inclusive Mixed Darts gatherings, where precision and playfulness create the perfect evening activity. The friendly competition and supportive atmosphere exemplify Barefoot Bay's commitment to creating diverse recreational opportunities that bring neighbors together in meaningful ways.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T14:00:00.000Z",
+    "endDate": "2025-03-05T16:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "LADIES POOL LEAGUE",
+    "description": "Area: Pool Rm: Chalk up and show your skills at our dynamic Ladies Pool League, where strategy and style converge around the green felt. These gatherings celebrate both competitive spirit and feminine camaraderie, creating a space where Barefoot Bay's women can showcase their talents while building lasting friendships.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T13:00:00.000Z",
+    "endDate": "2025-03-05T16:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "CANADA BOCCI",
+    "description": "Area: Bocci: Experience international fellowship at our Canada Bocci sessions, where Canadian residents and friends share their passion for this strategic game. The gentle roll of bocci balls accompanies warm conversations and cultural exchange, highlighting Barefoot Bay's welcoming embrace of seasonal residents and diverse traditions.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T09:30:00.000Z",
+    "endDate": "2025-03-05T12:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "TENNIS CLUB",
+    "description": "Area: Tennis Courts: Rally with fellow enthusiasts at our vibrant Tennis Club, where players of all levels enjoy our well-kept courts and spirited matches. The rhythmic sound of tennis balls and friendly conversation creates the perfect soundtrack for active living in Barefoot Bay, celebrating both athletic endeavor and community connection.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T08:00:00.000Z",
+    "endDate": "2025-03-05T12:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "LAWN BOWLING",
+    "description": "Area: Brit/Cana: Experience the refined pleasure of Lawn Bowling on our meticulously maintained greens, where strategy meets gentle physical activity. The elegant roll of the bowls reflects Barefoot Bay's blend of casual sophistication and outdoor enjoyment, creating moments of friendly competition against our stunning Florida backdrop.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T09:00:00.000Z",
+    "endDate": "2025-03-05T12:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "SOFTBALL PRACTICE",
+    "description": "Area: Ball Field: Polish your skills and bond with teammates during our energetic Softball Practice sessions on Barefoot Bay's well-maintained diamond. The crack of the bat and supportive cheers create a spirited atmosphere that celebrates both athletic achievement and the team mentality that makes our community strong.",
+    "location": "1127 Wren Circle, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T08:00:00.000Z",
+    "endDate": "2025-03-05T12:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "OVER 70's GAME",
+    "description": "Area: Ball Field: Celebrate the wisdom and vitality of our senior community members at the special Over 70's Game, where age is just a number and competitive spirit remains eternal. These games showcase the active lifestyle that defines Barefoot Bay at every stage of life, proving that Florida sunshine keeps our residents young at heart.",
+    "location": "1127 Wren Circle, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-05T12:00:00.000Z",
+    "endDate": "2025-03-05T14:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "LAP SWIMMING",
+    "description": "Area: Pool 1: Glide through crystal-clear waters while enjoying the tranquil morning atmosphere at our community pools. Lap Swimming offers the perfect blend of gentle exercise and peaceful solitude, allowing you to start your day with renewed energy while embracing Barefoot Bay's natural beauty.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T09:00:00.000Z",
+    "endDate": "2025-03-06T10:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "AQUATIC AEROBICS",
+    "description": "Area: Pool 1: Energize your body and spirit with our invigorating Aquatic Aerobics classes, combining effective low-impact exercise with the natural buoyancy of water. Instructors create a supportive, fun environment where neighbors move together against the backdrop of Barefoot Bay's stunning pool facilities and lush landscaping.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T10:00:00.000Z",
+    "endDate": "2025-03-06T11:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "HYDRO EXERCISE",
+    "description": "Area: Pool 3: Experience the gentle power of water-based fitness with our popular Hydro Exercise sessions, perfect for all fitness levels and abilities. These classes harness the therapeutic properties of water while fostering community connections, embodying Barefoot Bay's commitment to wellness that nurtures both body and social bonds.",
+    "location": "1344 Gardenia Dr, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T09:00:00.000Z",
+    "endDate": "2025-03-06T10:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "AQUA ZUMBA",
+    "description": "Area: Pool 3: Dance in the water during our exhilarating Aqua Zumba sessions, where Latin rhythms meet refreshing pool workouts. Participants move and groove in our beautiful pools, creating a joyful atmosphere that perfectly captures Barefoot Bay's blend of fitness, fun, and Florida's vibrant energy.",
+    "location": "1344 Gardenia Dr, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T14:00:00.000Z",
+    "endDate": "2025-03-06T15:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "BEGINNER LINE DANCE",
+    "description": "Area: Building A: Take your first steps into the world of choreographed movement with our supportive Beginner Line Dance classes. In Barefoot Bay's welcoming environment, newcomers learn popular routines while gaining confidence and creating connections that extend well beyond the dance floor.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T09:30:00.000Z",
+    "endDate": "2025-03-06T10:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "LINE DANCING",
+    "description": "Area: Building A: Kick up your heels at our energetic Line Dancing sessions, where synchronized movements create a visual celebration of community spirit. Set to toe-tapping music in our spacious facilities, these gatherings embody Barefoot Bay's blend of physical activity and joyful social interaction against Florida's sunny backdrop.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T10:00:00.000Z",
+    "endDate": "2025-03-06T11:30:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "LADIES BIBLE",
+    "description": "Area: Building C: Find spiritual enrichment and feminine fellowship at our thoughtful Ladies Bible gatherings, where scripture and conversation create meaningful connections. These meetings reflect Barefoot Bay's respect for personal faith journeys while fostering the supportive relationships that make our community a true sanctuary.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T09:00:00.000Z",
+    "endDate": "2025-03-06T11:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "LADIES BIBLE",
+    "description": "Area: Building C: Find spiritual enrichment and feminine fellowship at our thoughtful Ladies Bible gatherings, where scripture and conversation create meaningful connections. These meetings reflect Barefoot Bay's respect for personal faith journeys while fostering the supportive relationships that make our community a true sanctuary.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T09:30:00.000Z",
+    "endDate": "2025-03-06T11:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "LEARN QUILT & SEWING",
+    "description": "Area: Building C: Stitch together skills and friendships in our Learn Quilt & Sewing sessions, where beginners and experienced crafters share techniques and inspiration. The hum of sewing machines and gentle guidance of instructors creates a nurturing environment that reflects Barefoot Bay's commitment to lifelong learning and creative expression.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T12:30:00.000Z",
+    "endDate": "2025-03-06T15:45:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "MEN'S POKER",
+    "description": "Area: Building C: Ante up for an evening of cards and camaraderie at our popular Men's Poker gatherings, where strategic thinking meets good-natured rivalry. The shuffle of cards and friendly banter create a distinctly masculine social space while embodying the relaxed sophistication that characterizes Barefoot Bay's approach to leisure.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T16:30:00.000Z",
+    "endDate": "2025-03-06T22:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "LADIES DARTS",
+    "description": "Area: Building L: Take aim and join the fun at our Ladies Darts sessions, where precision meets playfulness in an atmosphere of feminine camaraderie. These gatherings celebrate both competitive spirit and supportive friendship, creating a space where Barefoot Bay's women can showcase their skills while building lasting connections.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T13:00:00.000Z",
+    "endDate": "2025-03-06T15:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "RINGERS CLUB",
+    "description": "Area: Pool Rm: Perfect your toss and enjoy friendly competition at Ringers Club, where horseshoe enthusiasts gather to showcase their skills and share laughter. The satisfying clink of ringers echoes through our beautifully maintained courts, embodying the casual elegance and outdoor enjoyment that defines the Barefoot Bay lifestyle.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T15:00:00.000Z",
+    "endDate": "2025-03-06T17:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "SOFTBALL GAME",
+    "description": "Area: Ball Field: Cheer on your neighbors or join the action at our spirited Softball Games, where friendly competition creates community memories. The diamond comes alive with energy and excitement, showcasing Barefoot Bay's active lifestyle and the bonds formed through shared experiences and good-natured athletic rivalry.",
+    "location": "1127 Wren Circle, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T09:00:00.000Z",
+    "endDate": "2025-03-06T12:30:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "RINGERS CLUB",
+    "description": "Area: Pits: Perfect your toss and enjoy friendly competition at Ringers Club, where horseshoe enthusiasts gather to showcase their skills and share laughter. The satisfying clink of ringers echoes through our beautifully maintained courts, embodying the casual elegance and outdoor enjoyment that defines the Barefoot Bay lifestyle.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T07:00:00.000Z",
+    "endDate": "2025-03-06T10:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "TTF SHUFFLEBOARD",
+    "description": "Area: Courts: Slide into friendly competition at our Tuesday-Thursday-Friday Shuffleboard sessions, where strategic thinking meets relaxed outdoor enjoyment. The gentle push of discs across our well-maintained courts creates a meditative rhythm, reflecting Barefoot Bay's perfect balance of activity and tranquility.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T08:30:00.000Z",
+    "endDate": "2025-03-06T09:30:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "THURS. BOCCI",
+    "description": "Area: Bocci: Roll into Thursday with our popular Bocci gatherings, where this timeless game creates modern connections between neighbors. Against the backdrop of Barefoot Bay's beautiful grounds, players enjoy gentle competition and lively conversation, embodying our community's appreciation for tradition and outdoor living.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T09:00:00.000Z",
+    "endDate": "2025-03-06T12:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "TENNIS CLUB",
+    "description": "Area: Tennis Courts: Rally with fellow enthusiasts at our vibrant Tennis Club, where players of all levels enjoy our well-kept courts and spirited matches. The rhythmic sound of tennis balls and friendly conversation creates the perfect soundtrack for active living in Barefoot Bay, celebrating both athletic endeavor and community connection.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T08:00:00.000Z",
+    "endDate": "2025-03-06T12:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "PICKLEBALL CLUB",
+    "description": "Area: Courts: Join the fastest-growing activity in Barefoot Bay at our energetic Pickleball Club, where the distinctive pop of paddles signals fun in progress. Our dedicated courts buzz with friendly competition and laughter, perfectly capturing our community's commitment to active living and social connection in the Florida sunshine.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T08:00:00.000Z",
+    "endDate": "2025-03-06T11:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "MIXED DARTS",
+    "description": "Area: Building L: Hit the bullseye of fun at our inclusive Mixed Darts gatherings, where precision and playfulness create the perfect evening activity. The friendly competition and supportive atmosphere exemplify Barefoot Bay's commitment to creating diverse recreational opportunities that bring neighbors together in meaningful ways.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-06T17:00:00.000Z",
+    "endDate": "2025-03-06T21:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "LAP SWIMMING",
+    "description": "Area: Pool 1: Glide through crystal-clear waters while enjoying the tranquil morning atmosphere at our community pools. Lap Swimming offers the perfect blend of gentle exercise and peaceful solitude, allowing you to start your day with renewed energy while embracing Barefoot Bay's natural beauty.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-07T09:00:00.000Z",
+    "endDate": "2025-03-07T10:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "AQUATIC AEROBICS",
+    "description": "Area: Pool 1: Energize your body and spirit with our invigorating Aquatic Aerobics classes, combining effective low-impact exercise with the natural buoyancy of water. Instructors create a supportive, fun environment where neighbors move together against the backdrop of Barefoot Bay's stunning pool facilities and lush landscaping.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-07T10:00:00.000Z",
+    "endDate": "2025-03-07T11:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "HYDRO EXERCISE",
+    "description": "Area: Pool 3: Experience the gentle power of water-based fitness with our popular Hydro Exercise sessions, perfect for all fitness levels and abilities. These classes harness the therapeutic properties of water while fostering community connections, embodying Barefoot Bay's commitment to wellness that nurtures both body and social bonds.",
+    "location": "1344 Gardenia Dr, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-07T09:00:00.000Z",
+    "endDate": "2025-03-07T10:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "BFB YOGA",
+    "description": "Area: Building A: Find your center and connect with nature during our peaceful Barefoot Bay Yoga sessions, designed to nurture mind, body, and spirit. Classes embrace our community's natural surroundings, allowing participants to flow through poses while absorbing the tranquil energy that makes Barefoot Bay a sanctuary for balanced living.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-07T07:45:00.000Z",
+    "endDate": "2025-03-07T08:45:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "TAP DANCING",
+    "description": "Area: Building A: Step into rhythm at our energetic Tap Dancing classes, where percussion meets performance in a celebration of movement. The rhythmic sounds of tap shoes fill our community spaces with energy, reflecting Barefoot Bay's commitment to diverse recreational opportunities that engage both body and spirit.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-07T11:00:00.000Z",
+    "endDate": "2025-03-07T12:30:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "TOPS #456",
+    "description": "Area: Building C: Find support and motivation at TOPS (Take Off Pounds Sensibly) meetings, where neighbors encourage each other's wellness journeys with compassion and practical guidance. These gatherings embody Barefoot Bay's holistic approach to health, recognizing that physical well-being flourishes best within a caring community context.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-07T09:00:00.000Z",
+    "endDate": "2025-03-07T11:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "LADIES POKER",
+    "description": "Area: Building C: Deal yourself into our spirited Ladies Poker gatherings, where strategy and socialization create the perfect evening activity. Around the poker table, Barefoot Bay's women enjoy friendly competition and lively conversation, forming bonds that extend well beyond the game itself.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-07T12:00:00.000Z",
+    "endDate": "2025-03-07T16:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "PINOCHLE CLUB",
+    "description": "Area: Building C: Immerse yourself in the strategic pleasure of Pinochle at our popular club gatherings, where this classic card game brings neighbors together. The thoughtful play and friendly banter create an atmosphere that perfectly reflects Barefoot Bay's blend of intellectual engagement and warm community connection.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-07T18:30:00.000Z",
+    "endDate": "2025-03-07T21:30:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "ARTIST GUILD",
+    "description": "Area: Building D: Elevate your creative practice with our distinguished Artist Guild, where serious artists share techniques and inspiration in a supportive environment. Set against Barefoot Bay's natural beauty, these gatherings celebrate the refined artistic spirit that enhances our community's cultural landscape and aesthetic appreciation.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-07T13:00:00.000Z",
+    "endDate": "2025-03-07T16:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "CORNHOLE CLUB",
+    "description": "Area: Courts: Embrace the playful side of outdoor recreation with our lively Cornhole Club, where friendly competition and laughter fill the air. Set against Barefoot Bay's lush surroundings, these gatherings perfectly blend casual fun with community connection, embodying our laid-back approach to active, engaged living.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-07T13:00:00.000Z",
+    "endDate": "2025-03-07T16:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "TTF SHUFFLEBOARD",
+    "description": "Area: Courts: Slide into friendly competition at our Tuesday-Thursday-Friday Shuffleboard sessions, where strategic thinking meets relaxed outdoor enjoyment. The gentle push of discs across our well-maintained courts creates a meditative rhythm, reflecting Barefoot Bay's perfect balance of activity and tranquility.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-07T08:00:00.000Z",
+    "endDate": "2025-03-07T09:30:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "ITALIAN BOCCE",
+    "description": "Area: Bocci Courts: Experience a touch of Italy at our traditional Bocce gatherings, where this beloved game creates a Mediterranean atmosphere in our Florida setting. The gentle competition and enthusiastic conversations honor cultural heritage while creating new traditions that enrich Barefoot Bay's diverse recreational landscape.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-07T09:00:00.000Z",
+    "endDate": "2025-03-07T12:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "TENNIS CLUB",
+    "description": "Area: Tennis Courts: Rally with fellow enthusiasts at our vibrant Tennis Club, where players of all levels enjoy our well-kept courts and spirited matches. The rhythmic sound of tennis balls and friendly conversation creates the perfect soundtrack for active living in Barefoot Bay, celebrating both athletic endeavor and community connection.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-07T08:00:00.000Z",
+    "endDate": "2025-03-07T12:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "LAWN BOWLING",
+    "description": "Area: Brit/Cana: Experience the refined pleasure of Lawn Bowling on our meticulously maintained greens, where strategy meets gentle physical activity. The elegant roll of the bowls reflects Barefoot Bay's blend of casual sophistication and outdoor enjoyment, creating moments of friendly competition against our stunning Florida backdrop.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-07T09:00:00.000Z",
+    "endDate": "2025-03-07T12:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "PICKLEBALL CLUB",
+    "description": "Area: Courts: Join the fastest-growing activity in Barefoot Bay at our energetic Pickleball Club, where the distinctive pop of paddles signals fun in progress. Our dedicated courts buzz with friendly competition and laughter, perfectly capturing our community's commitment to active living and social connection in the Florida sunshine.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-07T08:00:00.000Z",
+    "endDate": "2025-03-07T11:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "SOFTBALL PRACTICE",
+    "description": "Area: Ball Field: Polish your skills and bond with teammates during our energetic Softball Practice sessions on Barefoot Bay's well-maintained diamond. The crack of the bat and supportive cheers create a spirited atmosphere that celebrates both athletic achievement and the team mentality that makes our community strong.",
+    "location": "1127 Wren Circle, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-07T08:00:00.000Z",
+    "endDate": "2025-03-07T12:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "LAP SWIMMING",
+    "description": "Area: Pool 1: Glide through crystal-clear waters while enjoying the tranquil morning atmosphere at our community pools. Lap Swimming offers the perfect blend of gentle exercise and peaceful solitude, allowing you to start your day with renewed energy while embracing Barefoot Bay's natural beauty.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-08T09:00:00.000Z",
+    "endDate": "2025-03-08T10:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "AA MEETING",
+    "description": "Area: Building C: Find strength and support in our compassionate AA meetings, where neighbors help neighbors on their personal journeys. These gatherings embody Barefoot Bay's commitment to well-being and mutual support, creating a safe haven where residents can share experiences and build resilience together.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-08T19:00:00.000Z",
+    "endDate": "2025-03-08T21:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "BRIDGE CLUB",
+    "description": "Area: Building C: Engage your mind and connect with fellow strategic thinkers at our popular Bridge Club meetings, where cards bring neighbors together. In these gatherings, concentration meets conversation, fostering both mental acuity and social bonds in the welcoming, refined atmosphere that Barefoot Bay residents cherish.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-08T12:00:00.000Z",
+    "endDate": "2025-03-08T16:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "RINGERS CLUB",
+    "description": "Area: Pits: Perfect your toss and enjoy friendly competition at Ringers Club, where horseshoe enthusiasts gather to showcase their skills and share laughter. The satisfying clink of ringers echoes through our beautifully maintained courts, embodying the casual elegance and outdoor enjoyment that defines the Barefoot Bay lifestyle.",
+    "location": "625 Barefoot Blvd, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-08T07:00:00.000Z",
+    "endDate": "2025-03-08T10:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  },
+  {
+    "title": "KID'S SWIM",
+    "description": "Area: Pool 2: Watch the next generation of Barefoot Bay residents splash and play during our supervised Kid's Swim sessions. These family-friendly gatherings transform our beautiful pools into aquatic playgrounds, highlighting our community's commitment to creating joyful experiences for residents and visitors of all ages.",
+    "location": "1080 Parkway Dr, Barefoot Bay, FL 32976, USA",
+    "startDate": "2025-03-08T17:00:00.000Z",
+    "endDate": "2025-03-08T19:00:00.000Z",
+    "category": "social",
+    "businessName": "",
+    "contactInfo": {
+      "name": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "hoursOfOperation": {
+      "Monday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Tuesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Wednesday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Thursday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Friday": {
+        "isOpen": true,
+        "openTime": "09:00",
+        "closeTime": "17:00"
+      },
+      "Saturday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      },
+      "Sunday": {
+        "isOpen": false,
+        "openTime": "",
+        "closeTime": ""
+      }
+    },
+    "isRecurring": true,
+    "recurrenceFrequency": "weekly",
+    "recurrenceEndDate": "2025-12-31T00:00:00.000Z",
+    "mediaUrls": []
+  }
+]

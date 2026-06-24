@@ -1,0 +1,1379 @@
+ Unrecognized feature: 'ambient-light-sensor'.
+(anonymous) @ 9965a3c36c5d2424.js:2
+ Unrecognized feature: 'battery'.
+(anonymous) @ 9965a3c36c5d2424.js:2
+ Unrecognized feature: 'execution-while-not-rendered'.
+(anonymous) @ 9965a3c36c5d2424.js:2
+ Unrecognized feature: 'execution-while-out-of-viewport'.
+(anonymous) @ 9965a3c36c5d2424.js:2
+ Unrecognized feature: 'layout-animations'.
+(anonymous) @ 9965a3c36c5d2424.js:2
+ Unrecognized feature: 'legacy-image-formats'.
+(anonymous) @ 9965a3c36c5d2424.js:2
+ Unrecognized feature: 'navigation-override'.
+(anonymous) @ 9965a3c36c5d2424.js:2
+ Unrecognized feature: 'oversized-images'.
+(anonymous) @ 9965a3c36c5d2424.js:2
+ Unrecognized feature: 'publickey-credentials'.
+(anonymous) @ 9965a3c36c5d2424.js:2
+ Unrecognized feature: 'speaker-selection'.
+(anonymous) @ 9965a3c36c5d2424.js:2
+ Unrecognized feature: 'unoptimized-images'.
+(anonymous) @ 9965a3c36c5d2424.js:2
+ Unrecognized feature: 'unsized-media'.
+(anonymous) @ 9965a3c36c5d2424.js:2
+ Unrecognized feature: 'pointer-lock'.
+(anonymous) @ 9965a3c36c5d2424.js:2
+ Allow attribute will take precedence over 'allowfullscreen'.
+(anonymous) @ 9965a3c36c5d2424.js:2
+ Allow attribute will take precedence over 'allowpaymentrequest'.
+(anonymous) @ 9965a3c36c5d2424.js:2
+[Violation] Permissions policy violation: unload is not allowed in this document.
+[Violation] Permissions policy violation: unload is not allowed in this document.
+[Violation] Permissions policy violation: unload is not allowed in this document.
+[Violation] Permissions policy violation: unload is not allowed in this document.
+[Violation] Permissions policy violation: unload is not allowed in this document.
+[Violation] Permissions policy violation: unload is not allowed in this document.
+[Violation] Permissions policy violation: unload is not allowed in this document.
+[Violation] Permissions policy violation: unload is not allowed in this document.
+[Violation] Permissions policy violation: unload is not allowed in this document.
+[Violation] Permissions policy violation: unload is not allowed in this document.
+[Violation] Permissions policy violation: unload is not allowed in this document.
+[Violation] Permissions policy violation: unload is not allowed in this document.
+ stallwart: failed ping 1
+Barefoot-Bay:1 Uncaught (in promise) 
+Barefoot-Bay:1 Uncaught (in promise) 
+Barefoot-Bay:1 Uncaught (in promise) 
+Barefoot-Bay:1 Uncaught (in promise) 
+Barefoot-Bay:1 Uncaught (in promise) 
+Barefoot-Bay:1 Uncaught (in promise) 
+Barefoot-Bay:1 Uncaught (in promise) 
+Barefoot-Bay:1 Uncaught (in promise) 
+Barefoot-Bay:1 Uncaught (in promise) 
+Barefoot-Bay:1 Uncaught (in promise) 
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Barefoot-Bay:1 Uncaught (in promise) 
+ Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+z @ ed1e693c96a75807.js:2
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+ Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+z @ ed1e693c96a75807.js:2
+Barefoot-Bay:1 Uncaught (in promise) 
+Barefoot-Bay:1 Uncaught (in promise) 
+Barefoot-Bay:1 Uncaught (in promise) 
+ Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+z @ ed1e693c96a75807.js:2
+workspace_iframe.html?initialPath=%2Fevents%2F8811&id=%3Ar24r%3A:32 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+workspace_iframe.html?initialPath=%2Fevents%2F8811&id=%3Ar24r%3A:32 Unrecognized feature: 'ambient-light-sensor'.
+workspace_iframe.html?initialPath=%2Fevents%2F8811&id=%3Ar24r%3A:32 Unrecognized feature: 'battery'.
+workspace_iframe.html?initialPath=%2Fevents%2F8811&id=%3Ar24r%3A:32 Unrecognized feature: 'execution-while-not-rendered'.
+workspace_iframe.html?initialPath=%2Fevents%2F8811&id=%3Ar24r%3A:32 Unrecognized feature: 'execution-while-out-of-viewport'.
+workspace_iframe.html?initialPath=%2Fevents%2F8811&id=%3Ar24r%3A:32 Unrecognized feature: 'layout-animations'.
+workspace_iframe.html?initialPath=%2Fevents%2F8811&id=%3Ar24r%3A:32 Unrecognized feature: 'legacy-image-formats'.
+workspace_iframe.html?initialPath=%2Fevents%2F8811&id=%3Ar24r%3A:32 Unrecognized feature: 'navigation-override'.
+workspace_iframe.html?initialPath=%2Fevents%2F8811&id=%3Ar24r%3A:32 Unrecognized feature: 'oversized-images'.
+workspace_iframe.html?initialPath=%2Fevents%2F8811&id=%3Ar24r%3A:32 Unrecognized feature: 'publickey-credentials'.
+workspace_iframe.html?initialPath=%2Fevents%2F8811&id=%3Ar24r%3A:32 Unrecognized feature: 'speaker-selection'.
+workspace_iframe.html?initialPath=%2Fevents%2F8811&id=%3Ar24r%3A:32 Unrecognized feature: 'unoptimized-images'.
+workspace_iframe.html?initialPath=%2Fevents%2F8811&id=%3Ar24r%3A:32 Unrecognized feature: 'unsized-media'.
+workspace_iframe.html?initialPath=%2Fevents%2F8811&id=%3Ar24r%3A:32 Allow attribute will take precedence over 'allowfullscreen'.
+workspace_iframe.html?initialPath=%2Fevents%2F8811&id=%3Ar24r%3A:32 Allow attribute will take precedence over 'allowpaymentrequest'.
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/gallery-utils.js:1  Failed to load resource: the server responded with a status of 404 (Not Found)
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/events/8811:1 Refused to execute script from 'https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/gallery-utils.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ Converting direct Object Storage URL to proxy: https://object-storage.replit.app/CALENDAR/events/media-1761132768945-294930820.jpg -> /api/storage-proxy/CALENDAR/events/media-1761132768945-294930820.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1749038233010-42140180.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ Converting direct Object Storage URL to proxy: https://object-storage.replit.app/CALENDAR/events/media-1761106141991-433069370.jpg -> /api/storage-proxy/CALENDAR/events/media-1761106141991-433069370.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1762811615223-52284469.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1746754575293-915941366.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1747277617285-66362657.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1760448860028-850764463.png
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1747138682322-798910266.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1748414563609-950139373.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1762445213893-526037892.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ Converting direct Object Storage URL to proxy: https://object-storage.replit.app/CALENDAR/events/media-1760151003079-149386324.jpg -> /api/storage-proxy/CALENDAR/events/media-1760151003079-149386324.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1747067672157-686079735.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1747413705151-892751467.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1761830298653-67317243.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+injected.js:37 [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag for_sale_post Object
+injected.js:37 [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag vendor_page Object
+injected.js:37 [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag admin_access Object
+injected.js:37 [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag admin_forum Object
+injected.js:37 [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag featured_content Object
+injected.js:37 [Feature Flags] [PROD] featured_content is not found or inactive
+injected.js:37 [Feature Flags] [PROD] Checking flag messages Object
+injected.js:37 [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+injected.js:37 URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1747134175472-402876194.jpg
+injected.js:37 DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+injected.js:37 [Feature Flags] [PROD] Checking flag comments Object
+injected.js:37 [Feature Flags] [PROD] comments for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag reactions Object
+injected.js:37 [Feature Flags] [PROD] reactions for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag calendar_post Object
+injected.js:37 [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag forum_post Object
+injected.js:37 [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag for_sale_post Object
+injected.js:37 [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag vendor_page Object
+injected.js:37 [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag admin_access Object
+injected.js:37 [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag admin_forum Object
+injected.js:37 [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag featured_content Object
+injected.js:37 [Feature Flags] [PROD] featured_content is not found or inactive
+injected.js:37 [Feature Flags] [PROD] Checking flag messages Object
+injected.js:37 [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+injected.js:37 Converting direct Object Storage URL to proxy: https://object-storage.replit.app/CALENDAR/events/media-1764187755468-60344495.JPEG -> /api/storage-proxy/CALENDAR/events/media-1764187755468-60344495.JPEG
+injected.js:37 DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+injected.js:37 [Feature Flags] [PROD] Checking flag comments Object
+injected.js:37 [Feature Flags] [PROD] comments for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag reactions Object
+injected.js:37 [Feature Flags] [PROD] reactions for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag calendar_post Object
+injected.js:37 [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag forum_post Object
+injected.js:37 [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag for_sale_post Object
+injected.js:37 [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag vendor_page Object
+injected.js:37 [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag admin_access Object
+injected.js:37 [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag admin_forum Object
+injected.js:37 [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+injected.js:37 [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+injected.js:37 [Feature Flags] [PROD] Checking flag featured_content Object
+injected.js:37 [Feature Flags] [PROD] featured_content is not found or inactive
+injected.js:37 [Feature Flags] [PROD] Checking flag messages Object
+injected.js:37 [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+injected.js:37 [CalendarSync] WebSocket functionality is disabled to prevent conflicts with Object Storage
+injected.js:37 REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+injected.js:37 REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+injected.js:37 REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+injected.js:37 Query fetch: /api/forum/posts/267/unread-comments
+injected.js:37 Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+injected.js:37 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/forum/posts/267/unread-comments
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/auth/check
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/forum/posts/267/unread-comments
+injected.js:37 Query auth check: Object
+injected.js:37 REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+injected.js:37 REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+injected.js:37 Query fetch: /api/messages
+injected.js:37 Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+injected.js:37 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/messages
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/auth/check
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/messages
+injected.js:37 Query auth check: Object
+injected.js:37 REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/analytics/track/pageview
+injected.js:37 DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ PlaceholderData called with undefined context
+ PlaceholderData called with undefined context
+ PlaceholderData called with undefined context
+ Fetching event details for: 9668
+ Debug: Making GET request to /api/events/9668 with data: undefined
+ Request hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+ Authentication debug: 
+      Cookie exists: false
+      Full cookie string: 
+      URL: /api/events/9668
+      Method: GET
+      Headers: {"Accept":"application/json","Content-Type":"application/json","X-Requested-With":"XMLHttpRequest"}
+      Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+      Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+      Protocol: https:
+    
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+ [Maps Polyfill] BYPASSING for API request: /api/events/9668
+ Fetching event interactions for: 9668
+ Debug: Making GET request to /api/events/9668/interactions with data: undefined
+ Request hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+ Authentication debug: 
+      Cookie exists: false
+      Full cookie string: 
+      URL: /api/events/9668/interactions
+      Method: GET
+      Headers: {"Accept":"application/json","Content-Type":"application/json","X-Requested-With":"XMLHttpRequest"}
+      Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+      Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+      Protocol: https:
+    
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+ [Maps Polyfill] BYPASSING for API request: /api/events/9668/interactions
+ Fetching event comments for: 9668
+ Debug: Making GET request to /api/events/9668/comments with data: undefined
+ Request hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+ Authentication debug: 
+      Cookie exists: false
+      Full cookie string: 
+      URL: /api/events/9668/comments
+      Method: GET
+      Headers: {"Accept":"application/json","Content-Type":"application/json","X-Requested-With":"XMLHttpRequest"}
+      Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+      Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+      Protocol: https:
+    
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+ [Maps Polyfill] BYPASSING for API request: /api/events/9668/comments
+ REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+ Server auth check: Object
+ API response from GET /api/events/9668: {"id":9668,"title":"Test Event","description":null,"startDate":"2025-11-26T20:07:35.258Z","endDate":...
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ EventMediaGallery render: Showing slide 0 of 1 URL: https://object-storage.replit.app/CALENDAR/events/media-1764187755468-60344495.JPEG
+ Converting direct Object Storage URL to proxy: https://object-storage.replit.app/CALENDAR/events/media-1764187755468-60344495.JPEG -> /api/storage-proxy/CALENDAR/events/media-1764187755468-60344495.JPEG
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ API response from GET /api/events/9668/interactions: []
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ EventMediaGallery render: Showing slide 0 of 1 URL: https://object-storage.replit.app/CALENDAR/events/media-1764187755468-60344495.JPEG
+ Converting direct Object Storage URL to proxy: https://object-storage.replit.app/CALENDAR/events/media-1764187755468-60344495.JPEG -> /api/storage-proxy/CALENDAR/events/media-1764187755468-60344495.JPEG
+ API response from GET /api/events/9668/comments: []
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ EventMediaGallery render: Showing slide 0 of 1 URL: https://object-storage.replit.app/CALENDAR/events/media-1764187755468-60344495.JPEG
+ Converting direct Object Storage URL to proxy: https://object-storage.replit.app/CALENDAR/events/media-1764187755468-60344495.JPEG -> /api/storage-proxy/CALENDAR/events/media-1764187755468-60344495.JPEG
+ [Analytics] Page view tracked: /events/9668
+ Server auth check: Object
+ Server auth check: Object
+ Query fetch: /api/forum/unread-count
+ Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+ Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/forum/unread-count
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+ [Maps Polyfill] BYPASSING for API request: /api/forum/unread-count
+ REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+ Query auth check: Object
+ REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+ Query fetch: /api/forum/posts/267/unread-comments
+ Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+ Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/forum/posts/267/unread-comments
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+ [Maps Polyfill] BYPASSING for API request: /api/forum/posts/267/unread-comments
+ Query auth check: Object
+ REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+ REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+ Query fetch: /api/messages
+ Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+ Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/messages
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+ [Maps Polyfill] BYPASSING for API request: /api/messages
+ Query auth check: Object
+ REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+ REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+ REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+ REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+ Query fetch: /api/forum/posts/267/unread-comments
+ Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+ Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/forum/posts/267/unread-comments
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+ [Maps Polyfill] BYPASSING for API request: /api/forum/posts/267/unread-comments
+ Query auth check: Object
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ EventMediaGallery render: Showing slide 0 of 1 URL: https://object-storage.replit.app/CALENDAR/events/media-1764187755468-60344495.JPEG
+ Converting direct Object Storage URL to proxy: https://object-storage.replit.app/CALENDAR/events/media-1764187755468-60344495.JPEG -> /api/storage-proxy/CALENDAR/events/media-1764187755468-60344495.JPEG
+ HoursOperationPicker:  Object
+ Debug: Making GET request to /api/location/service-status with data: undefined
+ Request hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+ Authentication debug: 
+      Cookie exists: false
+      Full cookie string: 
+      URL: /api/location/service-status
+      Method: GET
+      Headers: {"Accept":"application/json","Content-Type":"application/json","X-Requested-With":"XMLHttpRequest"}
+      Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+      Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+      Protocol: https:
+    
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+ [Maps Polyfill] BYPASSING for API request: /api/location/service-status
+ Initialized existingMediaToRemove: Array(0)
+ Reset existingMediaToRemove due to defaultValues change
+ HoursOperationPicker:  Object
+ Server auth check: Object
+ REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+ API response from GET /api/location/service-status: {"available":true,"services":{"maps":true,"places":true},"message":"Location services are available"...
+ REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+ Query fetch: /api/messages
+ Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+ Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/messages
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+ [Maps Polyfill] BYPASSING for API request: /api/messages
+ Query auth check: Object
+ REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+ REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+ Recurring toggle changed to: true
+ HoursOperationPicker:  Object
+ HoursOperationPicker:  Object
+ 🏠 [FOR SALE BADGE] Making API call to /api/real-estate/new-listings-count
+ [Maps Polyfill] BYPASSING for API request: /api/real-estate/new-listings-count
+ 🏠 [FOR SALE BADGE] API response: Object
+ 🏬 [VENDOR BADGE] Making API call to /api/vendors/unvisited
+ [Maps Polyfill] BYPASSING for API request: /api/vendors/unvisited
+ REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+ 🏬 [VENDOR BADGE] API response: Object
+ Query fetch: /api/forum/posts/267/unread-comments
+ Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+ Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/forum/posts/267/unread-comments
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+ [Maps Polyfill] BYPASSING for API request: /api/forum/posts/267/unread-comments
+ REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+ Query auth check: Object
+ Recurrence frequency changed to: daily
+ HoursOperationPicker:  Object
+ HoursOperationPicker:  Object
+ REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+ REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+ Query fetch: /api/messages
+ Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+ Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/messages
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+ [Maps Polyfill] BYPASSING for API request: /api/messages
+ Query auth check: Object
+ Query fetch: /api/forum/categories/4/unread-count
+ Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+ Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/forum/categories/4/unread-count
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+ [Maps Polyfill] BYPASSING for API request: /api/forum/categories/4/unread-count
+ REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+ Query auth check: Object
+ Recurrence frequency changed to: monthly
+ HoursOperationPicker:  Object
+ REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+ Query fetch: /api/forum/posts/267/unread-comments
+ Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+ Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/forum/posts/267/unread-comments
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+ [Maps Polyfill] BYPASSING for API request: /api/forum/posts/267/unread-comments
+ REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+ Query auth check: Object
+ REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+ Recurrence end date changed to: Thu Dec 25 2025 18:00:00 GMT-0600 (Central Standard Time)
+ HoursOperationPicker:  Object
+ HoursOperationPicker:  Object
+ REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+ Recurrence end date changed to: Sun Jan 25 2026 18:00:00 GMT-0600 (Central Standard Time)
+ HoursOperationPicker:  Object
+ Recurrence end date changed to: Wed Feb 25 2026 18:00:00 GMT-0600 (Central Standard Time)
+ HoursOperationPicker:  Object
+ REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+ Recurrence end date changed to: Wed Mar 25 2026 19:00:00 GMT-0500 (Central Daylight Time)
+ HoursOperationPicker:  Object
+ Query fetch: /api/messages
+ Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+ Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/messages
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+ [Maps Polyfill] BYPASSING for API request: /api/messages
+ Query auth check: Object
+ Recurrence end date changed to: Wed Mar 25 2026 19:00:00 GMT-0500 (Central Daylight Time)
+ HoursOperationPicker:  Object
+ REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+ REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+ === FORM SUBMISSION DEBUG ===
+ Submit button clicked
+ Form valid: false
+ Form errors: Object
+ Form values: Object
+ Form dirty: false
+ Form submitting: false
+ No validation errors found in form.formState.errors
+ === END DEBUG ===
+ HoursOperationPicker:  Object
+ Manual validation trigger result: false
+ Manual trigger found errors: Object
+(anonymous) @ injected.js:37
+ HoursOperationPicker:  Object
+ Query fetch: /api/forum/posts/267/unread-comments
+ Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+ Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/forum/posts/267/unread-comments
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+ [Maps Polyfill] BYPASSING for API request: /api/auth/check
+ [Maps Polyfill] BYPASSING for API request: /api/forum/posts/267/unread-comments
+injected.js:37 Query auth check: Object
+injected.js:37 REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+injected.js:37 REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+injected.js:37 HoursOperationPicker:  Object
+injected.js:37 REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+injected.js:37 REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+injected.js:37 Query fetch: /api/messages
+injected.js:37 Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+injected.js:37 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/messages
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/auth/check
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/messages
+injected.js:37 Query auth check: Object
+injected.js:37 REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+injected.js:37 REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+injected.js:37 Query fetch: /api/forum/posts/267/unread-comments
+injected.js:37 Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+injected.js:37 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/forum/posts/267/unread-comments
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/auth/check
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/forum/posts/267/unread-comments
+injected.js:37 Query auth check: Object
+injected.js:37 HoursOperationPicker:  Object
+injected.js:37 REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+injected.js:37 === FORM SUBMISSION DEBUG ===
+injected.js:37 Submit button clicked
+injected.js:37 Form valid: false
+injected.js:37 Form errors: Object
+injected.js:37 Form values: Object
+injected.js:37 Form dirty: true
+injected.js:37 Form submitting: false
+injected.js:37 VALIDATION ERRORS PREVENTING SUBMISSION:
+(anonymous) @ injected.js:37
+injected.js:37   Field: hoursOfOperation
+(anonymous) @ injected.js:37
+injected.js:37   Error type: invalid_type
+(anonymous) @ injected.js:37
+injected.js:37   Error message: Expected string, received null
+(anonymous) @ injected.js:37
+injected.js:37   Full error object: {
+  "message": "Expected string, received null",
+  "type": "invalid_type",
+  "ref": {
+    "name": "hoursOfOperation"
+  }
+}
+(anonymous) @ injected.js:37
+injected.js:37 === END DEBUG ===
+injected.js:37 HoursOperationPicker:  Object
+injected.js:37 Manual validation trigger result: false
+injected.js:37 Manual trigger found errors: Object
+(anonymous) @ injected.js:37
+injected.js:37 HoursOperationPicker:  Object
+injected.js:37 REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+injected.js:37 === FORM SUBMISSION DEBUG ===
+injected.js:37 Submit button clicked
+injected.js:37 Form valid: false
+injected.js:37 Form errors: Object
+injected.js:37 Form values: Object
+injected.js:37 Form dirty: true
+injected.js:37 Form submitting: false
+injected.js:37 VALIDATION ERRORS PREVENTING SUBMISSION:
+(anonymous) @ injected.js:37
+injected.js:37   Field: hoursOfOperation
+(anonymous) @ injected.js:37
+injected.js:37   Error type: invalid_type
+(anonymous) @ injected.js:37
+injected.js:37   Error message: Expected string, received null
+(anonymous) @ injected.js:37
+injected.js:37   Full error object: {
+  "message": "Expected string, received null",
+  "type": "invalid_type",
+  "ref": {
+    "name": "hoursOfOperation"
+  }
+}
+(anonymous) @ injected.js:37
+injected.js:37 === END DEBUG ===
+injected.js:37 HoursOperationPicker:  Object
+injected.js:37 Manual validation trigger result: false
+injected.js:37 Manual trigger found errors: Object
+(anonymous) @ injected.js:37
+injected.js:37 HoursOperationPicker:  Object
+injected.js:37 === FORM SUBMISSION DEBUG ===
+injected.js:37 Submit button clicked
+injected.js:37 Form valid: false
+injected.js:37 Form errors: Object
+injected.js:37 Form values: Object
+injected.js:37 Form dirty: true
+injected.js:37 Form submitting: false
+injected.js:37 VALIDATION ERRORS PREVENTING SUBMISSION:
+(anonymous) @ injected.js:37
+injected.js:37   Field: hoursOfOperation
+(anonymous) @ injected.js:37
+injected.js:37   Error type: invalid_type
+(anonymous) @ injected.js:37
+injected.js:37   Error message: Expected string, received null
+(anonymous) @ injected.js:37
+injected.js:37   Full error object: {
+  "message": "Expected string, received null",
+  "type": "invalid_type",
+  "ref": {
+    "name": "hoursOfOperation"
+  }
+}
+(anonymous) @ injected.js:37
+injected.js:37 === END DEBUG ===
+injected.js:37 HoursOperationPicker:  Object
+injected.js:37 Manual validation trigger result: false
+injected.js:37 Manual trigger found errors: Object
+(anonymous) @ injected.js:37
+injected.js:37 HoursOperationPicker:  Object
+injected.js:37 === FORM SUBMISSION DEBUG ===
+injected.js:37 Submit button clicked
+injected.js:37 Form valid: false
+injected.js:37 Form errors: Object
+injected.js:37 Form values: Object
+injected.js:37 Form dirty: true
+injected.js:37 Form submitting: false
+injected.js:37 VALIDATION ERRORS PREVENTING SUBMISSION:
+(anonymous) @ injected.js:37
+injected.js:37   Field: hoursOfOperation
+(anonymous) @ injected.js:37
+injected.js:37   Error type: invalid_type
+(anonymous) @ injected.js:37
+injected.js:37   Error message: Expected string, received null
+(anonymous) @ injected.js:37
+injected.js:37   Full error object: {
+  "message": "Expected string, received null",
+  "type": "invalid_type",
+  "ref": {
+    "name": "hoursOfOperation"
+  }
+}
+(anonymous) @ injected.js:37
+injected.js:37 === END DEBUG ===
+injected.js:37 HoursOperationPicker:  Object
+injected.js:37 Manual validation trigger result: false
+injected.js:37 Manual trigger found errors: Object
+(anonymous) @ injected.js:37
+injected.js:37 HoursOperationPicker:  Object
+injected.js:37 REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+injected.js:37 REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+injected.js:37 Query fetch: /api/messages
+injected.js:37 Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+injected.js:37 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/messages
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/auth/check
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/messages
+injected.js:37 Query auth check: Object
+injected.js:37 REPLIT_PAGE_LOADED
+(anonymous) @ injected.js:37
+(anonymous) @ VM62 8811:7
+injected.js:37 REPLIT_PAGE_LOADED_SUCCESSFULLY
+(anonymous) @ injected.js:37
+signalReady @ replit-ready.js:29
+setTimeout
+(anonymous) @ replit-ready.js:38
+(anonymous) @ VM62 8811:24
+injected.js:37 Query fetch: /api/forum/posts/267/unread-comments
+injected.js:37 Query hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev, isDeploy: false
+injected.js:37 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/forum/posts/267/unread-comments
+          Hostname: 10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Origin: https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+          Protocol: https:
+        
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/auth/check
+injected.js:37 [Maps Polyfill] BYPASSING for API request: /api/forum/posts/267/unread-comments
+injected.js:37 Query auth check: {isAuthenticated: true, user: {…}, authToken: '6.1764192408093.CHECKSUM', tokenExpires: '2025-11-26T21:41:48.093Z'}

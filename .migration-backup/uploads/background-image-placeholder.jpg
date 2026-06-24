@@ -1,0 +1,5 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1920" height="1080" fill="#E5E7EB"/>
+<rect x="1" y="1" width="1918" height="1078" rx="9" stroke="#D1D5DB" stroke-width="2" stroke-dasharray="8 8"/>
+<text x="960" y="540" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#6B7280">Background Image Placeholder</text>
+</svg>

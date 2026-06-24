@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Discover Barefoot Bay"
+version = "1.0.0"
+id = "artifacts/discover-barefoot-bay"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22973
+
+[services.development]
+run = "pnpm --filter @workspace/discover-barefoot-bay run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/discover-barefoot-bay", "run", "build" ]
+publicDir = "artifacts/discover-barefoot-bay/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22973"
+BASE_PATH = "/"

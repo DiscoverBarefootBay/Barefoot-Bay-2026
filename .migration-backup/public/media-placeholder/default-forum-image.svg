@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#f0f2f5"/>
+  <rect x="200" y="150" width="400" height="300" rx="10" fill="#dfe3e8"/>
+  <path d="M430,250 L370,350 L400,350 L370,450" stroke="#a0aec0" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="450" cy="250" r="30" fill="#a0aec0"/>
+  <text x="400" y="480" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" fill="#5c6b7a">Forum Image</text>
+</svg>

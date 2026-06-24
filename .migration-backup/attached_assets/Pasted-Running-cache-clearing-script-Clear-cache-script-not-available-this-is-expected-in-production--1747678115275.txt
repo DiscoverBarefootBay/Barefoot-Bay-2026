@@ -1,0 +1,46 @@
+Running cache clearing script...
+Clear cache script not available - this is expected in production
+[Maps Polyfill] Initializing enhanced Google Maps polyfill
+[Maps Polyfill] Installing fetch polyfill
+[WebSocket] WebSocket functionality is disabled to prevent conflicts with Object Storage
+REPLIT_APP_LOADED
+REPLIT_PAGE_LOADED
+Date parsing error: 
+ReferenceError {}
+message: "format is not defined"
+stack: "ReferenceError: format is not defined↵ at j (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/chat-Huy5PfuX.js:1:9827)↵ at te (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/chat-Huy5PfuX.js:1:10510)↵ at Zj (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:39:17018)↵ at GT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:44058)↵ at VT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:39790)↵ at IB (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:39718)↵ at zg (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:39570)↵ at BT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:34647)↵ at w (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:26:1543)↵ at MessagePort.R (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:26:1902)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object
+ undefined
+Date parsing error: 
+ReferenceError {}
+message: "format is not defined"
+stack: "ReferenceError: format is not defined↵ at j (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/chat-Huy5PfuX.js:1:9827)↵ at te (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/chat-Huy5PfuX.js:1:10510)↵ at Zj (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:39:17018)↵ at GT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:44058)↵ at VT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:39790)↵ at IB (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:39718)↵ at zg (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:39570)↵ at z1 (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:35934)↵ at BT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:34883)↵ at w (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:26:1543)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object
+ undefined
+format is not defined
+at j (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/chat-Huy5PfuX.js:1:10162)
+at te (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/chat-Huy5PfuX.js:1:10510)
+at Zj (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:39:17018)
+at GT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:44058)
+at VT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:39790)
+at IB (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:39718)
+at zg (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:39570)
+at z1 (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:35934)
+at BT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:34883)
+at w (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:26:1543)
+format is not defined
+at j (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/chat-Huy5PfuX.js:1:10162)
+at te (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/chat-Huy5PfuX.js:1:10510)
+at Zj (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:39:17018)
+at GT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:44058)
+at VT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:39790)
+at IB (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:39718)
+at zg (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:39570)
+at z1 (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:35934)
+at BT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:41:34883)
+at w (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-B_4Ij8nK.js:26:1543)
+REPLIT_PAGE_LOADED

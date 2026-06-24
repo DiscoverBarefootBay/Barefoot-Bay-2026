@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting to Analytics Dashboard</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      padding: 40px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      margin-top: 0;
+      color: #3b82f6;
+    }
+    .spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border-left-color: #3b82f6;
+      animation: spin 1s linear infinite;
+      margin: 30px auto;
+    }
+    .error {
+      color: #ef4444;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 4px;
+      background-color: #fee2e2;
+      display: none;
+    }
+    .success {
+      color: #10b981;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 4px;
+      background-color: #d1fae5;
+      display: none;
+    }
+    .btn {
+      margin-top: 20px;
+      padding: 10px 18px;
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn:hover {
+      background-color: #2563eb;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Analytics Dashboard Access</h1>
+    <p>We're checking your credentials and redirecting you to the admin analytics dashboard...</p>
+    <div class="spinner"></div>
+    <div id="success" class="success">
+      <strong>Success!</strong> You're being redirected to the analytics dashboard.
+    </div>
+    <div id="error" class="error">
+      <strong>Access Denied!</strong> You don't have the necessary permissions to access the analytics dashboard.
+    </div>
+    <a href="/admin" class="btn" style="display: none;" id="adminBtn">Go to Admin Dashboard</a>
+    <a href="/" class="btn" style="display: none;" id="homeBtn">Go to Home Page</a>
+  </div>
+
+  <script>
+    // Function to get cookie value
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
+    }
+
+    // Function to check if user is admin
+    async function checkUserRole() {
+      try {
+        // First try to get the user data from the server
+        const response = await fetch('/api/auth/me', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'same-origin'
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+        
+        const userData = await response.json();
+        
+        if (userData && userData.role === 'admin') {
+          // Show success message
+          document.getElementById('success').style.display = 'block';
+          document.getElementById('adminBtn').style.display = 'inline-block';
+          
+          // Redirect to analytics dashboard after a short delay
+          setTimeout(() => {
+            window.location.href = '/admin/analytics-dashboard';
+          }, 1500);
+          return;
+        } else {
+          throw new Error('User is not an admin');
+        }
+      } catch (error) {
+        console.error('Authentication check failed:', error);
+        
+        // Show error message
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('homeBtn').style.display = 'inline-block';
+        document.querySelector('.spinner').style.display = 'none';
+      }
+    }
+
+    // Execute the check when page loads
+    window.onload = function() {
+      // Wait a moment to ensure any session is loaded
+      setTimeout(checkUserRole, 500);
+    };
+  </script>
+</body>
+</html>

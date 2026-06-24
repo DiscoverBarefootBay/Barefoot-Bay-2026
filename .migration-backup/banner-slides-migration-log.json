@@ -1,0 +1,61 @@
+{
+  "timestamp": "2025-05-02T20:15:37.576Z",
+  "inProgress": true,
+  "stats": {
+    "totalFiles": 44,
+    "uploadedFiles": 7,
+    "skippedFiles": 48,
+    "failedFiles": 0
+  },
+  "results": [
+    {
+      "filename": "bannerImage-1745534929110-754936565.png",
+      "originalPath": "banner-slides/bannerImage-1745534929110-754936565.png",
+      "objectStorageUrl": "https://object-storage.replit.app/DEFAULT/banner-slides/bannerImage-1745534929110-754936565.png",
+      "size": 2564327,
+      "status": "success"
+    },
+    {
+      "filename": "bannerImage-1745534929325-573469392.png",
+      "originalPath": "banner-slides/bannerImage-1745534929325-573469392.png",
+      "objectStorageUrl": "https://object-storage.replit.app/DEFAULT/banner-slides/bannerImage-1745534929325-573469392.png",
+      "size": 2564327,
+      "status": "success"
+    },
+    {
+      "filename": "bannerImage-1745534950747-82622680.png",
+      "originalPath": "banner-slides/bannerImage-1745534950747-82622680.png",
+      "objectStorageUrl": "https://object-storage.replit.app/DEFAULT/banner-slides/bannerImage-1745534950747-82622680.png",
+      "size": 2564327,
+      "status": "success"
+    },
+    {
+      "filename": "bannerImage-1745534950987-787196791.png",
+      "originalPath": "banner-slides/bannerImage-1745534950987-787196791.png",
+      "objectStorageUrl": "https://object-storage.replit.app/DEFAULT/banner-slides/bannerImage-1745534950987-787196791.png",
+      "size": 2564327,
+      "status": "success"
+    },
+    {
+      "filename": "bannerImage-1745534987256-627806244.png",
+      "originalPath": "banner-slides/bannerImage-1745534987256-627806244.png",
+      "objectStorageUrl": "https://object-storage.replit.app/DEFAULT/banner-slides/bannerImage-1745534987256-627806244.png",
+      "size": 3014682,
+      "status": "success"
+    },
+    {
+      "filename": "bannerImage-1745534987272-421215535.png",
+      "originalPath": "banner-slides/bannerImage-1745534987272-421215535.png",
+      "objectStorageUrl": "https://object-storage.replit.app/DEFAULT/banner-slides/bannerImage-1745534987272-421215535.png",
+      "size": 3014682,
+      "status": "success"
+    },
+    {
+      "filename": "bannerImage-1746160221838-423724539.png",
+      "originalPath": "banner-slides/bannerImage-1746160221838-423724539.png",
+      "objectStorageUrl": "https://object-storage.replit.app/DEFAULT/banner-slides/bannerImage-1746160221838-423724539.png",
+      "size": 3373895,
+      "status": "success"
+    }
+  ]
+}

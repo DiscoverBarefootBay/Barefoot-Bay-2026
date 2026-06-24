@@ -1,0 +1,106 @@
+[
+  {
+    "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+    "position": 1,
+    "filepath": "src/pages/slides/Cover.tsx",
+    "title": "Welcome to Discover Barefoot Bay",
+    "description": "Cover slide with logo and community hero image",
+    "speakerNotes": ""
+  },
+  {
+    "id": "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
+    "position": 2,
+    "filepath": "src/pages/slides/WhatIs.tsx",
+    "title": "One place for everything Barefoot Bay",
+    "description": "Introduction to the app and its value for residents",
+    "speakerNotes": ""
+  },
+  {
+    "id": "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
+    "position": 3,
+    "filepath": "src/pages/slides/Calendar.tsx",
+    "title": "Calendar",
+    "description": "Browse events, RSVP, and get reminders",
+    "speakerNotes": ""
+  },
+  {
+    "id": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80",
+    "position": 4,
+    "filepath": "src/pages/slides/Forum.tsx",
+    "title": "Forum",
+    "description": "Discussions, questions, and community updates",
+    "speakerNotes": ""
+  },
+  {
+    "id": "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8091",
+    "position": 5,
+    "filepath": "src/pages/slides/Clubs.tsx",
+    "title": "Clubs",
+    "description": "Browse the A-Z directory and find your groups",
+    "speakerNotes": ""
+  },
+  {
+    "id": "f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f809102",
+    "position": 6,
+    "filepath": "src/pages/slides/ForSale.tsx",
+    "title": "For Sale",
+    "description": "Buy and sell within the community marketplace",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a7b8c9d0-e1f2-4a3b-4c5d-6e7f80910213",
+    "position": 7,
+    "filepath": "src/pages/slides/Vendors.tsx",
+    "title": "Vendors",
+    "description": "Find trusted local service providers by category",
+    "speakerNotes": ""
+  },
+  {
+    "id": "b8c9d0e1-f2a3-4b4c-5d6e-7f8091021324",
+    "position": 8,
+    "filepath": "src/pages/slides/Community.tsx",
+    "title": "Community Info",
+    "description": "Government, safety, and nature resources",
+    "speakerNotes": ""
+  },
+  {
+    "id": "c9d0e1f2-a3b4-4c5d-6e7f-8091021324a5",
+    "position": 9,
+    "filepath": "src/pages/slides/RealEstate.tsx",
+    "title": "Real Estate",
+    "description": "FSBO, agent listings, and rentals in Barefoot Bay",
+    "speakerNotes": ""
+  },
+  {
+    "id": "d0e1f2a3-b4c5-4d6e-7f80-91021324a5b6",
+    "position": 10,
+    "filepath": "src/pages/slides/Messages.tsx",
+    "title": "Messages",
+    "description": "Private resident-to-resident communication",
+    "speakerNotes": ""
+  },
+  {
+    "id": "e1f2a3b4-c5d6-4e7f-8091-021324a5b6c7",
+    "position": 11,
+    "filepath": "src/pages/slides/Store.tsx",
+    "title": "Store",
+    "description": "Community-branded merchandise and local products",
+    "speakerNotes": ""
+  },
+  {
+    "id": "f2a3b4c5-d6e7-4f80-9102-1324a5b6c7d8",
+    "position": 12,
+    "filepath": "src/pages/slides/Tips.tsx",
+    "title": "Getting Started",
+    "description": "Three things to do first after signing up",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a3b4c5d6-e7f8-4091-0213-24a5b6c7d8e9",
+    "position": 13,
+    "filepath": "src/pages/slides/Closing.tsx",
+    "title": "Welcome to the community",
+    "description": "Closing slide with sunset image and call to action",
+    "speakerNotes": ""
+  }
+]

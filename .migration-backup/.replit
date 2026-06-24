@@ -1,0 +1,62 @@
+modules = ["nodejs-20", "web", "python-3.11", "postgresql-16"]
+
+# ──► 1.  Run the compiled server, not the dev server
+run = "NODE_ENV=production PORT=3000 node dist/index.js"
+
+hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+deploymentTarget = "gce"
+build = ["npm", "run", "build"] # This line is likely fine
+run = ["sh", "-c", "NODE_ENV=production node dist/index.js"] # NO "PORT=5000" HERE
+
+[[ports]]
+localPort = 3000
+externalPort = 3000
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[[ports]]
+localPort = 5001
+externalPort = 3001
+
+[[ports]]
+localPort = 5002
+externalPort = 3002
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Server"
+
+[[workflows.workflow]]
+name = "Server"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "NODE_ENV=production PORT=5000 tsx server/index.ts"
+waitForPort = 5000
+
+[objectStorage]
+defaultBucketID = "replit-objstore-5aea4964-e97d-4955-90f5-8ed0b6618a15"
+
+[userenv]
+
+[userenv.development]
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 20000

@@ -1,0 +1,83 @@
+Vendor Page Duplicate Prevention Fix (Commit 4bfa9df)
+Problem Solved: Prevents duplicate vendor pages from being created when the same slug already exists.
+
+Changes to Re-implement After Rollback:
+1. server/storage.ts - Add duplicate check in createPageContent method
+Find the createPageContent method (around line 3717) and modify it:
+
+BEFORE (broken):
+
+const [result] = await db.insert(pageContents)
+  .values({
+    ...contentWithoutCategory,
+    mediaUrls: contentWithoutCategory.mediaUrls || [],
+  })
+  .returning();
+// Log successful creation with category information
+if (categoryName) {
+  console.log(`✅ VENDOR PAGE CREATED: "${result.title}" in category "${categoryName}" with slug "${result.slug}"`);
+}
+return result;
+AFTER (fixed):
+
+// Check for duplicate slug before inserting (prevent duplicate vendor pages)
+const existingPage = await db.select({ id: pageContents.id, title: pageContents.title })
+  .from(pageContents)
+  .where(eq(pageContents.slug, contentWithoutCategory.slug))
+  .limit(1);
+if (existingPage.length > 0) {
+  console.warn(`⚠️ DUPLICATE SLUG DETECTED: "${contentWithoutCategory.slug}" already exists (ID: ${existingPage[0].id}, Title: "${existingPage[0].title}")`);
+  const error = new Error(`A page with the slug "${contentWithoutCategory.slug}" already exists. Please use a different title or edit the existing page.`);
+  (error as any).isDuplicateSlug = true;
+  throw error;
+}
+try {
+  const [result] = await db.insert(pageContents)
+    .values({
+      ...contentWithoutCategory,
+      mediaUrls: contentWithoutCategory.mediaUrls || [],
+    })
+    .returning();
+  
+  // Log successful creation with category information
+  if (categoryName) {
+    console.log(`✅ VENDOR PAGE CREATED: "${result.title}" in category "${categoryName}" with slug "${result.slug}"`);
+  }
+  
+  return result;
+} catch (insertError: any) {
+  // Handle unique constraint violation from database (belt-and-suspenders approach)
+  if (insertError.code === '23505' || insertError.message?.includes('unique constraint')) {
+    console.warn(`⚠️ DUPLICATE SLUG (DB constraint): "${contentWithoutCategory.slug}" - concurrent insert detected`);
+    const error = new Error(`A page with this URL already exists. Please use a different title or edit the existing page.`);
+    (error as any).isDuplicateSlug = true;
+    throw error;
+  }
+  throw insertError;
+}
+2. server/routes.ts - Handle duplicate slug error (around line 10233)
+Find the POST /api/page-contents route error handling and modify:
+
+BEFORE:
+
+} catch (err) {
+  console.error("Error creating page content:", err);
+  res.status(500).json({ 
+    message: "Failed to create page content",
+    error: err instanceof Error ? err.message : String(err)
+AFTER:
+
+} catch (err: any) {
+  console.error("Error creating page content:", err);
+  
+  // Return 400 for duplicate slug errors (user-fixable validation error)
+  if (err.isDuplicateSlug) {
+    return res.status(400).json({ 
+      message: err.message,
+      isDuplicateSlug: true
+    });
+  }
+  
+  res.status(500).json({ 
+    message: "Failed to create page content",
+    error: err instanceof Error ? err.message : String(err)

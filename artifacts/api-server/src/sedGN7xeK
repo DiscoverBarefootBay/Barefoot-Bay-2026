@@ -1,0 +1,4441 @@
+console.log("🚨🚨🚨 MODULE LEVEL: server/routes.ts IS BEING LOADED! 🚨🚨🚨");
+
+import type { Express, Request, Response, NextFunction } from "express";
+import { createServer, type Server } from "http";
+import { setupAuth, requireAuth, requireAdmin, hashPassword } from "./auth";
+import { storage, db } from "./storage";
+import { sql } from "drizzle-orm";
+// Import WebSocket for chat functionality
+import { WebSocketServer, WebSocket } from "ws";
+import { processBase64Images } from "./base64-image-processor";
+import { objectStorageService } from "./object-storage-service";
+import objectStorageProxyRouter from "./object-storage-proxy";
+import Stripe from "stripe";
+// Import Square service which handles all Square API interactions
+import * as squareService from './square-service';
+import squareAppInfoRouter from './square-app-info';
+// Import credit service for Square payment integration
+import { creditService } from './credit-service';
+import { 
+  createCreditPurchaseLink, 
+  verifyCreditPurchase, 
+  getUserCreditBalance, 
+  CREDIT_PACKAGES 
+} from './credit-purchase-service';
+// Import chat router with named WebSocket configurator
+import chatRouter, { configureChatWebSockets } from "./routes/chat";
+import { validateAndSanitizeCommunityPage } from "./community-page-validator";
+import { handleStandardForumFormat } from "./forum-standard-format-handler";
+import forumMediaTestRouter from "./routes/forum-media-test";
+import testPagesRouter from "./serve-test-pages";
+import { sendListingContactEmail, sendListingContactConfirmationEmail, sendCalendarEventNotificationEmail, sendPlatinumSponsorRequestEmail } from "./sendgrid-service";
+import {
+  resolveCalendarNotificationRecipients,
+  buildCalendarNonePreferenceResponse,
+  buildCalendarNoRecipientsResponse,
+  buildCalendarPartialFailureResponse,
+  buildCalendarSuccessResponse,
+} from "./calendar-notification-helpers";
+import { pool } from "./db";
+import { formatInTimeZone, toZonedTime, fromZonedTime } from 'date-fns-tz';
+import { startOfDay, endOfDay, addDays } from 'date-fns';
+// Import new unified storage service and middleware
+import { unifiedStorageService, STORAGE_BUCKETS } from "./unified-storage-service";
+import { Client } from "@replit/object-storage";
+import { 
+  uploadToObjectStorage, 
+  processObjectStorageUploadResult,
+  createStandardUploadHandler
+} from "./object-storage-upload-middleware";
+import { forumUpload, handleForumMediaUpload, handleMultipleForumMediaUpload } from "./forum-media-upload-handler";
+import { vendorUpload, handleVendorMediaUpload } from "./vendor-media-upload-handler";
+import { communityUpload, handleCommunityMediaUpload } from "./community-media-upload-handler";
+
+// WebSocket interface for real-time messaging
+interface ExtendedWebSocket extends WebSocket {
+  isAlive: boolean;
+  userId?: string;
+}
+import { insertEventSchema, insertListingSchema, insertPageContentSchema, contentVersions, insertFeatureFlagSchema, UserRole, type PageContent, insertListingPaymentSchema, type User, type FeatureFlag, users } from "@workspace/db";
+import { eq, desc, inArray } from "drizzle-orm";
+import logger from "./logger";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+import os from "os";
+import express from "express";
+import { fileURLToPath } from 'url';
+import printfulRoutes from './routes/printful';
+import { dirname } from 'path';
+import { normalizeMediaUrl } from './shared-compat/url-normalizer';
+import { isVendorPage } from './shared-compat/vendor-url-utils';
+import { scrypt, randomBytes, timingSafeEqual } from "crypto";
+import { promisify } from "util";
+import { eq, sql } from "drizzle-orm";
+import { sendPasswordResetEmail, generateResetToken } from "./password-reset";
+import { 
+  testEmailDelivery, 
+  testPasswordResetEmail, 
+  checkEmailConfiguration, 
+  generateDiagnosticReport 
+} from "./email-diagnostics";
+// Import Square service for payment API endpoints
+import * as squareService from "./square-service";
+// Import Google service for Maps API proxying
+import * as googleService from "./google-service";
+// Import analytics router for tracking user behavior
+import analyticsRouter from "./routes/analytics";
+// Import analytics middleware
+import { analyticsMiddleware } from "./analytics-service";
+// Import subscription service for recurring payments
+import fetch from "node-fetch";
+import * as subscriptionService from "./subscription-service";
+// Import for Gemini API proxy
+import { URLSearchParams } from "url";
+// Import XLSX for Excel export functionality
+import * as XLSX from "xlsx";
+// Import rocket launch service
+import { getUpcomingRocketLaunches } from "./rocket-launch-service";
+import productsRouter from "./routes/products";
+import realEstateRouter from "./routes/real-estate";
+import { Square } from "./square-client";
+import testMediaRouter from "./routes/test-media";
+import printServiceRouter from "./routes/print-service";
+import ordersRouter from "./routes/orders";
+import testRouter from "./routes/test-routes";
+import returnsRouter from "./routes/returns"; 
+import { createForumRouter } from "./routes/forum";
+import calendarMediaDiagnosticsRouter from "./calendar-media-diagnostics";
+import debugRouter from "./debug-routes";
+import { createVendorRouter } from "./routes/vendors";
+import { createVendorCategoryRouter } from "./routes/vendor-categories";
+// Import user membership subscription routes
+import userSubscriptionsRouter from "./routes/subscriptions";
+// Import sponsorship proxy for routing
+import sponsorshipProxyRouter from "./routes/sponsorship-proxy";
+// Import contact form router for handling contact form submissions
+import contactRouter from "./routes/contact";
+// Import setup memberships utility for creating membership products
+import setupMembershipsRouter from "./routes/setup-memberships";
+// Import membership processing admin tools
+import membershipProcessingRouter from "./routes/membership-processing";
+// Import admin manual upgrade tools
+import adminManualUpgradeRouter from "./routes/admin-manual-upgrade";
+// Import deployment diagnostic tools
+import deploymentDiagnosticRouter from "./deployment-diagnostic";
+// Import calendar media diagnostics
+import calendarMediaDiagnostics from './calendar-media-diagnostics';
+import calendarMediaMigration from './calendar-media-migration';
+import { calendarDiagnosticsRouter } from './routes/calendar-diagnostics';
+import { productionSyncRouter } from "./production-sync";
+import { createCommunityCategoryRouter } from "./routes/community-categories";
+import { productionAuthRouter } from "./fix-production-auth";
+import storageBrowserRouter from './routes/storage-browser';
+import bannerSlideHelpersRouter from './routes/banner-slide-helpers';
+import messagesRouter from './routes/messages-updated';
+// Import message diagnostics router for troubleshooting message visibility issues
+import messageDiagnosticsRouter from './routes/message-diagnostics';
+// Import new message debug router for analyzing message read status
+import messageDebugRouter from './routes/message-debug';
+// Import active users tracking router
+import activeUsersRouter from './routes/active-users';
+// Import unified search router
+import searchRouter from './routes/search';
+// Import media path utilities
+import { MEDIA_TYPES, ensureDirectoryExists, copyFileToProductionLocation, saveMediaFile, findMediaFile, fixMediaUrl, fixRealEstateMediaUrl, fixContentMediaUrl, normalizeEventMediaUrl } from "./media-path-utils";
+import { mediaSyncMiddleware } from "./media-sync-middleware";
+import { realEstateObjectStorageMiddleware } from "./real-estate-object-storage-middleware";
+import { handleCalendarMediaUpload } from "./calendar-media-upload-handler";
+import { processUploadedFiles, processUploadedFile, VALID_SECTIONS } from "./media-upload-middleware";
+// WebSocket already imported at the top
+
+const scryptAsync = promisify(scrypt);
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Create specialized uploader configuration for real estate media
+const realEstateMediaType = MEDIA_TYPES.REAL_ESTATE_MEDIA;
+const realEstateFileSize = 20 * 1024 * 1024; // 20MB
+
+// Reusable configuration function for real estate uploads
+function handleRealEstateUpload(req: Request, res: Response, next: NextFunction) {
+  // Set up an in-memory storage multer instance for temporary files
+  // These will later be uploaded to Object Storage exclusively (no filesystem storage)
+  const upload = multer({
+    limits: { fileSize: realEstateFileSize },
+    storage: multer.memoryStorage(), // Use memory storage instead of disk storage
+    fileFilter: (_req: Express.Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+      const allowedTypes = [
+        'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+        'image/svg+xml',
+        'video/mp4', 'video/webm', 'video/ogg', 'video/quicktime',
+        'text/csv',
+        'application/octet-stream' // Allow octet-stream for file uploads that might not have proper mimetype detection
+      ];
+      
+      // Also check file extension as a fallback
+      const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.mp4', '.webm', '.ogg', '.mov', '.csv'];
+      const fileExtension = file.originalname.toLowerCase().substring(file.originalname.lastIndexOf('.'));
+      
+      if (allowedTypes.includes(file.mimetype) || allowedExtensions.includes(fileExtension)) {
+        console.log(`Accepted file: ${file.originalname} with mimetype: ${file.mimetype}`);
+        cb(null, true);
+      } else {
+        console.log(`Rejected file: ${file.originalname} with mimetype: ${file.mimetype} and extension: ${fileExtension}`);
+        cb(new Error('Invalid file type'));
+      }
+    }
+  });
+  
+  // Always set the media type for real estate
+  req.mediaType = MEDIA_TYPES.REAL_ESTATE_MEDIA;
+  console.log(`Real estate upload middleware - Using memory storage for Object Storage exclusive upload`);
+  
+  // Use multer's array method to handle multiple file uploads
+  const handler = upload.array('media');
+  return handler(req, res, next);
+}
+
+// Configure multer for standard file uploads with enhanced media path support for production
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: function (req: any, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) {
+      // Determine media type from the request based on field name or explicit setting
+      let mediaType;
+      
+      if (req.mediaType) {
+        // Use explicitly set media type
+        mediaType = req.mediaType;
+      } else if (file.fieldname === 'bannerImage') {
+        mediaType = MEDIA_TYPES.BANNER_SLIDES;
+      } else if (file.fieldname === 'media') {
+        mediaType = MEDIA_TYPES.CALENDAR;
+      } else if (file.fieldname === 'avatar') {
+        mediaType = MEDIA_TYPES.AVATARS;
+      } else if (file.fieldname === 'iconFile') {
+        mediaType = MEDIA_TYPES.ICONS;
+      } else if (file.fieldname === 'mediaFile') {
+        // Check if this is a forum-related upload by examining the request URL or headers
+        if (req.originalUrl && req.originalUrl.includes('/forum/')) {
+          mediaType = MEDIA_TYPES.FORUM;
+          console.log(`Detected forum media upload from URL: ${req.originalUrl}`);
+        } else if (req.headers && req.headers.referer && req.headers.referer.includes('/forum/')) {
+          mediaType = MEDIA_TYPES.FORUM;
+          console.log(`Detected forum media upload from referer: ${req.headers.referer}`);
+        } else {
+          mediaType = MEDIA_TYPES.CONTENT;
+        }
+      } else if (file.fieldname === 'forumMedia') {
+        mediaType = MEDIA_TYPES.FORUM;
+      } else if (file.fieldname === 'vendorMedia') {
+        mediaType = MEDIA_TYPES.VENDOR;
+      } else if (file.fieldname === 'communityMedia') {
+        mediaType = MEDIA_TYPES.COMMUNITY;
+      } else if (file.fieldname === 'realEstateMedia') {
+        mediaType = MEDIA_TYPES.REAL_ESTATE_MEDIA; // Use the new dedicated folder
+      } else if (file.fieldname === 'attachedAsset') {
+        mediaType = MEDIA_TYPES.ATTACHED_ASSETS;
+      }
+      
+      // Store the media type on the request object for later use in the endpoint handlers
+      req.mediaType = mediaType;
+      
+      let uploadDir;
+      
+      if (mediaType) {
+        // Get the appropriate uploads directory
+        uploadDir = path.join(__dirname, '../uploads', mediaType);
+        
+        // Also ensure the production directory exists for later copying
+        const prodDir = path.join(__dirname, '..', mediaType);
+        ensureDirectoryExists(prodDir);
+        
+        console.log(`Media upload detected - type: ${mediaType}, directory: ${uploadDir}`);
+      } else {
+        // Default uploads directory if media type not determined
+        uploadDir = path.join(__dirname, '../uploads');
+        console.log(`Generic upload - using default directory: ${uploadDir}`);
+      }
+      
+      // Ensure the directory exists
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+      
+      cb(null, uploadDir);
+    },
+    filename: function (_req: Express.Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+  }),
+  fileFilter: (_req: Express.Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+    const allowedTypes = [
+      // Images
+      'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+      // SVG
+      'image/svg+xml',
+      // Videos
+      'video/mp4', 'video/webm', 'video/ogg', 'video/quicktime',
+      // Other
+      'text/csv'
+    ];
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      console.log(`Rejected file with mimetype: ${file.mimetype}`);
+      cb(new Error('Invalid file type'));
+    }
+  },
+  limits: {
+    fileSize: 350 * 1024 * 1024 // 350MB limit for videos
+  }
+});
+
+// Password hashing function
+async function hashPassword(password: string) {
+  const salt = randomBytes(16).toString("hex");
+  const buf = (await scryptAsync(password, salt, 64)) as Buffer;
+  return `${buf.toString("hex")}.${salt}`;
+}
+
+async function comparePasswords(supplied: string, stored: string) {
+  const [hashed, salt] = stored.split(".");
+  const hashedBuf = Buffer.from(hashed, "hex");
+  const suppliedBuf = (await scryptAsync(supplied, salt, 64)) as Buffer;
+  return timingSafeEqual(hashedBuf, suppliedBuf);
+}
+
+// Helper functions for media paths
+function getMediaUrl(mediaType: string, filename: string, useUploads: boolean = true): string {
+  if (useUploads) {
+    return `/uploads/${mediaType}/${filename}`;
+  } else {
+    return `/${mediaType}/${filename}`;
+  }
+}
+
+function processUploadedFile(req: any, file: Express.Multer.File): { success: boolean, url: string, developmentUrl: string, message?: string } {
+  console.log(`[ProcessFile] Processing uploaded file with media type: ${req.mediaType || 'uploads'}`);
+  
+  if (!file) {
+    console.error('[ProcessFile] No file provided in request');
+    return { 
+      success: false, 
+      url: '', 
+      developmentUrl: '',
+      message: 'No file provided' 
+    };
+  }
+  
+  // Get media type
+  const mediaType = req.mediaType || 'uploads';
+  console.log(`[ProcessFile] Using media type: ${mediaType}`);
+  
+  // Generate URLs
+  const developmentUrl = `/uploads/${mediaType}/${file.filename}`;
+  const url = `/${mediaType}/${file.filename}`;
+  
+  console.log(`[ProcessFile] Generated URLs:`, {
+    developmentUrl,
+    productionUrl: url
+  });
+  
+  // Copy file to production location if needed
+  const uploadsPath = path.join(__dirname, '..', developmentUrl);
+  const prodPath = path.join(__dirname, '..', url);
+  
+  console.log(`[ProcessFile] File paths:`, {
+    uploadsPath,
+    productionPath: prodPath
+  });
+  
+  // Check if uploads file exists
+  if (!fs.existsSync(uploadsPath)) {
+    console.error(`[ProcessFile] Source file does not exist at expected path: ${uploadsPath}`);
+    
+    // Enhanced error recovery - check if file exists in temporary location
+    const tempPath = path.join(os.tmpdir(), file.filename);
+    const tempExists = fs.existsSync(tempPath);
+    console.log(`[ProcessFile] Checking temporary location: ${tempPath}, exists: ${tempExists}`);
+    
+    if (tempExists) {
+      // Create the uploads directory if it doesn't exist
+      const uploadsDir = path.dirname(uploadsPath);
+      if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir, { recursive: true });
+        console.log(`[ProcessFile] Created uploads directory: ${uploadsDir}`);
+      }
+      
+      // Copy from temp directory to uploads directory
+      try {
+        fs.copyFileSync(tempPath, uploadsPath);
+        console.log(`[ProcessFile] Successfully copied file from temp location to uploads: ${uploadsPath}`);
+      } catch (err) {
+        console.error(`[ProcessFile] Failed to copy from temp location: ${err}`);
+        // Continue to check other potential locations
+      }
+    }
+    
+    // After recovery attempt, check again if the file exists
+    if (!fs.existsSync(uploadsPath)) {
+      console.error(`[ProcessFile] Recovery failed, file not found in any location`);
+      return {
+        success: false,
+        url: '',
+        developmentUrl: '',
+        message: 'Source file missing after upload - recovery failed'
+      };
+    }
+  }
+  
+  // For calendar and vendor media, ensure files exist in both paths
+  if (mediaType === MEDIA_TYPES.CALENDAR || mediaType === MEDIA_TYPES.VENDOR) {
+    // Create the production directory if it doesn't exist
+    const prodDir = path.dirname(prodPath);
+    if (!fs.existsSync(prodDir)) {
+      console.log(`[ProcessFile] Creating production directory: ${prodDir}`);
+      fs.mkdirSync(prodDir, { recursive: true });
+    }
+    
+    // Copy the file to production location
+    try {
+      fs.copyFileSync(uploadsPath, prodPath);
+      console.log(`[ProcessFile] Successfully copied file:`, {
+        from: uploadsPath,
+        to: prodPath,
+        fileSize: `${Math.round(fs.statSync(prodPath).size / 1024)}KB`
+      });
+    } catch (err) {
+      console.error(`[ProcessFile] Error copying file to production location:`, err);
+      // Still return success as the file is at least in the uploads directory
+    }
+    
+    // Verify both files exist
+    const uploadsExists = fs.existsSync(uploadsPath);
+    const prodExists = fs.existsSync(prodPath);
+    
+    console.log(`[ProcessFile] File existence check:`, {
+      uploadsPath: uploadsExists ? 'Exists' : 'Missing',
+      productionPath: prodExists ? 'Exists' : 'Missing'
+    });
+  } else {
+    // For other media types, use the standard approach
+    // Create the production directory if it doesn't exist
+    const prodDir = path.dirname(prodPath);
+    if (!fs.existsSync(prodDir)) {
+      console.log(`[ProcessFile] Creating production directory: ${prodDir}`);
+      fs.mkdirSync(prodDir, { recursive: true });
+    }
+    
+    // Copy the file to production location
+    try {
+      fs.copyFileSync(uploadsPath, prodPath);
+      console.log(`[ProcessFile] Successfully copied file:`, {
+        from: uploadsPath,
+        to: prodPath,
+        fileSize: `${Math.round(fs.statSync(prodPath).size / 1024)}KB`
+      });
+    } catch (err) {
+      console.error(`[ProcessFile] Error copying file to production location:`, err);
+      // Still return success as the file is at least in the uploads directory
+    }
+  }
+  
+  return {
+    success: true,
+    url,
+    developmentUrl
+  };
+}
+
+// Define comprehensive table mapping for user deletion
+const USER_DEPENDENT_TABLES = {
+  // Critical tables that must be deleted
+  critical: [
+    'forum_reactions',
+    'forum_comments',
+    'forum_posts',
+    'event_comments',
+    'event_interactions',
+    'vendor_comments',
+    'vendor_interactions',
+    'form_submissions',
+    'order_items',
+    'orders',
+    'order_returns',
+    'listing_payments',
+    'messages',
+    'message_recipients',
+    'credit_transactions',
+    'square_payments',
+    'user_credits',
+    'sponsorships'
+  ],
+  // Analytics and auxiliary data
+  analytics: [
+    'analytics_events',
+    'analytics_page_views',
+    'analytics_sessions'
+  ],
+  // Nullable references - can be nullified
+  nullable: [
+    'content',
+    'page_content',
+    'page_contents',
+    'content_versions',
+    'products',
+    'events',
+    'forum_description',
+    'real_estate_listings',
+    'custom_forms',
+    'site_settings'
+  ]
+};
+
+export async function registerRoutes(app: Express): Promise<Server> {
+  console.log("🔥🔥🔥 registerRoutes() FUNCTION CALLED - SERVER STARTUP BEGINNING! 🔥🔥🔥");
+  // Create HTTP server
+  const server = createServer(app);
+  
+  setupAuth(app);
+
+  // User deletion helper function - defined before endpoints that use it
+  async function deleteUserData(userId: number) {
+    console.log(`Starting enhanced deletion for user ID: ${userId}`);
+    
+    return await db.transaction(async (tx) => {
+      try {
+        // First, manually delete records from tables with NO ACTION constraints
+        // These need to be deleted first before the CASCADE DELETE can work
+        
+        console.log(`Manually deleting NO ACTION constraint records for user ${userId}...`);
+        
+        // First, clear last_read_comment_id references to comments created by this user
+        // This prevents foreign key violations when we later delete the user's comments
+        const clearedReadStatesResult = await tx.execute(sql`
+          UPDATE forum_read_states 
+          SET last_read_comment_id = NULL 
+          WHERE last_read_comment_id IN (
+            SELECT id FROM forum_comments WHERE author_id = ${userId}
+          )
+        `);
+        console.log(`Cleared ${clearedReadStatesResult.rowCount} forum read state references to user's comments`);
+        
+        // Delete forum read states (NO ACTION constraint)
+        const forumReadStatesResult = await tx.execute(sql`DELETE FROM forum_read_states WHERE user_id = ${userId}`);
+        console.log(`Deleted ${forumReadStatesResult.rowCount} forum read state records`);
+        
+        // Delete store visits (NO ACTION constraint)  
+        const storeVisitsResult = await tx.execute(sql`DELETE FROM store_visits WHERE user_id = ${userId}`);
+        console.log(`Deleted ${storeVisitsResult.rowCount} store visit records`);
+        
+        // Delete for sale visits (NO ACTION constraint)
+        const forSaleVisitsResult = await tx.execute(sql`DELETE FROM for_sale_visits WHERE user_id = ${userId}`);
+        console.log(`Deleted ${forSaleVisitsResult.rowCount} for sale visit records`);
+        
+        // Delete vendor page visits (NO ACTION constraint)
+        const vendorPageVisitsResult = await tx.execute(sql`DELETE FROM vendor_page_visits WHERE user_id = ${userId}`);
+        console.log(`Deleted ${vendorPageVisitsResult.rowCount} vendor page visit records`);
+        
+        // Delete event interactions for events created by this user (NO ACTION constraint on event_id)
+        // This handles the case where user created events that others interacted with
+        const eventInteractionsResult = await tx.execute(sql`
+          DELETE FROM event_interactions 
+          WHERE event_id IN (SELECT id FROM events WHERE created_by = ${userId})
+        `);
+        console.log(`Deleted ${eventInteractionsResult.rowCount} event interaction records for user's events`);
+        
+        // Delete event comments for events created by this user (NO ACTION constraint on event_id)
+        // This handles the case where user created events that others commented on
+        const eventCommentsResult = await tx.execute(sql`
+          DELETE FROM event_comments 
+          WHERE event_id IN (SELECT id FROM events WHERE created_by = ${userId})
+        `);
+        console.log(`Deleted ${eventCommentsResult.rowCount} event comment records for user's events`);
+        
+        // Now delete the user record - CASCADE DELETE will handle all remaining dependencies
+        console.log(`Executing CASCADE DELETE for user ${userId}...`);
+        const userResult = await tx.execute(sql`DELETE FROM users WHERE id = ${userId}`);
+        
+        if (userResult.rowCount === 0) {
+          throw new Error('User record could not be deleted - user may not exist');
+        }
+        
+        const totalRecords = clearedReadStatesResult.rowCount + forumReadStatesResult.rowCount + storeVisitsResult.rowCount + forSaleVisitsResult.rowCount + vendorPageVisitsResult.rowCount + eventInteractionsResult.rowCount + eventCommentsResult.rowCount + userResult.rowCount;
+        console.log(`Successfully deleted user ${userId} and ${totalRecords} total records`);
+        
+        return { 
+          success: true, 
+          totalDeleted: totalRecords,
+          message: 'User and all associated data deleted successfully' 
+        };
+      } catch (error) {
+        console.error(`Enhanced deletion failed for user ${userId}:`, error);
+        throw error;
+      }
+    });
+  }
+
+  // Debug endpoint to test routing
+  app.get("/api/user/delete-test", (req, res) => {
+    console.log("🧪 DELETE TEST ENDPOINT CALLED");
+    res.json({ message: "Delete test endpoint is working", authenticated: req.isAuthenticated() });
+  });
+
+  // Get user dependencies endpoint (for pre-deletion analysis)
+  app.get("/api/users/:id/dependencies", async (req, res) => {
+    console.log("🔍 USER DEPENDENCIES CHECK ENDPOINT CALLED", {
+      authenticated: req.isAuthenticated(),
+      user: req.user ? { id: req.user.id, role: req.user.role } : null,
+      targetUserId: req.params.id
+    });
+
+    // Auth checks
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ 
+        message: "Not authenticated", 
+        code: "AUTH_REQUIRED"
+      });
+    }
+
+    const userId = parseInt(req.params.id);
+    
+    if (isNaN(userId)) {
+      return res.status(400).json({
+        message: "Invalid user ID",
+        code: "INVALID_USER_ID"
+      });
+    }
+
+    // Admin can check any user, users can only check themselves
+    if (req.user.role !== 'admin' && req.user.id !== userId) {
+      return res.status(403).json({ 
+        message: "Insufficient permissions",
+        details: "You can only check dependencies for your own account",
+        code: "INSUFFICIENT_PERMISSIONS"
+      });
+    }
+
+    try {
+      // Check if user exists
+      const currentUser = await storage.getUser(userId);
+      
+      if (!currentUser) {
+        return res.status(404).json({ 
+          message: "User not found",
+          code: "USER_NOT_FOUND"
+        });
+      }
+
+      console.log(`Analyzing dependencies for user ${currentUser.username} (${userId})`);
+
+      // Query all tables that reference the user
+      const dependencies = await db.transaction(async (tx) => {
+        const results = {
+          // Tables with CASCADE DELETE (will be automatically handled)
+          cascadeTables: {
+            analytics_events: await tx.execute(sql`SELECT COUNT(*) as count FROM analytics_events WHERE user_id = ${userId}`),
+            analytics_page_views: await tx.execute(sql`SELECT COUNT(*) as count FROM analytics_page_views WHERE user_id = ${userId}`),
+            analytics_sessions: await tx.execute(sql`SELECT COUNT(*) as count FROM analytics_sessions WHERE user_id = ${userId}`),
+            content_updated: await tx.execute(sql`SELECT COUNT(*) as count FROM content WHERE updated_by = ${userId}`),
+            content_versions: await tx.execute(sql`SELECT COUNT(*) as count FROM content_versions WHERE created_by = ${userId}`),
+            credit_transactions: await tx.execute(sql`SELECT COUNT(*) as count FROM credit_transactions WHERE user_id = ${userId}`),
+            custom_forms: await tx.execute(sql`SELECT COUNT(*) as count FROM custom_forms WHERE created_by = ${userId}`),
+            event_comments: await tx.execute(sql`SELECT COUNT(*) as count FROM event_comments WHERE user_id = ${userId}`),
+            event_interactions: await tx.execute(sql`SELECT COUNT(*) as count FROM event_interactions WHERE user_id = ${userId}`),
+            events_created: await tx.execute(sql`SELECT COUNT(*) as count FROM events WHERE created_by = ${userId}`),
+            form_submissions: await tx.execute(sql`SELECT COUNT(*) as count FROM form_submissions WHERE user_id = ${userId}`),
+            forum_comments: await tx.execute(sql`SELECT COUNT(*) as count FROM forum_comments WHERE author_id = ${userId}`),
+            forum_description: await tx.execute(sql`SELECT COUNT(*) as count FROM forum_description WHERE updated_by = ${userId}`),
+            forum_likes: await tx.execute(sql`SELECT COUNT(*) as count FROM forum_likes WHERE user_id = ${userId}`),
+            forum_posts: await tx.execute(sql`SELECT COUNT(*) as count FROM forum_posts WHERE user_id = ${userId}`),
+            forum_reactions: await tx.execute(sql`SELECT COUNT(*) as count FROM forum_reactions WHERE user_id = ${userId}`),
+            message_recipients: await tx.execute(sql`SELECT COUNT(*) as count FROM message_recipients WHERE recipient_id = ${userId}`),
+            messages_sent: await tx.execute(sql`SELECT COUNT(*) as count FROM messages WHERE sender_id = ${userId}`),
+            orders: await tx.execute(sql`SELECT COUNT(*) as count FROM orders WHERE user_id = ${userId}`),
+            page_content: await tx.execute(sql`SELECT COUNT(*) as count FROM page_content WHERE created_by = ${userId}`),
+            page_contents: await tx.execute(sql`SELECT COUNT(*) as count FROM page_contents WHERE updated_by = ${userId}`),
+            products: await tx.execute(sql`SELECT COUNT(*) as count FROM products WHERE created_by = ${userId}`),
+            real_estate_listings: await tx.execute(sql`SELECT COUNT(*) as count FROM real_estate_listings WHERE created_by = ${userId}`),
+            site_settings: await tx.execute(sql`SELECT COUNT(*) as count FROM site_settings WHERE updated_by = ${userId}`),
+            sponsorships: await tx.execute(sql`SELECT COUNT(*) as count FROM sponsorships WHERE user_id = ${userId}`),
+            square_payments: await tx.execute(sql`SELECT COUNT(*) as count FROM square_payments WHERE user_id = ${userId}`),
+            user_credits: await tx.execute(sql`SELECT COUNT(*) as count FROM user_credits WHERE user_id = ${userId}`),
+            vendor_comments: await tx.execute(sql`SELECT COUNT(*) as count FROM vendor_comments WHERE user_id = ${userId}`),
+            vendor_interactions: await tx.execute(sql`SELECT COUNT(*) as count FROM vendor_interactions WHERE user_id = ${userId}`),
+            vendor_visits: await tx.execute(sql`SELECT COUNT(*) as count FROM vendor_visits WHERE user_id = ${userId}`)
+          },
+          
+          // Tables with NO ACTION constraints (need manual deletion)
+          noActionTables: {
+            forum_read_states: await tx.execute(sql`SELECT COUNT(*) as count FROM forum_read_states WHERE user_id = ${userId}`),
+            store_visits: await tx.execute(sql`SELECT COUNT(*) as count FROM store_visits WHERE user_id = ${userId}`),
+            for_sale_visits: await tx.execute(sql`SELECT COUNT(*) as count FROM for_sale_visits WHERE user_id = ${userId}`)
+          }
+        };
+        
+        return results;
+      });
+
+      // Calculate totals
+      const cascadeTotal = Object.values(dependencies.cascadeTables).reduce((sum, result: any) => 
+        sum + parseInt(result.rows[0].count), 0);
+      const noActionTotal = Object.values(dependencies.noActionTables).reduce((sum, result: any) => 
+        sum + parseInt(result.rows[0].count), 0);
+      const grandTotal = cascadeTotal + noActionTotal;
+
+      // Format the response
+      const formattedDependencies = {
+        user: {
+          id: userId,
+          username: currentUser.username,
+          fullName: currentUser.fullName
+        },
+        summary: {
+          totalRecords: grandTotal,
+          cascadeRecords: cascadeTotal,
+          noActionRecords: noActionTotal,
+          canDelete: true, // Our enhanced deletion handles both types
+          requiresManualCleanup: noActionTotal > 0
+        },
+        details: {
+          cascadeTables: Object.entries(dependencies.cascadeTables).map(([table, result]: [string, any]) => ({
+            table,
+            count: parseInt(result.rows[0].count),
+            deletionType: 'CASCADE'
+          })).filter(item => item.count > 0),
+          noActionTables: Object.entries(dependencies.noActionTables).map(([table, result]: [string, any]) => ({
+            table,
+            count: parseInt(result.rows[0].count),
+            deletionType: 'MANUAL'
+          })).filter(item => item.count > 0)
+        }
+      };
+
+      console.log(`Dependencies analysis complete for user ${userId}:`, formattedDependencies.summary);
+
+      res.json(formattedDependencies);
+      
+    } catch (error: any) {
+      console.error(`Error checking dependencies for user ${userId}:`, error);
+      res.status(500).json({ 
+        message: "Failed to check user dependencies",
+        details: error.message,
+        code: "DEPENDENCY_CHECK_FAILED"
+      });
+    }
+  });
+
+  // Email notification preference endpoints
+  app.post("/api/user/unsubscribe-emails", async (req, res) => {
+    try {
+      const { userId } = req.body;
+      
+      if (!userId) {
+        return res.status(400).json({ message: "User ID is required" });
+      }
+
+      // Update user's email notification preference
+      await db.execute(
+        sql`UPDATE users SET email_notifications_enabled = false WHERE id = ${userId}`
+      );
+
+      res.json({ 
+        success: true, 
+        message: "You have been unsubscribed from email notifications" 
+      });
+    } catch (error) {
+      console.error("Error unsubscribing from emails:", error);
+      res.status(500).json({ message: "Failed to unsubscribe from email notifications" });
+    }
+  });
+
+  // PRIORITY ENDPOINT: Self-deletion endpoint - must be registered early to avoid conflicts
+  app.delete("/api/user/delete-account", async (req, res) => {
+    console.log("🚨 SELF-DELETION ENDPOINT CALLED 🚨", {
+      authenticated: req.isAuthenticated(),
+      user: req.user ? { id: req.user.id, username: req.user.username, role: req.user.role } : null,
+      headers: {
+        origin: req.headers.origin,
+        host: req.headers.host,
+        referer: req.headers.referer,
+        cookie: req.headers.cookie ? "Present" : "None"
+      }
+    });
+
+    // Auth check
+    if (!req.isAuthenticated()) {
+      console.warn("Self-deletion request failed: not authenticated");
+      return res.status(401).json({ 
+        message: "Not authenticated", 
+        details: "You need to be logged in to delete your account",
+        code: "AUTH_REQUIRED"
+      });
+    }
+
+    const userId = req.user.id;
+    const username = req.user.username;
+    
+    console.log(`Processing self-deletion for user ${username} (${userId})`);
+
+    try {
+      // Execute deletion using simplified approach
+      const deletionResult = await deleteUserData(userId);
+      
+      console.log(`Self-deletion completed for ${username} (${userId}):`, {
+        success: deletionResult.success,
+        totalDeleted: deletionResult.totalDeleted
+      });
+
+      if (deletionResult.success) {
+        // Destroy session after successful deletion
+        req.session.destroy((err) => {
+          if (err) {
+            console.error("Error destroying session after self-deletion:", err);
+          }
+        });
+        
+        res.json({ 
+          message: "Account successfully deleted",
+          details: `User ${username} has been permanently removed from the system along with all associated data.`,
+          code: "DELETION_SUCCESS",
+          totalRecordsDeleted: deletionResult.totalDeleted
+        });
+      } else {
+        res.status(500).json({ 
+          message: "Account deletion failed",
+          details: "There was an error deleting your account. Please try again or contact support.",
+          code: "DELETION_FAILED"
+        });
+      }
+    } catch (error) {
+      console.error(`Self-deletion failed for ${username} (${userId}):`, error);
+      
+      // Handle foreign key constraint errors
+      if ((error as any).code === '23503' || ((error as any).message && (error as any).message.includes('foreign key'))) {
+        let tableName = 'unknown table';
+        let constraintDetail = '';
+        
+        if ((error as any).detail) {
+          const tableMatch = (error as any).detail.match(/table "([^"]+)"/);
+          if (tableMatch && tableMatch[1]) {
+            tableName = tableMatch[1];
+          }
+          constraintDetail = (error as any).detail;
+        } else if ((error as any).table) {
+          tableName = (error as any).table;
+        }
+        
+        return res.status(409).json({ 
+          message: "Cannot delete account due to remaining references",
+          details: `Your account still has content in ${tableName} that could not be automatically deleted. Please contact support for assistance.`,
+          code: "FOREIGN_KEY_VIOLATION",
+          constraint: (error as any).constraint || constraintDetail,
+          table: tableName
+        });
+      }
+      
+      // Handle database connection errors
+      if ((error as any).message && ((error as any).message.includes('connection') || (error as any).message.includes('timeout'))) {
+        return res.status(503).json({
+          message: "Database connection error",
+          details: "Could not connect to the database to complete this operation. Please try again later.",
+          code: "DB_CONNECTION_ERROR"
+        });
+      }
+      
+      // Generic server error
+      res.status(500).json({ 
+        message: "Failed to delete account",
+        details: error instanceof Error ? error.message : "Unknown error occurred",
+        code: "SERVER_ERROR"
+      });
+    }
+  });
+  
+  // Apply analytics middleware to capture page views and user behavior
+  app.use(analyticsMiddleware);
+  
+  // API endpoint for real estate media files
+  app.get('/api/real-estate-media/:filename', async (req: Request, res: Response) => {
+    try {
+      const { filename } = req.params;
+      
+      console.log(`[RealEstateMedia] Received request for: ${filename}`);
+      
+      // Try multiple sources in sequence
+      
+      // 1. Check Object Storage with real-estate-media prefix
+      try {
+        const storageKey = `real-estate-media/${filename}`;
+        console.log(`[RealEstateMedia] Trying Object Storage: ${storageKey}`);
+        
+        const buffer = await objectStorageService.getFile(storageKey, 'REAL_ESTATE');
+        if (buffer && buffer.length > 0) {
+          console.log(`[RealEstateMedia] Found in Object Storage: ${storageKey}`);
+          const ext = path.extname(filename).toLowerCase();
+          const contentType = ext === '.jpg' || ext === '.jpeg' ? 'image/jpeg' : 
+                             ext === '.png' ? 'image/png' : 
+                             ext === '.gif' ? 'image/gif' : 
+                             ext === '.webp' ? 'image/webp' : 'application/octet-stream';
+          
+          res.setHeader('Content-Type', contentType);
+          res.setHeader('Cache-Control', 'public, max-age=86400');
+          res.setHeader('Access-Control-Allow-Origin', '*');
+          return res.send(buffer);
+        }
+      } catch (err) {
+        console.log(`[RealEstateMedia] Object storage check failed: ${err.message}`);
+      }
+      
+      // 2. Check filesystem paths as fallback
+      const possiblePaths = [
+        path.join(__dirname, '..', 'uploads', 'real-estate-media', filename),
+        path.join(__dirname, '..', 'real-estate-media', filename)
+      ];
+      
+      console.log(`[RealEstateMedia] Checking filesystem paths`);
+      for (const filePath of possiblePaths) {
+        if (fs.existsSync(filePath)) {
+          console.log(`[RealEstateMedia] Found in filesystem: ${filePath}`);
+          return res.sendFile(filePath);
+        }
+      }
+      
+      // 3. Redirect to storage proxy as final attempt
+      console.log(`[RealEstateMedia] Trying storage proxy fallback`);
+      return res.redirect(`/api/storage-proxy/REAL_ESTATE/${filename}`);
+      
+    } catch (error) {
+      console.error('[RealEstateMedia] Error serving real estate media:', error);
+      // Fallback to default property image
+      return res.redirect('/default-property-image.svg');
+    }
+  });
+  
+  // Configure WebSockets for chat
+  // Setup WebSockets for real-time messaging feature
+  const wss = new WebSocketServer({ server });
+  
+  wss.on('connection', (ws) => {
+    console.log('New WebSocket connection established');
+    
+    ws.on('message', (message) => {
+      try {
+        const data = JSON.parse(message.toString());
+        console.log('Received message:', data);
+        
+        // Handle message types for the chat system
+        if (data.type === 'chat-message') {
+          console.log('Processing chat message:', data.data);
+          // Broadcast the chat message to all clients
+          wss.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+              client.send(JSON.stringify({
+                type: 'chat-message',
+                data: data.data,
+                timestamp: new Date().toISOString()
+              }));
+            }
+          });
+        } else if (data.type === 'read-message') {
+          console.log('Processing read status update:', data.data);
+          // Broadcast read status to all clients
+          wss.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+              client.send(JSON.stringify({
+                type: 'read-message',
+                data: data.data,
+                timestamp: new Date().toISOString()
+              }));
+            }
+          });
+        } else {
+          // Default broadcast for other message types
+          wss.clients.forEach((client) => {
+            if (client !== ws && client.readyState === WebSocket.OPEN) {
+              client.send(JSON.stringify(data));
+            }
+          });
+        }
+      } catch (error) {
+        console.error('Error processing WebSocket message:', error);
+      }
+    });
+    
+    ws.on('close', () => {
+      console.log('WebSocket connection closed');
+    });
+  });
+  
+  // Message routes - register at both paths for compatibility
+  app.use('/api/chat', chatRouter);
+  // Also mount the routes at /api directly for the new interface
+  app.use('/api', chatRouter);
+  
+  // Google Maps API key proxy to fix hardcoded key issue
+  app.get('/google-maps-proxy', async (req, res) => {
+    try {
+      logger.info(`Google Maps proxy request received with params: ${JSON.stringify(req.query)}`);
+      
+      // Get client domain for CORS
+      const origin = req.headers.origin || '*';
+      
+      // Allow browsers to call this endpoint by setting proper CORS headers
+      res.set('Access-Control-Allow-Origin', origin);
+      
+      // Preconnect to Google's domains to speed up subsequent requests
+      res.set('Link', '<https://maps.googleapis.com>; rel=preconnect; crossorigin, <https://maps.gstatic.com>; rel=preconnect; crossorigin');
+      
+      // Set appropriate content type for JavaScript
+      res.set('Content-Type', 'application/javascript');
+      
+      // Cache for 24 hours to improve performance
+      res.set('Cache-Control', 'public, max-age=86400');
+      
+      // Use the GoogleService to proxy the Google Maps script
+      const scriptContent = await googleService.proxyGoogleMapsScript(req.query as Record<string, string>);
+      
+      // Send the proxied script content
+      res.send(scriptContent);
+      
+      logger.info('Successfully served Google Maps script via proxy');
+    } catch (error) {
+      logger.error('Error proxying Google Maps script:', error);
+      
+      // Send a more helpful error response
+      res.status(500).send(`
+        // Google Maps API loading error
+        console.error("Server failed to proxy Google Maps API:", ${JSON.stringify(String(error))});
+        
+        // Try to notify any waiting callbacks
+        if (window.gm_authFailure) {
+          window.gm_authFailure();
+        }
+        
+        // Dispatch a custom event that the app can listen for
+        window.dispatchEvent(new CustomEvent('google-maps-load-error'));
+      `);
+    }
+  });
+
+  // Debug endpoint to check email configuration in production
+  app.get("/api/test-email-config", (req, res) => {
+    try {
+      const config = {
+        hasGoogleClientId: !!process.env.GOOGLE_CLIENT_ID,
+        hasGoogleClientSecret: !!process.env.GOOGLE_CLIENT_SECRET,
+        hasGoogleRefreshToken: !!process.env.GOOGLE_REFRESH_TOKEN,
+        hasGoogleUserEmail: !!process.env.GOOGLE_USER_EMAIL,
+        hasGoogleAccessToken: !!process.env.GOOGLE_ACCESS_TOKEN,
+        googleUserEmail: process.env.GOOGLE_USER_EMAIL,
+        nodeEnv: process.env.NODE_ENV,
+        timestamp: new Date().toISOString()
+      };
+      
+      console.log("Email configuration check:", config);
+      res.json(config);
+    } catch (error) {
+      console.error("Email config check error:", error);
+      res.status(500).json({ error: "Configuration check failed" });
+    }
+  });
+
+  // Password Reset Request Route
+  app.post("/api/password-reset/request", async (req, res) => {
+    try {
+      console.log("===== Password reset request received =====");
+      const { email } = req.body;
+      
+      console.log("Request body:", req.body);
+      
+      if (!email) {
+        console.log("Email is required but was not provided");
+        return res.status(400).json({ message: "Email is required" });
+      }
+      
+      console.log(`Attempting to find user with email: ${email}`);
+      
+      // Find user by email (case-insensitive)
+      const user = await storage.getUserByEmailCaseInsensitive(email);
+      
+      if (!user) {
+        console.log(`No user found with email (case-insensitive): ${email}`);
+        // Include emailExists: false flag to show appropriate message on frontend, but wording still doesn't reveal too much
+        return res.status(200).json({ 
+          message: "If a user with that email exists, a password reset link has been sent", 
+          emailExists: false 
+        });
+      }
+      
+      console.log(`User found: ID ${user.id}, Username: ${user.username}, Email: ${user.email}`);
+      
+      // Clear any expired tokens from the database first
+      console.log("Cleaning up expired reset tokens...");
+      const db = storage.getDb();
+      await db.execute(sql`
+        UPDATE users 
+        SET reset_token = NULL, reset_token_expires = NULL 
+        WHERE reset_token_expires < NOW()
+      `);
+      
+      // Generate a reset token
+      const resetToken = generateResetToken();
+      // Ensure we use UTC time consistently - add 1 hour (3600000ms) to current UTC time
+      const now = new Date();
+      const resetTokenExpires = new Date(now.getTime() + 3600000); // Token expires in 1 hour
+      
+      console.log(`Generated reset token for user ${user.id}: ${resetToken.substring(0, 8)}...`);
+      console.log(`Current UTC time: ${now.toISOString()}`);
+      console.log(`Token will expire at: ${resetTokenExpires.toISOString()}`);
+      
+      // Clear any existing reset token first, then set the new one
+      console.log(`Updating user ${user.id} with reset token`);
+      try {
+        await storage.updateUser(user.id, {
+          resetToken,
+          resetTokenExpires,
+          updatedAt: new Date()
+        });
+        console.log("Database update successful for reset token");
+        
+        // Verify the update by checking what was actually saved
+        const updatedUser = await storage.getUserByEmailCaseInsensitive(email);
+        console.log(`Verification - Token saved: ${updatedUser?.resetToken?.substring(0, 8)}...`);
+        console.log(`Verification - Expires saved: ${updatedUser?.resetTokenExpires}`);
+      } catch (dbError) {
+        console.error("Failed to update user in database:", dbError);
+        return res.status(500).json({ message: "Failed to save reset token" });
+      }
+
+      // Send password reset email
+      console.log(`Attempting to send password reset email to: ${user.email}`);
+      try {
+        const emailSent = await sendPasswordResetEmail(user, resetToken, resetTokenExpires);
+        console.log(`Password reset email sending result: ${emailSent ? 'SUCCESS' : 'FAILED'}`);
+        
+        // Check email configuration if sending failed
+        if (!emailSent) {
+          console.log("Email sending failed. Checking environment variables:");
+          console.log(`- GMAIL_APP_PASSWORD: ${process.env.GMAIL_APP_PASSWORD ? 'Set' : 'Not set'}`);
+          console.log(`- GOOGLE_USER_EMAIL: ${process.env.GOOGLE_USER_EMAIL ? 'Set' : 'Not set'}`);
+        }
+      } catch (emailError) {
+        console.error("Email sending threw an exception:", emailError);
+        // Don't return error to client for security - we still created the token
+      }
+      
+      return res.status(200).json({ 
+        message: "A password reset link has been sent to your email",
+        emailExists: true, 
+        email: user.email 
+      });
+    } catch (error) {
+      console.error("Password reset request error:", error);
+      // Enhanced error logging
+      if (error instanceof Error) {
+        console.error("Error details:", error.message);
+        console.error("Stack trace:", error.stack);
+      }
+      return res.status(500).json({ message: "An error occurred while processing your request" });
+    }
+  });
+  
+  // Validate Reset Token Route
+  app.post("/api/password-reset/validate", async (req, res) => {
+    try {
+      console.log("===== Password reset token validation =====");
+      const { email, token } = req.body;
+      
+      console.log(`Validating token for email: ${email}`);
+      console.log(`Token provided: ${token?.substring(0, 8)}...`);
+      
+      if (!email || !token) {
+        console.log("Missing email or token in request");
+        return res.status(400).json({ message: "Email and token are required" });
+      }
+      
+      // Find user by email (case-insensitive)
+      const user = await storage.getUserByEmailCaseInsensitive(email);
+      
+      if (!user) {
+        console.log(`No user found for email: ${email}`);
+        return res.status(400).json({ message: "Invalid or expired reset token" });
+      }
+      
+      console.log(`User found: ID ${user.id}`);
+      console.log(`Stored token: ${user.resetToken?.substring(0, 8)}...`);
+      console.log(`Stored expiration: ${user.resetTokenExpires}`);
+      
+      if (!user.resetToken || user.resetToken !== token) {
+        console.log("Token mismatch or missing stored token");
+        return res.status(400).json({ message: "Invalid or expired reset token" });
+      }
+      
+      // Check if token has expired with detailed logging
+      const now = new Date();
+      const expiresAt = new Date(user.resetTokenExpires!);
+      
+      console.log(`Current UTC time: ${now.toISOString()}`);
+      console.log(`Token expires at: ${expiresAt.toISOString()}`);
+      console.log(`Time difference (minutes): ${(expiresAt.getTime() - now.getTime()) / (1000 * 60)}`);
+      
+      if (!user.resetTokenExpires || now > expiresAt) {
+        console.log("Token has expired");
+        return res.status(400).json({ message: "Reset token has expired" });
+      }
+      
+      console.log("Token validation successful");
+      return res.status(200).json({ message: "Token is valid", valid: true });
+    } catch (error) {
+      console.error("Token validation error:", error);
+      return res.status(500).json({ message: "An error occurred while validating the token" });
+    }
+  });
+  
+  // Reset Password Route
+  app.post("/api/password-reset/reset", async (req, res) => {
+    try {
+      const { email, token, newPassword } = req.body;
+      
+      if (!email || !token || !newPassword) {
+        return res.status(400).json({ message: "Email, token, and new password are required" });
+      }
+      
+      // Find user by email (case-insensitive)
+      const user = await storage.getUserByEmailCaseInsensitive(email);
+      
+      if (!user || !user.resetToken || user.resetToken !== token) {
+        return res.status(400).json({ message: "Invalid or expired reset token" });
+      }
+      
+      // Check if token has expired
+      if (!user.resetTokenExpires || new Date() > new Date(user.resetTokenExpires)) {
+        return res.status(400).json({ message: "Reset token has expired" });
+      }
+      
+      // Hash the new password
+      const hashedPassword = await hashPassword(newPassword);
+      
+      // Update user with new password and clear reset token
+      await storage.updateUser(user.id, {
+        password: hashedPassword,
+        resetToken: null,
+        resetTokenExpires: null,
+        updatedAt: new Date()
+      });
+      
+      return res.status(200).json({ message: "Password has been reset successfully" });
+    } catch (error) {
+      console.error("Password reset error:", error);
+      return res.status(500).json({ message: "An error occurred while resetting your password" });
+    }
+  });
+
+  // Email Diagnostic Routes (Admin only)
+  app.get("/api/email-diagnostics/config", requireAdmin, async (req, res) => {
+    try {
+      const result = await checkEmailConfiguration();
+      res.json(result);
+    } catch (error) {
+      console.error("Email config check error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to check email configuration",
+        timestamp: new Date()
+      });
+    }
+  });
+
+  app.post("/api/email-diagnostics/test-delivery", requireAdmin, async (req, res) => {
+    try {
+      const { email } = req.body;
+      if (!email) {
+        return res.status(400).json({ message: "Email address is required" });
+      }
+      
+      const result = await testEmailDelivery(email);
+      res.json(result);
+    } catch (error) {
+      console.error("Email delivery test error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to test email delivery",
+        timestamp: new Date()
+      });
+    }
+  });
+
+  app.post("/api/email-diagnostics/test-password-reset", requireAdmin, async (req, res) => {
+    try {
+      const { email } = req.body;
+      if (!email) {
+        return res.status(400).json({ message: "Email address is required" });
+      }
+      
+      const result = await testPasswordResetEmail(email);
+      res.json(result);
+    } catch (error) {
+      console.error("Password reset test error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to test password reset email",
+        timestamp: new Date()
+      });
+    }
+  });
+
+  app.post("/api/email-diagnostics/full-report", requireAdmin, async (req, res) => {
+    try {
+      const { email } = req.body;
+      const result = await generateDiagnosticReport(email);
+      res.json(result);
+    } catch (error) {
+      console.error("Email diagnostic report error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to generate diagnostic report",
+        timestamp: new Date()
+      });
+    }
+  });
+
+  // Note: Static file middleware for uploads directory is now configured in server/index.ts
+  // to ensure it runs before authentication middleware
+  
+  // Production data sync and debugging endpoints (admin only)
+  app.use('/api/production-sync', productionSyncRouter);
+  
+  // Production authentication troubleshooting endpoints
+  app.use('/api/production-auth', productionAuthRouter);
+  
+  // Deployment diagnostic endpoints
+  app.use('/api/deployment-diagnostic', deploymentDiagnosticRouter);
+  
+  // Calendar media diagnostics for fixing event media issues
+  app.use('/api/calendar-media', calendarMediaDiagnosticsRouter);
+  
+  // Calendar event diagnostics for production/dev database issues
+  app.use('/api/calendar-diagnostics', calendarDiagnosticsRouter);
+  
+  // Storage browser for diagnostic purposes
+  app.use('/api', storageBrowserRouter);
+  
+  // Banner slide helpers for fixing banner display issues
+  app.use('/api', bannerSlideHelpersRouter);
+  
+  // We'll add the message diagnostics routes in a different way
+  
+  // Analytics routes for tracking user behavior
+  app.use('/api/analytics', analyticsRouter);
+  
+  // Add direct routes for our test event API HTML files
+  app.get('/test-event-api.html', (req, res) => {
+    const htmlPath = path.join(__dirname, '..', 'public', 'test-event-api.html');
+    if (fs.existsSync(htmlPath)) {
+      res.sendFile(htmlPath);
+    } else {
+      res.status(404).send('Test event API page not found');
+    }
+  });
+  
+  // Add direct route for event media test page
+  app.get('/event-media-test.html', (req, res) => {
+    const htmlPath = path.join(__dirname, '..', 'public', 'event-media-test.html');
+    if (fs.existsSync(htmlPath)) {
+      res.sendFile(htmlPath);
+    } else {
+      res.status(404).send('Event Media Test page not found');
+    }
+  });
+  
+  // Add direct route for forum media test page
+  app.get('/forum-media-test.html', (req, res) => {
+    const htmlPath = path.join(__dirname, '..', 'public', 'forum-media-test.html');
+    if (fs.existsSync(htmlPath)) {
+      res.sendFile(htmlPath);
+    } else {
+      res.status(404).send('Forum Media Test page not found');
+    }
+  });
+  
+  // Add direct route for tmp_debug files
+  app.get('/tmp_debug/:filename', (req, res) => {
+    const filepath = path.join(__dirname, '..', 'tmp_debug', req.params.filename);
+    console.log(`Request for tmp_debug file: ${filepath}`);
+    if (fs.existsSync(filepath)) {
+      res.sendFile(filepath);
+    } else {
+      res.status(404).send(`Debug file not found: ${req.params.filename}`);
+    }
+  });
+  
+  // Also serve the test page directly at the root URL
+  app.get('/', (req, res) => {
+    const htmlPath = path.join(__dirname, '..', 'public', 'test-event-api.html');
+    if (fs.existsSync(htmlPath)) {
+      res.sendFile(htmlPath);
+    } else {
+      res.status(404).send('Test event API page not found');
+    }
+  });
+  
+  // Admin debug routes for diagnostics and troubleshooting
+  app.use('/api/admin/debug', requireAdmin, debugRouter);
+  
+  // User subscriptions router for membership management
+  app.use('/api/subscriptions', userSubscriptionsRouter);
+  
+  // Square diagnostic endpoint for troubleshooting credentials
+  app.use('/api/square-app-info', squareAppInfoRouter);
+  
+  // Add sponsorship proxy to forward /api/sponsorship/* to /api/subscriptions/*
+  // This maintains backwards compatibility while using more appropriate terminology
+  app.use('/api/sponsorship', sponsorshipProxyRouter);
+  
+  // Special route to handle subscription confirmation redirect
+  // This is needed because Square redirects to /subscriptions/confirm instead of /api/subscriptions/confirm
+  app.get('/subscriptions/confirm', (req, res) => {
+    console.log('Subscription confirmation redirect received at /subscriptions/confirm:', req.query);
+    // Forward the request to the API endpoint with the same query parameters
+    res.redirect(`/api/subscriptions/confirm${req.url.substring(req.path.length)}`);
+  });
+  
+  // Add sponsorship confirmation redirect handler (for consistency with the new naming)
+  app.get('/sponsorship/confirm', (req, res) => {
+    console.log('Sponsorship confirmation redirect received at /sponsorship/confirm:', req.query);
+    // Forward to the subscriptions API endpoint
+    res.redirect(`/api/subscriptions/confirm${req.url.substring(req.path.length)}`);
+  });
+  
+  // Setup memberships utility for creating membership products (admin only)
+  app.use('/api/setup-memberships', setupMembershipsRouter);
+  
+  // Membership processing tools for admins
+  app.use('/api/membership-processing', membershipProcessingRouter);
+  
+  // Admin manual upgrade tools for manually upgrading users to paid status
+  app.use('/api/admin', adminManualUpgradeRouter);
+  
+  // User search endpoints (admin only)
+  const { default: usersSearchRouter } = await import('./routes/users-search');
+  app.use('/api/users', usersSearchRouter);
+  
+  // Chat system endpoints (new WebSocket-based implementation)
+  app.use('/api/chat', chatRouter);
+  
+  // Development-only endpoint to access the last generated password reset link
+  // This is useful when email delivery is unreliable in development
+  app.get("/api/dev/last-reset-link", (req, res) => {
+    // Only available in development mode
+    if (process.env.NODE_ENV !== 'production') {
+      if (global.lastPasswordResetLink) {
+        return res.json({
+          message: "Last password reset link information",
+          data: global.lastPasswordResetLink,
+          resetUrl: `${req.protocol}://${req.get('host')}/reset-password?token=${global.lastPasswordResetLink.token}&email=${encodeURIComponent(global.lastPasswordResetLink.email)}`
+        });
+      } else {
+        return res.status(404).json({ message: "No password reset link has been generated yet" });
+      }
+    } else {
+      return res.status(403).json({ message: "This endpoint is not available in production" });
+    }
+  });
+  
+  // Development-only endpoint to access the last sent email preview URLs
+  app.get("/api/dev/email-previews", (req, res) => {
+    // Only available in development mode
+    if (process.env.NODE_ENV !== 'production') {
+      if (global.lastEmailPreviewUrl && global.lastEmailPreviewUrl.length > 0) {
+        return res.json({
+          message: "Last email preview URLs",
+          emailPreviews: global.lastEmailPreviewUrl
+        });
+      } else {
+        return res.status(404).json({ message: "No email previews are available" });
+      }
+    } else {
+      return res.status(403).json({ message: "This endpoint is not available in production" });
+    }
+  });
+  
+  // Feature Flags API Routes
+  
+  // Get all feature flags (for authorized users)
+  app.get("/api/feature-flags", async (req, res) => {
+    try {
+      // Get all feature flags
+      const flags = await storage.getFeatureFlags();
+      
+      // If no user is authenticated, return all active flags
+      // This allows public pages to respect feature flags without requiring authentication
+      if (!req.isAuthenticated()) {
+        return res.json(flags);
+      }
+      
+      // If the user is an admin, return all flags (active and inactive)
+      // Otherwise, return only flags relevant to the user's role
+      const userRole = req.user?.role || '';
+      if (userRole === 'admin') {
+        return res.json(flags);
+      } else {
+        // Filter flags that apply to the user's role
+        const relevantFlags = flags.filter((flag: FeatureFlag) => 
+          flag.enabledForRoles.includes(userRole.toLowerCase() as "registered" | "paid" | "admin")
+        );
+        return res.json(relevantFlags);
+      }
+    } catch (error) {
+      console.error("Error fetching feature flags:", error);
+      return res.status(500).json({ message: "Failed to fetch feature flags" });
+    }
+  });
+  
+  // Create a new feature flag (admin only)
+  app.post("/api/feature-flags", requireAdmin, async (req, res) => {
+    try {
+      const validatedData = insertFeatureFlagSchema.parse(req.body);
+      const newFlag = await storage.createFeatureFlag(validatedData);
+      return res.status(201).json(newFlag);
+    } catch (error: any) {
+      console.error("Error creating feature flag:", error);
+      if (error.name === 'ZodError') {
+        return res.status(400).json({ message: "Invalid feature flag data", errors: error.errors });
+      }
+      return res.status(500).json({ message: "Failed to create feature flag" });
+    }
+  });
+  
+  // Update an existing feature flag (admin only)
+  app.patch("/api/feature-flags/:id", requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid feature flag ID" });
+      }
+      
+      const existingFlag = await storage.getFeatureFlag(id);
+      if (!existingFlag) {
+        return res.status(404).json({ message: "Feature flag not found" });
+      }
+      
+      const updatedFlag = await storage.updateFeatureFlag(id, req.body);
+      return res.json(updatedFlag);
+    } catch (error: any) {
+      console.error("Error updating feature flag:", error);
+      return res.status(500).json({ message: "Failed to update feature flag" });
+    }
+  });
+  
+  // Get feature flags for admin view (admin only)
+  app.get("/api/feature-flags/admin", requireAdmin, async (req, res) => {
+    try {
+      // Get all feature flags for admin dashboard
+      const flags = await storage.getFeatureFlags();
+      return res.json(flags);
+    } catch (error) {
+      console.error("Error fetching feature flags for admin:", error);
+      return res.status(500).json({ message: "Failed to fetch feature flags" });
+    }
+  });
+  
+  // Bulk update feature flags (admin only)
+  app.put("/api/feature-flags", requireAdmin, async (req, res) => {
+    try {
+      const { flags } = req.body;
+      
+      if (!Array.isArray(flags)) {
+        return res.status(400).json({ message: "Invalid data format. Expected an array of flags." });
+      }
+      
+      const updatedFlags = [];
+      
+      // Update each flag in the array
+      for (const flag of flags) {
+        if (!flag.id) continue;
+        
+        const updatedFlag = await storage.updateFeatureFlag(flag.id, {
+          enabledForRoles: flag.enabledForRoles,
+          isActive: flag.isActive
+        });
+        
+        updatedFlags.push(updatedFlag);
+      }
+      
+      return res.json({ 
+        success: true, 
+        message: `Successfully updated ${updatedFlags.length} feature flags`,
+        flags: updatedFlags
+      });
+    } catch (error) {
+      console.error("Error updating feature flags:", error);
+      return res.status(500).json({ message: "Failed to update feature flags" });
+    }
+  });
+
+  // Delete a feature flag (admin only)
+  app.delete("/api/feature-flags/:id", requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid feature flag ID" });
+      }
+      
+      const existingFlag = await storage.getFeatureFlag(id);
+      if (!existingFlag) {
+        return res.status(404).json({ message: "Feature flag not found" });
+      }
+      
+      await storage.deleteFeatureFlag(id);
+      return res.status(204).send();
+    } catch (error: any) {
+      console.error("Error deleting feature flag:", error);
+      return res.status(500).json({ message: "Failed to delete feature flag" });
+    }
+  });
+  
+  // Initialize default feature flags if needed (admin only)
+  app.post("/api/feature-flags/initialize", requireAdmin, async (req, res) => {
+    try {
+      const flags = await storage.initializeDefaultFeatureFlags();
+      return res.status(201).json(flags);
+    } catch (error: any) {
+      console.error("Error initializing default feature flags:", error);
+      return res.status(500).json({ message: "Failed to initialize default feature flags" });
+    }
+  });
+  
+  // Endpoint to create the weather_rocket_icons feature flag specifically
+  app.post("/api/feature-flags/create-weather-rocket", requireAdmin, async (req, res) => {
+    try {
+      console.log("Creating weather_rocket_icons feature flag");
+      
+      // Check if the flag already exists
+      const existingFlag = await storage.getFeatureFlagByName(FeatureFlagName.WEATHER_ROCKET_ICONS);
+      if (existingFlag) {
+        console.log("Weather & Rocket Icons feature flag already exists:", existingFlag);
+        return res.status(200).json(existingFlag);
+      }
+      
+      // Create the new feature flag with all roles enabled by default
+      const newFlag = {
+        name: FeatureFlagName.WEATHER_ROCKET_ICONS,
+        displayName: 'Weather & Rocket Icons',
+        enabledForRoles: [
+          UserRole.GUEST,
+          UserRole.REGISTERED,
+          UserRole.BADGE_HOLDER,
+          UserRole.PAID,
+          UserRole.MODERATOR,
+          UserRole.ADMIN
+        ],
+        description: 'Show weather temperature and rocket icon in the navigation bar',
+        isActive: true
+      };
+      
+      const result = await storage.createFeatureFlag(newFlag);
+      console.log("Weather & Rocket Icons feature flag created successfully:", result);
+      return res.status(201).json(result);
+    } catch (error: any) {
+      console.error("Error creating weather_rocket_icons feature flag:", error);
+      return res.status(500).json({ message: "Failed to create weather_rocket_icons feature flag" });
+    }
+  });
+  
+  // Update a specific role permission for a feature flag (admin only)
+  app.patch("/api/feature-flags/:id/role/:role", requireAdmin, async (req, res) => {
+    try {
+      const flagId = req.params.id;
+      const roleName = req.params.role;
+      const { enabled } = req.body;
+      
+      console.log(`Updating permission for flag: ${flagId}, role: ${roleName}, enabled: ${enabled}`);
+      
+      // List of permission controls - make sure to match the IDs in the client
+      const permissionControls = [
+        { name: "comments", displayName: "Comments", description: "Allow commenting throughout the site (forum, calendar, etc.)" },
+        { name: "reactions", displayName: "Like/Going/Interested", description: "Allow clicking reaction buttons throughout the site" },
+        { name: "calendar_post", displayName: "Post Event on Calendar", description: "Allow creating new calendar events" },
+        { name: "forum_post", displayName: "Create Forum Topic", description: "Allow creating new forum topics" },
+        { name: "for_sale_post", displayName: "Create For Sale Listing", description: "Allow posting items for sale" },
+        { name: "vendor_page", displayName: "Create Vendor/Community Page", description: "Allow creating vendor or community pages" },
+        { name: "admin_access", displayName: "Access Admin Dashboard", description: "Allow access to the admin dashboard" },
+        { name: "admin_forum", displayName: "Access Admin-only Forums", description: "Allow access to admin-only forum categories" },
+      ];
+      
+      // List of navigation items - match the IDs in the client
+      const navigationItems = [
+        { name: "nav-forum", displayName: "Forum", description: "Access to community forum" },
+        { name: "nav-store", displayName: "Store", description: "Access to community store" },
+        { name: "nav-calendar", displayName: "Calendar", description: "Access to community calendar features" },
+        { name: "nav-community", displayName: "Community", description: "Access to community information pages" },
+        { name: "nav-for-sale", displayName: "For Sale", description: "Access to marketplace listings" },
+        { name: "nav-vendors", displayName: "Vendors", description: "Access to preferred vendors" }
+      ];
+      
+      // Get the current flag data
+      let existingFlag = await storage.getFeatureFlagByName(flagId);
+      
+      // If flag doesn't exist, create it first
+      if (!existingFlag) {
+        // Check if it's a permission control
+        const permissionControl = permissionControls.find(control => control.name === flagId);
+        // Check if it's a navigation item
+        const navigationItem = navigationItems.find(item => item.name === flagId);
+        
+        // If it's either a permission control or navigation item, we can create it
+        if (permissionControl || navigationItem) {
+          const control = permissionControl || navigationItem;
+          console.log(`Creating new feature flag: ${flagId}`);
+          
+          // Setup default roles - all features enabled for admin
+          let defaultRoles = ['admin', 'moderator', 'paid', 'badge_holder', 'registered'];
+          
+          // For navigation items, make almost everything available by default (except guest for some)
+          if (navigationItem) {
+            // For navigation items, most are available to all users including guests
+            defaultRoles.push('guest');
+          }
+          // For permission controls, set more restrictive defaults
+          else if (permissionControl) {
+            // Reset to just admin, then add others as needed
+            defaultRoles = ['admin'];
+            
+            // Set reasonable defaults based on permission type
+            if (flagId === 'comments' || flagId === 'reactions') {
+              defaultRoles.push('badge_holder', 'paid', 'moderator');
+            } else if (flagId === 'for_sale_post') {
+              defaultRoles.push('registered', 'badge_holder', 'paid', 'moderator'); 
+            } else if (flagId === 'calendar_post' || flagId === 'forum_post') {
+              defaultRoles.push('paid', 'moderator');
+            } else if (flagId === 'admin_access' || flagId === 'admin_forum') {
+              // Only for admin and moderator
+              defaultRoles.push('moderator');
+            }
+          }
+          
+          // Create the feature flag
+          const newFlag = await storage.createFeatureFlag({
+            name: control.name,
+            displayName: control.displayName,
+            description: control.description,
+            enabledForRoles: defaultRoles,
+            isActive: true
+          });
+          
+          existingFlag = newFlag;
+          console.log(`Created new feature flag: ${existingFlag.name}`);
+        } else {
+          return res.status(404).json({ message: `Feature flag '${flagId}' not found` });
+        }
+      }
+      
+      // Get the current role permissions
+      const currentRoles = existingFlag.enabledForRoles || [];
+      
+      // Update the role permissions based on the enabled flag
+      let updatedRoles = [...currentRoles];
+      if (enabled === true) {
+        // Add the role if it's not already in the array
+        if (!updatedRoles.includes(roleName)) {
+          updatedRoles.push(roleName);
+        }
+      } else {
+        // Remove the role if it exists in the array
+        updatedRoles = updatedRoles.filter(role => role !== roleName);
+      }
+      
+      // Update the flag with the new role permissions
+      const updatedFlag = await storage.updateFeatureFlag(existingFlag.id, {
+        enabledForRoles: updatedRoles
+      });
+      
+      return res.json({
+        success: true,
+        message: `Successfully updated '${roleName}' permission for feature flag '${flagId}'`,
+        flag: updatedFlag
+      });
+    } catch (error: any) {
+      console.error(`Error updating role permission for feature flag:`, error);
+      return res.status(500).json({ message: "Failed to update feature flag role permission" });
+    }
+  });
+
+  // Password Update Route
+  app.post("/api/user/password", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    const { currentPassword, newPassword } = req.body;
+
+    try {
+      const user = await storage.getUser(req.user.id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Verify current password
+      const isValid = await comparePasswords(currentPassword, user.password);
+      if (!isValid) {
+        return res.status(400).json({ message: "Current password is incorrect" });
+      }
+
+      // Hash and update new password
+      const hashedPassword = await hashPassword(newPassword);
+      const updatedUser = await storage.updateUser(req.user.id, {
+        password: hashedPassword,
+        updatedAt: new Date()
+      });
+
+      if (!updatedUser) {
+        throw new Error("Failed to update password");
+      }
+
+      res.json({ success: true, message: "Password updated successfully" });
+    } catch (err) {
+      console.error("Error updating password:", err);
+      res.status(500).json({ message: "Failed to update password" });
+    }
+  });
+
+  // User Profile Update Route (updated to handle role changes)
+  app.patch("/api/user", async (req, res) => {
+    console.log("****** PROFILE UPDATE ROUTE CALLED ******");
+    
+    if (!req.isAuthenticated()) {
+      console.log("User not authenticated");
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    try {
+      console.log("Update profile request:", {
+        body: req.body,
+        userId: req.user.id,
+        currentUser: req.user,
+        session: req.session,
+        isAuthenticated: req.isAuthenticated()
+      });
+
+      // Ensure required fields
+      if (!req.body.fullName) {
+        console.log("Missing required field: fullName");
+        return res.status(400).json({
+          success: false,
+          message: "Full name is required"
+        });
+      }
+
+      // Check if role update is attempted and if user is admin
+      if (req.body.role && req.user.role !== 'admin') {
+        console.log("Non-admin attempting to update role");
+        return res.status(403).json({
+          success: false,
+          message: "Only administrators can update user roles"
+        });
+      }
+
+      // Check if username update is attempted and if user is admin
+      if (req.body.username && req.body.username !== req.user.username && req.user.role !== 'admin') {
+        console.log("Non-admin attempting to update username");
+        return res.status(403).json({
+          success: false,
+          message: "Only administrators can update usernames"
+        });
+      }
+
+      const updateData = {
+        fullName: req.body.fullName,
+        username: req.body.username || req.user.username,
+        email: req.body.email || req.user.email,
+        phoneNumber: req.body.phoneNumber !== undefined ? req.body.phoneNumber : req.user.phoneNumber,
+        isResident: req.body.isResident === true,
+        role: req.body.role || req.user.role,
+        updatedAt: new Date(),
+        residentTags: Array.isArray(req.body.residentTags) ? req.body.residentTags : req.user.residentTags || [],
+        clubMemberships: Array.isArray(req.body.clubMemberships) ? req.body.clubMemberships : req.user.clubMemberships || []
+      };
+
+      console.log("Attempting to update user with data:", updateData);
+      console.log("Current user ID:", req.user.id, "Type:", typeof req.user.id);
+      
+      try {
+        const updatedUser = await storage.updateUser(req.user.id, updateData);
+
+        if (!updatedUser) {
+          console.error("Update failed - no user returned");
+          return res.status(404).json({
+            success: false,
+            message: "User not found"
+          });
+        }
+        
+        console.log("User updated successfully:", updatedUser);
+
+        // Update session with new user data
+        req.user = updatedUser;
+
+        // Force session save
+        await new Promise<void>((resolve, reject) => {
+          req.session.save((err) => {
+            if (err) {
+              console.error("Session save error:", err);
+              reject(err);
+            } else {
+              console.log("Session saved successfully with updated user:", updatedUser);
+              resolve();
+            }
+          });
+        });
+        
+        // Send response after successful update
+        return res.json({
+          success: true,
+          message: "Profile updated successfully",
+          user: updatedUser
+        });
+        
+      } catch (updateError) {
+        console.error("Error in storage.updateUser:", updateError);
+        return res.status(500).json({
+          success: false,
+          message: "Database error when updating user"
+        });
+      }
+    } catch (err) {
+      console.error("Error updating user profile:", err);
+      res.status(500).json({
+        success: false,
+        message: "Failed to update user profile"
+      });
+    }
+  });
+
+  // Test endpoint to verify route registration
+  app.get("/api/user/delete-account-test", (req, res) => {
+    console.log("Delete account test endpoint reached");
+    res.json({ message: "Delete endpoint route is registered", authenticated: req.isAuthenticated() });
+  });
+
+
+  // User Avatar Upload - using generic processUploadedFile function with Object Storage backup
+  app.post("/api/upload/avatar", upload.single('avatar'), async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      // Set the media type explicitly for avatar uploads
+      req.mediaType = 'avatars';
+      
+      // Use our generic file processing function to handle uploads and copying to production paths
+      const result = processUploadedFile(req, req.file);
+      
+      if (!result.success) {
+        console.error("Avatar upload failed:", result.message);
+        return res.status(400).json({ 
+          success: false,
+          message: result.message 
+        });
+      }
+      
+      console.log(`Avatar uploaded and processed successfully: ${result.url}`);
+
+      // CREATE PRIMARY COPY IN OBJECT STORAGE (AVATARS bucket)
+      let objectStorageUrl: string | null = null;
+      let finalAvatarUrl: string = result.url; // Fallback to filesystem URL
+      
+      try {
+        console.log(`[Avatar Upload] Creating Object Storage copy for user ${req.user.id} in dedicated AVATARS bucket`);
+        
+        // Use the file buffer directly from Multer (in-memory storage)
+        if (req.file.buffer) {
+          console.log(`[Avatar Upload] Uploading to AVATARS bucket with filename: ${req.file.filename}`);
+          
+          // Upload directly to the AVATARS bucket using the filename as the storage key
+          objectStorageUrl = await objectStorageService.uploadData(
+            req.file.buffer,
+            'avatar', // media type for proper bucket routing
+            req.file.filename, // Store directly in bucket root with this filename
+            req.file.mimetype, // content type
+            'AVATARS' // Dedicated AVATARS bucket
+          );
+          
+          console.log(`[Avatar Upload] Successfully uploaded to Object Storage: ${objectStorageUrl}`);
+          
+          // CRITICAL: Use Object Storage proxy URL as the primary avatar URL
+          // This ensures avatars persist through deployments
+          finalAvatarUrl = `/api/storage-proxy/direct-avatars/${req.file.filename}`;
+          console.log(`[Avatar Upload] Using Object Storage proxy URL as primary: ${finalAvatarUrl}`);
+          
+        } else {
+          console.warn(`[Avatar Upload] No file buffer available, trying file path method`);
+          
+          // Fallback to file path method if buffer is not available
+          const uploadedFilePath = req.file.path;
+          console.log(`[Avatar Upload] Fallback: Source file path: ${uploadedFilePath}`);
+          
+          if (uploadedFilePath && require('fs').existsSync(uploadedFilePath)) {
+            // Upload to the dedicated AVATARS bucket
+            objectStorageUrl = await objectStorageService.uploadFile(
+              uploadedFilePath,
+              '', // No subdirectory needed in dedicated bucket
+              req.file.filename,
+              'AVATARS' // Dedicated AVATARS bucket
+            );
+            
+            console.log(`[Avatar Upload] Successfully uploaded to Object Storage via file path: ${objectStorageUrl}`);
+            
+            // CRITICAL: Use Object Storage proxy URL as the primary avatar URL
+            finalAvatarUrl = `/api/storage-proxy/direct-avatars/${req.file.filename}`;
+            console.log(`[Avatar Upload] Using Object Storage proxy URL as primary: ${finalAvatarUrl}`);
+          } else {
+            console.warn(`[Avatar Upload] Source file not found at ${uploadedFilePath}, Object Storage upload failed`);
+          }
+        }
+      } catch (uploadError) {
+        console.error(`[Avatar Upload] Failed to upload to Object Storage:`, uploadError);
+        console.log(`[Avatar Upload] Falling back to filesystem URL: ${result.url}`);
+        // Continue with the filesystem URL as fallback
+      }
+
+      // Update user's avatar URL in the database - USE OBJECT STORAGE URL AS PRIMARY
+      const updatedUser = await storage.updateUser(req.user.id, {
+        avatarUrl: finalAvatarUrl, // Use Object Storage proxy URL (persists through deployments)
+        updatedAt: new Date()
+      });
+
+      if (!updatedUser) {
+        throw new Error("Failed to update user");
+      }
+
+      // Update session with new user data
+      req.user = updatedUser;
+
+      // Force session save
+      await new Promise<void>((resolve, reject) => {
+        req.session.save((err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+
+      res.json({
+        success: true,
+        message: "Profile photo updated successfully",
+        url: finalAvatarUrl, // PRIMARY: Object Storage proxy URL (persists through deployments)
+        backupUrl: result.url, // Backup filesystem URL
+        objectStorageUrl, // Direct Object Storage URL from AVATARS bucket
+        user: updatedUser
+      });
+    } catch (err) {
+      console.error("Error uploading avatar:", err);
+      res.status(500).json({
+        success: false,
+        message: "Failed to upload avatar"
+      });
+    }
+  });
+
+
+  // Real estate media upload endpoint using Object Storage exclusively
+  app.post("/api/upload/real-estate-media", handleRealEstateUpload, async (req, res) => {
+    // Import the object storage utilities
+    const objectStorage = await import('./object-storage');
+    
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    try {
+      if (!req.files || (req.files as Express.Multer.File[]).length === 0) {
+        return res.status(400).json({ message: "No files uploaded" });
+      }
+
+      const files = req.files as Express.Multer.File[];
+      
+      // Always use real-estate-media type for this endpoint
+      req.mediaType = MEDIA_TYPES.REAL_ESTATE_MEDIA;
+      
+      console.log(`Processing ${files.length} real estate media files using Object Storage exclusively`);
+      
+      // Process the uploaded files and upload directly to Object Storage
+      const mediaUrls = await Promise.all(
+        files.map(async (file) => {
+          try {
+            // Generate a unique filename with timestamp
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+            const extension = path.extname(file.originalname);
+            const filename = uniqueSuffix + extension;
+            
+            // Upload directly to Object Storage from memory buffer
+            const buffer = file.buffer;
+            if (!buffer) {
+              throw new Error("File buffer is undefined");
+            }
+            
+            // Upload to Object Storage exclusively
+            const storageKey = await objectStorage.uploadRealEstateMediaFromBuffer(
+              buffer,
+              filename
+            );
+            
+            console.log(`Uploaded real estate media to Object Storage: ${storageKey}`);
+            
+            // We use Object Storage exclusively, no filesystem copies are created
+            return storageKey;
+          } catch (error) {
+            console.error("Error processing upload:", error);
+            throw error;
+          }
+        })
+      );
+      
+      console.log(`Successfully uploaded ${mediaUrls.length} real estate media files to Object Storage exclusively`);
+      res.json({ mediaUrls });
+    } catch (error) {
+      console.error("Error uploading real estate media:", error);
+      res.status(500).json({ 
+        message: "Error uploading files", 
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+
+  /**
+   * General media upload endpoint with section-aware routing
+   * This is the new primary endpoint for all uploads, supporting multi-bucket storage
+   * Uses Object Storage exclusively instead of filesystem
+   */
+  app.post('/api/upload', 
+    // Authentication middleware
+    (req: Request, res: Response, next: NextFunction) => {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ success: false, message: 'Authentication required' });
+      }
+      next();
+    },
+    // First use multer to capture the uploaded file
+    // Using disk storage for large files to prevent memory issues
+    multer({ 
+      storage: multer.diskStorage({
+        destination: function (req, file, cb) {
+          const tmpdir = path.join(os.tmpdir(), 'uploads');
+          fs.mkdirSync(tmpdir, { recursive: true });
+          cb(null, tmpdir);
+        },
+        filename: function (req, file, cb) {
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+          cb(null, 'upload-' + uniqueSuffix + path.extname(file.originalname));
+        }
+      }),
+      limits: {
+        fileSize: 350 * 1024 * 1024 // 350MB limit for videos
+      }
+    }).single('file'),
+    // Then determine media type/section (must come after multer)
+    (req: Request, res: Response, next: NextFunction) => {
+      // Get section from request body or query parameter
+      // Log the request details to debug the form data
+      console.log('[Upload] Request body:', req.body);
+      console.log('[Upload] Request query:', req.query);
+      
+      let section = 'content';
+      
+      // Look for section parameter from body first
+      if (req.body && req.body.section) {
+        section = req.body.section.toLowerCase();
+      } 
+      // Then try query parameter
+      else if (req.query && req.query.section) {
+        section = (req.query.section as string).toLowerCase();
+      }
+      // If we're in the forum module, set section to forum
+      else if (req.headers.referer && req.headers.referer.includes('/forum')) {
+        section = 'forum';
+      }
+      
+      console.log(`[Upload] Processing file for section: ${section}`);
+      
+      // Map section to standardized media type for bucket organization
+      let mediaType = 'general';
+      
+      if (section === 'forum') {
+        mediaType = 'forum';
+        console.log(`[Upload] Detected forum upload, using FORUM bucket`);
+      } else if (section === 'calendar' || section === 'events') {
+        mediaType = 'calendar';
+        console.log(`[Upload] Detected calendar/events upload, using CALENDAR bucket`);
+      } else if (section === 'vendors') {
+        mediaType = 'vendor';
+      } else if (section === 'community') {
+        mediaType = 'community';
+      } else if (section === 'real-estate') {
+        mediaType = 'real-estate';
+      } else if (section === 'avatar' || section === 'profile') {
+        mediaType = 'avatar';
+      } else if (section === 'banner' || section === 'banner-slides') {
+        mediaType = 'banner';
+      }
+      
+      // Store the media type for later use
+      (req as any).mediaType = mediaType;
+      next();
+    },
+    // Handle the Object Storage upload with our custom function
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        if (!req.file) {
+          return res.status(400).json({ success: false, message: 'No file uploaded' });
+        }
+        
+        // Get the media type from the request
+        const mediaType = (req as any).mediaType || 'general';
+        
+        // Process file details
+        const { path: filePath, originalname, mimetype } = req.file;
+        
+        console.log(`[Upload] CRITICAL DEBUG: Processing upload for forum with mediaType=${mediaType}`);
+        console.log(`[Upload] CRITICAL DEBUG: File details: originalname=${originalname}, mimetype=${mimetype}, path=${filePath}`);
+        
+        // For large files like videos, use uploadFile instead of uploadBuffer
+        // to avoid loading the entire file into memory
+        const uploadResult = await unifiedStorageService.uploadFile(
+          filePath,
+          mediaType,
+          {
+            contentType: mimetype,
+            generateUniqueName: true
+          }
+        );
+        
+        // Enhanced logging for debugging
+        console.log(`[Upload] CRITICAL DEBUG: Upload Result:
+          - Success: ${uploadResult.success}
+          - URL: ${uploadResult.url || 'N/A'}
+          - DirectURL: ${uploadResult.directUrl || 'N/A'}
+          - Key: ${uploadResult.key || 'N/A'}
+          - Bucket: ${uploadResult.bucket || 'N/A'}
+          - Error: ${uploadResult.error || 'None'}
+        `);
+        
+        // Store result in request for later middleware/handlers
+        req.objectStorageResult = uploadResult;
+        
+        if (!uploadResult.success) {
+          return res.status(uploadResult.statusCode || 500).json({
+            success: false,
+            message: `File upload failed: ${uploadResult.error}`
+          });
+        }
+        
+        // Verify the file was actually uploaded by checking if it exists
+        if (uploadResult.success && uploadResult.key && uploadResult.bucket) {
+          try {
+            console.log(`[Upload] Verifying upload by checking if file exists: ${uploadResult.bucket}/${uploadResult.key}`);
+            const fileExists = await objectStorageService.checkFileExists(uploadResult.key, uploadResult.bucket);
+            console.log(`[Upload] File exists check result: ${fileExists}`);
+            
+            if (!fileExists) {
+              console.error(`[Upload] WARNING: File reported as successfully uploaded but cannot be found in Object Storage`);
+            }
+          } catch (verifyError) {
+            console.error(`[Upload] Error verifying file exists:`, verifyError);
+            // Don't fail the request just because verification failed
+          }
+        }
+        
+        next();
+      } catch (error) {
+        console.error('[Upload] Error handling upload:', error);
+        return res.status(500).json({
+          success: false,
+          message: 'Internal server error during file upload'
+        });
+      }
+    },
+    // Final handler after successful upload
+    (req: Request, res: Response) => {
+      // If no upload result is available, something went wrong
+      if (!req.objectStorageResult) {
+        return res.status(500).json({ 
+          success: false, 
+          message: 'Upload failed - no storage result available' 
+        });
+      }
+      
+      // Return success response with the URL
+      return res.status(200).json({
+        success: true,
+        url: req.objectStorageResult.url,
+        message: 'File uploaded to Object Storage successfully',
+        section: (req as any).mediaType,
+        bucket: req.objectStorageResult.bucket
+      });
+    }
+  );
+
+  /**
+   * Legacy upload URL support - now uses Object Storage directly
+   */
+  app.post("/api/content/upload-media", 
+    // Authentication check
+    (req: Request, res: Response, next: NextFunction) => {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      next();
+    },
+    // Use multer for disk storage to handle large files
+    multer({ 
+      storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+          cb(null, './tmp')
+        },
+        filename: (req, file, cb) => {
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+          cb(null, 'legacy-upload-' + uniqueSuffix + path.extname(file.originalname));
+        }
+      }),
+      limits: {
+        fileSize: 350 * 1024 * 1024 // 350MB limit for videos
+      }
+    }).single('mediaFile'),
+    // Custom middleware to upload to Object Storage
+    async (req: Request, res: Response) => {
+      try {
+        if (!req.file) {
+          return res.status(400).json({ message: "No file uploaded" });
+        }
+        
+        // Legacy endpoint always uses content media
+        const mediaType = 'general';
+        console.log('[LegacyUpload] Content media upload requested - using Object Storage');
+        
+        // Get file details from multer
+        const { path: filePath, originalname, mimetype } = req.file;
+        
+        // For large files like videos, use uploadFile instead of uploadBuffer
+        // to avoid loading the entire file into memory
+        const uploadResult = await unifiedStorageService.uploadFile(
+          filePath,
+          mediaType,
+          {
+            contentType: mimetype,
+            generateUniqueName: true
+          }
+        );
+        
+        if (!uploadResult.success) {
+          console.error(`[LegacyUpload] Upload failed: ${uploadResult.error}`);
+          return res.status(uploadResult.statusCode || 500).json({
+            success: false,
+            message: `File upload failed: ${uploadResult.error}`
+          });
+        }
+        
+        // Return the URL in the expected format
+        return res.json({
+          success: true,
+          message: "File uploaded to Object Storage successfully",
+          url: uploadResult.url
+        });
+      } catch (error) {
+        console.error("[LegacyUpload] Error in content upload:", error);
+        return res.status(500).json({ 
+          success: false,
+          message: "Error uploading file", 
+          details: error instanceof Error ? error.message : String(error)
+        });
+      }
+    }
+  );
+
+  // Add media upload endpoint to handle multiple files - using generic processUploadedFile function
+  app.post("/api/upload/media", upload.array('media'), mediaSyncMiddleware, async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    try {
+      if (!req.files || (req.files as Express.Multer.File[]).length === 0) {
+        return res.status(400).json({ message: "No files uploaded" });
+      }
+
+      const files = req.files as Express.Multer.File[];
+      
+      // Determine the appropriate media type based on the request
+      // This will be used for all files in this batch upload
+      let mediaType = '';
+      
+      // Check if this is for an event (based on request referer or query param)
+      const isEventUpload = req.query.type === 'event' || 
+                           (req.headers.referer && req.headers.referer.includes('/events/'));
+      
+      // Check for specific upload types based on query params or headers
+      const uploadType = req.query.type as string || '';
+      const referer = req.headers.referer as string || '';
+      
+      // If this is an event upload, handle it with our special calendar handler
+      if (isEventUpload || uploadType === 'event' || referer.includes('/events/')) {
+        console.log('[MediaUpload] Event media detected, using specialized handler');
+        req.mediaType = 'calendar';
+        
+        // Since we can't easily intercept this route during array upload,
+        // we'll process each file manually through our calendar handler
+        const files = req.files as Express.Multer.File[];
+        
+        // Process all files using our specialized calendar handler
+        const successfulUploads = [];
+        const failedUploads = [];
+        
+        for (const file of files) {
+          try {
+            // Create a mock request with this single file for our handler
+            const singleFileReq = {...req, file: file} as any;
+            
+            // Call our calendar handler directly
+            await handleCalendarMediaUpload(singleFileReq, res, () => {});
+            
+            // If we have an object storage URL, consider it successful
+            if (singleFileReq.objectStorageUrl) {
+              console.log(`[MediaUpload] Successfully processed event file with Object Storage: ${singleFileReq.objectStorageUrl}`);
+              successfulUploads.push({
+                success: true,
+                url: singleFileReq.objectStorageUrl,
+                originalname: file.originalname,
+                mimetype: file.mimetype,
+                size: file.size
+              });
+            } else {
+              console.error(`[MediaUpload] Error processing event file ${file.originalname}: No Object Storage URL returned`);
+              failedUploads.push({
+                success: false,
+                message: "No Object Storage URL returned",
+                originalname: file.originalname
+              });
+            }
+          } catch (error) {
+            console.error(`[MediaUpload] Exception processing event file ${file.originalname}:`, error);
+            failedUploads.push({
+              success: false,
+              message: error instanceof Error ? error.message : String(error),
+              originalname: file.originalname
+            });
+          }
+        }
+        
+        // Extract the URLs from successful uploads
+        const urls = successfulUploads.map(r => r.url);
+        
+        console.log(`[MediaUpload] Event media upload complete. Successfully processed ${successfulUploads.length} of ${files.length} files`);
+        console.log(`[MediaUpload] URLs returned to client: ${urls.join(', ')}`);
+        
+        return res.json({
+          success: true,
+          urls: urls,
+          details: [...successfulUploads, ...failedUploads],
+          message: `Files uploaded successfully (${successfulUploads.length} of ${files.length})`
+        });
+      } else if (uploadType === 'banner' || referer.includes('/banner-slides')) {
+        console.log('Banner slide detected');
+        mediaType = 'banner-slides';
+      } else if (uploadType === 'forum' || referer.includes('/forum')) {
+        console.log('Forum media detected');
+        mediaType = 'forum-media';
+      } else if (uploadType === 'vendor' || referer.includes('/vendors')) {
+        console.log('Vendor media detected');
+        mediaType = 'vendor-media';
+      } else if (uploadType === 'community' || referer.includes('/community')) {
+        console.log('Community media detected');
+        mediaType = 'community-media';
+      } else if (uploadType === 'real-estate' || referer.includes('/real-estate') || referer.includes('/for-sale')) {
+        console.log('Real estate media detected');
+        mediaType = 'real-estate-media';
+      } else {
+        // Default to content-media if no specific type is detected
+        console.log('No specific media type detected, using content-media');
+        mediaType = 'content-media';
+      }
+      
+      // Set the media type on the request for our processing function
+      req.mediaType = mediaType;
+      
+      // Process each file using our utility function
+      const results = [];
+      
+      for (const file of files) {
+        try {
+          const result = await processUploadedFile(req, file);
+          
+          if (result.success) {
+            console.log(`File processed successfully: ${result.url}`);
+            results.push({
+              success: true,
+              url: result.url,
+              developmentUrl: result.developmentUrl,
+              filename: file.filename,
+              originalname: file.originalname,
+              mimetype: file.mimetype,
+              size: file.size
+            });
+          } else {
+            console.error(`Error processing file ${file.originalname}: ${result.message}`);
+            results.push({
+              success: false,
+              message: result.message,
+              filename: file.filename,
+              originalname: file.originalname
+            });
+          }
+        } catch (error) {
+          console.error(`Exception processing file ${file.originalname}:`, error);
+          results.push({
+            success: false,
+            message: error instanceof Error ? error.message : String(error),
+            filename: file.filename,
+            originalname: file.originalname
+          });
+        }
+      }
+      
+      // Check if any files were successfully processed
+      const successfulUploads = results.filter(r => r.success);
+      if (successfulUploads.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: "No files were successfully processed",
+          details: results
+        });
+      }
+      
+      // Extract the URLs from successful uploads
+      const urls = successfulUploads.map(r => r.url);
+      
+      console.log(`Media upload complete. Successfully processed ${successfulUploads.length} of ${files.length} files`);
+      console.log(`URLs returned to client: ${urls.join(', ')}`);
+
+      res.json({
+        success: true,
+        urls: urls,
+        details: results,
+        message: `Files uploaded successfully (${successfulUploads.length} of ${files.length})`
+      });
+    } catch (err) {
+      console.error("Error uploading media:", err);
+      res.status(500).json({
+        success: false,
+        message: "Failed to upload media"
+      });
+    }
+  });
+
+  // Get all users (admin only)
+  // Get users for messaging (available to all authenticated users)
+  app.get("/api/messages/users", async (req, res) => {
+    console.log(`GET /api/messages/users - Auth debug:`, {
+      isAuthenticated: req.isAuthenticated(),
+      userExists: !!req.user,
+      userRole: req.user?.role,
+      sessionID: req.sessionID
+    });
+    
+    if (!req.isAuthenticated()) {
+      console.log("GET /api/messages/users - Authentication check failed");
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    
+    try {
+      // Get all users but only return the necessary fields for messaging
+      const allUsers = await storage.getUsers();
+      // Add debug output for the first user to understand the structure
+      if (allUsers.length > 0) {
+        const userSample = allUsers[0];
+        console.log("DEBUG User object structure sample:", {
+          id: userSample.id,
+          username: userSample.username,
+          // Log both possible field naming conventions
+          fullName: userSample.fullName, 
+          full_name: (userSample as any).full_name,
+          // Log role which is critical for UI
+          role: userSample.role,
+          // Log both possible avatar field naming conventions
+          avatarUrl: userSample.avatarUrl,
+          avatar_url: (userSample as any).avatar_url
+        });
+      }
+      
+      // Transform users safely, checking all possible property name formats
+      const messagingUsers = allUsers.map(user => ({
+        id: user.id,
+        username: user.username,
+        // Use the camelCase version which is returned by Drizzle ORM
+        fullName: user.fullName || (user as any).full_name || user.username,
+        role: user.role,
+        avatarUrl: user.avatarUrl || (user as any).avatar_url
+      }));
+      
+      console.log(`GET /api/messages/users - Successfully fetched ${messagingUsers.length} users for messaging`);
+      res.json({ 
+        success: true,
+        data: messagingUsers
+      });
+    } catch (err) {
+      console.error("Error fetching users for messaging:", err);
+      res.status(500).json({ 
+        success: false,
+        message: "Failed to fetch users", 
+        details: err instanceof Error ? err.message : String(err)
+      });
+    }
+  });
+
+  // Note: GET /api/users is now handled by users-search router
+  
+  // Export all users as CSV (admin only)
+  app.get("/api/users/export", async (req, res) => {
+    console.log("GET /api/users/export - Exporting users as CSV");
+    
+    if (!req.isAuthenticated()) {
+      console.log("GET /api/users/export - Authentication check failed");
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    if (req.user.role !== 'admin') {
+      console.log(`GET /api/users/export - Admin check failed: User role is ${req.user.role}`);
+      return res.status(403).json({ message: "Admin access required" });
+    }
+
+    try {
+      // Import stringify from csv-stringify
+      const { stringify } = await import('csv-stringify/sync');
+      
+      // Get all users
+      const users = await storage.getUsers();
+      console.log(`GET /api/users/export - Exporting ${users.length} users`);
+      
+      // Define the columns to include in the export
+      const columns = [
+        { key: 'id', header: 'ID' },
+        { key: 'username', header: 'Username' },
+        { key: 'email', header: 'Email' },
+        { key: 'fullName', header: 'Full Name' },
+        { key: 'role', header: 'Role' },
+        { key: 'isApproved', header: 'Approved' },
+        { key: 'isResident', header: 'Resident' },
+        { key: 'isBlocked', header: 'Blocked' },
+        { key: 'blockReason', header: 'Block Reason' },
+        { key: 'isLocalResident', header: 'Local Resident' },
+        { key: 'ownsHomeInBB', header: 'Owns Home' },
+        { key: 'isFullTimeResident', header: 'Full Time Resident' },
+        { key: 'isSnowbird', header: 'Snowbird' },
+        { key: 'hasMembershipBadge', header: 'Has Badge' },
+        { key: 'membershipBadgeNumber', header: 'Badge Number' },
+        { key: 'hasLivedInBB', header: 'Has Lived In BB' },
+        { key: 'consideringMovingToBB', header: 'Considering Moving' },
+        { key: 'createdAt', header: 'Created At' },
+        { key: 'updatedAt', header: 'Updated At' }
+      ];
+      
+      // Format dates and boolean values for better readability
+      const formattedUsers = users.map(user => {
+        // Create a new object to avoid modifying the original user
+        const formattedUser = { ...user };
+        
+        // Format dates to be more readable in CSV
+        if (formattedUser.createdAt) {
+          formattedUser.createdAt = new Date(formattedUser.createdAt).toISOString().split('T')[0];
+        }
+        if (formattedUser.updatedAt) {
+          formattedUser.updatedAt = new Date(formattedUser.updatedAt).toISOString().split('T')[0];
+        }
+        
+        // Format boolean values as 'Yes' or 'No'
+        ['isApproved', 'isResident', 'isBlocked', 'isLocalResident', 'ownsHomeInBB', 
+         'isFullTimeResident', 'isSnowbird', 'hasMembershipBadge', 'hasLivedInBB', 
+         'consideringMovingToBB'].forEach(key => {
+          if (key in formattedUser) {
+            formattedUser[key] = formattedUser[key] ? 'Yes' : 'No';
+          }
+        });
+        
+        // Format array values as comma-separated strings
+        if (formattedUser.residentTags && Array.isArray(formattedUser.residentTags)) {
+          formattedUser.residentTags = formattedUser.residentTags.join(', ');
+        }
+        
+        return formattedUser;
+      });
+      
+      // Generate CSV
+      const csvContent = stringify(formattedUsers, { 
+        header: true,
+        columns: columns
+      });
+      
+      // Set appropriate headers for file download
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename="users.csv"');
+      
+      // Send the CSV content
+      res.send(csvContent);
+      console.log("GET /api/users/export - CSV export completed successfully");
+    } catch (err) {
+      console.error("Error exporting users:", err);
+      res.status(500).json({ 
+        message: "Failed to export users", 
+        details: err instanceof Error ? err.message : "Unknown error" 
+      });
+    }
+  });
+
+  // Update user role (admin only)
+  app.patch("/api/users/:id/role", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+
+    const userId = parseInt(req.params.id);
+    const { role } = req.body;
+
+    try {
+      // Update the user's role
+      const updatedUser = await storage.updateUser(userId, {
+        role,
+        updatedAt: new Date()
+      });
+
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      console.log(`Role updated for user ${userId} to ${role}`);
+      // The permissions will be automatically applied based on the feature flags system
+      // When a user has their role updated to "moderator", they'll get exactly the permissions
+      // defined for moderators in the Feature Management grid
+
+      res.json({ success: true, user: updatedUser }); // Corrected to updatedUser
+    } catch (err) {
+      console.error("Error updating user role:", err);
+      res.status(500).json({ message: "Failed to update user role" });
+    }
+  });
+  
+  // Update user approval status (admin only)
+
+
+
+
+
+
+
+  // Delete user endpoint (admin and self-deletion)
+  app.delete("/api/users/:id", async (req, res) => {
+    console.log("🚨 USER DELETE ENDPOINT CALLED 🚨", {
+      authenticated: req.isAuthenticated(),
+      user: req.user ? { id: req.user.id, role: req.user.role, username: req.user.username } : null,
+      params: req.params,
+      targetUserId: req.params.id,
+      headers: {
+        origin: req.headers.origin,
+        host: req.headers.host,
+        referer: req.headers.referer,
+        cookie: req.headers.cookie ? "Present" : "None"
+      }
+    });
+
+    // Auth checks
+    if (!req.isAuthenticated()) {
+      console.warn("User delete request failed: not authenticated");
+      return res.status(401).json({ 
+        message: "Not authenticated", 
+        details: "You need to be logged in to delete users",
+        code: "AUTH_REQUIRED"
+      });
+    }
+
+    const userId = parseInt(req.params.id);
+    
+    if (isNaN(userId)) {
+      return res.status(400).json({
+        message: "Invalid user ID",
+        details: "User ID must be a valid number",
+        code: "INVALID_USER_ID"
+      });
+    }
+
+    // Allow users to delete their own accounts OR admin to delete any account
+    const isAdmin = req.user.role === 'admin';
+    const isSelfDeletion = userId === req.user.id;
+    
+    if (!isAdmin && !isSelfDeletion) {
+      console.warn(`User delete request rejected: non-admin user (${req.user.role}) attempted to delete user ${userId}`);
+      return res.status(403).json({ 
+        message: "Access denied", 
+        details: "You can only delete your own account unless you are an administrator",
+        code: "ACCESS_DENIED"
+      });
+    }
+
+    // Log the type of deletion being performed
+    if (isSelfDeletion) {
+      console.log(`Self-deletion request for user ${userId} (${req.user.username})`);
+    } else {
+      console.log(`Admin deletion request for user ${userId} by admin ${req.user.id} (${req.user.username})`);
+    }
+    
+    // Special handling for self-deletion vs admin deletion
+    if (isSelfDeletion && isAdmin) {
+      console.warn(`Admin self-delete attempt prevented for user ${userId}`);
+      return res.status(400).json({
+        message: "Cannot delete your own account",
+        details: "Admins cannot delete their own accounts",
+        code: "SELF_DELETE_PREVENTED"
+      });
+    }
+
+    try {
+      // Get the current user to verify they exist
+      const currentUser = await storage.getUser(userId);
+      
+      if (!currentUser) {
+        console.warn(`User deletion failed: User ID ${userId} not found`);
+        return res.status(404).json({ 
+          message: "User not found",
+          details: "The specified user ID does not exist",
+          code: "USER_NOT_FOUND"
+        });
+      }
+      
+      console.log(`Processing deletion for user ${currentUser.username} (${userId})`);
+      
+      // Execute deletion using simplified approach
+      const deletionResult = await deleteUserData(userId);
+      
+      console.log(`User deletion completed for ${currentUser.username} (${userId}):`, {
+        success: deletionResult.success,
+        totalDeleted: deletionResult.totalDeleted
+      });
+
+      res.json({ 
+        success: true,
+        user: {
+          id: userId,
+          username: currentUser.username,
+          fullName: currentUser.fullName || currentUser.username
+        },
+        message: 'User and all associated content deleted successfully',
+        deletionSummary: {
+          totalDeleted: deletionResult.totalDeleted,
+          success: deletionResult.success
+        }
+      });
+      
+    } catch (error: any) {
+      console.error(`Error deleting user ${userId}:`, error);
+      
+      // Check for foreign key constraint violations
+      if (error.code === '23503' || 
+          (error.message && error.message.includes('foreign key constraint')) || 
+          (error.detail && error.detail.includes('is still referenced'))) {
+          
+        // Extract table information from error
+        let tableName = 'unknown table';
+        let constraintDetail = '';
+        
+        if (error.detail) {
+          const tableMatch = error.detail.match(/table "([^"]+)"/);
+          if (tableMatch && tableMatch[1]) {
+            tableName = tableMatch[1];
+          }
+          constraintDetail = error.detail;
+        } else if (error.table) {
+          tableName = error.table;
+        }
+        
+        return res.status(409).json({ 
+          message: "Cannot delete user due to remaining references",
+          details: `This user still has content in ${tableName} that could not be automatically deleted. This may indicate a missing table in our deletion process.`,
+          code: "FOREIGN_KEY_VIOLATION",
+          constraint: error.constraint || constraintDetail,
+          table: tableName,
+          suggestion: "Please contact system administrator to resolve this constraint manually."
+        });
+      }
+      
+      // Handle database connection errors
+      if (error.message && (error.message.includes('connection') || error.message.includes('timeout'))) {
+        return res.status(503).json({
+          message: "Database connection error",
+          details: "Could not connect to the database to complete this operation. Please try again later.",
+          code: "DB_CONNECTION_ERROR"
+        });
+      }
+      
+      // Generic server error
+      res.status(500).json({ 
+        message: "Failed to delete user",
+        details: error instanceof Error ? error.message : "Unknown error occurred",
+        code: "SERVER_ERROR"
+      });
+    }
+  });
+
+
+  // User approval endpoint has been removed as the isApproved function is no longer needed
+  
+  // Cross-domain user approval endpoint has been removed as the isApproved function is no longer needed
+
+  // Emergency endpoint to update michael to admin role
+  app.post("/api/admin/update-michael-to-admin", requireAdmin, async (req, res) => {
+    try {
+      console.log("Updating michael to admin role");
+      const updatedUser = await storage.updateUserToAdmin("michael");
+      
+      if (!updatedUser) {
+        return res.status(404).json({ 
+          success: false,
+          message: "User michael not found" 
+        });
+      }
+      
+      return res.json({
+        success: true,
+        message: "Successfully updated michael to admin role",
+        user: {
+          id: updatedUser.id,
+          username: updatedUser.username,
+          role: updatedUser.role
+        }
+      });
+    } catch (error) {
+      console.error("Error updating michael to admin:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to update user role",
+        error: error.message
+      });
+    }
+  });
+
+  // Emergency endpoint to update Rob Allan to admin role
+  app.post("/api/admin/update-rob-allan-to-admin", requireAdmin, async (req, res) => {
+    try {
+      console.log("Updating Rob Allan to admin role");
+      const updatedUser = await storage.updateRobAllanToAdmin();
+      
+      if (!updatedUser) {
+        return res.status(404).json({ 
+          success: false,
+          message: "User Rob Allan not found" 
+        });
+      }
+      
+      return res.json({
+        success: true,
+        message: "Successfully updated Rob Allan to admin role",
+        user: {
+          id: updatedUser.id,
+          username: updatedUser.username,
+          fullName: updatedUser.fullName,
+          role: updatedUser.role
+        }
+      });
+    } catch (error) {
+      console.error("Error updating Rob Allan to admin:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to update user role",
+        error: error.message
+      });
+    }
+  });
+
+  // Update user block status (admin only)
+  app.patch("/api/users/:id/block", async (req, res) => {
+    console.log("User block endpoint called", {
+      authenticated: req.isAuthenticated(),
+      user: req.user ? { id: req.user.id, role: req.user.role } : null,
+      params: req.params,
+      body: req.body,
+      headers: {
+        origin: req.headers.origin,
+        host: req.headers.host,
+        referer: req.headers.referer,
+        cookie: req.headers.cookie ? "Present" : "None"
+      }
+    });
+
+    // Auth checks
+    if (!req.isAuthenticated()) {
+      console.warn("User block request failed: not authenticated");
+      return res.status(401).json({ 
+        message: "Not authenticated", 
+        details: "You need to be logged in to block users",
+        code: "AUTH_REQUIRED"
+      });
+    }
+
+    if (req.user.role !== 'admin') {
+      console.warn(`User block request rejected: non-admin user (${req.user.role}) attempted to block`);
+      return res.status(403).json({ 
+        message: "Admin access required", 
+        details: "Only administrators can block user accounts",
+        code: "ADMIN_REQUIRED"
+      });
+    }
+
+    const userId = parseInt(req.params.id);
+    const { isBlocked, blockReason } = req.body;
+    
+    if (typeof isBlocked !== 'boolean') {
+      console.warn("User block request rejected: invalid isBlocked value", isBlocked);
+      return res.status(400).json({ 
+        message: "isBlocked must be a boolean value",
+        details: "Please provide a valid block status (true or false)",
+        code: "INVALID_PARAMETER"
+      });
+    }
+
+    try {
+      // Get the current user
+      const currentUser = await storage.getUser(userId);
+      
+      if (!currentUser) {
+        console.warn(`User block failed: User ID ${userId} not found`);
+        return res.status(404).json({ 
+          message: "User not found",
+          details: "The specified user ID does not exist",
+          code: "USER_NOT_FOUND"
+        });
+      }
+      
+      // Don't allow blocking admins
+      if (currentUser.role === 'admin' && isBlocked) {
+        console.warn(`Attempted to block an admin user: ${currentUser.username} (${userId})`);
+        return res.status(403).json({ 
+          message: "Cannot block admin users",
+          details: "Administrator accounts cannot be blocked",
+          code: "ADMIN_BLOCK_DENIED"
+        });
+      }
+      
+      console.log(`Processing block for user ${currentUser.username} (${userId}): setting isBlocked=${isBlocked}`);
+      
+      // Update the block status
+      const updateData: any = {
+        isBlocked,
+        updatedAt: new Date()
+      };
+      
+      // Only set blockReason when blocking a user
+      if (isBlocked && blockReason) {
+        updateData.blockReason = blockReason;
+      } else if (!isBlocked) {
+        // Clear the block reason when unblocking
+        updateData.blockReason = null;
+      }
+
+      const updatedUser = await storage.updateUser(userId, updateData);
+
+      if (!updatedUser) {
+        console.error(`User block failed: User ID ${userId} not found after update attempt`);
+        return res.status(404).json({ 
+          message: "User not found",
+          details: "The user could not be updated",
+          code: "UPDATE_FAILED"
+        });
+      }
+
+      console.log(`User block status changed: User ${updatedUser.username} (${userId}) is now ${isBlocked ? 'blocked' : 'unblocked'}`);
+
+      res.json({ 
+        success: true, 
+        user: updatedUser,
+        message: isBlocked ? 'User blocked successfully' : 'User unblocked successfully'
+      });
+    } catch (err) {
+      console.error("Error updating user block status:", err);
+      res.status(500).json({ 
+        message: "Failed to update user block status",
+        details: err.message,
+        code: "SERVER_ERROR"
+      });
+    }
+  });
+
+  // Cross-domain compatible user block endpoint (admin only)
+  app.patch("/api/auth/users/:id/block", async (req, res) => {
+    console.log("Cross-domain user block endpoint called", {
+      authenticated: req.isAuthenticated(),
+      user: req.user ? { id: req.user.id, role: req.user.role } : null,
+      params: req.params,
+      body: req.body,
+      headers: {
+        origin: req.headers.origin,
+        host: req.headers.host,
+        referer: req.headers.referer,
+        cookie: req.headers.cookie ? "Present" : "None"
+      }
+    });
+
+    // Set CORS headers for cross-domain requests
+    if (req.headers.origin) {
+      console.log(`Cross-domain user block: Setting CORS headers for origin: ${req.headers.origin}`);
+      // Allow credentials for cross-origin requests
+      res.header('Access-Control-Allow-Credentials', 'true');
+      
+      // Set origin based on the request's origin header
+      res.header('Access-Control-Allow-Origin', req.headers.origin);
+    }
+
+    // Auth checks
+    if (!req.isAuthenticated()) {
+      console.warn("Cross-domain user block request failed: not authenticated");
+      return res.status(401).json({ 
+        success: false,
+        message: "Not authenticated",
+        details: "You need to be logged in to block users",
+        code: "AUTH_REQUIRED"
+      });
+    }
+
+    if (req.user.role !== 'admin') {
+      console.warn(`Cross-domain user block rejected: non-admin user (${req.user.role}) attempted operation`);
+      return res.status(403).json({ 
+        success: false,
+        message: "Admin access required",
+        details: "Only administrators can block user accounts",
+        code: "ADMIN_REQUIRED"
+      });
+    }
+
+    const userId = parseInt(req.params.id);
+    const { isBlocked, blockReason } = req.body;
+    
+    if (typeof isBlocked !== 'boolean') {
+      console.warn("Cross-domain user block request rejected: invalid isBlocked value", isBlocked);
+      return res.status(400).json({ 
+        success: false,
+        message: "isBlocked must be a boolean value",
+        details: "Please provide a valid block status (true or false)",
+        code: "INVALID_PARAMETER"
+      });
+    }
+
+    try {
+      // Use a force refresh to ensure we're getting the latest user data
+      const allUsers = await storage.getUsers(true);
+      const currentUser = allUsers.find(u => u.id === userId);
+      
+      if (!currentUser) {
+        console.warn(`Cross-domain user block failed: User ID ${userId} not found`);
+        return res.status(404).json({ 
+          success: false,
+          message: "User not found",
+          details: "The specified user ID does not exist",
+          code: "USER_NOT_FOUND"
+        });
+      }
+      
+      // Don't allow blocking admins
+      if (currentUser.role === 'admin' && isBlocked) {
+        console.warn(`Cross-domain attempted to block an admin user: ${currentUser.username} (${userId})`);
+        return res.status(403).json({ 
+          success: false,
+          message: "Cannot block admin users",
+          details: "Administrator accounts cannot be blocked",
+          code: "ADMIN_BLOCK_DENIED"
+        });
+      }
+      
+      console.log(`Cross-domain processing block for user ${currentUser.username} (${userId}): setting isBlocked=${isBlocked}`);
+      
+      // Update the block status
+      const updateData: any = {
+        isBlocked,
+        updatedAt: new Date()
+      };
+      
+      // Only set blockReason when blocking a user
+      if (isBlocked && blockReason) {
+        updateData.blockReason = blockReason;
+      } else if (!isBlocked) {
+        // Clear the block reason when unblocking
+        updateData.blockReason = null;
+      }
+
+      const updatedUser = await storage.updateUser(userId, updateData);
+
+      if (!updatedUser) {
+        console.error(`Cross-domain user block failed: User ID ${userId} not found after update attempt`);
+        return res.status(404).json({ 
+          success: false,
+          message: "User not found",
+          details: "The user could not be updated",
+          code: "UPDATE_FAILED"
+        });
+      }
+
+      console.log(`Cross-domain user block successful: User ${updatedUser.username} (${userId}) is now ${isBlocked ? 'blocked' : 'unblocked'}`);
+
+      // If this was a cross-domain request, ensure CORS headers are set
+      if (req.headers.origin) {
+        console.log(`Cross-domain user block: Setting CORS headers for response to origin: ${req.headers.origin}`);
+        // Allow credentials for cross-origin requests
+        res.header('Access-Control-Allow-Credentials', 'true');
+        
+        // Set origin based on the request's origin header
+        if (req.headers.origin) {
+          res.header('Access-Control-Allow-Origin', req.headers.origin);
+        }
+      }
+
+      res.json({ 
+        success: true, 
+        user: updatedUser,
+        message: isBlocked ? 'User blocked successfully' : 'User unblocked successfully'
+      });
+    } catch (err) {
+      console.error("Error in cross-domain user block:", err);
+      res.status(500).json({ 
+        success: false,
+        message: "Failed to update user block status",
+        details: err.message,
+        code: "SERVER_ERROR"
+      });
+    }
+  });
+
+  // Object Storage Debug Endpoint
+  app.get("/api/debug/object-storage", async (req, res) => {
+    try {
+      const { key } = req.query;
+      
+      if (!key) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Object key parameter is required" 
+        });
+      }
+      
+      console.log(`[DEBUG] Checking if object exists in storage: ${key}`);
+      
+      // Dynamically import the object-storage module
+      const objectStorage = await import('./object-storage');
+      
+      // Check if the object exists
+      const exists = await objectStorage.default.objectExists(key as string);
+      
+      console.log(`[DEBUG] Object exists check result: ${exists}`);
+      
+      let url = null;
+      if (exists) {
+        // Get a signed URL for the object
+        url = await objectStorage.default.getPresignedUrl(key as string, 3600);
+        console.log(`[DEBUG] Generated presigned URL: ${url}`);
+      }
+      
+      return res.json({ 
+        success: true,
+        exists,
+        url,
+        key,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error("[DEBUG] Error checking object storage:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: error instanceof Error ? error.message : String(error) 
+      });
+    }
+  });
+
+  // Events API
+  // Debug endpoint to check event media URLs in the database
+  app.get("/api/debug/event-media/:id?", async (req, res) => {
+    if (!req.isAuthenticated() || req.user.role !== 'admin') {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    
+    console.log('[EventMediaDebug] Checking event media URLs in database');
+    
+    try {
+      let events;
+      if (req.params.id) {
+        // Get a specific event
+        const event = await storage.getEvent(parseInt(req.params.id));
+        if (!event) {
+          return res.status(404).json({ message: "Event not found" });
+        }
+        events = [event];
+      } else {
+        // Get recent events with media
+        events = await db.query(`
+          SELECT id, title, mediaUrls
+          FROM events
+          WHERE mediaUrls IS NOT NULL AND jsonb_array_length(mediaUrls) > 0
+          ORDER BY "createdAt" DESC
+          LIMIT 10
+        `);
+      }
+      
+      // Process each event to normalize URLs
+      const processedEvents = events.map(event => {
+        // Skip events without media
+        if (!event.mediaUrls || !Array.isArray(event.mediaUrls) || event.mediaUrls.length === 0) {
+          return {
+            ...event,
+            mediaUrlsInfo: [{ message: "No media URLs" }]
+          };
+        }
+        
+        // Process each URL
+        const mediaUrlsInfo = event.mediaUrls.map(url => {
+          let category = 'unknown';
+          
+          if (url.includes('object-storage.replit.app')) {
+            category = 'direct-object-storage';
+          } else if (url.includes('/api/storage-proxy/')) {
+            category = 'storage-proxy';
+          } else if (url.startsWith('/uploads/')) {
+            category = 'legacy-uploads';
+          } else if (url.startsWith('/')) {
+            category = 'root-relative';
+          }
+          
+          // Generate corrected URL if needed
+          let correctedUrl = url;
+          if (category !== 'storage-proxy') {
+            try {
+              correctedUrl = normalizeMediaUrl(url, 'event');
+            } catch (error) {
+              correctedUrl = `Error normalizing URL: ${error.message}`;
+            }
+          }
+          
+          return {
+            original: url,
+            category,
+            correctedUrl: correctedUrl !== url ? correctedUrl : null,
+            filename: extractFilename(url)
+          };
+        });
+        
+        return {
+          ...event,
+          mediaUrlsInfo: mediaUrlsInfo
+        };
+      });
+      
+      return res.json({
+        count: events.length,
+        events: processedEvents
+      });
+    } catch (error) {
+      console.error('[EventMediaDebug] Error:', error);
+      return res.status(500).json({ message: `Error: ${error.message}` });
+    }
+  });
+  
+  // Test endpoint to fix event media URLs in the database
+  app.post("/api/debug/fix-event-media/:id?", async (req, res) => {
+    if (!req.isAuthenticated() || req.user.role !== 'admin') {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    
+    console.log('[EventMediaFix] Fixing event media URLs in database');
+    
+    try {
+      let events;
+      if (req.params.id) {
+        // Get a specific event
+        const event = await storage.getEvent(parseInt(req.params.id));
+        if (!event) {
+          return res.status(404).json({ message: "Event not found" });
+        }
+        events = [event];
+      } else {
+        // Get events with media
+        events = await db.query(`
+          SELECT id, title, mediaUrls
+          FROM events
+          WHERE mediaUrls IS NOT NULL AND jsonb_array_length(mediaUrls) > 0
+        `);
+      }
+      
+      const fixResults = [];
+      
+      // Process each event to fix URLs
+      for (const event of events) {
+        // Skip events without media
+        if (!event.mediaUrls || !Array.isArray(event.mediaUrls) || event.mediaUrls.length === 0) {
+          fixResults.push({
+            id: event.id,
+            title: event.title,
+            status: 'skipped',
+            message: 'No media URLs'
+          });
+          continue;
+        }
+        
+        // Normalize all URLs
+        const normalizedUrls = event.mediaUrls.map(url => {
+          try {
+            // Always return a storage proxy URL format for consistency
+            return normalizeMediaUrl(url, 'event');
+          } catch (error) {
+            console.error(`[EventMediaFix] Error normalizing URL for event ${event.id}:`, error);
+            // Keep the original URL if normalization fails
+            return url;
+          }
+        });
+        
+        // Check if URLs were changed
+        const hasChanges = JSON.stringify(normalizedUrls) !== JSON.stringify(event.mediaUrls);
+        
+        if (hasChanges) {
+          // Update the event with normalized URLs
+          await db.query(
+            `UPDATE events SET "mediaUrls" = $1 WHERE id = $2`,
+            [JSON.stringify(normalizedUrls), event.id]
+          );
+          
+          fixResults.push({
+            id: event.id,
+            title: event.title,
+            status: 'fixed',
+            original: event.mediaUrls,
+            normalized: normalizedUrls
+          });
+        } else {
+          fixResults.push({
+            id: event.id,
+            title: event.title,
+            status: 'unchanged',
+            urls: event.mediaUrls
+          });
+        }
+      }
+      
+      return res.json({
+        count: events.length,
+        fixedCount: fixResults.filter(r => r.status === 'fixed').length,
+        unchangedCount: fixResults.filter(r => r.status === 'unchanged').length,
+        skippedCount: fixResults.filter(r => r.status === 'skipped').length,
+        results: fixResults
+      });
+    } catch (error) {
+      console.error('[EventMediaFix] Error:', error);
+      return res.status(500).json({ message: `Error: ${error.message}` });
+    }
+  });
+  
+  // Test endpoint for calendar event media upload
+  app.post("/api/test-calendar-upload", upload.single('media'), async (req: any, res) => {
+    if (!req.isAuthenticated()) return res.status(401).json({ message: "Not authenticated" });
+    
+    console.log('[TestCalendarUpload] Processing test calendar media upload...');
+    
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: "No file uploaded" });
+    }
+    
+    // Set media type explicitly for calendar
+    req.mediaType = MEDIA_TYPES.CALENDAR;
+    
+    try {
+      // Call our calendar media upload handler directly
+      await handleCalendarMediaUpload(req, res, () => {});
+      
+      // Get the object storage URL assigned by the handler
+      const objectStorageUrl = req.objectStorageUrl;
+      
+      if (!objectStorageUrl) {
+        return res.status(500).json({ 
+          success: false, 
+          message: "Upload handler did not return a valid URL"
+        });
+      }
+      
+      console.log('[TestCalendarUpload] Upload successful with URL:', objectStorageUrl);
+      
+      // List the current mappings for this file
+      const mappingFilePath = path.join(process.cwd(), 'server', 'calendar-media-mapping.json');
+      let mappings = {};
+      if (fs.existsSync(mappingFilePath)) {
+        mappings = JSON.parse(fs.readFileSync(mappingFilePath, 'utf8'));
+      }
+      
+      // Filter mappings for this file only
+      const filename = req.file.filename;
+      const relevantMappings = Object.entries(mappings)
+        .filter(([key, value]) => key.includes(filename) || (value as string).includes(filename))
+        .reduce((acc, [key, value]) => {
+          acc[key] = value;
+          return acc;
+        }, {});
+      
+      return res.json({ 
+        success: true, 
+        url: objectStorageUrl,
+        filename: req.file.filename,
+        originalname: req.file.originalname,
+        filesize: req.file.size,
+        path: req.file.path,
+        mappings: relevantMappings,
+        message: "Test upload successful - verify URL in event detail page"
+      });
+    } catch (error) {
+      console.error('[TestCalendarUpload] Error:', error);
+      return res.status(500).json({ 
+        success: false, 
+        message: `Upload error: ${error.message || "Unknown error"}` 
+      });
+    }
+  });
+  
+  app.get("/api/events", async (_req, res) => {
+    const events = await storage.getEvents();
+    res.json(events);
+  });
+
+  app.get("/api/events/platinum-sponsors", async (_req, res) => {
+    try {
+      const allEvents = await storage.getEvents();
+      const now = new Date();
+      const activePlatinumSponsors = allEvents
+        .filter(event => {
+          if (event.category !== 'platinum_sponsor') return false;
+          if (event.parentEventId) return false;
+          const start = new Date(event.startDate);
+          const end = new Date(event.endDate);
+          return start <= now && end >= now;
+        })
+        .sort((a, b) => new Date(a.createdAt!).getTime() - new Date(b.createdAt!).getTime())
+        .slice(0, 3);
+      res.json(activePlatinumSponsors);
+    } catch (error) {
+      console.error("Error fetching platinum sponsors:", error);
+      res.status(500).json({ message: "Failed to fetch platinum sponsors" });
+    }
+  });
+
+  app.get("/api/events/:id/occurrences", async (req, res) => {
+    const parentId = parseInt(req.params.id);
+    
+    if (isNaN(parentId)) {
+      return res.status(400).json({ message: "Invalid parent event ID" });
+    }
+    
+    try {
+      const allEvents = await storage.getEvents();
+      const childEvents = allEvents
+        .filter(e => e.parentEventId === parentId)
+        .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+      
+      res.json(childEvents);
+    } catch (error) {
+      console.error("Error fetching child events:", error);
+      res.status(500).json({ message: "Failed to fetch child events" });
+    }
+  });
+
+  app.get("/api/events/export/excel", requireAdmin, async (_req, res) => {
+    try {
+      const events = await storage.getEvents();
+      
+      // Sort events: parent events first, then their children
+      const sortedEvents = [];
+      const processedIds = new Set();
+      
+      // First pass: add all parent events and their children
+      for (const event of events) {
+        if (!processedIds.has(event.id)) {
+          // If this is a parent event (recurring and no parentEventId)
+          if (event.isRecurring && !event.parentEventId) {
+            sortedEvents.push(event);
+            processedIds.add(event.id);
+            
+            // Find and add all children of this parent
+            const children = events
+              .filter(e => e.parentEventId === event.id)
+              .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+            
+            children.forEach(child => {
+              sortedEvents.push(child);
+              processedIds.add(child.id);
+            });
+          }
+        }
+      }
+      
+      // Second pass: add remaining events (single events and orphaned children)
+      for (const event of events) {
+        if (!processedIds.has(event.id)) {
+          sortedEvents.push(event);
+          processedIds.add(event.id);
+        }
+      }
+      
+      // Format events for Excel
+      const excelData = sortedEvents.map((event, index) => {
+        const isParent = event.isRecurring && !event.parentEventId;
+        const isChild = !!event.parentEventId;
+        
+        // Determine event type
+        let eventType = 'Single';
+        if (isParent) eventType = 'Recurring Parent';
+        if (isChild) eventType = `Child of #${event.parentEventId}`;
+        
+        // Format dates
+        const formatDate = (dateStr: string) => {
+          try {
+            const date = new Date(dateStr);
+            return date.toLocaleString('en-US', { 
+              month: '2-digit',
+              day: '2-digit', 
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true
+            });
+          } catch {
+            return dateStr;
+          }
+        };
+        
+        // Add indentation for child events
+        const titlePrefix = isChild ? '  └─ ' : '';
+        
+        return {
+          'Row': index + 1,
+          'Event ID': event.id,
+          'Type': eventType,
+          'Title': titlePrefix + event.title,
+          'Description': event.description || '',
+          'Category': event.category,
+          'Start Date': formatDate(event.startDate),
+          'End Date': formatDate(event.endDate),
+          'Location': event.location || '',
+          'Website URL': event.websiteUrl || '',
+          'Map Link': event.mapLink || '',
+          'Created At': formatDate(event.createdAt),
+          'Created By': event.createdBy || 'N/A',
+          'Media Files': event.mediaUrls?.length || 0
+        };
+      });
+      
+      // Create workbook
+      const wb = XLSX.utils.book_new();
+      
+      // Create main events worksheet
+      const ws = XLSX.utils.json_to_sheet(excelData);
+      
+      // Set column widths
+      ws['!cols'] = [
+        { wch: 6 },  // Row
+        { wch: 10 }, // Event ID
+        { wch: 20 }, // Type
+        { wch: 35 }, // Title
+        { wch: 50 }, // Description
+        { wch: 12 }, // Category
+        { wch: 20 }, // Start Date
+        { wch: 20 }, // End Date
+        { wch: 30 }, // Location
+        { wch: 40 }, // Website URL
+        { wch: 40 }, // Map Link
+        { wch: 20 }, // Created At
+        { wch: 12 }, // Created By
+        { wch: 12 }  // Media Files
+      ];
+      
+      XLSX.utils.book_append_sheet(wb, ws, 'Events');
+      
+      // Create summary worksheet
+      const totalEvents = events.length;
+      const parentEvents = events.filter(e => e.isRecurring && !e.parentEventId).length;
+      const childEvents = events.filter(e => e.parentEventId).length;
+      const singleEvents = events.filter(e => !e.isRecurring && !e.parentEventId).length;
+      const categories = [...new Set(events.map(e => e.category))];
+      
+      const summaryData = [
+        { 'Metric': 'Total Events', 'Value': totalEvents },
+        { 'Metric': 'Recurring Parent Events', 'Value': parentEvents },
+        { 'Metric': 'Child Events (in series)', 'Value': childEvents },
+        { 'Metric': 'Single Events', 'Value': singleEvents },
+        { 'Metric': 'Unique Categories', 'Value': categories.length },
+        { 'Metric': 'Export Date', 'Value': new Date().toLocaleString('en-US') }
+      ];
+      
+      const summaryWs = XLSX.utils.json_to_sheet(summaryData);
+      summaryWs['!cols'] = [
+        { wch: 30 }, // Metric
+        { wch: 40 }  // Value
+      ];
+      
+      XLSX.utils.book_append_sheet(wb, summaryWs, 'Summary');
+      
+      // Generate Excel file buffer
+      const excelBuffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
+      
+      // Set headers for file download
+      const timestamp = new Date().toISOString().split('T')[0];
+      const filename = `barefoot-bay-events-${timestamp}.xlsx`;
+      
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      res.setHeader('Content-Length', excelBuffer.length);
+      
+      res.send(excelBuffer);
+    } catch (error) {
+      console.error('Error exporting events:', error);
+      res.status(500).json({ message: 'Failed to export events' });
+    }
+  });
+
+  app.get("/api/events/:id", async (req, res) => {
+    try {
+      const event = await storage.getEvent(parseInt(req.params.id));
+      if (!event) return res.status(404).json({ message: "Event not found" });
+      res.json(event);
+    } catch (err) {
+      console.error("Error fetching event:", err);
+      res.status(500).json({ message: "Failed to fetch event" });
+    }
+  });
+
+  app.post("/api/events", upload.array('media'), (req: any, res, next) => {
+    // Set the mediaType explicitly for calendar events to ensure proper sync
+    req.mediaType = MEDIA_TYPES.CALENDAR;
+    
+    // Log for debugging purpose
+    console.log('[EventCreate] Processing event media upload request');
+    if (req.files && req.files.length > 0) {
+      console.log(`[EventCreate] Event has ${req.files.length} media files attached`);
+      req.files.forEach((file: Express.Multer.File, index: number) => {
+        console.log(`[EventCreate] Media file ${index + 1}:
+          - Filename: ${file.originalname}
+          - Size: ${file.size} bytes
+          - Path: ${file.path}
+          - Mimetype: ${file.mimetype}
+        `);
+      });
+    } else {
+      console.log('[EventCreate] No media files attached to this event creation request');
+    }
+    
+    next();
+  }, mediaSyncMiddleware, async (req, res) => {
+    if (!req.isAuthenticated()) return res.status(401).json({ message: "Not authenticated" });
+    
+    // Check if user is approved or admin
+    const isAdmin = req.user.role === 'admin';
+    const isApproved = !!req.user.isApproved;
+    
+    // User must be approved to create events (admins are automatically considered approved)
+    if (!isApproved && !isAdmin) {
+      return res.status(403).json({ message: "Your account must be approved before you can create events" });
+    }
+
+    try {
+      const files = req.files as Express.Multer.File[];
+      let eventData;
+
+      try {
+        eventData = JSON.parse(req.body.eventData);
+      } catch (error) {
+        console.error("Error parsing event data:", error);
+        return res.status(400).json({ message: "Invalid event data format" });
+      }
+
+      const result = insertEventSchema.safeParse(eventData);
+      if (!result.success) {
+        return res.status(400).json({
+          message: "Invalid event data",
+          errors: result.error.errors
+        });
+      }
+
+      if (result.data.category === 'platinum_sponsor') {
+        const start = new Date(result.data.startDate);
+        const end = new Date(result.data.endDate);
+        const maxEnd = new Date(start);
+        maxEnd.setMonth(maxEnd.getMonth() + 12);
+        if (end > maxEnd) {
+          return res.status(400).json({
+            message: "Platinum sponsor events cannot exceed 12 months in duration"
+          });
+        }
+      }
+
+      // Process media files through Object Storage middleware
+      let mediaUrls = [];
+      
+      // Handle new file uploads
+      if (files && files.length > 0) {
+        try {
+          // Use processUploadedFiles to handle Object Storage integration
+          req.mediaType = MEDIA_TYPES.CALENDAR;
+          const result = await processUploadedFiles(req, files);
+          
+          if (result.success && result.urls) {
+            mediaUrls = result.urls;
+            console.log(`[EventCreate] Processed ${mediaUrls.length} files through Object Storage middleware`);
+            console.log(`[EventCreate] Media URLs: ${JSON.stringify(mediaUrls)}`);
+          } else {
+            console.error(`[EventCreate] Failed to process media files through middleware:`, result.message);
+            return res.status(500).json({ message: `Error processing media files: ${result.message}` });
+          }
+        } catch (mediaError) {
+          console.error(`[EventCreate] Error processing media files:`, mediaError);
+          return res.status(500).json({ message: 'Error processing media files' });
+        }
+      }
+      
+      // Handle existing media URLs for event duplication
+      if (eventData.mediaUrls && Array.isArray(eventData.mediaUrls) && eventData.mediaUrls.length > 0) {
+        console.log(`[EventCreate] Processing existing media URLs for duplication:`, eventData.mediaUrls);
+        
+        // For event duplication, we can safely reuse existing media URLs since they point to Object Storage
+        // The URLs are already properly formatted storage proxy URLs that will continue to work
+        const existingMediaUrls = eventData.mediaUrls.filter(url => 
+          url && typeof url === 'string' && url.trim().length > 0
+        );
+        
+        if (existingMediaUrls.length > 0) {
+          mediaUrls = [...mediaUrls, ...existingMediaUrls];
+          console.log(`[EventCreate] Added ${existingMediaUrls.length} existing media URLs to new event`);
+          console.log(`[EventCreate] Final media URLs:`, mediaUrls);
+        }
+      }
+      
+      if (mediaUrls.length === 0) {
+        console.log(`[EventCreate] No media files or URLs to process`);
+      }
+
+      // Extract date and time components for backward compatibility with old database columns
+      // The database has both old columns (event_date, start_time, end_time) and new columns (start_date, end_date)
+      // We populate both to maintain compatibility with existing data
+      // IMPORTANT: Use America/New_York timezone to avoid UTC conversion issues
+      const startDateTime = new Date(result.data.startDate);
+      const endDateTime = new Date(result.data.endDate);
+      
+      // Extract date in YYYY-MM-DD format for event_date column using Florida timezone
+      const eventDate = startDateTime.toLocaleDateString('en-CA', { timeZone: 'America/New_York' }); // en-CA gives YYYY-MM-DD format
+      
+      // Extract time in HH:MM:SS format for start_time and end_time columns using Florida timezone
+      const startTime = startDateTime.toLocaleTimeString('en-US', { 
+        timeZone: 'America/New_York', 
+        hour12: false, 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit' 
+      });
+      const endTime = endDateTime.toLocaleTimeString('en-US', { 
+        timeZone: 'America/New_York', 
+        hour12: false, 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit' 
+      });
+
+      const event = await storage.createEvent({
+        ...result.data,
+        eventDate,
+        startTime,
+        endTime,
+        mediaUrls,
+        createdBy: req.user.id,
+      });
+      
+      // Broadcast event creation to all connected clients
+      broadcastWebSocketMessage('calendar_update', {
+        action: 'create',
+        event: event,
+        timestamp: new Date().toISOString(),
+        userId: req.user.id
+      });
+      
+      // WebSocket disabled
+      console.log(`Calendar event created: ID=${event.id}, Title="${event.title}"`);
+
+      res.status(201).json(event);
+    } catch (err) {
+      console.error("=== ERROR CREATING EVENT ===");
+      console.error("Error details:", err);
+      console.error("Error message:", err instanceof Error ? err.message : String(err));
+      console.error("Error stack:", err instanceof Error ? err.stack : 'No stack trace');
+      res.status(500).json({ 
+        message: "Failed to create event",
+        error: err instanceof Error ? err.message : String(err)
+      });
+    }
+  });
+
+  app.patch("/api/events/:id", upload.array('media'), (req: any, res, next) => {
+    // Set the mediaType explicitly for calendar events to ensure proper sync
+    req.mediaType = MEDIA_TYPES.CALENDAR;
+    next();
+  }, mediaSyncMiddleware, async (req, res) => {
+    // Enhanced authentication debugging
+    console.log("Event PATCH authentication debug:", {
+      isAuthenticated: req.isAuthenticated(),
+      session: req.session ? {
+        id: req.sessionID,
+        cookie: req.session.cookie ? {
+          originalMaxAge: req.session.cookie.originalMaxAge,
+          expires: req.session.cookie.expires,
+          secure: req.session.cookie.secure,
+          httpOnly: req.session.cookie.httpOnly,
+          sameSite: req.session.cookie.sameSite
+        } : 'No cookie'
+      } : 'No session',
+      user: req.user ? {
+        id: req.user.id,
+        username: req.user.username,
+        role: req.user.role
+      } : 'No user',
+      headers: {
+        cookie: req.headers.cookie ? 'Present' : 'Missing',
+        origin: req.headers.origin,
+        host: req.headers.host,
+        referer: req.headers.referer,
+        'content-type': req.headers['content-type']
+      }
+    });
+
+    if (!req.isAuthenticated()) {
+      console.error(`Authentication failed for PATCH /api/events/${req.params.id}`);
+      return res.status(401).json({ 
+        message: "Not authenticated",
+        details: "Session validation failed. Try logging in again."
+      });
+    }
+
+    // Check if user is admin OR is the creator of the event and is approved
+    const eventId = parseInt(req.params.id);
+    const event = await storage.getEvent(eventId);
+    
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    
+    const isAdmin = req.user.role === 'admin';
+    const isCreator = event.createdBy === req.user.id;
+    const isApproved = !!req.user.isApproved;
+    
+    console.log(`User permission check for event ${eventId}:`, {
+      userId: req.user.id,
+      username: req.user.username,
+      isAdmin,
+      isCreator,
+      isApproved,
+      eventCreator: event.createdBy
+    });
+    
+    if (!isAdmin && (!isCreator || !isApproved)) {
+      return res.status(403).json({ message: "You don't have permission to edit this event" });
+    }
+
+    try {
+      const eventId = parseInt(req.params.id);
+      console.log(`Processing PATCH request for event ${eventId}`);
+
+      const event = await storage.getEvent(eventId);
+      if (!event) {
+        console.log(`Event ${eventId} not found`);
+        return res.status(404).json({ message: "Event not found" });
+      }
+
+      if (!req.body.eventData) {
+        console.error('Missing eventData in request body');
+        return res.status(400).json({ message: "Event data is required" });
+      }
+
+      let eventData;
+      let editMode = null;
+      
+      try {
+        eventData = JSON.parse(req.body.eventData);
+        console.log('Parsed event data:', eventData);
+        
+        // DEBUG: Track contactInfo specifically
+        console.log('CONTACT_INFO_DEBUG - Received contactInfo:', JSON.stringify(eventData.contactInfo, null, 2));
+        console.log('CONTACT_INFO_DEBUG - websiteUrl in contactInfo:', eventData.contactInfo?.website);
+        console.log('CONTACT_INFO_DEBUG - contactInfo type:', typeof eventData.contactInfo);
+        
+        // Check if this is a recurring event edit and extract the edit mode
+        if (event.isRecurring && eventData.editMode) {
+          editMode = eventData.editMode;
+          console.log(`Recurring event edit mode: ${editMode}`);
+          // Remove editMode from the data as it's not part of the schema
+          delete eventData.editMode;
+        }
+      } catch (error) {
+        console.error("Error parsing event data:", error);
+        return res.status(400).json({ message: "Invalid event data format" });
+      }
+
+      // Add media URLs if new files were uploaded (with calendar folder path)
+      const files = req.files as Express.Multer.File[];
+      console.log('Uploaded files:', files); // Log all files that were uploaded
+      
+      // Log the actual file paths
+      if (files && files.length > 0) {
+        console.log('Uploaded file details:');
+        files.forEach(file => {
+          console.log(`- Filename: ${file.filename}`);
+          console.log(`  Path: ${file.path}`);
+          console.log(`  Destination: ${file.destination}`);
+        });
+      }
+      
+      // Process each file using our enhanced media upload middleware
+      let newMediaUrls = [];
+      if (files && files.length > 0) {
+        // Set media type for calendar events
+        req.mediaType = MEDIA_TYPES.CALENDAR;
+        
+        try {
+          // Process files through our enhanced middleware that uses Object Storage
+          const result = await processUploadedFiles(req, files);
+          
+          if (result.success) {
+            try {
+              console.log(`[EventUpdate] DEBUG - Raw result object:`, JSON.stringify(result));
+              
+              // IMPORTANT FIX: Check for objectStorageUrls first, as these will be the most reliable
+              // Then fall back to urls array if no object storage URLs available
+              if (result.objectStorageUrls && result.objectStorageUrls.length > 0) {
+                // Use Object Storage URLs and normalize them with our utility
+                console.log(`[EventUpdate] Found ${result.objectStorageUrls.length} Object Storage URLs to normalize`);
+                newMediaUrls = result.objectStorageUrls.map(url => {
+                  try {
+                    const normalizedUrl = normalizeMediaUrl(url, 'event');
+                    console.log(`[EventUpdate] Normalized URL: ${url} -> ${normalizedUrl}`);
+                    return normalizedUrl;
+                  } catch (normalizeError) {
+                    console.error(`[EventUpdate] Error normalizing URL: ${url}`, normalizeError);
+                    // Return original URL as fallback
+                    return url;
+                  }
+                });
+                console.log(`[EventUpdate] Using Object Storage URLs (normalized): ${JSON.stringify(newMediaUrls)}`);
+              } else if (result.urls && result.urls.length > 0) {
+                // Fall back to regular URLs and normalize them
+                console.log(`[EventUpdate] Found ${result.urls.length} regular URLs to normalize`);
+                newMediaUrls = result.urls.map(url => {
+                  try {
+                    const normalizedUrl = normalizeMediaUrl(url, 'event');
+                    console.log(`[EventUpdate] Normalized URL: ${url} -> ${normalizedUrl}`);
+                    return normalizedUrl;
+                  } catch (normalizeError) {
+                    console.error(`[EventUpdate] Error normalizing URL: ${url}`, normalizeError);
+                    // Return original URL as fallback
+                    return url;
+                  }
+                });
+                console.log(`[EventUpdate] Using regular URLs (normalized): ${JSON.stringify(newMediaUrls)}`);
+              } else {
+                console.warn(`[EventUpdate] No URLs returned from upload processor, but success was indicated`);
+              }
+              
+              console.log(`[EventUpdate] Processed ${newMediaUrls.length} files through Object Storage middleware`);
+              console.log(`[EventUpdate] Final Media URLs: ${JSON.stringify(newMediaUrls)}`);
+            } catch (processingError) {
+              console.error(`[EventUpdate] CRITICAL ERROR during media URL processing:`, processingError);
+              // Set empty array as fallback to prevent the update from failing entirely
+              newMediaUrls = [];
+            }
+          } else {
+            console.error(`[EventUpdate] Failed to process media files through middleware:`, result.message);
+            return res.status(500).json({ message: `Error processing media files: ${result.message}` });
+          }
+        } catch (mediaError) {
+          console.error(`[EventUpdate] Error processing media files:`, mediaError);
+          return res.status(500).json({ message: 'Error processing media files' });
+        }
+      } else {
+        console.log(`[EventUpdate] No new media files to process`);
+      }
+
+      // Get current media URLs excluding the ones marked for removal
+      const currentMediaUrls = event.mediaUrls || [];
+      
+      // Check both the regular eventData and the separate FormData field for URLs to remove
+      let mediaToRemove = [];
+      
+      // First check if there's a separate field in the FormData
+      if (req.body.existingMediaToRemove) {
+        try {
+          const parsedMediaToRemove = JSON.parse(req.body.existingMediaToRemove);
+          console.log('Media removal - Detected separate FormData field with media to remove:', parsedMediaToRemove);
+          if (Array.isArray(parsedMediaToRemove)) {
+            mediaToRemove = parsedMediaToRemove;
+          } else if (parsedMediaToRemove && typeof parsedMediaToRemove === 'string') {
+            mediaToRemove = [parsedMediaToRemove];
+          } else if (parsedMediaToRemove) {
+            console.log('Media removal - Non-array value received:', parsedMediaToRemove);
+            mediaToRemove = [parsedMediaToRemove.toString()];
+          }
+        } catch (e) {
+          console.error('Media removal - Error parsing existingMediaToRemove from FormData:', e);
+          console.error('Raw existingMediaToRemove value:', req.body.existingMediaToRemove);
+          // If parsing fails but we have a string, try using it directly
+          if (typeof req.body.existingMediaToRemove === 'string' && req.body.existingMediaToRemove.trim()) {
+            mediaToRemove = [req.body.existingMediaToRemove];
+          }
+        }
+      }
+      
+      // If not found in separate field, use the one in eventData
+      if (mediaToRemove.length === 0 && eventData.existingMediaToRemove) {
+        console.log('Media removal - Using existingMediaToRemove from eventData:', eventData.existingMediaToRemove);
+        if (Array.isArray(eventData.existingMediaToRemove)) {
+          mediaToRemove = eventData.existingMediaToRemove;
+        } else if (eventData.existingMediaToRemove && typeof eventData.existingMediaToRemove === 'string') {
+          mediaToRemove = [eventData.existingMediaToRemove];
+        } else if (eventData.existingMediaToRemove) {
+          mediaToRemove = [eventData.existingMediaToRemove.toString()];
+        }
+      }
+      
+      // Log media removal information for debugging
+      console.log('Media removal - Request ID:', req.params.id);
+      console.log('Media removal - Current media URLs:', currentMediaUrls);
+      console.log('Media removal - Media to remove (raw):', mediaToRemove);
+      
+      // Ensure currentMediaUrls is always an array
+      let normalizedCurrentUrls = [];
+      if (Array.isArray(currentMediaUrls)) {
+        normalizedCurrentUrls = currentMediaUrls.filter(url => typeof url === 'string' && url.trim() !== '');
+      } else if (typeof currentMediaUrls === 'string' && currentMediaUrls.trim()) {
+        normalizedCurrentUrls = [currentMediaUrls];
+      } else if (currentMediaUrls) {
+        try {
+          if (typeof currentMediaUrls === 'string') {
+            const parsed = JSON.parse(currentMediaUrls);
+            if (Array.isArray(parsed)) {
+              normalizedCurrentUrls = parsed.filter(url => typeof url === 'string' && url.trim() !== '');
+            } else if (parsed && typeof parsed === 'string') {
+              normalizedCurrentUrls = [parsed];
+            }
+          }
+        } catch (e) {
+          console.error('Media removal - Error parsing currentMediaUrls:', e);
+          // If it's not parseable JSON but still has a value, use it directly
+          if (currentMediaUrls && typeof currentMediaUrls === 'string') {
+            normalizedCurrentUrls = [currentMediaUrls];
+          }
+        }
+      }
+      
+      // Ensure mediaToRemove is always an array of strings
+      let normalizedMediaToRemove = [];
+      
+      // Filter out any non-string or empty values
+      if (Array.isArray(mediaToRemove)) {
+        normalizedMediaToRemove = mediaToRemove
+          .filter(url => url !== null && url !== undefined)
+          .map(url => url.toString().trim())
+          .filter(url => url !== '');
+      } else if (mediaToRemove && typeof mediaToRemove === 'string' && mediaToRemove.trim()) {
+        normalizedMediaToRemove = [mediaToRemove];
+      }
+      
+      console.log('Media removal - Normalized current URLs:', normalizedCurrentUrls);
+      console.log('Media removal - Normalized URLs to remove:', normalizedMediaToRemove);
+      
+      // Special debug for this broken event
+      if (req.params.id === '4217') {
+        console.log('CRITICAL DEBUG - Special handling for event 4217');
+        console.log('Current URLs before filtering:', JSON.stringify(normalizedCurrentUrls));
+        console.log('URLs to remove before filtering:', JSON.stringify(normalizedMediaToRemove));
+      }
+      
+      const mediaUrlsToKeep = normalizedCurrentUrls.filter(
+        url => {
+          // Make sure we're dealing with strings
+          const urlStr = String(url).trim();
+          
+          // Check if this URL should be removed
+          const shouldRemove = normalizedMediaToRemove.some(removeUrl => {
+            // First try direct string matching
+            if (urlStr === removeUrl) return true;
+            
+            // Then try matching just the filename part
+            const urlFilename = urlStr.split('/').pop();
+            const removeFilename = removeUrl.split('/').pop();
+            return urlFilename === removeFilename;
+          });
+          
+          const shouldKeep = !shouldRemove;
+          
+          if (!shouldKeep) {
+            console.log(`Media removal - Removing URL: ${urlStr}`);
+            
+            // Log all path variants to help with debugging
+            const filenamePart = urlStr.split('/').pop();
+            console.log(`Media removal - File basename: ${filenamePart}`);
+            console.log(`Media removal - Possible paths: 
+              - /uploads/calendar/${filenamePart}
+              - /calendar/${filenamePart}
+              - ${urlStr}
+            `);
+          }
+          
+          return shouldKeep;
+        }
+      );
+      
+      console.log('Media removal - URLs to keep:', mediaUrlsToKeep);
+
+      // Normalize existing media URLs to ensure they use proxy format for client access
+      // Import the normalizeMediaUrl function from our centralized utility
+      const normalizedMediaUrlsToKeep = mediaUrlsToKeep.map(url => 
+        normalizeMediaUrl(url, 'event')
+      );
+      
+      console.log('Media removal - Normalized URLs to keep:', normalizedMediaUrlsToKeep);
+      
+      // Combine existing media (not marked for removal) with new media
+      const mediaUrls = [...normalizedMediaUrlsToKeep, ...newMediaUrls];
+      console.log('Media removal - Final media URLs list:', mediaUrls);
+
+      // Convert ISO date strings to Date objects
+      try {
+        eventData.startDate = new Date(eventData.startDate);
+        eventData.endDate = new Date(eventData.endDate);
+
+        // Validate that dates are valid
+        if (isNaN(eventData.startDate.getTime()) || isNaN(eventData.endDate.getTime())) {
+          throw new Error("Invalid date format");
+        }
+      } catch (error) {
+        console.error("Date parsing error:", error);
+        return res.status(400).json({ message: "Invalid date format in event data" });
+      }
+
+      // Extract legacy date/time fields for backward compatibility with Florida timezone
+      const startDateTime = new Date(eventData.startDate);
+      const endDateTime = new Date(eventData.endDate);
+      
+      const eventDate = startDateTime.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+      const startTime = startDateTime.toLocaleTimeString('en-US', { 
+        timeZone: 'America/New_York', 
+        hour12: false, 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit' 
+      });
+      const endTime = endDateTime.toLocaleTimeString('en-US', { 
+        timeZone: 'America/New_York', 
+        hour12: false, 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit' 
+      });
+
+      // Pre-validation cleanup: strip null sponsor fields for non-platinum events
+      // so validation doesn't reject nulls for fields irrelevant to the event type
+      // Use existing event's category as fallback when category isn't in the payload
+      const effectiveCategory = eventData.category || event.category;
+      const sponsorFields = ['sponsorTagline', 'sponsorPhone', 'sponsorWebsiteUrl', 'sponsorVendorPageSlug', 'sponsorIsPoliticalAd', 'sponsorPoliticalAdText'] as const;
+      if (effectiveCategory !== 'platinum_sponsor') {
+        for (const field of sponsorFields) {
+          if (eventData[field] === null || eventData[field] === undefined) {
+            delete eventData[field];
+          }
+        }
+      }
+
+      // Description null handling is done by schema preprocess (null -> undefined)
+
+      // Prepare the final update data
+      const updatedEventData = {
+        ...eventData,
+        eventDate,
+        startTime,
+        endTime,
+        mediaUrls,
+        updatedAt: new Date()
+      };
+
+      // Special debug logging for the hoursOfOperation field to track null values
+      console.log('HOURS OF OPERATION data:', { 
+        raw: eventData.hoursOfOperation,
+        type: typeof eventData.hoursOfOperation,
+        isNull: eventData.hoursOfOperation === null,
+        keys: eventData.hoursOfOperation ? Object.keys(eventData.hoursOfOperation) : 'no keys' 
+      });
+
+      const result = insertEventSchema.safeParse(updatedEventData);
+      if (!result.success) {
+        console.error('Validation errors:', result.error.errors);
+        return res.status(400).json({
+          message: "Invalid event data",
+          errors: result.error.errors
+        });
+      }
+
+      if (updatedEventData.category === 'platinum_sponsor') {
+        const start = new Date(updatedEventData.startDate);
+        const end = new Date(updatedEventData.endDate);
+        const maxEnd = new Date(start);
+        maxEnd.setMonth(maxEnd.getMonth() + 12);
+        if (end > maxEnd) {
+          return res.status(400).json({
+            message: "Platinum sponsor events cannot exceed 12 months in duration"
+          });
+        }
+      }
+
+      console.log('Final update data:', updatedEventData);
+      
+      // DEBUG: Track contactInfo just before storage update
+      console.log('CONTACT_INFO_DEBUG - Final contactInfo before storage update:', JSON.stringify(updatedEventData.contactInfo, null, 2));
+
+      // Pass the edit mode to the storage method if this is a recurring event
+      const updatedEvent = await storage.updateEvent(eventId, updatedEventData, editMode);
+      console.log('Event updated successfully:', updatedEvent);
+      
+      // Broadcast event update to all connected clients
+      broadcastWebSocketMessage('calendar_update', {
+        action: 'update',
+        event: updatedEvent,
+        timestamp: new Date().toISOString(),
+        userId: req.user.id,
+        editMode: editMode // This includes the recurrence edit mode info
+      });
+      
+      // WebSocket disabled
+      console.log(`Calendar event updated: ID=${updatedEvent.id}, Title="${updatedEvent.title}"`);
+      
+      res.json(updatedEvent);
+    } catch (err) {
+      console.error("Error updating event:", err);
+      res.status(500).json({ message: "Failed to update event" });
+    }
+  });
+
+  // Add delete event endpoint
+  app.delete("/api/events/:id", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+
+    try {
+      const eventId = parseInt(req.params.id);
+      
+      // Get the event before deleting it so we can include its info in the WebSocket message
+      const eventToDelete = await storage.getEvent(eventId);
+      
+      if (!eventToDelete) {
+        return res.status(404).json({ message: "Event not found" });
+      }
+      
+      await storage.deleteEvent(eventId);
+      
+      // Broadcast event deletion to all connected clients
+      broadcastWebSocketMessage('calendar_update', {
+        action: 'delete',
+        eventId: eventId,
+        event: eventToDelete,
+        timestamp: new Date().toISOString(),
+        userId: req.user.id
+      });
+      
+      // WebSocket disabled
+      console.log(`Calendar event deleted: ID=${eventId}, Title="${eventToDelete.title}"`);
+      
+      res.sendStatus(200);
+    } catch (err) {
+      console.error("Error deleting event:", err);
+      res.status(500).json({ message: "Failed to delete event" });
+    }
+  });
+  
+  // Add endpoint to delete an entire recurring event series
+  app.delete("/api/events/:id/series", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+
+    try {
+      const eventId = parseInt(req.params.id);
+      
+      // Get the parent event before deleting the series
+      const parentEvent = await storage.getEvent(eventId);
+      
+      if (!parentEvent) {
+        return res.status(404).json({ message: "Event not found" });
+      }
+      
+      await storage.deleteEventSeries(eventId);
+      
+      // Broadcast event series deletion to all connected clients
+      broadcastWebSocketMessage('calendar_update', {
+        action: 'delete_series',
+        eventId: eventId,
+        parentEvent: parentEvent
+      });
+      
+      res.sendStatus(200);
+    } catch (err) {
+      console.error("Error deleting event series:", err);
+      res.status(500).json({ message: "Failed to delete event series" });
+    }
+  });
+  
+  // Add endpoint to delete all events (admin only)
+  app.delete("/api/events", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+
+    try {
+      await storage.deleteAllEvents();
+      
+      // Broadcast a message to all clients that all events have been deleted
+      broadcastWebSocketMessage('calendar_update', {
+        action: 'delete_all'
+      });
+      
+      res.status(200).json({ message: "All events have been deleted successfully" });
+    } catch (err) {
+      console.error("Error deleting all events:", err);
+      res.status(500).json({ message: "Failed to delete all events" });
+    }
+  });
+
+  // Analyze events for timezone migration (admin only)
+  app.get("/api/admin/events/timezone-migration/analyze", requireAdmin, async (req, res) => {
+    try {
+      const { formatInTimeZone } = await import('date-fns-tz');
+      const allEvents = await storage.getEvents();
+  

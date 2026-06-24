@@ -1,0 +1,19 @@
+/* Hide the featured products section */
+h2:first-of-type {
+  /* This targets the first h2 in the store, which is likely the "FEATURED PRODUCTS" heading */
+  display: none !important;
+}
+
+h2:first-of-type + div {
+  /* This targets the div after the first h2, which likely contains the featured products carousel */
+  display: none !important;
+}
+
+/* Hide specific classes */
+.featured-carousel,
+.featured-products,
+.featured-products-section,
+.featured-section,
+[class*="featured-"] {
+  display: none !important;
+}

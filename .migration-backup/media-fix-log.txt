@@ -1,0 +1,139 @@
+[2025-04-19T06:37:43.628Z] ==============================================
+[2025-04-19T06:37:43.629Z] EMERGENCY MEDIA FIX FOR BAREFOOT BAY
+[2025-04-19T06:37:43.629Z] ==============================================
+[2025-04-19T06:37:43.629Z] Started at: 2025-04-19T06:37:43.629Z
+[2025-04-19T06:37:43.629Z] 
+[2025-04-19T06:37:43.630Z] --- PHASE 1: COPYING MEDIA FILES ---
+[2025-04-19T06:37:43.630Z] Scanning uploads directory for files...
+[2025-04-19T06:37:43.631Z] Found 59 files in uploads directory.
+[2025-04-19T06:37:43.751Z] 
+File copy summary:
+[2025-04-19T06:37:43.752Z] - Total files found: 59
+[2025-04-19T06:37:43.752Z] - Files copied: 59
+[2025-04-19T06:37:43.752Z] - Files skipped (already exist): 0
+[2025-04-19T06:37:43.752Z] - Files failed: 0
+[2025-04-19T06:37:43.752Z] - Total files processed: 59
+[2025-04-19T06:37:43.752Z] 
+--- PHASE 2: UPDATING DATABASE RECORDS ---
+[2025-04-19T06:37:43.754Z] Connecting to database...
+[2025-04-19T06:37:44.255Z] Connected to database successfully.
+[2025-04-19T06:37:44.256Z] Creating backup of tables before modifications...
+[2025-04-19T06:37:44.331Z] Error fixing database records: syntax error at or near "-"
+[2025-04-19T06:37:44.406Z] 
+==============================================
+[2025-04-19T06:37:44.406Z] FINAL RESULTS
+[2025-04-19T06:37:44.406Z] ==============================================
+[2025-04-19T06:37:44.406Z] File copy: SUCCESS
+[2025-04-19T06:37:44.406Z] Database update: FAILED
+[2025-04-19T06:37:44.406Z] 
+[2025-04-19T06:37:44.406Z] ⚠️ SOME FIXES WERE NOT COMPLETED ⚠️
+[2025-04-19T06:37:44.406Z] Please check the error messages above and try again.
+[2025-04-19T06:37:44.406Z] 
+See media-fix-log.txt for detailed log of all operations.
+[2025-04-19T06:37:44.406Z] Completed at: 2025-04-19T06:37:44.406Z
+[2025-04-19T06:38:35.745Z] ==============================================
+[2025-04-19T06:38:35.746Z] EMERGENCY MEDIA FIX FOR BAREFOOT BAY
+[2025-04-19T06:38:35.746Z] ==============================================
+[2025-04-19T06:38:35.746Z] Started at: 2025-04-19T06:38:35.746Z
+[2025-04-19T06:38:35.746Z] 
+[2025-04-19T06:38:35.746Z] --- PHASE 1: COPYING MEDIA FILES ---
+[2025-04-19T06:38:35.746Z] Scanning uploads directory for files...
+[2025-04-19T06:38:35.747Z] Found 59 files in uploads directory.
+[2025-04-19T06:38:35.749Z] 
+File copy summary:
+[2025-04-19T06:38:35.749Z] - Total files found: 59
+[2025-04-19T06:38:35.749Z] - Files copied: 0
+[2025-04-19T06:38:35.749Z] - Files skipped (already exist): 59
+[2025-04-19T06:38:35.749Z] - Files failed: 0
+[2025-04-19T06:38:35.749Z] - Total files processed: 59
+[2025-04-19T06:38:35.749Z] 
+--- PHASE 2: UPDATING DATABASE RECORDS ---
+[2025-04-19T06:38:35.751Z] Connecting to database...
+[2025-04-19T06:38:36.224Z] Connected to database successfully.
+[2025-04-19T06:38:36.224Z] Creating backup of tables before modifications...
+[2025-04-19T06:38:36.299Z] Error fixing database records: relation "pages" does not exist
+[2025-04-19T06:38:36.373Z] 
+==============================================
+[2025-04-19T06:38:36.373Z] FINAL RESULTS
+[2025-04-19T06:38:36.373Z] ==============================================
+[2025-04-19T06:38:36.374Z] File copy: SUCCESS
+[2025-04-19T06:38:36.374Z] Database update: FAILED
+[2025-04-19T06:38:36.374Z] 
+[2025-04-19T06:38:36.374Z] ⚠️ SOME FIXES WERE NOT COMPLETED ⚠️
+[2025-04-19T06:38:36.374Z] Please check the error messages above and try again.
+[2025-04-19T06:38:36.374Z] 
+See media-fix-log.txt for detailed log of all operations.
+[2025-04-19T06:38:36.374Z] Completed at: 2025-04-19T06:38:36.374Z
+[2025-04-19T06:39:15.654Z] ==============================================
+[2025-04-19T06:39:15.656Z] EMERGENCY MEDIA FIX FOR BAREFOOT BAY
+[2025-04-19T06:39:15.656Z] ==============================================
+[2025-04-19T06:39:15.656Z] Started at: 2025-04-19T06:39:15.656Z
+[2025-04-19T06:39:15.656Z] 
+[2025-04-19T06:39:15.656Z] --- PHASE 1: COPYING MEDIA FILES ---
+[2025-04-19T06:39:15.656Z] Scanning uploads directory for files...
+[2025-04-19T06:39:15.657Z] Found 59 files in uploads directory.
+[2025-04-19T06:39:15.659Z] 
+File copy summary:
+[2025-04-19T06:39:15.659Z] - Total files found: 59
+[2025-04-19T06:39:15.659Z] - Files copied: 0
+[2025-04-19T06:39:15.659Z] - Files skipped (already exist): 59
+[2025-04-19T06:39:15.659Z] - Files failed: 0
+[2025-04-19T06:39:15.659Z] - Total files processed: 59
+[2025-04-19T06:39:15.660Z] 
+--- PHASE 2: UPDATING DATABASE RECORDS ---
+[2025-04-19T06:39:15.662Z] Connecting to database...
+[2025-04-19T06:39:16.136Z] Connected to database successfully.
+[2025-04-19T06:39:16.137Z] Creating backup of tables before modifications...
+[2025-04-19T06:39:16.249Z] Created backup of page_content as page_content_backup_1745044756137
+[2025-04-19T06:39:16.330Z] Created backup of content as content_backup_1745044756249
+[2025-04-19T06:39:16.444Z] Created backup of events as events_backup_1745044756330
+[2025-04-19T06:39:16.522Z] Created backup of forum_posts as forum_posts_backup_1745044756444
+[2025-04-19T06:39:16.608Z] Created backup of forum_comments as forum_comments_backup_1745044756523
+[2025-04-19T06:39:16.695Z] Created backup of real_estate_listings as real_estate_listings_backup_1745044756608
+[2025-04-19T06:39:16.774Z] Created backup of users as users_backup_1745044756695
+[2025-04-19T06:39:16.774Z] 
+Processing table: page_content (Page content (including vendors))
+[2025-04-19T06:39:16.850Z] Found 0 records in page_content
+[2025-04-19T06:39:16.850Z] 
+Processing table: content (Generic content)
+[2025-04-19T06:39:16.925Z] Found 4 records in content
+[2025-04-19T06:39:16.925Z] 
+Processing table: events (Calendar events)
+[2025-04-19T06:39:17.299Z] Found 650 records in events
+[2025-04-19T06:39:17.300Z] 
+Processing table: forum_posts (Forum posts)
+[2025-04-19T06:39:17.374Z] Found 3 records in forum_posts
+[2025-04-19T06:39:17.528Z] 
+Processing table: forum_comments (Forum comments)
+[2025-04-19T06:39:17.604Z] Found 4 records in forum_comments
+[2025-04-19T06:39:17.604Z] 
+Processing table: real_estate_listings (Real estate listings)
+[2025-04-19T06:39:17.682Z] Found 6 records in real_estate_listings
+[2025-04-19T06:39:18.131Z] 
+Processing table: users (User avatars)
+[2025-04-19T06:39:18.206Z] Found 14 records in users
+[2025-04-19T06:39:18.206Z] 
+=== DATABASE UPDATE SUMMARY ===
+[2025-04-19T06:39:18.206Z] Checked 7 tables and 681 records
+[2025-04-19T06:39:18.206Z] Fixed 8 records containing 8 paths
+[2025-04-19T06:39:18.206Z] 
+Breakdown by table:
+[2025-04-19T06:39:18.206Z] - page_content: 0/0 records fixed, 0 paths updated
+[2025-04-19T06:39:18.206Z] - content: 0/4 records fixed, 0 paths updated
+[2025-04-19T06:39:18.206Z] - events: 0/650 records fixed, 0 paths updated
+[2025-04-19T06:39:18.206Z] - forum_posts: 2/3 records fixed, 2 paths updated
+[2025-04-19T06:39:18.206Z] - forum_comments: 0/4 records fixed, 0 paths updated
+[2025-04-19T06:39:18.207Z] - real_estate_listings: 6/6 records fixed, 6 paths updated
+[2025-04-19T06:39:18.207Z] - users: 0/14 records fixed, 0 paths updated
+[2025-04-19T06:39:18.281Z] 
+==============================================
+[2025-04-19T06:39:18.281Z] FINAL RESULTS
+[2025-04-19T06:39:18.281Z] ==============================================
+[2025-04-19T06:39:18.281Z] File copy: SUCCESS
+[2025-04-19T06:39:18.281Z] Database update: SUCCESS
+[2025-04-19T06:39:18.281Z] 
+[2025-04-19T06:39:18.281Z] 🎉 ALL FIXES COMPLETED SUCCESSFULLY! 🎉
+[2025-04-19T06:39:18.281Z] Your media should now work correctly in both development and production environments.
+[2025-04-19T06:39:18.281Z] 
+See media-fix-log.txt for detailed log of all operations.
+[2025-04-19T06:39:18.281Z] Completed at: 2025-04-19T06:39:18.281Z

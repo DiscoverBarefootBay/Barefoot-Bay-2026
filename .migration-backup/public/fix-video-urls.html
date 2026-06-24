@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fix Banner Slide Video URLs</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #2563eb;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 10px;
+    }
+    button {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    button:hover {
+      background-color: #1d4ed8;
+    }
+    button:disabled {
+      background-color: #93c5fd;
+      cursor: not-allowed;
+    }
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      background-color: #f9fafb;
+    }
+    #output {
+      background-color: #f1f5f9;
+      border-radius: 6px;
+      padding: 15px;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      font-family: monospace;
+      margin-top: 20px;
+      border: 1px solid #cbd5e1;
+      min-height: 200px;
+    }
+    .success {
+      color: #059669;
+      font-weight: bold;
+    }
+    .error {
+      color: #dc2626;
+      font-weight: bold;
+    }
+    .video-item {
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 15px;
+      margin: 10px 0;
+      background-color: white;
+    }
+    details {
+      margin: 10px 0;
+    }
+    summary {
+      cursor: pointer;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Banner Slide Video URL Fixer</h1>
+  
+  <div class="card">
+    <h2>About this tool</h2>
+    <p>This tool updates any videos in banner slides to use Object Storage URLs instead of local filesystem paths. 
+      This ensures video content persists across deployments and container restarts.</p>
+    <p><strong>Note:</strong> You must be logged in as an admin to use this tool.</p>
+  </div>
+  
+  <div>
+    <button id="analyzeButton">1. Analyze Banner Slides</button>
+    <button id="fixButton" disabled>2. Fix Video URLs</button>
+    <button id="testVideosButton" disabled>3. Test Videos in Object Storage</button>
+    <button id="clearButton" style="background-color: #6b7280;">Clear Log</button>
+  </div>
+  
+  <div id="videoList"></div>
+  
+  <div id="output"></div>
+  
+  <script>
+    // Output log function
+    function log(message, isError = false, isSuccess = false) {
+      const output = document.getElementById('output');
+      const line = document.createElement('div');
+      line.textContent = message;
+      if (isError) {
+        line.className = 'error';
+      } else if (isSuccess) {
+        line.className = 'success';
+      }
+      output.appendChild(line);
+      output.scrollTop = output.scrollHeight;
+      console.log(message);
+    }
+
+    // Function to handle API authentication
+    async function checkAuth() {
+      log('Checking authentication status...');
+      
+      // First check if already logged in
+      try {
+        const userResponse = await fetch('/api/auth/me');
+        if (userResponse.ok) {
+          const userData = await userResponse.json();
+          if (userData && userData.role === 'admin') {
+            log(`Already logged in as admin (${userData.username})`, false, true);
+            return true;
+          } else if (userData) {
+            log(`Logged in as ${userData.username}, but admin access is required`, true);
+            return false;
+          }
+        } else {
+          log('Not authenticated. Please log in as admin in another tab first.', true);
+          return false;
+        }
+      } catch (e) {
+        log('Error checking auth status: ' + e.message, true);
+        return false;
+      }
+      
+      log('Please ensure you are logged in as an admin in another tab', true);
+      return false;
+    }
+
+    // Function to get banner slides from the API
+    async function getBannerSlides() {
+      log('Fetching banner slides data...');
+      const response = await fetch('/api/pages/banner-slides');
+      
+      if (!response.ok) {
+        throw new Error(`Failed to get banner slides: ${response.status} ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      log(`Found banner slides with ID: ${data.id}`);
+      
+      return data;
+    }
+
+    // Function to save updated banner slides
+    async function saveBannerSlides(slides, pageId) {
+      log('Saving updated banner slides...');
+      
+      const updateData = {
+        slug: "banner-slides",
+        title: "Homepage Banner Slides",
+        content: JSON.stringify(slides),
+        createVersion: true,
+        versionNotes: "Update video URLs to use Object Storage"
+      };
+      
+      const response = await fetch(`/api/pages/${pageId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updateData),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to update banner slides: ${response.status} ${response.statusText}`);
+      }
+      
+      log('Banner slides updated successfully', false, true);
+      return response;
+    }
+
+    // Extract filename from path
+    function getFilename(url) {
+      if (!url) return null;
+      
+      // Handle different path formats
+      if (url.startsWith('/uploads/banner-slides/')) {
+        return url.replace('/uploads/banner-slides/', '');
+      } else if (url.startsWith('/banner-slides/')) {
+        return url.replace('/banner-slides/', '');
+      } else if (url.includes('object-storage.replit.app')) {
+        const parts = url.split('/');
+        return parts[parts.length - 1];
+      }
+      
+      return null;
+    }
+
+    // Check if the file has a video extension
+    function isVideoFile(filename) {
+      if (!filename) return false;
+      const videoExtensions = ['.mp4', '.webm', '.mov', '.avi'];
+      const ext = filename.substring(filename.lastIndexOf('.')).toLowerCase();
+      return videoExtensions.includes(ext);
+    }
+
+    // Convert video URLs to Object Storage format
+    function convertVideoUrl(url) {
+      if (!url || url.includes('object-storage.replit.app')) {
+        return url; // Already an Object Storage URL or empty
+      }
+      
+      const filename = getFilename(url);
+      if (!filename) {
+        log(`Could not extract filename from URL: ${url}`, true);
+        return url;
+      }
+      
+      if (!isVideoFile(filename)) {
+        return url; // Not a video file
+      }
+      
+      // Generate the Object Storage URL
+      const bucket = 'BANNER'; // Use the BANNER bucket
+      return `https://object-storage.replit.app/${bucket}/banner-slides/${filename}`;
+    }
+
+    // Test if a video exists in object storage and can be loaded
+    async function testVideoInObjectStorage(videoUrl) {
+      try {
+        // For Object Storage URLs, also check using the API proxy
+        let urlsToTest = [videoUrl];
+        
+        // If this is an Object Storage URL, add the proxy URL as well
+        if (videoUrl.includes('object-storage.replit.app')) {
+          // Extract bucket and path from Object Storage URL
+          const urlParts = videoUrl.split('object-storage.replit.app/');
+          if (urlParts.length > 1) {
+            const parts = urlParts[1].split('/');
+            if (parts.length >= 2) {
+              const bucket = parts[0];
+              const filepath = parts.slice(1).join('/');
+              
+              // Add our server's proxy endpoint
+              const proxyPath = `/api/storage-proxy/${bucket}/${filepath}`;
+              urlsToTest.push(proxyPath);
+            }
+          }
+        }
+        
+        // Test each URL
+        for (const url of urlsToTest) {
+          const result = await new Promise((resolve) => {
+            const video = document.createElement('video');
+            
+            video.onloadeddata = () => {
+              resolve(true);
+            };
+            
+            video.onerror = () => {
+              resolve(false);
+            };
+            
+            // Set a timeout in case it hangs
+            setTimeout(() => resolve(false), 5000);
+            
+            // Try to load the video
+            video.src = url;
+          });
+          
+          if (result) {
+            return true; // If any URL works, return true
+          }
+        }
+        
+        return false; // If none worked, return false
+      } catch (error) {
+        console.error('Error testing video in Object Storage:', error);
+        return false;
+      }
+    }
+    
+    // Try to upload a video file to Object Storage
+    async function uploadVideoToObjectStorage(filename) {
+      log(`Attempting to upload video ${filename} to Object Storage...`);
+      
+      // First check if the file exists in the uploads directory
+      const uploadsPath = `/uploads/banner-slides/${filename}`;
+      const rootPath = `/banner-slides/${filename}`;
+      
+      // Try to fetch the file from both possible locations
+      let fileBlob = null;
+      try {
+        // Try uploads path first
+        const uploadsResponse = await fetch(uploadsPath);
+        if (uploadsResponse.ok) {
+          fileBlob = await uploadsResponse.blob();
+          log(`Found video at ${uploadsPath}`);
+        } else {
+          // Try root path
+          const rootResponse = await fetch(rootPath);
+          if (rootResponse.ok) {
+            fileBlob = await rootResponse.blob();
+            log(`Found video at ${rootPath}`);
+          }
+        }
+      } catch (error) {
+        log(`Error fetching video file: ${error.message}`, true);
+      }
+      
+      if (!fileBlob) {
+        log(`Could not find video file ${filename} in filesystem`, true);
+        return false;
+      }
+      
+      // Now we have the file blob, we can upload it
+      try {
+        // Create a form for the direct upload
+        const formData = new FormData();
+        formData.append('file', fileBlob, filename);
+        formData.append('folder', 'banner-slides');
+        formData.append('bucket', 'BANNER');
+        
+        // Upload using the direct upload endpoint
+        const uploadResponse = await fetch('/api/direct-banner-upload', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (!uploadResponse.ok) {
+          throw new Error(`Upload failed with status ${uploadResponse.status}`);
+        }
+        
+        const result = await uploadResponse.json();
+        
+        if (result.url) {
+          log(`Successfully uploaded video to Object Storage: ${result.url}`, false, true);
+          return result.url;
+        } else {
+          throw new Error('Upload response did not contain a URL');
+        }
+      } catch (error) {
+        log(`Error uploading to Object Storage: ${error.message}`, true);
+        return false;
+      }
+    }
+
+    // Display the list of videos
+    function displayVideoList(videos) {
+      const videoList = document.getElementById('videoList');
+      videoList.innerHTML = '';
+      
+      if (videos.length === 0) {
+        videoList.innerHTML = '<div class="card">No videos found in banner slides.</div>';
+        return;
+      }
+      
+      const container = document.createElement('div');
+      container.className = 'card';
+      container.innerHTML = `<h2>Found ${videos.length} videos in banner slides</h2>`;
+      
+      videos.forEach((video, index) => {
+        const videoItem = document.createElement('div');
+        videoItem.className = 'video-item';
+        
+        const filename = getFilename(video.src);
+        const isObjectStorage = video.src.includes('object-storage.replit.app');
+        
+        videoItem.innerHTML = `
+          <strong>Video ${index + 1}: ${filename}</strong>
+          <div>Current URL: ${video.src}</div>
+          <div>Storage Type: ${isObjectStorage ? 'Object Storage ✅' : 'Local Filesystem ⚠️'}</div>
+          ${isObjectStorage ? '' : `<div>Recommended URL: ${convertVideoUrl(video.src)}</div>`}
+          <details>
+            <summary>Preview Video</summary>
+            <video 
+              src="${video.src}" 
+              controls 
+              width="100%" 
+              style="max-height: 200px; object-fit: contain;"
+              loop
+              muted
+              onloadeddata="this.parentNode.querySelector('.status').textContent = 'Status: Video loaded successfully ✅'"
+              onerror="this.parentNode.querySelector('.status').textContent = 'Status: Video failed to load ❌'"
+            ></video>
+            <div class="status">Status: Loading...</div>
+          </details>
+        `;
+        
+        container.appendChild(videoItem);
+      });
+      
+      videoList.appendChild(container);
+    }
+
+    // Analyze banner slides to identify videos
+    async function analyzeBannerSlides() {
+      const analyzeButton = document.getElementById('analyzeButton');
+      const fixButton = document.getElementById('fixButton');
+      
+      analyzeButton.disabled = true;
+      
+      try {
+        // Check authentication
+        const authenticated = await checkAuth();
+        if (!authenticated) {
+          analyzeButton.disabled = false;
+          return;
+        }
+        
+        // Get banner slides
+        const pageData = await getBannerSlides();
+        
+        // Parse content
+        let slides;
+        try {
+          slides = JSON.parse(pageData.content);
+          log(`Found ${slides.length} banner slides`);
+        } catch (parseError) {
+          log('Error parsing banner slides JSON: ' + parseError.message, true);
+          analyzeButton.disabled = false;
+          return;
+        }
+        
+        // Find videos
+        const videos = slides.filter(slide => {
+          const filename = getFilename(slide.src);
+          return filename && isVideoFile(filename);
+        });
+        
+        // Display videos
+        displayVideoList(videos);
+        
+        // Count videos that need conversion
+        const needConversion = videos.filter(slide => !slide.src.includes('object-storage.replit.app'));
+        
+        log(`Found ${videos.length} total video slides`);
+        log(`${needConversion.length} videos need URL conversion to use Object Storage`);
+        
+        if (needConversion.length > 0) {
+          log('Click "Fix Video URLs" to update them to use Object Storage.', false);
+          fixButton.disabled = false;
+        } else if (videos.length > 0) {
+          log('All videos are already using Object Storage URLs.', false, true);
+          document.getElementById('testVideosButton').disabled = false;
+        } else {
+          log('No videos found in banner slides.', false);
+        }
+        
+        // Store the data for other functions to use
+        window.bannerData = {
+          pages: pageData,
+          slides: slides,
+          videos: videos,
+          needConversion: needConversion
+        };
+      } catch (error) {
+        log('Error analyzing banner slides: ' + error.message, true);
+      } finally {
+        analyzeButton.disabled = false;
+      }
+    }
+    
+    // Fix video URLs
+    async function fixVideoUrls() {
+      const fixButton = document.getElementById('fixButton');
+      const testButton = document.getElementById('testVideosButton');
+      
+      fixButton.disabled = true;
+      
+      try {
+        if (!window.bannerData) {
+          log('Please analyze banner slides first', true);
+          fixButton.disabled = false;
+          return;
+        }
+        
+        const { pages, slides, needConversion } = window.bannerData;
+        
+        if (needConversion.length === 0) {
+          log('No videos need conversion', false);
+          fixButton.disabled = false;
+          return;
+        }
+        
+        // Process each slide
+        const updatedSlides = slides.map(slide => {
+          if (!slide.src) return slide;
+          
+          // Check if this is a video file that needs conversion
+          const filename = getFilename(slide.src);
+          if (filename && isVideoFile(filename) && !slide.src.includes('object-storage.replit.app')) {
+            const newUrl = convertVideoUrl(slide.src);
+            log(`Converting video URL: ${slide.src} to ${newUrl}`);
+            
+            return {
+              ...slide,
+              src: newUrl,
+              // Also ensure mediaType is set correctly
+              mediaType: slide.mediaType || 'video'
+            };
+          }
+          
+          return slide;
+        });
+        
+        // Save changes
+        log(`Updating ${needConversion.length} video URLs in database...`);
+        await saveBannerSlides(updatedSlides, pages.id);
+        log(`✅ All ${needConversion.length} video URLs have been updated to use Object Storage format`, false, true);
+        
+        // Update the stored data
+        window.bannerData.slides = updatedSlides;
+        window.bannerData.needConversion = [];
+        
+        // Update the display
+        const videos = updatedSlides.filter(slide => {
+          const filename = getFilename(slide.src);
+          return filename && isVideoFile(filename);
+        });
+        displayVideoList(videos);
+        window.bannerData.videos = videos;
+        
+        // Enable testing
+        testButton.disabled = false;
+      } catch (error) {
+        log('Error fixing video URLs: ' + error.message, true);
+      } finally {
+        fixButton.disabled = false;
+      }
+    }
+    
+    // Test videos in Object Storage and upload missing ones
+    async function testVideosInObjectStorage() {
+      const testButton = document.getElementById('testVideosButton');
+      
+      testButton.disabled = true;
+      
+      try {
+        if (!window.bannerData || !window.bannerData.videos) {
+          log('Please analyze banner slides first', true);
+          testButton.disabled = false;
+          return;
+        }
+        
+        const { videos, pages } = window.bannerData;
+        
+        if (videos.length === 0) {
+          log('No videos to test', false);
+          testButton.disabled = false;
+          return;
+        }
+        
+        log(`Testing ${videos.length} videos in Object Storage...`);
+        
+        // Test each video
+        let successCount = 0;
+        let failCount = 0;
+        let fixedCount = 0;
+        let updatedSlides = [...window.bannerData.slides]; // Clone slides for potential updates
+        
+        for (const video of videos) {
+          const filename = getFilename(video.src);
+          log(`Testing video: ${filename}...`);
+          
+          const objectStorageUrl = video.src.includes('object-storage.replit.app') 
+            ? video.src 
+            : convertVideoUrl(video.src);
+            
+          const exists = await testVideoInObjectStorage(objectStorageUrl);
+          
+          if (exists) {
+            log(`✅ Video ${filename} exists in Object Storage and can be loaded`, false, true);
+            successCount++;
+          } else {
+            log(`❌ Video ${filename} could not be loaded from Object Storage`, true);
+            
+            // Try to upload the video to Object Storage
+            log(`Attempting to upload video ${filename} to Object Storage...`);
+            const uploadedUrl = await uploadVideoToObjectStorage(filename);
+            
+            if (uploadedUrl) {
+              log(`Successfully uploaded video to Object Storage: ${uploadedUrl}`, false, true);
+              fixedCount++;
+              
+              // Update the slide with the new URL if needed
+              if (objectStorageUrl !== video.src) {
+                // Find and update this slide
+                updatedSlides = updatedSlides.map(slide => {
+                  if (slide.src === video.src) {
+                    log(`Updating slide to use the new Object Storage URL`);
+                    return {
+                      ...slide,
+                      src: uploadedUrl,
+                      // Also ensure mediaType is set correctly
+                      mediaType: slide.mediaType || 'video'
+                    };
+                  }
+                  return slide;
+                });
+              }
+            } else {
+              failCount++;
+            }
+          }
+        }
+        
+        // If any slides were updated with new URLs, save the changes
+        if (fixedCount > 0 && JSON.stringify(updatedSlides) !== JSON.stringify(window.bannerData.slides)) {
+          log(`Saving updated slides with ${fixedCount} new Object Storage URLs...`);
+          await saveBannerSlides(updatedSlides, pages.id);
+          
+          // Update the stored data
+          window.bannerData.slides = updatedSlides;
+          
+          // Update the display
+          const updatedVideos = updatedSlides.filter(slide => {
+            const filename = getFilename(slide.src);
+            return filename && isVideoFile(filename);
+          });
+          displayVideoList(updatedVideos);
+          window.bannerData.videos = updatedVideos;
+        }
+        
+        // Summary
+        const totalFixed = successCount + fixedCount;
+        log(`Test complete: ${totalFixed} videos available in Object Storage, ${failCount} videos failed`, 
+          false, totalFixed > failCount);
+        
+        if (fixedCount > 0) {
+          log(`✅ Fixed ${fixedCount} videos by uploading them to Object Storage`, false, true);
+        }
+        
+        if (failCount > 0) {
+          log(`Some videos could not be loaded or uploaded to Object Storage.`, true);
+          log(`To fix this, you may need to:`, false);
+          log(`1. Ensure the video files exist in the /uploads/banner-slides/ directory`, false);
+          log(`2. Re-upload the video files through the banner slide editor`, false);
+        } else if (totalFixed > 0) {
+          log(`All videos are successfully stored in Object Storage and can be loaded.`, false, true);
+        }
+      } catch (error) {
+        log('Error testing videos: ' + error.message, true);
+      } finally {
+        testButton.disabled = false;
+      }
+    }
+
+    // Set up button handlers
+    document.getElementById('analyzeButton').addEventListener('click', analyzeBannerSlides);
+    document.getElementById('fixButton').addEventListener('click', fixVideoUrls);
+    document.getElementById('testVideosButton').addEventListener('click', testVideosInObjectStorage);
+    document.getElementById('clearButton').addEventListener('click', () => {
+      document.getElementById('output').innerHTML = '';
+      document.getElementById('videoList').innerHTML = '';
+    });
+  </script>
+</body>
+</html>

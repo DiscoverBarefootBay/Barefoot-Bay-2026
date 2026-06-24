@@ -1,0 +1,18 @@
+Identified Issues:
+
+Mobile Responsiveness of Popup: The "UPCOMING ROCKET LAUNCHES" popup is not responsive for mobile view.
+Centering: The popup is not centered on mobile screens.
+Readability/Overflow: The content of the popup is overflowing or being cut off on mobile, making it unreadable. In image_1b4cad.jpg, the text "UPCOMING LAUN..." is cut off, and the details below are also not fitting within the viewport of the popup.
+This is a common CSS issue related to how the popup's width, positioning (like position, left, right, transform), and potentially max-width are defined, especially within media queries for smaller screens.
+
+Concise Prompt for Replit Agent:
+
+"The 'UPCOMING ROCKET LAUNCHES' popup, triggered by the rocket icon in the navbar, is not centered and its content is cut off/unreadable on mobile devices. On desktop, it appears correctly. Adjust the CSS for this popup to ensure it is horizontally centered and its content is fully visible and readable on mobile screen sizes. This might involve making its width responsive (e.g., a percentage of the screen width with a max-width), ensuring proper text wrapping, and verifying its positioning properties (e.g., using flexbox/grid for centering or adjusting absolute/fixed positioning values)."
+Why this prompt is structured this way:
+
+Identifies the Element: Clearly names the "UPCOMING ROCKET LAUNCHES" popup and how it's triggered.
+States the Problem: Describes the visual bugs (not centered, content cut off/unreadable).
+Specifies the Context: Mentions it occurs on "mobile devices" and contrasts it with the correct "desktop" behavior.
+Suggests the Goal: "ensure it is horizontally centered and its content is fully visible and readable on mobile screen sizes."
+Hints at Solution Areas: Points towards CSS adjustments and gives examples like responsive width, text wrapping, and positioning properties, which helps the Agent narrow down the files and properties to look at.
+This should give Replit Agent a good starting point to address the styling of your popup for mobile views.

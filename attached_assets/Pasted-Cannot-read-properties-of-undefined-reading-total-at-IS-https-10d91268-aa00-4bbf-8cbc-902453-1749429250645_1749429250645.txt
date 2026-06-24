@@ -1,0 +1,17 @@
+Cannot read properties of undefined (reading 'total')
+at IS (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:2499:19415)
+at tb (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:39:17018)
+at lP (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:41:44058)
+at aP (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:41:39790)
+at QB (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:41:39718)
+at Xg (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:41:39570)
+at U1 (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:41:35934)
+at WN (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:41:36738)
+at jl (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:39:3279)
+at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:41:34263
+Error caught by boundary: 
+TypeError {}
+ 
+Object {componentStack: "↵    at IS…"}
+componentStack: "↵ at IS (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:2499:16666)↵ at gt (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:49:3233)↵ at Yt (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:2801:46391)↵ at OU (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:49:4046)↵ at main↵ at div↵ at div↵ at Xxe↵ at Zxe↵ at yY (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:790:31797)↵ at gY (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:790:23478)↵ at aH (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:49:40627)↵ at bY (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:790:36638)↵ at Jxe (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-ru1nLP9Y.js:2802:12969)"
+[[Prototype]]: Object

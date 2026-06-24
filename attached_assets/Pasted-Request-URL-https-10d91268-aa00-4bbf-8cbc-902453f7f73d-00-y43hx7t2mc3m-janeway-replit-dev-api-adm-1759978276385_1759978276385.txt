@@ -1,0 +1,88 @@
+Request URL
+https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/api/admin/send-calendar-events/day
+Request Method
+POST
+Status Code
+500 Internal Server Error
+Remote Address
+34.148.134.19:443
+Referrer Policy
+no-referrer
+access-control-allow-credentials
+true
+access-control-allow-origin
+https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+content-length
+51
+content-security-policy
+default-src 'self' * data: blob:;script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.googletagmanager.com http://localhost:* https://*.replit.app https://*.replit.dev *;style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com http://localhost:* https://*.replit.app https://*.replit.dev *;img-src 'self' data: blob: https://images.unsplash.com https://cdn.jsdelivr.net http://localhost:* https://*.replit.app https://*.replit.dev *;connect-src 'self' http://localhost:* https://*.replit.app https://*.replit.dev https://barefootbay.com wss://*.replit.app wss://*.replit.dev ws://localhost:* *;font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com http://localhost:* https://*.replit.app https://*.replit.dev *;object-src 'none';media-src 'self' http://localhost:* https://*.replit.app https://*.replit.dev data: blob: *;frame-src 'self' http://localhost:* https://*.replit.app https://*.replit.dev *;base-uri 'self';form-action 'self';upgrade-insecure-requests
+content-type
+application/json; charset=utf-8
+cross-origin-opener-policy
+same-origin-allow-popups
+cross-origin-resource-policy
+cross-origin
+date
+Thu, 09 Oct 2025 02:51:06 GMT
+etag
+W/"33-EM2FnTtVzcBa82fr6YwnLNiqwg8"
+origin-agent-cluster
+?1
+referrer-policy
+no-referrer
+replit-cluster
+janeway
+strict-transport-security
+max-age=31536000; includeSubDomains
+vary
+Origin, Accept-Encoding
+x-content-type-options
+nosniff
+x-dns-prefetch-control
+off
+x-download-options
+noopen
+x-frame-options
+SAMEORIGIN
+x-permitted-cross-domain-policies
+none
+x-robots-tag
+none, noindex, noarchive, nofollow, nositelinkssearchbox, noimageindex
+x-robots-tag
+none, noindex, noarchive, nofollow, nositelinkssearchbox, noimageindex
+x-xss-protection
+0
+accept
+*/*
+accept-encoding
+gzip, deflate, br, zstd
+accept-language
+en-US,en;q=0.9
+connection
+keep-alive
+content-length
+29
+content-type
+application/json
+cookie
+connect.sid=s%3A4KaW0L2Ibrn881u9JBqif6rJiBCYmIxs.STENRlxxIMubq1QqqeXSe7hXNNbzWPWEl7%2F21aQ%2BDQ0; analytics_session_id=7f96ec7a-f52a-4575-86fc-5db7a41f44ba
+host
+10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+origin
+https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev
+sec-ch-ua
+"Chromium";v="140", "Not=A?Brand";v="24", "Google Chrome";v="140"
+sec-ch-ua-mobile
+?1
+sec-ch-ua-platform
+"Android"
+sec-fetch-dest
+empty
+sec-fetch-mode
+cors
+sec-fetch-site
+same-origin
+sec-fetch-storage-access
+active
+user-agent
+Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Mobile Safari/537.36

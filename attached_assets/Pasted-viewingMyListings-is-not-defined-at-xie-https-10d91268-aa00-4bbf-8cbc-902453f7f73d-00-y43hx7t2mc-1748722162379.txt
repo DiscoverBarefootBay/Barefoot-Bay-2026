@@ -1,0 +1,20 @@
+viewingMyListings is not defined
+at xie (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:2241:68732)
+at Yj (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:39:17018)
+at tP (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:41:44058)
+at ZT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:41:39790)
+at LB (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:41:39718)
+at Wg (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:41:39570)
+at $1 (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:41:35934)
+at ON (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:41:36738)
+at vl (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:39:3279)
+at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:41:34263
+Error caught by boundary: 
+ReferenceError {}
+message: "viewingMyListings is not defined"
+stack: "ReferenceError: viewingMyListings is not defined↵ at xie (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:2241:68732)↵ at Yj (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:39:17018)↵ at tP (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:41:44058)↵ at ZT (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:41:39790)↵ at LB (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:41:39718)↵ at Wg (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:41:39570)↵ at $1 (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:41:35934)↵ at ON (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:41:36738)↵ at vl (https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:39:3279)↵ at https://10d91268-aa00-4bbf-8cbc-902453f7f73d-00-y43hx7t2mc3m.janeway.replit.dev/assets/index-Dc_Ll4pt.js:41:34263"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object
+ 
+Object {componentStack: "↵    at xie…"}

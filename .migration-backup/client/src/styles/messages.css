@@ -1,0 +1,233 @@
+/* Message system styling */
+.messages-container {
+  display: flex;
+  height: calc(100vh - 200px);
+  min-height: 500px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+.message-list {
+  width: 300px;
+  border-right: 1px solid #e5e7eb;
+  overflow-y: auto;
+  background-color: #f9fafb;
+}
+
+.message-detail {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.message-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.message-compose {
+  border-top: 1px solid #e5e7eb;
+  padding: 15px;
+  background-color: #f9fafb;
+}
+
+.message-item {
+  padding: 15px;
+  border-bottom: 1px solid #e5e7eb;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.message-item:hover {
+  background-color: #eef2ff;
+}
+
+.message-item.active {
+  background-color: transparent !important;
+  border-left: 4px solid #3b82f6;
+}
+
+.message-item-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.message-item-subject {
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+.message-item-date {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.message-item-preview {
+  color: #6b7280;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.message-unread {
+  position: relative;
+}
+
+.message-unread::after {
+  content: '';
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ef4444;
+}
+
+.message-attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.message-attachment {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #f3f4f6;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.message-attachment-icon {
+  margin-right: 5px;
+  color: #6b7280;
+}
+
+.message-detail-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
+
+.message-detail-subject {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-bottom: 5px;
+}
+
+.message-detail-meta {
+  display: flex;
+  justify-content: space-between;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.message-attachment-image {
+  max-width: 150px;
+  max-height: 150px;
+  border-radius: 4px;
+  border: 1px solid #e5e7eb;
+}
+
+.attachment-preview {
+  display: inline-block;
+  margin: 10px;
+  text-align: center;
+}
+
+.attachment-filename {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-top: 5px;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.message-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .messages-container {
+    flex-direction: column;
+    height: calc(100vh - 150px);
+  }
+  
+  .message-list {
+    width: 100%;
+    height: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .message-detail {
+    display: none;
+  }
+  
+  .mobile-view .message-list {
+    display: none;
+  }
+  
+  .mobile-view .message-detail {
+    display: flex;
+    height: 100%;
+  }
+  
+  .mobile-back-button {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 15px;
+    color: #3b82f6;
+    font-weight: 500;
+  }
+  
+  .desktop-back-button {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-back-button {
+    display: none;
+  }
+}
+
+/* New message button */
+.new-message-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.5);
+  z-index: 10;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.new-message-button:hover {
+  transform: scale(1.05);
+  background-color: #2563eb;
+}

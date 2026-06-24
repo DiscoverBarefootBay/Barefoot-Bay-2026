@@ -1,0 +1,19 @@
+{
+  "variant": "professional",
+  "primary": "#90C9D4",
+  "appearance": "light",
+  "radius": 0.75,
+  "colors": {
+    "ocean": "#90C9D4",
+    "coral": "#e15a4f",
+    "navy": "#434054",
+    "grey": "#f4f4f5",
+    "charcoal": "#27272a",
+    "background": "#FFFFFF",
+    "foreground": "#11181C",
+    "popover": "#FFFFFF",
+    "popover-foreground": "#11181C",
+    "muted": "#F4F4F5",
+    "muted-foreground": "#71717A"
+  }
+}

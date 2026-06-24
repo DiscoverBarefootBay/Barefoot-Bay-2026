@@ -1,0 +1,27 @@
+/* Completely hide the featured products section */
+h2:contains('FEATURED PRODUCTS'),
+div:has(> h2:contains('FEATURED PRODUCTS')),
+section:has(> h2:contains('FEATURED PRODUCTS')),
+div.featured-products,
+section.featured-products,
+.featured-products-carousel,
+.featured-products-container {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Hide anything with "featured" in class name that might be related */
+[class*="featured"] {
+  display: none !important;
+}
+
+/* Style for hiding specific elements */
+.hide-featured-heading,
+.hide-featured-content {
+  display: none !important;
+}

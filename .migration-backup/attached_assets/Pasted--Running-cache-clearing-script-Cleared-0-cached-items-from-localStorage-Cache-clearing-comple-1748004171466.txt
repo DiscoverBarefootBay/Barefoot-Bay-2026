@@ -1,0 +1,312 @@
+ Running cache clearing script...
+ Cleared 0 cached items from localStorage
+ Cache clearing complete - errors should be resolved on next page refresh.
+Nunito-Regular.ttf:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:18 [Maps Polyfill] Initializing enhanced Google Maps polyfill
+index-Bj3dea7w.js:18 [Maps Polyfill] Installing fetch polyfill
+index-Bj3dea7w.js:835 [WebSocket] WebSocket functionality is disabled to prevent conflicts with Object Storage
+/static/videos/BackgroundVideo.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:2765 ❌ Video URL returned status 502: /static/videos/BackgroundVideo.mp4
+(anonymous) @ index-Bj3dea7w.js:2765
+/api/pages/banner-slides:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:58 API request failed: GET /api/pages/banner-slides - Status: 502 Error: HTTP error! Status: 502
+    at _e (index-Bj3dea7w.js:58:1603)
+    at async index-Bj3dea7w.js:835:44464
+_e @ index-Bj3dea7w.js:58
+index-Bj3dea7w.js:58 API request failed: GET /api/pages/banner-slides Error: HTTP error! Status: 502
+    at _e (index-Bj3dea7w.js:58:1603)
+    at async index-Bj3dea7w.js:835:44464
+_e @ index-Bj3dea7w.js:58
+index-Bj3dea7w.js:835 Error fetching banner slides: Error: HTTP error! Status: 502
+    at _e (index-Bj3dea7w.js:58:1603)
+    at async index-Bj3dea7w.js:835:44464
+(anonymous) @ index-Bj3dea7w.js:835
+/api/auth/check:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+/api/events:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+/api/pages:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:65 Query auth check error: SyntaxError: Unexpected token 'T', "The deploy"... is not valid JSON
+(anonymous) @ index-Bj3dea7w.js:65
+Nunito-Medium.ttf:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+/api/messages/unread/count:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+/api/weather?lat=27.9589&lon=-80.5603&units=imperial:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+/api/community-categories:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+/api/forum/categories:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:65 Query fetch failed: /api/pages TypeError: Failed to execute 'text' on 'Response': body stream already read
+    at lH (index-Bj3dea7w.js:49:43154)
+    at async index-Bj3dea7w.js:65:1463
+(anonymous) @ index-Bj3dea7w.js:65
+/uploads/icons/rocket-icon.svg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:65 Query fetch failed: /api/messages/unread/count TypeError: Failed to execute 'text' on 'Response': body stream already read
+    at lH (index-Bj3dea7w.js:49:43154)
+    at async index-Bj3dea7w.js:65:1463
+(anonymous) @ index-Bj3dea7w.js:65
+index-Bj3dea7w.js:65 Query fetch failed: /api/community-categories TypeError: Failed to execute 'text' on 'Response': body stream already read
+    at lH (index-Bj3dea7w.js:49:43154)
+    at async index-Bj3dea7w.js:65:1463
+(anonymous) @ index-Bj3dea7w.js:65
+index-Bj3dea7w.js:2762 Weather API error response: The deployment could not be reached
+c @ index-Bj3dea7w.js:2762
+index-Bj3dea7w.js:2762 Error fetching weather: Error: Weather API error: 502 
+    at c (index-Bj3dea7w.js:2762:39313)
+c @ index-Bj3dea7w.js:2762
+/api/user:1 
+            
+            
+           Failed to load resource: the server responded with a status of 401 ()
+object-storage.replit.app/DEFAULT/videos/BackgroundVideo.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+index-Bj3dea7w.js:2765 Video error event triggered (1/2): Event
+R @ index-Bj3dea7w.js:2765
+index-Bj3dea7w.js:2766 Detailed video error: Code 4: MEDIA_ERR_SRC_NOT_SUPPORTED - Media source not supported
+
+R @ index-Bj3dea7w.js:2766
+barefootbay.com/:1 Access to fetch at 'https://object-storage.replit.app/DEFAULT/videos/BackgroundVideo.mp4' from origin 'https://barefootbay.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+object-storage.replit.app/DEFAULT/videos/BackgroundVideo.mp4:1 
+            
+            
+           Failed to load resource: net::ERR_FAILED
+index-Bj3dea7w.js:2765 ❌ Failed to check video URL: https://object-storage.replit.app/DEFAULT/videos/BackgroundVideo.mp4 TypeError: Failed to fetch
+    at u (index-Bj3dea7w.js:18:3663)
+    at index-Bj3dea7w.js:2765:47824
+    at index-Bj3dea7w.js:2765:49128
+    at nv (index-Bj3dea7w.js:41:24283)
+    at ad (index-Bj3dea7w.js:41:42409)
+    at index-Bj3dea7w.js:41:40726
+    at S (index-Bj3dea7w.js:26:1543)
+    at MessagePort.R (index-Bj3dea7w.js:26:1902)
+(anonymous) @ index-Bj3dea7w.js:2765
+/api/auth/check:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:65 Query auth check error: SyntaxError: Unexpected token 'T', "The deploy"... is not valid JSON
+(anonymous) @ index-Bj3dea7w.js:65
+object-storage.replit.app/DEFAULT/banner-slides/background-video.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+index-Bj3dea7w.js:2765 Video error event triggered (1/2): Event
+R @ index-Bj3dea7w.js:2765
+index-Bj3dea7w.js:2766 Detailed video error: Code 4: MEDIA_ERR_SRC_NOT_SUPPORTED - Media source not supported
+
+R @ index-Bj3dea7w.js:2766
+barefootbay.com/:1 Access to fetch at 'https://object-storage.replit.app/DEFAULT/banner-slides/background-video.mp4' from origin 'https://barefootbay.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+object-storage.replit.app/DEFAULT/banner-slides/background-video.mp4:1 
+            
+            
+           Failed to load resource: net::ERR_FAILED
+index-Bj3dea7w.js:2765 ❌ Failed to check video URL: https://object-storage.replit.app/DEFAULT/banner-slides/background-video.mp4 TypeError: Failed to fetch
+    at u (index-Bj3dea7w.js:18:3663)
+    at index-Bj3dea7w.js:2765:47824
+    at index-Bj3dea7w.js:2765:49128
+    at nv (index-Bj3dea7w.js:41:24283)
+    at ad (index-Bj3dea7w.js:41:42409)
+    at index-Bj3dea7w.js:41:40726
+    at S (index-Bj3dea7w.js:26:1543)
+    at MessagePort.R (index-Bj3dea7w.js:26:1902)
+(anonymous) @ index-Bj3dea7w.js:2765
+object-storage.replit.app/DEFAULT/videos/background-video.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+index-Bj3dea7w.js:2765 Video error event triggered (1/2): Event
+R @ index-Bj3dea7w.js:2765
+index-Bj3dea7w.js:2766 Detailed video error: Code 4: MEDIA_ERR_SRC_NOT_SUPPORTED - Media source not supported
+
+R @ index-Bj3dea7w.js:2766
+barefootbay.com/:1 Access to fetch at 'https://object-storage.replit.app/DEFAULT/videos/background-video.mp4' from origin 'https://barefootbay.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+object-storage.replit.app/DEFAULT/videos/background-video.mp4:1 
+            
+            
+           Failed to load resource: net::ERR_FAILED
+index-Bj3dea7w.js:2765 ❌ Failed to check video URL: https://object-storage.replit.app/DEFAULT/videos/background-video.mp4 TypeError: Failed to fetch
+    at u (index-Bj3dea7w.js:18:3663)
+    at index-Bj3dea7w.js:2765:47824
+    at index-Bj3dea7w.js:2765:49128
+    at nv (index-Bj3dea7w.js:41:24283)
+    at ad (index-Bj3dea7w.js:41:42409)
+    at index-Bj3dea7w.js:41:40726
+    at S (index-Bj3dea7w.js:26:1543)
+    at MessagePort.R (index-Bj3dea7w.js:26:1902)
+(anonymous) @ index-Bj3dea7w.js:2765
+/api/auth/check:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:65 Query auth check error: SyntaxError: Unexpected token 'T', "The deploy"... is not valid JSON
+(anonymous) @ index-Bj3dea7w.js:65
+barefootbay.com/:1 Access to fetch at 'https://object-storage.replit.app/DEFAULT/banner-slides/test-background-video.mp4' from origin 'https://barefootbay.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+object-storage.replit.app/DEFAULT/banner-slides/test-background-video.mp4:1 
+            
+            
+           Failed to load resource: net::ERR_FAILED
+index-Bj3dea7w.js:2765 ❌ Failed to check video URL: https://object-storage.replit.app/DEFAULT/banner-slides/test-background-video.mp4 TypeError: Failed to fetch
+    at u (index-Bj3dea7w.js:18:3663)
+    at index-Bj3dea7w.js:2765:47824
+    at index-Bj3dea7w.js:2765:49128
+    at nv (index-Bj3dea7w.js:41:24283)
+    at ad (index-Bj3dea7w.js:41:42409)
+    at index-Bj3dea7w.js:41:40726
+    at S (index-Bj3dea7w.js:26:1543)
+    at MessagePort.R (index-Bj3dea7w.js:26:1902)
+(anonymous) @ index-Bj3dea7w.js:2765
+object-storage.replit.app/DEFAULT/banner-slides/test-background-video.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+/public/banner-placeholder.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+/api/auth/check:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:65 Query auth check error: SyntaxError: Unexpected token 'T', "The deploy"... is not valid JSON
+(anonymous) @ index-Bj3dea7w.js:65
+barefootbay.com/:1 Access to fetch at 'https://object-storage.replit.app/DEFAULT/videos/test-background-video.mp4' from origin 'https://barefootbay.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+object-storage.replit.app/DEFAULT/videos/test-background-video.mp4:1 
+            
+            
+           Failed to load resource: net::ERR_FAILED
+index-Bj3dea7w.js:2765 ❌ Failed to check video URL: https://object-storage.replit.app/DEFAULT/videos/test-background-video.mp4 TypeError: Failed to fetch
+    at u (index-Bj3dea7w.js:18:3663)
+    at index-Bj3dea7w.js:2765:47824
+    at index-Bj3dea7w.js:2765:49128
+    at nv (index-Bj3dea7w.js:41:24283)
+    at ad (index-Bj3dea7w.js:41:42409)
+    at index-Bj3dea7w.js:41:40726
+    at S (index-Bj3dea7w.js:26:1543)
+    at MessagePort.R (index-Bj3dea7w.js:26:1902)
+(anonymous) @ index-Bj3dea7w.js:2765
+object-storage.replit.app/DEFAULT/videos/test-background-video.mp4:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+index-Bj3dea7w.js:2765 Video error event triggered (1/2): Event
+R @ index-Bj3dea7w.js:2765
+index-Bj3dea7w.js:2766 Detailed video error: Code 4: MEDIA_ERR_SRC_NOT_SUPPORTED - Media source not supported
+
+R @ index-Bj3dea7w.js:2766
+index-Bj3dea7w.js:835 Image load error for: /uploads/banner-slides/bannerImage-1741926522955-8... - trying fallback
+N @ index-Bj3dea7w.js:835
+AdventPro-Regular.ttf:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+/public/banner-placeholder.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+barefootbay.com/:1 Access to fetch at 'https://object-storage.replit.app/DEFAULT/videos/test-background-video.mp4' from origin 'https://barefootbay.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+object-storage.replit.app/DEFAULT/videos/test-background-video.mp4:1 
+            
+            
+           Failed to load resource: net::ERR_FAILED
+index-Bj3dea7w.js:2765 ❌ Failed to check video URL: https://object-storage.replit.app/DEFAULT/videos/test-background-video.mp4 TypeError: Failed to fetch
+    at u (index-Bj3dea7w.js:18:3663)
+    at index-Bj3dea7w.js:2765:47824
+    at index-Bj3dea7w.js:2765:49128
+    at nv (index-Bj3dea7w.js:41:24283)
+    at ad (index-Bj3dea7w.js:41:42409)
+    at index-Bj3dea7w.js:41:40726
+    at S (index-Bj3dea7w.js:26:1543)
+    at MessagePort.R (index-Bj3dea7w.js:26:1902)
+(anonymous) @ index-Bj3dea7w.js:2765
+index-Bj3dea7w.js:2765 All video sources failed
+(anonymous) @ index-Bj3dea7w.js:2765
+index-Bj3dea7w.js:835 Image load error for: /uploads/banner-slides/bannerImage-1741927053069-8... - trying fallback
+N @ index-Bj3dea7w.js:835
+/api/auth/check:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:58 Auth check error: SyntaxError: Unexpected token 'T', "The deploy"... is not valid JSON
+(anonymous) @ index-Bj3dea7w.js:58
+Asset1.svg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:2762 Failed to preload: /uploads/icons/Asset1.svg
+R.onerror @ index-Bj3dea7w.js:2762
+/icons/Asset1.svg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:2762 Failed to preload: /icons/Asset1.svg
+R.onerror @ index-Bj3dea7w.js:2762
+/public/banner-placeholder.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+/favicon/favicon-48x48.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+/uploads/background-image-placeholder.jpg:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+/uploads/banner-slides/placeholder-banner.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:2766 REPLIT_APP_LOADED
+(anonymous) @ index-Bj3dea7w.js:2766
+/api/messages/unread/count:1 
+            
+            
+           Failed to load resource: the server responded with a status of 401 ()
+/api/auth/check:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:65 Query auth check error: SyntaxError: Unexpected token 'T', "The deploy"... is not valid JSON
+(anonymous) @ index-Bj3dea7w.js:65
+index-Bj3dea7w.js:2766 REPLIT_PAGE_LOADED
+(anonymous) @ index-Bj3dea7w.js:2766
+/api/analytics/track/event:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()
+index-Bj3dea7w.js:785 Error tracking event: Error: Failed to track event: 
+    at J0 (index-Bj3dea7w.js:785:34644)
+J0 @ index-Bj3dea7w.js:785

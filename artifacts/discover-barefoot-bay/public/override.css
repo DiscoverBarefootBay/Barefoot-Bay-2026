@@ -1,0 +1,34 @@
+/* Direct CSS override to hide the featured products section */
+h2 {
+  display: none !important;
+}
+
+h2 + div {
+  display: none !important;
+}
+
+/* Target specific heading text (will be applied via JavaScript) */
+.hide-featured-heading {
+  display: none !important;
+}
+
+.hide-featured-content {
+  display: none !important;
+}
+
+/* Try different selectors based on potential DOM structure */
+.featured-products-container,
+.featured-products-section,
+.featured-products,
+.featured-carousel {
+  display: none !important;
+}
+
+/* More aggressive approach */
+#featured-products,
+[id*="featured"],
+[class*="featured"],
+[data-id*="featured"],
+[data-section*="featured"] {
+  display: none !important;
+}
