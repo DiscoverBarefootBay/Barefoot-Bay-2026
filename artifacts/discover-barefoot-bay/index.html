@@ -184,36 +184,5 @@
     </script>
     
     
-    <!-- Special script for Replit integration (conditionally loaded) -->
-    <script>
-      // Signal to Replit that the page is loaded, but only in Replit environment
-      if (window.location.hostname.includes('replit.dev') || 
-          window.location.hostname.includes('janeway.replit.dev')) {
-        window.addEventListener('load', function() {
-          setTimeout(function() {
-            console.warn("REPLIT_PAGE_LOADED"); // Special signal for Replit
-            
-            // Also dispatch a custom event that Replit might be listening for
-            if (window.parent) {
-              try {
-                window.parent.postMessage({ type: "load", status: "complete" }, "*");
-              } catch (e) {
-                // Silent fail if posting to parent doesn't work
-              }
-            }
-            
-            // Try to force document.readyState to 'complete'
-            if (document.readyState !== 'complete') {
-              Object.defineProperty(document, 'readyState', { value: 'complete' });
-            }
-            
-            // Dispatch the load event again for good measure
-            window.dispatchEvent(new Event('load'));
-            document.dispatchEvent(new Event('DOMContentLoaded'));
-            document.dispatchEvent(new Event('readystatechange'));
-          }, 2000); // Wait 2 seconds to ensure app has fully loaded
-        });
-      }
-    </script>
   </body>
 </html>
