@@ -18,6 +18,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
 
 // Debounce hook for real-time validation
 function useDebounce<T>(value: T, delay: number): T {
@@ -70,6 +71,7 @@ type LoginData = Pick<InsertUser, "username" | "password">;
 
 export default function AuthPage() {
   const { user, loginMutation, registerMutation } = useAuth();
+  const { toast } = useToast();
   const [location] = useLocation();
   
   // Check if there's a tab parameter in the URL - use state for controlled Tabs
@@ -232,6 +234,16 @@ export default function AuthPage() {
     }
   });
 
+  // Keep `acceptedTerms` as a real boolean in the form state. It is driven
+  // solely by the terms + privacy acceptance state (set when the user clicks
+  // "I Accept" in each modal). This is the single source of truth so the
+  // z.boolean() schema can never receive a string and silently fail.
+  useEffect(() => {
+    registerForm.setValue("acceptedTerms", termsAccepted && privacyAccepted, {
+      shouldValidate: registerForm.formState.isSubmitted,
+    });
+  }, [termsAccepted, privacyAccepted]);
+
   // Auto-calculate resident status based on survey answers
   useEffect(() => {
     const watchLocalResident = registerForm.watch("isLocalResident");
@@ -385,18 +397,38 @@ export default function AuthPage() {
                   // Check password confirmation
                   if (data.password !== confirmPassword) {
                     setPasswordMismatch(true);
+                    toast({
+                      title: "Passwords don't match",
+                      description: "Please make sure both password fields are identical.",
+                      variant: "destructive",
+                    });
                     return;
                   }
                   // Check email confirmation
                   if (data.email !== confirmEmail) {
                     setEmailMismatch(true);
+                    toast({
+                      title: "Emails don't match",
+                      description: "Please make sure both email fields are identical.",
+                      variant: "destructive",
+                    });
                     return;
                   }
                   if (!recaptchaToken) {
+                    toast({
+                      title: "Please verify the CAPTCHA",
+                      description: "Complete the 'I'm not a robot' check before registering.",
+                      variant: "destructive",
+                    });
                     return;
                   }
                   // Block submission if username/email are taken
                   if (usernameStatus === 'taken' || emailStatus === 'taken') {
+                    toast({
+                      title: usernameStatus === 'taken' ? "Username already taken" : "Email already registered",
+                      description: "Please choose a different one and try again.",
+                      variant: "destructive",
+                    });
                     return;
                   }
                   // Include explicit acceptance tracking from modal interactions
@@ -431,6 +463,20 @@ export default function AuthPage() {
                       setRecaptchaToken(null);
                       recaptchaRef.current?.reset();
                     }
+                  });
+                }, (errors) => {
+                  // Invalid callback: surface zod validation failures instead of
+                  // silently aborting. Some fields (e.g. acceptedTerms) have no
+                  // inline FormMessage, so without this the form would do nothing.
+                  console.error('Registration validation failed:', errors);
+                  const firstError = Object.values(errors).find((e) => (e as any)?.message);
+                  const description =
+                    (firstError as any)?.message ||
+                    'Please review the highlighted fields and try again.';
+                  toast({
+                    title: 'Please complete the form',
+                    description: String(description),
+                    variant: 'destructive',
                   });
                 })} className="space-y-4">
                   <FormField
@@ -1086,12 +1132,9 @@ export default function AuthPage() {
                     </div>
                   </div>
                   
-                  {/* Hidden field to satisfy form validation when both are accepted */}
-                  <input 
-                    type="hidden" 
-                    {...registerForm.register('acceptedTerms')} 
-                    value={termsAccepted && privacyAccepted ? 'true' : 'false'}
-                  />
+                  {/* acceptedTerms is kept in sync as a real boolean via the
+                      useEffect tied to termsAccepted + privacyAccepted above,
+                      so no hidden string-valued input is needed here. */}
                   
                   {/* Google reCAPTCHA v2 Checkbox */}
                   <div className="mt-4 flex justify-center">
@@ -1181,10 +1224,6 @@ export default function AuthPage() {
               onClick={() => {
                 setTermsAccepted(true);
                 setShowTermsModal(false);
-                // Set form value when both accepted
-                if (privacyAccepted) {
-                  registerForm.setValue('acceptedTerms', true);
-                }
               }}
               data-testid="button-accept-terms"
               disabled={termsLoading || termsError || !termsPage?.content}
@@ -1228,10 +1267,6 @@ export default function AuthPage() {
               onClick={() => {
                 setPrivacyAccepted(true);
                 setShowPrivacyModal(false);
-                // Set form value when both accepted
-                if (termsAccepted) {
-                  registerForm.setValue('acceptedTerms', true);
-                }
               }}
               data-testid="button-accept-privacy"
               disabled={privacyLoading || privacyError || !privacyPage?.content}
