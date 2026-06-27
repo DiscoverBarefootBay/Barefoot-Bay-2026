@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodV4Resolver } from "@/lib/zod-v4-resolver";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -153,7 +153,7 @@ export function CreateListingForm({
   };
 
   const form = useForm<ListingFormValues>({
-    resolver: zodResolver(insertListingSchema),
+    resolver: zodV4Resolver(insertListingSchema),
     defaultValues: {
       listingType: defaultValues?.listingType as ListingType | undefined,
       title: defaultValues?.title || "",

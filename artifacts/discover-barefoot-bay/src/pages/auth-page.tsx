@@ -1,6 +1,6 @@
 import { useAuth } from "@/hooks/use-auth";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodV4Resolver } from "@/lib/zod-v4-resolver";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -83,7 +83,7 @@ export default function AuthPage() {
   const [activeTab, setActiveTab] = useState(initialTab);
 
   const loginForm = useForm<LoginData>({
-    resolver: zodResolver(insertUserSchema.pick({ username: true, password: true })),
+    resolver: zodV4Resolver(insertUserSchema.pick({ username: true, password: true })),
     defaultValues: {
       username: "",
       password: ""
@@ -199,7 +199,7 @@ export default function AuthPage() {
   const [selectedClubs, setSelectedClubs] = useState<string[]>([]);
 
   const registerForm = useForm<InsertUser>({
-    resolver: zodResolver(insertUserSchema),
+    resolver: zodV4Resolver(insertUserSchema),
     defaultValues: {
       fullName: "",
       email: "",

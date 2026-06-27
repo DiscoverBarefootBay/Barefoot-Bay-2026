@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodV4Resolver } from "@/lib/zod-v4-resolver";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -40,7 +40,7 @@ export function CreateListingForm({ onSubmit, isSubmitting, defaultValues }: Pro
   const [currentPhotos, setCurrentPhotos] = useState<string[]>(defaultValues?.photos || []);
 
   const form = useForm<typeof insertListingSchema._type>({
-    resolver: zodResolver(insertListingSchema),
+    resolver: zodV4Resolver(insertListingSchema),
     defaultValues: {
       listingType: defaultValues?.listingType,
       title: defaultValues?.title || "",

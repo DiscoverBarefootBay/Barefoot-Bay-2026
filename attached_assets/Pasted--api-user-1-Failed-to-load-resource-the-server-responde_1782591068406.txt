@@ -1,0 +1,1209 @@
+/api/user:1  Failed to load resource: the server responded with a status of 401 ()
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ Using filesystem rocket icon
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1781645546729-521108078.jpg
+ 🔍 [MOBILE DIRECT] Successfully loaded slide 4: /api/storage-proxy/BANNER/banner-slides/bannerImage-1781645546729-521108078.jpg
+ 🔍 [MOBILE DIRECT] Successfully loaded slide 0: /api/storage-proxy/BANNER/banner-slides/bannerImage-1782164718804-685535861.jpg
+ 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1782164718804-685535861.jpg
+ 🔍 [MOBILE DIRECT] Successfully loaded slide 5: /api/storage-proxy/BANNER/banner-slides/bannerImage-1780676234997-532275188.png
+ 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1780676234997-532275188.png
+ 🔍 [MOBILE DIRECT] Successfully loaded slide 1: /api/storage-proxy/BANNER/banner-slides/bannerImage-1782588042499-248718161.jpg
+ 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1782588042499-248718161.jpg
+ 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1752510745473-383654848.jpg
+ 🔍 [MOBILE DIRECT] Successfully loaded slide 11: /api/storage-proxy/BANNER/banner-slides/bannerImage-1752510745473-383654848.jpg
+ 🔍 [MOBILE DIRECT] Successfully loaded slide 12: /api/storage-proxy/BANNER/banner-slides/bannerImage-1748470568704-557694426.jpg
+ 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1748470568704-557694426.jpg
+ 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1779404883639-916195021.jpg
+ 🔍 [MOBILE DIRECT] Successfully loaded slide 7: /api/storage-proxy/BANNER/banner-slides/bannerImage-1779404883639-916195021.jpg
+ 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1780335600960-36710420.jpg
+ 🔍 [MOBILE DIRECT] Successfully loaded slide 6: /api/storage-proxy/BANNER/banner-slides/bannerImage-1780335600960-36710420.jpg
+ 🔍 [MOBILE DIRECT] Successfully loaded slide 2: /api/storage-proxy/BANNER/banner-slides/bannerImage-1782138759127-952920422.jpg
+ 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1782138759127-952920422.jpg
+ 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1781707416935-346455623.png
+ 🔍 [MOBILE DIRECT] Successfully loaded slide 3: /api/storage-proxy/BANNER/banner-slides/bannerImage-1781707416935-346455623.png
+ 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1767621084651-648799319.jpg
+ 🔍 [MOBILE DIRECT] Successfully loaded slide 10: /api/storage-proxy/BANNER/banner-slides/bannerImage-1767621084651-648799319.jpg
+ Debug: Making POST request to /api/logout with data: undefined
+ Request hostname: barefootbay.com, isDeploy: true
+ Authentication debug: 
+      Cookie exists: false
+      Full cookie string: 
+      URL: /api/logout
+      Method: POST
+      Headers: {"Accept":"application/json","Content-Type":"application/json","X-Requested-With":"XMLHttpRequest"}
+      Hostname: barefootbay.com
+      Origin: https://barefootbay.com
+      Protocol: https:
+    
+ [Maps Polyfill] BYPASSING for API request: /api/logout
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ Unread messages count: 0
+ [Feature Flags] [PROD] Checking flag calendar Object
+ [Feature Flags] [PROD] nav-calendar for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag forum Object
+ [Feature Flags] [PROD] nav-forum for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag for_sale Object
+ [Feature Flags] [PROD] nav-for-sale for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag store Object
+ [Feature Flags] [PROD] nav-store for admin: HIDDEN
+ [Feature Flags] [PROD] Checking flag vendors Object
+ [Feature Flags] [PROD] nav-vendors for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ Using filesystem rocket icon
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ 🔍 [MOBILE DEBUG] HomePage component is rendering
+ 🔍 [MOBILE DEBUG] CommunityShowcase component is mounting/rendering
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ 🔍 [VISUAL DEBUG] Rendering slide 0: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 1: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 2: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 3: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 4: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 5: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 6: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 7: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 8: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 9: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 10: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 11: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 12: Object
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1776801934448-815373455.jpg
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1774359619778-789866897.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1769091815911-1348589.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1749214531889-863779076.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1749038233010-42140180.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1768187219241-434099959.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1769091815911-1348589.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1749214531889-863779076.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1749038233010-42140180.jpg
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1768187219241-434099959.jpg
+ 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1782588042499-248718161.jpg
+ 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1782138759127-952920422.jpg
+ 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1781707416935-346455623.png
+ 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1752510745473-383654848.jpg
+ 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1748470568704-557694426.jpg
+ API response from POST /api/logout: OK
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for guest: HIDDEN
+ Unread messages count: 0
+ [Feature Flags] [PROD] Checking flag calendar Object
+ [Feature Flags] [PROD] nav-calendar for guest: VISIBLE
+ [Feature Flags] [PROD] Checking flag forum Object
+ [Feature Flags] [PROD] nav-forum for guest: VISIBLE
+ [Feature Flags] [PROD] Checking flag for_sale Object
+ [Feature Flags] [PROD] nav-for-sale for guest: VISIBLE
+ [Feature Flags] [PROD] Checking flag store Object
+ [Feature Flags] [PROD] nav-store for guest: HIDDEN
+ [Feature Flags] [PROD] Checking flag vendors Object
+ [Feature Flags] [PROD] nav-vendors for guest: VISIBLE
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for guest: VISIBLE
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for guest: VISIBLE
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for guest: HIDDEN
+ Using filesystem rocket icon
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for guest: HIDDEN
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for guest: HIDDEN
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for guest: HIDDEN
+ 🔍 [MOBILE DEBUG] HomePage component is rendering
+ 🔍 [MOBILE DEBUG] CommunityShowcase component is mounting/rendering
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for guest: HIDDEN
+ 🔍 [VISUAL DEBUG] Rendering slide 0: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 1: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 2: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 3: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 4: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 5: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 6: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 7: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 8: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 9: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 10: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 11: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 12: Object
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1776801934448-815373455.jpg
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1774359619778-789866897.jpg
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for guest: HIDDEN
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1769091815911-1348589.jpg
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for guest: HIDDEN
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1749214531889-863779076.jpg
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for guest: HIDDEN
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1749038233010-42140180.jpg
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for guest: HIDDEN
+ URL already in correct proxy format: /api/storage-proxy/CALENDAR/events/media-1768187219241-434099959.jpg
+ Tooltip is changing from uncontrolled to controlled. Components should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled value for the lifetime of the component.
+ Tooltip is changing from uncontrolled to controlled. Components should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled value for the lifetime of the component.
+ 🔍 [MOBILE DEBUG] Starting banner slide data fetch process
+ 🔍 [MOBILE DEBUG] Attempting to fetch from backend API: /api/pages/banner-slides
+ Debug: Making GET request to /api/pages/banner-slides?t=1782590925034 with data: undefined
+ Request hostname: barefootbay.com, isDeploy: true
+ Authentication debug: 
+      Cookie exists: false
+      Full cookie string: 
+      URL: /api/pages/banner-slides?t=1782590925034
+      Method: GET
+      Headers: {"Accept":"application/json","Content-Type":"application/json","X-Requested-With":"XMLHttpRequest"}
+      Hostname: barefootbay.com
+      Origin: https://barefootbay.com
+      Protocol: https:
+    
+ [Maps Polyfill] BYPASSING for API request: /api/pages/banner-slides?t=1782590925034
+ 🔍 [MOBILE DEBUG] CommunityShowcase component is mounting/rendering
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for guest: HIDDEN
+ API response from GET /api/pages/banner-slides?t=1782590925034: {"id":334,"slug":"banner-slides","title":"Homepage Banner Slides","content":"[{\"alt\":\"New Banner ...
+ 🔍 [MOBILE DEBUG] API Response status: 200 OK: true
+ 🔍 [MOBILE DEBUG] API Response data received: YES
+ 🔍 [MOBILE DEBUG] API Response data.content exists: YES
+ 🔍 [MOBILE DEBUG] Parsed content type: ARRAY
+ 🔍 [MOBILE DEBUG] Parsed content length: 13
+ 🔍 [MOBILE DEBUG] Backend slides data (first 3): Array(3)
+ Normalized banner slide src from /api/storage-proxy/BANNER/banner-slides/bannerImage-1782164718804-685535861.jpg to /api/storage-proxy/BANNER/banner-slides/bannerImage-1782164718804-685535861.jpg
+ Normalized banner slide src from /api/storage-proxy/BANNER/banner-slides/bannerImage-1782588042499-248718161.jpg to /api/storage-proxy/BANNER/banner-slides/bannerImage-1782588042499-248718161.jpg
+ Normalized banner slide src from /api/storage-proxy/BANNER/banner-slides/bannerImage-1782138759127-952920422.jpg to /api/storage-proxy/BANNER/banner-slides/bannerImage-1782138759127-952920422.jpg
+ Normalized banner slide src from /api/storage-proxy/BANNER/banner-slides/bannerImage-1781707416935-346455623.png to /api/storage-proxy/BANNER/banner-slides/bannerImage-1781707416935-346455623.png
+ Normalized banner slide src from /api/storage-proxy/BANNER/banner-slides/bannerImage-1781645546729-521108078.jpg to /api/storage-proxy/BANNER/banner-slides/bannerImage-1781645546729-521108078.jpg
+ Normalized banner slide src from /api/storage-proxy/BANNER/banner-slides/bannerImage-1780676234997-532275188.png to /api/storage-proxy/BANNER/banner-slides/bannerImage-1780676234997-532275188.png
+ Normalized banner slide src from /api/storage-proxy/BANNER/banner-slides/bannerImage-1780335600960-36710420.jpg to /api/storage-proxy/BANNER/banner-slides/bannerImage-1780335600960-36710420.jpg
+ Normalized banner slide src from /api/storage-proxy/BANNER/banner-slides/bannerImage-1779404883639-916195021.jpg to /api/storage-proxy/BANNER/banner-slides/bannerImage-1779404883639-916195021.jpg
+ Normalized banner slide src from /api/storage-proxy/BANNER/banner-slides/bannerImage-1762105636645-70659954.jpg to /api/storage-proxy/BANNER/banner-slides/bannerImage-1762105636645-70659954.jpg
+ Normalized banner slide src from /api/storage-proxy/BANNER/banner-slides/bannerImage-1750683976644-288979365.jpg to /api/storage-proxy/BANNER/banner-slides/bannerImage-1750683976644-288979365.jpg
+ Normalized banner slide src from /api/storage-proxy/BANNER/banner-slides/bannerImage-1767621084651-648799319.jpg to /api/storage-proxy/BANNER/banner-slides/bannerImage-1767621084651-648799319.jpg
+ Normalized banner slide src from /api/storage-proxy/BANNER/banner-slides/bannerImage-1752510745473-383654848.jpg to /api/storage-proxy/BANNER/banner-slides/bannerImage-1752510745473-383654848.jpg
+ Normalized banner slide src from /api/storage-proxy/BANNER/banner-slides/bannerImage-1748470568704-557694426.jpg to /api/storage-proxy/BANNER/banner-slides/bannerImage-1748470568704-557694426.jpg
+ 🔍 [MOBILE DEBUG] Normalized slides count: 13
+ 🔍 [MOBILE DEBUG] Setting community images from backend data
+ 🔍 [MOBILE DEBUG] CommunityShowcase component is mounting/rendering
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for guest: DISABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for guest: HIDDEN
+ 🔍 [VISUAL DEBUG] Rendering slide 0: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 1: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 2: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 3: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 4: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 5: Object
+ 🔍 [VISUAL DEBUG] Rendering slide 6: Object
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 7: Object
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 8: Object
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 9: Object
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 10: Object
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 11: Object
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 12: Object
+index-D9g3Wb6p.js:404 🔍 [MOBILE DEBUG] communityImages state updated: Object
+index-D9g3Wb6p.js:404 🔍 [MOBILE DIRECT] Successfully loaded slide 0: /api/storage-proxy/BANNER/banner-slides/bannerImage-1782164718804-685535861.jpg
+index-D9g3Wb6p.js:404 🔍 [MOBILE DIRECT] Successfully loaded slide 1: /api/storage-proxy/BANNER/banner-slides/bannerImage-1782588042499-248718161.jpg
+index-D9g3Wb6p.js:404 🔍 [MOBILE DIRECT] Successfully loaded slide 2: /api/storage-proxy/BANNER/banner-slides/bannerImage-1782138759127-952920422.jpg
+index-D9g3Wb6p.js:404 🔍 [MOBILE DIRECT] Successfully loaded slide 3: /api/storage-proxy/BANNER/banner-slides/bannerImage-1781707416935-346455623.png
+index-D9g3Wb6p.js:404 🔍 [MOBILE DIRECT] Successfully loaded slide 4: /api/storage-proxy/BANNER/banner-slides/bannerImage-1781645546729-521108078.jpg
+index-D9g3Wb6p.js:404 🔍 [MOBILE DIRECT] Successfully loaded slide 5: /api/storage-proxy/BANNER/banner-slides/bannerImage-1780676234997-532275188.png
+index-D9g3Wb6p.js:404 🔍 [MOBILE DIRECT] Successfully loaded slide 6: /api/storage-proxy/BANNER/banner-slides/bannerImage-1780335600960-36710420.jpg
+index-D9g3Wb6p.js:404 🔍 [MOBILE DIRECT] Successfully loaded slide 7: /api/storage-proxy/BANNER/banner-slides/bannerImage-1779404883639-916195021.jpg
+index-D9g3Wb6p.js:404 🔍 [MOBILE DIRECT] Successfully loaded slide 8: /api/storage-proxy/BANNER/banner-slides/bannerImage-1762105636645-70659954.jpg
+index-D9g3Wb6p.js:404 🔍 [MOBILE DIRECT] Successfully loaded slide 9: /api/storage-proxy/BANNER/banner-slides/bannerImage-1750683976644-288979365.jpg
+index-D9g3Wb6p.js:404 🔍 [MOBILE DIRECT] Successfully loaded slide 10: /api/storage-proxy/BANNER/banner-slides/bannerImage-1767621084651-648799319.jpg
+index-D9g3Wb6p.js:404 🔍 [MOBILE DIRECT] Successfully loaded slide 11: /api/storage-proxy/BANNER/banner-slides/bannerImage-1752510745473-383654848.jpg
+index-D9g3Wb6p.js:404 🔍 [MOBILE DIRECT] Successfully loaded slide 12: /api/storage-proxy/BANNER/banner-slides/bannerImage-1748470568704-557694426.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1782164718804-685535861.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1782588042499-248718161.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1782138759127-952920422.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1781707416935-346455623.png
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1781645546729-521108078.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1780676234997-532275188.png
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1780335600960-36710420.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1779404883639-916195021.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1762105636645-70659954.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1750683976644-288979365.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1767621084651-648799319.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1752510745473-383654848.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1748470568704-557694426.jpg
+index-D9g3Wb6p.js:404 🔍 [MOBILE DEBUG] CommunityShowcase component is mounting/rendering
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] Checking flag comments Object
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] comments for guest: DISABLED
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] Checking flag reactions Object
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] reactions for guest: DISABLED
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] Checking flag calendar_post Object
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] calendar_post for guest: DISABLED
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] Checking flag forum_post Object
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] forum_post for guest: DISABLED
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] Checking flag for_sale_post Object
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] for_sale_post for guest: DISABLED
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] Checking flag vendor_page Object
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] vendor_page for guest: DISABLED
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] Checking flag admin_access Object
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] admin_access for guest: DISABLED
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] Checking flag admin_forum Object
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] admin_forum for guest: DISABLED
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] Checking flag featured_content Object
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] featured_content is not found or inactive
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] Checking flag messages Object
+index-D9g3Wb6p.js:404 [Feature Flags] [PROD] nav-messages for guest: HIDDEN
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 0: Object
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 1: Object
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 2: Object
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 3: Object
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 4: Object
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 5: Object
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 6: Object
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 7: Object
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 8: Object
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 9: Object
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 10: Object
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 11: Object
+index-D9g3Wb6p.js:404 🔍 [VISUAL DEBUG] Rendering slide 12: Object
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1782164718804-685535861.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1782588042499-248718161.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1782138759127-952920422.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1781707416935-346455623.png
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1781645546729-521108078.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1780676234997-532275188.png
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1780335600960-36710420.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1779404883639-916195021.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1762105636645-70659954.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1750683976644-288979365.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1767621084651-648799319.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1752510745473-383654848.jpg
+index-D9g3Wb6p.js:404 🔍 [BANNER DEBUG] Successfully loaded: /api/storage-proxy/BANNER/banner-slides/bannerImage-1748470568704-557694426.jpg
+index-D9g3Wb6p.js:450 [Maps Polyfill] BYPASSING for API request: /api/analytics/track/pageview
+index-D9g3Wb6p.js:54 [Analytics] Page view tracked: /auth
+index-D9g3Wb6p.js:1462 Using official pad time: 2026-06-29T02:25Z for imminent check
+index-D9g3Wb6p.js:1462 Current time: 2026-06-27T20:09:04.358Z, Launch time: 2026-06-29T02:25:00.000Z
+index-D9g3Wb6p.js:1462 Time difference: 1815 minutes
+index-D9g3Wb6p.js:1462 Using official pad time: 2026-06-29T02:25Z for imminent check
+index-D9g3Wb6p.js:1462 Current time: 2026-06-27T20:09:34.357Z, Launch time: 2026-06-29T02:25:00.000Z
+index-D9g3Wb6p.js:1462 Time difference: 1815 minutes
+index-D9g3Wb6p.js:450 [Maps Polyfill] BYPASSING for API request: /api/check-email?email=team%40dbt
+index-D9g3Wb6p.js:450 [Maps Polyfill] BYPASSING for API request: /api/check-email?email=team%40dbtcheckin.com
+index-D9g3Wb6p.js:450 [Maps Polyfill] BYPASSING for API request: /api/check-username?username=MichaelTest
+index-D9g3Wb6p.js:1462 Using official pad time: 2026-06-29T02:25Z for imminent check
+index-D9g3Wb6p.js:1462 Current time: 2026-06-27T20:10:04.358Z, Launch time: 2026-06-29T02:25:00.000Z
+index-D9g3Wb6p.js:1462 Time difference: 1814 minutes
+index-D9g3Wb6p.js:1462 Using official pad time: 2026-06-29T02:25Z for imminent check
+index-D9g3Wb6p.js:1462 Current time: 2026-06-27T20:10:34.357Z, Launch time: 2026-06-29T02:25:00.000Z
+index-D9g3Wb6p.js:1462 Time difference: 1814 minutes
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)
+index-D9g3Wb6p.js:29 Uncaught (in promise) Error: Invalid element at key "phoneNumber": expected a Zod schema
+    at index-D9g3Wb6p.js:29:8914
+    at get value (index-D9g3Wb6p.js:26:38371)
+    at t._zod.parse (index-D9g3Wb6p.js:52:264)
+    at index-D9g3Wb6p.js:27:359
+    at t.parseAsync (index-D9g3Wb6p.js:54:7957)
+    at index-D9g3Wb6p.js:346:97739
+    at Object.resolver (index-D9g3Wb6p.js:346:97897)
+    at M (index-D9g3Wb6p.js:346:84223)
+    at index-D9g3Wb6p.js:346:91283
+    at r8 (index-D9g3Wb6p.js:9:118580)

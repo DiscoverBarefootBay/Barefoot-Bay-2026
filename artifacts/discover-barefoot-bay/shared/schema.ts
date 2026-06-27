@@ -1,6 +1,6 @@
 import { pgTable, text, serial, integer, bigint, boolean, timestamp, date, time, jsonb, decimal, varchar, doublePrecision, unique, index, type AnyPgColumn } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
-import { z } from "zod";
+import { z } from "zod/v4";
 import { 
   analyticsSessions, analyticsPageViews, analyticsEvents,
   analyticsSessionsRelations, analyticsPageViewsRelations, analyticsEventsRelations, 
@@ -511,14 +511,14 @@ export const insertListingSchema = baseListingSchema
     if (['FSBO', 'Agent', 'Rent', 'OpenHouse'].includes(data.listingType)) {
       if (!data.address) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           message: "Address is required for property listings",
           path: ["address"],
         });
       }
       if (data.price === undefined || data.price === null) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           message: "Price is required for property listings",
           path: ["price"],
         });
