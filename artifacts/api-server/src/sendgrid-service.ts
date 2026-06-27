@@ -499,6 +499,69 @@ Barefoot Bay Community Platform
 }
 
 /**
+ * Welcome / account-created confirmation email sent to a new user immediately
+ * after a successful registration. Greets the user by name, confirms the account
+ * is active, and links them back to the community site. This is a notification
+ * only — it is NOT an email-verification gate.
+ */
+export async function sendWelcomeEmail(
+  email: string,
+  fullName?: string | null,
+): Promise<boolean> {
+  const baseUrl = getBaseUrl();
+  const firstName = (fullName ?? '').trim().split(/\s+/)[0] || 'there';
+  // Escape the user-derived name before interpolating into the HTML body.
+  const firstNameHtml = firstName
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+  const subject = 'Welcome to Barefoot Bay! Your account is ready';
+
+  const text = `
+Hi ${firstName},
+
+Welcome to the Barefoot Bay community! Your account has been created successfully and is ready to use.
+
+You can now sign in and explore community events, clubs, vendors, the forum, for-sale listings, and more.
+
+Visit the community: ${baseUrl}
+
+If you didn't create this account, please contact us at ${FROM_EMAIL}.
+
+---
+Barefoot Bay Community Platform
+  `.trim();
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2 style="color: #2563eb;">Welcome to Barefoot Bay!</h2>
+      <p>Hi ${firstNameHtml},</p>
+      <p>Your account has been created successfully and is ready to use. Welcome to the community!</p>
+      <p>You can now sign in and explore community events, clubs, vendors, the forum, for-sale listings, and more.</p>
+
+      <div style="margin: 30px 0;">
+        <a href="${baseUrl}" style="background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Explore the Community</a>
+      </div>
+
+      <p style="color: #6b7280;">If you didn't create this account, please contact us at <a href="mailto:${FROM_EMAIL}">${FROM_EMAIL}</a>.</p>
+
+      <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
+      <p style="font-size: 12px; color: #6b7280;">Barefoot Bay Community Platform</p>
+    </div>
+  `;
+
+  return await sendEmail({
+    to: email,
+    from: FROM_EMAIL,
+    subject,
+    text,
+    html,
+  });
+}
+
+/**
  * Send order confirmation email via SendGrid
  * @param order - Order object with order details
  * @param toEmail - Customer email address

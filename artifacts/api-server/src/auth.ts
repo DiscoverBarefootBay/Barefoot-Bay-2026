@@ -9,6 +9,7 @@ import { User as SelectUser } from "@workspace/db";
 import { pool } from "./db";
 import { applyPerformanceOptimizations } from "./performance";
 import { sendBotDetectionAlertEmail, isSuspiciousUsername } from "./bot-detection";
+import { sendWelcomeEmail } from "./sendgrid-service";
 
 declare global {
   namespace Express {
@@ -507,6 +508,18 @@ export function setupAuth(app: Express) {
           console.error('[Bot Detection] Failed to send alert email:', err);
         });
       }
+
+      // Send a welcome / account-created confirmation email. Fire-and-forget so
+      // a SendGrid failure never blocks or breaks the registration response.
+      sendWelcomeEmail(user.email, user.fullName)
+        .then((sent) => {
+          if (!sent) {
+            console.error(`[Welcome Email] Failed to send welcome email to ${user.email} (sendEmail returned false)`);
+          }
+        })
+        .catch((err) => {
+          console.error(`[Welcome Email] Error sending welcome email to ${user.email}:`, err);
+        });
 
       req.login(user, (err) => {
         if (err) {
