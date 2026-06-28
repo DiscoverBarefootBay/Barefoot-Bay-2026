@@ -54,7 +54,13 @@ export const analyticsPageViews = pgTable('analytics_page_views', {
   maxScrollDepth: integer('max_scroll_depth'),
   maxScrollPercentage: decimal('max_scroll_percentage', { precision: 5, scale: 2 }),
   customDimensions: jsonb('custom_dimensions').$type<Record<string, any>>(),
-});
+}, (table) => ({
+  // Indexes for fast dashboard queries (filter/join on these columns)
+  sessionIdIdx: index('analytics_page_views_session_id_idx').on(table.sessionId),
+  pathIdx: index('analytics_page_views_path_idx').on(table.path),
+  timestampIdx: index('analytics_page_views_timestamp_idx').on(table.timestamp),
+  userIdIdx: index('analytics_page_views_user_id_idx').on(table.userId),
+}));
 
 /**
  * Analytics Events Table
@@ -73,7 +79,14 @@ export const analyticsEvents = pgTable('analytics_events', {
   timestamp: timestamp('timestamp').defaultNow().notNull(),
   eventData: jsonb('event_data').$type<Record<string, any>>(),
   positionData: jsonb('position_data').$type<Record<string, any>>(),
-});
+}, (table) => ({
+  // Indexes for fast dashboard queries (filter/join on these columns)
+  sessionIdIdx: index('analytics_events_session_id_idx').on(table.sessionId),
+  eventTypeIdx: index('analytics_events_event_type_idx').on(table.eventType),
+  timestampIdx: index('analytics_events_timestamp_idx').on(table.timestamp),
+  pathIdx: index('analytics_events_path_idx').on(table.path),
+  userIdIdx: index('analytics_events_user_id_idx').on(table.userId),
+}));
 
 // Analytics table relationships
 

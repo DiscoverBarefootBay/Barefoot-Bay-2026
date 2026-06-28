@@ -8,7 +8,11 @@ description: Why the analyticsSessions/Events/PageViews *Indexes exported object
 The `analyticsSessionsIndexes` / `analyticsEventsIndexes` / `analyticsPageViewsIndexes`
 exported objects in the three analytics-schema copies (`lib/db`, frontend `shared/`,
 api `shared-compat/`) are **never consumed at runtime** — they are not Drizzle
-`pgTable` index definitions and nothing imports them to create indexes.
+`pgTable` index definitions and nothing imports them to create indexes. They are now
+**redundant**: `analyticsSessions`, `analyticsPageViews`, and `analyticsEvents` all carry
+real Drizzle `index(...)` defs in their third `pgTable` arg (session_id/path/timestamp/
+user_id on page_views; +event_type on events; visitor_fingerprint on sessions). The dead
+constants are still exported/re-exported (via the schema barrels) but should be ignored.
 
 **Why:** Adding a "new index" by extending those constants gives false confidence —
 it changes no actual DB index. There is no migration runner that applies them.
