@@ -6,6 +6,19 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Loader2, Users, Eye, MousePointer, Clock, Globe, PieChart, BarChart2, Filter } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+} from 'recharts';
+import { format, parseISO } from 'date-fns';
 
 // Types for analytics data
 interface DashboardData {
@@ -240,6 +253,78 @@ const AnalyticsDashboard: React.FC = () => {
     return `${Math.round((value / total) * 100)}%`;
   };
 
+  // Format an ISO date for chart axis ticks (short form)
+  const formatChartDate = (value: string) => {
+    try {
+      return format(parseISO(value), 'MMM d');
+    } catch {
+      return value;
+    }
+  };
+
+  // Format an ISO date for chart tooltips (long form)
+  const formatChartTooltipDate = (value: any) => {
+    try {
+      return format(parseISO(value as string), 'MMMM d, yyyy');
+    } catch {
+      return value;
+    }
+  };
+
+  // Merge sessions-by-day and page-views-by-day into a single series keyed by date
+  const trafficChartData = React.useMemo(() => {
+    if (!dashboardData) return [];
+    const byDate = new Map<string, { date: string; sessions: number; pageViews: number }>();
+    for (const day of dashboardData.traffic.byDay) {
+      if (!day?.date) continue;
+      byDate.set(day.date, { date: day.date, sessions: toNumber(day.sessions), pageViews: 0 });
+    }
+    for (const day of dashboardData.traffic.pageViewsByDay) {
+      if (!day?.date) continue;
+      const existing = byDate.get(day.date);
+      if (existing) {
+        existing.pageViews = toNumber(day.pageViews);
+      } else {
+        byDate.set(day.date, { date: day.date, sessions: 0, pageViews: toNumber(day.pageViews) });
+      }
+    }
+    return Array.from(byDate.values()).sort((a, b) => a.date.localeCompare(b.date));
+  }, [dashboardData]);
+
+  // Aggregate geo data into a labelled, sorted series of visitor counts by location
+  const geoChartData = React.useMemo(() => {
+    if (!dashboardData) return [];
+    return dashboardData.location.geoData
+      .map((loc) => {
+        const label = [loc.city, loc.region, loc.country].filter(Boolean).join(', ') || 'Unknown';
+        return { label, count: toNumber(loc.count) };
+      })
+      .filter((d) => d.count > 0)
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 15);
+  }, [dashboardData]);
+
+  // Build a labelled, sorted series of the strongest page-to-page transitions
+  const pathTransitions = React.useMemo(() => {
+    const entry = Array.isArray(userJourneyData) ? userJourneyData[0] : undefined;
+    const nodes = entry?.nodes ?? [];
+    const links = entry?.links ?? [];
+    if (links.length === 0) return [];
+    const titleById = new Map<string, string>();
+    for (const node of nodes) {
+      titleById.set(node.id, node.title || node.id);
+    }
+    const labelFor = (id: string) => titleById.get(id) || id;
+    return links
+      .map((link) => ({
+        label: `${labelFor(link.source)} → ${labelFor(link.target)}`,
+        value: toNumber(link.value),
+      }))
+      .filter((d) => d.value > 0)
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 15);
+  }, [userJourneyData]);
+
   // Error state - check first so a failed request shows a message instead of
   // being stuck on the loading spinner forever (dashboardData stays undefined).
   if (dashboardError) {
@@ -374,12 +459,49 @@ const AnalyticsDashboard: React.FC = () => {
                   <CardDescription>Sessions and page views over time</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-[300px] flex items-center justify-center">
-                    {/* Here you would integrate a chart library like Recharts */}
-                    <div className="text-muted-foreground">
-                      Traffic chart would be displayed here. Data available for {dashboardData.traffic.byDay.length} days.
+                  {trafficChartData.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={300}>
+                      <AreaChart data={trafficChartData}>
+                        <defs>
+                          <linearGradient id="sessionsGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#2563eb" stopOpacity={0.4} />
+                            <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
+                          </linearGradient>
+                          <linearGradient id="pageViewsGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#10b981" stopOpacity={0.4} />
+                            <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="date" tickFormatter={formatChartDate} />
+                        <YAxis allowDecimals={false} />
+                        <Tooltip labelFormatter={formatChartTooltipDate} />
+                        <Legend />
+                        <Area
+                          type="monotone"
+                          dataKey="sessions"
+                          name="Sessions"
+                          stroke="#2563eb"
+                          strokeWidth={2}
+                          fill="url(#sessionsGradient)"
+                          activeDot={{ r: 5 }}
+                        />
+                        <Area
+                          type="monotone"
+                          dataKey="pageViews"
+                          name="Page Views"
+                          stroke="#10b981"
+                          strokeWidth={2}
+                          fill="url(#pageViewsGradient)"
+                          activeDot={{ r: 5 }}
+                        />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+                      No traffic data available for the selected time period.
                     </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -481,11 +603,26 @@ const AnalyticsDashboard: React.FC = () => {
                   ) : (
                     <div className="space-y-2">
                       {journeyType === 'pathTransitions' ? (
-                        <div className="h-[300px] flex items-center justify-center">
-                          <div className="text-muted-foreground">
-                            Path transition visualization would be displayed here.
+                        pathTransitions.length > 0 ? (
+                          <ResponsiveContainer width="100%" height={Math.max(300, pathTransitions.length * 36)}>
+                            <BarChart data={pathTransitions} layout="vertical" margin={{ left: 16, right: 16 }}>
+                              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                              <XAxis type="number" allowDecimals={false} />
+                              <YAxis
+                                dataKey="label"
+                                type="category"
+                                width={220}
+                                tick={{ fontSize: 12 }}
+                              />
+                              <Tooltip formatter={(value: any) => [`${value} transitions`, 'Count']} />
+                              <Bar dataKey="value" name="Transitions" fill="#2563eb" radius={[0, 4, 4, 0]} />
+                            </BarChart>
+                          </ResponsiveContainer>
+                        ) : (
+                          <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+                            No path transition data available for the selected time period.
                           </div>
-                        </div>
+                        )
                       ) : (
                         <div className="space-y-2">
                           {userJourneyData?.map((page, index) => (
@@ -637,11 +774,26 @@ const AnalyticsDashboard: React.FC = () => {
                   <CardTitle>Visitor Map</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-[400px] flex items-center justify-center">
-                    <div className="text-muted-foreground">
-                      Geographic map visualization would be displayed here. Data for {dashboardData.location.geoData.length} locations.
+                  {geoChartData.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={Math.max(400, geoChartData.length * 32)}>
+                      <BarChart data={geoChartData} layout="vertical" margin={{ left: 16, right: 16 }}>
+                        <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                        <XAxis type="number" allowDecimals={false} />
+                        <YAxis
+                          dataKey="label"
+                          type="category"
+                          width={220}
+                          tick={{ fontSize: 12 }}
+                        />
+                        <Tooltip formatter={(value: any) => [`${value} visitors`, 'Count']} />
+                        <Bar dataKey="count" name="Visitors" fill="#7c3aed" radius={[0, 4, 4, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="h-[400px] flex items-center justify-center text-muted-foreground">
+                      No location data available for the selected time period.
                     </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
