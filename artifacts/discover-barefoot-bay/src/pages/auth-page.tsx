@@ -324,11 +324,11 @@ export default function AuthPage() {
                     name="username"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-base font-medium mb-1">Username</FormLabel>
+                        <FormLabel className="text-base font-medium mb-1">Username or email</FormLabel>
                         <FormControl>
                           <Input 
                             type="text"
-                            placeholder="Enter your username"
+                            placeholder="Enter your username or email"
                             className="py-6 px-4 text-base rounded-md"
                             {...field}
                             value={field.value || ""}
@@ -370,7 +370,7 @@ export default function AuthPage() {
                       <svg xmlns="http://www.w3.org/2000/svg" className="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                       </svg>
-                      <span>{loginMutation.error?.message || "Invalid username or password. Please try again."}</span>
+                      <span>{loginMutation.error?.message || "Invalid username/email or password. Please try again."}</span>
                     </div>
                   )}
                   <Button 

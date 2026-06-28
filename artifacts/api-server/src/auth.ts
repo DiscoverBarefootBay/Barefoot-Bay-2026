@@ -230,12 +230,17 @@ export function setupAuth(app: Express) {
   applyPerformanceOptimizations(app, pool);
 
   passport.use(
-    new LocalStrategy(async (username, password, done) => {
+    new LocalStrategy(async (identifier, password, done) => {
       try {
-        // Use case-insensitive username comparison for login
-        const user = await storage.getUserByUsernameCaseInsensitive(username);
+        // Allow login with either a username or an email address.
+        // Match username first (case-insensitive), then fall back to email
+        // (case-insensitive) if no username match is found.
+        let user = await storage.getUserByUsernameCaseInsensitive(identifier);
+        if (!user && identifier.includes("@")) {
+          user = await storage.getUserByEmailCaseInsensitive(identifier);
+        }
         if (!user || !(await comparePasswords(password, user.password))) {
-          return done(null, false, { message: "Invalid username or password" });
+          return done(null, false, { message: "Invalid username/email or password" });
         }
         return done(null, user);
       } catch (err) {
