@@ -1,0 +1,212 @@
+manifest.json:1 Manifest: Line: 1, column: 1, Syntax error.
+manifest.json:1 Manifest: Line: 1, column: 1, Syntax error.
+index-CytzMsI8.js:9 TypeError: Cannot read properties of undefined (reading 'byDay')
+    at index-CytzMsI8.js:584:34118
+    at Object.useMemo (index-CytzMsI8.js:9:46553)
+    at Un.useMemo (index-CytzMsI8.js:2:13240)
+    at KK (index-CytzMsI8.js:584:34049)
+    at KS (index-CytzMsI8.js:9:34435)
+    at mC (index-CytzMsI8.js:9:63297)
+    at N9 (index-CytzMsI8.js:9:74013)
+    at Z9 (index-CytzMsI8.js:9:108336)
+    at wve (index-CytzMsI8.js:9:107382)
+    at RC (index-CytzMsI8.js:9:107208)
+i9 @ index-CytzMsI8.js:9
+l9 @ index-CytzMsI8.js:9
+ne.componentDidCatch.u.callback @ index-CytzMsI8.js:9
+f7 @ index-CytzMsI8.js:9
+m7 @ index-CytzMsI8.js:9
+E9 @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+tF @ index-CytzMsI8.js:9
+J9 @ index-CytzMsI8.js:9
+W9 @ index-CytzMsI8.js:9
+H9 @ index-CytzMsI8.js:9
+dF @ index-CytzMsI8.js:9
+wx @ index-CytzMsI8.js:9
+oF @ index-CytzMsI8.js:9
+(anonymous) @ index-CytzMsI8.js:9
+setTimeout
+Gye @ index-CytzMsI8.js:10
+o @ index-CytzMsI8.js:10
+batch @ index-CytzMsI8.js:10
+#i @ index-CytzMsI8.js:10
+setData @ index-CytzMsI8.js:10
+fetch @ index-CytzMsI8.js:10
+await in fetch
+#p @ index-CytzMsI8.js:10
+onSubscribe @ index-CytzMsI8.js:10
+subscribe @ index-CytzMsI8.js:10
+(anonymous) @ index-CytzMsI8.js:10
+b7 @ index-CytzMsI8.js:9
+px @ index-CytzMsI8.js:9
+F9 @ index-CytzMsI8.js:9
+El @ index-CytzMsI8.js:9
+F9 @ index-CytzMsI8.js:9
+El @ index-CytzMsI8.js:9
+F9 @ index-CytzMsI8.js:9
+El @ index-CytzMsI8.js:9
+F9 @ index-CytzMsI8.js:9
+El @ index-CytzMsI8.js:9
+F9 @ index-CytzMsI8.js:9
+El @ index-CytzMsI8.js:9
+F9 @ index-CytzMsI8.js:9
+El @ index-CytzMsI8.js:9
+F9 @ index-CytzMsI8.js:9
+sF @ index-CytzMsI8.js:9
+Kb @ index-CytzMsI8.js:9
+dF @ index-CytzMsI8.js:9
+wx @ index-CytzMsI8.js:9
+nF @ index-CytzMsI8.js:9
+J9 @ index-CytzMsI8.js:9
+W9 @ index-CytzMsI8.js:9
+H9 @ index-CytzMsI8.js:9
+cF @ index-CytzMsI8.js:9
+_ @ index-CytzMsI8.js:2
+postMessage
+O @ index-CytzMsI8.js:2
+e.unstable_scheduleCallback @ index-CytzMsI8.js:2
+lF @ index-CytzMsI8.js:9
+oF @ index-CytzMsI8.js:9
+(anonymous) @ index-CytzMsI8.js:9
+index-CytzMsI8.js:54 Error caught by boundary: TypeError: Cannot read properties of undefined (reading 'byDay')
+    at index-CytzMsI8.js:584:34118
+    at Object.useMemo (index-CytzMsI8.js:9:46553)
+    at Un.useMemo (index-CytzMsI8.js:2:13240)
+    at KK (index-CytzMsI8.js:584:34049)
+    at KS (index-CytzMsI8.js:9:34435)
+    at mC (index-CytzMsI8.js:9:63297)
+    at N9 (index-CytzMsI8.js:9:74013)
+    at Z9 (index-CytzMsI8.js:9:108336)
+    at wve (index-CytzMsI8.js:9:107382)
+    at RC (index-CytzMsI8.js:9:107208) {componentStack: '\n    at KK (https://barefoot-bay.replit.app/assets…y.replit.app/assets/index-CytzMsI8.js:1537:12878)'}
+componentDidCatch @ index-CytzMsI8.js:54
+ne.componentDidCatch.u.callback @ index-CytzMsI8.js:9
+f7 @ index-CytzMsI8.js:9
+m7 @ index-CytzMsI8.js:9
+E9 @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+hd @ index-CytzMsI8.js:9
+D9 @ index-CytzMsI8.js:9
+tF @ index-CytzMsI8.js:9
+J9 @ index-CytzMsI8.js:9
+W9 @ index-CytzMsI8.js:9
+H9 @ index-CytzMsI8.js:9
+dF @ index-CytzMsI8.js:9
+wx @ index-CytzMsI8.js:9
+oF @ index-CytzMsI8.js:9
+(anonymous) @ index-CytzMsI8.js:9
+setTimeout
+Gye @ index-CytzMsI8.js:10
+o @ index-CytzMsI8.js:10
+batch @ index-CytzMsI8.js:10
+#i @ index-CytzMsI8.js:10
+setData @ index-CytzMsI8.js:10
+fetch @ index-CytzMsI8.js:10
+await in fetch
+#p @ index-CytzMsI8.js:10
+onSubscribe @ index-CytzMsI8.js:10
+subscribe @ index-CytzMsI8.js:10
+(anonymous) @ index-CytzMsI8.js:10
+b7 @ index-CytzMsI8.js:9
+px @ index-CytzMsI8.js:9
+F9 @ index-CytzMsI8.js:9
+El @ index-CytzMsI8.js:9
+F9 @ index-CytzMsI8.js:9
+El @ index-CytzMsI8.js:9
+F9 @ index-CytzMsI8.js:9
+El @ index-CytzMsI8.js:9
+F9 @ index-CytzMsI8.js:9
+El @ index-CytzMsI8.js:9
+F9 @ index-CytzMsI8.js:9
+El @ index-CytzMsI8.js:9
+F9 @ index-CytzMsI8.js:9
+El @ index-CytzMsI8.js:9
+F9 @ index-CytzMsI8.js:9
+sF @ index-CytzMsI8.js:9
+Kb @ index-CytzMsI8.js:9
+dF @ index-CytzMsI8.js:9
+wx @ index-CytzMsI8.js:9
+nF @ index-CytzMsI8.js:9
+J9 @ index-CytzMsI8.js:9
+W9 @ index-CytzMsI8.js:9
+H9 @ index-CytzMsI8.js:9
+cF @ index-CytzMsI8.js:9
+_ @ index-CytzMsI8.js:2
+postMessage
+O @ index-CytzMsI8.js:2
+e.unstable_scheduleCallback @ index-CytzMsI8.js:2
+lF @ index-CytzMsI8.js:9
+oF @ index-CytzMsI8.js:9
+(anonymous) @ index-CytzMsI8.js:9
+analytics-dashboard:1 Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+analytics-dashboard:1 Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+analytics-dashboard:1 Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+analytics-dashboard:1 Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+analytics-dashboard:1 Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
