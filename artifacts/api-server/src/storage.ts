@@ -8727,7 +8727,16 @@ export class DatabaseStorage implements IStorage {
   async getCalendarEmailSchedule(): Promise<import('../shared/schema').CalendarEmailSchedule | undefined> {
     try {
       const { calendarEmailSchedule } = await import('@workspace/db');
-      const rows = await db.select().from(calendarEmailSchedule).limit(1);
+      // Deterministic single-row read: order by id so the send tick and the
+      // watchdog always evaluate the SAME row even if a duplicate schedule row
+      // ever exists. Without an explicit ORDER BY, Postgres may return a
+      // different row between calls after updates/autovacuum, which could make
+      // the watchdog miss a run the tick just recorded and falsely alert.
+      const rows = await db
+        .select()
+        .from(calendarEmailSchedule)
+        .orderBy(asc(calendarEmailSchedule.id))
+        .limit(1);
       return rows[0];
     } catch (error) {
       console.error('[CalendarEmailSchedule] Error getting schedule:', error);

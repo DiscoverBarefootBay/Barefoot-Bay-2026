@@ -46,7 +46,8 @@ import {
   buildCalendarPartialFailureResponse,
   buildCalendarSuccessResponse,
 } from "./calendar-notification-helpers";
-import { runCalendarEmailWatchdog, computeCalendarEmailHealth } from "./calendar-email-scheduler";
+import { runCalendarEmailWatchdog, computeCalendarEmailHealth, MAX_RUN_HISTORY } from "./calendar-email-scheduler";
+import type { CalendarEmailRunHistoryEntry } from "@workspace/db";
 import { pool } from "./db";
 import { formatInTimeZone, toZonedTime, fromZonedTime } from 'date-fns-tz';
 import { startOfDay, endOfDay, addDays } from 'date-fns';
@@ -4928,12 +4929,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       );
 
-      // After sending, clear both one-shot fields (customEventOrder + attachImageEventIds)
-      if (emailSchedule) {
+      const manualSendFailed = result.sentCount === 0 && result.totalCount > 0;
+
+      // Only a manual send to the SAME audience the automatic scheduler targets
+      // counts as the canonical daily run. A NARROWER send (e.g. a "justme" test
+      // send) must NOT stamp lastSentAt — doing so would wrongly suppress the
+      // real broadcast scheduled later that day. A zero-delivery outcome
+      // (recipients existed but none received it) is recorded as a failure.
+      const scheduledPreference = emailSchedule?.notifyPreference ?? "everyone";
+      const isCanonicalDailyRun = notifyPreference === scheduledPreference;
+
+      if (isCanonicalDailyRun) {
+        const manualRunStatus = manualSendFailed ? "partial_failure" : "sent";
+        const manualRunDetail = manualSendFailed
+          ? `Manual send: delivered to 0 of ${result.totalCount} recipient(s) for ${upcomingEvents.length} event(s).`
+          : `Manually sent to ${result.sentCount} of ${result.totalCount} recipient(s) covering ${upcomingEvents.length} event(s).`;
+        const priorRuns = Array.isArray(emailSchedule?.recentRuns)
+          ? (emailSchedule!.recentRuns as CalendarEmailRunHistoryEntry[])
+          : [];
+        const manualRunEntry: CalendarEmailRunHistoryEntry = {
+          status: manualRunStatus,
+          detail: manualRunDetail,
+          at: now.toISOString(),
+        };
+        const nextRecentRuns = [manualRunEntry, ...priorRuns].slice(0, MAX_RUN_HISTORY);
+        // Upsert (creates the row if absent) so the run is tracked for the
+        // watchdog/health, and clear the one-shot fields the send consumed.
+        await storage.upsertCalendarEmailSchedule({
+          lastSentAt: now,
+          lastRunAt: now,
+          lastRunStatus: manualRunStatus,
+          lastRunDetail: manualRunDetail,
+          recentRuns: nextRecentRuns,
+          customEventOrder: null,
+          attachImageEventIds: null,
+        });
+      } else if (emailSchedule) {
+        // Narrow/ad-hoc send: still clear the one-shot fields it consumed, but do
+        // NOT record it as the daily run or stamp lastSentAt.
         await storage.upsertCalendarEmailSchedule({ customEventOrder: null, attachImageEventIds: null });
       }
 
-      if (result.sentCount === 0 && result.totalCount > 0) {
+      if (manualSendFailed) {
         return res.status(200).json(
           buildCalendarPartialFailureResponse(
             result.totalCount,

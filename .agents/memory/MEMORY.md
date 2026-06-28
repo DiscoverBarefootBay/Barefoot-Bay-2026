@@ -2,3 +2,4 @@
 - [SendGrid deliverability](sendgrid-deliverability.md) — connector only gives API key+from_email, NOT DKIM/DNS; spam happens when domain-auth CNAMEs aren't published; verify DNS with an independent resolver, not SendGrid's cached valid flag.
 - [esbuild bundling pitfalls](esbuild-bundling-runtime-data-files.md) — externalize deps that read __dirname-relative data files (e.g. geoip-lite); swallowed __esm init throws silently poison singletons; never dual `export *` the same symbol.
 - [Listing expiration emails](listing-expiration-emails.md) — sendEmail returns false (never throws) so check the boolean for idempotent cadence state; getExpiredListings returns raw snake_case rows so camelCase branches are dead.
+- [Calendar watchdog false alerts](calendar-watchdog-false-alerts.md) — false "digest missed" alerts usually come from a stale deployed build; manual /day send only counts as the daily run (stamps lastSentAt) when its audience matches the schedule.

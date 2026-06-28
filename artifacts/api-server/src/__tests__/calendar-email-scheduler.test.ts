@@ -577,6 +577,35 @@ describe('runCalendarEmailWatchdog — missed-day catch-up', () => {
     assert.equal(result.reason, 'ran');
   });
 
+  it('REGRESSION (#216): stays silent the next morning when yesterday sent cleanly', async () => {
+    // The exact false-alarm shape from production: the 16:15 ET digest sent
+    // cleanly on Jun 26 (16:15 ET == 20:15 UTC in EDT), and the watchdog is
+    // evaluated mid-afternoon the NEXT day — Jun 27 14:07 ET (18:07 UTC) —
+    // BEFORE that day's 16:15 send + 2h grace window has elapsed. The most
+    // recent fully-elapsed expected day is therefore Jun 26, which HAS a run,
+    // so the watchdog must stay completely silent. An older deployed build was
+    // alerting here even though Jun 26 was sent; this locks the correct verdict.
+    const h = makeHarness(
+      makeSchedule({
+        sendTime: '16:15',
+        lastRunAt: new Date('2026-06-26T20:15:00Z'),
+        lastSentAt: new Date('2026-06-26T20:15:00Z'),
+        lastRunStatus: 'sent',
+      }),
+      { users: [...oneRecipient, adminUser] },
+    );
+    const jun27_1407_ET = new Date('2026-06-27T18:07:00Z');
+    const result = await runCalendarEmailWatchdog(jun27_1407_ET, h.deps);
+    assert.equal(h.escalations.length, 0);
+    assert.equal(result.healthy, true);
+    assert.equal(result.missed, false);
+    assert.equal(result.alerted, false);
+    assert.equal(result.reason, 'ran');
+    assert.equal(result.expectedDay, '2026-06-26');
+    // No dedup timestamp should be burned when nothing was alerted.
+    assert.equal(h.getSchedule().lastWatchdogAt ?? null, null);
+  });
+
   it('does not alert before the expected window has fully elapsed', async () => {
     // It's Jan 15 07:00 ET — today's 08:00 window hasn't even started, and the
     // last run was yesterday (Jan 14), which is the right cadence so far.
@@ -683,6 +712,24 @@ describe('computeCalendarEmailHealth — panel verdict', () => {
     // the most recent fully-elapsed expected day is the prior day (Jan 14), and
     // the Jan 15 run satisfies it.
     assert.equal(h.expectedDay, '2026-01-14');
+  });
+
+  it('REGRESSION (#216): is "healthy" the next morning when yesterday sent cleanly', () => {
+    // Mirrors the watchdog regression: the admin panel badge must read healthy
+    // (not "attention needed") when checked the next afternoon before the send
+    // window elapses and the prior day was sent.
+    const h = computeCalendarEmailHealth(
+      makeSchedule({
+        sendTime: '16:15',
+        lastRunAt: new Date('2026-06-26T20:15:00Z'),
+        lastSentAt: new Date('2026-06-26T20:15:00Z'),
+        lastRunStatus: 'sent',
+      }),
+      new Date('2026-06-27T18:07:00Z'),
+    );
+    assert.equal(h.status, 'healthy');
+    assert.equal(h.reason, 'ran');
+    assert.equal(h.expectedDay, '2026-06-26');
   });
 
   it('needs attention when the expected day fully elapsed with no run', () => {

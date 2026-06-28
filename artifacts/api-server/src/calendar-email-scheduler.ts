@@ -76,7 +76,7 @@ const TRANSIENT_WAIT_STATUSES = new Set([
 ]);
 
 // How many recent finalized run outcomes to keep in the rolling history.
-const MAX_RUN_HISTORY = 14;
+export const MAX_RUN_HISTORY = 14;
 
 // Missed-day watchdog cadence. It runs shortly after boot (the key moment — a
 // server returning from an outage) and then slowly on a standing interval. It
