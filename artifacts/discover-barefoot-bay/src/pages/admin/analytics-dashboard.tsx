@@ -19,6 +19,7 @@ import {
   Legend,
 } from 'recharts';
 import { format, parseISO } from 'date-fns';
+import ChartErrorBoundary from '@/components/error/chart-error-boundary';
 
 // Types for analytics data
 interface DashboardData {
@@ -460,6 +461,7 @@ const AnalyticsDashboard: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   {trafficChartData.length > 0 ? (
+                    <ChartErrorBoundary minHeight={300}>
                     <ResponsiveContainer width="100%" height={300}>
                       <AreaChart data={trafficChartData}>
                         <defs>
@@ -497,6 +499,7 @@ const AnalyticsDashboard: React.FC = () => {
                         />
                       </AreaChart>
                     </ResponsiveContainer>
+                    </ChartErrorBoundary>
                   ) : (
                     <div className="h-[300px] flex items-center justify-center text-muted-foreground">
                       No traffic data available for the selected time period.
@@ -604,6 +607,7 @@ const AnalyticsDashboard: React.FC = () => {
                     <div className="space-y-2">
                       {journeyType === 'pathTransitions' ? (
                         pathTransitions.length > 0 ? (
+                          <ChartErrorBoundary minHeight={300}>
                           <ResponsiveContainer width="100%" height={Math.max(300, pathTransitions.length * 36)}>
                             <BarChart data={pathTransitions} layout="vertical" margin={{ left: 16, right: 16 }}>
                               <CartesianGrid strokeDasharray="3 3" horizontal={false} />
@@ -618,6 +622,7 @@ const AnalyticsDashboard: React.FC = () => {
                               <Bar dataKey="value" name="Transitions" fill="#2563eb" radius={[0, 4, 4, 0]} />
                             </BarChart>
                           </ResponsiveContainer>
+                          </ChartErrorBoundary>
                         ) : (
                           <div className="h-[300px] flex items-center justify-center text-muted-foreground">
                             No path transition data available for the selected time period.
@@ -775,6 +780,7 @@ const AnalyticsDashboard: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   {geoChartData.length > 0 ? (
+                    <ChartErrorBoundary minHeight={400}>
                     <ResponsiveContainer width="100%" height={Math.max(400, geoChartData.length * 32)}>
                       <BarChart data={geoChartData} layout="vertical" margin={{ left: 16, right: 16 }}>
                         <CartesianGrid strokeDasharray="3 3" horizontal={false} />
@@ -789,6 +795,7 @@ const AnalyticsDashboard: React.FC = () => {
                         <Bar dataKey="count" name="Visitors" fill="#7c3aed" radius={[0, 4, 4, 0]} />
                       </BarChart>
                     </ResponsiveContainer>
+                    </ChartErrorBoundary>
                   ) : (
                     <div className="h-[400px] flex items-center justify-center text-muted-foreground">
                       No location data available for the selected time period.
