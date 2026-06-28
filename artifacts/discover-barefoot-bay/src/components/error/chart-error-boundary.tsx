@@ -6,10 +6,28 @@ interface Props {
   fallback?: ReactNode;
   /** Min height of the default fallback so the card keeps its shape. */
   minHeight?: number;
+  /**
+   * When any value in this array changes, the boundary clears its error state and
+   * re-attempts rendering its children. Use it to key the boundary on the inputs
+   * that drive the chart (e.g. selected time range, journey type, bot filter) so a
+   * transient render failure recovers automatically when the user changes a filter
+   * instead of requiring a full page reload.
+   */
+  resetKeys?: ReadonlyArray<unknown>;
 }
 
 interface State {
   hasError: boolean;
+}
+
+function resetKeysChanged(
+  prev: ReadonlyArray<unknown> | undefined,
+  next: ReadonlyArray<unknown> | undefined,
+): boolean {
+  if (prev === next) return false;
+  if (!prev || !next) return prev !== next;
+  if (prev.length !== next.length) return true;
+  return prev.some((value, index) => !Object.is(value, next[index]));
 }
 
 /**
@@ -32,6 +50,12 @@ class ChartErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     console.error('Chart failed to render (contained by ChartErrorBoundary):', error, errorInfo);
+  }
+
+  componentDidUpdate(prevProps: Props): void {
+    if (this.state.hasError && resetKeysChanged(prevProps.resetKeys, this.props.resetKeys)) {
+      this.setState({ hasError: false });
+    }
   }
 
   render(): ReactNode {
