@@ -3,3 +3,4 @@
 - [esbuild bundling pitfalls](esbuild-bundling-runtime-data-files.md) — externalize deps that read __dirname-relative data files (e.g. geoip-lite); swallowed __esm init throws silently poison singletons; never dual `export *` the same symbol.
 - [Listing expiration emails](listing-expiration-emails.md) — sendEmail returns false (never throws) so check the boolean for idempotent cadence state; getExpiredListings returns raw snake_case rows so camelCase branches are dead.
 - [Calendar watchdog false alerts](calendar-watchdog-false-alerts.md) — false "digest missed" alerts usually come from a stale deployed build; manual /day send only counts as the daily run (stamps lastSentAt) when its audience matches the schedule.
+- [Vite port conflict after merges](vite-port-conflict-after-merges.md) — artifact "crash" with clean browser console is often a stale Vite process holding the port after lockfile-changing merges; restart_workflow fixes it.
