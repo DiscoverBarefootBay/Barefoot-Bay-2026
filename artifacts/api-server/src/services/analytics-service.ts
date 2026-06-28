@@ -108,6 +108,8 @@ class AnalyticsService {
             const newSessionId = crypto.randomUUID();
             const now = new Date();
             const os = this.detectOperatingSystem(data.userAgent); // Uses existing private method
+            const visitorFingerprint = this.createVisitorFingerprint(data.ipAddress, data.userAgent);
+            const returningVisitor = await this.isReturningVisitor(visitorFingerprint);
             let geoData = data.ipAddress ? geoip.lookup(data.ipAddress) : null;
 
             if (!geoData && process.env.NODE_ENV !== 'production') {
@@ -138,6 +140,8 @@ class AnalyticsService {
                 isActive: true,
                 referrer: data.referrer,
                 entryPage: data.entryPage,
+                visitorFingerprint,
+                isReturningVisitor: returningVisitor,
                 // customDimensions: data.properties // Optional: consider if you want to store these initial properties
             });
 
@@ -817,30 +821,24 @@ class AnalyticsService {
                     const result = await db.execute(sql`
                         WITH page_paths AS (
                             SELECT
-                                pv1.path AS source_path, pv1.page_type AS source_page_type, pv1.page_category AS source_page_category,
-                                pv2.path AS target_path, pv2.page_type AS target_page_type, pv2.page_category AS target_page_category,
-                                pv1.session_id
-                            FROM analytics_page_views pv1
-                            JOIN analytics_page_views pv2 ON 
-                                pv1.session_id = pv2.session_id AND
-                                pv1.timestamp < pv2.timestamp
-                            JOIN analytics_sessions s ON pv1.session_id = s.session_id
+                                pv.path AS source_path,
+                                pv.page_type AS source_page_type,
+                                pv.page_category AS source_page_category,
+                                LEAD(pv.path) OVER (PARTITION BY pv.session_id ORDER BY pv.timestamp ASC) AS target_path,
+                                LEAD(pv.page_type) OVER (PARTITION BY pv.session_id ORDER BY pv.timestamp ASC) AS target_page_type,
+                                LEAD(pv.page_category) OVER (PARTITION BY pv.session_id ORDER BY pv.timestamp ASC) AS target_page_category
+                            FROM analytics_page_views pv
+                            JOIN analytics_sessions s ON pv.session_id = s.session_id
                             WHERE 
                                 s.start_timestamp >= ${startDate}
                                 ${liveDataOnly ? sql`AND (s.ip NOT LIKE '127.%' AND s.ip != 'unknown' AND s.ip NOT LIKE '192.168.%' AND s.ip NOT LIKE '10.%')` : sql``}
-                                AND pv2.timestamp = (
-                                    SELECT MIN(pv3.timestamp)
-                                    FROM analytics_page_views pv3
-                                    WHERE 
-                                        pv3.session_id = pv1.session_id AND
-                                        pv3.timestamp > pv1.timestamp
-                                )
                         )
                         SELECT
                             source_path, source_page_type, source_page_category, 
                             target_path, target_page_type, target_page_category,
                             COUNT(*) as transitions
                         FROM page_paths
+                        WHERE target_path IS NOT NULL
                         GROUP BY 
                             source_path, source_page_type, source_page_category, 
                             target_path, target_page_type, target_page_category
@@ -937,6 +935,8 @@ class AnalyticsService {
         }
 
         const newSessionId = crypto.randomUUID();
+        const visitorFingerprint = this.createVisitorFingerprint(ip, userAgent);
+        const returningVisitor = await this.isReturningVisitor(visitorFingerprint);
 
         await db.insert(analyticsSessions)
             .values({
@@ -946,6 +946,8 @@ class AnalyticsService {
                 latitude: geoData?.ll ? geoData.ll[0] : null, longitude: geoData?.ll ? geoData.ll[1] : null,
                 startTimestamp: new Date(), pagesViewed: 1, // Start pagesViewed at 1 for the first page view
                 isActive: true,
+                visitorFingerprint,
+                isReturningVisitor: returningVisitor,
                 // referrer and entryPage should be set by the first trackPageView or by startSession if it were more complex
             })
             .returning();
@@ -995,6 +997,30 @@ class AnalyticsService {
     /**
      * Get the client IP address
      */
+    /**
+     * Create a stable visitor fingerprint from IP + User-Agent.
+     * Returns null when we lack usable identifying data, so unknown visitors
+     * are not all collapsed into a single fingerprint bucket.
+     */
+    private createVisitorFingerprint(ip: string | null | undefined, userAgent: string | null | undefined): string | null {
+        if (!ip || ip === 'unknown' || !userAgent || userAgent === 'unknown') {
+            return null;
+        }
+        return crypto.createHash('sha256').update(`${ip}|${userAgent}`).digest('hex');
+    }
+
+    /**
+     * Determine whether a visitor fingerprint has already been seen in a prior session.
+     */
+    private async isReturningVisitor(visitorFingerprint: string | null): Promise<boolean> {
+        if (!visitorFingerprint) return false;
+        const [prior] = await db.select({ id: analyticsSessions.id })
+            .from(analyticsSessions)
+            .where(eq(analyticsSessions.visitorFingerprint, visitorFingerprint))
+            .limit(1);
+        return !!prior;
+    }
+
     private getClientIp(req: Request): string | null {
         if (!req || !req.headers) {
             return null;

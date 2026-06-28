@@ -155,6 +155,92 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  // Track click and form-submit interactions so the Events dashboard receives
+  // data (the provider previously only tracked page views). Registered in its
+  // own effect with cleanup so listeners are not duplicated across HMR/remounts,
+  // which would otherwise double-count events.
+  useEffect(() => {
+    const handleClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target) return;
+
+      // Track button clicks
+      const button = target.tagName === 'BUTTON' ? target : target.closest('button');
+      if (button) {
+        const id = button.id || '';
+        const text = button.textContent?.trim() || '';
+        const classes = Array.from(button.classList).join(' ');
+        trackEvent({
+          eventType: 'click',
+          eventCategory: 'button',
+          eventAction: 'click',
+          eventLabel: id || text || classes,
+          properties: {
+            elementId: id,
+            elementText: text,
+            elementClasses: classes,
+            elementPath: getElementPath(button as HTMLElement),
+          },
+        });
+        return;
+      }
+
+      // Track link clicks
+      const link = target.tagName === 'A' ? target : target.closest('a');
+      if (link && link instanceof HTMLAnchorElement) {
+        // Strip query string / hash to avoid persisting tokens or PII in analytics
+        let safeHref = link.href || '';
+        try {
+          const url = new URL(link.href);
+          safeHref = url.origin + url.pathname;
+        } catch {
+          // keep the raw href if it cannot be parsed
+        }
+        const text = link.textContent?.trim() || '';
+        trackEvent({
+          eventType: 'click',
+          eventCategory: 'link',
+          eventAction: 'click',
+          eventLabel: text || safeHref,
+          properties: {
+            href: safeHref,
+            elementText: text,
+            elementPath: getElementPath(link as HTMLElement),
+          },
+        });
+      }
+    };
+
+    const handleSubmit = (event: SubmitEvent) => {
+      const form = event.target as HTMLFormElement;
+      if (!form) return;
+      const formId = form.id || '';
+      const formAction = form.action || '';
+      const formMethod = form.method || '';
+      trackEvent({
+        eventType: 'form_submit',
+        eventCategory: 'form',
+        eventAction: 'submit',
+        eventLabel: formId || formAction,
+        properties: {
+          formId,
+          formAction,
+          formMethod,
+          elementPath: getElementPath(form),
+        },
+      });
+    };
+
+    document.addEventListener('click', handleClick);
+    document.addEventListener('submit', handleSubmit);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+      document.removeEventListener('submit', handleSubmit);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <AnalyticsContext.Provider value={{ trackPageView, trackEvent }}>
       {children}

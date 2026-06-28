@@ -5,3 +5,4 @@
 - [Calendar watchdog false alerts](calendar-watchdog-false-alerts.md) — false "digest missed" alerts usually come from a stale deployed build; manual /day send only counts as the daily run (stamps lastSentAt) when its audience matches the schedule.
 - [Vite port conflict after merges](vite-port-conflict-after-merges.md) — artifact "crash" with clean browser console is often a stale Vite process holding the port after lockfile-changing merges; restart_workflow fixes it.
 - [Recharts in minified prod](recharts-prod-charts.md) — recharts uses static displayName strings (minify-safe), so no React19/minify crash; charts-stuck-on-fallback is stale build or an error boundary with no resetKeys; repro prod via public/ dir through proxy.
+- [Analytics schema index constants](analytics-schema-index-constants.md) — the *Indexes exported objects create NO DB index (declarative-only); event tracking lives in AnalyticsProvider (analytics.tsx), not the commented-out initAnalytics.

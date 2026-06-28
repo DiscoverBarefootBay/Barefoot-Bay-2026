@@ -240,7 +240,10 @@ const AnalyticsDashboard: React.FC = () => {
         throw new Error('Failed to fetch user journey data');
       }
       const { data } = await response.json();
-      return Array.isArray(data) ? data : [];
+      // pathTransitions returns a single { nodes, links } object, while
+      // entryPages/exitPages return arrays. Normalize both into an array so
+      // the render path (userJourneyData[0]) works for every journey type.
+      return Array.isArray(data) ? data : (data ? [data] : []);
     },
     placeholderData: undefined,
   });
