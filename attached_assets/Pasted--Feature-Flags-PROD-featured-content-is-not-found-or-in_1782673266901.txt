@@ -1,0 +1,1078 @@
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ Unread messages count: 0
+ [Feature Flags] [PROD] Checking flag calendar Object
+ [Feature Flags] [PROD] nav-calendar for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag forum Object
+ [Feature Flags] [PROD] nav-forum for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag for_sale Object
+ [Feature Flags] [PROD] nav-for-sale for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag store Object
+ [Feature Flags] [PROD] nav-store for admin: HIDDEN
+ [Feature Flags] [PROD] Checking flag vendors Object
+ [Feature Flags] [PROD] nav-vendors for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ [Analytics] Page view tracked: /analytics-dashboard
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ Unread messages count: 0
+ [Feature Flags] [PROD] Checking flag calendar Object
+ [Feature Flags] [PROD] nav-calendar for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag forum Object
+ [Feature Flags] [PROD] nav-forum for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag for_sale Object
+ [Feature Flags] [PROD] nav-for-sale for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag store Object
+ [Feature Flags] [PROD] nav-store for admin: HIDDEN
+ [Feature Flags] [PROD] Checking flag vendors Object
+ [Feature Flags] [PROD] nav-vendors for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ Rocket launch data received: Array(3)
+ First launch window_start: 2026-06-29T02:25Z
+ First launch date object: Sun Jun 28 2026 21:25:00 GMT-0500 (Central Daylight Time)
+ Current date object: Sun Jun 28 2026 14:00:13 GMT-0500 (Central Daylight Time)
+ Is future date? true
+ Using official pad time: 2026-06-29T02:25Z for imminent check
+ Current time: 2026-06-28T19:00:13.181Z, Launch time: 2026-06-29T02:25:00.000Z
+ Time difference: 444 minutes
+ Setting API fetch frequency to 3600 seconds
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ Using filesystem rocket icon
+ Using official pad time: 2026-06-29T02:25Z for imminent check
+ Current time: 2026-06-28T19:00:13.183Z, Launch time: 2026-06-29T02:25:00.000Z
+ Time difference: 444 minutes
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ Using filesystem rocket icon
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ Unread messages count: 0
+ [Feature Flags] [PROD] Checking flag calendar Object
+ [Feature Flags] [PROD] nav-calendar for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag forum Object
+ [Feature Flags] [PROD] nav-forum for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag for_sale Object
+ [Feature Flags] [PROD] nav-for-sale for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag store Object
+ [Feature Flags] [PROD] nav-store for admin: HIDDEN
+ [Feature Flags] [PROD] Checking flag vendors Object
+ [Feature Flags] [PROD] nav-vendors for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ Using filesystem rocket icon
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ Unread messages count: 0
+ [Feature Flags] [PROD] Checking flag calendar Object
+ [Feature Flags] [PROD] nav-calendar for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag forum Object
+ [Feature Flags] [PROD] nav-forum for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag for_sale Object
+ [Feature Flags] [PROD] nav-for-sale for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag store Object
+ [Feature Flags] [PROD] nav-store for admin: HIDDEN
+ [Feature Flags] [PROD] Checking flag vendors Object
+ [Feature Flags] [PROD] nav-vendors for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ Using filesystem rocket icon
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ 🏠 [FOR SALE BADGE] API response: Object
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ REPLIT_APP_LOADED
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ Unread messages count: 0
+ [Feature Flags] [PROD] Checking flag calendar Object
+ [Feature Flags] [PROD] nav-calendar for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag forum Object
+ [Feature Flags] [PROD] nav-forum for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag for_sale Object
+ [Feature Flags] [PROD] nav-for-sale for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag store Object
+ [Feature Flags] [PROD] nav-store for admin: HIDDEN
+ [Feature Flags] [PROD] Checking flag vendors Object
+ [Feature Flags] [PROD] nav-vendors for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for admin: VISIBLE
+ [Feature Flags] [PROD] Checking flag community Object
+ [Feature Flags] [PROD] nav-community for admin: VISIBLE
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_forum Object
+ [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+ [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag featured_content Object
+ [Feature Flags] [PROD] featured_content is not found or inactive
+ [Feature Flags] [PROD] Checking flag messages Object
+ [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+ Using filesystem rocket icon
+ DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+ [Feature Flags] [PROD] Checking flag comments Object
+ [Feature Flags] [PROD] comments for admin in production: checking roles...
+ [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag reactions Object
+ [Feature Flags] [PROD] reactions for admin in production: checking roles...
+ [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag calendar_post Object
+ [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+ [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag forum_post Object
+ [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+ [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag for_sale_post Object
+ [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+ [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag vendor_page Object
+ [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+ [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+ [Feature Flags] [PROD] Checking flag admin_access Object
+ [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag admin_forum Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag featured_content Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] featured_content is not found or inactive
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag messages Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+index-ty0HqYCp.js:404 DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag comments Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] comments for admin in production: checking roles...
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag reactions Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] reactions for admin in production: checking roles...
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag calendar_post Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag forum_post Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag for_sale_post Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag vendor_page Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag admin_access Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag admin_forum Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag featured_content Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] featured_content is not found or inactive
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag messages Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+index-ty0HqYCp.js:404 DEBUG usePermissions - Effective role: admin isAdmin: true isBlocked: false hasPermission: true
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag comments Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] comments for admin in production: checking roles...
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] comments for admin based on roles: ENABLED
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag reactions Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] reactions for admin in production: checking roles...
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] reactions for admin based on roles: ENABLED
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag calendar_post Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] calendar_post for admin in production: checking roles...
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] calendar_post for admin based on roles: ENABLED
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag forum_post Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] forum_post for admin in production: checking roles...
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] forum_post for admin based on roles: ENABLED
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag for_sale_post Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] for_sale_post for admin in production: checking roles...
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] for_sale_post for admin based on roles: ENABLED
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag vendor_page Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] vendor_page for admin in production: checking roles...
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] vendor_page for admin based on roles: ENABLED
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag admin_access Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] admin_access for admin in production: checking roles...
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] admin_access for admin based on roles: ENABLED
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag admin_forum Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] admin_forum for admin in production: checking roles...
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] admin_forum for admin based on roles: ENABLED
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag featured_content Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] featured_content is not found or inactive
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] Checking flag messages Object
+index-ty0HqYCp.js:404 [Feature Flags] [PROD] nav-messages for admin: VISIBLE
+index-ty0HqYCp.js:19 Query fetch: /api/forum/posts/267/unread-comments
+index-ty0HqYCp.js:19 Query hostname: barefootbay.com, isDeploy: true
+index-ty0HqYCp.js:19 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/forum/posts/267/unread-comments
+          Hostname: barefootbay.com
+          Origin: https://barefootbay.com
+          Protocol: https:
+        
+index-ty0HqYCp.js:450 [Maps Polyfill] BYPASSING for API request: /api/forum/posts/267/unread-comments
+index-ty0HqYCp.js:19 Query fetch: /api/messages
+index-ty0HqYCp.js:19 Query hostname: barefootbay.com, isDeploy: true
+index-ty0HqYCp.js:19 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/messages
+          Hostname: barefootbay.com
+          Origin: https://barefootbay.com
+          Protocol: https:
+        
+index-ty0HqYCp.js:450 [Maps Polyfill] BYPASSING for API request: /api/messages
+index-ty0HqYCp.js:19 Query fetch: /api/forum/posts/267/unread-comments
+index-ty0HqYCp.js:19 Query hostname: barefootbay.com, isDeploy: true
+index-ty0HqYCp.js:19 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/forum/posts/267/unread-comments
+          Hostname: barefootbay.com
+          Origin: https://barefootbay.com
+          Protocol: https:
+        
+index-ty0HqYCp.js:450 [Maps Polyfill] BYPASSING for API request: /api/forum/posts/267/unread-comments
+index-ty0HqYCp.js:19 Query fetch: /api/messages
+index-ty0HqYCp.js:19 Query hostname: barefootbay.com, isDeploy: true
+index-ty0HqYCp.js:19 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/messages
+          Hostname: barefootbay.com
+          Origin: https://barefootbay.com
+          Protocol: https:
+        
+index-ty0HqYCp.js:450 [Maps Polyfill] BYPASSING for API request: /api/messages
+index-ty0HqYCp.js:19 Query fetch: /api/forum/posts/267/unread-comments
+index-ty0HqYCp.js:19 Query hostname: barefootbay.com, isDeploy: true
+index-ty0HqYCp.js:19 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/forum/posts/267/unread-comments
+          Hostname: barefootbay.com
+          Origin: https://barefootbay.com
+          Protocol: https:
+        
+index-ty0HqYCp.js:450 [Maps Polyfill] BYPASSING for API request: /api/forum/posts/267/unread-comments
+index-ty0HqYCp.js:19 Query fetch: /api/messages
+index-ty0HqYCp.js:19 Query hostname: barefootbay.com, isDeploy: true
+index-ty0HqYCp.js:19 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/messages
+          Hostname: barefootbay.com
+          Origin: https://barefootbay.com
+          Protocol: https:
+        
+index-ty0HqYCp.js:450 [Maps Polyfill] BYPASSING for API request: /api/messages
+index-ty0HqYCp.js:19 Query fetch: /api/forum/posts/267/unread-comments
+index-ty0HqYCp.js:19 Query hostname: barefootbay.com, isDeploy: true
+index-ty0HqYCp.js:19 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/forum/posts/267/unread-comments
+          Hostname: barefootbay.com
+          Origin: https://barefootbay.com
+          Protocol: https:
+        
+index-ty0HqYCp.js:450 [Maps Polyfill] BYPASSING for API request: /api/forum/posts/267/unread-comments
+index-ty0HqYCp.js:19 Query fetch: /api/messages
+index-ty0HqYCp.js:19 Query hostname: barefootbay.com, isDeploy: true
+index-ty0HqYCp.js:19 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/messages
+          Hostname: barefootbay.com
+          Origin: https://barefootbay.com
+          Protocol: https:
+        
+index-ty0HqYCp.js:450 [Maps Polyfill] BYPASSING for API request: /api/messages
+index-ty0HqYCp.js:19 Query fetch: /api/forum/posts/267/unread-comments
+index-ty0HqYCp.js:19 Query hostname: barefootbay.com, isDeploy: true
+index-ty0HqYCp.js:19 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/forum/posts/267/unread-comments
+          Hostname: barefootbay.com
+          Origin: https://barefootbay.com
+          Protocol: https:
+        
+index-ty0HqYCp.js:450 [Maps Polyfill] BYPASSING for API request: /api/forum/posts/267/unread-comments
+index-ty0HqYCp.js:19 Query fetch: /api/messages
+index-ty0HqYCp.js:19 Query hostname: barefootbay.com, isDeploy: true
+index-ty0HqYCp.js:19 Query authentication debug: 
+          Cookie exists: false
+          Full cookie string: 
+          Query: /api/messages
+          Hostname: barefootbay.com
+          Origin: https://barefootbay.com
+          Protocol: https:
+        
+index-ty0HqYCp.js:450 [Maps Polyfill] BYPASSING for API request: /api/messages
