@@ -1,4 +1,4 @@
-import { pgTable, serial, integer, text, timestamp, json, boolean, decimal, jsonb } from 'drizzle-orm/pg-core';
+import { pgTable, serial, integer, text, timestamp, json, boolean, decimal, jsonb, index } from 'drizzle-orm/pg-core';
 import { relations, sql } from 'drizzle-orm';
 import { users } from './schema';
 
@@ -28,7 +28,10 @@ export const analyticsSessions = pgTable('analytics_sessions', {
   // New field for proper returning visitor tracking
   visitorFingerprint: text('visitor_fingerprint'), // Combination of IP + User-Agent hash for visitor identification
   isReturningVisitor: boolean('is_returning_visitor').default(false), // True if this visitor has been seen before
-});
+}, (table) => ({
+  // Index for fast returning-visitor lookups (isReturningVisitor filters by visitor_fingerprint)
+  visitorFingerprintIdx: index('analytics_sessions_visitor_fingerprint_idx').on(table.visitorFingerprint),
+}));
 
 /**
  * Analytics Page Views Table
