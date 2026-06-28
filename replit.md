@@ -62,6 +62,21 @@ See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and pa
 
 ## Important Notes
 
+### Database schema sync (`drizzle-kit push`) — read before pushing
+The dev (and prod) database is a **legacy database created outside Drizzle** (pre-migration raw SQL). The Drizzle schema in `lib/db` only *approximates* it, so the DB and schema have drifted at every level: table set, constraint names (Postgres default `_key`/`_fkey` vs Drizzle's `_unique`/`_id_fk`), column types/defaults/nullability, and extra columns. Because of this, **`drizzle-kit push` can never fully "sync" this DB without destroying data** — a blind/force push would drop populated columns and offer to truncate large tables.
+
+- **`drizzle.config.ts` scopes push to schema-owned tables.** `tablesFilter` is derived dynamically from the exported schema tables (via `getTableName` + `is(x, PgTable)`). This is what stopped the dangerous "rename dozens of unrelated tables" prompt: the DB has ~26 tables not modeled here (legacy app tables like `sessions`, `sponsorships`, `media_files`, plus one-time `*_backup_*` / `*_recovery_backup` snapshots). Without the filter, push paired those drops against schema-only creates and asked to "rename" them, where a wrong answer destroys data. **Keep `tablesFilter` in the config.** It auto-updates as the schema grows — no maintenance needed.
+- **NEVER run `pnpm --filter @workspace/db run push-force` (`--force`) and never blindly accept push prompts.** Even scoped, push still wants to do destructive legacy reconciliation that is NOT a real schema change:
+  - DROP populated columns: `events.notify_users` (~5,771 rows), `users.is_approved` (~976), `forum_posts.category` (~189), `page_contents.category` (~263), `real_estate_listings.is_approved` (~15).
+  - TRUNCATE-or-fail prompts on huge tables just to rename unique constraints (`forum_read_states` ~75k, `vendor_page_visits` ~82k, `users` ~976, etc.). The safe answer is always **"No, add the constraint without truncating."**
+  - Coerce column types (e.g. `events.hours_of_operation` → jsonb) and rename every FK/unique constraint to Drizzle's convention. Cosmetic churn at best, lossy at worst.
+- **Safe path to apply a schema change to dev:**
+  1. Update the Drizzle schema in `lib/db` (it's the source of truth for app *types*, not a migration tool here).
+  2. Apply the actual DDL to the DB with explicit, **idempotent** SQL — `CREATE TABLE IF NOT EXISTS`, `CREATE INDEX IF NOT EXISTS`, `ALTER TABLE … ADD COLUMN IF NOT EXISTS` — via the `database` skill. Do not rely on `push` to apply it. (This is how Task #240's analytics indexes were applied, and how the missing `analytics_user_segments`, `analytics_segment_filters`, `order_returns`, `return_items` tables were created — with FK names matching Drizzle's `<table>_<col>_<reftable>_<refcol>_fk` convention.)
+  3. To preview exactly what push *thinks* differs: `cd lib/db && npx drizzle-kit push --verbose --strict` and read the statement list, then answer the final confirmation **No** to abort without applying.
+- **Prod (on Publish):** there is no auto-migration on Publish. Apply the *same* explicit idempotent SQL against the production database (`database` skill, `environment: "production"`) when you ship a schema change.
+- The stale `*_backup_*` / `*_recovery_backup` tables are now ignored by push (out of `tablesFilter`). They are harmless; drop them manually only if you deliberately want the space back.
+
 ### Express 5 Compatibility
 - Optional route params (`:id?`) must use `{id}` syntax instead
 - Wildcard routes (`/*filename`) return `req.params.filename` as an **array** — always normalize: `Array.isArray(p) ? p.join('/') : p`
