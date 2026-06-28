@@ -12,8 +12,7 @@ import { AuthProvider } from "./components/providers/auth-provider";
 // Analytics tracking
 import { AnalyticsProvider } from "@/lib/analytics";
 // New Error Boundary component for improved error handling
-// import ErrorBoundary from "@/components/error/error-boundary";
-// import AnalyticsErrorBoundary from "@/components/error/analytics-error-boundary";
+import ErrorBoundary from "@/components/error/error-boundary";
 // Chat messaging feature
 import { ChatProvider } from "./context/ChatContext";
 // Rocket easter egg provider
@@ -128,6 +127,7 @@ function Router() {
       <div className="relative z-10 bg-transparent flex-grow flex flex-col">
         <NavBar />
         <main className="container mx-auto px-4 py-4 md:py-8 flex-grow">
+          <ErrorBoundary>
           <Switch>
             <Route path="/" component={HomePage} />
             <Route path="/auth" component={AuthPage} />
@@ -475,6 +475,7 @@ function Router() {
             
             <Route component={() => <NotFound />} />
           </Switch>
+          </ErrorBoundary>
         </main>
         <Footer />
       </div>

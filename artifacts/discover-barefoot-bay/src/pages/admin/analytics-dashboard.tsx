@@ -115,6 +115,47 @@ interface UserJourneyData {
   count?: number;
 }
 
+// Normalize a raw API payload into a guaranteed DashboardData shape so the
+// render path never throws on a missing/partial/unexpected response.
+const toArray = <T,>(value: unknown): T[] => (Array.isArray(value) ? (value as T[]) : []);
+const toNumber = (value: unknown): number =>
+  typeof value === 'number' && Number.isFinite(value) ? value : 0;
+
+const normalizeDashboardData = (raw: any): DashboardData => ({
+  timeRange: {
+    startDate: raw?.timeRange?.startDate ?? '',
+    endDate: raw?.timeRange?.endDate ?? '',
+    days: toNumber(raw?.timeRange?.days),
+  },
+  sessions: {
+    total: toNumber(raw?.sessions?.total),
+    uniqueVisitors: toNumber(raw?.sessions?.uniqueVisitors),
+    newVsReturning: {
+      new: toNumber(raw?.sessions?.newVsReturning?.new),
+      returning: toNumber(raw?.sessions?.newVsReturning?.returning),
+    },
+    byDevice: toArray(raw?.sessions?.byDevice),
+    byBrowser: toArray(raw?.sessions?.byBrowser),
+    byCountry: toArray(raw?.sessions?.byCountry),
+  },
+  pageViews: {
+    total: toNumber(raw?.pageViews?.total),
+    topPages: toArray(raw?.pageViews?.topPages),
+    averageLoadTime: toNumber(raw?.pageViews?.averageLoadTime),
+  },
+  events: {
+    total: toNumber(raw?.events?.total),
+    byType: toArray(raw?.events?.byType),
+  },
+  location: {
+    geoData: toArray(raw?.location?.geoData),
+  },
+  traffic: {
+    byDay: toArray(raw?.traffic?.byDay),
+    pageViewsByDay: toArray(raw?.traffic?.pageViewsByDay),
+  },
+});
+
 const AnalyticsDashboard: React.FC = () => {
   const [range, setRange] = useState<number>(30);
   const [journeyType, setJourneyType] = useState<'pathTransitions' | 'entryPages' | 'exitPages'>('pathTransitions');
@@ -129,7 +170,7 @@ const AnalyticsDashboard: React.FC = () => {
         throw new Error('Failed to fetch analytics dashboard data');
       }
       const { data } = await response.json();
-      return data;
+      return normalizeDashboardData(data);
     },
     refetchInterval: 5 * 60 * 1000, // Refetch every 5 minutes
   });
@@ -179,7 +220,7 @@ const AnalyticsDashboard: React.FC = () => {
         throw new Error('Failed to fetch user journey data');
       }
       const { data } = await response.json();
-      return data;
+      return Array.isArray(data) ? data : [];
     },
   });
 
@@ -199,22 +240,23 @@ const AnalyticsDashboard: React.FC = () => {
     return `${Math.round((value / total) * 100)}%`;
   };
 
+  // Error state - check first so a failed request shows a message instead of
+  // being stuck on the loading spinner forever (dashboardData stays undefined).
+  if (dashboardError) {
+    return (
+      <div className="bg-destructive/10 border border-destructive p-4 rounded-md my-4">
+        <h3 className="text-destructive font-medium">Error loading analytics</h3>
+        <p className="text-destructive/80">{(dashboardError as Error).message}</p>
+      </div>
+    );
+  }
+
   // Loading state - also check if dashboardData is undefined (can happen during client-side navigation)
   if (isLoadingDashboard || !dashboardData) {
     return (
       <div className="flex items-center justify-center min-h-[600px]">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
         <span className="ml-2">Loading analytics data...</span>
-      </div>
-    );
-  }
-
-  // Error state
-  if (dashboardError) {
-    return (
-      <div className="bg-destructive/10 border border-destructive p-4 rounded-md my-4">
-        <h3 className="text-destructive font-medium">Error loading analytics</h3>
-        <p className="text-destructive/80">{(dashboardError as Error).message}</p>
       </div>
     );
   }
@@ -278,7 +320,7 @@ const AnalyticsDashboard: React.FC = () => {
                   <div className="text-2xl font-bold">{dashboardData.pageViews.total.toLocaleString()}</div>
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Avg {(dashboardData.pageViews.total / dashboardData.sessions.total).toFixed(1)} pages per session
+                  Avg {(dashboardData.sessions.total > 0 ? dashboardData.pageViews.total / dashboardData.sessions.total : 0).toFixed(1)} pages per session
                 </p>
               </CardContent>
             </Card>
@@ -481,7 +523,7 @@ const AnalyticsDashboard: React.FC = () => {
                     <div className="text-destructive">{(activeUsersError as Error).message}</div>
                   ) : (
                     <div className="space-y-2">
-                      {activeUsersData?.users.map((user) => (
+                      {activeUsersData?.users?.map((user) => (
                         <div key={user.sessionId} className="p-2 hover:bg-muted rounded-md">
                           <div className="flex items-center justify-between">
                             <div className="font-medium">
