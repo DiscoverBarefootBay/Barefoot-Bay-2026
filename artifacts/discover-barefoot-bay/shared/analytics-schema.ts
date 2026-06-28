@@ -1,5 +1,5 @@
 import { pgTable, serial, integer, text, timestamp, json, boolean, decimal, jsonb, index } from 'drizzle-orm/pg-core';
-import { relations, sql } from 'drizzle-orm';
+import { relations } from 'drizzle-orm';
 
 
 /**
@@ -132,26 +132,3 @@ export const analyticsEventsRelations = relations(analyticsEvents, ({ one }) => 
     relationName: 'event_user'
   })
 }));
-
-// Create indexes for faster queries
-export const analyticsSessionsIndexes = {
-  userIdIdx: sql`CREATE INDEX IF NOT EXISTS analytics_sessions_user_id_idx ON analytics_sessions (user_id)`,
-  startTimestampIdx: sql`CREATE INDEX IF NOT EXISTS analytics_sessions_start_timestamp_idx ON analytics_sessions (start_timestamp)`,
-  isActiveIdx: sql`CREATE INDEX IF NOT EXISTS analytics_sessions_is_active_idx ON analytics_sessions (is_active)`,
-  sessionIdIdx: sql`CREATE INDEX IF NOT EXISTS analytics_sessions_session_id_idx ON analytics_sessions (session_id)`,
-};
-
-export const analyticsPageViewsIndexes = {
-  sessionIdIdx: sql`CREATE INDEX IF NOT EXISTS analytics_page_views_session_id_idx ON analytics_page_views (session_id)`,
-  pathIdx: sql`CREATE INDEX IF NOT EXISTS analytics_page_views_path_idx ON analytics_page_views (path)`,
-  timestampIdx: sql`CREATE INDEX IF NOT EXISTS analytics_page_views_timestamp_idx ON analytics_page_views (timestamp)`,
-  userIdIdx: sql`CREATE INDEX IF NOT EXISTS analytics_page_views_user_id_idx ON analytics_page_views (user_id)`,
-};
-
-export const analyticsEventsIndexes = {
-  sessionIdIdx: sql`CREATE INDEX IF NOT EXISTS analytics_events_session_id_idx ON analytics_events (session_id)`,
-  eventTypeIdx: sql`CREATE INDEX IF NOT EXISTS analytics_events_event_type_idx ON analytics_events (event_type)`,
-  timestampIdx: sql`CREATE INDEX IF NOT EXISTS analytics_events_timestamp_idx ON analytics_events (timestamp)`,
-  pathIdx: sql`CREATE INDEX IF NOT EXISTS analytics_events_path_idx ON analytics_events (path)`,
-  userIdIdx: sql`CREATE INDEX IF NOT EXISTS analytics_events_user_id_idx ON analytics_events (user_id)`,
-};

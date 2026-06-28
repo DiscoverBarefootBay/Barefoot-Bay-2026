@@ -3,15 +3,13 @@ import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 import { 
   analyticsSessions, analyticsPageViews, analyticsEvents,
-  analyticsSessionsRelations, analyticsPageViewsRelations, analyticsEventsRelations, 
-  analyticsSessionsIndexes, analyticsPageViewsIndexes, analyticsEventsIndexes
+  analyticsSessionsRelations, analyticsPageViewsRelations, analyticsEventsRelations
 } from './analytics-schema';
 
 // Re-export analytics schema
 export {
   analyticsSessions, analyticsPageViews, analyticsEvents,
-  analyticsSessionsRelations, analyticsPageViewsRelations, analyticsEventsRelations,
-  analyticsSessionsIndexes, analyticsPageViewsIndexes, analyticsEventsIndexes
+  analyticsSessionsRelations, analyticsPageViewsRelations, analyticsEventsRelations
 };
 
 // Define user roles - expanded structure
