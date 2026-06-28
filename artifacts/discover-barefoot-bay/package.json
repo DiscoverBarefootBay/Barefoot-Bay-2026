@@ -45,6 +45,7 @@
     "@replit/vite-plugin-shadcn-theme-json": "^0.0.4",
     "@tailwindcss/typography": "^0.5.15",
     "@tanstack/react-query": "catalog:",
+    "@types/file-saver": "^2.0.7",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
