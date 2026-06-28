@@ -187,6 +187,11 @@ const AnalyticsDashboard: React.FC = () => {
       return normalizeDashboardData(data);
     },
     refetchInterval: 5 * 60 * 1000, // Refetch every 5 minutes
+    // Opt out of the global `placeholderData` default (queryClient.ts), which
+    // returns `[]` before the first fetch resolves. That empty array is truthy,
+    // so it slips past the `!dashboardData` guards below and then `[].traffic`
+    // is undefined -> reading `.byDay` throws and crashes the whole page.
+    placeholderData: undefined,
   });
 
   // Fetch active users
@@ -223,6 +228,7 @@ const AnalyticsDashboard: React.FC = () => {
       return { count: 0, users: [] };
     },
     refetchInterval: 60 * 1000, // Refetch every minute
+    placeholderData: undefined,
   });
 
   // Fetch user journey data
@@ -236,6 +242,7 @@ const AnalyticsDashboard: React.FC = () => {
       const { data } = await response.json();
       return Array.isArray(data) ? data : [];
     },
+    placeholderData: undefined,
   });
 
   // Format date for display
@@ -274,13 +281,13 @@ const AnalyticsDashboard: React.FC = () => {
 
   // Merge sessions-by-day and page-views-by-day into a single series keyed by date
   const trafficChartData = React.useMemo(() => {
-    if (!dashboardData) return [];
+    if (!dashboardData?.traffic) return [];
     const byDate = new Map<string, { date: string; sessions: number; pageViews: number }>();
-    for (const day of dashboardData.traffic.byDay) {
+    for (const day of (dashboardData.traffic.byDay ?? [])) {
       if (!day?.date) continue;
       byDate.set(day.date, { date: day.date, sessions: toNumber(day.sessions), pageViews: 0 });
     }
-    for (const day of dashboardData.traffic.pageViewsByDay) {
+    for (const day of (dashboardData.traffic.pageViewsByDay ?? [])) {
       if (!day?.date) continue;
       const existing = byDate.get(day.date);
       if (existing) {
@@ -294,8 +301,8 @@ const AnalyticsDashboard: React.FC = () => {
 
   // Aggregate geo data into a labelled, sorted series of visitor counts by location
   const geoChartData = React.useMemo(() => {
-    if (!dashboardData) return [];
-    return dashboardData.location.geoData
+    if (!dashboardData?.location) return [];
+    return (dashboardData.location.geoData ?? [])
       .map((loc) => {
         const label = [loc.city, loc.region, loc.country].filter(Boolean).join(', ') || 'Unknown';
         return { label, count: toNumber(loc.count) };
@@ -377,7 +384,7 @@ const AnalyticsDashboard: React.FC = () => {
         </div>
       </div>
 
-      {dashboardData && (
+      {dashboardData?.sessions && (
         <>
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
