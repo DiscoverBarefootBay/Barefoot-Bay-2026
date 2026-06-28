@@ -1571,18 +1571,18 @@ export default function CalendarPage() {
                 },
               }}
               classNames={{
-                months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 w-full max-w-full",
+                months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 w-full max-w-full relative",
                 month: "space-y-2 w-full max-w-full",
                 month_caption: "flex justify-center pt-1 pb-1 relative items-center",
                 caption_label: "text-lg font-semibold",
-                nav: "space-x-1 flex items-center",
+                nav: "absolute top-0 inset-x-0 z-20 flex items-center justify-between px-2 h-9",
                 button_previous: cn(
                   buttonVariants({ variant: "outline" }),
-                  "h-7 w-7 md:h-9 md:w-9 bg-transparent p-0 opacity-70 hover:opacity-100 absolute left-1"
+                  "h-7 w-7 md:h-9 md:w-9 bg-transparent p-0 opacity-80 hover:opacity-100"
                 ),
                 button_next: cn(
                   buttonVariants({ variant: "outline" }),
-                  "h-7 w-7 md:h-9 md:w-9 bg-transparent p-0 opacity-70 hover:opacity-100 absolute right-1"
+                  "h-7 w-7 md:h-9 md:w-9 bg-transparent p-0 opacity-80 hover:opacity-100"
                 ),
                 month_grid: "w-full max-w-full border-collapse space-y-0 table-fixed",
                 weekdays: "flex w-full max-w-full flex-nowrap",
