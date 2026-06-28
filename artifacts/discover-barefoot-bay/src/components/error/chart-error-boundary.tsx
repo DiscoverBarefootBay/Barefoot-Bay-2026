@@ -20,15 +20,10 @@ interface State {
   hasError: boolean;
 }
 
-function resetKeysChanged(
-  prev: ReadonlyArray<unknown> | undefined,
-  next: ReadonlyArray<unknown> | undefined,
-): boolean {
-  if (prev === next) return false;
-  if (!prev || !next) return prev !== next;
-  if (prev.length !== next.length) return true;
-  return prev.some((value, index) => !Object.is(value, next[index]));
-}
+const resetKeysChanged = (
+  a: ReadonlyArray<unknown> = [],
+  b: ReadonlyArray<unknown> = [],
+): boolean => a.length !== b.length || a.some((value, index) => !Object.is(value, b[index]));
 
 /**
  * ChartErrorBoundary
@@ -37,6 +32,10 @@ function resetKeysChanged(
  * (e.g. a render-time failure in the charting library), only that card shows a
  * graceful fallback instead of the failure bubbling up to the global
  * ErrorBoundary and collapsing the entire page.
+ *
+ * Pass `resetKeys` so a transient failure doesn't permanently pin the fallback:
+ * when the data backing the chart changes, the boundary resets and re-renders
+ * the real chart.
  */
 class ChartErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {

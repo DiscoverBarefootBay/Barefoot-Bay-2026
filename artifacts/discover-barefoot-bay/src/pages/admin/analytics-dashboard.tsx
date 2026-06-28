@@ -461,7 +461,7 @@ const AnalyticsDashboard: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   {trafficChartData.length > 0 ? (
-                    <ChartErrorBoundary minHeight={300} resetKeys={[range, filterBots]}>
+                    <ChartErrorBoundary minHeight={300} resetKeys={[range, filterBots, trafficChartData.length]}>
                     <ResponsiveContainer width="100%" height={300}>
                       <AreaChart data={trafficChartData}>
                         <defs>
@@ -607,7 +607,7 @@ const AnalyticsDashboard: React.FC = () => {
                     <div className="space-y-2">
                       {journeyType === 'pathTransitions' ? (
                         pathTransitions.length > 0 ? (
-                          <ChartErrorBoundary minHeight={300} resetKeys={[journeyType, range, filterBots]}>
+                          <ChartErrorBoundary minHeight={300} resetKeys={[range, filterBots, journeyType, pathTransitions.length]}>
                           <ResponsiveContainer width="100%" height={Math.max(300, pathTransitions.length * 36)}>
                             <BarChart data={pathTransitions} layout="vertical" margin={{ left: 16, right: 16 }}>
                               <CartesianGrid strokeDasharray="3 3" horizontal={false} />
@@ -780,7 +780,7 @@ const AnalyticsDashboard: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   {geoChartData.length > 0 ? (
-                    <ChartErrorBoundary minHeight={400} resetKeys={[range, filterBots]}>
+                    <ChartErrorBoundary minHeight={400} resetKeys={[range, filterBots, geoChartData.length]}>
                     <ResponsiveContainer width="100%" height={Math.max(400, geoChartData.length * 32)}>
                       <BarChart data={geoChartData} layout="vertical" margin={{ left: 16, right: 16 }}>
                         <CartesianGrid strokeDasharray="3 3" horizontal={false} />

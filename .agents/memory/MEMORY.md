@@ -4,3 +4,4 @@
 - [Listing expiration emails](listing-expiration-emails.md) — sendEmail returns false (never throws) so check the boolean for idempotent cadence state; getExpiredListings returns raw snake_case rows so camelCase branches are dead.
 - [Calendar watchdog false alerts](calendar-watchdog-false-alerts.md) — false "digest missed" alerts usually come from a stale deployed build; manual /day send only counts as the daily run (stamps lastSentAt) when its audience matches the schedule.
 - [Vite port conflict after merges](vite-port-conflict-after-merges.md) — artifact "crash" with clean browser console is often a stale Vite process holding the port after lockfile-changing merges; restart_workflow fixes it.
+- [Recharts in minified prod](recharts-prod-charts.md) — recharts uses static displayName strings (minify-safe), so no React19/minify crash; charts-stuck-on-fallback is stale build or an error boundary with no resetKeys; repro prod via public/ dir through proxy.
