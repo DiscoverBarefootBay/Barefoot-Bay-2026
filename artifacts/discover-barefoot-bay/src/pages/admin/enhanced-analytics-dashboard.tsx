@@ -18,6 +18,7 @@ import { Badge } from '@/components/ui/badge';
 
 // Import our custom components
 import { ActiveUsersPanel } from '@/components/admin/active-users-panel';
+import { RealTimeActivityPanel } from '@/components/admin/real-time-activity-panel';
 import { UserJourneyVisualization } from '@/components/admin/user-journey-visualization';
 import { ActivityHeatmap } from '@/components/admin/activity-heatmap';
 import { ClickHeatmap } from '@/components/admin/click-heatmap';
@@ -478,21 +479,8 @@ export default function EnhancedAnalyticsDashboard() {
           <TabsContent value="realtime">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <ActiveUsersPanel />
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle>Real-Time Activity</CardTitle>
-                  <CardDescription>What users are doing right now</CardDescription>
-                </CardHeader>
-                <CardContent className="h-[350px] flex items-center justify-center">
-                  <div className="text-center p-6">
-                    <div className="mb-4 text-muted-foreground">
-                      Real-time activity tracking is active
-                    </div>
-                    <Badge variant="outline" className="mb-2">Activity data refreshes every 30 seconds</Badge>
-                  </div>
-                </CardContent>
-              </Card>
+
+              <RealTimeActivityPanel />
               
               {/* Activity heatmap - spans full width */}
               <div className="col-span-1 md:col-span-2">
