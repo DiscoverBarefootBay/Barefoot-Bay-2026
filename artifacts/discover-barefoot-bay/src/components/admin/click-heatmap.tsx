@@ -17,6 +17,10 @@ interface ClickData {
 }
 
 // Generate color based on density
+// Size of each heatmap grid cell (px). Module-scoped so both the binning
+// (generateHeatmapPoints) and the render use the same value.
+const GRID_SIZE = 50;
+
 const getHeatmapColor = (intensity: number): string => {
   // Scale from transparent to red
   const alpha = Math.min(0.85, intensity);
@@ -52,7 +56,9 @@ export function ClickHeatmap() {
         setClickData(data.clicks);
         
         // Extract unique pages
-        const pages = Array.from(new Set(data.clicks.map((click: ClickData) => click.path)));
+        const pages = Array.from(
+          new Set(data.clicks.map((click: ClickData) => click.path))
+        ) as string[];
         if (pages.length > 0) {
           setAvailablePages(pages);
           if (!pages.includes(selectedPage)) {
@@ -137,13 +143,12 @@ export function ClickHeatmap() {
   // Generate heatmap points based on click proximity
   const generateHeatmapPoints = () => {
     // Group nearby clicks together to create heatmap points
-    const gridSize = 50; // Size of each cell in the grid
     const grid: Record<string, { x: number, y: number, count: number }> = {};
     
     pageClicks.forEach(click => {
       // Round to nearest grid cell
-      const gridX = Math.floor(click.x / gridSize) * gridSize;
-      const gridY = Math.floor(click.y / gridSize) * gridSize;
+      const gridX = Math.floor(click.x / GRID_SIZE) * GRID_SIZE;
+      const gridY = Math.floor(click.y / GRID_SIZE) * GRID_SIZE;
       const key = `${gridX},${gridY}`;
       
       if (!grid[key]) {
@@ -240,8 +245,8 @@ export function ClickHeatmap() {
                           style={{
                             left: `${point.x}px`,
                             top: `${point.y}px`,
-                            width: `${gridSize * 2}px`,
-                            height: `${gridSize * 2}px`,
+                            width: `${GRID_SIZE * 2}px`,
+                            height: `${GRID_SIZE * 2}px`,
                             backgroundColor: getHeatmapColor(point.count / maxCount),
                             transform: 'translate(-50%, -50%)',
                             pointerEvents: 'none'
