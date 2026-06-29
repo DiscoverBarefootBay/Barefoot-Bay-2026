@@ -114,6 +114,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
           eventLabel: options.eventLabel,
           eventValue: options.eventValue,
           positionData: options.positionData || {},
+          path: window.location.pathname,
           properties: {
             ...options.properties,
             url: window.location.pathname,
@@ -162,35 +163,17 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
   // own effect with cleanup so listeners are not duplicated across HMR/remounts,
   // which would otherwise double-count events.
   useEffect(() => {
-    const handleClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (!target) return;
+    // Interactive controls we want to attribute clicks to. Goes well beyond
+    // native <button>/<a> to cover custom components (role="button", tabs, menu
+    // items, switches, etc.) — the previous narrow matching was the documented
+    // cause of most sessions recording zero events.
+    const INTERACTIVE_SELECTOR =
+      'a, button, [role="button"], [role="link"], [role="tab"], [role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"], [role="option"], [role="switch"], [role="checkbox"], [role="radio"], input[type="button"], input[type="submit"], input[type="reset"], summary, [data-analytics-id], [data-testid]';
 
-      // Track button clicks
-      const button = target.tagName === 'BUTTON' ? target : target.closest('button');
-      if (button) {
-        const id = button.id || '';
-        const text = button.textContent?.trim() || '';
-        const classes = Array.from(button.classList).join(' ');
-        trackEvent({
-          eventType: 'click',
-          eventCategory: 'button',
-          eventAction: 'click',
-          eventLabel: id || text || classes,
-          positionData: { x: event.pageX, y: event.pageY, elementType: 'button', elementId: id },
-          properties: {
-            elementId: id,
-            elementText: text,
-            elementClasses: classes,
-            elementPath: getElementPath(button as HTMLElement),
-          },
-        });
-        return;
-      }
-
-      // Track link clicks
-      const link = target.tagName === 'A' ? target : target.closest('a');
-      if (link && link instanceof HTMLAnchorElement) {
+    const recordInteraction = (el: HTMLElement, x: number, y: number) => {
+      // Anchor activations are recorded as links; everything else as a button-like control.
+      const link = el instanceof HTMLAnchorElement ? el : (el.closest('a') as HTMLAnchorElement | null);
+      if (link) {
         // Strip query string / hash to avoid persisting tokens or PII in analytics
         let safeHref = link.href || '';
         try {
@@ -199,20 +182,80 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
         } catch {
           // keep the raw href if it cannot be parsed
         }
-        const text = link.textContent?.trim() || '';
+        const text = link.textContent?.trim().slice(0, 120) || '';
         trackEvent({
           eventType: 'click',
           eventCategory: 'link',
           eventAction: 'click',
           eventLabel: text || safeHref,
-          positionData: { x: event.pageX, y: event.pageY, elementType: 'link', elementId: link.id || '' },
+          positionData: { x, y, elementType: 'link', elementId: link.id || '' },
           properties: {
             href: safeHref,
             elementText: text,
-            elementPath: getElementPath(link as HTMLElement),
+            elementPath: getElementPath(link),
           },
         });
+        return;
       }
+
+      const id = el.id || '';
+      const text = el.textContent?.trim().slice(0, 120) || '';
+      const classes = Array.from(el.classList).join(' ');
+      const role = el.getAttribute('role') || el.tagName.toLowerCase();
+      trackEvent({
+        eventType: 'click',
+        eventCategory: 'button',
+        eventAction: 'click',
+        eventLabel: id || text || classes,
+        positionData: { x, y, elementType: role, elementId: id },
+        properties: {
+          elementId: id,
+          elementRole: role,
+          elementText: text,
+          elementClasses: classes,
+          elementPath: getElementPath(el),
+        },
+      });
+    };
+
+    // Native controls (button, a, input) fire a synthetic `click` after Enter/
+    // Space activation. We record on keydown (so custom role-based controls that
+    // never emit a click are still captured) and then swallow the immediately
+    // following click for the same element to avoid double-counting.
+    let recentKeyActivation: { el: HTMLElement; at: number } | null = null;
+
+    const handleClick = (event: MouseEvent) => {
+      const start = event.target as HTMLElement | null;
+      if (!start || typeof start.closest !== 'function') return;
+      const el = start.closest(INTERACTIVE_SELECTOR) as HTMLElement | null;
+      if (!el) return;
+      if (
+        recentKeyActivation &&
+        recentKeyActivation.el === el &&
+        Date.now() - recentKeyActivation.at < 700
+      ) {
+        recentKeyActivation = null;
+        return;
+      }
+      recordInteraction(el, event.pageX, event.pageY);
+    };
+
+    // Keyboard activation (Enter / Space) of interactive controls, so we still
+    // record users who operate the UI without a mouse.
+    const handleKeyActivate = (event: KeyboardEvent) => {
+      if (event.repeat) return;
+      if (event.key !== 'Enter' && event.key !== ' ' && event.key !== 'Spacebar') return;
+      const start = event.target as HTMLElement | null;
+      if (!start || typeof start.closest !== 'function') return;
+      const el = start.closest(INTERACTIVE_SELECTOR) as HTMLElement | null;
+      if (!el) return;
+      recentKeyActivation = { el, at: Date.now() };
+      const rect = el.getBoundingClientRect();
+      recordInteraction(
+        el,
+        Math.round(rect.left + rect.width / 2 + window.scrollX),
+        Math.round(rect.top + rect.height / 2 + window.scrollY)
+      );
     };
 
     const handleSubmit = (event: SubmitEvent) => {
@@ -235,12 +278,17 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
       });
     };
 
-    document.addEventListener('click', handleClick);
-    document.addEventListener('submit', handleSubmit);
+    // Capture phase so an interaction is still recorded even when an inner
+    // handler calls stopPropagation() before it reaches document in the
+    // bubbling phase.
+    document.addEventListener('click', handleClick, true);
+    document.addEventListener('keydown', handleKeyActivate, true);
+    document.addEventListener('submit', handleSubmit, true);
 
     return () => {
-      document.removeEventListener('click', handleClick);
-      document.removeEventListener('submit', handleSubmit);
+      document.removeEventListener('click', handleClick, true);
+      document.removeEventListener('keydown', handleKeyActivate, true);
+      document.removeEventListener('submit', handleSubmit, true);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -338,108 +386,6 @@ export const trackEvent = async (options: TrackEventOptions) => {
   }
 };
 
-// Initialize analytics
-export const initAnalytics = () => {
-  // Track initial page view
-  trackPageView();
-
-  // Set up tracking for navigation
-  const originalPushState = history.pushState;
-  history.pushState = function(state, title, url) {
-    originalPushState.apply(this, [state, title, url]);
-    
-    // Track page view after navigation
-    if (typeof url === 'string') {
-      trackPageView({ url });
-    }
-  };
-  
-  // Track page views on history navigation
-  window.addEventListener('popstate', () => {
-    trackPageView();
-  });
-  
-  // Set up click tracking for important elements
-  document.addEventListener('click', (event) => {
-    const target = event.target as HTMLElement;
-    
-    // Track button clicks
-    if (target.tagName === 'BUTTON' || target.closest('button')) {
-      const button = target.tagName === 'BUTTON' ? target : target.closest('button');
-      if (button) {
-        const id = button.id || '';
-        const text = button.textContent?.trim() || '';
-        const classes = Array.from(button.classList).join(' ');
-        
-        trackEvent({
-          eventType: 'click',
-          eventCategory: 'button',
-          eventAction: 'click',
-          eventLabel: id || text || classes,
-          positionData: { x: event.pageX, y: event.pageY, elementType: 'button', elementId: id },
-          properties: {
-            elementId: id,
-            elementText: text,
-            elementClasses: classes,
-            elementPath: getElementPath(button as HTMLElement)
-          }
-        });
-      }
-    }
-    
-    // Track link clicks
-    if (target.tagName === 'A' || target.closest('a')) {
-      const link = target.tagName === 'A' ? target : target.closest('a');
-      if (link && link instanceof HTMLAnchorElement) {
-        const href = link.href || '';
-        const text = link.textContent?.trim() || '';
-        
-        trackEvent({
-          eventType: 'click',
-          eventCategory: 'link',
-          eventAction: 'click',
-          eventLabel: text || href,
-          positionData: { x: event.pageX, y: event.pageY, elementType: 'link', elementId: link.id || '' },
-          properties: {
-            href,
-            elementText: text,
-            elementPath: getElementPath(link as HTMLElement)
-          }
-        });
-      }
-    }
-  });
-  
-  // Set up form submission tracking
-  document.addEventListener('submit', (event) => {
-    const form = event.target as HTMLFormElement;
-    const formId = form.id || '';
-    const formAction = form.action || '';
-    const formMethod = form.method || '';
-    
-    trackEvent({
-      eventType: 'form_submit',
-      eventCategory: 'form',
-      eventAction: 'submit',
-      eventLabel: formId || formAction,
-      properties: {
-        formId,
-        formAction,
-        formMethod,
-        elementPath: getElementPath(form)
-      }
-    });
-  });
-  
-  // Track page unload
-  window.addEventListener('beforeunload', () => {
-    // Use navigator.sendBeacon for more reliable tracking on page unload
-    const data = JSON.stringify({});
-    navigator.sendBeacon('/api/analytics/track/endsession', data);
-  });
-  
-  console.info('[Analytics] Tracking initialized');
-};
 
 // Utility function to get element path for better tracking context
 function getElementPath(element: HTMLElement, maxLength = 5): string {

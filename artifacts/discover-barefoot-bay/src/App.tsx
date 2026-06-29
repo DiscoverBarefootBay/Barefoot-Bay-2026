@@ -489,7 +489,6 @@ function App() {
     // initMediaCache();
     
     // Initialize analytics tracking system
-    // initAnalytics();
     console.log("[Analytics]", "Analytics tracking system temporarily disabled");
     
     // Note: The chat feature uses WebSockets for its own functionality

@@ -227,7 +227,7 @@ class AnalyticsService {
                 action: data.eventAction || 'interaction',
                 label: data.eventLabel || '',
                 value: data.eventValue || null,
-                path: data.path || req.path,
+                path: data.path || data.properties?.url || req.path,
                 timestamp: new Date(),
                 eventData: data.properties || {},
                 positionData: data.positionData || {}
