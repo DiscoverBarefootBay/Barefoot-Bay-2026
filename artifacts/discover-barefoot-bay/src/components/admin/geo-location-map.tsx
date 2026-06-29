@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { 
-  GoogleMap, 
-  LoadScript, 
-  Marker, 
+import {
+  GoogleMap,
+  useJsApiLoader,
+  Marker,
   InfoWindow,
   HeatmapLayer
 } from '@react-google-maps/api';
 import { apiRequest } from '@/lib/queryClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, MapPin } from 'lucide-react';
+import { Loader2, MapPin, AlertTriangle } from 'lucide-react';
 
 // Define our map container styles
 const mapContainerStyle = {
@@ -28,6 +27,13 @@ const defaultCenter = {
   lat: 20,
   lng: 0,
 };
+
+// A single, stable libraries reference shared by the whole component. The heatmap
+// requires the `visualization` library; without it `google.maps.visualization` is
+// undefined and <HeatmapLayer> throws, tripping the analytics error boundary.
+// The array reference must be stable (declared at module scope) so the loader is
+// never "called again with different options".
+const GOOGLE_MAPS_LIBRARIES: ('visualization')[] = ['visualization'];
 
 // Define interface for geolocation data
 interface GeoLocation {
@@ -47,6 +53,168 @@ interface CountryVisitors {
   count: number;
 }
 
+/**
+ * Inner map renderer. Receives a resolved (non-empty) API key so the loader is
+ * initialised exactly once with stable options. Both the pin map and the heatmap
+ * go through this single `useJsApiLoader` instance, which dedupes the underlying
+ * Google Maps script and avoids the "Loader must not be called again with
+ * different options" error that two separate <LoadScript> tags could cause.
+ */
+const VisitorMap: React.FC<{
+  apiKey: string;
+  mode: 'pins' | 'heatmap';
+  locations: GeoLocation[];
+}> = ({ apiKey, mode, locations }) => {
+  const [selectedLocation, setSelectedLocation] = useState<GeoLocation | null>(null);
+
+  const { isLoaded, loadError } = useJsApiLoader({
+    id: 'analytics-google-maps',
+    googleMapsApiKey: apiKey,
+    libraries: GOOGLE_MAPS_LIBRARIES,
+  });
+
+  // Heatmap points. Only build these once the visualization library is actually
+  // available — `google.maps.LatLng` and `google.maps.visualization` are undefined
+  // until the script (with the visualization library) has loaded.
+  const heatmapData = useMemo(() => {
+    if (!isLoaded || typeof google === 'undefined' || !google.maps?.visualization) {
+      return [];
+    }
+    return locations.map(location => ({
+      location: new google.maps.LatLng(location.latitude, location.longitude),
+      weight: location.views || 1,
+    }));
+  }, [locations, isLoaded]);
+
+  if (loadError) {
+    return (
+      <div className="flex flex-col items-center justify-center bg-muted/20 rounded-md p-8 min-h-[400px]">
+        <AlertTriangle className="h-12 w-12 text-muted mb-4" />
+        <h3 className="text-lg font-medium mb-2">Map Unavailable</h3>
+        <p className="text-muted-foreground text-center max-w-md">
+          The Google Maps script failed to load. Please verify the Google Maps API key
+          configuration and try again.
+        </p>
+      </div>
+    );
+  }
+
+  if (!isLoaded) {
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2">Loading map...</span>
+      </div>
+    );
+  }
+
+  if (mode === 'heatmap') {
+    return (
+      <GoogleMap
+        mapContainerStyle={mapContainerStyle}
+        center={defaultCenter}
+        zoom={2}
+      >
+        {heatmapData.length > 0 && (
+          <HeatmapLayer
+            data={heatmapData}
+            options={{
+              radius: 20,
+              opacity: 0.7,
+              gradient: [
+                'rgba(0, 255, 255, 0)',
+                'rgba(0, 255, 255, 1)',
+                'rgba(0, 191, 255, 1)',
+                'rgba(0, 127, 255, 1)',
+                'rgba(0, 63, 255, 1)',
+                'rgba(0, 0, 255, 1)',
+                'rgba(0, 0, 223, 1)',
+                'rgba(0, 0, 191, 1)',
+                'rgba(0, 0, 159, 1)',
+                'rgba(0, 0, 127, 1)',
+                'rgba(63, 0, 91, 1)',
+                'rgba(127, 0, 63, 1)',
+                'rgba(191, 0, 31, 1)',
+                'rgba(255, 0, 0, 1)'
+              ]
+            }}
+          />
+        )}
+      </GoogleMap>
+    );
+  }
+
+  return (
+    <GoogleMap
+      mapContainerStyle={mapContainerStyle}
+      center={defaultCenter}
+      zoom={2}
+      options={{
+        styles: [
+          {
+            featureType: 'administrative',
+            elementType: 'geometry',
+            stylers: [{ visibility: 'on' }],
+          },
+        ],
+      }}
+    >
+      {locations.map((location) => (
+        <Marker
+          key={`${location.sessionId}-${location.latitude}-${location.longitude}`}
+          position={{
+            lat: location.latitude,
+            lng: location.longitude,
+          }}
+          onClick={() => setSelectedLocation(location)}
+          icon={{
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 8 + Math.min(location.views / 2, 8), // Size based on views
+            fillColor: '#3b82f6',
+            fillOpacity: 0.7,
+            strokeWeight: 1,
+            strokeColor: '#1d4ed8',
+          }}
+        />
+      ))}
+
+      {selectedLocation && (
+        <InfoWindow
+          position={{
+            lat: selectedLocation.latitude,
+            lng: selectedLocation.longitude,
+          }}
+          onCloseClick={() => setSelectedLocation(null)}
+        >
+          <div className="p-2 max-w-sm">
+            <h3 className="font-bold text-gray-800">
+              {selectedLocation.city}, {selectedLocation.region}, {selectedLocation.country}
+            </h3>
+            <p className="text-sm text-gray-600">
+              Views: {selectedLocation.views}
+            </p>
+            <p className="text-sm text-gray-600">
+              Last active: {new Date(selectedLocation.lastActive).toLocaleString()}
+            </p>
+            {selectedLocation.topPages?.length > 0 && (
+              <div className="mt-2">
+                <h4 className="text-sm font-semibold">Top Pages:</h4>
+                <ul className="text-xs text-gray-600 max-h-32 overflow-auto">
+                  {selectedLocation.topPages.map((page, i) => (
+                    <li key={i} className="truncate">
+                      {page.path} <span className="text-gray-400">({page.count})</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </InfoWindow>
+      )}
+    </GoogleMap>
+  );
+};
+
 const GeoLocationMap: React.FC = () => {
   const [mapTab, setMapTab] = useState<'pins' | 'heatmap'>('pins');
   const [startDate, setStartDate] = useState<Date | undefined>(
@@ -59,8 +227,22 @@ const GeoLocationMap: React.FC = () => {
   const [endDate, setEndDate] = useState<Date | undefined>(new Date());
   const [pageFilter, setPageFilter] = useState<string>('');
   const [countryFilter, setCountryFilter] = useState<string>('');
-  const [selectedLocation, setSelectedLocation] = useState<GeoLocation | null>(null);
-  
+
+  // Resolve the Google Maps API key. Prefer the build-time env var; if it wasn't
+  // available at build time (a common cause of an empty production map), fall back
+  // to the server endpoint which carries its own configured key.
+  const envApiKey = (import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string) || '';
+  const { data: fetchedApiKey } = useQuery<string>({
+    queryKey: ['google-maps-key'],
+    enabled: !envApiKey,
+    staleTime: Infinity,
+    queryFn: async () => {
+      const response = await apiRequest('GET', '/api/google/mapkey');
+      return (await response.text()).trim();
+    },
+  });
+  const apiKey = envApiKey || fetchedApiKey || '';
+
   // Fetch geolocation data
   const { data: geoData, isLoading: isLoadingGeo, refetch: refetchGeo } = useQuery<GeoLocation[]>({
     queryKey: ['analytics', 'geo-location', startDate, endDate, pageFilter, countryFilter],
@@ -71,13 +253,13 @@ const GeoLocationMap: React.FC = () => {
       if (endDate) params.append('endDate', endDate.toISOString());
       if (pageFilter) params.append('page', pageFilter);
       if (countryFilter) params.append('country', countryFilter);
-      
+
       const response = await apiRequest('GET', `/api/analytics/geo-location?${params.toString()}`);
       return await response.json();
     },
     enabled: true
   });
-  
+
   // Fetch country visitor data for heatmap
   const { data: countryData, isLoading: isLoadingCountry } = useQuery<CountryVisitors[]>({
     queryKey: ['analytics', 'country-visitors', startDate, endDate, pageFilter],
@@ -87,38 +269,64 @@ const GeoLocationMap: React.FC = () => {
       if (startDate) params.append('startDate', startDate.toISOString());
       if (endDate) params.append('endDate', endDate.toISOString());
       if (pageFilter) params.append('page', pageFilter);
-      
+
       const response = await apiRequest('GET', `/api/analytics/country-visitors?${params.toString()}`);
       return await response.json();
     },
     enabled: mapTab === 'heatmap'
   });
-  
+
   const handleApplyFilters = () => {
     refetchGeo();
   };
-  
+
+  const handleResetFilters = () => {
+    setStartDate(undefined);
+    setEndDate(new Date());
+    setPageFilter('');
+    setCountryFilter('');
+    setTimeout(() => refetchGeo(), 0);
+  };
+
   // Filter out entries without valid coordinates
-  const filteredGeoData = geoData?.filter(loc => 
-    loc && loc.latitude !== null && loc.longitude !== null && 
+  const filteredGeoData = geoData?.filter(loc =>
+    loc && loc.latitude !== null && loc.longitude !== null &&
     !isNaN(loc.latitude) && !isNaN(loc.longitude)
   ) || [];
-  
+
   // Check if we have any valid location data
   const hasLocationData = filteredGeoData.length > 0;
-  
-  // Prepare heatmap data (if available). Guard `google` — the Maps script is loaded
-  // lazily by LoadScript, so `google.maps` is undefined on the first renders.
-  const heatmapData = React.useMemo(() => {
-    if (typeof google === 'undefined' || !google.maps) return [];
-    if (!filteredGeoData || filteredGeoData.length === 0) return [];
-    
-    return filteredGeoData.map(location => ({
-      location: new google.maps.LatLng(location.latitude, location.longitude),
-      weight: location.views || 1
-    }));
-  }, [filteredGeoData]);
-  
+
+  const renderEmptyState = (context: string) => (
+    <div className="flex flex-col items-center justify-center bg-muted/20 rounded-md p-8 min-h-[400px]">
+      <MapPin className="h-12 w-12 text-muted mb-4" />
+      <h3 className="text-lg font-medium mb-2">No Location Data Available</h3>
+      <p className="text-muted-foreground text-center max-w-md">
+        There is no geolocation data available for {context}. This could be because:
+      </p>
+      <ul className="text-sm text-muted-foreground mt-2 list-disc space-y-1 pl-6">
+        <li>No visitors with IP address data have been tracked yet</li>
+        <li>IP addresses couldn't be resolved to geographic locations</li>
+        <li>Your current filters don't match any visitors with location data</li>
+      </ul>
+      <Button className="mt-4" variant="outline" onClick={handleResetFilters}>
+        Reset Filters
+      </Button>
+    </div>
+  );
+
+  const renderMap = (mode: 'pins' | 'heatmap') => {
+    if (!apiKey) {
+      return (
+        <div className="flex justify-center items-center min-h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <span className="ml-2">Preparing map...</span>
+        </div>
+      );
+    }
+    return <VisitorMap apiKey={apiKey} mode={mode} locations={filteredGeoData} />;
+  };
+
   // Loading state
   if (isLoadingGeo && !geoData) {
     return (
@@ -128,7 +336,7 @@ const GeoLocationMap: React.FC = () => {
       </div>
     );
   }
-  
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -143,8 +351,8 @@ const GeoLocationMap: React.FC = () => {
             <div>
               <Label htmlFor="startDate">Start Date</Label>
               <DatePicker
-                id="startDate" 
-                date={startDate} 
+                id="startDate"
+                date={startDate}
                 setDate={setStartDate}
                 className="w-full"
               />
@@ -152,8 +360,8 @@ const GeoLocationMap: React.FC = () => {
             <div>
               <Label htmlFor="endDate">End Date</Label>
               <DatePicker
-                id="endDate" 
-                date={endDate} 
+                id="endDate"
+                date={endDate}
                 setDate={setEndDate}
                 className="w-full"
               />
@@ -181,176 +389,20 @@ const GeoLocationMap: React.FC = () => {
             <Button onClick={handleApplyFilters}>Apply Filters</Button>
           </div>
         </div>
-        
+
         <Tabs value={mapTab} onValueChange={(value) => setMapTab(value as 'pins' | 'heatmap')}>
           <TabsList className="mb-4">
             <TabsTrigger value="pins">Location Pins</TabsTrigger>
             <TabsTrigger value="heatmap">Heatmap View</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="pins" className="mt-0">
-            {!hasLocationData ? (
-              <div className="flex flex-col items-center justify-center bg-muted/20 rounded-md p-8 min-h-[400px]">
-                <MapPin className="h-12 w-12 text-muted mb-4" />
-                <h3 className="text-lg font-medium mb-2">No Location Data Available</h3>
-                <p className="text-muted-foreground text-center max-w-md">
-                  There is no geolocation data available for the selected time period. This could be because:
-                </p>
-                <ul className="text-sm text-muted-foreground mt-2 list-disc space-y-1 pl-6">
-                  <li>No visitors with IP address data have been tracked yet</li>
-                  <li>IP addresses couldn't be resolved to geographic locations</li>
-                  <li>Your current filters don't match any visitors with location data</li>
-                </ul>
-                <Button 
-                  className="mt-4" 
-                  variant="outline" 
-                  onClick={() => {
-                    setStartDate(undefined);
-                    setEndDate(new Date());
-                    setPageFilter('');
-                    setCountryFilter('');
-                    setTimeout(() => refetchGeo(), 0);
-                  }}
-                >
-                  Reset Filters
-                </Button>
-              </div>
-            ) : (
-              <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ''}>
-                <GoogleMap
-                  mapContainerStyle={mapContainerStyle}
-                  center={defaultCenter}
-                  zoom={2}
-                  options={{
-                    styles: [
-                      {
-                        featureType: 'administrative',
-                        elementType: 'geometry',
-                        stylers: [{ visibility: 'on' }],
-                      },
-                    ],
-                  }}
-                >
-                  {typeof google !== 'undefined' && google.maps && filteredGeoData.map((location) => (
-                    <Marker
-                      key={`${location.sessionId}-${location.latitude}-${location.longitude}`}
-                      position={{
-                        lat: location.latitude,
-                        lng: location.longitude,
-                      }}
-                      onClick={() => setSelectedLocation(location)}
-                      icon={{
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 8 + Math.min(location.views / 2, 8), // Size based on views
-                        fillColor: '#3b82f6',
-                        fillOpacity: 0.7,
-                        strokeWeight: 1,
-                        strokeColor: '#1d4ed8',
-                      }}
-                    />
-                  ))}
-                  
-                  {selectedLocation && (
-                    <InfoWindow
-                      position={{
-                        lat: selectedLocation.latitude,
-                        lng: selectedLocation.longitude,
-                      }}
-                      onCloseClick={() => setSelectedLocation(null)}
-                    >
-                      <div className="p-2 max-w-sm">
-                        <h3 className="font-bold text-gray-800">
-                          {selectedLocation.city}, {selectedLocation.region}, {selectedLocation.country}
-                        </h3>
-                        <p className="text-sm text-gray-600">
-                          Views: {selectedLocation.views}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          Last active: {new Date(selectedLocation.lastActive).toLocaleString()}
-                        </p>
-                        {selectedLocation.topPages?.length > 0 && (
-                          <div className="mt-2">
-                            <h4 className="text-sm font-semibold">Top Pages:</h4>
-                            <ul className="text-xs text-gray-600 max-h-32 overflow-auto">
-                              {selectedLocation.topPages.map((page, i) => (
-                                <li key={i} className="truncate">
-                                  {page.path} <span className="text-gray-400">({page.count})</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-                      </div>
-                    </InfoWindow>
-                  )}
-                </GoogleMap>
-              </LoadScript>
-            )}
+            {!hasLocationData ? renderEmptyState('the selected time period') : renderMap('pins')}
           </TabsContent>
-          
+
           <TabsContent value="heatmap" className="mt-0">
-            {!hasLocationData ? (
-              <div className="flex flex-col items-center justify-center bg-muted/20 rounded-md p-8 min-h-[400px]">
-                <MapPin className="h-12 w-12 text-muted mb-4" />
-                <h3 className="text-lg font-medium mb-2">No Location Data Available</h3>
-                <p className="text-muted-foreground text-center max-w-md">
-                  There is no geolocation data available for the heatmap. This could be because:
-                </p>
-                <ul className="text-sm text-muted-foreground mt-2 list-disc space-y-1 pl-6">
-                  <li>No visitors with IP address data have been tracked yet</li>
-                  <li>IP addresses couldn't be resolved to geographic locations</li>
-                  <li>Your current filters don't match any visitors with location data</li>
-                </ul>
-                <Button 
-                  className="mt-4" 
-                  variant="outline" 
-                  onClick={() => {
-                    setStartDate(undefined);
-                    setEndDate(new Date());
-                    setPageFilter('');
-                    setCountryFilter('');
-                    setTimeout(() => refetchGeo(), 0);
-                  }}
-                >
-                  Reset Filters
-                </Button>
-              </div>
-            ) : (
-              <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ''}>
-                <GoogleMap
-                  mapContainerStyle={mapContainerStyle}
-                  center={defaultCenter}
-                  zoom={2}
-                >
-                  {heatmapData.length > 0 && (
-                    <HeatmapLayer
-                      data={heatmapData}
-                      options={{
-                        radius: 20,
-                        opacity: 0.7,
-                        gradient: [
-                          'rgba(0, 255, 255, 0)',
-                          'rgba(0, 255, 255, 1)',
-                          'rgba(0, 191, 255, 1)',
-                          'rgba(0, 127, 255, 1)',
-                          'rgba(0, 63, 255, 1)',
-                          'rgba(0, 0, 255, 1)',
-                          'rgba(0, 0, 223, 1)',
-                          'rgba(0, 0, 191, 1)',
-                          'rgba(0, 0, 159, 1)',
-                          'rgba(0, 0, 127, 1)',
-                          'rgba(63, 0, 91, 1)',
-                          'rgba(127, 0, 63, 1)',
-                          'rgba(191, 0, 31, 1)',
-                          'rgba(255, 0, 0, 1)'
-                        ]
-                      }}
-                    />
-                  )}
-                </GoogleMap>
-              </LoadScript>
-            )}
-            
+            {!hasLocationData ? renderEmptyState('the heatmap') : renderMap('heatmap')}
+
             {/* Country visitor counts displayed as a list */}
             <div className="mt-6 bg-accent/30 rounded-md p-4">
               <h3 className="font-medium mb-2">Visitor Count by Country</h3>
@@ -375,7 +427,7 @@ const GeoLocationMap: React.FC = () => {
             </div>
           </TabsContent>
         </Tabs>
-        
+
         <p className="text-xs text-muted-foreground mt-4">
           Note: The map displays approximate visitor locations based on IP addresses.
           For privacy reasons, exact locations are not tracked or stored.
