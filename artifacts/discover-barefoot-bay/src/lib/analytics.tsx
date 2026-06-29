@@ -21,6 +21,7 @@ export interface TrackEventOptions {
   eventLabel?: string;
   eventValue?: number;
   properties?: Record<string, any>;
+  positionData?: Record<string, any>;
 }
 
 // Context for analytics
@@ -112,6 +113,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
           eventAction: options.eventAction,
           eventLabel: options.eventLabel,
           eventValue: options.eventValue,
+          positionData: options.positionData || {},
           properties: {
             ...options.properties,
             url: window.location.pathname,
@@ -175,6 +177,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
           eventCategory: 'button',
           eventAction: 'click',
           eventLabel: id || text || classes,
+          positionData: { x: event.pageX, y: event.pageY, elementType: 'button', elementId: id },
           properties: {
             elementId: id,
             elementText: text,
@@ -202,6 +205,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
           eventCategory: 'link',
           eventAction: 'click',
           eventLabel: text || safeHref,
+          positionData: { x: event.pageX, y: event.pageY, elementType: 'link', elementId: link.id || '' },
           properties: {
             href: safeHref,
             elementText: text,
@@ -318,6 +322,7 @@ export const trackEvent = async (options: TrackEventOptions) => {
         eventAction: options.eventAction,
         eventLabel: options.eventLabel,
         eventValue: options.eventValue,
+        positionData: options.positionData || {},
         properties: {
           ...options.properties,
           url: window.location.pathname,
@@ -371,6 +376,7 @@ export const initAnalytics = () => {
           eventCategory: 'button',
           eventAction: 'click',
           eventLabel: id || text || classes,
+          positionData: { x: event.pageX, y: event.pageY, elementType: 'button', elementId: id },
           properties: {
             elementId: id,
             elementText: text,
@@ -393,6 +399,7 @@ export const initAnalytics = () => {
           eventCategory: 'link',
           eventAction: 'click',
           eventLabel: text || href,
+          positionData: { x: event.pageX, y: event.pageY, elementType: 'link', elementId: link.id || '' },
           properties: {
             href,
             elementText: text,

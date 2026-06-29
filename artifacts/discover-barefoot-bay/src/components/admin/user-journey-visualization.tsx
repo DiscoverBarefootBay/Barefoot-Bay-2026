@@ -83,7 +83,7 @@ export function UserJourneyVisualization() {
       }
       
       // Fetch journey data from API
-      const response = await fetch(`/user-journey?startDate=${startDate}&endDate=${endDate}`, {
+      const response = await fetch(`/api/analytics/user-journey?startDate=${startDate}&endDate=${endDate}`, {
         credentials: 'include'
       });
 

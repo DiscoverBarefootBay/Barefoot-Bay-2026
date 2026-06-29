@@ -7,3 +7,4 @@
 - [Recharts in minified prod](recharts-prod-charts.md) — recharts uses static displayName strings (minify-safe), so no React19/minify crash; charts-stuck-on-fallback is stale build or an error boundary with no resetKeys; repro prod via public/ dir through proxy.
 - [Analytics schema index constants](analytics-schema-index-constants.md) — the *Indexes exported objects create NO DB index (declarative-only); event tracking lives in AnalyticsProvider (analytics.tsx), not the commented-out initAnalytics.
 - [Drizzle push legacy drift](drizzle-push-legacy-drift.md) — DB built outside Drizzle; drizzle.config tablesFilter (derived from schema) stops the rename-table catastrophe, but push must NEVER be blind/--force — apply schema changes via idempotent SQL.
+- [Analytics dashboard contracts](analytics-dashboard-contracts.md) — enhanced-analytics endpoints have intentionally INCONSISTENT response shapes per tab; don't "normalize" them or tabs blank silently.

@@ -1246,6 +1246,399 @@ class AnalyticsService {
             };
         }
     }
+
+    // ===== Enhanced Analytics Dashboard support =====
+
+    private escapeSql(value: string): string {
+        return String(value).replace(/'/g, "''");
+    }
+
+    private resolveRange(startDate?: string, endDate?: string, days: number = 30): { startStr: string; endStr: string } {
+        let start: Date;
+        let end: Date;
+        if (startDate) {
+            const parsed = new Date(startDate);
+            start = isNaN(parsed.getTime()) ? new Date(Date.now() - days * 86400000) : parsed;
+        } else {
+            start = new Date(Date.now() - (Number.isFinite(days) && days > 0 ? Math.floor(days) : 30) * 86400000);
+        }
+        if (endDate) {
+            const parsedEnd = new Date(endDate);
+            end = isNaN(parsedEnd.getTime()) ? new Date() : parsedEnd;
+            // If endDate has no time component (date only), include the whole day
+            if (/^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
+                end.setHours(23, 59, 59, 999);
+            }
+        } else {
+            end = new Date();
+        }
+        return { startStr: start.toISOString(), endStr: end.toISOString() };
+    }
+
+    private sessionBotFilter(liveDataOnly: boolean, alias: string = ''): string {
+        return liveDataOnly ? ` AND (${this.getBotFilterSQL(alias)})` : '';
+    }
+
+    /**
+     * Flat analytics overview consumed by the Enhanced Analytics Dashboard "Overview" tab.
+     */
+    async getEnhancedOverview(startDate?: string, endDate?: string, liveDataOnly: boolean = false) {
+        const { startStr, endStr } = this.resolveRange(startDate, endDate, 30);
+        const sFilter = this.sessionBotFilter(liveDataOnly, 's');
+        const sessRange = `s.start_timestamp >= '${startStr}' AND s.start_timestamp <= '${endStr}'`;
+        const pvJoin = `LEFT JOIN analytics_sessions s ON pv.session_id = s.session_id`;
+        const pvRange = `pv.timestamp >= '${startStr}' AND pv.timestamp <= '${endStr}'`;
+        const pvBot = liveDataOnly ? ` AND (s.session_id IS NULL OR (${this.getBotFilterSQL('s')}))` : '';
+
+        const totalPageViewsQ = `SELECT COUNT(*) c FROM analytics_page_views pv ${pvJoin} WHERE ${pvRange}${pvBot}`;
+        const uniqueUsersQ = `SELECT COUNT(DISTINCT COALESCE(s.visitor_fingerprint, s.ip)) c FROM analytics_sessions s WHERE ${sessRange}${sFilter}`;
+        const uniqueIPsQ = `SELECT COUNT(DISTINCT s.ip) c FROM analytics_sessions s WHERE ${sessRange}${sFilter}`;
+        const authQ = `SELECT COUNT(DISTINCT s.user_id) c FROM analytics_sessions s WHERE ${sessRange} AND s.user_id IS NOT NULL${sFilter}`;
+        const unauthQ = `SELECT COUNT(DISTINCT COALESCE(s.visitor_fingerprint, s.ip)) c FROM analytics_sessions s WHERE ${sessRange} AND s.user_id IS NULL${sFilter}`;
+        const sessTotalQ = `SELECT COUNT(*) c FROM analytics_sessions s WHERE ${sessRange}${sFilter}`;
+        const bounceQ = `SELECT COUNT(*) c FROM analytics_sessions s WHERE ${sessRange} AND COALESCE(s.pages_viewed, 0) <= 1${sFilter}`;
+        const durQ = `SELECT AVG(EXTRACT(EPOCH FROM (s.end_timestamp - s.start_timestamp))) a FROM analytics_sessions s WHERE ${sessRange} AND s.end_timestamp IS NOT NULL${sFilter}`;
+        const dailyQ = `SELECT to_char(date_trunc('day', pv.timestamp), 'YYYY-MM-DD') d, COUNT(*) c, COUNT(DISTINCT pv.session_id) u FROM analytics_page_views pv ${pvJoin} WHERE ${pvRange}${pvBot} GROUP BY 1 ORDER BY 1 ASC`;
+        const topPagesQ = `SELECT pv.path p, COUNT(*) c FROM analytics_page_views pv ${pvJoin} WHERE ${pvRange}${pvBot} GROUP BY pv.path ORDER BY c DESC LIMIT 10`;
+        const devicesQ = `SELECT COALESCE(s.device, 'Unknown') device, COUNT(*) c FROM analytics_sessions s WHERE ${sessRange}${sFilter} GROUP BY 1 ORDER BY c DESC LIMIT 10`;
+        const browsersQ = `SELECT COALESCE(s.browser, 'Unknown') browser, COUNT(*) c FROM analytics_sessions s WHERE ${sessRange}${sFilter} GROUP BY 1 ORDER BY c DESC LIMIT 10`;
+        const referrersQ = `SELECT pv.referrer r, COUNT(*) c FROM analytics_page_views pv ${pvJoin} WHERE ${pvRange} AND pv.referrer LIKE 'http%'${pvBot} GROUP BY pv.referrer ORDER BY c DESC LIMIT 10`;
+
+        const [tpv, uu, uip, auth, unauth, sess, bounce, dur, daily, top, dev, brow, refs] = await Promise.all([
+            db.execute(sql.raw(totalPageViewsQ)),
+            db.execute(sql.raw(uniqueUsersQ)),
+            db.execute(sql.raw(uniqueIPsQ)),
+            db.execute(sql.raw(authQ)),
+            db.execute(sql.raw(unauthQ)),
+            db.execute(sql.raw(sessTotalQ)),
+            db.execute(sql.raw(bounceQ)),
+            db.execute(sql.raw(durQ)),
+            db.execute(sql.raw(dailyQ)),
+            db.execute(sql.raw(topPagesQ)),
+            db.execute(sql.raw(devicesQ)),
+            db.execute(sql.raw(browsersQ)),
+            db.execute(sql.raw(referrersQ)),
+        ]);
+
+        const totalPageViews = Number(tpv.rows[0]?.c || 0);
+        const uniqueUsers = Number(uu.rows[0]?.c || 0);
+        const totalUniqueIPs = Number(uip.rows[0]?.c || 0);
+        const totalAuthenticatedUsers = Number(auth.rows[0]?.c || 0);
+        const totalUnauthenticatedUsers = Number(unauth.rows[0]?.c || 0);
+        const totalSessions = Number(sess.rows[0]?.c || 0);
+        const totalBounces = Number(bounce.rows[0]?.c || 0);
+        const avgSessionDuration = Math.round(Number(dur.rows[0]?.a || 0));
+        const bounceRate = totalSessions > 0 ? Math.round((totalBounces / totalSessions) * 100) : 0;
+
+        return {
+            totalPageViews,
+            uniqueUsers,
+            avgSessionDuration,
+            bounce_rate: bounceRate,
+            bounceRate,
+            pageViews: daily.rows.map((r: any) => ({ date: r.d, count: Number(r.c), users: Number(r.u) })),
+            topPages: top.rows.map((r: any) => ({ path: r.p, count: Number(r.c) })),
+            devices: dev.rows.map((r: any) => ({ device: r.device, count: Number(r.c) })),
+            browsers: brow.rows.map((r: any) => ({ browser: r.browser, count: Number(r.c) })),
+            referrers: refs.rows.map((r: any) => ({ referrer: r.r, count: Number(r.c) })),
+            totalUniqueVisitors: uniqueUsers,
+            totalUniqueIPs,
+            totalAuthenticatedUsers,
+            totalUnauthenticatedUsers,
+            totalBounces,
+        };
+    }
+
+    /**
+     * Combined user-journey data (path transitions, entry pages, exit pages).
+     */
+    async getUserJourneyCombined(startDate?: string, endDate?: string, liveDataOnly: boolean = false) {
+        const { startStr, endStr } = this.resolveRange(startDate, endDate, 30);
+        const pvJoin = `LEFT JOIN analytics_sessions s ON pv.session_id = s.session_id`;
+        const pvRange = `pv.timestamp >= '${startStr}' AND pv.timestamp <= '${endStr}'`;
+        const pvBot = liveDataOnly ? ` AND (s.session_id IS NULL OR (${this.getBotFilterSQL('s')}))` : '';
+
+        const transitionsQ = `
+            WITH pv AS (
+                SELECT pv.session_id, pv.path, pv.timestamp
+                FROM analytics_page_views pv ${pvJoin}
+                WHERE ${pvRange}${pvBot}
+            ),
+            trans AS (
+                SELECT session_id, path, LAG(path) OVER (PARTITION BY session_id ORDER BY timestamp) prev
+                FROM pv
+            )
+            SELECT prev AS source, path AS target, COUNT(*) c
+            FROM trans WHERE prev IS NOT NULL AND prev <> path
+            GROUP BY prev, path ORDER BY c DESC LIMIT 50`;
+
+        const entryQ = `
+            WITH firsts AS (
+                SELECT DISTINCT ON (pv.session_id) pv.session_id, pv.path
+                FROM analytics_page_views pv ${pvJoin}
+                WHERE ${pvRange}${pvBot}
+                ORDER BY pv.session_id, pv.timestamp ASC
+            )
+            SELECT path, COUNT(*) c FROM firsts GROUP BY path ORDER BY c DESC LIMIT 20`;
+
+        const exitQ = `
+            WITH lasts AS (
+                SELECT DISTINCT ON (pv.session_id) pv.session_id, pv.path
+                FROM analytics_page_views pv ${pvJoin}
+                WHERE ${pvRange}${pvBot}
+                ORDER BY pv.session_id, pv.timestamp DESC
+            )
+            SELECT path, COUNT(*) c FROM lasts GROUP BY path ORDER BY c DESC LIMIT 20`;
+
+        const [trans, entry, exit] = await Promise.all([
+            db.execute(sql.raw(transitionsQ)),
+            db.execute(sql.raw(entryQ)),
+            db.execute(sql.raw(exitQ)),
+        ]);
+
+        const entryTotal = entry.rows.reduce((acc: number, r: any) => acc + Number(r.c), 0);
+        const exitTotal = exit.rows.reduce((acc: number, r: any) => acc + Number(r.c), 0);
+
+        return {
+            success: true,
+            pathTransitions: trans.rows.map((r: any) => ({ source: r.source, target: r.target, count: Number(r.c) })),
+            entryPages: entry.rows.map((r: any) => ({
+                path: r.path,
+                count: Number(r.c),
+                percentage: entryTotal > 0 ? Math.round((Number(r.c) / entryTotal) * 100) : 0,
+            })),
+            exitPages: exit.rows.map((r: any) => ({
+                path: r.path,
+                count: Number(r.c),
+                percentage: exitTotal > 0 ? Math.round((Number(r.c) / exitTotal) * 100) : 0,
+            })),
+        };
+    }
+
+    /**
+     * Click position data for the click heatmap.
+     */
+    async getClickData(startDate?: string, endDate?: string, path?: string, liveDataOnly: boolean = false) {
+        const { startStr, endStr } = this.resolveRange(startDate, endDate, 30);
+        const pvBot = liveDataOnly ? ` AND (s.session_id IS NULL OR (${this.getBotFilterSQL('s')}))` : '';
+        const pathFilter = path ? ` AND e.path = '${this.escapeSql(path)}'` : '';
+        const q = `
+            SELECT e.path, e.timestamp, e.position_data, e.event_data, e.category
+            FROM analytics_events e
+            LEFT JOIN analytics_sessions s ON e.session_id = s.session_id
+            WHERE e.event_type = 'click' AND e.timestamp >= '${startStr}' AND e.timestamp <= '${endStr}'${pathFilter}${pvBot}
+            ORDER BY e.timestamp DESC LIMIT 5000`;
+        const result = await db.execute(sql.raw(q));
+        const clicks = result.rows
+            .map((r: any) => {
+                const pd = (typeof r.position_data === 'string' ? safeJson(r.position_data) : r.position_data) || {};
+                const ed = (typeof r.event_data === 'string' ? safeJson(r.event_data) : r.event_data) || {};
+                const x = Number(pd.x);
+                const y = Number(pd.y);
+                if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
+                return {
+                    x,
+                    y,
+                    path: r.path || '/',
+                    timestamp: r.timestamp,
+                    elementType: pd.elementType || ed.elementType || r.category || undefined,
+                    elementId: pd.elementId || ed.elementId || undefined,
+                };
+            })
+            .filter((c: any) => c !== null);
+        return { clicks };
+    }
+
+    /**
+     * User segmentation across activity, frequency, retention, conversion and time-of-day.
+     */
+    async getUserSegments(startDate?: string, endDate?: string, liveDataOnly: boolean = false) {
+        const { startStr, endStr } = this.resolveRange(startDate, endDate, 30);
+        const sFilter = this.sessionBotFilter(liveDataOnly, '');
+        const range = `start_timestamp >= '${startStr}' AND start_timestamp <= '${endStr}'`;
+
+        const visitorsQ = `
+            SELECT
+                SUM(COALESCE(pages_viewed, 0)) AS views,
+                COUNT(*) AS sessions,
+                MAX(start_timestamp) AS last_seen,
+                BOOL_OR(user_id IS NOT NULL) AS auth
+            FROM analytics_sessions
+            WHERE ${range} AND COALESCE(visitor_fingerprint, ip) IS NOT NULL AND COALESCE(visitor_fingerprint, ip) <> 'unknown'${sFilter}
+            GROUP BY COALESCE(visitor_fingerprint, ip)`;
+
+        const timeQ = `
+            SELECT CASE
+                WHEN h < 6 THEN 'Night (12am-6am)'
+                WHEN h < 12 THEN 'Morning (6am-12pm)'
+                WHEN h < 18 THEN 'Afternoon (12pm-6pm)'
+                ELSE 'Evening (6pm-12am)' END AS seg, COUNT(*) c
+            FROM (SELECT EXTRACT(HOUR FROM start_timestamp) h FROM analytics_sessions WHERE ${range}${sFilter}) t
+            GROUP BY 1`;
+
+        const [visitors, timeRes] = await Promise.all([
+            db.execute(sql.raw(visitorsQ)),
+            db.execute(sql.raw(timeQ)),
+        ]);
+
+        const rows = visitors.rows as any[];
+        const totalUsers = rows.length;
+        const now = Date.now();
+
+        const counter = (predicate: (r: any) => string) => {
+            const map = new Map<string, number>();
+            for (const r of rows) {
+                const key = predicate(r);
+                map.set(key, (map.get(key) || 0) + 1);
+            }
+            return map;
+        };
+
+        const toSegments = (map: Map<string, number>, order: string[]) => {
+            const total = Array.from(map.values()).reduce((a, b) => a + b, 0);
+            return order
+                .filter(name => map.has(name))
+                .map(name => {
+                    const c = map.get(name) || 0;
+                    return { name, count: c, percentage: total > 0 ? Math.round((c / total) * 100) : 0 };
+                });
+        };
+
+        const activityMap = counter(r => {
+            const v = Number(r.views || 0);
+            if (v >= 10) return 'Highly Active (10+ views)';
+            if (v >= 4) return 'Active (4-9 views)';
+            if (v >= 2) return 'Casual (2-3 views)';
+            return 'Single View';
+        });
+        const frequencyMap = counter(r => {
+            const s = Number(r.sessions || 0);
+            if (s >= 16) return 'Power Users (16+ sessions)';
+            if (s >= 6) return 'Frequent (6-15 sessions)';
+            if (s >= 2) return 'Occasional (2-5 sessions)';
+            return 'One-time Visitors';
+        });
+        const retentionMap = counter(r => {
+            const last = r.last_seen ? new Date(r.last_seen).getTime() : 0;
+            const daysAgo = (now - last) / 86400000;
+            if (daysAgo <= 1) return 'Active Today';
+            if (daysAgo <= 7) return 'This Week';
+            if (daysAgo <= 30) return 'This Month';
+            return 'Older';
+        });
+        const conversionMap = counter(r => (r.auth ? 'Registered Users' : 'Anonymous Visitors'));
+
+        const timeMap = new Map<string, number>();
+        for (const r of timeRes.rows as any[]) {
+            timeMap.set(String(r.seg), Number(r.c));
+        }
+
+        return {
+            success: true,
+            totalUsers,
+            activitySegments: toSegments(activityMap, ['Highly Active (10+ views)', 'Active (4-9 views)', 'Casual (2-3 views)', 'Single View']),
+            frequencySegments: toSegments(frequencyMap, ['Power Users (16+ sessions)', 'Frequent (6-15 sessions)', 'Occasional (2-5 sessions)', 'One-time Visitors']),
+            retentionSegments: toSegments(retentionMap, ['Active Today', 'This Week', 'This Month', 'Older']),
+            conversionSegments: toSegments(conversionMap, ['Registered Users', 'Anonymous Visitors']),
+            timeSegments: toSegments(timeMap, ['Morning (6am-12pm)', 'Afternoon (12pm-6pm)', 'Evening (6pm-12am)', 'Night (12am-6am)']),
+        };
+    }
+
+    /**
+     * Per-session geolocation rows for the visitor map.
+     */
+    async getGeoLocations(startDate?: string, endDate?: string, page?: string, country?: string, liveDataOnly: boolean = false) {
+        const { startStr, endStr } = this.resolveRange(startDate, endDate, 30);
+        const sFilter = this.sessionBotFilter(liveDataOnly, 's');
+        const countryFilter = country ? ` AND s.country = '${this.escapeSql(country)}'` : '';
+        const pageFilter = page
+            ? ` AND EXISTS (SELECT 1 FROM analytics_page_views pv WHERE pv.session_id = s.session_id AND pv.path = '${this.escapeSql(page)}')`
+            : '';
+        const q = `
+            SELECT s.session_id "sessionId", s.country, s.region, s.city, s.latitude, s.longitude,
+                COALESCE(s.pages_viewed, 0) views, s.start_timestamp "lastActive"
+            FROM analytics_sessions s
+            WHERE s.start_timestamp >= '${startStr}' AND s.start_timestamp <= '${endStr}'
+                AND s.latitude IS NOT NULL AND s.longitude IS NOT NULL${countryFilter}${pageFilter}${sFilter}
+            ORDER BY s.start_timestamp DESC LIMIT 500`;
+        const result = await db.execute(sql.raw(q));
+        const sessions = result.rows as any[];
+        if (sessions.length === 0) return [];
+
+        const ids = sessions.map(s => `'${this.escapeSql(String(s.sessionId))}'`).join(',');
+        const topPagesQ = `
+            SELECT session_id, path, COUNT(*) c
+            FROM analytics_page_views
+            WHERE session_id IN (${ids})
+            GROUP BY session_id, path ORDER BY c DESC`;
+        const tp = await db.execute(sql.raw(topPagesQ));
+        const bySession = new Map<string, { path: string; count: number }[]>();
+        for (const r of tp.rows as any[]) {
+            const list = bySession.get(r.session_id) || [];
+            if (list.length < 5) list.push({ path: r.path, count: Number(r.c) });
+            bySession.set(r.session_id, list);
+        }
+
+        return sessions.map(s => ({
+            sessionId: s.sessionId,
+            country: s.country || 'Unknown',
+            region: s.region || '',
+            city: s.city || '',
+            latitude: Number(s.latitude),
+            longitude: Number(s.longitude),
+            views: Number(s.views),
+            lastActive: s.lastActive,
+            topPages: bySession.get(s.sessionId) || [],
+        }));
+    }
+
+    /**
+     * Visitor counts grouped by country (heatmap side panel).
+     */
+    async getCountryVisitors(startDate?: string, endDate?: string, page?: string, liveDataOnly: boolean = false) {
+        const { startStr, endStr } = this.resolveRange(startDate, endDate, 30);
+        const sFilter = this.sessionBotFilter(liveDataOnly, 's');
+        const pageFilter = page
+            ? ` AND EXISTS (SELECT 1 FROM analytics_page_views pv WHERE pv.session_id = s.session_id AND pv.path = '${this.escapeSql(page)}')`
+            : '';
+        const q = `
+            SELECT s.country, COUNT(*) count
+            FROM analytics_sessions s
+            WHERE s.start_timestamp >= '${startStr}' AND s.start_timestamp <= '${endStr}'
+                AND s.country IS NOT NULL AND s.country <> ''${pageFilter}${sFilter}
+            GROUP BY s.country ORDER BY count DESC LIMIT 100`;
+        const result = await db.execute(sql.raw(q));
+        return result.rows.map((r: any) => ({ country: r.country, count: Number(r.count) }));
+    }
+
+    /**
+     * Raw events for CSV export.
+     */
+    async getEventsForExport(startDate?: string, endDate?: string) {
+        const { startStr, endStr } = this.resolveRange(startDate, endDate, 30);
+        const q = `
+            SELECT event_type, category, action, label, path, timestamp
+            FROM analytics_events
+            WHERE timestamp >= '${startStr}' AND timestamp <= '${endStr}'
+            ORDER BY timestamp DESC LIMIT 10000`;
+        const result = await db.execute(sql.raw(q));
+        return result.rows.map((r: any) => ({
+            eventType: r.event_type,
+            category: r.category,
+            action: r.action,
+            label: r.label,
+            path: r.path,
+            timestamp: r.timestamp,
+        }));
+    }
 } // End of AnalyticsService class
+
+function safeJson(value: string): any {
+    try {
+        return JSON.parse(value);
+    } catch {
+        return {};
+    }
+}
 
 export const analyticsService = new AnalyticsService();

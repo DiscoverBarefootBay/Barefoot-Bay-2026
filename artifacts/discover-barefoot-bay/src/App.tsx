@@ -211,7 +211,7 @@ function Router() {
             <ProtectedRoute path="/admin/platinum-sponsor-settings" component={PlatinumSponsorSettingsPage} requiredFeature="ADMIN" />
             <ProtectedRoute path="/admin/membership-management" component={MembershipManagementPage} requiredFeature="ADMIN" />
             {/* Single consolidated analytics route */}
-            <ProtectedRoute path="/analytics-dashboard" component={AnalyticsDashboard} requiredFeature="ADMIN" />
+            <ProtectedRoute path="/analytics-dashboard" component={EnhancedAnalyticsDashboard} requiredFeature="ADMIN" />
             
             {/* Enhanced Analytics Dashboard (heatmaps, user segments, journey, export) */}
             <ProtectedRoute path="/enhanced-analytics" component={EnhancedAnalyticsDashboard} requiredFeature="ADMIN" />

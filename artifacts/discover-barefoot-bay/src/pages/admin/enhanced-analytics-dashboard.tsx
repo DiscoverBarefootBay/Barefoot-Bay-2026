@@ -63,7 +63,7 @@ export default function EnhancedAnalyticsDashboard() {
         queryParams = `?startDate=${fromDate}&endDate=${toDate}`;
       }
       
-      const response = await fetch(`/api/analytics-data${queryParams}`, {
+      const response = await fetch(`/api/analytics/data${queryParams}`, {
         credentials: 'include'
       });
       
