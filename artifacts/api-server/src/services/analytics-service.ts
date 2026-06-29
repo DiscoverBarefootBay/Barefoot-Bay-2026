@@ -1278,7 +1278,7 @@ class AnalyticsService {
         const pvBot = liveDataOnly ? ` AND (s.session_id IS NULL OR (${this.getBotFilterSQL('s')}))` : '';
 
         const totalPageViewsQ = `SELECT COUNT(*) c FROM analytics_page_views pv ${pvJoin} WHERE ${pvRange}${pvBot}`;
-        const uniqueUsersQ = `SELECT COUNT(DISTINCT COALESCE(s.visitor_fingerprint, s.ip)) c FROM analytics_sessions s WHERE ${sessRange}${sFilter}`;
+        const uniqueUsersQ = `SELECT COUNT(DISTINCT s.ip) c FROM analytics_sessions s WHERE ${sessRange}${sFilter}`;
         const uniqueIPsQ = `SELECT COUNT(DISTINCT s.ip) c FROM analytics_sessions s WHERE ${sessRange}${sFilter}`;
         const authQ = `SELECT COUNT(DISTINCT s.user_id) c FROM analytics_sessions s WHERE ${sessRange} AND s.user_id IS NOT NULL${sFilter}`;
         const unauthQ = `SELECT COUNT(DISTINCT COALESCE(s.visitor_fingerprint, s.ip)) c FROM analytics_sessions s WHERE ${sessRange} AND s.user_id IS NULL${sFilter}`;
@@ -1288,7 +1288,13 @@ class AnalyticsService {
         // pageview/event, so returning visitors produce multi-day "sessions" that wildly
         // inflate a plain AVG. LEAST() clamps the long tail to a GA-style 30-min timeout.
         const durQ = `SELECT AVG(LEAST(EXTRACT(EPOCH FROM (s.end_timestamp - s.start_timestamp)), 1800)) a FROM analytics_sessions s WHERE ${sessRange} AND s.end_timestamp IS NOT NULL AND s.end_timestamp >= s.start_timestamp${sFilter}`;
-        const dailyQ = `SELECT to_char(date_trunc('day', pv.timestamp), 'YYYY-MM-DD') d, COUNT(*) c, COUNT(DISTINCT pv.session_id) u FROM analytics_page_views pv ${pvJoin} WHERE ${pvRange}${pvBot} GROUP BY 1 ORDER BY 1 ASC`;
+        // Unique visitors per day are anchored on sessions (distinct IP by session start day),
+        // identical to the Overview "Unique Users"/"Unique IP Addresses" cards, so a single-day
+        // frame reconciles exactly. Page-view count stays anchored on page-view timestamps and
+        // matches the Overview "Total Page Views" card. The two date-grouped subqueries are merged
+        // by day. Counting distinct IP straight from the page-views join cannot reconcile because
+        // many sessions have IPs but no page-view rows, so they appear only in the session count.
+        const dailyQ = `SELECT COALESCE(p.d, x.d) d, COALESCE(p.c, 0) c, COALESCE(x.u, 0) u FROM (SELECT to_char(date_trunc('day', pv.timestamp), 'YYYY-MM-DD') d, COUNT(*) c FROM analytics_page_views pv ${pvJoin} WHERE ${pvRange}${pvBot} GROUP BY 1) p FULL OUTER JOIN (SELECT to_char(date_trunc('day', s.start_timestamp), 'YYYY-MM-DD') d, COUNT(DISTINCT s.ip) u FROM analytics_sessions s WHERE ${sessRange}${sFilter} GROUP BY 1) x ON p.d = x.d ORDER BY 1 ASC`;
         const topPagesQ = `SELECT pv.path p, COUNT(*) c FROM analytics_page_views pv ${pvJoin} WHERE ${pvRange}${pvBot} GROUP BY pv.path ORDER BY c DESC LIMIT 10`;
         const devicesQ = `SELECT COALESCE(s.device, 'Unknown') device, COUNT(*) c FROM analytics_sessions s WHERE ${sessRange}${sFilter} GROUP BY 1 ORDER BY c DESC LIMIT 10`;
         const browsersQ = `SELECT COALESCE(s.browser, 'Unknown') browser, COUNT(*) c FROM analytics_sessions s WHERE ${sessRange}${sFilter} GROUP BY 1 ORDER BY c DESC LIMIT 10`;
