@@ -22,6 +22,7 @@ import { RealTimeActivityPanel } from '@/components/admin/real-time-activity-pan
 import { UserJourneyVisualization } from '@/components/admin/user-journey-visualization';
 import { ActivityHeatmap } from '@/components/admin/activity-heatmap';
 import { ClickHeatmap } from '@/components/admin/click-heatmap';
+import { PagePerformance } from '@/components/admin/page-performance';
 import { UserSegments } from '@/components/admin/user-segments';
 import { ExportReports } from '@/components/admin/export-reports';
 import { TrafficMetricsPanel } from '@/components/admin/traffic-metrics-panel';
@@ -34,6 +35,7 @@ export default function EnhancedAnalyticsDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [timeFrame, setTimeFrame] = useState('30d');
+  const [refreshKey, setRefreshKey] = useState(0);
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: subDays(new Date(), 30),
     to: new Date(),
@@ -159,7 +161,7 @@ export default function EnhancedAnalyticsDashboard() {
               </Select>
             </div>
             
-            <Button variant="outline" size="icon" onClick={fetchAnalyticsData} title="Refresh Data">
+            <Button variant="outline" size="icon" onClick={() => { fetchAnalyticsData(); setRefreshKey((k) => k + 1); }} title="Refresh Data">
               <RefreshCw className="h-4 w-4" />
             </Button>
             
@@ -502,18 +504,7 @@ export default function EnhancedAnalyticsDashboard() {
           {/* Pages Tab */}
           <TabsContent value="pages">
             <div className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Page Performance</CardTitle>
-                  <CardDescription>Detailed metrics for individual pages</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center p-8 text-muted-foreground">
-                    <p className="mb-4">Page-level performance metrics will be implemented here</p>
-                    <Badge variant="outline">Coming Soon</Badge>
-                  </div>
-                </CardContent>
-              </Card>
+              <PagePerformance dateRange={dateRange} refreshKey={refreshKey} />
               
               {/* Click Heatmap */}
               <ClickHeatmap />

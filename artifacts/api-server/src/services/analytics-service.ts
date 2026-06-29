@@ -1440,6 +1440,56 @@ class AnalyticsService {
     }
 
     /**
+     * Per-page performance metrics for the "Pages" tab.
+     * Aggregates analytics_page_views joined with analytics_sessions to produce,
+     * per path: total views, unique visitors, average time on page (seconds, clamped
+     * to a 30-min ceiling to drop outliers) and bounce rate (share of single-page
+     * sessions that viewed the path). Bot/crawler traffic is excluded when
+     * liveDataOnly is set, consistent with the rest of the analytics service.
+     */
+    async getPagePerformance(startDate?: string, endDate?: string, liveDataOnly: boolean = false) {
+        const { startStr, endStr } = this.resolveRange(startDate, endDate, 30);
+        const pvRange = `pv.timestamp >= '${startStr}' AND pv.timestamp <= '${endStr}'`;
+        const pvBot = liveDataOnly ? ` AND (s.session_id IS NULL OR (${this.getBotFilterSQL('s')}))` : '';
+
+        const q = `
+            SELECT
+                pv.path AS path,
+                COUNT(*) AS views,
+                COUNT(DISTINCT COALESCE(s.visitor_fingerprint, s.ip, pv.ip)) AS unique_visitors,
+                AVG(LEAST(pv.duration, 1800)) FILTER (WHERE pv.duration IS NOT NULL AND pv.duration >= 0) AS avg_duration,
+                COUNT(DISTINCT pv.session_id) AS total_sessions,
+                COUNT(DISTINCT s.session_id) FILTER (WHERE COALESCE(s.pages_viewed, 0) <= 1) AS bounce_sessions
+            FROM analytics_page_views pv
+            LEFT JOIN analytics_sessions s ON pv.session_id = s.session_id
+            WHERE ${pvRange}${pvBot}
+            GROUP BY pv.path
+            ORDER BY views DESC
+            LIMIT 50`;
+
+        const result = await db.execute(sql.raw(q));
+        const pages = result.rows.map((r: any) => {
+            const path = r.path || '/';
+            const views = Number(r.views) || 0;
+            const uniqueVisitors = Number(r.unique_visitors) || 0;
+            const avgTimeOnPage = Math.round(Number(r.avg_duration) || 0);
+            const totalSessions = Number(r.total_sessions) || 0;
+            const bounceSessions = Number(r.bounce_sessions) || 0;
+            const bounceRate = totalSessions > 0 ? Math.round((bounceSessions / totalSessions) * 100) : 0;
+            return {
+                path,
+                title: this.generateTitleFromPath(path),
+                views,
+                uniqueVisitors,
+                avgTimeOnPage,
+                bounceRate,
+            };
+        });
+
+        return { pages };
+    }
+
+    /**
      * User segmentation across activity, frequency, retention, conversion and time-of-day.
      */
     async getUserSegments(startDate?: string, endDate?: string, liveDataOnly: boolean = false) {

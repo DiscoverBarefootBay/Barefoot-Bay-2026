@@ -238,6 +238,21 @@ router.get('/click-data', isAdmin, async (req, res) => {
   }
 });
 
+// Per-page performance metrics for the Pages tab
+router.get('/page-performance', isAdmin, async (req, res) => {
+  try {
+    const data = await analyticsService.getPagePerformance(
+      str(req.query.startDate),
+      str(req.query.endDate),
+      req.query.liveDataOnly === 'true'
+    );
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching page performance data:', error);
+    res.status(500).json({ success: false, error: (error as Error).message || 'Failed to fetch page performance data' });
+  }
+});
+
 // User segmentation
 router.get('/user-segments', isAdmin, async (req, res) => {
   try {
