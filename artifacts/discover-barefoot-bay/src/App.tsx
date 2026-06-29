@@ -70,6 +70,7 @@ import FeatureManagementPage from "@/pages/admin/feature-management";
 import PlatinumSponsorSettingsPage from "@/pages/admin/platinum-sponsor-settings";
 import MembershipManagementPage from "@/pages/admin/membership-management";
 import AnalyticsDashboard from "@/pages/admin/analytics-dashboard";
+import EnhancedAnalyticsDashboard from "@/pages/admin/enhanced-analytics-dashboard";
 import AdminMessagesPage from "@/pages/admin/admin-messages";
 import EmailActivityPage from "@/pages/admin/email-activity";
 
@@ -212,23 +213,12 @@ function Router() {
             {/* Single consolidated analytics route */}
             <ProtectedRoute path="/analytics-dashboard" component={AnalyticsDashboard} requiredFeature="ADMIN" />
             
-            {/* Redirect legacy analytics routes to the main analytics dashboard */}
-            <Route path="/enhanced-analytics" component={() => {
-              window.location.href = '/analytics-dashboard';
-              return null;
-            }} />
-            
+            {/* Enhanced Analytics Dashboard (heatmaps, user segments, journey, export) */}
+            <ProtectedRoute path="/enhanced-analytics" component={EnhancedAnalyticsDashboard} requiredFeature="ADMIN" />
+            <ProtectedRoute path="/admin/enhanced-analytics" component={EnhancedAnalyticsDashboard} requiredFeature="ADMIN" />
+            <ProtectedRoute path="/admin/enhanced-analytics-dashboard" component={EnhancedAnalyticsDashboard} requiredFeature="ADMIN" />
+
             <Route path="/direct-analytics" component={() => {
-              window.location.href = '/analytics-dashboard';
-              return null;
-            }} />
-            
-            <Route path="/admin/enhanced-analytics" component={() => {
-              window.location.href = '/analytics-dashboard';
-              return null;
-            }} />
-            
-            <Route path="/admin/enhanced-analytics-dashboard" component={() => {
               window.location.href = '/analytics-dashboard';
               return null;
             }} />
