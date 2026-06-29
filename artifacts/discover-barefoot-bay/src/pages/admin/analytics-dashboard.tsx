@@ -431,7 +431,7 @@ const AnalyticsDashboard: React.FC = () => {
                   <div className="text-2xl font-bold">{dashboardData.sessions.uniqueVisitors.toLocaleString()}</div>
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {calculatePercentage(dashboardData.sessions.newVsReturning.new, dashboardData.sessions.total)} new, {calculatePercentage(dashboardData.sessions.newVsReturning.returning, dashboardData.sessions.total)} returning
+                  {calculatePercentage(dashboardData.sessions.newVsReturning.new, dashboardData.sessions.uniqueVisitors)} new, {calculatePercentage(dashboardData.sessions.newVsReturning.returning, dashboardData.sessions.uniqueVisitors)} returning
                 </p>
               </CardContent>
             </Card>
@@ -724,12 +724,12 @@ const AnalyticsDashboard: React.FC = () => {
                       <div className="mt-4 flex h-4 w-full overflow-hidden rounded-full bg-muted">
                         <div 
                           className="bg-primary"
-                          style={{ width: calculatePercentage(dashboardData.sessions.newVsReturning.new, dashboardData.sessions.total) }}
+                          style={{ width: calculatePercentage(dashboardData.sessions.newVsReturning.new, dashboardData.sessions.uniqueVisitors) }}
                         ></div>
                       </div>
                       <div className="mt-2 flex justify-between text-xs">
-                        <span>New: {calculatePercentage(dashboardData.sessions.newVsReturning.new, dashboardData.sessions.total)}</span>
-                        <span>Returning: {calculatePercentage(dashboardData.sessions.newVsReturning.returning, dashboardData.sessions.total)}</span>
+                        <span>New: {calculatePercentage(dashboardData.sessions.newVsReturning.new, dashboardData.sessions.uniqueVisitors)}</span>
+                        <span>Returning: {calculatePercentage(dashboardData.sessions.newVsReturning.returning, dashboardData.sessions.uniqueVisitors)}</span>
                       </div>
                     </div>
                   </div>

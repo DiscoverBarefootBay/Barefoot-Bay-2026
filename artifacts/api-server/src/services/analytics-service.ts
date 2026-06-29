@@ -352,20 +352,39 @@ class AnalyticsService {
             const uniqueVisitorsResult = await db.execute(sql.raw(uniqueVisitorsQuery));
             const uniqueVisitors = Number(uniqueVisitorsResult.rows[0]?.count) || 0;
 
-            // Get returning visitor counts using raw SQL
-            let returningVisitorsQuery = `
-                SELECT COUNT(*) as count 
-                FROM analytics_sessions 
-                WHERE start_timestamp >= '${startDateStr}'
-                AND is_returning_visitor = true
+            // Get new vs returning visitor counts computed from visitor identity
+            // history rather than the stored `is_returning_visitor` flag (which is
+            // set forward-only at session creation and is effectively always false
+            // on historical data). A visitor identity is COALESCE(visitor_fingerprint, ip).
+            // A visitor is "returning" if their first-ever session predates the
+            // window and "new" if their first-ever session falls within it. Counts
+            // are visitor-based (not session-based) and sum to uniqueVisitors.
+            let newVsReturningQuery = `
+                WITH visitor_identities AS (
+                    SELECT
+                        COALESCE(visitor_fingerprint, ip) AS visitor_id,
+                        MIN(start_timestamp) AS first_seen,
+                        MAX(start_timestamp) AS last_seen
+                    FROM analytics_sessions
+                    WHERE COALESCE(visitor_fingerprint, ip) IS NOT NULL
+                    AND COALESCE(visitor_fingerprint, ip) <> 'unknown'
             `;
             if (liveDataOnly) {
-                returningVisitorsQuery += ` AND ${botFilter}`;
+                newVsReturningQuery += ` AND ${botFilter}`;
             }
-            
-            const returningVisitorsResult = await db.execute(sql.raw(returningVisitorsQuery));
-            const returningVisitors = Number(returningVisitorsResult.rows[0]?.count) || 0;
-            const newVisitors = totalSessions - returningVisitors;
+            newVsReturningQuery += `
+                    GROUP BY COALESCE(visitor_fingerprint, ip)
+                )
+                SELECT
+                    COUNT(*) FILTER (WHERE first_seen >= '${startDateStr}') AS new_count,
+                    COUNT(*) FILTER (WHERE first_seen < '${startDateStr}') AS returning_count
+                FROM visitor_identities
+                WHERE last_seen >= '${startDateStr}'
+            `;
+
+            const newVsReturningResult = await db.execute(sql.raw(newVsReturningQuery));
+            const newVisitors = Number(newVsReturningResult.rows[0]?.new_count) || 0;
+            const returningVisitors = Number(newVsReturningResult.rows[0]?.returning_count) || 0;
 
             // Get page views with bot filtering through session join
             let pageViewsQuery = `
@@ -1101,15 +1120,20 @@ class AnalyticsService {
     private async getDailyTrafficData(startDate: Date, liveDataOnly: boolean = false) {
         try {
             console.log(`[Analytics] Getting daily traffic data since ${startDate.toISOString()}, liveDataOnly: ${liveDataOnly}`);
-            // Use visitor fingerprints instead of IP addresses for accurate unique visitor counting by day
+            // Count every session per day (the previous `visitor_fingerprint IS NOT NULL`
+            // requirement zeroed out days because fingerprints are not populated on
+            // historical data). Unique visitors use COALESCE(visitor_fingerprint, ip)
+            // so the count works whether or not fingerprints exist. The bot filter is
+            // IP-based here to stay aligned with getDailyPageViewsData so the two daily
+            // series on the Traffic chart line up.
             const result = await db.execute(sql`
                 SELECT 
                     DATE_TRUNC('day', start_timestamp) AS day,
                     COUNT(*) AS sessions,
-                    COUNT(DISTINCT visitor_fingerprint) AS unique_visitors
+                    COUNT(DISTINCT COALESCE(visitor_fingerprint, ip)) AS unique_visitors
                 FROM analytics_sessions
                 WHERE start_timestamp >= ${startDate}
-                ${liveDataOnly ? sql`AND (ip NOT LIKE '127.%' AND ip != 'unknown' AND ip NOT LIKE '192.168.%' AND ip NOT LIKE '10.%') AND visitor_fingerprint IS NOT NULL` : sql`AND visitor_fingerprint IS NOT NULL`}
+                ${liveDataOnly ? sql`AND (ip NOT LIKE '127.%' AND ip != 'unknown' AND ip NOT LIKE '192.168.%' AND ip NOT LIKE '10.%')` : sql``}
                 GROUP BY DATE_TRUNC('day', start_timestamp)
                 ORDER BY day ASC
             `);
