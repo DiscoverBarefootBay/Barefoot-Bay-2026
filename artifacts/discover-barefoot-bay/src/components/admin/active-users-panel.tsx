@@ -1,4 +1,4 @@
-import { useActiveUsers } from '@/hooks/use-active-users';
+import { useSiteActiveUsers } from '@/hooks/use-active-users';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -20,26 +20,10 @@ function formatLastActive(dateString: string): string {
 }
 
 /**
- * Get device type from user agent
- */
-function getDeviceType(userAgent: string): string {
-  if (!userAgent) return 'Unknown';
-  
-  // Simple detection for demo purposes
-  if (/mobile|android|iphone|ipad|ipod/i.test(userAgent.toLowerCase())) {
-    return 'Mobile';
-  } else if (/tablet|ipad/i.test(userAgent.toLowerCase())) {
-    return 'Tablet';
-  } else {
-    return 'Desktop';
-  }
-}
-
-/**
  * Display a panel of currently active users with real-time updates
  */
 export function ActiveUsersPanel() {
-  const { activeUsers, activeUserCount, isLoading, error, refresh } = useActiveUsers(30000); // Poll every 30 seconds
+  const { activeUsers, activeUserCount, isLoading, error, refresh } = useSiteActiveUsers(30000); // Poll every 30 seconds
   
   return (
     <Card className="shadow-md">
@@ -61,7 +45,7 @@ export function ActiveUsersPanel() {
           </Button>
         </div>
         <CardDescription>
-          Users active in the last 5 minutes
+          Users active in the last 15 minutes
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -111,7 +95,7 @@ export function ActiveUsersPanel() {
                         {user.username || `User ${user.userId}`}
                       </span>
                       <Badge variant="outline" className="ml-2 text-xs">
-                        {getDeviceType(user.userAgent)}
+                        {user.device}
                       </Badge>
                     </div>
                     <div className="text-sm text-muted-foreground mt-1 flex items-center space-x-1">

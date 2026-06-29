@@ -1297,7 +1297,10 @@ class AnalyticsService {
         const unauthQ = `SELECT COUNT(DISTINCT COALESCE(s.visitor_fingerprint, s.ip)) c FROM analytics_sessions s WHERE ${sessRange} AND s.user_id IS NULL${sFilter}`;
         const sessTotalQ = `SELECT COUNT(*) c FROM analytics_sessions s WHERE ${sessRange}${sFilter}`;
         const bounceQ = `SELECT COUNT(*) c FROM analytics_sessions s WHERE ${sessRange} AND COALESCE(s.pages_viewed, 0) <= 1${sFilter}`;
-        const durQ = `SELECT AVG(EXTRACT(EPOCH FROM (s.end_timestamp - s.start_timestamp))) a FROM analytics_sessions s WHERE ${sessRange} AND s.end_timestamp IS NOT NULL${sFilter}`;
+        // Cap each session at 30 min (1800s). end_timestamp is bumped to NOW() on every
+        // pageview/event, so returning visitors produce multi-day "sessions" that wildly
+        // inflate a plain AVG. LEAST() clamps the long tail to a GA-style 30-min timeout.
+        const durQ = `SELECT AVG(LEAST(EXTRACT(EPOCH FROM (s.end_timestamp - s.start_timestamp)), 1800)) a FROM analytics_sessions s WHERE ${sessRange} AND s.end_timestamp IS NOT NULL AND s.end_timestamp >= s.start_timestamp${sFilter}`;
         const dailyQ = `SELECT to_char(date_trunc('day', pv.timestamp), 'YYYY-MM-DD') d, COUNT(*) c, COUNT(DISTINCT pv.session_id) u FROM analytics_page_views pv ${pvJoin} WHERE ${pvRange}${pvBot} GROUP BY 1 ORDER BY 1 ASC`;
         const topPagesQ = `SELECT pv.path p, COUNT(*) c FROM analytics_page_views pv ${pvJoin} WHERE ${pvRange}${pvBot} GROUP BY pv.path ORDER BY c DESC LIMIT 10`;
         const devicesQ = `SELECT COALESCE(s.device, 'Unknown') device, COUNT(*) c FROM analytics_sessions s WHERE ${sessRange}${sFilter} GROUP BY 1 ORDER BY c DESC LIMIT 10`;

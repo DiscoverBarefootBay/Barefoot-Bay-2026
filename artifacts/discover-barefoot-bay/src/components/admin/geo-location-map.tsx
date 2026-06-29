@@ -98,8 +98,19 @@ const GeoLocationMap: React.FC = () => {
     refetchGeo();
   };
   
-  // Prepare heatmap data (if available)
+  // Filter out entries without valid coordinates
+  const filteredGeoData = geoData?.filter(loc => 
+    loc && loc.latitude !== null && loc.longitude !== null && 
+    !isNaN(loc.latitude) && !isNaN(loc.longitude)
+  ) || [];
+  
+  // Check if we have any valid location data
+  const hasLocationData = filteredGeoData.length > 0;
+  
+  // Prepare heatmap data (if available). Guard `google` — the Maps script is loaded
+  // lazily by LoadScript, so `google.maps` is undefined on the first renders.
   const heatmapData = React.useMemo(() => {
+    if (typeof google === 'undefined' || !google.maps) return [];
     if (!filteredGeoData || filteredGeoData.length === 0) return [];
     
     return filteredGeoData.map(location => ({
@@ -117,15 +128,6 @@ const GeoLocationMap: React.FC = () => {
       </div>
     );
   }
-  
-  // Filter out entries without valid coordinates
-  const filteredGeoData = geoData?.filter(loc => 
-    loc && loc.latitude !== null && loc.longitude !== null && 
-    !isNaN(loc.latitude) && !isNaN(loc.longitude)
-  ) || [];
-  
-  // Check if we have any valid location data
-  const hasLocationData = filteredGeoData.length > 0;
   
   return (
     <Card className="w-full">
@@ -229,7 +231,7 @@ const GeoLocationMap: React.FC = () => {
                     ],
                   }}
                 >
-                  {filteredGeoData.map((location) => (
+                  {typeof google !== 'undefined' && google.maps && filteredGeoData.map((location) => (
                     <Marker
                       key={`${location.sessionId}-${location.latitude}-${location.longitude}`}
                       position={{

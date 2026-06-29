@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Loader2, RefreshCw } from 'lucide-react';
-import { useActiveUsers } from '@/hooks/use-active-users';
+import { useSiteActiveUsers } from '@/hooks/use-active-users';
 
 // Color mapping for heatmap intensity
 const getHeatColor = (intensity: number): string => {
@@ -22,7 +22,7 @@ interface PathActivity {
 }
 
 export function ActivityHeatmap() {
-  const { activeUsers, isLoading, error, refresh } = useActiveUsers(15000); // Poll every 15 seconds
+  const { activeUsers, isLoading, error, refresh } = useSiteActiveUsers(15000); // Poll every 15 seconds
   const [pathActivity, setPathActivity] = useState<PathActivity[]>([]);
   
   // Transform active users data into path activity heatmap
