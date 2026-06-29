@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { analyticsService } from './services/analytics-service';
+import { logger } from './lib/logger';
 
 /**
  * Analytics middleware to track page views and visits
@@ -16,7 +17,6 @@ export const analyticsMiddleware = async (req: Request, res: Response, next: Nex
     ];
 
     if (skipPatterns.some(pattern => pattern.test(req.path))) {
-      console.log(`[Analytics Middleware] Skipping tracking for path: ${req.path} (matches skip pattern)`);
       return next();
     }
 
@@ -40,26 +40,17 @@ export const analyticsMiddleware = async (req: Request, res: Response, next: Nex
     ];
 
     if (botPatterns.some(pattern => pattern.test(userAgent))) {
-      console.log(`[Analytics Middleware] Skipping tracking for bot/headless browser: ${userAgent.substring(0, 50)}`);
       return next();
     }
 
-    console.log(`[Analytics Middleware] Processing request for path: ${req.path}, method: ${req.method}, user: ${req.user?.id || 'anonymous'}`);
-    console.log(`[Analytics Middleware] Headers - IP: ${req.ip || req.headers['x-forwarded-for'] || 'unknown'}, User-Agent: ${req.headers['user-agent']?.substring(0, 50) || 'unknown'}`);
-    console.log(`[Analytics Middleware] Cookies: ${req.cookies ? Object.keys(req.cookies).join(', ') : 'none'}`);
-    console.log(`[Analytics Middleware] Analytics session cookie: ${req.cookies?.['analytics_session_id'] || 'not found'}`);
-
     // Get or create session ID from cookie
     let sessionId = req.cookies?.['analytics_session_id'];
-    
+
     if (!sessionId) {
-      // Parse user agent manually without UAParser
-      const userAgent = req.headers['user-agent'] as string;
-      
       // Simple detection of device type and browser
       const deviceType = detectDeviceType(userAgent);
       const browser = detectBrowser(userAgent);
-      
+
       // Start a new session
       sessionId = await analyticsService.startSession({
         userId: req.user?.id,
@@ -70,24 +61,36 @@ export const analyticsMiddleware = async (req: Request, res: Response, next: Nex
         referrer: req.headers.referer || null,
         entryPage: req.path,
         properties: {
-          screen: req.headers['sec-ch-viewport-width'] 
+          screen: req.headers['sec-ch-viewport-width']
                   ? { width: req.headers['sec-ch-viewport-width'], height: req.headers['sec-ch-viewport-height'] }
                   : undefined,
           language: req.headers['accept-language']
         }
       });
-      
-      // Set session cookie (24-hour expiration)
+
+      // Set session cookie (30-day expiration to match getOrCreateSession)
       res.cookie('analytics_session_id', sessionId, {
-        maxAge: 24 * 60 * 60 * 1000,
+        maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax'
       });
+
+      // Make the freshly created session visible to getOrCreateSession() within
+      // THIS same request. The cookie above is only set on the response, so it is
+      // not yet present on req.cookies; without this, trackPageView() would call
+      // getOrCreateSession(), find no cookie, and create a SECOND session — the
+      // page view then lands on the duplicate while this session keeps
+      // pages_viewed = 0. That double-counting is what collapsed the
+      // page-views-per-session ratio and inflated session/visitor counts.
+      if (req.cookies && typeof req.cookies === 'object') {
+        req.cookies['analytics_session_id'] = sessionId;
+      } else {
+        (req as any).cookies = { analytics_session_id: sessionId };
+      }
     }
-    
-    // Track page view (we do this in the background without waiting)
-    console.log(`[Analytics Middleware] Tracking page view for path: ${req.path}, sessionId: ${sessionId}, userId: ${req.user?.id || 'anonymous'}`);
+
+    // Track the page view in the background without blocking the request.
     analyticsService.trackPageView(req, {
       sessionId,
       url: req.path,
@@ -97,16 +100,16 @@ export const analyticsMiddleware = async (req: Request, res: Response, next: Nex
         method: req.method,
         isAuthenticated: req.isAuthenticated?.() || false
       }
-    }).then(result => {
-      console.log(`[Analytics Middleware] Successfully tracked page view: ${JSON.stringify(result)}`);
     }).catch(err => {
-      console.error('[Analytics Middleware] Error tracking page view:', err);
+      // Surface recording failures instead of dropping them silently — a sudden
+      // burst of these is the signal that analytics tracking has regressed.
+      logger.warn({ err, path: req.path }, 'analytics: failed to record page view');
     });
-    
+
     // Continue to the next middleware
     next();
   } catch (error) {
-    console.error('Error in analytics middleware:', error);
+    logger.error({ err: error, path: req.path }, 'analytics: middleware error');
     // Don't block the request, just continue
     next();
   }
@@ -117,9 +120,9 @@ export const analyticsMiddleware = async (req: Request, res: Response, next: Nex
  */
 function detectDeviceType(userAgent: string): string {
   if (!userAgent) return 'unknown';
-  
+
   userAgent = userAgent.toLowerCase();
-  
+
   if (userAgent.match(/mobile|android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i)) {
     return 'mobile';
   } else if (userAgent.match(/tablet|ipad/i)) {
@@ -134,9 +137,9 @@ function detectDeviceType(userAgent: string): string {
  */
 function detectBrowser(userAgent: string): string {
   if (!userAgent) return 'unknown';
-  
+
   userAgent = userAgent.toLowerCase();
-  
+
   if (userAgent.includes('edge') || userAgent.includes('edg')) {
     return 'Edge';
   } else if (userAgent.includes('chrome')) {

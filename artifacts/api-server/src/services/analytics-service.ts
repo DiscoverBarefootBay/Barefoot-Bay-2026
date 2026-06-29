@@ -10,6 +10,7 @@ import {
 import geoip from 'geoip-lite';
 import crypto from 'crypto';
 import { and, asc, count, desc, eq, gte, or, sql } from 'drizzle-orm';
+import { logger } from '../lib/logger';
 
 // Comprehensive list of bot/crawler user-agent patterns to filter out
 const BOT_USER_AGENT_PATTERNS = [
@@ -113,7 +114,6 @@ class AnalyticsService {
             let geoData = data.ipAddress ? geoip.lookup(data.ipAddress) : null;
 
             if (!geoData && process.env.NODE_ENV !== 'production') {
-                console.log('[AnalyticsService] Using fallback geo location for startSession');
                 geoData = {
                     range: [0, 0], country: 'US', region: 'FL', eu: '0',
                     timezone: 'America/New_York', city: 'Orlando',
@@ -145,11 +145,10 @@ class AnalyticsService {
                 // customDimensions: data.properties // Optional: consider if you want to store these initial properties
             });
 
-            console.log(`[AnalyticsService] New session started: ${newSessionId}`);
             return newSessionId;
 
         } catch (error) {
-            console.error('Error in AnalyticsService.startSession:', error);
+            logger.error({ err: error }, 'analytics: error starting session');
             throw error; 
         }
     }
@@ -161,11 +160,7 @@ class AnalyticsService {
         try {
             // Get userId from either req.user (populated by passport) or session passport user
             const userId = (req as any).user?.id || (req as any).session?.passport?.user || null;
-            console.log(`[Analytics Service] trackPageView called - Path: ${req.path}, User: ${userId || 'anonymous'}`);
-            console.log(`[Analytics Service] Data received:`, JSON.stringify(data, null, 2));
-            
-            const sessionId = await this.getOrCreateSession(req); 
-            console.log(`[Analytics Service] Session ID obtained: ${sessionId}`);
+            const sessionId = await this.getOrCreateSession(req);
 
             const userAgent = (req && req.headers) ? req.headers['user-agent'] as string : 'unknown';
             const ip = this.getClientIp(req);
@@ -183,9 +178,6 @@ class AnalyticsService {
                 customDimensions: (data && data.properties) || {} 
             };
 
-            console.log(`[Analytics Service] Page view data to insert:`, JSON.stringify(pageViewData, null, 2));
-
-            console.log(`[Analytics Service] Updating session ${sessionId} pages_viewed count...`);
             await db.update(analyticsSessions)
                 .set({ 
                     pagesViewed: sql`pages_viewed + 1`,
@@ -194,16 +186,13 @@ class AnalyticsService {
                 })
                 .where(eq(analyticsSessions.sessionId, sessionId));
 
-            console.log(`[Analytics Service] Inserting page view into database...`);
             const [pageView] = await db.insert(analyticsPageViews)
                 .values(pageViewData)
                 .returning();
 
-            console.log(`[Analytics Service] Page view successfully inserted with ID: ${pageView.id}`);
             return { sessionId, pageViewId: pageView.id };
         } catch (error) {
-            console.error('[Analytics Service] Error tracking page view:', error);
-            console.error('[Analytics Service] Error stack:', error.stack);
+            logger.error({ err: error, path: req.path }, 'analytics: error tracking page view');
             throw error;
         }
     }
@@ -246,7 +235,7 @@ class AnalyticsService {
 
             return { sessionId, eventId: event.id };
         } catch (error) {
-            console.error('Error tracking event:', error);
+            logger.error({ err: error }, 'analytics: error tracking event');
             throw error;
         }
     }
@@ -285,7 +274,7 @@ class AnalyticsService {
 
             return { success: false, message: 'No active session found' };
         } catch (error) {
-            console.error('Error ending session:', error);
+            logger.error({ err: error }, 'analytics: error ending session');
             throw error;
         }
     }
@@ -927,7 +916,6 @@ class AnalyticsService {
             if (session) {
                 // If user is now logged in but session doesn't have userId, update it
                 if (currentUserId && !session.userId) {
-                    console.log(`[Analytics] Updating session ${sessionId} with userId ${currentUserId}`);
                     await db.update(analyticsSessions)
                         .set({ userId: currentUserId })
                         .where(eq(analyticsSessions.sessionId, sessionId));
@@ -945,7 +933,6 @@ class AnalyticsService {
         let geoData = ip ? geoip.lookup(ip) : null;
 
         if (!geoData && process.env.NODE_ENV !== 'production') {
-            console.log('[Analytics] Using fallback geo location for testing');
             geoData = {
                 range: [0, 0], country: 'US', region: 'FL', eu: '0',
                 timezone: 'America/New_York', city: 'Orlando',
