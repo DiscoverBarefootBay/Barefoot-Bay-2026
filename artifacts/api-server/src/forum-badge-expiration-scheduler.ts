@@ -1,9 +1,8 @@
 import { logger } from "./lib/logger";
 import { db } from "./db";
 import { forumPosts } from "@workspace/db";
-import { and, eq, lt, isNotNull, sql } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
-const BADGE_TTL_DAYS = 7;
 const CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000; // daily
 const BOOT_DELAY_MS = 60 * 1000; // 1 minute after boot
 
@@ -14,30 +13,7 @@ async function expireStaleUpdatedBadges(): Promise<void> {
   if (ticking) return;
   ticking = true;
   try {
-    const result = await db
-      .update(forumPosts)
-      .set({
-        isEditoriallyUpdated: false,
-        editoriallyUpdatedAt: null,
-      })
-      .where(
-        and(
-          eq(forumPosts.isEditoriallyUpdated, true),
-          isNotNull(forumPosts.editoriallyUpdatedAt),
-          lt(
-            forumPosts.editoriallyUpdatedAt,
-            sql`NOW() - INTERVAL '${sql.raw(String(BADGE_TTL_DAYS))} days'`,
-          ),
-        ),
-      )
-      .returning({ id: forumPosts.id });
-
-    if (result.length > 0) {
-      logger.info(
-        { count: result.length, ids: result.map((r) => r.id) },
-        "[ForumBadgeExpiration] Cleared stale 'Updated' badges",
-      );
-    }
+    logger.info("[ForumBadgeExpiration] Skipping — editorially_updated_at column not yet provisioned in DB");
   } catch (err) {
     logger.error({ err }, "[ForumBadgeExpiration] Failed to clear stale badges");
   } finally {
@@ -50,8 +26,8 @@ export function startForumBadgeExpirationScheduler(): void {
   started = true;
 
   logger.info(
-    { intervalMs: CHECK_INTERVAL_MS, ttlDays: BADGE_TTL_DAYS },
-    "[ForumBadgeExpiration] Starting 'Updated' badge auto-expiration scheduler",
+    { intervalMs: CHECK_INTERVAL_MS },
+    "[ForumBadgeExpiration] Starting 'Updated' badge auto-expiration scheduler (dormant until DB column is provisioned)",
   );
 
   setTimeout(() => {
