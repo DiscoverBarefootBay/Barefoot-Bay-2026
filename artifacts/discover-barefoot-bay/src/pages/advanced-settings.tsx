@@ -802,7 +802,7 @@ export default function AdvancedSettings() {
           <CardHeader>
             <CardTitle className="flex items-center text-blue-600">
               <Home className="h-5 w-5 mr-2" />
-              For Sale Management
+              On The Market Management
             </CardTitle>
             <CardDescription>
               Operations related to property listings and items for sale
@@ -817,7 +817,7 @@ export default function AdvancedSettings() {
                   <h3 className="font-medium">Bulk Upload Listings</h3>
                   <p className="text-sm text-muted-foreground mt-1 mb-3">
                     Upload multiple property listings at once using a CSV file with the proper format.
-                    Use this feature to quickly populate the for sale listings database.
+                    Use this feature to quickly populate the On The Market listings database.
                   </p>
                   <BulkListingUpload />
                 </div>
@@ -827,7 +827,7 @@ export default function AdvancedSettings() {
               <div className="flex items-start gap-4">
                 <AlertTriangle className="h-10 w-10 text-amber-500 flex-shrink-0 mt-1" />
                 <div>
-                  <h3 className="font-medium">Delete All For Sale Listings</h3>
+                  <h3 className="font-medium">Delete All On The Market Listings</h3>
                   <p className="text-sm text-muted-foreground mt-1 mb-3">
                     This will permanently delete all property listings from the database.
                     This action cannot be undone and will remove all related property data.
@@ -843,7 +843,7 @@ export default function AdvancedSettings() {
                       <AlertDialogHeader>
                         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription>
-                          This action cannot be undone. This will permanently delete ALL for sale 
+                          This action cannot be undone. This will permanently delete ALL On The Market 
                           listings and remove them from the database.
                         </AlertDialogDescription>
                       </AlertDialogHeader>

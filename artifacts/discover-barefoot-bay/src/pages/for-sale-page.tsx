@@ -80,6 +80,16 @@ const LISTING_TYPES = [
   },
 ];
 
+// Server-backed sort options for the public listings page
+const SORT_OPTIONS = [
+  { value: "newest", label: "Newest Listings" },
+  { value: "oldest", label: "Oldest Listings" },
+  { value: "price_asc", label: "Price: Low to High" },
+  { value: "price_desc", label: "Price: High to Low" },
+  { value: "recently_updated", label: "Recently Updated" },
+  { value: "title_az", label: "Title: A–Z" },
+];
+
 // Define the categories for Classified listings
 const CLASSIFIED_CATEGORIES = [
   { value: "all", label: "All Categories" },
@@ -114,7 +124,13 @@ export default function ForSalePage() {
   const [currentPaymentId, setCurrentPaymentId] = useState<number | null>(null);
   const [selectedType, setSelectedType] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [selectedStatus, setSelectedStatus] = useState<string>("all");
+  // Sort selection, initialized from the URL (?sort=...) so sorted views can
+  // be bookmarked and shared.
+  const [sortBy, setSortBy] = useState<string>(() => {
+    const params = new URLSearchParams(window.location.search);
+    const sort = params.get("sort");
+    return sort && SORT_OPTIONS.some((o) => o.value === sort) ? sort : "newest";
+  });
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000000]);
   const [isPriceFilterActive, setIsPriceFilterActive] = useState(false);
@@ -147,12 +163,6 @@ export default function ForSalePage() {
   ]);
   const [isYearBuiltFilterActive, setIsYearBuiltFilterActive] = useState(false);
 
-  // Define status options
-  const statusOptions = [
-    { value: "all", label: "All Statuses" },
-    { value: "DRAFT", label: "Drafts" },
-    { value: "ACTIVE", label: "Active" },
-  ];
   const [isBedroomsOpen, setIsBedroomsOpen] = useState(false);
   const [isBathroomsOpen, setIsBathroomsOpen] = useState(false);
   const [isSquareFeetOpen, setIsSquareFeetOpen] = useState(false);
@@ -185,8 +195,21 @@ export default function ForSalePage() {
     isSquareFeetFilterActive,
     isYearBuiltFilterActive,
     selectedCategory !== "all", // Add category filter to count
-    selectedStatus !== "all", // Add status filter to count
   ].filter(Boolean).length;
+
+  // Keep the selected sort in the URL query string so it survives navigation
+  // and can be bookmarked/shared. Uses replaceState to avoid history spam.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (sortBy === "newest") {
+      params.delete("sort");
+    } else {
+      params.set("sort", sortBy);
+    }
+    const query = params.toString();
+    const newUrl = `${window.location.pathname}${query ? `?${query}` : ""}`;
+    window.history.replaceState(null, "", newUrl);
+  }, [sortBy]);
 
   // Fetch user credits if authenticated
   const { data: userCredits = 0, refetch: refetchCredits } = useQuery({
@@ -215,12 +238,12 @@ export default function ForSalePage() {
     error,
     isSuccess,
   } = useQuery<RealEstateListing[]>({
-    queryKey: ["/api/listings", !!user],
+    queryKey: ["/api/listings", !!user, sortBy],
     queryFn: async () => {
       try {
         // Use fetch directly instead of apiRequest to avoid authentication errors
-        // For public for-sale page, exclude draft listings
-        let url = "/api/listings?excludeDrafts=true";
+        // For public listings page, exclude draft listings
+        let url = `/api/listings?excludeDrafts=true&sortBy=${encodeURIComponent(sortBy)}`;
         
         // If user is authenticated, include new status to show red outlines for new listings
         if (user) {
@@ -722,7 +745,7 @@ export default function ForSalePage() {
         toast({
           title: "Success",
           description:
-            "Listing created successfully. Published to For Sale page.",
+            "Listing created successfully. Published to the On The Market page.",
         });
 
         // Stay on the for-sale page for published listings - just refresh it
@@ -866,7 +889,7 @@ export default function ForSalePage() {
   console.log(`[DEBUG] Active filters:`, {
     type: selectedType,
     category: selectedCategory,
-    status: selectedStatus,
+    sortBy,
     priceRange: isPriceFilterActive ? priceRange : "inactive",
     bedroomFilter,
     bathroomFilter,
@@ -980,19 +1003,12 @@ export default function ForSalePage() {
       }
     }
 
-    // Status filter - ensure it properly handles cases where status might be undefined
-    // Also handle special case for admin users who should see all draft listings
-    let statusMatch = true;
-    if (selectedStatus !== "all") {
-      // If status is explicitly selected, require it to match
-      statusMatch = listing.status === selectedStatus;
-    }
-
-    // On the main for-sale page, non-admin users
+    // On the main public listings page, non-admin users
     // should not see any draft listings unless they created them
-    if (!isAdmin && listing.status === "DRAFT" && selectedStatus === "all") {
-      // Only show drafts to their creators (when not explicitly filtering by status)
-      statusMatch = user && listing.createdBy === user.id;
+    let statusMatch = true;
+    if (!isAdmin && listing.status === "DRAFT") {
+      // Only show drafts to their creators
+      statusMatch = !!user && listing.createdBy === user.id;
     }
 
     const result =
@@ -1028,15 +1044,11 @@ export default function ForSalePage() {
     `[DEBUG] After filtering: ${filteredListings.length} listings remain`,
   );
 
-  // Create a safe copy for sorting
-  const sortedListings = [...filteredListings]
-    .filter((listing) => listing && listing.id) // Ensure only valid listings are included
-    .sort((a, b) => {
-      // Safely access created date
-      const dateA = a?.createdAt ? new Date(a.createdAt).getTime() : 0;
-      const dateB = b?.createdAt ? new Date(b.createdAt).getTime() : 0;
-      return dateB - dateA;
-    });
+  // Sorting is applied server-side (see sortBy); just drop invalid entries
+  // while preserving the API's order.
+  const sortedListings = filteredListings.filter(
+    (listing) => listing && listing.id,
+  );
 
   // Number formatter for price display
   const formatter = new Intl.NumberFormat("en-US", {
@@ -1147,8 +1159,6 @@ export default function ForSalePage() {
     setSelectedType("all");
     // Reset category filter
     setSelectedCategory("all");
-    // Reset status filter
-    setSelectedStatus("all");
 
     // Reset price filter
     const pricesWithValues = listings
@@ -1235,7 +1245,7 @@ export default function ForSalePage() {
 
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="w-full sm:w-auto">
-          <h1 className="text-2xl sm:text-3xl font-bold">For Sale Listings</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold">On The Market</h1>
           <div className="flex flex-row gap-2 mt-2">
             <Button
               variant="outline"
@@ -1273,13 +1283,13 @@ export default function ForSalePage() {
             </SelectContent>
           </Select>
 
-          {/* Status Filter Dropdown */}
-          <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Filter by status" />
+          {/* Sort By Dropdown */}
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="w-[200px]" aria-label="Sort listings">
+              <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
-              {statusOptions.map((option) => (
+              {SORT_OPTIONS.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>
@@ -1287,12 +1297,12 @@ export default function ForSalePage() {
             </SelectContent>
           </Select>
 
-          {/* All Filters Button */}
+          {/* All Filters Button — expands into the space freed by the removed status dropdown */}
           <Dialog open={isAllFiltersOpen} onOpenChange={setIsAllFiltersOpen}>
             <DialogTrigger asChild>
               <Button
                 variant={activeFilterCount > 0 ? "secondary" : "outline"}
-                className="w-[200px] justify-between"
+                className="w-full sm:w-auto sm:min-w-[200px] sm:flex-1 sm:max-w-[420px] justify-between"
               >
                 <div className="flex items-center">
                   <Filter className="h-4 w-4 mr-2" />

@@ -358,7 +358,7 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
                 onClick={() => toggleMenu('forSale')}
               >
                 <div className="flex items-center gap-2">
-                  <span>For Sale</span>
+                  <span>On The Market</span>
                   <ForSaleBadge inMobileMenu />
                 </div>
                 {expandedMenus['forSale'] ? <ChevronDown size={20} /> : <ChevronRight size={20} />}

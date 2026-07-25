@@ -1101,11 +1101,11 @@ export function CreateListingForm({
               <div className="grid grid-cols-2 gap-4 text-xs text-muted-foreground">
                 <div className="space-y-1">
                   <p className="font-medium">Save as Draft:</p>
-                  <p>Removes listing from public For Sale page. Saved under <Link href="/my-listings" className="underline hover:text-foreground">My Listings</Link>. Requires credits to republish.</p>
+                  <p>Removes listing from public On The Market page. Saved under <Link href="/my-listings" className="underline hover:text-foreground">My Listings</Link>. Requires credits to republish.</p>
                 </div>
                 <div className="space-y-1">
                   <p className="font-medium">Update Listing:</p>
-                  <p>Updates listing with your edits while keeping it live on the public For Sale page. No additional credits needed.</p>
+                  <p>Updates listing with your edits while keeping it live on the public On The Market page. No additional credits needed.</p>
                 </div>
               </div>
             )}

@@ -494,7 +494,7 @@ export function NavBar() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <span className={`text-navy hover:text-coral transition-colors font-advent-pro cursor-pointer ${!user ? 'text-xl px-1 py-1' : 'text-2xl px-2 py-1'} relative`} style={{ textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>
-                      For Sale
+                      On The Market
                     </span>
                   </DropdownMenuTrigger>
                 <DropdownMenuContent className="dropdown-menu-content w-56 bg-white border border-navy/20 p-4 shadow-lg">

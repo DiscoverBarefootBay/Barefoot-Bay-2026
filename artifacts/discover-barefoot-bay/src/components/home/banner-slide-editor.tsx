@@ -320,7 +320,7 @@ export function BannerSlideEditor({ slide, index, isOpen, onClose, onSave, onDel
                   <option value="/real-estate">Real Estate</option>
                   <option value="/vendors">Local Vendors</option>
                   <option value="/listings">Community Listings</option>
-                  <option value="/for-sale">For Sale & Marketplace</option>
+                  <option value="/for-sale">On The Market & Marketplace</option>
                   
                   {/* Banner Pages */}
                   <option disabled>──────────────</option>

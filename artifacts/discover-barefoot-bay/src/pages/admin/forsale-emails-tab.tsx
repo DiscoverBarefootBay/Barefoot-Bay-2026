@@ -52,7 +52,7 @@ const EMAIL_TYPES: Array<{ type: ForSaleEmailType; title: string; description: s
   {
     type: "adminExpired",
     title: "Listing Expired — Admin Alert",
-    description: "Sent to admins the moment a For Sale listing expires, with the seller's contact details.",
+    description: "Sent to admins the moment an On The Market listing expires, with the seller's contact details.",
   },
   {
     type: "sellerExpired",
@@ -62,7 +62,7 @@ const EMAIL_TYPES: Array<{ type: ForSaleEmailType; title: string; description: s
   {
     type: "noActiveListings",
     title: "No Active Listings — Admin Reminder",
-    description: "Sent to admins when the public For Sale page has had no active listings for a while.",
+    description: "Sent to admins when the public On The Market page has had no active listings for a while.",
   },
 ];
 
@@ -86,7 +86,7 @@ export default function ForSaleEmailsTab() {
       const res = await fetch(ENDPOINT, { credentials: "include" });
       if (!res.ok) {
         const text = await res.text();
-        throw new Error(`Failed to load For Sale email config: ${text}`);
+        throw new Error(`Failed to load On The Market email config: ${text}`);
       }
       return res.json();
     },
@@ -109,7 +109,7 @@ export default function ForSaleEmailsTab() {
   const unsavedChangesDialog = useUnsavedChangesPrompt(isDirty, {
     title: "Unsaved email changes",
     description:
-      "You have unsaved changes to the For Sale email templates. If you leave now, your edits will be lost.",
+      "You have unsaved changes to the On The Market email templates. If you leave now, your edits will be lost.",
     confirmLabel: "Discard & Leave",
     cancelLabel: "Stay on Page",
   });
@@ -128,7 +128,7 @@ export default function ForSaleEmailsTab() {
       queryClient.setQueryData([ENDPOINT], updated);
       setForm(cloneConfig(updated.config));
       setBaseline(JSON.stringify(updated.config));
-      toast({ title: "Templates saved", description: "Your For Sale email changes are live." });
+      toast({ title: "Templates saved", description: "Your On The Market email changes are live." });
     },
     onError: (err: Error) => {
       toast({ title: "Could not save", description: err.message, variant: "destructive" });
@@ -207,7 +207,7 @@ export default function ForSaleEmailsTab() {
 
       <div className="bg-muted rounded-lg p-4">
         <p className="text-sm text-muted-foreground">
-          Edit the subject and HTML body of the three automated For Sale listing emails, turn each one on or off, and
+          Edit the subject and HTML body of the three automated On The Market listing emails, turn each one on or off, and
           adjust how the "no active listings" reminder is timed. Use the <span className="font-medium">placeholder
           tokens</span> shown under each email — they're swapped for real values when the email is sent. The plain-text
           version is generated automatically from your HTML.{" "}
@@ -302,7 +302,7 @@ export default function ForSaleEmailsTab() {
         <CardHeader>
           <CardTitle className="text-lg">Reminder Timing</CardTitle>
           <CardDescription>
-            Controls the "No Active Listings" admin reminder: how long the For Sale page must be empty before the first
+            Controls the "No Active Listings" admin reminder: how long the On The Market page must be empty before the first
             reminder, and how often it repeats while it stays empty.
           </CardDescription>
         </CardHeader>

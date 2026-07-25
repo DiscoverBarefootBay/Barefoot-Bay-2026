@@ -130,7 +130,7 @@ export async function ogTagsMiddleware(req: Request, res: Response, next: NextFu
     
     if (req.path === '/for-sale') {
       return sendHtmlWithOGTags({
-        title: 'For Sale - BarefootBay.com',
+        title: 'On The Market - BarefootBay.com',
         description: 'Browse items for sale in the Barefoot Bay community marketplace',
         url: fullUrl,
         image: `${baseUrl}/assets/DiscoverBFBText.png`,
@@ -298,7 +298,7 @@ async function handleForSaleListing(listingId: number, fullUrl: string, baseUrl:
     }
     
     return sendHtmlWithOGTags({
-      title: `${listing.title} - For Sale in Barefoot Bay`,
+      title: `${listing.title} - On The Market in Barefoot Bay`,
       description: truncateText(description, 160) || 'Item for sale in Barefoot Bay community',
       url: fullUrl,
       image: imageUrl,

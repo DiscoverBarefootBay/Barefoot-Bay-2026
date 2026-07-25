@@ -8232,7 +8232,7 @@ export class DatabaseStorage implements IStorage {
         },
         {
           name: FeatureFlagName.FOR_SALE,
-          displayName: 'For Sale',
+          displayName: 'On The Market',
           enabledForRoles: [
             UserRole.GUEST,
             UserRole.REGISTERED, 

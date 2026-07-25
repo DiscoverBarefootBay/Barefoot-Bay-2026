@@ -159,7 +159,7 @@ export function FeatureFlagManager() {
     { id: "reactions", name: "Like/Going/Interested", description: "Allow clicking reaction buttons throughout the site" },
     { id: "calendar_post", name: "Post Event on Calendar", description: "Allow creating new calendar events" },
     { id: "forum_post", name: "Create Forum Topic", description: "Allow creating new forum topics" },
-    { id: "for_sale_post", name: "Create For Sale Listing", description: "Allow posting items for sale" },
+    { id: "for_sale_post", name: "Create On The Market Listing", description: "Allow posting items for sale" },
     { id: "vendor_page", name: "Create Vendor/Community Page", description: "Allow creating vendor or community pages" },
     { id: "admin_access", name: "Access Admin Dashboard", description: "Allow access to the admin dashboard" },
     { id: "admin_forum", name: "Access Admin-only Forums", description: "Allow access to admin-only forum categories" },
@@ -178,7 +178,7 @@ export function FeatureFlagManager() {
     moderator: "Block users and delete inappropriate comments - cannot unblock users",
     paid: "Paid Sponsors ($5/mo or $50/yr): Full access to like, comment, post in forums",
     badge_holder: "Badge Holders: Can interact with events/vendors/clubs and comment on content",
-    registered: "Registered: Can purchase and post For Sale listings",
+    registered: "Registered: Can purchase and post On The Market listings",
     guest: "Guest: Can only browse the site and view content"
   };
 
@@ -388,7 +388,7 @@ export function FeatureFlagManager() {
                       { id: 'nav-store', name: 'Store', description: 'Access to community store' },
                       { id: 'nav-calendar', name: 'Calendar', description: 'Access to community calendar features' },
                       { id: 'nav-community', name: 'Community', description: 'Access to community information pages' },
-                      { id: 'nav-for-sale', name: 'For Sale', description: 'Access to marketplace listings' },
+                      { id: 'nav-for-sale', name: 'On The Market', description: 'Access to marketplace listings' },
                       { id: 'nav-vendors', name: 'Vendors', description: 'Access to preferred vendors' }
                     ].map((navItem) => (
                       <TableRow key={navItem.id}>

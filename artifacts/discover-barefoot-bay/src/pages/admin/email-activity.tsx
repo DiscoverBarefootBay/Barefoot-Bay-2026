@@ -524,7 +524,7 @@ export default function EmailActivityPage() {
               </TabsTrigger>
               <TabsTrigger value="forsale-emails" data-testid="tab-forsale-emails">
                 <Mail className="h-4 w-4 mr-2" />
-                For Sale Emails
+                On The Market Emails
               </TabsTrigger>
             </TabsList>
 

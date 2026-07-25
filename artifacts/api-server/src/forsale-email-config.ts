@@ -23,7 +23,7 @@ export interface ForSaleEmailTemplate {
 }
 
 export interface ForSaleEmailTimingConfig {
-  /** Days the public For Sale page must be empty before the first reminder. */
+  /** Days the public On The Market page must be empty before the first reminder. */
   emptyThresholdDays: number;
   /** How often (in days) to re-send the empty-page reminder while still empty. */
   resendIntervalDays: number;
@@ -57,8 +57,8 @@ export const FORSALE_EMAIL_PLACEHOLDERS: Record<ForSaleEmailType, Array<{ token:
     { token: '{{myListingsUrl}}', description: 'Link to the seller\'s "My Listings" page' },
   ],
   noActiveListings: [
-    { token: '{{daysEmpty}}', description: 'Number of days the For Sale page has been empty' },
-    { token: '{{forSaleUrl}}', description: 'Link to the For Sale page' },
+    { token: '{{daysEmpty}}', description: 'Number of days the On The Market page has been empty' },
+    { token: '{{forSaleUrl}}', description: 'Link to the On The Market page' },
     { token: '{{baseUrl}}', description: 'Site home URL' },
   ],
 };
@@ -106,7 +106,7 @@ export function getDefaultForSaleEmailConfig(): ForSaleEmailConfig {
       html: `${EMAIL_SHELL_OPEN}
   <h2 style="color: #2563eb;">Your Listing Has Expired</h2>
   <p>Hi {{sellerName}},</p>
-  <p>Your Barefoot Bay listing <strong>"{{listingTitle}}"</strong> has expired and is no longer shown on the For Sale page.</p>
+  <p>Your Barefoot Bay listing <strong>"{{listingTitle}}"</strong> has expired and is no longer shown on the On The Market page.</p>
 
   <div style="background: #fffbeb; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f59e0b;">
     <p style="margin: 0;"><strong>Already sold or rented?</strong> You can ignore this email — no action is needed.</p>
@@ -115,7 +115,7 @@ export function getDefaultForSaleEmailConfig(): ForSaleEmailConfig {
   <p>If it's still available and you'd like to keep it listed, you can renew it in a few steps:</p>
   <ol style="line-height: 1.6;">
     <li>Log in at <a href="{{baseUrl}}">barefootbay.com</a></li>
-    <li>Go to <strong>For Sale</strong>, then open <strong>My Listings</strong></li>
+    <li>Go to <strong>On The Market</strong>, then open <strong>My Listings</strong></li>
     <li>Open this listing, choose a new listing duration, and republish it.</li>
   </ol>
 
@@ -126,13 +126,13 @@ export function getDefaultForSaleEmailConfig(): ForSaleEmailConfig {
     },
     noActiveListings: {
       enabled: true,
-      subject: 'For Sale page has had no active listings for {{daysEmpty}} days',
+      subject: 'On The Market page has had no active listings for {{daysEmpty}} days',
       html: `${EMAIL_SHELL_OPEN}
-  <h2 style="color: #2563eb;">No Active For Sale Listings</h2>
-  <p>The Barefoot Bay For Sale page has had <strong>no active listings for {{daysEmpty}} days</strong>.</p>
+  <h2 style="color: #2563eb;">No Active On The Market Listings</h2>
+  <p>The Barefoot Bay On The Market page has had <strong>no active listings for {{daysEmpty}} days</strong>.</p>
   <p>This may be a good time to follow up with sellers whose listings recently expired and encourage them to renew.</p>
 
-  <p><a href="{{forSaleUrl}}" style="background: #2563eb; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">View For Sale Page</a></p>
+  <p><a href="{{forSaleUrl}}" style="background: #2563eb; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">View On The Market Page</a></p>
 
   ${EMAIL_FOOTER}
 </div>`,

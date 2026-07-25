@@ -1681,7 +1681,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         { name: "reactions", displayName: "Like/Going/Interested", description: "Allow clicking reaction buttons throughout the site" },
         { name: "calendar_post", displayName: "Post Event on Calendar", description: "Allow creating new calendar events" },
         { name: "forum_post", displayName: "Create Forum Topic", description: "Allow creating new forum topics" },
-        { name: "for_sale_post", displayName: "Create For Sale Listing", description: "Allow posting items for sale" },
+        { name: "for_sale_post", displayName: "Create On The Market Listing", description: "Allow posting items for sale" },
         { name: "vendor_page", displayName: "Create Vendor/Community Page", description: "Allow creating vendor or community pages" },
         { name: "admin_access", displayName: "Access Admin Dashboard", description: "Allow access to the admin dashboard" },
         { name: "admin_forum", displayName: "Access Admin-only Forums", description: "Allow access to admin-only forum categories" },
@@ -1693,7 +1693,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         { name: "nav-store", displayName: "Store", description: "Access to community store" },
         { name: "nav-calendar", displayName: "Calendar", description: "Access to community calendar features" },
         { name: "nav-community", displayName: "Community", description: "Access to community information pages" },
-        { name: "nav-for-sale", displayName: "For Sale", description: "Access to marketplace listings" },
+        { name: "nav-for-sale", displayName: "On The Market", description: "Access to marketplace listings" },
         { name: "nav-vendors", displayName: "Vendors", description: "Access to preferred vendors" }
       ];
       
@@ -8353,6 +8353,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.query.userId;
       const excludeDrafts = req.query.excludeDrafts === 'true';
       const includeNewStatus = req.query.includeNewStatus === 'true';
+      const sortBy = typeof req.query.sortBy === 'string' ? req.query.sortBy : 'newest';
       
       // Detailed timing and execution logs
       console.time("[DEBUG: Listings API] Database fetch time");
@@ -8515,7 +8516,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       console.timeEnd("[DEBUG: Listings API] URL processing time");
-      
+
+      // Apply server-side sorting so the public listings page order is
+      // controlled by the API. Default: newest first.
+      if (listings && Array.isArray(listings)) {
+        const time = (value: any) => (value ? new Date(value).getTime() : 0);
+        const num = (value: any) => (typeof value === 'number' && Number.isFinite(value) ? value : Number(value) || 0);
+        switch (sortBy) {
+          case 'oldest':
+            listings.sort((a, b) => time(a.createdAt) - time(b.createdAt));
+            break;
+          case 'price_asc':
+            listings.sort((a, b) => num(a.price) - num(b.price));
+            break;
+          case 'price_desc':
+            listings.sort((a, b) => num(b.price) - num(a.price));
+            break;
+          case 'recently_updated':
+            listings.sort((a, b) => time(b.updatedAt ?? b.createdAt) - time(a.updatedAt ?? a.createdAt));
+            break;
+          case 'title_az':
+            listings.sort((a, b) => String(a.title || '').localeCompare(String(b.title || ''), undefined, { sensitivity: 'base' }));
+            break;
+          case 'newest':
+          default:
+            listings.sort((a, b) => time(b.createdAt) - time(a.createdAt));
+            break;
+        }
+      }
+
       console.log(`[DEBUG: Listings API] Sending response with ${listings ? listings.length : 0} listings`);
       if (includeNewStatus) {
         const newListingsCount = listings?.filter(listing => listing.isNew).length || 0;

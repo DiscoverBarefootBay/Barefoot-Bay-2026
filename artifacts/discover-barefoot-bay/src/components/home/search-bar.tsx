@@ -2800,7 +2800,7 @@ Respond in this enhanced JSON format only without any explanation:
             <div class="pt-4">
               <a href="/for-sale" 
                 class="inline-flex items-center px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition-colors w-fit">
-                <span class="mr-2">🔍</span> View all listings on the For Sale page
+                <span class="mr-2">🔍</span> View all listings on the On The Market page
               </a>
             </div>
           </div>
@@ -2819,7 +2819,7 @@ Respond in this enhanced JSON format only without any explanation:
           </div>
           
           <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
-            <p class="mb-3">I couldn't process your real estate search at the moment. You can browse all available listings on our For Sale page.</p>
+            <p class="mb-3">I couldn't process your real estate search at the moment. You can browse all available listings on our On The Market page.</p>
             
             <div class="flex justify-center w-full mt-2">
               <a href="/for-sale" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors font-medium">
@@ -4904,7 +4904,7 @@ Keep your answers concise, aiming for 2-3 short paragraphs max. If the query see
                   🏢 Vendors
                 </a>
                 <a href="/for-sale" class="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors text-sm">
-                  🏠 For Sale
+                  🏠 On The Market
                 </a>
               </div>
             </div>
@@ -5952,7 +5952,7 @@ Respond in this JSON format only:
           onKeyPress={(e) => {
             if (e.key === 'Enter') handleSearch();
           }}
-          placeholder={isMobile ? "Search clubs, events, vendors..." : "Search clubs, events, vendors, news, for sale, etc."}
+          placeholder={isMobile ? "Search clubs, events, vendors..." : "Search clubs, events, vendors, news, on the market, etc."}
           className="md:pl-12 pl-4 pr-20 py-6 bg-white border border-gray-200 focus:border-blue-300 rounded-full text-gray-700 shadow-sm text-xs sm:text-sm md:text-base lg:text-lg w-full"
         />
         <button

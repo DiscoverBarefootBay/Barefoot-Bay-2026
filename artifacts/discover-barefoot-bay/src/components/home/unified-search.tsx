@@ -398,7 +398,7 @@ export function UnifiedSearch() {
     switch (type) {
       case 'event': return 'Events';
       case 'forum': return 'Extra! Extra!';
-      case 'listing': return 'For Sale';
+      case 'listing': return 'On The Market';
       case 'vendor': return 'Vendors';
       case 'page': return 'Pages';
       default: return type;
@@ -410,7 +410,7 @@ export function UnifiedSearch() {
       <div className="relative">
         <Input
           type="text"
-          placeholder="Search clubs, events, vendors, news, for sale, etc."
+          placeholder="Search clubs, events, vendors, news, on the market, etc."
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);

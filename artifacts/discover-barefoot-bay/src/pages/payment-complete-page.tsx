@@ -384,7 +384,7 @@ export default function PaymentCompletePage() {
             {countdown !== null && countdown > 0 && (
               <div className="text-center">
                 <p className="text-green-800 text-sm">
-                  Redirecting to For Sale listings in {countdown.toFixed(1)} seconds
+                  Redirecting to On The Market listings in {countdown.toFixed(1)} seconds
                 </p>
                 <div className="w-full bg-green-200 rounded-full h-2 mt-2">
                   <div 

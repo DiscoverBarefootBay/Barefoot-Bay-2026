@@ -40,7 +40,7 @@ async function writeEmptyListingsState(state: EmptyListingsState): Promise<void>
     await storage.setSiteSetting(
       EMPTY_LISTINGS_SETTING_KEY,
       JSON.stringify(state),
-      "Tracks how long the public For Sale page has had no active listings, for the weekly admin reminder.",
+      "Tracks how long the public On The Market page has had no active listings, for the weekly admin reminder.",
     );
   } catch (err) {
     logger.error({ err }, "[ListingExpirationScheduler] Failed to persist empty-listings state");
