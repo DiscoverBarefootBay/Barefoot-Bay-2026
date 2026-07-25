@@ -316,7 +316,7 @@ export function BannerSlideEditor({ slide, index, isOpen, onClose, onSave, onDel
                   {/* Main Sections */}
                   <option value="/">Home Page</option>
                   <option value="/calendar">Calendar & Events</option>
-                  <option value="/forum">Extra! Extra!</option>
+                  <option value="/forum">Extra!</option>
                   <option value="/real-estate">Real Estate</option>
                   <option value="/vendors">Local Vendors</option>
                   <option value="/listings">Community Listings</option>

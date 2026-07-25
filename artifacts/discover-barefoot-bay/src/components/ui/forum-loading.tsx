@@ -33,7 +33,7 @@ export function ForumLoading({ type = 'forums', className = '' }: ForumLoadingPr
       {/* Loading text with typewriter effect */}
       <div className="text-center">
         <h2 className="text-xl font-semibold text-navy mb-2 animate-pulse">
-          {isTopics ? 'Loading Stories...' : 'Loading Extra! Extra!...'}
+          {isTopics ? 'Loading Stories...' : 'Loading Extra!...'}
         </h2>
         <p className="text-navy/60 animate-pulse delay-100">
           {isTopics ? 'Getting the latest stories' : 'Preparing the latest community news'}

@@ -263,7 +263,7 @@ export function FeaturedImageEditorDialog({
           <DialogTitle>Featured Image</DialogTitle>
           <DialogDescription>
             Upload an image, then drag and zoom to choose exactly what shows on this story's card in the
-            Extra! Extra! feed.
+            Extra! feed.
           </DialogDescription>
         </DialogHeader>
 

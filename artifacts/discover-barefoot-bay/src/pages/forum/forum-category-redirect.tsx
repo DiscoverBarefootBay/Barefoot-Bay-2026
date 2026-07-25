@@ -3,7 +3,7 @@ import { useParams, useLocation } from "wouter";
 import { ForumLoading } from "@/components/ui/forum-loading";
 
 // Legacy route: /forum/category/:categoryId used to render a list-style page.
-// Redirect to the Extra! Extra! feed with the category filter pre-selected so
+// Redirect to the Extra! feed with the category filter pre-selected so
 // old links and bookmarks land on the new layout.
 export default function ForumCategoryRedirect() {
   const params = useParams<{ categoryId: string }>();

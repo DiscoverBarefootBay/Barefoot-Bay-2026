@@ -444,7 +444,7 @@ export default function ForumPage() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-6">
-        <h1 className="text-3xl font-bold text-navy">Extra! Extra!</h1>
+        <h1 className="text-3xl font-bold text-navy">Extra!</h1>
         <div className="flex flex-wrap gap-3">
           {user &&
             (selectedCategoryId
@@ -479,7 +479,7 @@ export default function ForumPage() {
           {isAdmin && (
             <Link href="/admin/manage-forum">
               <Button variant="outline" className="border-navy/20 hover:bg-coral/10 hover:text-coral hover:border-coral">
-                <Settings className="mr-2 h-4 w-4" /> Manage Extra! Extra!
+                <Settings className="mr-2 h-4 w-4" /> Manage Extra!
               </Button>
             </Link>
           )}
@@ -517,7 +517,7 @@ export default function ForumPage() {
                 <Textarea
                   value={descriptionText}
                   onChange={(e) => setDescriptionText(e.target.value)}
-                  placeholder="Enter a description for Extra! Extra!..."
+                  placeholder="Enter a description for Extra!..."
                   className="min-h-[120px]"
                 />
                 <div className="flex justify-end gap-2">

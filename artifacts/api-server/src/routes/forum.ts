@@ -155,7 +155,7 @@ export function createForumRouter(storage: IStorage) {
     }
   });
 
-  // Get the paginated "Extra! Extra!" story feed (all categories, pinned first, newest first)
+  // Get the paginated "Extra!" story feed (all categories, pinned first, newest first)
   router.get("/stories", async (req, res) => {
     try {
       const categoryIdRaw = req.query.categoryId as string | undefined;

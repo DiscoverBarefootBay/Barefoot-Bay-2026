@@ -864,40 +864,40 @@ export default function AdvancedSettings() {
           </CardContent>
         </Card>
         
-        {/* Extra! Extra! Management Card */}
+        {/* Extra! Management Card */}
         <Card className="border-orange-500/20">
           <CardHeader>
             <CardTitle className="flex items-center text-orange-600">
               <MessageSquare className="h-5 w-5 mr-2" />
-              Extra! Extra! Management
+              Extra! Management
             </CardTitle>
             <CardDescription>
-              Operations related to Extra! Extra! stories, comments, and reactions
+              Operations related to Extra! stories, comments, and reactions
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-6">
-              {/* Delete All Extra! Extra! Content Section */}
+              {/* Delete All Extra! Content Section */}
               <div className="flex items-start gap-4 pb-6 border-b border-border">
                 <AlertTriangle className="h-10 w-10 text-amber-500 flex-shrink-0 mt-1" />
                 <div>
-                  <h3 className="font-medium">Delete All Extra! Extra! Content</h3>
+                  <h3 className="font-medium">Delete All Extra! Content</h3>
                   <p className="text-sm text-muted-foreground mt-1 mb-3">
-                    This will permanently delete all Extra! Extra! stories, comments, and reactions from the database.
-                    This action cannot be undone and will remove all Extra! Extra! content.
+                    This will permanently delete all Extra! stories, comments, and reactions from the database.
+                    This action cannot be undone and will remove all Extra! content.
                   </p>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="destructive" className="gap-2">
                         <Trash2 className="h-4 w-4" />
-                        Delete All Extra! Extra! Content
+                        Delete All Extra! Content
                       </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription>
-                          This action cannot be undone. This will permanently delete ALL Extra! Extra! stories, 
+                          This action cannot be undone. This will permanently delete ALL Extra! stories, 
                           comments, and reactions.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
@@ -907,7 +907,7 @@ export default function AdvancedSettings() {
                           onClick={(e) => deleteAllForumContentMutation.mutate()}
                           className="bg-red-600 hover:bg-red-700"
                         >
-                          {deleteAllForumContentMutation.isPending ? "Deleting..." : "Delete All Extra! Extra! Content"}
+                          {deleteAllForumContentMutation.isPending ? "Deleting..." : "Delete All Extra! Content"}
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -915,27 +915,27 @@ export default function AdvancedSettings() {
                 </div>
               </div>
               
-              {/* Delete All Extra! Extra! Comments Section */}
+              {/* Delete All Extra! Comments Section */}
               <div className="flex items-start gap-4">
                 <AlertTriangle className="h-10 w-10 text-amber-500 flex-shrink-0 mt-1" />
                 <div>
-                  <h3 className="font-medium">Delete All Extra! Extra! Comments</h3>
+                  <h3 className="font-medium">Delete All Extra! Comments</h3>
                   <p className="text-sm text-muted-foreground mt-1 mb-3">
-                    This will permanently delete all Extra! Extra! comments and their reactions, but will keep all stories.
+                    This will permanently delete all Extra! comments and their reactions, but will keep all stories.
                     This action cannot be undone.
                   </p>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="destructive" className="gap-2">
                         <Trash2 className="h-4 w-4" />
-                        Delete All Extra! Extra! Comments
+                        Delete All Extra! Comments
                       </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription>
-                          This action cannot be undone. This will permanently delete ALL Extra! Extra!
+                          This action cannot be undone. This will permanently delete ALL Extra!
                           comments and their reactions, but will preserve the stories.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
@@ -945,7 +945,7 @@ export default function AdvancedSettings() {
                           onClick={(e) => deleteAllForumCommentsMutation.mutate()}
                           className="bg-red-600 hover:bg-red-700"
                         >
-                          {deleteAllForumCommentsMutation.isPending ? "Deleting..." : "Delete All Extra! Extra! Comments"}
+                          {deleteAllForumCommentsMutation.isPending ? "Deleting..." : "Delete All Extra! Comments"}
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>

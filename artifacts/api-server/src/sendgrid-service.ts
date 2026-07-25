@@ -524,7 +524,7 @@ Hi ${firstName},
 
 Welcome to the Barefoot Bay community! Your account has been created successfully and is ready to use.
 
-You can now sign in and explore community events, clubs, vendors, Extra! Extra! news, On The Market listings, and more.
+You can now sign in and explore community events, clubs, vendors, Extra! news, On The Market listings, and more.
 
 Visit the community: ${baseUrl}
 
@@ -539,7 +539,7 @@ Barefoot Bay Community Platform
       <h2 style="color: #2563eb;">Welcome to Barefoot Bay!</h2>
       <p>Hi ${firstNameHtml},</p>
       <p>Your account has been created successfully and is ready to use. Welcome to the community!</p>
-      <p>You can now sign in and explore community events, clubs, vendors, Extra! Extra! news, On The Market listings, and more.</p>
+      <p>You can now sign in and explore community events, clubs, vendors, Extra! news, On The Market listings, and more.</p>
 
       <div style="margin: 30px 0;">
         <a href="${baseUrl}" style="background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Explore the Community</a>
@@ -748,7 +748,7 @@ export async function sendForumPostNotificationEmail(
     recipientCount: recipientEmails.length
   });
 
-  const subject = `Extra! Extra! New Story: ${post.title}`;
+  const subject = `Extra! New Story: ${post.title}`;
   const forumUrl = `https://barefootbay.com/forum/post/${post.id}`;
   
   // Strip HTML tags from content for preview
@@ -758,7 +758,7 @@ export async function sendForumPostNotificationEmail(
     .trim() + (post.content.length > 200 ? '...' : '');
   
   const text = `
-New Extra! Extra! story in ${categoryName}
+New Extra! story in ${categoryName}
 
 ${post.title}
 
@@ -779,7 +779,7 @@ To manage your notification preferences, please log in to your account.
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>New Extra! Extra! Story - Barefoot Bay</title>
+      <title>New Extra! Story - Barefoot Bay</title>
       <style>
         body {
           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -878,7 +878,7 @@ To manage your notification preferences, please log in to your account.
     <body>
       <div class="container">
         <div class="header">
-          <div class="logo">📢 Extra! Extra!</div>
+          <div class="logo">📢 Extra!</div>
           <div class="tagline">A new story has been published in the ${categoryName} category</div>
         </div>
         
@@ -1790,7 +1790,7 @@ export async function sendForumCommentNotificationEmail(
   const subject = `New comment on: ${post.title}`;
   
   const text = `
-New Comment on Extra! Extra! Story
+New Comment on Extra! Story
 
 ${post.title}
 
@@ -1802,7 +1802,7 @@ View the full discussion: ${postUrl}
 
 ---
 This is an automated notification from the Barefoot Bay community platform.
-You are receiving this because you are subscribed to this Extra! Extra! story.
+You are receiving this because you are subscribed to this Extra! story.
   `.trim();
 
   const html = `
@@ -1911,7 +1911,7 @@ You are receiving this because you are subscribed to this Extra! Extra! story.
       <div class="container">
         <div class="header">
           <div class="logo">💬 New Comment</div>
-          <div class="tagline">Someone replied to an Extra! Extra! story you're following</div>
+          <div class="tagline">Someone replied to an Extra! story you're following</div>
         </div>
         
         <div class="content">
@@ -1929,7 +1929,7 @@ You are receiving this because you are subscribed to this Extra! Extra! story.
         
         <div class="footer">
           <p><strong>Barefoot Bay Community Platform</strong></p>
-          <p>You're receiving this because you're subscribed to this Extra! Extra! story.</p>
+          <p>You're receiving this because you're subscribed to this Extra! story.</p>
           <p>
             <a href="${postUrl}#unsubscribe">Unsubscribe from this post</a>
           </p>

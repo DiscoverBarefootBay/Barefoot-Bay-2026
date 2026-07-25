@@ -2058,7 +2058,7 @@
   pointer-events: none;
 }
 
-/* Extra! Extra! single-column story banner animations */
+/* Extra! single-column story banner animations */
 @keyframes story-banner-in {
   from {
     opacity: 0;
