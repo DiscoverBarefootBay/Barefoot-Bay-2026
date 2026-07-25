@@ -191,7 +191,7 @@ export function LiveChatBubble() {
       <Tooltip open={activeTooltip === 'chat'} onOpenChange={(open) => open ? toggleTooltip('chat') : toggleTooltip(null)} delayDuration={0}>
         <TooltipTrigger asChild>
           <button
-            className={`ml-1 sm:ml-2 touch-manipulation ${
+            className={`touch-manipulation ${
               isDisabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'
             }`}
             onClick={handleClick}
@@ -222,7 +222,7 @@ export function LiveChatBubble() {
   ) : (
     <Link href={`/forum/post/${LIVE_CHAT_POST_ID}`}>
       <button
-        className="ml-1 sm:ml-2 cursor-pointer"
+        className="cursor-pointer"
         onClick={handleClick}
         aria-label="Open Live Chat"
       >

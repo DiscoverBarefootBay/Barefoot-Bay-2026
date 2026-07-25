@@ -466,7 +466,7 @@ export function NavBar() {
           </button>
 
           {/* Desktop menu - only shows on very large screens when signed out to preserve logo/rocket visibility */}
-          <div className={`${!user ? 'hidden 2xl:flex' : 'hidden xl:flex'} flex-1 min-w-0 items-center justify-evenly gap-2`}>
+          <div className={`${!user ? 'hidden 2xl:flex' : 'hidden xl:flex'} flex-1 min-w-0 items-center justify-evenly gap-2 ml-8 xl:ml-12`}>
             {/* Calendar navigation item */}
             {isCalendarEnabled() && (
               <Link href="/calendar">
