@@ -490,11 +490,10 @@ export function NavBar() {
             
             {/* For Sale navigation item */}
             {isForSaleEnabled() && (
-              <div className={`${!user ? 'px-1 py-1' : 'px-2 py-1'}`}>
-                <span className="relative inline-block">
+              <div className="relative">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <span className={`whitespace-nowrap text-navy hover:text-coral transition-colors font-advent-pro cursor-pointer ${!user ? 'text-xl' : 'text-2xl'}`} style={{ textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>
+                    <span className={`whitespace-nowrap text-navy hover:text-coral transition-colors font-advent-pro cursor-pointer ${!user ? 'text-xl px-1 py-1' : 'text-2xl px-2 py-1'}`} style={{ textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>
                       On The Market
                     </span>
                   </DropdownMenuTrigger>
@@ -516,7 +515,6 @@ export function NavBar() {
                 </DropdownMenuContent>
                 </DropdownMenu>
                 <ForSaleBadge />
-                </span>
               </div>
             )}
             
