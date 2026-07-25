@@ -13,7 +13,16 @@ import {
   CheckCheck,
   Pin,
   Newspaper,
+  ArrowUpDown,
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import bfbLogo from "@assets/image_1784954979351.png";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { usePermissions } from "@/hooks/use-permissions";
@@ -87,7 +96,12 @@ function StoryCard({ story }: { story: Story }) {
             />
           ) : (
             <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-ocean/20 to-navy/10">
-              <Newspaper className="h-10 w-10 text-navy/30" />
+              <img
+                src={bfbLogo}
+                alt="Discover Barefoot Bay"
+                loading="lazy"
+                className="max-h-[70%] max-w-[60%] object-contain opacity-90"
+              />
             </div>
           )}
           <div className="absolute top-2 left-2 flex flex-wrap gap-1.5">
@@ -149,6 +163,7 @@ export default function ForumPage() {
     navigate(categoryId ? `/forum?categoryId=${categoryId}` : "/forum");
   };
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [sortBy, setSortBy] = useState<string>("newest_created");
 
   // Fetch categories (for filter chips)
   const { data: categories, isLoading: categoriesLoading } = useQuery<ForumCategory[]>({
@@ -162,8 +177,8 @@ export default function ForumPage() {
 
   // Fetch story feed (paginated via limit; "Load More" grows the limit)
   const storiesQueryKey = selectedCategoryId
-    ? `/api/forum/stories?limit=${visibleCount}&categoryId=${selectedCategoryId}`
-    : `/api/forum/stories?limit=${visibleCount}`;
+    ? `/api/forum/stories?limit=${visibleCount}&categoryId=${selectedCategoryId}&sort=${sortBy}`
+    : `/api/forum/stories?limit=${visibleCount}&sort=${sortBy}`;
   const {
     data: feed,
     isLoading: storiesLoading,
@@ -179,10 +194,10 @@ export default function ForumPage() {
     }
   }, [description]);
 
-  // Reset pagination when the category filter changes
+  // Reset pagination when the category filter or sort order changes
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
-  }, [selectedCategoryId]);
+  }, [selectedCategoryId, sortBy]);
 
   const updateDescriptionMutation = useMutation({
     mutationFn: (content: string) => {
@@ -376,6 +391,25 @@ export default function ForumPage() {
             )}
           </button>
         ))}
+      </div>
+
+      {/* Sort Dropdown */}
+      <div className="mb-6 flex items-center justify-end gap-2">
+        <ArrowUpDown className="h-4 w-4 text-navy/70" />
+        <span className="text-sm text-navy/70 font-medium">Sort by:</span>
+        <Select value={sortBy} onValueChange={setSortBy}>
+          <SelectTrigger className="w-[200px] border-navy/20 bg-white" data-testid="select-sort">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="newest_created" data-testid="sort-newest-created">Newest Created</SelectItem>
+            <SelectItem value="oldest_created" data-testid="sort-oldest-created">Oldest Created</SelectItem>
+            <SelectItem value="newest_comment" data-testid="sort-newest-comment">Newest Comment</SelectItem>
+            <SelectItem value="oldest_comment" data-testid="sort-oldest-comment">Oldest Comment</SelectItem>
+            <SelectItem value="newest_edited" data-testid="sort-newest-edited">Newest Edited</SelectItem>
+            <SelectItem value="oldest_edited" data-testid="sort-oldest-edited">Oldest Edited</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Story grid */}

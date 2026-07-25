@@ -6102,12 +6102,38 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  async getForumStoryFeed(options: { categoryId?: number; limit?: number; offset?: number; userId?: number }): Promise<{ stories: any[]; total: number; hasMore: boolean }> {
-    const { categoryId, userId } = options;
+  async getForumStoryFeed(options: { categoryId?: number; limit?: number; offset?: number; userId?: number; sortBy?: string }): Promise<{ stories: any[]; total: number; hasMore: boolean }> {
+    const { categoryId, userId, sortBy } = options;
     const limit = Math.min(Math.max(options.limit ?? 12, 1), 50);
     const offset = Math.max(options.offset ?? 0, 0);
     try {
       const whereClause = categoryId ? eq(forumPosts.categoryId, categoryId) : undefined;
+
+      // Server-side sorting so pagination ("Load More") stays correct across the whole feed.
+      // Pinned posts stay first only for the default newest_created sort; other sorts follow the chosen order.
+      const latestCommentExpr = sql`(SELECT MAX(fc.created_at) FROM forum_comments fc WHERE fc.post_id = ${forumPosts.id})`;
+      let orderClauses;
+      switch (sortBy) {
+        case 'oldest_created':
+          orderClauses = [asc(forumPosts.createdAt)];
+          break;
+        case 'newest_edited':
+          orderClauses = [desc(forumPosts.updatedAt)];
+          break;
+        case 'oldest_edited':
+          orderClauses = [asc(forumPosts.updatedAt)];
+          break;
+        case 'newest_comment':
+          orderClauses = [sql`${latestCommentExpr} DESC NULLS LAST`, desc(forumPosts.createdAt)];
+          break;
+        case 'oldest_comment':
+          orderClauses = [sql`${latestCommentExpr} ASC NULLS FIRST`, asc(forumPosts.createdAt)];
+          break;
+        case 'newest_created':
+        default:
+          orderClauses = [desc(forumPosts.isPinned), desc(forumPosts.createdAt)];
+          break;
+      }
 
       const totalResult = await db.select({ count: count() })
         .from(forumPosts)
@@ -6148,7 +6174,7 @@ export class DatabaseStorage implements IStorage {
         eq(forumReadStates.userId, userId ?? -1)
       ))
       .where(whereClause)
-      .orderBy(desc(forumPosts.isPinned), desc(forumPosts.createdAt))
+      .orderBy(...orderClauses)
       .limit(limit)
       .offset(offset);
 

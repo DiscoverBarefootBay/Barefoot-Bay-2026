@@ -172,11 +172,16 @@ export function createForumRouter(storage: IStorage) {
         return res.status(400).json({ message: "Invalid pagination parameters" });
       }
 
+      const validSorts = ['newest_created', 'oldest_created', 'newest_comment', 'oldest_comment', 'newest_edited', 'oldest_edited'];
+      const sortRaw = req.query.sort as string | undefined;
+      const sortBy = sortRaw && validSorts.includes(sortRaw) ? sortRaw : 'newest_created';
+
       const feed = await storage.getForumStoryFeed({
         categoryId,
         limit,
         offset,
-        userId: req.user?.id
+        userId: req.user?.id,
+        sortBy
       });
 
       res.json(feed);
