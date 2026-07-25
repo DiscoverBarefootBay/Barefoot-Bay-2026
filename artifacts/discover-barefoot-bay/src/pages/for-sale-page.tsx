@@ -13,6 +13,7 @@ import {
   X,
   Tag,
   Info,
+  ArrowUpDown,
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import {
@@ -189,6 +190,7 @@ export default function ForSalePage() {
 
   // Count active filters
   const activeFilterCount = [
+    selectedType !== "all",
     isPriceFilterActive,
     bedroomFilter !== null,
     bathroomFilter !== null,
@@ -1269,24 +1271,13 @@ export default function ForSalePage() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4">
-          <Select value={selectedType} onValueChange={setSelectedType}>
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Filter by type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Listings</SelectItem>
-              {LISTING_TYPES.map((type) => (
-                <SelectItem key={type.value} value={type.value}>
-                  {type.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
           {/* Sort By Dropdown */}
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-[200px]" aria-label="Sort listings">
-              <SelectValue placeholder="Sort by" />
+            <SelectTrigger className="w-full sm:w-[200px]" aria-label="Sort listings">
+              <div className="flex items-center">
+                <ArrowUpDown className="h-4 w-4 mr-2 shrink-0 text-muted-foreground" />
+                <SelectValue placeholder="Sort by" />
+              </div>
             </SelectTrigger>
             <SelectContent>
               {SORT_OPTIONS.map((option) => (
@@ -1328,6 +1319,35 @@ export default function ForSalePage() {
                     <X className="h-4 w-4 mr-2" />
                     Reset all
                   </Button>
+                </div>
+
+                {/* Listing Type Filter */}
+                <div className="border-b pb-6 mb-6">
+                  <h4 className="font-medium mb-4 flex items-center">
+                    <Filter className="h-4 w-4 mr-2" />
+                    Listing Type
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      variant={selectedType === "all" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedType("all")}
+                    >
+                      All Listings
+                    </Button>
+                    {LISTING_TYPES.map((type) => (
+                      <Button
+                        key={type.value}
+                        variant={
+                          selectedType === type.value ? "default" : "outline"
+                        }
+                        size="sm"
+                        onClick={() => setSelectedType(type.value)}
+                      >
+                        {type.label}
+                      </Button>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Category Filter - Only shown when Classified is selected */}
