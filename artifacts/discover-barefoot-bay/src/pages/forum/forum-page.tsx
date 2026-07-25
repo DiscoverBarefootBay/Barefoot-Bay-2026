@@ -698,7 +698,10 @@ export default function ForumPage() {
                 setSelectedCategoryId(val === "all" ? null : parseInt(val, 10));
               }}
             >
-              <SelectTrigger className="flex-1 sm:w-[180px] sm:flex-none border-navy/20 bg-white min-w-0" data-testid="select-category">
+              <SelectTrigger
+                className="flex-1 sm:w-[180px] sm:flex-none border-navy/20 bg-white min-w-0 [&>span]:min-w-0 [&>span]:truncate [&>span]:text-left [&>span_span]:inline [&>span_span]:truncate"
+                data-testid="select-category"
+              >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
