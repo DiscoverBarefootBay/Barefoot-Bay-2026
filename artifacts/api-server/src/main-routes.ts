@@ -13438,8 +13438,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Manually trigger this week's campaign send. Idempotent per week — if the
-  // campaign already went out, this reports that instead of re-sending.
+  // Manually trigger the current campaign send (rolling last-7-days window).
+  // Idempotent per weekly cycle — if an overlapping campaign already went
+  // out, this reports that instead of re-sending.
   app.post("/api/admin/email-activity/weekly-listings/send", requireAuth, requireAdmin, async (req, res) => {
     try {
       const now = new Date();
@@ -13454,12 +13455,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const result = await executeWeeklySend(range, effectiveConfig, "manual", undefined, now, triggeredByUser);
       if (result.status === "already_sent") {
         return res.status(409).json({
-          message: `The campaign for ${range.label} was already sent — a week can never send twice.`,
+          message: `A campaign covering ${range.label} already went out — only one campaign can send per weekly cycle.`,
           result,
         });
       }
       if (result.status === "claim_lost") {
-        return res.status(409).json({ message: "Another send for this week is already in progress.", result });
+        return res.status(409).json({ message: "Another campaign send is already in progress.", result });
       }
       if (result.status === "failed") {
         return res.status(502).json({ message: result.error || "Send failed", result });

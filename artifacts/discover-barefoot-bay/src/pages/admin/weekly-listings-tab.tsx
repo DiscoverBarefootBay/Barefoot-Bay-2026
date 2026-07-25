@@ -238,9 +238,8 @@ export default function WeeklyListingsTab() {
             Weekly "Currently, On The Market" Email
           </CardTitle>
           <CardDescription>
-            A weekly promo email showcasing the new listings posted On The Market during the
-            previous week (Monday through Sunday, Eastern time). Each week's campaign can only
-            ever be sent once.
+            A weekly promo email showcasing the listings posted On The Market during the last
+            7 days (ending today, Eastern time). Only one campaign can go out per weekly cycle.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -342,7 +341,7 @@ export default function WeeklyListingsTab() {
             </div>
             <p className="text-xs text-muted-foreground">
               Test emails are labeled [TEST], go only to this address, and never count as the
-              week's real campaign send.
+              real campaign send.
             </p>
           </div>
 
@@ -371,14 +370,14 @@ export default function WeeklyListingsTab() {
               data-testid="button-weekly-preview"
             >
               <Eye className="h-4 w-4 mr-2" />
-              {showPreview && previewSource === "saved" ? "Hide Preview" : "Preview This Week's Email"}
+              {showPreview && previewSource === "saved" ? "Hide Preview" : "Preview Current Email"}
             </Button>
             <Button
               variant="secondary"
               onClick={() => {
                 if (
                   window.confirm(
-                    "⚠️ This emails REAL subscribers: the campaign will go to every opted-in member's actual inbox. This is NOT a test. A week can only ever be sent once. Send now?",
+                    "⚠️ This emails REAL subscribers: the campaign will go to every opted-in member's actual inbox. This is NOT a test. Only one campaign can go out per weekly cycle. Send now?",
                   )
                 ) {
                   sendNowMutation.mutate();

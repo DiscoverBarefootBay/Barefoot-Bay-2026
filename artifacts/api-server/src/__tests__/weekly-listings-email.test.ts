@@ -23,59 +23,62 @@ import {
 
 // ---------------------------------------------------------------------------
 // These tests lock the weekly "Currently, On The Market" campaign behaviour:
-// which Monday–Sunday ET week a send covers, which listings and recipients
+// the rolling 7-ET-day window a send covers, which listings and recipients
 // qualify, the render contract (subject/heading format, unsubscribe link),
-// and — crucially — the per-week idempotency: a week that reached a terminal
-// status can never send twice, while a failed week may retry.
+// and — crucially — the per-cycle idempotency: a campaign whose window
+// overlaps an already-terminal one can never send twice, while a failed
+// attempt may retry.
 // ---------------------------------------------------------------------------
 
 // --------------------------- week range ----------------------------------
 
 describe('getCampaignWeekRange', () => {
-  it('mid-week send promotes the previous completed Mon–Sun week', () => {
-    // Wednesday July 29 2026, noon ET (16:00 UTC)
+  it('covers the rolling 7 ET days ending today', () => {
+    // Wednesday July 29 2026, noon ET (16:00 UTC) → July 23–29 inclusive.
     const range = getCampaignWeekRange(new Date('2026-07-29T16:00:00Z'));
-    assert.equal(range.weekStart, '2026-07-20');
-    assert.equal(range.weekEnd, '2026-07-26');
+    assert.equal(range.weekStart, '2026-07-23');
+    assert.equal(range.weekEnd, '2026-07-29');
+    assert.equal(range.label, 'July 23\u201329, 2026');
   });
 
-  it('Monday itself still promotes the week that just ended', () => {
-    // Monday July 27 2026, 09:00 ET
-    const range = getCampaignWeekRange(new Date('2026-07-27T13:00:00Z'));
-    assert.equal(range.weekStart, '2026-07-20');
-    assert.equal(range.weekEnd, '2026-07-26');
-  });
-
-  it('Sunday belongs to the current (incomplete) week, so the prior week is promoted', () => {
-    // Sunday July 26 2026, 10:00 ET — the current week is Jul 20–26, still
-    // incomplete until Monday, so the campaign covers Jul 13–19.
-    const range = getCampaignWeekRange(new Date('2026-07-26T14:00:00Z'));
-    assert.equal(range.weekStart, '2026-07-13');
-    assert.equal(range.weekEnd, '2026-07-19');
+  it('a Saturday send covers the 7 days ending that Saturday', () => {
+    // Saturday July 25 2026, 10:00 ET → July 19–25.
+    const range = getCampaignWeekRange(new Date('2026-07-25T14:00:00Z'));
+    assert.equal(range.weekStart, '2026-07-19');
+    assert.equal(range.weekEnd, '2026-07-25');
+    assert.equal(range.label, 'July 19\u201325, 2026');
   });
 
   it('respects the ET day boundary, not UTC', () => {
-    // Monday July 27 2026 01:00 UTC is still Sunday July 26 in ET.
+    // Monday July 27 2026 01:00 UTC is still Sunday July 26 in ET → Jul 20–26.
     const range = getCampaignWeekRange(new Date('2026-07-27T01:00:00Z'));
-    assert.equal(range.weekStart, '2026-07-13');
-    assert.equal(range.weekEnd, '2026-07-19');
+    assert.equal(range.weekStart, '2026-07-20');
+    assert.equal(range.weekEnd, '2026-07-26');
   });
 
-  it('handles the spring-forward DST transition week (Mar 8 2026)', () => {
-    // Monday March 9 2026, 09:00 ET (EDT, UTC-4) — the completed week
-    // Mar 2–8 contains the spring-forward transition (Mar 8, 2:00 AM).
+  it('handles a window containing the spring-forward DST transition', () => {
+    // Monday March 9 2026, 09:00 ET (EDT, UTC-4) → Mar 3–9 contains the
+    // spring-forward transition (Mar 8, 2:00 AM) and stays 7 calendar days.
     const range = getCampaignWeekRange(new Date('2026-03-09T13:00:00Z'));
-    assert.equal(range.weekStart, '2026-03-02');
-    assert.equal(range.weekEnd, '2026-03-08');
+    assert.equal(range.weekStart, '2026-03-03');
+    assert.equal(range.weekEnd, '2026-03-09');
   });
 
-  it('handles the fall-back DST transition week (Nov 1 2026)', () => {
-    // Monday November 2 2026, 09:00 ET (EST, UTC-5). Week Oct 26–Nov 1
-    // contains the fall-back transition and spans a month boundary.
+  it('handles a fall-back DST window spanning a month boundary', () => {
+    // Monday November 2 2026, 09:00 ET (EST, UTC-5) → Oct 27–Nov 2 contains
+    // the fall-back transition and spans a month boundary.
     const range = getCampaignWeekRange(new Date('2026-11-02T14:00:00Z'));
-    assert.equal(range.weekStart, '2026-10-26');
-    assert.equal(range.weekEnd, '2026-11-01');
-    assert.equal(range.label, 'October 26\u2013November 1, 2026');
+    assert.equal(range.weekStart, '2026-10-27');
+    assert.equal(range.weekEnd, '2026-11-02');
+    assert.equal(range.label, 'October 27\u2013November 2, 2026');
+  });
+
+  it('handles a window spanning a year boundary', () => {
+    // Friday January 1 2027, noon ET → Dec 26, 2026–Jan 1, 2027.
+    const range = getCampaignWeekRange(new Date('2027-01-01T17:00:00Z'));
+    assert.equal(range.weekStart, '2026-12-26');
+    assert.equal(range.weekEnd, '2027-01-01');
+    assert.equal(range.label, 'December 26, 2026\u2013January 1, 2027');
   });
 });
 
@@ -362,6 +365,19 @@ function makeDeps(state: FakeState, opts: { listings?: any[]; users?: any[] } = 
       }
     },
     getWeeklySendForWeek: async (weekStart) => state.rows.get(weekStart),
+    getOverlappingBlockingSend: async (range) => {
+      const BLOCKING = new Set(['sent', 'partially_failed', 'skipped_no_listings', 'sending']);
+      for (const row of state.rows.values()) {
+        if (
+          BLOCKING.has(row.status) &&
+          row.weekStart <= range.weekEnd &&
+          row.weekEnd >= range.weekStart
+        ) {
+          return row;
+        }
+      }
+      return undefined;
+    },
     baseUrl: 'https://barefootbay.com',
   };
 }
@@ -384,13 +400,66 @@ describe('executeWeeklySend', () => {
     assert.equal(state.rows.get(RANGE.weekStart)!.status, 'sent');
   });
 
-  it('never sends the same week twice', async () => {
+  it('never sends the same window twice', async () => {
     const state = freshState();
     const deps = makeDeps(state);
     await executeWeeklySend(RANGE, CONFIG, 'scheduler', deps, NOW);
     const second = await executeWeeklySend(RANGE, CONFIG, 'manual', deps, NOW);
     assert.equal(second.status, 'already_sent');
     assert.equal(state.sends.length, 2); // only the first run's two sends
+  });
+
+  it('blocks a shifted rolling window that overlaps an already-sent campaign', async () => {
+    const state = freshState();
+    const deps = makeDeps(state);
+    // Manual send Friday: window Jul 18–24.
+    const friday: WeekRange = { weekStart: '2026-07-18', weekEnd: '2026-07-24', label: 'July 18–24, 2026' };
+    await executeWeeklySend(friday, CONFIG, 'manual', deps, NOW);
+    // Scheduled send the following Monday: window Jul 21–27 — overlaps.
+    const monday: WeekRange = { weekStart: '2026-07-21', weekEnd: '2026-07-27', label: 'July 21–27, 2026' };
+    const second = await executeWeeklySend(monday, CONFIG, 'scheduler', deps, NOW);
+    assert.equal(second.status, 'already_sent');
+    assert.equal(state.sends.length, 2); // only Friday's sends
+
+    // A window a full week later (Jul 25–31) no longer overlaps — it proceeds
+    // as a fresh campaign (the fake listing from Jul 22 is outside it, so it
+    // resolves to skipped_no_listings, NOT already_sent).
+    const nextCycle: WeekRange = { weekStart: '2026-07-25', weekEnd: '2026-07-31', label: 'July 25–31, 2026' };
+    const third = await executeWeeklySend(nextCycle, CONFIG, 'scheduler', deps, NOW);
+    assert.equal(third.status, 'skipped_no_listings');
+  });
+
+  it('an overlapping in-progress ("sending") row from another day blocks a new send', async () => {
+    const state = freshState();
+    const deps = makeDeps(state);
+    // A campaign claimed Friday (Jul 18–24) is still mid-send.
+    state.rows.set('2026-07-18', {
+      id: 50,
+      weekStart: '2026-07-18',
+      weekEnd: '2026-07-24',
+      status: 'sending',
+      listingCount: 0,
+      recipientCount: 0,
+      sentCount: 0,
+      error: null,
+    });
+    const monday: WeekRange = { weekStart: '2026-07-21', weekEnd: '2026-07-27', label: 'July 21–27, 2026' };
+    const res = await executeWeeklySend(monday, CONFIG, 'scheduler', deps, NOW);
+    assert.equal(res.status, 'claim_lost');
+    assert.equal(state.sends.length, 0);
+  });
+
+  it('a failed attempt on an earlier day does not block a later shifted window', async () => {
+    const state = freshState(false); // all sends fail
+    const deps = makeDeps(state);
+    const friday: WeekRange = { weekStart: '2026-07-18', weekEnd: '2026-07-24', label: 'July 18–24, 2026' };
+    const first = await executeWeeklySend(friday, CONFIG, 'scheduler', deps, NOW);
+    assert.equal(first.status, 'failed');
+
+    state.sendResult = true;
+    const monday: WeekRange = { weekStart: '2026-07-21', weekEnd: '2026-07-27', label: 'July 21–27, 2026' };
+    const retry = await executeWeeklySend(monday, CONFIG, 'scheduler', deps, NOW);
+    assert.equal(retry.status, 'sent');
   });
 
   it('skips empty weeks (and skip is terminal — no later send)', async () => {
@@ -477,7 +546,28 @@ describe('runWeeklyListingsEmailTick', () => {
     const state = freshState();
     const res = await runWeeklyListingsEmailTick(dueMoment, tickDeps(state, CONFIG));
     assert.equal(res?.status, 'sent');
-    assert.equal(res?.weekStart, '2026-07-20');
+    // Rolling window: 7 ET days ending Monday July 27 → July 21–27.
+    assert.equal(res?.weekStart, '2026-07-21');
+    assert.equal(res?.weekEnd, '2026-07-27');
+  });
+
+  it('does not fire when a manual send earlier in the cycle already went out', async () => {
+    const state = freshState();
+    const deps = tickDeps(state, CONFIG);
+    // Manual campaign the previous Friday (window Jul 18–24) already sent.
+    state.rows.set('2026-07-18', {
+      id: 99,
+      weekStart: '2026-07-18',
+      weekEnd: '2026-07-24',
+      status: 'sent',
+      listingCount: 1,
+      recipientCount: 2,
+      sentCount: 2,
+      error: null,
+    });
+    const res = await runWeeklyListingsEmailTick(dueMoment, deps);
+    assert.equal(res, null);
+    assert.equal(state.sends.length, 0);
   });
 
   it('does nothing when disabled', async () => {

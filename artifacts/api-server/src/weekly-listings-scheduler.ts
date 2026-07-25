@@ -5,14 +5,19 @@
  * self-started at boot from index.ts, and each tick checks the admin-configured
  * schedule (site_settings JSON) against the current Eastern time. Idempotency
  * is guaranteed by the `weekly_listings_email_sends` table: one row per
- * campaign week, keyed by the unique week_start, claimed atomically via
- * INSERT ... ON CONFLICT DO NOTHING. A failed send leaves the row in status
- * "failed" so the next tick (within the grace window) or a manual trigger can
- * retry — but a week whose row reached "sent" or "skipped_no_listings" can
- * never send again.
+ * campaign, keyed by the unique week_start, claimed atomically via
+ * INSERT ... ON CONFLICT DO NOTHING. Because the campaign window is a ROLLING
+ * 7 days ending "today" (ET), the week_start shifts daily — so on top of the
+ * exact-key claim, any campaign whose window OVERLAPS the requested one and
+ * that reached a terminal status blocks a new send. That keeps the "at most
+ * one campaign per weekly cycle" guarantee even when a manual send happens on
+ * a different day than the scheduled one. A failed attempt leaves its row in
+ * status "failed" so the next tick (within the grace window) or a manual
+ * trigger can retry — but a campaign that reached "sent", "partially_failed",
+ * or "skipped_no_listings" can never send again while its window overlaps.
  */
 
-import { eq, and, desc, inArray } from 'drizzle-orm';
+import { eq, and, desc, inArray, gte, lte } from 'drizzle-orm';
 import { db } from './db';
 import { weeklyListingsEmailSends, type WeeklyListingsEmailSend } from '@workspace/db';
 import { storage } from './storage';
@@ -106,6 +111,38 @@ export async function getWeeklySendForWeek(
   return rows[0];
 }
 
+// Statuses that block a new overlapping campaign: terminal outcomes (the
+// cycle already went out) plus "sending" (another instance is mid-send for an
+// overlapping window — possibly claimed under a different week_start on
+// another day). Only "failed" rows are non-blocking, so retries stay possible.
+const BLOCKING_SEND_STATUSES = [...TERMINAL_SEND_STATUSES, 'sending'];
+
+/**
+ * Find a campaign whose 7-day window overlaps the given range and whose
+ * status blocks a new send. With a rolling window, an overlapping terminal
+ * campaign means "this cycle already went out" — a new send would re-feature
+ * listings already covered — and an overlapping "sending" row means another
+ * instance is currently sending this cycle (even if it claimed a different
+ * week_start on an earlier day). Only "failed" rows don't count here.
+ */
+export async function getOverlappingBlockingSend(
+  range: Pick<WeekRange, 'weekStart' | 'weekEnd'>,
+): Promise<WeeklyListingsEmailSend | undefined> {
+  const rows = await db
+    .select()
+    .from(weeklyListingsEmailSends)
+    .where(
+      and(
+        lte(weeklyListingsEmailSends.weekStart, range.weekEnd),
+        gte(weeklyListingsEmailSends.weekEnd, range.weekStart),
+        inArray(weeklyListingsEmailSends.status, BLOCKING_SEND_STATUSES),
+      ),
+    )
+    .orderBy(desc(weeklyListingsEmailSends.weekStart))
+    .limit(1);
+  return rows[0];
+}
+
 /**
  * Atomically claim a campaign week for sending. Returns the claimed row, or
  * null when the week is already terminal (sent/skipped) or another instance is
@@ -179,6 +216,7 @@ export interface WeeklySendDeps {
   claimWeeklySend: typeof claimWeeklySend;
   finalizeWeeklySend: typeof finalizeWeeklySend;
   getWeeklySendForWeek: typeof getWeeklySendForWeek;
+  getOverlappingBlockingSend: typeof getOverlappingBlockingSend;
   baseUrl?: string;
 }
 
@@ -190,6 +228,7 @@ export function defaultWeeklySendDeps(): WeeklySendDeps {
     claimWeeklySend,
     finalizeWeeklySend,
     getWeeklySendForWeek,
+    getOverlappingBlockingSend,
     baseUrl: getWeeklyEmailBaseUrl(),
   };
 }
@@ -220,9 +259,14 @@ export async function executeWeeklySend(
 ): Promise<WeeklySendResult> {
   const base = { weekStart: range.weekStart, weekEnd: range.weekEnd, label: range.label };
 
-  // Fast path: already terminal for this week.
-  const existing = await deps.getWeeklySendForWeek(range.weekStart);
-  if (existing && TERMINAL_SEND_STATUSES.has(existing.status)) {
+  // Fast path: a blocking campaign whose rolling window overlaps this one
+  // means the current weekly cycle already went out (terminal) or is being
+  // sent right now by another instance ("sending") — never send twice.
+  const existing = await deps.getOverlappingBlockingSend(range);
+  if (existing) {
+    if (existing.status === 'sending') {
+      return { ...base, status: 'claim_lost', listingCount: 0, recipientCount: 0, sentCount: 0 };
+    }
     return {
       ...base,
       status: 'already_sent',
@@ -396,10 +440,14 @@ export async function runWeeklyListingsEmailTick(
 
     const range = getCampaignWeekRange(now);
 
-    // Cheap pre-check to avoid claim churn every tick once the week is done.
+    // Cheap pre-checks to avoid claim churn every tick once the cycle is done:
+    // an overlapping terminal campaign (possibly sent manually on another day)
+    // or an overlapping in-progress send blocks the scheduled send.
+    const overlapping = await deps.getOverlappingBlockingSend(range);
+    if (overlapping) return null;
     const existing = await deps.getWeeklySendForWeek(range.weekStart);
     if (existing && existing.status !== 'failed') {
-      // sent/skipped are terminal; "sending" means another instance is mid-send.
+      // "sending" means another instance is mid-send.
       return null;
     }
 

@@ -90,9 +90,9 @@ export async function loadWeeklyListingsEmailConfig(): Promise<WeeklyListingsEma
 // ---------------------------------------------------------------------------
 
 export interface WeekRange {
-  /** yyyy-MM-dd of the Monday that starts the campaign week (ET). */
+  /** yyyy-MM-dd of the first ET day of the rolling 7-day campaign window. */
   weekStart: string;
-  /** yyyy-MM-dd of the Sunday that ends the campaign week (ET). */
+  /** yyyy-MM-dd of the last ET day of the window (today at send time). */
   weekEnd: string;
   /** Human label, e.g. "July 20–26, 2026" or "December 28, 2026–January 3, 2027". */
   label: string;
@@ -116,11 +116,6 @@ function ymdAddDays(ymd: string, days: number): string {
   return date.toISOString().slice(0, 10);
 }
 
-function dayOfWeekOfYmd(ymd: string): number {
-  const { y, m, d } = parseYmd(ymd);
-  return new Date(Date.UTC(y, m - 1, d, 12)).getUTCDay(); // 0 = Sunday
-}
-
 /**
  * Format a campaign week range naturally, spanning month/year boundaries:
  *  - same month:  "July 20–26, 2026"
@@ -142,19 +137,14 @@ export function formatWeekRangeLabel(weekStart: string, weekEnd: string): string
 }
 
 /**
- * The campaign week for a send happening at `now`: the most recently COMPLETED
- * Monday–Sunday week in Eastern time. E.g. any moment during the week of
- * July 27–August 2, 2026 promotes the listings of July 20–26, 2026.
+ * The campaign window for a send happening at `now`: a ROLLING 7-day window of
+ * Eastern calendar days ending today. E.g. a send on Saturday July 25, 2026
+ * promotes everything posted July 19–25, 2026 — so mid-week previews, tests,
+ * and manual sends always feel current.
  */
 export function getCampaignWeekRange(now: Date = new Date()): WeekRange {
-  const todayEt = formatInTimeZone(now, EASTERN_TZ, 'yyyy-MM-dd');
-  const dow = dayOfWeekOfYmd(todayEt); // 0 = Sunday … 6 = Saturday
-  // Days back to the Monday of the CURRENT week (Sunday belongs to the week
-  // that started 6 days earlier).
-  const daysSinceMonday = (dow + 6) % 7;
-  const currentWeekMonday = ymdAddDays(todayEt, -daysSinceMonday);
-  const weekStart = ymdAddDays(currentWeekMonday, -7);
-  const weekEnd = ymdAddDays(weekStart, 6);
+  const weekEnd = formatInTimeZone(now, EASTERN_TZ, 'yyyy-MM-dd');
+  const weekStart = ymdAddDays(weekEnd, -6);
   return { weekStart, weekEnd, label: formatWeekRangeLabel(weekStart, weekEnd) };
 }
 
