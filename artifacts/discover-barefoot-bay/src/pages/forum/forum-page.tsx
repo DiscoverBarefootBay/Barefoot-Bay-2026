@@ -15,6 +15,9 @@ import {
   Newspaper,
   ArrowUpDown,
   Plus,
+  LayoutGrid,
+  Columns2,
+  Rows2,
 } from "lucide-react";
 import {
   Select,
@@ -69,6 +72,26 @@ interface StoryFeedResponse {
 }
 
 const PAGE_SIZE = 12;
+
+type StoryView = "grid" | "dual" | "single";
+
+const STORY_VIEW_STORAGE_KEY = "extra-extra-story-view";
+
+const STORY_VIEW_CLASSES: Record<StoryView, string> = {
+  grid: "grid grid-cols-1 md:grid-cols-3 gap-6",
+  dual: "grid grid-cols-1 md:grid-cols-2 gap-6",
+  single: "grid grid-cols-1 gap-6",
+};
+
+function loadStoredStoryView(): StoryView {
+  try {
+    const stored = window.localStorage.getItem(STORY_VIEW_STORAGE_KEY);
+    if (stored === "grid" || stored === "dual" || stored === "single") return stored;
+  } catch {
+    // localStorage unavailable (private mode, etc.) — fall back to default
+  }
+  return "dual";
+}
 
 function formatStoryDate(dateStr: string): string {
   const date = new Date(dateStr);
@@ -167,6 +190,16 @@ export default function ForumPage() {
   const [sortBy, setSortBy] = useState<string>("newest_created");
   // Which category chip badge is hovered (shows an X instead of the count)
   const [hoveredBadgeCategoryId, setHoveredBadgeCategoryId] = useState<number | null>(null);
+  const [storyView, setStoryView] = useState<StoryView>(loadStoredStoryView);
+
+  const handleStoryViewChange = (view: StoryView) => {
+    setStoryView(view);
+    try {
+      window.localStorage.setItem(STORY_VIEW_STORAGE_KEY, view);
+    } catch {
+      // localStorage unavailable — preference just won't persist
+    }
+  };
 
   // Fetch categories (for filter chips)
   const { data: categories, isLoading: categoriesLoading } = useQuery<ForumCategory[]>({
@@ -497,8 +530,57 @@ export default function ForumPage() {
         </div>
       )}
 
-      {/* Sort Dropdown */}
-      <div className="mb-6 flex items-center justify-end gap-2">
+      {/* View toggle + Sort Dropdown */}
+      <div className="mb-6 flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-navy/70 font-medium">View as:</span>
+          <div
+            role="group"
+            aria-label="View as"
+            className="inline-flex rounded-md border border-navy/20 bg-white overflow-hidden"
+          >
+            <button
+              type="button"
+              aria-label="Grid view (3 per row)"
+              aria-pressed={storyView === "grid"}
+              title="Grid view"
+              onClick={() => handleStoryViewChange("grid")}
+              data-testid="view-grid"
+              className={`p-2 transition-colors ${
+                storyView === "grid" ? "bg-navy text-white" : "text-navy/70 hover:bg-navy/5"
+              }`}
+            >
+              <LayoutGrid className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              aria-label="Dual column view"
+              aria-pressed={storyView === "dual"}
+              title="Dual column view"
+              onClick={() => handleStoryViewChange("dual")}
+              data-testid="view-dual"
+              className={`p-2 border-l border-navy/20 transition-colors ${
+                storyView === "dual" ? "bg-navy text-white" : "text-navy/70 hover:bg-navy/5"
+              }`}
+            >
+              <Columns2 className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              aria-label="Single column view"
+              aria-pressed={storyView === "single"}
+              title="Single column view"
+              onClick={() => handleStoryViewChange("single")}
+              data-testid="view-single"
+              className={`p-2 border-l border-navy/20 transition-colors ${
+                storyView === "single" ? "bg-navy text-white" : "text-navy/70 hover:bg-navy/5"
+              }`}
+            >
+              <Rows2 className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
         <ArrowUpDown className="h-4 w-4 text-navy/70" />
         <span className="text-sm text-navy/70 font-medium">Sort by:</span>
         <Select value={sortBy} onValueChange={setSortBy}>
@@ -514,6 +596,7 @@ export default function ForumPage() {
             <SelectItem value="oldest_edited" data-testid="sort-oldest-edited">Oldest Edited</SelectItem>
           </SelectContent>
         </Select>
+        </div>
       </div>
 
       {/* Story grid */}
@@ -524,7 +607,7 @@ export default function ForumPage() {
           <p className="text-navy/60">Check back soon for the latest community news.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className={STORY_VIEW_CLASSES[storyView]} data-testid="story-grid">
           {stories.map((story) => (
             <StoryCard key={story.id} story={story} />
           ))}
