@@ -20,7 +20,14 @@ import {
   Rows2,
   Search,
   Tag,
+  Info,
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -263,6 +270,7 @@ export default function ForumPage() {
   const { isAdmin, canCreateTopic, canCreateTopicInCategory } = usePermissions();
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [descriptionText, setDescriptionText] = useState("");
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
   const [, navigate] = useLocation();
   const searchString = useSearch();
   // Category filter is URL-addressable (?categoryId=N) so filtered feeds can be
@@ -443,7 +451,20 @@ export default function ForumPage() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-6">
-        <h1 className="text-3xl font-bold text-navy">Extra!</h1>
+        <div className="flex items-center gap-2">
+          <h1 className="text-3xl font-bold text-navy">Extra!</h1>
+          {(isAdmin || description?.content) && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="p-1 h-auto text-navy/40 hover:text-ocean hover:bg-transparent"
+              onClick={() => setIsInfoOpen(true)}
+              aria-label="About Extra!"
+            >
+              <Info className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
         <div className="flex flex-wrap gap-3">
           {user &&
             (selectedCategoryId
@@ -485,62 +506,74 @@ export default function ForumPage() {
         </div>
       </div>
 
-      {/* Description */}
-      {(description?.content || isAdmin) && (
-        <Card className="mb-6 bg-white">
-          <CardContent className="pt-6">
-            {!isEditingDescription ? (
-              <div className="relative">
-                <div className="prose max-w-none">
-                  {description?.content ? (
-                    <div dangerouslySetInnerHTML={{ __html: description.content }} />
-                  ) : (
-                    <p className="text-navy/50 italic">
-                      {isAdmin ? "No description available. Click edit to add one." : ""}
-                    </p>
-                  )}
-                </div>
-                {isAdmin && (
+      {/* Description info dialog */}
+      <Dialog
+        open={isInfoOpen}
+        onOpenChange={(open) => {
+          setIsInfoOpen(open);
+          if (!open) {
+            setIsEditingDescription(false);
+            setDescriptionText(description?.content || "");
+          }
+        }}
+      >
+        <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-auto">
+          <DialogHeader>
+            <DialogTitle>About Extra!</DialogTitle>
+          </DialogHeader>
+          {!isEditingDescription ? (
+            <div>
+              <div className="prose max-w-none">
+                {description?.content ? (
+                  <div dangerouslySetInnerHTML={{ __html: description.content }} />
+                ) : (
+                  <p className="text-navy/50 italic">
+                    No description set yet. Click Edit to add one.
+                  </p>
+                )}
+              </div>
+              {isAdmin && (
+                <div className="flex justify-end mt-4">
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="absolute right-0 top-0 text-navy/50 hover:text-coral hover:bg-transparent"
+                    className="text-navy/50 hover:text-coral hover:bg-transparent"
                     onClick={() => setIsEditingDescription(true)}
                   >
                     <Edit className="h-4 w-4 mr-1" /> Edit
                   </Button>
-                )}
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <Textarea
-                  value={descriptionText}
-                  onChange={(e) => setDescriptionText(e.target.value)}
-                  placeholder="Enter a description for Extra!..."
-                  className="min-h-[120px]"
-                />
-                <div className="flex justify-end gap-2">
-                  <Button variant="outline" size="sm" onClick={handleCancelEdit}>
-                    <X className="h-4 w-4 mr-1" /> Cancel
-                  </Button>
-                  <Button
-                    variant="default"
-                    size="sm"
-                    onClick={handleSaveDescription}
-                    disabled={updateDescriptionMutation.isPending}
-                  >
-                    {updateDescriptionMutation.isPending ? (
-                      <><Loader2 className="h-4 w-4 mr-1 animate-spin" /> Saving</>
-                    ) : (
-                      <><Save className="h-4 w-4 mr-1" /> Save</>
-                    )}
-                  </Button>
                 </div>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <Textarea
+                value={descriptionText}
+                onChange={(e) => setDescriptionText(e.target.value)}
+                placeholder="Enter a description for Extra!..."
+                className="min-h-[120px]"
+              />
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" size="sm" onClick={handleCancelEdit}>
+                  <X className="h-4 w-4 mr-1" /> Cancel
+                </Button>
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={handleSaveDescription}
+                  disabled={updateDescriptionMutation.isPending}
+                >
+                  {updateDescriptionMutation.isPending ? (
+                    <><Loader2 className="h-4 w-4 mr-1 animate-spin" /> Saving</>
+                  ) : (
+                    <><Save className="h-4 w-4 mr-1" /> Save</>
+                  )}
+                </Button>
               </div>
-            )}
-          </CardContent>
-        </Card>
-      )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Selected category context (name + description + mark-all-read) */}
       {selectedCategory && (
