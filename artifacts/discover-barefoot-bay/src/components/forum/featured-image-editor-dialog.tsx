@@ -258,7 +258,7 @@ export function FeaturedImageEditorDialog({
 
   return (
     <Dialog open={open} onOpenChange={(o) => !busy && onOpenChange(o)}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Featured Image</DialogTitle>
           <DialogDescription>
@@ -288,7 +288,7 @@ export function FeaturedImageEditorDialog({
             >
               <Upload className="mr-2 h-4 w-4" /> Upload Image
             </Button>
-            <div className="flex-1 min-w-[200px]">
+            <div className="flex-1 min-w-0">
               <Input
                 placeholder="…or paste an image URL"
                 value={urlInput}
@@ -335,7 +335,7 @@ export function FeaturedImageEditorDialog({
           {imageSrc ? (
             canCrop ? (
               <div className="space-y-2">
-                <div className="relative h-64 w-full overflow-hidden rounded-lg bg-navy/90">
+                <div className="relative h-56 sm:h-64 w-full overflow-hidden rounded-lg bg-navy/90 touch-none">
                   <Cropper
                     image={imageSrc}
                     crop={crop}
