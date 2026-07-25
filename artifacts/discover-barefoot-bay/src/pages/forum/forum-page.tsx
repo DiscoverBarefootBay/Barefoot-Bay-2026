@@ -121,14 +121,14 @@ function HorizontalStoryCard({ story, index }: { story: Story; index: number }) 
               New
             </div>
           )}
-          <div className="flex items-stretch min-h-[96px] sm:min-h-[110px] group-hover:min-h-[160px] sm:group-hover:min-h-[190px] transition-all duration-300">
-            <div className="story-banner-shine relative w-[110px] sm:w-[160px] md:w-[200px] group-hover:w-[160px] sm:group-hover:w-[230px] md:group-hover:w-[280px] flex-shrink-0 overflow-hidden bg-navy/5 transition-all duration-300">
+          <div className="flex items-stretch min-h-[128px] sm:min-h-[146px] group-hover:min-h-[176px] sm:group-hover:min-h-[204px] transition-all duration-300">
+            <div className="story-banner-shine relative w-[148px] sm:w-[210px] md:w-[264px] group-hover:w-[188px] sm:group-hover:w-[260px] md:group-hover:w-[320px] flex-shrink-0 overflow-hidden bg-navy/5 transition-all duration-300">
               {story.image ? (
                 <img
                   src={story.image}
                   alt=""
                   loading="lazy"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="absolute inset-0 h-full w-full object-cover"
                   onError={(e) => {
                     (e.currentTarget as HTMLImageElement).style.display = "none";
                   }}
