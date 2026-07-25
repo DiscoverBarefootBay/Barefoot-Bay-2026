@@ -455,9 +455,9 @@ function ManageForumCategories(_props: RouteComponentProps) {
         <CardHeader>
           <div className="flex justify-between items-center">
             <div>
-              <CardTitle className="text-2xl">Extra! Categories</CardTitle>
+              <CardTitle className="text-2xl">Extra!!! Categories</CardTitle>
               <CardDescription>
-                Manage categories for the Extra! news feed
+                Manage categories for the Extra!!! news feed
               </CardDescription>
             </div>
             <Dialog open={isAddDialogOpen} onOpenChange={handleAddDialogOpenChange}>
@@ -470,7 +470,7 @@ function ManageForumCategories(_props: RouteComponentProps) {
                 <DialogHeader>
                   <DialogTitle>Add New Category</DialogTitle>
                   <DialogDescription>
-                    Create a new category for Extra!
+                    Create a new category for Extra!!!
                   </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>

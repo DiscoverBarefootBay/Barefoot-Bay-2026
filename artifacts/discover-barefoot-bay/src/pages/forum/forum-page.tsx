@@ -452,14 +452,14 @@ export default function ForumPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-6">
         <div className="flex items-center gap-2">
-          <h1 className="text-3xl font-bold text-navy">Extra!</h1>
+          <h1 className="text-3xl font-bold text-navy">Extra!!!</h1>
           {(isAdmin || description?.content) && (
             <Button
               variant="ghost"
               size="sm"
               className="p-1 h-auto text-navy/40 hover:text-ocean hover:bg-transparent"
               onClick={() => setIsInfoOpen(true)}
-              aria-label="About Extra!"
+              aria-label="About Extra!!!"
             >
               <Info className="h-4 w-4" />
             </Button>
@@ -499,7 +499,7 @@ export default function ForumPage() {
           {isAdmin && (
             <Link href="/admin/manage-forum">
               <Button variant="outline" className="border-navy/20 hover:bg-coral/10 hover:text-coral hover:border-coral">
-                <Settings className="mr-2 h-4 w-4" /> Manage Extra!
+                <Settings className="mr-2 h-4 w-4" /> Manage Extra!!!
               </Button>
             </Link>
           )}
@@ -519,7 +519,7 @@ export default function ForumPage() {
       >
         <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-auto">
           <DialogHeader>
-            <DialogTitle>About Extra!</DialogTitle>
+            <DialogTitle>About Extra!!!</DialogTitle>
           </DialogHeader>
           {!isEditingDescription ? (
             <div>
@@ -550,7 +550,7 @@ export default function ForumPage() {
               <Textarea
                 value={descriptionText}
                 onChange={(e) => setDescriptionText(e.target.value)}
-                placeholder="Enter a description for Extra!..."
+                placeholder="Enter a description for Extra!!!..."
                 className="min-h-[120px]"
               />
               <div className="flex justify-end gap-2">

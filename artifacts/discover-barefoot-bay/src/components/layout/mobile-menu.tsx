@@ -317,7 +317,7 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
           {isForumEnabled() && (
             <Link href="/forum" onClick={onClose}>
               <div className="py-2 text-navy hover:text-coral font-medium flex items-center justify-between">
-                <span>Extra!</span>
+                <span>Extra!!!</span>
                 <ForumBadge inMobileMenu />
               </div>
             </Link>

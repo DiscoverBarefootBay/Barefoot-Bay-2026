@@ -481,7 +481,7 @@ export function NavBar() {
               <div className="relative">
                 <Link href="/forum">
                   <span className={`whitespace-nowrap text-navy hover:text-coral transition-colors font-advent-pro cursor-pointer inline-block ${!user ? 'text-xl px-1 py-1' : 'text-2xl px-2 py-1'}`} style={{ textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>
-                    Extra!
+                    Extra!!!
                   </span>
                 </Link>
                 <ForumBadge />

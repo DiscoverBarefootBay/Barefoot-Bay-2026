@@ -949,7 +949,7 @@ export default function ForumPostPage() {
         <p className="text-navy/70 mb-6">The post you're looking for doesn't exist or has been removed.</p>
         <Link href="/forum">
           <Button variant="outline" className="border-navy/20">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Extra!
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Extra!!!
           </Button>
         </Link>
       </div>
