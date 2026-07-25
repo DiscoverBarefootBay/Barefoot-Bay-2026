@@ -1,0 +1,179 @@
+Verify that the three requested BarefootBay.com features were implemented completely and according to specification.
+
+Do not assume the implementation is correct. Inspect the current codebase, database schema, routes, scheduled jobs, email templates, admin controls, and rendered pages. Test each requirement and fix any missing or incorrect implementation without deleting existing data or breaking current functionality.
+
+## 1. “Extra! Extra!” forum redesign
+
+Verify the following:
+
+- “Forum” and “Community Forum” have been renamed to “Extra! Extra!” in all user-facing locations, including:
+  - Desktop and mobile navigation
+  - Page headings and titles
+  - Breadcrumbs
+  - Buttons and labels
+  - Notifications
+  - Admin screens
+  - Emails
+  - Metadata and accessibility labels
+- Existing `/forum` routes and topic links still work.
+- Existing topics, comments, permissions, unread tracking, notification badges, “Mark All Read,” and forum-management tools still work.
+- The main `/forum` page displays forum topics immediately as news-style story cards instead of only displaying category cards.
+- Every story card displays:
+  - Featured image or fallback image
+  - Headline
+  - Category
+  - Short excerpt
+  - Publication date
+  - Comment count
+  - New or Updated indicator when applicable
+- Stories are ordered newest first.
+- Pinned stories appear above the normal chronological feed.
+- Admins can pin and unpin stories.
+- Existing forum categories work as story filters.
+- “All Stories” is the default filter.
+- Filters support direct URLs and browser back/forward behavior.
+- Existing topic and category pages remain functional.
+- No topics or comments were deleted or duplicated.
+- Desktop displays approximately two equal-sized cards per row.
+- Mobile displays one card per row.
+- Pagination or “Load More” works for older stories.
+- The redesign follows Barefoot Bay branding and does not copy CNN or HuffPost branding.
+
+## 2. “On The Market” rename, sorting, and public filters
+
+Verify the following:
+
+- “For Sale” and “For-Sale” have been renamed to “On The Market” in all appropriate user-facing locations, including:
+  - Desktop and mobile navigation
+  - Public page heading
+  - Buttons and links
+  - Breadcrumbs
+  - Search text
+  - Admin screens
+  - Listing-management screens
+  - Notifications
+  - Emails
+  - Metadata and accessibility labels
+- Listing-type labels such as “For Sale by Owner” and “For Sale by Agent” remain unchanged unless intentionally updated.
+- Existing `/for-sale` and individual listing URLs continue to work or redirect safely.
+- Existing listing records, images, filters, credits, ownership, and permissions remain intact.
+- The public On The Market page does not display the “All Statuses” dropdown.
+- Draft and Active status filtering remains available on `/my-listings`.
+- The public-page filter controls use the space previously occupied by the status dropdown.
+- A visible “Sort By” control exists with:
+  - Newest Listings
+  - Oldest Listings
+  - Price: Low to High
+  - Price: High to Low
+  - Recently Updated
+  - Title: A–Z
+- “Newest Listings” is the default.
+- Sorting works correctly with all existing listing filters.
+- Changing a filter does not unexpectedly reset the selected sort.
+- Sort and filter selections are represented in the URL where appropriate.
+- Invalid or missing sort parameters fall back safely to Newest Listings.
+- Price sorting uses numeric values rather than formatted text.
+- Null or missing prices are handled consistently.
+- Public users cannot use status parameters to expose drafts, expired listings, or unpublished listings.
+- The page remains responsive on desktop, tablet, and mobile.
+
+## 3. “Currently, On The Market” weekly email
+
+Verify the following:
+
+- A reusable email template exists.
+- The dynamic subject follows:
+  `Currently, On The Market | {{week_start}}–{{week_end}}`
+- The heading displays the same weekly date range.
+- Date ranges format correctly across:
+  - A normal week
+  - Two different months
+  - Two different years
+- The email uses the correct Barefoot Bay local timezone.
+- The email includes only listings first published within the target weekly period.
+- Only active and publicly visible listings are included.
+- Draft, expired, deleted, and unpublished listings are excluded.
+- Listings appear newest first.
+- Each listing includes:
+  - Primary image or fallback image
+  - Title
+  - Price
+  - Listing type
+  - Short description
+  - Working View Listing link
+- The View All Listings button links to the public On The Market page.
+- The Post a Listing button links to the correct listing-submission page.
+- The email is responsive and readable on desktop and mobile.
+- Image alt text is present.
+- The email remains understandable when images are blocked.
+- A plain-text version exists.
+- The weekly scheduled job exists.
+- An administrator can configure the send day and time.
+- An administrator can:
+  - Enable or disable automation
+  - Preview the email
+  - Send a test email
+  - Review included listings
+  - Manually trigger a campaign
+  - Review send history and errors
+- The same weekly campaign cannot be sent twice accidentally.
+- Temporary retry behavior does not create duplicate campaigns.
+- No email is sent when there are no qualifying listings unless that behavior is explicitly enabled.
+- Only approved promotional-email subscribers receive the email.
+- Unsubscribed, suppressed, and invalid recipients are excluded.
+- Existing unsubscribe and email-preference behavior remains functional.
+- The footer contains the required business identity, mailing information, and unsubscribe link.
+- Email credentials and provider configuration are stored in environment variables.
+- The scheduled automation remains disabled until the sender identity, subscriber source, schedule, and test delivery have been verified.
+
+## Automated and manual testing
+
+Run or add tests for:
+
+- Global user-facing rename coverage
+- Existing route compatibility
+- Forum topic ordering
+- Pinned-topic ordering
+- Forum category filtering
+- New and Updated indicators
+- Forum permissions and unread tracking
+- Public listing status protection
+- Every sorting option
+- Sorting combined with filters
+- `/my-listings` status filtering
+- Weekly date-range calculations
+- Listing eligibility for email campaigns
+- Duplicate-send prevention
+- Unsubscribe exclusions
+- Admin authorization
+- Responsive rendering
+- Existing regression tests
+
+Manually inspect these pages on desktop and mobile:
+
+- Main navigation
+- `/forum`
+- A filtered forum feed
+- A forum topic page
+- `/for-sale`
+- `/my-listings`
+- Listing details
+- Email preview
+- Email administration and send-history pages
+
+## Final verification report
+
+After testing and correcting the implementation, provide a report containing:
+
+1. Each requirement marked:
+   - Passed
+   - Fixed
+   - Not implemented
+   - Blocked
+2. Files changed during verification.
+3. Database migrations or schema changes.
+4. Tests run and their results.
+5. Any remaining risks or unresolved requirements.
+6. Screenshots or clear descriptions of the final desktop and mobile layouts.
+7. Confirmation that existing forum, listing, subscriber, and comment data were not deleted or duplicated.
+8. Confirmation that the weekly automation is disabled or safely configured before production use.
