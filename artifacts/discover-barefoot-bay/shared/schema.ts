@@ -129,6 +129,8 @@ export const users = pgTable("users", {
   previousRole: text("previous_role"), // Store role before upgrading to paid sponsor
   // Email notification preferences
   emailNotificationsEnabled: boolean("email_notifications_enabled").notNull().default(true),
+  // Marketing/promotional email opt-in (weekly listings digest, etc.)
+  marketingEmailsEnabled: boolean("marketing_emails_enabled").notNull().default(true),
   // Club memberships - stores slugs of social clubs the user belongs to
   clubMemberships: text("club_memberships").array(),
   createdAt: timestamp("created_at").defaultNow(),

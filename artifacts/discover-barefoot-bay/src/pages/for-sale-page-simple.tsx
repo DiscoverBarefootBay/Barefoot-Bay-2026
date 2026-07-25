@@ -57,7 +57,7 @@ export default function ForSalePage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">For Sale</h1>
+      <h1 className="text-3xl font-bold mb-6">On The Market</h1>
       
       <div className="grid gap-6">
         {listings.length === 0 ? (

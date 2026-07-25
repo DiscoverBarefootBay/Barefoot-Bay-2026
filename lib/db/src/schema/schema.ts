@@ -128,6 +128,8 @@ export const users = pgTable("users", {
   previousRole: text("previous_role"), // Store role before upgrading to paid sponsor
   // Email notification preferences
   emailNotificationsEnabled: boolean("email_notifications_enabled").notNull().default(true),
+  // Marketing/promotional email opt-in (weekly listings digest, etc.)
+  marketingEmailsEnabled: boolean("marketing_emails_enabled").notNull().default(true),
   // Club memberships - stores slugs of social clubs the user belongs to
   clubMemberships: text("club_memberships").array(),
   createdAt: timestamp("created_at").defaultNow(),
@@ -1799,5 +1801,25 @@ export type InsertCalendarEmailSchedule = z.infer<typeof insertCalendarEmailSche
 
 // One finalized run outcome in the rolling history stored on `recentRuns`.
 export type CalendarEmailRunHistoryEntry = { status: string; detail: string; at: string };
+
+// Weekly "Currently, On The Market" promotional email — one row per campaign
+// week (Monday–Sunday, ET). The unique week_start is the idempotency key that
+// guarantees a given week's campaign can never send twice, even across
+// concurrent server instances (claimed via INSERT ... ON CONFLICT DO NOTHING).
+export const weeklyListingsEmailSends = pgTable("weekly_listings_email_sends", {
+  id: serial("id").primaryKey(),
+  weekStart: text("week_start").notNull().unique(), // yyyy-MM-dd (ET Monday)
+  weekEnd: text("week_end").notNull(), // yyyy-MM-dd (ET Sunday)
+  status: text("status").notNull().default("sending"), // sending|sent|failed|skipped_no_listings
+  listingCount: integer("listing_count").notNull().default(0),
+  recipientCount: integer("recipient_count").notNull().default(0),
+  sentCount: integer("sent_count").notNull().default(0),
+  error: text("error"),
+  triggeredBy: text("triggered_by").notNull().default("scheduler"), // scheduler|manual
+  createdAt: timestamp("created_at").defaultNow(),
+  sentAt: timestamp("sent_at"),
+});
+
+export type WeeklyListingsEmailSend = typeof weeklyListingsEmailSends.$inferSelect;
 
 // Migration Records Table is defined above around line 389

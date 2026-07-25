@@ -524,7 +524,7 @@ Hi ${firstName},
 
 Welcome to the Barefoot Bay community! Your account has been created successfully and is ready to use.
 
-You can now sign in and explore community events, clubs, vendors, Extra! Extra! news, for-sale listings, and more.
+You can now sign in and explore community events, clubs, vendors, Extra! Extra! news, On The Market listings, and more.
 
 Visit the community: ${baseUrl}
 
@@ -539,7 +539,7 @@ Barefoot Bay Community Platform
       <h2 style="color: #2563eb;">Welcome to Barefoot Bay!</h2>
       <p>Hi ${firstNameHtml},</p>
       <p>Your account has been created successfully and is ready to use. Welcome to the community!</p>
-      <p>You can now sign in and explore community events, clubs, vendors, Extra! Extra! news, for-sale listings, and more.</p>
+      <p>You can now sign in and explore community events, clubs, vendors, Extra! Extra! news, On The Market listings, and more.</p>
 
       <div style="margin: 30px 0;">
         <a href="${baseUrl}" style="background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Explore the Community</a>

@@ -28,7 +28,7 @@ import { validateAndSanitizeCommunityPage } from "./community-page-validator";
 import { handleStandardForumFormat } from "./forum-standard-format-handler";
 import forumMediaTestRouter from "./routes/forum-media-test";
 import testPagesRouter from "./serve-test-pages";
-import { sendListingContactEmail, sendListingContactConfirmationEmail, sendCalendarEventNotificationEmail, sendPlatinumSponsorRequestEmail, sendListingExpiredAdminEmail, sendListingExpiredSellerEmail, sendNoActiveListingsAdminEmail } from "./sendgrid-service";
+import { sendEmail, sendListingContactEmail, sendListingContactConfirmationEmail, sendCalendarEventNotificationEmail, sendPlatinumSponsorRequestEmail, sendListingExpiredAdminEmail, sendListingExpiredSellerEmail, sendNoActiveListingsAdminEmail } from "./sendgrid-service";
 import {
   FORSALE_EMAIL_CONFIG_KEY,
   FORSALE_EMAIL_PLACEHOLDERS,
@@ -38,6 +38,20 @@ import {
   type ForSaleEmailConfig,
   type ForSaleEmailType,
 } from "./forsale-email-config";
+import {
+  WEEKLY_LISTINGS_CONFIG_KEY,
+  loadWeeklyListingsEmailConfig,
+  mergeWeeklyListingsEmailConfig,
+  getCampaignWeekRange,
+  selectListingsForWeek,
+  resolveWeeklyEmailRecipients,
+  renderWeeklyListingsEmail,
+} from "./weekly-listings-email";
+import {
+  executeWeeklySend,
+  getWeeklySendHistory,
+  getWeeklyEmailBaseUrl,
+} from "./weekly-listings-scheduler";
 import { getSendGridCredentials } from "./lib/sendgrid-credentials";
 import {
   resolveCalendarNotificationRecipients,
@@ -13242,6 +13256,143 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       req.log.error({ err: error }, "[ForSaleEmails] Failed to send test emails");
       return res.status(500).json({ message: "Failed to send test emails" });
+    }
+  });
+
+  // ==========================================================================
+  // Weekly "Currently, On The Market" promotional email — admin controls
+  // ==========================================================================
+
+  // Load config + send history + a preview of the current campaign week.
+  app.get("/api/admin/email-activity/weekly-listings", requireAuth, requireAdmin, async (req, res) => {
+    try {
+      const config = await loadWeeklyListingsEmailConfig();
+      const history = await getWeeklySendHistory();
+      return res.json({ config, history });
+    } catch (error: any) {
+      req.log.error({ err: error }, "[WeeklyListingsEmail] Failed to load config");
+      return res.status(500).json({ message: "Failed to load weekly email configuration" });
+    }
+  });
+
+  // Save config (enabled, sendDay 0-6, sendTime HH:mm, sendWhenEmpty).
+  app.put("/api/admin/email-activity/weekly-listings", requireAuth, requireAdmin, async (req, res) => {
+    try {
+      const body = req.body ?? {};
+      if (body.enabled !== undefined && typeof body.enabled !== "boolean") {
+        return res.status(400).json({ message: '"enabled" must be true or false' });
+      }
+      if (body.sendWhenEmpty !== undefined && typeof body.sendWhenEmpty !== "boolean") {
+        return res.status(400).json({ message: '"sendWhenEmpty" must be true or false' });
+      }
+      if (body.sendDay !== undefined) {
+        const day = Number(body.sendDay);
+        if (!Number.isInteger(day) || day < 0 || day > 6) {
+          return res.status(400).json({ message: '"sendDay" must be a day of the week (0-6)' });
+        }
+      }
+      if (body.sendTime !== undefined && !(typeof body.sendTime === "string" && /^\d{2}:\d{2}$/.test(body.sendTime))) {
+        return res.status(400).json({ message: '"sendTime" must be in HH:MM format' });
+      }
+
+      const saved = await loadWeeklyListingsEmailConfig();
+      const merged = mergeWeeklyListingsEmailConfig({ ...saved, ...body });
+      await storage.setSiteSetting(
+        WEEKLY_LISTINGS_CONFIG_KEY,
+        JSON.stringify(merged),
+        'Weekly "Currently, On The Market" promotional email schedule and options',
+        req.user?.id,
+      );
+      return res.json({ config: merged });
+    } catch (error: any) {
+      req.log.error({ err: error }, "[WeeklyListingsEmail] Failed to save config");
+      return res.status(500).json({ message: "Failed to save weekly email configuration" });
+    }
+  });
+
+  // Preview: the current campaign week's range, the listings that qualify,
+  // recipient count, and the rendered HTML.
+  app.get("/api/admin/email-activity/weekly-listings/preview", requireAuth, requireAdmin, async (req, res) => {
+    try {
+      const now = new Date();
+      const range = getCampaignWeekRange(now);
+      const listings = selectListingsForWeek(await storage.getListings(), range, now);
+      const recipients = resolveWeeklyEmailRecipients(await storage.getUsers());
+      const rendered = renderWeeklyListingsEmail(listings, range, getWeeklyEmailBaseUrl());
+      return res.json({
+        range,
+        listings,
+        recipientCount: recipients.length,
+        subject: rendered.subject,
+        html: rendered.html,
+        text: rendered.text,
+      });
+    } catch (error: any) {
+      req.log.error({ err: error }, "[WeeklyListingsEmail] Failed to build preview");
+      return res.status(500).json({ message: "Failed to build weekly email preview" });
+    }
+  });
+
+  // Send a test copy of the current campaign week's email to the logged-in
+  // admin's own address only.
+  app.post("/api/admin/email-activity/weekly-listings/test", requireAuth, requireAdmin, async (req, res) => {
+    try {
+      const adminEmail = req.user?.email?.trim();
+      if (!adminEmail || !adminEmail.includes("@")) {
+        return res.status(400).json({ message: "Your account doesn't have a valid email address to send the test to." });
+      }
+      const now = new Date();
+      const range = getCampaignWeekRange(now);
+      const listings = selectListingsForWeek(await storage.getListings(), range, now);
+      const rendered = renderWeeklyListingsEmail(listings, range, getWeeklyEmailBaseUrl());
+      const ok = await sendEmail({
+        to: adminEmail,
+        subject: `[TEST] ${rendered.subject}`,
+        html: rendered.html,
+        text: rendered.text,
+      });
+      if (!ok) {
+        return res.status(502).json({ message: "Test email failed to send — check the email logs." });
+      }
+      return res.json({ message: `Test email sent to ${adminEmail}`, sentTo: adminEmail, listingCount: listings.length });
+    } catch (error: any) {
+      req.log.error({ err: error }, "[WeeklyListingsEmail] Failed to send test email");
+      return res.status(500).json({ message: "Failed to send test email" });
+    }
+  });
+
+  // Manually trigger this week's campaign send. Idempotent per week — if the
+  // campaign already went out, this reports that instead of re-sending.
+  app.post("/api/admin/email-activity/weekly-listings/send", requireAuth, requireAdmin, async (req, res) => {
+    try {
+      const now = new Date();
+      const config = await loadWeeklyListingsEmailConfig();
+      const range = getCampaignWeekRange(now);
+      // Manual trigger may send an empty week only when the admin explicitly
+      // opted in via config OR passes force=true for a one-off.
+      const effectiveConfig = req.body?.forceWhenEmpty === true
+        ? { ...config, sendWhenEmpty: true }
+        : config;
+      const result = await executeWeeklySend(range, effectiveConfig, "manual", undefined, now);
+      if (result.status === "already_sent") {
+        return res.status(409).json({
+          message: `The campaign for ${range.label} was already sent — a week can never send twice.`,
+          result,
+        });
+      }
+      if (result.status === "claim_lost") {
+        return res.status(409).json({ message: "Another send for this week is already in progress.", result });
+      }
+      if (result.status === "failed") {
+        return res.status(502).json({ message: result.error || "Send failed", result });
+      }
+      const message = result.status === "skipped_no_listings"
+        ? `No new listings for ${range.label} — campaign skipped.`
+        : `Campaign sent to ${result.sentCount} of ${result.recipientCount} recipient(s), covering ${result.listingCount} listing(s).`;
+      return res.json({ message, result });
+    } catch (error: any) {
+      req.log.error({ err: error }, "[WeeklyListingsEmail] Manual send failed");
+      return res.status(500).json({ message: "Failed to trigger the weekly send" });
     }
   });
 

@@ -2,6 +2,7 @@ import { getApp } from "./app";
 import { logger } from "./lib/logger";
 import { startCalendarEmailScheduler } from "./calendar-email-scheduler";
 import { startListingExpirationScheduler } from "./listing-expiration-scheduler";
+import { startWeeklyListingsEmailScheduler } from "./weekly-listings-scheduler";
 
 // Catch unhandled rejections from optional services (e.g. Object Storage when
 // no bucket is provisioned) so they don't crash the server process.
@@ -45,6 +46,9 @@ getApp().then(({ server }) => {
     // listings as EXPIRED so their status never drifts out of sync with their
     // expiration date. Idempotent so it only ever runs one timer.
     startListingExpirationScheduler();
+    // Start the weekly "Currently, On The Market" promotional email scheduler.
+    // Ships disabled; the admin Email Activity tab turns it on. Idempotent.
+    startWeeklyListingsEmailScheduler();
   });
 
   server.on("error", (err) => {
