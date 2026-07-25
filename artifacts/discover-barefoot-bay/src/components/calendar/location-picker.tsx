@@ -391,7 +391,9 @@ export function LocationPicker({ value = "", onChange, placeholder }: LocationPi
       const script = document.createElement("script");
       scriptRef.current = script;
       
-      script.src = `${window.location.origin}/google-maps-proxy?libraries=places&callback=initAutocomplete`;
+      // Request the same library set as the shared loader (places + visualization)
+      // so whichever load wins first, every map capability on the site is available.
+      script.src = `${window.location.origin}/google-maps-proxy?libraries=places,visualization&callback=initAutocomplete`;
       script.async = true;
       script.defer = true;
 

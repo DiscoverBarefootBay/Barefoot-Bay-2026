@@ -27,6 +27,7 @@ import { UserSegments } from '@/components/admin/user-segments';
 import { ExportReports } from '@/components/admin/export-reports';
 import { TrafficMetricsPanel } from '@/components/admin/traffic-metrics-panel';
 import GeoLocationMap from '@/components/admin/geo-location-map';
+import ErrorBoundary from '@/components/error/error-boundary';
 
 // Analytics Dashboard Component
 export default function EnhancedAnalyticsDashboard() {
@@ -498,7 +499,27 @@ export default function EnhancedAnalyticsDashboard() {
           
           {/* Geolocation Tab */}
           <TabsContent value="location">
-            <GeoLocationMap />
+            <ErrorBoundary
+              fallback={
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Visitor Geolocation Map</CardTitle>
+                    <CardDescription>
+                      The map couldn't be displayed right now.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">
+                      Something went wrong while loading the geolocation map. The rest
+                      of the analytics dashboard is unaffected — try refreshing the page
+                      to reload the map.
+                    </p>
+                  </CardContent>
+                </Card>
+              }
+            >
+              <GeoLocationMap />
+            </ErrorBoundary>
           </TabsContent>
           
           {/* Pages Tab */}

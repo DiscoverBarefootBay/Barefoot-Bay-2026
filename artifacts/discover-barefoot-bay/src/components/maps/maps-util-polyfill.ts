@@ -372,16 +372,15 @@ if (typeof window !== 'undefined') {
       }
     }
 
-    // Comprehensive set of additional modules that may be needed
+    // Only stub internal helper modules. Never stub real Google Maps libraries
+    // (marker, map, geometry, drawing, visualization) — installing a truthy
+    // placeholder like `google.maps.visualization = { __polyfilled: true }`
+    // shadows the real library, so capability checks pass against an object
+    // with no working constructors (e.g. HeatmapLayer), crashing consumers.
     const additionalModules = [
       'common',
-      'marker',
       'common/stats',
-      'places/place_impl',
-      'map',
-      'geometry',
-      'drawing',
-      'visualization'
+      'places/place_impl'
     ];
     
     // Install minimum stubs for these modules

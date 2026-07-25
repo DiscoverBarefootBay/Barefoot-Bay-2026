@@ -2,11 +2,14 @@ import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   GoogleMap,
-  useJsApiLoader,
   Marker,
   InfoWindow,
   HeatmapLayer
 } from '@react-google-maps/api';
+import {
+  useGoogleMapsApiKey,
+  useSharedGoogleMapsLoader,
+} from '@/components/maps/google-maps-loader';
 import { apiRequest } from '@/lib/queryClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,13 +30,6 @@ const defaultCenter = {
   lat: 20,
   lng: 0,
 };
-
-// A single, stable libraries reference shared by the whole component. The heatmap
-// requires the `visualization` library; without it `google.maps.visualization` is
-// undefined and <HeatmapLayer> throws, tripping the analytics error boundary.
-// The array reference must be stable (declared at module scope) so the loader is
-// never "called again with different options".
-const GOOGLE_MAPS_LIBRARIES: ('visualization')[] = ['visualization'];
 
 // Define interface for geolocation data
 interface GeoLocation {
@@ -67,24 +63,29 @@ const VisitorMap: React.FC<{
 }> = ({ apiKey, mode, locations }) => {
   const [selectedLocation, setSelectedLocation] = useState<GeoLocation | null>(null);
 
-  const { isLoaded, loadError } = useJsApiLoader({
-    id: 'analytics-google-maps',
-    googleMapsApiKey: apiKey,
-    libraries: GOOGLE_MAPS_LIBRARIES,
-  });
+  const { isLoaded, loadError } = useSharedGoogleMapsLoader(apiKey);
+
+  // The maps polyfill (or a partial load) can leave `google.maps.visualization`
+  // as a truthy stub object with no working HeatmapLayer constructor. Check the
+  // real capability — the constructor must be an actual function — not mere
+  // existence of the namespace.
+  const hasHeatmapCapability =
+    isLoaded &&
+    typeof google !== 'undefined' &&
+    typeof google.maps?.visualization?.HeatmapLayer === 'function';
 
   // Heatmap points. Only build these once the visualization library is actually
   // available — `google.maps.LatLng` and `google.maps.visualization` are undefined
   // until the script (with the visualization library) has loaded.
   const heatmapData = useMemo(() => {
-    if (!isLoaded || typeof google === 'undefined' || !google.maps?.visualization) {
+    if (!hasHeatmapCapability || typeof google.maps?.LatLng !== 'function') {
       return [];
     }
     return locations.map(location => ({
       location: new google.maps.LatLng(location.latitude, location.longitude),
       weight: location.views || 1,
     }));
-  }, [locations, isLoaded]);
+  }, [locations, hasHeatmapCapability]);
 
   if (loadError) {
     return (
@@ -109,6 +110,18 @@ const VisitorMap: React.FC<{
   }
 
   if (mode === 'heatmap') {
+    if (!hasHeatmapCapability) {
+      return (
+        <div className="flex flex-col items-center justify-center bg-muted/20 rounded-md p-8 min-h-[400px]">
+          <AlertTriangle className="h-12 w-12 text-muted mb-4" />
+          <h3 className="text-lg font-medium mb-2">Heatmap Unavailable</h3>
+          <p className="text-muted-foreground text-center max-w-md">
+            The Google Maps visualization library could not be loaded, so the
+            heatmap can't be displayed. The Location Pins view is still available.
+          </p>
+        </div>
+      );
+    }
     return (
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
@@ -228,20 +241,9 @@ const GeoLocationMap: React.FC = () => {
   const [pageFilter, setPageFilter] = useState<string>('');
   const [countryFilter, setCountryFilter] = useState<string>('');
 
-  // Resolve the Google Maps API key. Prefer the build-time env var; if it wasn't
-  // available at build time (a common cause of an empty production map), fall back
-  // to the server endpoint which carries its own configured key.
-  const envApiKey = (import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string) || '';
-  const { data: fetchedApiKey } = useQuery<string>({
-    queryKey: ['google-maps-key'],
-    enabled: !envApiKey,
-    staleTime: Infinity,
-    queryFn: async () => {
-      const response = await apiRequest('GET', '/api/google/mapkey');
-      return (await response.text()).trim();
-    },
-  });
-  const apiKey = envApiKey || fetchedApiKey || '';
+  // Resolve the Google Maps API key via the shared resolver (build-time env var
+  // first, then the server endpoint) so every map uses identical loader options.
+  const apiKey = useGoogleMapsApiKey();
 
   // Fetch geolocation data
   const { data: geoData, isLoading: isLoadingGeo, refetch: refetchGeo } = useQuery<GeoLocation[]>({

@@ -1,5 +1,9 @@
 import { useMemo, useEffect, useRef, useState, useCallback } from "react";
-import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker } from "@react-google-maps/api";
+import {
+  useGoogleMapsApiKey,
+  useSharedGoogleMapsLoader,
+} from "@/components/maps/google-maps-loader";
 import { MapPin, ExternalLink, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -13,18 +17,40 @@ interface LocationMapProps {
 const DEFAULT_CENTER = { lat: 28.0, lng: -80.5 };
 
 export function LocationMap({ location, className }: LocationMapProps) {
+  // Resolve the API key via the shared resolver (env var → server endpoint) so
+  // every map on the site initializes the Google Maps loader with identical options.
+  // Only mount the inner map once the key is resolved, so the shared loader is
+  // never initialized with an empty key.
+  const apiKey = useGoogleMapsApiKey();
+
+  if (!apiKey) {
+    return (
+      <div className={`${className} bg-muted rounded-lg flex flex-col items-center justify-center p-4`}>
+        <MapPin className="h-8 w-8 mb-2 text-muted-foreground" />
+        <p className="text-sm text-muted-foreground mb-2">Loading location map...</p>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`, '_blank')}
+          className="flex items-center gap-1"
+        >
+          <ExternalLink className="h-4 w-4" />
+          View Location
+        </Button>
+      </div>
+    );
+  }
+
+  return <LocationMapInner apiKey={apiKey} location={location} className={className} />;
+}
+
+function LocationMapInner({ apiKey, location, className }: LocationMapProps & { apiKey: string }) {
   const mapRef = useRef<google.maps.Map | null>(null);
   const markerRef = useRef<google.maps.Marker | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
   const [apiKeyMissing, setApiKeyMissing] = useState(false);
 
-  // Check if API key exists
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-  
-  // Use a safer approach to specify libraries
-  const libraries = useMemo(() => ["places"], []);
-  
   // Set a maximum number of retries
   const MAX_RETRIES = 2;
 
@@ -40,56 +66,9 @@ export function LocationMap({ location, className }: LocationMapProps) {
     styles: [{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] }]
   }), []);
 
-  // Check for API key on mount
-  useEffect(() => {
-    // We no longer immediately set apiKeyMissing since we have a proxy fallback
-    if (!apiKey) {
-      console.warn("Direct Google Maps API key is missing - will use server proxy instead");
-      // Don't set apiKeyMissing, we'll let the proxy try to handle it
-      // setApiKeyMissing(false);
-    }
-  }, [apiKey]);
-
-  // Use our server-side proxy to handle the API key
-  const loadScriptOptions = useMemo(() => {
-    console.log(`Using Google Maps API via proxy: ${apiKey ? 'API key available as fallback' : 'Relying on server configuration'}`);
-    
-    // First attempt: Always use our server-side proxy for reliability
-    // This is more reliable as the server can handle API key issues
-    return {
-      googleMapsApiKey: "",  // Empty since we'll use a custom loader
-      googleMapsScriptBaseUrl: window.location.origin + "/google-maps-proxy",
-      libraries: libraries as any,
-      preventGoogleFontsLoading: false,
-      version: undefined, // Don't specify version when using proxy
-      channel: "barefoot-bay-community"
-    };
-    
-    /* Original approach with direct API key usage
-    if (apiKey) {
-      // If we have an API key, use it directly
-      return {
-        googleMapsApiKey: apiKey,
-        libraries: libraries as any,
-        preventGoogleFontsLoading: false,
-        version: "weekly",
-        channel: "barefoot-bay-community"
-      };
-    } else {
-      // Otherwise use proxy endpoint
-      return {
-        googleMapsApiKey: "",  // Empty since we'll use a custom loader
-        googleMapsScriptBaseUrl: window.location.origin + "/google-maps-proxy",
-        libraries: libraries as any,
-        preventGoogleFontsLoading: false,
-        version: undefined, // Don't specify version when using proxy
-        channel: "barefoot-bay-community"
-      };
-    }
-    */
-  }, [apiKey, libraries]);
-
-  const { isLoaded, loadError: scriptLoadError } = useLoadScript(loadScriptOptions);
+  // Shared loader — identical id, libraries, and key source as every other map
+  // on the site, so the Google Maps script is only ever initialized once.
+  const { isLoaded, loadError: scriptLoadError } = useSharedGoogleMapsLoader(apiKey);
 
   // Handle script load errors
   useEffect(() => {
