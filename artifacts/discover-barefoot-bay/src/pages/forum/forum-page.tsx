@@ -19,6 +19,7 @@ import {
   Columns2,
   Rows2,
   Search,
+  Tag,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -275,8 +276,6 @@ export default function ForumPage() {
   };
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [sortBy, setSortBy] = useState<string>("newest_created");
-  // Which category chip badge is hovered (shows an X instead of the count)
-  const [hoveredBadgeCategoryId, setHoveredBadgeCategoryId] = useState<number | null>(null);
   const [storyView, setStoryView] = useState<StoryView>(loadStoredStoryView);
   // Text search: raw input updates instantly; debounced value drives the server query
   const [searchInput, setSearchInput] = useState("");
@@ -543,83 +542,40 @@ export default function ForumPage() {
         </Card>
       )}
 
-      {/* Category filter chips */}
-      <div className="flex flex-wrap gap-2 mb-6">
-        <button
-          onClick={() => setSelectedCategoryId(null)}
-          className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-            selectedCategoryId === null
-              ? "bg-navy text-white"
-              : "bg-white text-navy border border-navy/20 hover:border-coral hover:text-coral"
-          }`}
-        >
-          All Stories
-        </button>
-        {(categories ?? []).map((category) => {
-          const unread = category.unreadCount ?? 0;
-          const isPendingDismiss =
-            markCategoryReadMutation.isPending &&
-            markCategoryReadMutation.variables === category.id;
-          const showX = hoveredBadgeCategoryId === category.id || isPendingDismiss;
-          return (
-            <button
-              key={category.id}
-              onClick={() => setSelectedCategoryId(category.id)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                selectedCategoryId === category.id
-                  ? "bg-navy text-white"
-                  : "bg-white text-navy border border-navy/20 hover:border-coral hover:text-coral"
-              }`}
-              data-testid={`chip-category-${category.id}`}
-            >
-              {category.name}
-              {unread > 0 && (
-                <span
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`Mark all ${category.name} stories as read`}
-                  title={`Mark all ${category.name} stories as read`}
-                  onMouseEnter={() => setHoveredBadgeCategoryId(category.id)}
-                  onMouseLeave={() => setHoveredBadgeCategoryId(null)}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (!markCategoryReadMutation.isPending) {
-                      markCategoryReadMutation.mutate(category.id);
-                    }
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      if (!markCategoryReadMutation.isPending) {
-                        markCategoryReadMutation.mutate(category.id);
-                      }
-                    }
-                  }}
-                  className={`ml-1.5 inline-flex items-center justify-center min-w-[20px] px-1.5 py-0.5 rounded-full text-[10px] font-bold text-white transition-colors ${
-                    showX ? "bg-coral/80 hover:bg-coral" : "bg-coral"
-                  }`}
-                  data-testid={`badge-unread-${category.id}`}
-                >
-                  {isPendingDismiss ? (
-                    <Loader2 className="h-3 w-3 animate-spin" />
-                  ) : showX ? (
-                    <X className="h-3 w-3" />
-                  ) : (
-                    unread
-                  )}
-                </span>
-              )}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Selected category context (name + description, from the old category page) */}
+      {/* Selected category context (name + description + mark-all-read) */}
       {selectedCategory && (
         <div className="mb-6" data-testid="selected-category-header">
-          <h2 className="text-2xl font-bold text-navy">{selectedCategory.name}</h2>
+          <div className="flex items-center gap-3">
+            <h2 className="text-2xl font-bold text-navy">{selectedCategory.name}</h2>
+            {(selectedCategory.unreadCount ?? 0) > 0 && (
+              <button
+                type="button"
+                aria-label={`Mark all ${selectedCategory.name} stories as read`}
+                title={`Mark all ${selectedCategory.name} stories as read`}
+                disabled={
+                  markCategoryReadMutation.isPending &&
+                  markCategoryReadMutation.variables === selectedCategory.id
+                }
+                onClick={() => {
+                  if (!markCategoryReadMutation.isPending) {
+                    markCategoryReadMutation.mutate(selectedCategory.id);
+                  }
+                }}
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold text-white bg-coral hover:bg-coral/80 transition-colors disabled:opacity-60"
+                data-testid={`badge-unread-${selectedCategory.id}`}
+              >
+                {markCategoryReadMutation.isPending &&
+                markCategoryReadMutation.variables === selectedCategory.id ? (
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                ) : (
+                  <>
+                    {selectedCategory.unreadCount}
+                    <X className="h-3 w-3" />
+                  </>
+                )}
+              </button>
+            )}
+          </div>
           {selectedCategory.description && (
             <p className="text-navy/70 mt-1">{selectedCategory.description}</p>
           )}
@@ -698,6 +654,38 @@ export default function ForumPage() {
               <Rows2 className="h-4 w-4" />
             </button>
           </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <Tag className="h-4 w-4 text-navy/70" />
+          <span className="text-sm text-navy/70 font-medium">Category:</span>
+          <Select
+            value={selectedCategoryId === null ? "all" : selectedCategoryId.toString()}
+            onValueChange={(val) => {
+              setSelectedCategoryId(val === "all" ? null : parseInt(val, 10));
+            }}
+          >
+            <SelectTrigger className="w-[180px] border-navy/20 bg-white" data-testid="select-category">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Stories</SelectItem>
+              {(categories ?? []).map((category) => {
+                const unread = category.unreadCount ?? 0;
+                return (
+                  <SelectItem key={category.id} value={category.id.toString()} data-testid={`category-option-${category.id}`}>
+                    <span className="flex items-center gap-2">
+                      {category.name}
+                      {unread > 0 && (
+                        <span className="inline-flex items-center justify-center min-w-[18px] px-1.5 py-0.5 rounded-full text-[10px] font-bold text-white bg-coral">
+                          {unread}
+                        </span>
+                      )}
+                    </span>
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
         </div>
         <div className="flex items-center gap-2">
         <ArrowUpDown className="h-4 w-4 text-navy/70" />
