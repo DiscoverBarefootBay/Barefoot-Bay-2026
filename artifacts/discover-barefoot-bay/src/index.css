@@ -2058,6 +2058,66 @@
   pointer-events: none;
 }
 
+/* Extra! Extra! single-column story banner animations */
+@keyframes story-banner-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.story-banner-enter {
+  animation: story-banner-in 0.45s ease-out both;
+  animation-delay: calc(var(--story-index, 0) * 60ms);
+}
+
+.story-banner-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.story-banner-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+.group:hover .story-banner-shine::after {
+  left: 125%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-banner-enter {
+    animation: none;
+  }
+  .story-banner-shine::after {
+    display: none;
+  }
+  .story-banner-card,
+  .story-banner-card div,
+  .story-banner-card p,
+  .story-banner-card img {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
 /* Premium glow effect for promotional cards */
 .promotional-glow {
   box-shadow: 0 0 8px rgba(212, 175, 55, 0.3), 0 0 16px rgba(212, 175, 55, 0.1);

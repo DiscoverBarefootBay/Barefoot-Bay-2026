@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type CSSProperties } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link, useLocation, useSearch } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -82,7 +82,7 @@ const STORY_VIEW_STORAGE_KEY = "extra-extra-story-view";
 const STORY_VIEW_CLASSES: Record<StoryView, string> = {
   grid: "grid grid-cols-1 md:grid-cols-3 gap-6",
   dual: "grid grid-cols-1 md:grid-cols-2 gap-6",
-  single: "grid grid-cols-1 gap-6",
+  single: "grid grid-cols-1 gap-4",
 };
 
 function loadStoredStoryView(): StoryView {
@@ -92,13 +92,98 @@ function loadStoredStoryView(): StoryView {
   } catch {
     // localStorage unavailable (private mode, etc.) — fall back to default
   }
-  return "dual";
+  return "single";
 }
 
 function formatStoryDate(dateStr: string): string {
   const date = new Date(dateStr);
   if (isNaN(date.getTime())) return "";
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
+function HorizontalStoryCard({ story, index }: { story: Story; index: number }) {
+  return (
+    <Link href={`/forum/post/${story.id}`}>
+      <div
+        className="story-banner-enter group"
+        style={{ "--story-index": Math.min(index, 8) } as CSSProperties}
+      >
+        <div
+          className={`story-banner-card relative overflow-hidden rounded-xl bg-white cursor-pointer transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-0.5 border ${
+            story.isUnread
+              ? "border-red-500 border-2 ring-2 ring-red-300 shadow-lg"
+              : "border-navy/10 hover:border-ocean/40"
+          }`}
+          data-testid={`story-banner-${story.id}`}
+        >
+          {story.isUnread && (
+            <div className="absolute top-2 right-2 z-20 bg-red-500 text-white text-[10px] sm:text-xs font-bold px-2.5 py-0.5 rounded-full shadow-md">
+              New
+            </div>
+          )}
+          <div className="flex items-stretch min-h-[96px] sm:min-h-[110px] group-hover:min-h-[160px] sm:group-hover:min-h-[190px] transition-all duration-300">
+            <div className="story-banner-shine relative w-[110px] sm:w-[160px] md:w-[200px] group-hover:w-[160px] sm:group-hover:w-[230px] md:group-hover:w-[280px] flex-shrink-0 overflow-hidden bg-navy/5 transition-all duration-300">
+              {story.image ? (
+                <img
+                  src={story.image}
+                  alt=""
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).style.display = "none";
+                  }}
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-ocean/20 to-navy/10">
+                  <img
+                    src={bfbLogo}
+                    alt="Discover Barefoot Bay"
+                    loading="lazy"
+                    className="max-h-[70%] max-w-[70%] object-contain opacity-90"
+                  />
+                </div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/20 pointer-events-none" />
+            </div>
+            <div className="flex-1 min-w-0 flex flex-col justify-center px-3.5 sm:px-5 py-2.5 sm:py-3">
+              <div className="flex flex-wrap items-center gap-1.5 mb-1">
+                {story.categoryName && (
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-coral">
+                    {story.categoryName}
+                  </span>
+                )}
+                {story.isPinned && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-semibold bg-navy text-white shadow-sm">
+                    <Pin className="h-3 w-3" /> Pinned
+                  </span>
+                )}
+                {story.isEditoriallyUpdated && (
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-semibold bg-coral text-white shadow-sm">
+                    Updated
+                  </span>
+                )}
+              </div>
+              <h3 className="text-base sm:text-xl font-extrabold text-navy leading-snug line-clamp-2 group-hover:text-ocean transition-colors break-words [overflow-wrap:anywhere]">
+                {story.title}
+              </h3>
+              {story.excerpt && (
+                <p className="story-banner-excerpt text-xs sm:text-sm text-navy/70 line-clamp-2 max-h-0 opacity-0 overflow-hidden group-hover:max-h-16 group-hover:opacity-100 group-hover:mt-1.5 transition-all duration-300">
+                  {story.excerpt}
+                </p>
+              )}
+              <div className="mt-1.5 flex items-center gap-3 text-[11px] sm:text-xs text-navy/60">
+                <span>{formatStoryDate(story.createdAt)}</span>
+                <span className="inline-flex items-center gap-1">
+                  <MessageSquare className="h-3.5 w-3.5" />
+                  {story.commentCount}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
 }
 
 function StoryCard({ story }: { story: Story }) {
@@ -651,9 +736,13 @@ export default function ForumPage() {
         </div>
       ) : (
         <div className={STORY_VIEW_CLASSES[storyView]} data-testid="story-grid">
-          {stories.map((story) => (
-            <StoryCard key={story.id} story={story} />
-          ))}
+          {stories.map((story, index) =>
+            storyView === "single" ? (
+              <HorizontalStoryCard key={story.id} story={story} index={index} />
+            ) : (
+              <StoryCard key={story.id} story={story} />
+            ),
+          )}
         </div>
       )}
 
