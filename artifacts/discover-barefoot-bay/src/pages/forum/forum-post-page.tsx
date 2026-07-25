@@ -264,6 +264,9 @@ export default function ForumPostPage() {
   const [liveChatComments, setLiveChatComments] = useState<ForumComment[]>([]);
   const [lastPollTimestamp, setLastPollTimestamp] = useState<string | null>(null);
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  // Tracks the last "postId:latestCommentId" combination we already marked as
+  // read, so the mark-read effect doesn't re-POST on every comments refetch.
+  const markedReadKeyRef = useRef<string | null>(null);
   const isLiveChatPost = postId === 267;
   
   // Enhanced UX states for live chat microinteractions
@@ -582,11 +585,21 @@ export default function ForumPostPage() {
         ? Math.max(...comments.map(c => c.id))
         : null;
 
+      // Only record one read per post+latest-comment combination, so the
+      // comments polling refetch (which re-runs this effect) doesn't fire a
+      // mark-read POST on every cycle.
+      const markKey = `${postId}:${latestCommentId ?? "none"}`;
+
       // Mark the post as read with the latest comment ID
       const markAsRead = async () => {
+        if (markedReadKeyRef.current === markKey) return;
+        markedReadKeyRef.current = markKey;
         try {
           await fetch(`/api/forum/posts/${postId}/mark-read`, {
             method: 'POST',
+            credentials: 'include',
+            // keepalive lets the request survive navigating away mid-flight
+            keepalive: true,
             headers: {
               'Content-Type': 'application/json',
             },
@@ -599,15 +612,28 @@ export default function ForumPostPage() {
           queryClient.invalidateQueries({ queryKey: [`/api/forum/categories/${post.categoryId}/posts`] });
           queryClient.invalidateQueries({ queryKey: ['/api/forum/categories'] });
           queryClient.invalidateQueries({ queryKey: [`/api/forum/categories/${post.categoryId}/unread-status`] });
+          queryClient.invalidateQueries({ queryKey: ['/api/forum/unread-count'] });
+          // Story feed cards carry an isUnread flag - refresh them too
+          queryClient.invalidateQueries({
+            predicate: (query) =>
+              typeof query.queryKey[0] === 'string' && query.queryKey[0].startsWith('/api/forum/stories'),
+          });
         } catch (error) {
           console.error('Failed to mark post as read:', error);
         }
       };
 
-      // Mark as read after a short delay to ensure the user is actually viewing the content
-      const timer = setTimeout(markAsRead, 2000);
+      // Mark as read after a short delay to ensure the user is actually viewing
+      // the content. Previously 2s - readers who hit Back sooner never got their
+      // read state recorded, so unread badges never cleared.
+      const timer = setTimeout(markAsRead, 500);
       
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+        // If the reader leaves before the timer fires, still record the read -
+        // they did open the story.
+        markAsRead();
+      };
     }
   }, [post, comments, user, postId, queryClient]);
 

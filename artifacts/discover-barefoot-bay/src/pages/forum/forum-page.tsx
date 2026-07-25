@@ -165,6 +165,8 @@ export default function ForumPage() {
   };
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [sortBy, setSortBy] = useState<string>("newest_created");
+  // Which category chip badge is hovered (shows an X instead of the count)
+  const [hoveredBadgeCategoryId, setHoveredBadgeCategoryId] = useState<number | null>(null);
 
   // Fetch categories (for filter chips)
   const { data: categories, isLoading: categoriesLoading } = useQuery<ForumCategory[]>({
@@ -255,6 +257,29 @@ export default function ForumPage() {
         variant: "destructive",
       });
       console.error("Error marking all stories as read:", error);
+    },
+  });
+
+  // Dismiss a single category's unread badge (X click on the chip badge)
+  const markCategoryReadMutation = useMutation({
+    mutationFn: (categoryId: number) => {
+      return apiRequest("POST", `/api/forum/categories/${categoryId}/mark-all-read`, {});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/forum/categories"] });
+      queryClient.invalidateQueries({
+        predicate: (query) =>
+          typeof query.queryKey[0] === "string" && query.queryKey[0].startsWith("/api/forum/stories"),
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/forum/unread-count"] });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "Failed to mark stories as read",
+        variant: "destructive",
+      });
+      console.error("Error marking category stories as read:", error);
     },
   });
 
@@ -401,24 +426,65 @@ export default function ForumPage() {
         >
           All Stories
         </button>
-        {(categories ?? []).map((category) => (
-          <button
-            key={category.id}
-            onClick={() => setSelectedCategoryId(category.id)}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-              selectedCategoryId === category.id
-                ? "bg-navy text-white"
-                : "bg-white text-navy border border-navy/20 hover:border-coral hover:text-coral"
-            }`}
-          >
-            {category.name}
-            {(category.unreadCount ?? 0) > 0 && (
-              <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-coral text-white">
-                {category.unreadCount}
-              </span>
-            )}
-          </button>
-        ))}
+        {(categories ?? []).map((category) => {
+          const unread = category.unreadCount ?? 0;
+          const isPendingDismiss =
+            markCategoryReadMutation.isPending &&
+            markCategoryReadMutation.variables === category.id;
+          const showX = hoveredBadgeCategoryId === category.id || isPendingDismiss;
+          return (
+            <button
+              key={category.id}
+              onClick={() => setSelectedCategoryId(category.id)}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                selectedCategoryId === category.id
+                  ? "bg-navy text-white"
+                  : "bg-white text-navy border border-navy/20 hover:border-coral hover:text-coral"
+              }`}
+              data-testid={`chip-category-${category.id}`}
+            >
+              {category.name}
+              {unread > 0 && (
+                <span
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Mark all ${category.name} stories as read`}
+                  title={`Mark all ${category.name} stories as read`}
+                  onMouseEnter={() => setHoveredBadgeCategoryId(category.id)}
+                  onMouseLeave={() => setHoveredBadgeCategoryId(null)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!markCategoryReadMutation.isPending) {
+                      markCategoryReadMutation.mutate(category.id);
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (!markCategoryReadMutation.isPending) {
+                        markCategoryReadMutation.mutate(category.id);
+                      }
+                    }
+                  }}
+                  className={`ml-1.5 inline-flex items-center justify-center min-w-[20px] px-1.5 py-0.5 rounded-full text-[10px] font-bold text-white transition-colors ${
+                    showX ? "bg-coral/80 hover:bg-coral" : "bg-coral"
+                  }`}
+                  data-testid={`badge-unread-${category.id}`}
+                >
+                  {isPendingDismiss ? (
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  ) : showX ? (
+                    <X className="h-3 w-3" />
+                  ) : (
+                    unread
+                  )}
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {/* Selected category context (name + description, from the old category page) */}
