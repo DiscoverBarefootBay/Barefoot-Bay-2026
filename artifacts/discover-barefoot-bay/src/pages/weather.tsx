@@ -369,7 +369,7 @@ export default function WeatherPage() {
           <p className="text-gray-600 mb-6">
             Connect with your neighbors to discuss weather patterns, share local observations, and stay informed about upcoming conditions affecting Barefoot Bay.
           </p>
-          <Link href="/forum/category/4">
+          <Link href="/forum?categoryId=4">
             <div className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors cursor-pointer group">
               <MessageSquare className="h-5 w-5 mr-2" />
               Join the Discussion

@@ -712,7 +712,7 @@ export default function ForumPostPage() {
       
       // Navigate back to the category page
       if (post) {
-        navigate(`/forum/category/${post.categoryId}`);
+        navigate(`/forum?categoryId=${post.categoryId}`);
       } else {
         navigate("/forum");
       }
@@ -927,7 +927,7 @@ export default function ForumPostPage() {
     <div className="max-w-5xl mx-auto">
       {/* Mobile-first navigation and actions */}
       <div className="mb-6">
-        <Link href={`/forum/category/${post.categoryId}`}>
+        <Link href={`/forum?categoryId=${post.categoryId}`}>
           <Button variant="ghost" className="mb-4">
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to {post.category?.name || 'Category'}
           </Button>

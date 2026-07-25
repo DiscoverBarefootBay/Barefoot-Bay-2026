@@ -78,7 +78,7 @@ import GenericContentPage from "@/pages/generic-content-page";
 import FormPage from "@/pages/form-page";
 import MockTrackingPage from "@/pages/testing/mock-tracking";
 import ForumPage from "@/pages/forum/forum-page";
-import ForumCategoryPage from "@/pages/forum/forum-category-page";
+import ForumCategoryRedirect from "@/pages/forum/forum-category-redirect";
 import ForumPostPage from "@/pages/forum/forum-post-page";
 import NewPostPage from "@/pages/forum/new-post-page";
 import EditPostPage from "@/pages/forum/edit-post-page";
@@ -159,7 +159,7 @@ function Router() {
             
             {/* Forum Routes */}
             <Route path="/forum" component={ForumPage} />
-            <Route path="/forum/category/:categoryId" component={ForumCategoryPage} />
+            <Route path="/forum/category/:categoryId" component={ForumCategoryRedirect} />
             <Route path="/forum/post/:postId" component={ForumPostPage} />
             <ProtectedRoute path="/forum/new-post" component={NewPostPage} requiredFeature="FORUM" />
             <ProtectedRoute path="/forum/edit-post/:postId" component={EditPostPage} requiredFeature="FORUM" />

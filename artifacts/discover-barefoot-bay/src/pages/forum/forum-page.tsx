@@ -14,6 +14,7 @@ import {
   Pin,
   Newspaper,
   ArrowUpDown,
+  Plus,
 } from "lucide-react";
 import {
   Select,
@@ -148,7 +149,7 @@ function StoryCard({ story }: { story: Story }) {
 export default function ForumPage() {
   const { user } = useAuth();
   const { toast } = useToast();
-  const { isAdmin } = usePermissions();
+  const { isAdmin, canCreateTopic, canCreateTopicInCategory } = usePermissions();
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [descriptionText, setDescriptionText] = useState("");
   const [, navigate] = useLocation();
@@ -224,9 +225,17 @@ export default function ForumPage() {
     },
   });
 
+  // Scope Mark All Read to the selected category (matching the old category
+  // page behavior); fall back to the global endpoint on "All Stories".
   const markAllReadMutation = useMutation({
     mutationFn: () => {
-      return apiRequest("POST", "/api/forum/mark-all-read", {});
+      return apiRequest(
+        "POST",
+        selectedCategoryId
+          ? `/api/forum/categories/${selectedCategoryId}/mark-all-read`
+          : "/api/forum/mark-all-read",
+        {},
+      );
     },
     onSuccess: (data: any) => {
       queryClient.invalidateQueries({ queryKey: ["/api/forum/categories"] });
@@ -236,7 +245,7 @@ export default function ForumPage() {
       });
       toast({
         title: "Success",
-        description: `Marked ${data?.updatedCount || 0} stories as read`,
+        description: data?.message || `Marked ${data?.updatedCount || 0} stories as read`,
       });
     },
     onError: (error) => {
@@ -273,13 +282,32 @@ export default function ForumPage() {
 
   const stories = feed?.stories ?? [];
   const hasMore = feed?.hasMore ?? false;
+  const selectedCategory = selectedCategoryId
+    ? (categories ?? []).find((c) => c.id === selectedCategoryId) ?? null
+    : null;
 
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-6">
         <h1 className="text-3xl font-bold text-navy">Extra! Extra!</h1>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
+          {user &&
+            (selectedCategoryId
+              ? canCreateTopicInCategory(selectedCategoryId)
+              : canCreateTopic) && (
+              <Link
+                href={
+                  selectedCategoryId
+                    ? `/forum/new-post?category=${selectedCategoryId}`
+                    : "/forum/new-post"
+                }
+              >
+                <Button className="bg-coral hover:bg-coral/90 text-white" data-testid="button-create-topic">
+                  <Plus className="mr-2 h-4 w-4" /> Create New Topic
+                </Button>
+              </Link>
+            )}
           {user && (
             <Button
               variant="outline"
@@ -392,6 +420,16 @@ export default function ForumPage() {
           </button>
         ))}
       </div>
+
+      {/* Selected category context (name + description, from the old category page) */}
+      {selectedCategory && (
+        <div className="mb-6" data-testid="selected-category-header">
+          <h2 className="text-2xl font-bold text-navy">{selectedCategory.name}</h2>
+          {selectedCategory.description && (
+            <p className="text-navy/70 mt-1">{selectedCategory.description}</p>
+          )}
+        </div>
+      )}
 
       {/* Sort Dropdown */}
       <div className="mb-6 flex items-center justify-end gap-2">

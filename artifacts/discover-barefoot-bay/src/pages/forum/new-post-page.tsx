@@ -242,7 +242,7 @@ export default function NewPostPage() {
         onClick={() => {
           // If came from a category page, go back to that specific category
           if (categoryFromUrl) {
-            navigate(`/forum/category/${categoryFromUrl}`);
+            navigate(`/forum?categoryId=${categoryFromUrl}`);
           } else {
             navigate("/forum");
           }
