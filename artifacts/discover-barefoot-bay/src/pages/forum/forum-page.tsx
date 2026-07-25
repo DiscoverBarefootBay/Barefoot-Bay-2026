@@ -105,10 +105,15 @@ function StoryCard({ story }: { story: Story }) {
   return (
     <Link href={`/forum/post/${story.id}`}>
       <Card
-        className={`h-full flex flex-col overflow-hidden cursor-pointer transition-all hover:shadow-lg bg-white ${
-          story.isUnread ? "border-coral/40 shadow-sm" : "border-navy/10"
+        className={`h-full flex flex-col cursor-pointer transition-all hover:shadow-lg bg-white relative ${
+          story.isUnread ? "border-red-500 border-[3px] shadow-lg ring-2 ring-red-300" : "border-navy/10"
         }`}
       >
+        {story.isUnread && (
+          <div className="absolute -top-2 -right-2 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+            New
+          </div>
+        )}
         <div className="relative aspect-[16/9] w-full overflow-hidden bg-navy/5">
           {story.image ? (
             <img
@@ -139,11 +144,6 @@ function StoryCard({ story }: { story: Story }) {
             {story.isEditoriallyUpdated && (
               <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-coral text-white shadow">
                 Updated
-              </span>
-            )}
-            {story.isUnread && (
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-ocean text-navy shadow">
-                New
               </span>
             )}
           </div>
