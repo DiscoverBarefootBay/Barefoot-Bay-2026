@@ -640,7 +640,7 @@ export default function ForumPage() {
             </button>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="hidden sm:flex items-center gap-2">
           <span className="text-sm text-navy/70 font-medium">View as:</span>
           <div
             role="group"
@@ -688,54 +688,56 @@ export default function ForumPage() {
             </button>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Tag className="h-4 w-4 text-navy/70" />
-          <span className="text-sm text-navy/70 font-medium">Category:</span>
-          <Select
-            value={selectedCategoryId === null ? "all" : selectedCategoryId.toString()}
-            onValueChange={(val) => {
-              setSelectedCategoryId(val === "all" ? null : parseInt(val, 10));
-            }}
-          >
-            <SelectTrigger className="w-[180px] border-navy/20 bg-white" data-testid="select-category">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Stories</SelectItem>
-              {(categories ?? []).map((category) => {
-                const unread = category.unreadCount ?? 0;
-                return (
-                  <SelectItem key={category.id} value={category.id.toString()} data-testid={`category-option-${category.id}`}>
-                    <span className="flex items-center gap-2">
-                      {category.name}
-                      {unread > 0 && (
-                        <span className="inline-flex items-center justify-center min-w-[18px] px-1.5 py-0.5 rounded-full text-[10px] font-bold text-white bg-coral">
-                          {unread}
-                        </span>
-                      )}
-                    </span>
-                  </SelectItem>
-                );
-              })}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex items-center gap-2">
-        <ArrowUpDown className="h-4 w-4 text-navy/70" />
-        <span className="text-sm text-navy/70 font-medium">Sort by:</span>
-        <Select value={sortBy} onValueChange={setSortBy}>
-          <SelectTrigger className="w-[200px] border-navy/20 bg-white" data-testid="select-sort">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="newest_created" data-testid="sort-newest-created">Newest Created</SelectItem>
-            <SelectItem value="oldest_created" data-testid="sort-oldest-created">Oldest Created</SelectItem>
-            <SelectItem value="newest_comment" data-testid="sort-newest-comment">Newest Comment</SelectItem>
-            <SelectItem value="oldest_comment" data-testid="sort-oldest-comment">Oldest Comment</SelectItem>
-            <SelectItem value="newest_edited" data-testid="sort-newest-edited">Newest Edited</SelectItem>
-            <SelectItem value="oldest_edited" data-testid="sort-oldest-edited">Oldest Edited</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="flex flex-row gap-2 w-full sm:contents">
+          <div className="flex items-center gap-2 flex-1 sm:flex-none min-w-0">
+            <Tag className="h-4 w-4 text-navy/70 shrink-0" />
+            <span className="text-sm text-navy/70 font-medium shrink-0">Category:</span>
+            <Select
+              value={selectedCategoryId === null ? "all" : selectedCategoryId.toString()}
+              onValueChange={(val) => {
+                setSelectedCategoryId(val === "all" ? null : parseInt(val, 10));
+              }}
+            >
+              <SelectTrigger className="flex-1 sm:w-[180px] sm:flex-none border-navy/20 bg-white min-w-0" data-testid="select-category">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Stories</SelectItem>
+                {(categories ?? []).map((category) => {
+                  const unread = category.unreadCount ?? 0;
+                  return (
+                    <SelectItem key={category.id} value={category.id.toString()} data-testid={`category-option-${category.id}`}>
+                      <span className="flex items-center gap-2">
+                        {category.name}
+                        {unread > 0 && (
+                          <span className="inline-flex items-center justify-center min-w-[18px] px-1.5 py-0.5 rounded-full text-[10px] font-bold text-white bg-coral">
+                            {unread}
+                          </span>
+                        )}
+                      </span>
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex items-center gap-2 flex-1 sm:flex-none min-w-0">
+            <ArrowUpDown className="h-4 w-4 text-navy/70 shrink-0" />
+            <span className="text-sm text-navy/70 font-medium shrink-0">Sort by:</span>
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="flex-1 sm:w-[200px] sm:flex-none border-navy/20 bg-white min-w-0" data-testid="select-sort">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="newest_created" data-testid="sort-newest-created">Newest Created</SelectItem>
+                <SelectItem value="oldest_created" data-testid="sort-oldest-created">Oldest Created</SelectItem>
+                <SelectItem value="newest_comment" data-testid="sort-newest-comment">Newest Comment</SelectItem>
+                <SelectItem value="oldest_comment" data-testid="sort-oldest-comment">Oldest Comment</SelectItem>
+                <SelectItem value="newest_edited" data-testid="sort-newest-edited">Newest Edited</SelectItem>
+                <SelectItem value="oldest_edited" data-testid="sort-oldest-edited">Oldest Edited</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 
