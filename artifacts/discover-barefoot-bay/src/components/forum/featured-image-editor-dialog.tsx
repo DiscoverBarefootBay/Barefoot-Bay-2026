@@ -114,6 +114,13 @@ export function FeaturedImageEditorDialog({
     }
   };
 
+  const clearPreviewUrl = () => {
+    setPreviewUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return null;
+    });
+  };
+
   // Reset state each time the dialog opens
   useEffect(() => {
     if (open) {
@@ -124,10 +131,11 @@ export function FeaturedImageEditorDialog({
       setCrop({ x: 0, y: 0 });
       setZoom(1);
       setCroppedAreaPixels(null);
-      setPreviewUrl(null);
+      clearPreviewUrl();
       setCropUnavailable(false);
     } else {
       releaseObjectUrl();
+      clearPreviewUrl();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
@@ -141,7 +149,7 @@ export function FeaturedImageEditorDialog({
     setCrop({ x: 0, y: 0 });
     setZoom(1);
     setCroppedAreaPixels(null);
-    setPreviewUrl(null);
+    clearPreviewUrl();
     setCropUnavailable(false);
   };
 
@@ -179,7 +187,7 @@ export function FeaturedImageEditorDialog({
         if (!cancelled) {
           // External image blocked canvas export (CORS) — crop not possible
           setCropUnavailable(true);
-          setPreviewUrl(null);
+          clearPreviewUrl();
         }
       }
     }, 300);
@@ -201,6 +209,12 @@ export function FeaturedImageEditorDialog({
   const previewSrc = previewUrl || imageSrc;
 
   const handleSave = async () => {
+    // Pasted a URL but never blurred/pressed Enter — apply it now
+    if (!imageSrc && urlInput.trim()) {
+      selectImage(urlInput.trim(), false);
+      onSave(urlInput.trim());
+      return;
+    }
     if (!imageSrc) return;
     // External image we couldn't crop: save the URL as-is (legacy behavior)
     if (cropUnavailable && !sourceIsUpload) {
@@ -418,7 +432,7 @@ export function FeaturedImageEditorDialog({
           <Button
             type="button"
             className="bg-coral hover:bg-coral/90 text-white"
-            disabled={busy || !imageSrc}
+            disabled={busy || (!imageSrc && !urlInput.trim())}
             onClick={handleSave}
             data-testid="button-save-featured-image"
           >
