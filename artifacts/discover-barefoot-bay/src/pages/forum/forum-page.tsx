@@ -543,7 +543,7 @@ export default function ForumPage() {
 
       {/* Search + View toggle + Sort Dropdown */}
       <div className="mb-6 flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
-        <div className="relative w-full sm:w-64 sm:mr-auto">
+        <div className="relative w-full sm:flex-1 sm:mr-auto">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-navy/40 pointer-events-none" />
           <Input
             type="text"
