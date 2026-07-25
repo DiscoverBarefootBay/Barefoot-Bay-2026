@@ -478,16 +478,14 @@ export function NavBar() {
             
             {/* Forum navigation item */}
             {isForumEnabled() && (
-              <Link href="/forum">
-                <div className={`${!user ? 'px-1 py-1' : 'px-2 py-1'}`}>
-                  <span className="relative inline-block">
-                    <span className={`whitespace-nowrap text-navy hover:text-coral transition-colors font-advent-pro cursor-pointer ${!user ? 'text-xl' : 'text-2xl'}`} style={{ textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>
-                      Extra! Extra!
-                    </span>
-                    <ForumBadge />
+              <div className="relative">
+                <Link href="/forum">
+                  <span className={`whitespace-nowrap text-navy hover:text-coral transition-colors font-advent-pro cursor-pointer inline-block ${!user ? 'text-xl px-1 py-1' : 'text-2xl px-2 py-1'}`} style={{ textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>
+                    Extra! Extra!
                   </span>
-                </div>
-              </Link>
+                </Link>
+                <ForumBadge />
+              </div>
             )}
             
             {/* For Sale navigation item */}
