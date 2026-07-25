@@ -171,14 +171,6 @@ export default function WeeklyListingsTab() {
     },
   });
 
-  if (isLoading || !form) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <Card>
@@ -186,6 +178,14 @@ export default function WeeklyListingsTab() {
           <p className="text-sm text-destructive">{(error as Error).message}</p>
         </CardContent>
       </Card>
+    );
+  }
+
+  if (isLoading || !form) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
     );
   }
 
