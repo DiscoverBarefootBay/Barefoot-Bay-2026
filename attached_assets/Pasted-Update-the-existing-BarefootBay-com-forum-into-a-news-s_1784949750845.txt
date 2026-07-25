@@ -1,0 +1,46 @@
+Update the existing BarefootBay.com forum into a news-style section called “Extra! Extra!”
+
+Requirements:
+
+- Rename “Forum” to “Extra! Extra!” everywhere the old name appears, including:
+  - Main navigation
+  - Page titles and headings
+  - Buttons, labels, breadcrumbs, notifications, admin screens, emails, and metadata
+  - Any user-facing references to “Forum” or “Community Forum”
+- Keep existing forum routes, topics, comments, permissions, unread tracking, notification badges, and admin tools working.
+- Redesign the main /forum landing page so it shows stories immediately instead of only category cards.
+- Display existing topics as equal-sized news cards with:
+  - Featured image
+  - Headline
+  - Category
+  - Short excerpt
+  - Publication date
+  - Comment count
+  - New or Updated indicator
+- Sort stories newest first.
+- Allow admins to pin a story to the top.
+- Use existing category names as filters, with “All Stories” as the default.
+- Keep existing topic and category pages functional.
+- Use a two-column layout on desktop and one column on mobile.
+- Use the topic’s featured image, first attached image, or a default Barefoot Bay placeholder.
+- Preserve the current Barefoot Bay fonts, colors, spacing, buttons, and overall visual style.
+- Take inspiration from CNN and HuffPost only for the visual story-feed concept.
+- Do not copy their branding or use uneven story sizes.
+- Add or reuse admin controls for:
+  - Featured image
+  - Pin or unpin
+  - Editorial update status
+- Reuse the existing database structure where possible.
+- Do not delete or duplicate existing content.
+- Add pagination or a Load More button for older stories.
+- Ensure the redesign works on desktop, tablet, and mobile.
+
+Acceptance criteria:
+
+- No user-facing “Forum” or “Community Forum” labels remain.
+- “Extra! Extra!” appears consistently across the site.
+- The /forum page displays the latest stories as visual cards.
+- Newest stories appear first unless a story is pinned.
+- Category filters work.
+- Existing comments, unread counts, permissions, and links continue to work.
+- No existing forum data is lost.
