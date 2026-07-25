@@ -13346,24 +13346,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Preview: the current campaign week's range, the listings that qualify,
   // recipient count, and the rendered HTML.
+  // GET renders the saved template. POST may include a draft template
+  // ({ template: { subject?, html? } }) to render unsaved edits without
+  // touching the saved config.
+  const buildWeeklyListingsPreview = async (draftTemplate?: { subject?: unknown; html?: unknown }) => {
+    const now = new Date();
+    const config = await loadWeeklyListingsEmailConfig();
+    let template = config.template;
+    let source: "saved" | "draft" = "saved";
+    if (draftTemplate) {
+      template = {
+        subject:
+          typeof draftTemplate.subject === "string" && draftTemplate.subject.trim()
+            ? draftTemplate.subject
+            : config.template.subject,
+        html:
+          typeof draftTemplate.html === "string" && draftTemplate.html.trim()
+            ? draftTemplate.html
+            : config.template.html,
+      };
+      source = "draft";
+    }
+    const range = getCampaignWeekRange(now);
+    const listings = selectListingsForWeek(await storage.getListings(), range, now);
+    const recipients = resolveWeeklyEmailRecipients(await storage.getUsers());
+    const rendered = renderWeeklyListingsEmail(listings, range, getWeeklyEmailBaseUrl(), template);
+    return {
+      source,
+      range,
+      listings,
+      recipientCount: recipients.length,
+      subject: rendered.subject,
+      html: rendered.html,
+      text: rendered.text,
+    };
+  };
+
   app.get("/api/admin/email-activity/weekly-listings/preview", requireAuth, requireAdmin, async (req, res) => {
     try {
-      const now = new Date();
-      const config = await loadWeeklyListingsEmailConfig();
-      const range = getCampaignWeekRange(now);
-      const listings = selectListingsForWeek(await storage.getListings(), range, now);
-      const recipients = resolveWeeklyEmailRecipients(await storage.getUsers());
-      const rendered = renderWeeklyListingsEmail(listings, range, getWeeklyEmailBaseUrl(), config.template);
-      return res.json({
-        range,
-        listings,
-        recipientCount: recipients.length,
-        subject: rendered.subject,
-        html: rendered.html,
-        text: rendered.text,
-      });
+      return res.json(await buildWeeklyListingsPreview());
     } catch (error: any) {
       req.log.error({ err: error }, "[WeeklyListingsEmail] Failed to build preview");
+      return res.status(500).json({ message: "Failed to build weekly email preview" });
+    }
+  });
+
+  app.post("/api/admin/email-activity/weekly-listings/preview", requireAuth, requireAdmin, async (req, res) => {
+    try {
+      const rawTemplate = req.body?.template;
+      if (rawTemplate !== undefined && (typeof rawTemplate !== "object" || rawTemplate === null || Array.isArray(rawTemplate))) {
+        return res.status(400).json({ message: '"template" must be an object with "subject" and/or "html" strings' });
+      }
+      return res.json(await buildWeeklyListingsPreview(rawTemplate ?? undefined));
+    } catch (error: any) {
+      req.log.error({ err: error }, "[WeeklyListingsEmail] Failed to build draft preview");
       return res.status(500).json({ message: "Failed to build weekly email preview" });
     }
   });

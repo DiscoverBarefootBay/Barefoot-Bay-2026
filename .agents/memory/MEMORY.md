@@ -11,4 +11,5 @@
 - [Drizzle push legacy drift](drizzle-push-legacy-drift.md) — DB built outside Drizzle; drizzle.config tablesFilter (derived from schema) stops the rename-table catastrophe, but push must NEVER be blind/--force — apply schema changes via idempotent SQL.
 - [Analytics dashboard contracts](analytics-dashboard-contracts.md) — enhanced-analytics endpoints have intentionally INCONSISTENT response shapes per tab; don't "normalize" them or tabs blank silently.
 - [Typecheck baseline is broken](typecheck-baseline-broken.md) — ~1,500 pre-existing tsc errors in api-server + web; verify changes at runtime, not via typecheck green.
+- [Global placeholderData crashes](query-placeholder-data-crashes.md) — web app's global react-query fallback injects []/null for unknown keys; guard data shape or override placeholderData, else full-page error boundary.
 - [Visitor geolocation map](geo-visitor-map.md) — empty admin geo map = Maps-script load failure (key/LoadScript churn), NOT missing coords; all maps must use ONE shared loader id+libraries or navigation order breaks heatmap.

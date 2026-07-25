@@ -64,6 +64,7 @@ interface ConfigResponse {
 }
 
 interface PreviewResponse {
+  source?: "saved" | "draft";
   range: { weekStart: string; weekEnd: string; label: string };
   listings: Array<{ id: number; title: string }>;
   recipientCount: number;
@@ -88,6 +89,7 @@ export default function WeeklyListingsTab() {
   const [form, setForm] = useState<WeeklyListingsEmailConfig | null>(null);
   const [baseline, setBaseline] = useState<string>("");
   const [showPreview, setShowPreview] = useState(false);
+  const [previewSource, setPreviewSource] = useState<"saved" | "draft">("saved");
   const [testEmail, setTestEmail] = useState("");
 
   const { data, isLoading, error } = useQuery<ConfigResponse>({
@@ -114,10 +116,24 @@ export default function WeeklyListingsTab() {
     [form, baseline],
   );
 
+  // The preview always goes through POST: an empty body renders the saved
+  // template, a { template } body renders the unsaved draft. Kept out of the
+  // shared query cache on purpose — the app-wide placeholderData fallback
+  // substitutes `[]` for unknown query keys, which crashed this tab when the
+  // preview card read `.listings` off an empty array mid-fetch.
   const previewQuery = useQuery<PreviewResponse>({
-    queryKey: [`${ENDPOINT}/preview`],
+    queryKey: [`${ENDPOINT}/preview`, previewSource],
     queryFn: async () => {
-      const res = await fetch(`${ENDPOINT}/preview`, { credentials: "include" });
+      const body =
+        previewSource === "draft" && form?.template
+          ? { template: { subject: form.template.subject, html: form.template.html } }
+          : {};
+      const res = await fetch(`${ENDPOINT}/preview`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
       if (!res.ok) {
         const text = await res.text();
         throw new Error(`Failed to load preview: ${text}`);
@@ -125,7 +141,21 @@ export default function WeeklyListingsTab() {
       return res.json();
     },
     enabled: showPreview,
+    placeholderData: undefined,
+    staleTime: 0,
+    gcTime: 0,
   });
+
+  const previewData =
+    previewQuery.data && !Array.isArray(previewQuery.data) ? previewQuery.data : undefined;
+
+  const openPreview = (source: "saved" | "draft") => {
+    setPreviewSource(source);
+    setShowPreview(true);
+    // Same source clicked again while already open → force a fresh render of
+    // the latest draft text (the query key doesn't change in that case).
+    queryClient.invalidateQueries({ queryKey: [`${ENDPOINT}/preview`, source] });
+  };
 
   const saveMutation = useMutation({
     mutationFn: async () => {
@@ -331,11 +361,17 @@ export default function WeeklyListingsTab() {
             </Button>
             <Button
               variant="outline"
-              onClick={() => setShowPreview((s) => !s)}
+              onClick={() => {
+                if (showPreview && previewSource === "saved") {
+                  setShowPreview(false);
+                } else {
+                  openPreview("saved");
+                }
+              }}
               data-testid="button-weekly-preview"
             >
               <Eye className="h-4 w-4 mr-2" />
-              {showPreview ? "Hide Preview" : "Preview This Week's Email"}
+              {showPreview && previewSource === "saved" ? "Hide Preview" : "Preview This Week's Email"}
             </Button>
             <Button
               variant="secondary"
@@ -430,6 +466,14 @@ export default function WeeklyListingsTab() {
             <div className="flex items-center gap-3">
               {isDirty && <span className="text-sm text-muted-foreground">Unsaved changes</span>}
               <Button
+                variant="outline"
+                onClick={() => openPreview("draft")}
+                data-testid="button-weekly-preview-draft"
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                Preview draft
+              </Button>
+              <Button
                 onClick={() => saveMutation.mutate()}
                 disabled={!isDirty || saveMutation.isPending}
                 data-testid="button-weekly-template-save"
@@ -449,28 +493,46 @@ export default function WeeklyListingsTab() {
       {showPreview && (
         <Card>
           <CardHeader>
-            <CardTitle>Email Preview</CardTitle>
-            {previewQuery.data && (
+            <div className="flex items-center justify-between gap-3">
+              <CardTitle className="flex items-center gap-2">
+                Email Preview
+                <Badge
+                  variant={previewSource === "draft" ? "destructive" : "secondary"}
+                  data-testid="badge-weekly-preview-source"
+                >
+                  {previewSource === "draft" ? "Draft (unsaved changes)" : "Saved template"}
+                </Badge>
+              </CardTitle>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowPreview(false)}
+                data-testid="button-weekly-preview-close"
+              >
+                Hide
+              </Button>
+            </div>
+            {previewData && Array.isArray(previewData.listings) && (
               <CardDescription>
-                Subject: <span className="font-medium">{previewQuery.data.subject}</span>
+                Subject: <span className="font-medium">{previewData.subject}</span>
                 {" · "}
-                {previewQuery.data.listings.length} listing(s)
+                {previewData.listings.length} listing(s)
                 {" · "}
-                {previewQuery.data.recipientCount} recipient(s)
+                {previewData.recipientCount} recipient(s)
               </CardDescription>
             )}
           </CardHeader>
           <CardContent>
-            {previewQuery.isLoading ? (
+            {previewQuery.isFetching ? (
               <div className="flex items-center justify-center py-8">
                 <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
               </div>
             ) : previewQuery.error ? (
               <p className="text-sm text-destructive">{(previewQuery.error as Error).message}</p>
-            ) : previewQuery.data ? (
+            ) : previewData ? (
               <iframe
                 title="Weekly email preview"
-                srcDoc={previewQuery.data.html}
+                srcDoc={previewData.html}
                 className="w-full rounded-md border"
                 style={{ height: 640 }}
                 sandbox=""
