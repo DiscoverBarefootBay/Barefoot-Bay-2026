@@ -176,12 +176,16 @@ export function createForumRouter(storage: IStorage) {
       const sortRaw = req.query.sort as string | undefined;
       const sortBy = sortRaw && validSorts.includes(sortRaw) ? sortRaw : 'newest_created';
 
+      const searchRaw = typeof req.query.search === "string" ? req.query.search.trim() : "";
+      const search = searchRaw ? searchRaw.slice(0, 100) : undefined;
+
       const feed = await storage.getForumStoryFeed({
         categoryId,
         limit,
         offset,
         userId: req.user?.id,
-        sortBy
+        sortBy,
+        search
       });
 
       res.json(feed);

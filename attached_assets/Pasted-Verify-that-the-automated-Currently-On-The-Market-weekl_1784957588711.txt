@@ -1,0 +1,241 @@
+Verify that the automated “Currently, On The Market” weekly email system is fully implemented, working correctly, and that all required controls are available on the existing Admin Settings page.
+
+Do not assume the feature works. Inspect the codebase, database, email provider integration, scheduled jobs, environment variables, admin permissions, and rendered admin interface. Test each requirement and fix any missing or incorrect implementation.
+
+Important safety requirement:
+- Do not send an email to the full production subscriber list during verification.
+- Use preview mode, test recipients, or a development email provider.
+- Require explicit administrator confirmation before any production campaign is sent.
+
+## 1. Verify the weekly automation
+
+Confirm that:
+
+- A recurring weekly scheduled job exists.
+- The automation uses the configured Barefoot Bay timezone.
+- The send day and time come from Admin Settings and are not hard-coded.
+- Changing the day or time updates the scheduled job correctly.
+- Disabling the automation prevents scheduled sends.
+- Re-enabling the automation restores the correct schedule.
+- The scheduled job can run independently without requiring an administrator to be logged in.
+- Scheduled-job failures are logged clearly.
+
+## 2. Verify the weekly date range
+
+Confirm that the email automatically calculates the correct weekly date range.
+
+Test:
+
+- A normal week within one month
+- A week spanning two months
+- A week spanning two years
+- Daylight-saving-time changes, if applicable
+
+Expected subject format:
+
+Currently, On The Market | {{week_start}}–{{week_end}}
+
+Examples:
+
+- Currently, On The Market | July 20–26, 2026
+- Currently, On The Market | July 27–August 2, 2026
+- Currently, On The Market | December 28, 2026–January 3, 2027
+
+## 3. Verify listing selection
+
+Confirm that each campaign includes only listings that:
+
+- Were first published during the target weekly date range
+- Are active
+- Are publicly visible
+- Have not been deleted
+
+Confirm that the campaign excludes:
+
+- Draft listings
+- Expired listings
+- Unpublished listings
+- Deleted listings
+- Listings outside the weekly date range
+
+Confirm that:
+
+- Listings are ordered newest first.
+- Each listing appears only once.
+- The primary image is used when available.
+- A standard fallback image is used when no listing image exists.
+- Private or administrative listing information is not exposed.
+
+## 4. Verify email content
+
+Confirm that the reusable email template includes:
+
+- Dynamic subject line
+- “Currently, On The Market” heading
+- Dynamic weekly date range
+- Intro text:
+  “Here are this week’s newest listings from the Barefoot Bay community.”
+- “New This Week” section heading
+- Listing cards containing:
+  - Image
+  - Listing title
+  - Price
+  - Listing type
+  - Short description
+  - Working “View Listing” button
+- “View All Listings” button
+- Closing text:
+  “Have something to sell? Post it on On The Market today.”
+- “Post a Listing” button
+- Business identity and mailing information
+- Working unsubscribe link
+- Plain-text email version
+
+Confirm that all links use the correct production domain and point to the appropriate On The Market pages.
+
+## 5. Verify recipient selection
+
+Confirm that the automation sends only to the approved promotional-email audience.
+
+Exclude:
+
+- Unsubscribed recipients
+- Suppressed recipients
+- Invalid email addresses
+- Users who have opted out of promotional emails
+- Duplicate email addresses
+
+Confirm that unsubscribe and preference changes are respected before every send.
+
+## 6. Verify duplicate-send protection
+
+Confirm that:
+
+- The same weekly campaign cannot be sent twice accidentally.
+- Clicking the manual-send control repeatedly does not create duplicate campaigns.
+- Scheduled-job retries do not create duplicate sends.
+- The system stores a unique identifier for each weekly campaign.
+- Campaign status is recorded as pending, processing, sent, partially failed, or failed.
+- A failed campaign can be retried safely.
+
+## 7. Verify no-listings behavior
+
+Confirm that:
+
+- No automated email is sent when there are no qualifying listings by default.
+- The admin can optionally enable sending a “no new listings” email.
+- The campaign log records that the send was skipped and why.
+
+## 8. Verify Admin Settings controls
+
+Confirm that the Admin Settings page contains all required “Currently, On The Market” controls:
+
+- Enable or disable weekly automation
+- Select weekly send day
+- Select weekly send time
+- Display the timezone being used
+- Preview the current email
+- Send a test email to a specified address
+- Review the listings that will be included
+- Manually trigger the current weekly campaign
+- Enable or disable the no-new-listings email
+- View the next scheduled send date and time
+- View the previous send date and result
+- View campaign history
+- View recipient count
+- View listing count
+- View errors and failed-recipient information
+
+Confirm that:
+
+- Only authorized administrators can access or change these settings.
+- Settings persist after refreshing or restarting the application.
+- Buttons show loading, success, and error states.
+- Destructive or production-send actions require confirmation.
+- The manual production-send button clearly identifies that it will email real subscribers.
+- Test sends are clearly separated from production sends.
+
+## 9. Verify preview and test-send behavior
+
+Confirm that:
+
+- Preview uses current qualifying listing data.
+- Preview shows the correct date range.
+- Preview does not create a campaign record marked as sent.
+- Test email sends only to the specified test address.
+- Test sends are clearly labeled as tests.
+- Test sends do not update the production campaign as completed.
+- Invalid test email addresses show a clear validation error.
+
+## 10. Verify campaign history and logging
+
+Confirm that each campaign records:
+
+- Weekly date range
+- Campaign identifier
+- Trigger type: scheduled, manual, or test
+- Listing count
+- Recipient count
+- Successful-delivery count
+- Failed-delivery count
+- Send status
+- Start and completion timestamps
+- Error messages
+- Administrator who manually triggered the campaign, when applicable
+
+Ensure sensitive credentials and full private recipient data are not exposed in logs.
+
+## 11. Verify configuration and security
+
+Confirm that:
+
+- Email-provider credentials are stored in environment variables or secure secrets.
+- Credentials are not exposed in frontend code.
+- The sender address and sender name are configurable.
+- The sender identity has been verified with the email provider.
+- Admin endpoints require authorization.
+- Scheduled endpoints cannot be triggered publicly without authentication or a secure scheduler token.
+- User-provided content is escaped or sanitized for email rendering.
+
+## 12. Automated tests
+
+Run or add tests for:
+
+- Weekly date-range calculation
+- Month-spanning date ranges
+- Year-spanning date ranges
+- Timezone handling
+- Listing eligibility
+- Listing exclusions
+- Recipient exclusions
+- Duplicate-send prevention
+- Scheduled-job execution
+- Automation enable and disable behavior
+- Admin setting persistence
+- Admin authorization
+- Preview behavior
+- Test-send behavior
+- Manual-send confirmation
+- No-listings behavior
+- Failed-send retry behavior
+- Email-link generation
+
+## Final report
+
+After verification and corrections, provide a report containing:
+
+1. Each requirement marked:
+   - Passed
+   - Fixed
+   - Not implemented
+   - Blocked
+2. Admin controls found and their locations.
+3. Scheduled-job configuration and next scheduled run.
+4. Test campaigns sent and the test recipient used.
+5. Listings included in the test campaign.
+6. Tests run and their results.
+7. Files changed.
+8. Database or schema changes.
+9. Remaining risks or configuration steps.
+10. Confirmation that no production subscriber email was sent during verification.
+11. Confirmation that the automation remains disabled until the sender identity, recipient source, schedule, and test delivery have been approved.

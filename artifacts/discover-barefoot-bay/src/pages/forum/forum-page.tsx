@@ -18,7 +18,9 @@ import {
   LayoutGrid,
   Columns2,
   Rows2,
+  Search,
 } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -191,6 +193,14 @@ export default function ForumPage() {
   // Which category chip badge is hovered (shows an X instead of the count)
   const [hoveredBadgeCategoryId, setHoveredBadgeCategoryId] = useState<number | null>(null);
   const [storyView, setStoryView] = useState<StoryView>(loadStoredStoryView);
+  // Text search: raw input updates instantly; debounced value drives the server query
+  const [searchInput, setSearchInput] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchInput.trim()), 300);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
   const handleStoryViewChange = (view: StoryView) => {
     setStoryView(view);
@@ -212,9 +222,10 @@ export default function ForumPage() {
   });
 
   // Fetch story feed (paginated via limit; "Load More" grows the limit)
+  const searchParam = debouncedSearch ? `&search=${encodeURIComponent(debouncedSearch)}` : "";
   const storiesQueryKey = selectedCategoryId
-    ? `/api/forum/stories?limit=${visibleCount}&categoryId=${selectedCategoryId}&sort=${sortBy}`
-    : `/api/forum/stories?limit=${visibleCount}&sort=${sortBy}`;
+    ? `/api/forum/stories?limit=${visibleCount}&categoryId=${selectedCategoryId}&sort=${sortBy}${searchParam}`
+    : `/api/forum/stories?limit=${visibleCount}&sort=${sortBy}${searchParam}`;
   const {
     data: feed,
     isLoading: storiesLoading,
@@ -230,10 +241,10 @@ export default function ForumPage() {
     }
   }, [description]);
 
-  // Reset pagination when the category filter or sort order changes
+  // Reset pagination when the category filter, sort order, or search term changes
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
-  }, [selectedCategoryId, sortBy]);
+  }, [selectedCategoryId, sortBy, debouncedSearch]);
 
   const updateDescriptionMutation = useMutation({
     mutationFn: (content: string) => {
@@ -530,8 +541,31 @@ export default function ForumPage() {
         </div>
       )}
 
-      {/* View toggle + Sort Dropdown */}
+      {/* Search + View toggle + Sort Dropdown */}
       <div className="mb-6 flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
+        <div className="relative w-full sm:w-64 sm:mr-auto">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-navy/40 pointer-events-none" />
+          <Input
+            type="text"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder="Search stories…"
+            aria-label="Search stories"
+            data-testid="input-story-search"
+            className="pl-9 pr-8 border-navy/20 bg-white"
+          />
+          {searchInput && (
+            <button
+              type="button"
+              aria-label="Clear search"
+              data-testid="button-clear-search"
+              onClick={() => setSearchInput("")}
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 rounded text-navy/50 hover:text-navy hover:bg-navy/5"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
         <div className="flex items-center gap-2">
           <span className="text-sm text-navy/70 font-medium">View as:</span>
           <div
@@ -603,8 +637,17 @@ export default function ForumPage() {
       {stories.length === 0 ? (
         <div className="text-center py-16">
           <Newspaper className="h-12 w-12 text-navy/20 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-navy mb-1">No stories yet</h2>
-          <p className="text-navy/60">Check back soon for the latest community news.</p>
+          {debouncedSearch ? (
+            <>
+              <h2 className="text-xl font-bold text-navy mb-1">No stories match your search</h2>
+              <p className="text-navy/60">Try a different word or clear the search to see all stories.</p>
+            </>
+          ) : (
+            <>
+              <h2 className="text-xl font-bold text-navy mb-1">No stories yet</h2>
+              <p className="text-navy/60">Check back soon for the latest community news.</p>
+            </>
+          )}
         </div>
       ) : (
         <div className={STORY_VIEW_CLASSES[storyView]} data-testid="story-grid">

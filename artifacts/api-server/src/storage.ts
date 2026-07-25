@@ -268,7 +268,7 @@ export interface IStorage {
   getForumPosts(categoryId?: number): Promise<ForumPost[]>;
   getForumPostsWithReadState(categoryId: number, userId: number, sortBy?: string): Promise<ForumPost[]>;
   getForumPost(id: number): Promise<ForumPost | undefined>;
-  getForumStoryFeed(options: { categoryId?: number; limit?: number; offset?: number; userId?: number }): Promise<{ stories: any[]; total: number; hasMore: boolean }>;
+  getForumStoryFeed(options: { categoryId?: number; limit?: number; offset?: number; userId?: number; sortBy?: string; search?: string }): Promise<{ stories: any[]; total: number; hasMore: boolean }>;
   createForumPost(post: InsertForumPost): Promise<ForumPost>;
   updateForumPost(id: number, data: Partial<ForumPost>): Promise<ForumPost>;
   deleteForumPost(id: number): Promise<void>;
@@ -6102,12 +6102,35 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  async getForumStoryFeed(options: { categoryId?: number; limit?: number; offset?: number; userId?: number; sortBy?: string }): Promise<{ stories: any[]; total: number; hasMore: boolean }> {
+  async getForumStoryFeed(options: { categoryId?: number; limit?: number; offset?: number; userId?: number; sortBy?: string; search?: string }): Promise<{ stories: any[]; total: number; hasMore: boolean }> {
     const { categoryId, userId, sortBy } = options;
     const limit = Math.min(Math.max(options.limit ?? 12, 1), 50);
     const offset = Math.max(options.offset ?? 0, 0);
     try {
-      const whereClause = categoryId ? eq(forumPosts.categoryId, categoryId) : undefined;
+      const conditions = [];
+      if (categoryId) {
+        conditions.push(eq(forumPosts.categoryId, categoryId));
+      }
+
+      // Server-side text search across title, body, caption/preview, and comments.
+      // Runs in SQL so pagination ("Load More") and total counts stay correct.
+      const searchTerm = options.search?.trim();
+      if (searchTerm) {
+        // Escape ILIKE wildcards so user input matches literally
+        const escaped = searchTerm.replace(/\\/g, '\\\\').replace(/[%_]/g, (m) => `\\${m}`);
+        const pattern = `%${escaped}%`;
+        conditions.push(sql`(
+          ${forumPosts.title} ILIKE ${pattern}
+          OR ${forumPosts.content} ILIKE ${pattern}
+          OR ${forumPosts.customPreview} ILIKE ${pattern}
+          OR EXISTS (
+            SELECT 1 FROM forum_comments fc
+            WHERE fc.post_id = ${forumPosts.id} AND fc.content ILIKE ${pattern}
+          )
+        )`);
+      }
+
+      const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
       // Server-side sorting so pagination ("Load More") stays correct across the whole feed.
       // Pinned posts stay first only for the default newest_created sort; other sorts follow the chosen order.
