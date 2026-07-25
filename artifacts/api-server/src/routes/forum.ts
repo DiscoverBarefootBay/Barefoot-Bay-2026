@@ -527,11 +527,21 @@ export function createForumRouter(storage: IStorage) {
         userId: post.userId // Ensure userId is preserved from the original post
       };
 
-      // Editorial fields (pin, updated flag, featured image) are admin-only
+      // Editorial fields (pin, updated flag, featured image, and the associated
+      // timestamp) are admin-only — always strip them from non-admin payloads
+      // before any further processing so clients cannot bypass editorial controls.
       if (req.user.role !== "admin") {
         delete updateData.isPinned;
         delete updateData.isEditoriallyUpdated;
         delete updateData.featuredImage;
+        delete updateData.editoriallyUpdatedAt;
+      }
+
+      // Stamp or clear the timestamp when the "Updated" badge is explicitly toggled.
+      // This runs server-side after the non-admin strip above, so the timestamp
+      // is always set by this controlled path — never directly from client input.
+      if (typeof updateData.isEditoriallyUpdated === 'boolean') {
+        updateData.editoriallyUpdatedAt = updateData.isEditoriallyUpdated ? new Date() : null;
       }
       
       // Debug logs to help diagnose issues

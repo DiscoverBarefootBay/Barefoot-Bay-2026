@@ -3,6 +3,7 @@ import { logger } from "./lib/logger";
 import { startCalendarEmailScheduler } from "./calendar-email-scheduler";
 import { startListingExpirationScheduler } from "./listing-expiration-scheduler";
 import { startWeeklyListingsEmailScheduler } from "./weekly-listings-scheduler";
+import { startForumBadgeExpirationScheduler } from "./forum-badge-expiration-scheduler";
 
 // Catch unhandled rejections from optional services (e.g. Object Storage when
 // no bucket is provisioned) so they don't crash the server process.
@@ -49,6 +50,9 @@ getApp().then(({ server }) => {
     // Start the weekly "Currently, On The Market" promotional email scheduler.
     // Ships disabled; the admin Email Activity tab turns it on. Idempotent.
     startWeeklyListingsEmailScheduler();
+    // Start the daily job that clears the "Updated" badge from forum posts
+    // once their 7-day expiration window has elapsed. Idempotent.
+    startForumBadgeExpirationScheduler();
   });
 
   server.on("error", (err) => {

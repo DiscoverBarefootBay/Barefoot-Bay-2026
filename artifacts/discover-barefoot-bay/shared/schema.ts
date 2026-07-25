@@ -1119,6 +1119,7 @@ export const forumPosts = pgTable("forum_posts", {
   hideDefaultTitle: boolean("hide_default_title").default(false), // When true, the post detail page hides the auto-rendered title (used when authors style their own headline inside the body)
   featuredImage: text("featured_image"), // Admin-set featured image URL for the news-card feed
   isEditoriallyUpdated: boolean("is_editorially_updated").default(false), // Admin-set "Updated" badge for the news feed
+  editoriallyUpdatedAt: timestamp("editorially_updated_at"), // When the "Updated" badge was last set; used to auto-expire it after 7 days
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -1214,6 +1215,7 @@ export const insertForumPostSchema = baseForumPostSchema
     hideDefaultTitle: z.boolean().optional().default(false),
     featuredImage: z.string().nullable().optional(),
     isEditoriallyUpdated: z.boolean().optional(),
+    editoriallyUpdatedAt: z.coerce.date().nullable().optional(),
   });
 
 export const insertForumCommentSchema = baseForumCommentSchema

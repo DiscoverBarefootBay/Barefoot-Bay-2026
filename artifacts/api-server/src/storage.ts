@@ -5772,6 +5772,8 @@ export class DatabaseStorage implements IStorage {
           userId: forumPosts.userId,
           isPinned: forumPosts.isPinned,
           isLocked: forumPosts.isLocked,
+          isEditoriallyUpdated: forumPosts.isEditoriallyUpdated,
+          editoriallyUpdatedAt: forumPosts.editoriallyUpdatedAt,
           views: forumPosts.views,
           mediaUrls: forumPosts.mediaUrls,
           customPreview: forumPosts.customPreview,
@@ -5790,6 +5792,7 @@ export class DatabaseStorage implements IStorage {
         .orderBy(...orderClauses);
         
         // Count comments for each post and get last comment date for comment-based sorting
+        const UPDATED_BADGE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
         for (const post of results) {
           const commentCount = await db.select({ count: count() })
             .from(forumComments)
@@ -5806,6 +5809,14 @@ export class DatabaseStorage implements IStorage {
               .limit(1);
             
             post.lastCommentDate = lastComment[0]?.createdAt?.toISOString();
+          }
+
+          // Apply 7-day expiry to the "Updated" badge
+          if (post.isEditoriallyUpdated) {
+            const ts = post.editoriallyUpdatedAt ? new Date(post.editoriallyUpdatedAt).getTime() : null;
+            if (ts == null || Date.now() - ts >= UPDATED_BADGE_TTL_MS) {
+              post.isEditoriallyUpdated = false;
+            }
           }
         }
         
@@ -5842,6 +5853,8 @@ export class DatabaseStorage implements IStorage {
           userId: forumPosts.userId,
           isPinned: forumPosts.isPinned,
           isLocked: forumPosts.isLocked,
+          isEditoriallyUpdated: forumPosts.isEditoriallyUpdated,
+          editoriallyUpdatedAt: forumPosts.editoriallyUpdatedAt,
           views: forumPosts.views,
           mediaUrls: forumPosts.mediaUrls,
           customPreview: forumPosts.customPreview,
@@ -5859,12 +5872,21 @@ export class DatabaseStorage implements IStorage {
         .orderBy(desc(forumPosts.isPinned), desc(forumPosts.updatedAt));
         
         // Count comments for each post
+        const UPDATED_BADGE_TTL_MS_ALL = 7 * 24 * 60 * 60 * 1000;
         for (const post of results) {
           const commentCount = await db.select({ count: count() })
             .from(forumComments)
             .where(eq(forumComments.postId, post.id));
           
           post.commentCount = commentCount[0]?.count || 0;
+
+          // Apply 7-day expiry to the "Updated" badge
+          if (post.isEditoriallyUpdated) {
+            const ts = post.editoriallyUpdatedAt ? new Date(post.editoriallyUpdatedAt).getTime() : null;
+            if (ts == null || Date.now() - ts >= UPDATED_BADGE_TTL_MS_ALL) {
+              post.isEditoriallyUpdated = false;
+            }
+          }
         }
         
         console.log(`Retrieved ${results.length} forum posts (all categories)`);
@@ -5973,6 +5995,8 @@ export class DatabaseStorage implements IStorage {
         userId: forumPosts.userId,
         isPinned: forumPosts.isPinned,
         isLocked: forumPosts.isLocked,
+        isEditoriallyUpdated: forumPosts.isEditoriallyUpdated,
+        editoriallyUpdatedAt: forumPosts.editoriallyUpdatedAt,
         views: forumPosts.views,
         mediaUrls: forumPosts.mediaUrls,
         customPreview: forumPosts.customPreview,
@@ -6062,6 +6086,15 @@ export class DatabaseStorage implements IStorage {
             .limit(1);
           
           post.lastCommentDate = lastComment[0]?.createdAt?.toISOString();
+        }
+
+        // Apply 7-day expiry to the "Updated" badge
+        if (post.isEditoriallyUpdated) {
+          const UPDATED_BADGE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+          const ts = post.editoriallyUpdatedAt ? new Date(post.editoriallyUpdatedAt).getTime() : null;
+          if (ts == null || Date.now() - ts >= UPDATED_BADGE_TTL_MS) {
+            post.isEditoriallyUpdated = false;
+          }
         }
 
         // Reconstruct readState object for client compatibility
@@ -6172,6 +6205,7 @@ export class DatabaseStorage implements IStorage {
         userId: forumPosts.userId,
         isPinned: forumPosts.isPinned,
         isEditoriallyUpdated: forumPosts.isEditoriallyUpdated,
+        editoriallyUpdatedAt: forumPosts.editoriallyUpdatedAt,
         featuredImage: forumPosts.featuredImage,
         mediaUrls: forumPosts.mediaUrls,
         views: forumPosts.views,
@@ -6259,7 +6293,9 @@ export class DatabaseStorage implements IStorage {
           categoryName: row.categoryName,
           categorySlug: row.categorySlug,
           isPinned: !!row.isPinned,
-          isEditoriallyUpdated: !!row.isEditoriallyUpdated,
+          isEditoriallyUpdated: !!row.isEditoriallyUpdated &&
+            row.editoriallyUpdatedAt != null &&
+            (Date.now() - new Date(row.editoriallyUpdatedAt).getTime()) < 7 * 24 * 60 * 60 * 1000,
           commentCount: row.commentCount || 0,
           isUnread,
           views: row.views || 0,
