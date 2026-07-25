@@ -5890,10 +5890,12 @@ export class DatabaseStorage implements IStorage {
         userId: forumPosts.userId,
         isPinned: forumPosts.isPinned,
         isLocked: forumPosts.isLocked,
+        isEditoriallyUpdated: forumPosts.isEditoriallyUpdated,
         views: forumPosts.views,
         mediaUrls: forumPosts.mediaUrls,
         customPreview: forumPosts.customPreview,
         hideDefaultTitle: forumPosts.hideDefaultTitle,
+        featuredImage: forumPosts.featuredImage,
         createdAt: forumPosts.createdAt,
         updatedAt: forumPosts.updatedAt,
         // Add complete author information
