@@ -39,6 +39,7 @@ interface WeeklySendRecord {
   weekEnd: string;
   status: string;
   triggeredBy: string | null;
+  triggeredByUser: string | null;
   listingCount: number;
   recipientCount: number;
   sentCount: number;
@@ -50,6 +51,7 @@ interface WeeklySendRecord {
 interface ConfigResponse {
   config: WeeklyListingsEmailConfig;
   history: WeeklySendRecord[];
+  nextScheduledSend: { dateEt: string; time: string; label: string } | null;
 }
 
 interface PreviewResponse {
@@ -66,6 +68,7 @@ const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Frid
 
 const STATUS_BADGES: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
   sent: { label: "Sent", variant: "default" },
+  partially_failed: { label: "Partially failed", variant: "destructive" },
   failed: { label: "Failed", variant: "destructive" },
   skipped_no_listings: { label: "Skipped (no listings)", variant: "secondary" },
   sending: { label: "Sending…", variant: "outline" },
@@ -76,6 +79,7 @@ export default function WeeklyListingsTab() {
   const [form, setForm] = useState<WeeklyListingsEmailConfig | null>(null);
   const [baseline, setBaseline] = useState<string>("");
   const [showPreview, setShowPreview] = useState(false);
+  const [testEmail, setTestEmail] = useState("");
 
   const { data, isLoading, error } = useQuery<ConfigResponse>({
     queryKey: [ENDPOINT],
@@ -137,7 +141,7 @@ export default function WeeklyListingsTab() {
 
   const testMutation = useMutation({
     mutationFn: async () => {
-      const res = await apiRequest("POST", `${ENDPOINT}/test`, {});
+      const res = await apiRequest("POST", `${ENDPOINT}/test`, testEmail.trim() ? { email: testEmail.trim() } : {});
       const body = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(body.message || "Failed to send test email");
       return body as { message: string };
@@ -260,6 +264,48 @@ export default function WeeklyListingsTab() {
             />
           </div>
 
+          {data?.nextScheduledSend ? (
+            <p className="text-sm text-muted-foreground" data-testid="text-next-scheduled-send">
+              Next automatic send: <span className="font-medium">{data.nextScheduledSend.label}</span>
+            </p>
+          ) : (
+            <p className="text-sm text-muted-foreground" data-testid="text-next-scheduled-send">
+              Automatic sending is off — no send is scheduled.
+            </p>
+          )}
+
+          <div className="space-y-2">
+            <Label htmlFor="weekly-test-email">Test email address (defaults to your own)</Label>
+            <div className="flex flex-wrap gap-2">
+              <Input
+                id="weekly-test-email"
+                type="email"
+                placeholder="you@example.com"
+                value={testEmail}
+                onChange={(e) => setTestEmail(e.target.value)}
+                className="max-w-xs"
+                data-testid="input-weekly-test-email"
+              />
+              <Button
+                variant="outline"
+                onClick={() => testMutation.mutate()}
+                disabled={testMutation.isPending}
+                data-testid="button-weekly-test"
+              >
+                {testMutation.isPending ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Send className="h-4 w-4 mr-2" />
+                )}
+                Send Test Email
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Test emails are labeled [TEST], go only to this address, and never count as the
+              week's real campaign send.
+            </p>
+          </div>
+
           <div className="flex flex-wrap gap-2">
             <Button
               onClick={() => saveMutation.mutate()}
@@ -282,24 +328,11 @@ export default function WeeklyListingsTab() {
               {showPreview ? "Hide Preview" : "Preview This Week's Email"}
             </Button>
             <Button
-              variant="outline"
-              onClick={() => testMutation.mutate()}
-              disabled={testMutation.isPending}
-              data-testid="button-weekly-test"
-            >
-              {testMutation.isPending ? (
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              ) : (
-                <Send className="h-4 w-4 mr-2" />
-              )}
-              Send Test to My Email
-            </Button>
-            <Button
               variant="secondary"
               onClick={() => {
                 if (
                   window.confirm(
-                    "Send this week's campaign to all opted-in members now? A week can only ever be sent once.",
+                    "⚠️ This emails REAL subscribers: the campaign will go to every opted-in member's actual inbox. This is NOT a test. A week can only ever be sent once. Send now?",
                   )
                 ) {
                   sendNowMutation.mutate();
@@ -390,7 +423,12 @@ export default function WeeklyListingsTab() {
                           <p className="text-xs text-destructive mt-1">{row.error}</p>
                         )}
                       </TableCell>
-                      <TableCell className="capitalize">{row.triggeredBy || "—"}</TableCell>
+                      <TableCell>
+                        <span className="capitalize">{row.triggeredBy || "—"}</span>
+                        {row.triggeredByUser && (
+                          <p className="text-xs text-muted-foreground">by {row.triggeredByUser}</p>
+                        )}
+                      </TableCell>
                       <TableCell className="text-right">{row.listingCount}</TableCell>
                       <TableCell className="text-right">{row.recipientCount}</TableCell>
                       <TableCell className="text-right">{row.sentCount}</TableCell>

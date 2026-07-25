@@ -1810,12 +1810,13 @@ export const weeklyListingsEmailSends = pgTable("weekly_listings_email_sends", {
   id: serial("id").primaryKey(),
   weekStart: text("week_start").notNull().unique(), // yyyy-MM-dd (ET Monday)
   weekEnd: text("week_end").notNull(), // yyyy-MM-dd (ET Sunday)
-  status: text("status").notNull().default("sending"), // sending|sent|failed|skipped_no_listings
+  status: text("status").notNull().default("sending"), // sending|sent|partially_failed|failed|skipped_no_listings
   listingCount: integer("listing_count").notNull().default(0),
   recipientCount: integer("recipient_count").notNull().default(0),
   sentCount: integer("sent_count").notNull().default(0),
   error: text("error"),
   triggeredBy: text("triggered_by").notNull().default("scheduler"), // scheduler|manual
+  triggeredByUser: text("triggered_by_user"), // admin username for manual triggers
   createdAt: timestamp("created_at").defaultNow(),
   sentAt: timestamp("sent_at"),
 });

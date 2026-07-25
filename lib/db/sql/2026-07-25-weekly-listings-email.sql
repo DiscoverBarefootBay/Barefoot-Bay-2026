@@ -20,3 +20,7 @@ CREATE TABLE IF NOT EXISTS weekly_listings_email_sends (
   created_at timestamp NOT NULL DEFAULT now(),
   CONSTRAINT weekly_listings_email_sends_week_start_unique UNIQUE (week_start)
 );
+
+-- Task #305: record which admin triggered a manual campaign send.
+ALTER TABLE weekly_listings_email_sends
+  ADD COLUMN IF NOT EXISTS triggered_by_user text;

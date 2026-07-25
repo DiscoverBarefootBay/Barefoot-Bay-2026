@@ -53,7 +53,39 @@ export function getWeeklyEmailBaseUrl(): string {
 // Campaign record helpers (idempotency)
 // ---------------------------------------------------------------------------
 
-export const TERMINAL_SEND_STATUSES = new Set(['sent', 'skipped_no_listings']);
+export const TERMINAL_SEND_STATUSES = new Set(['sent', 'partially_failed', 'skipped_no_listings']);
+
+/**
+ * Compute the next scheduled automatic send as an ET-labelled string, or null
+ * when the automation is disabled. Used by the admin tab.
+ */
+export function getNextScheduledSend(
+  config: WeeklyListingsEmailConfig,
+  now: Date = new Date(),
+): { dateEt: string; time: string; label: string } | null {
+  if (!config.enabled) return null;
+  const todayEt = formatInTimeZone(now, EASTERN_TZ, 'yyyy-MM-dd');
+  const nowHHMM = formatInTimeZone(now, EASTERN_TZ, 'HH:mm');
+  const dowEt = Number(formatInTimeZone(now, EASTERN_TZ, 'i')) % 7; // 0 = Sunday
+  let daysAhead = (config.sendDay - dowEt + 7) % 7;
+  if (daysAhead === 0 && nowHHMM >= config.sendTime) daysAhead = 7;
+  const [y, m, d] = todayEt.split('-').map(Number);
+  const next = new Date(Date.UTC(y!, m! - 1, d!, 12));
+  next.setUTCDate(next.getUTCDate() + daysAhead);
+  const dateEt = next.toISOString().slice(0, 10);
+  const dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][
+    next.getUTCDay()
+  ];
+  const monthName = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
+  ][next.getUTCMonth()];
+  return {
+    dateEt,
+    time: config.sendTime,
+    label: `${dayName}, ${monthName} ${next.getUTCDate()}, ${next.getUTCFullYear()} at ${config.sendTime} ET`,
+  };
+}
 
 export async function getWeeklySendHistory(limit = 26): Promise<WeeklyListingsEmailSend[]> {
   return db
@@ -82,6 +114,7 @@ export async function getWeeklySendForWeek(
 export async function claimWeeklySend(
   range: Pick<WeekRange, 'weekStart' | 'weekEnd'>,
   triggeredBy: 'scheduler' | 'manual',
+  triggeredByUser?: string | null,
 ): Promise<WeeklyListingsEmailSend | null> {
   // Fresh claim: only succeeds for the first instance to insert this week.
   const inserted = await db
@@ -91,6 +124,7 @@ export async function claimWeeklySend(
       weekEnd: range.weekEnd,
       status: 'sending',
       triggeredBy,
+      triggeredByUser: triggeredByUser ?? null,
     })
     .onConflictDoNothing({ target: weeklyListingsEmailSends.weekStart })
     .returning();
@@ -100,7 +134,7 @@ export async function claimWeeklySend(
   // update so concurrent retriers can't both win.
   const reclaimed = await db
     .update(weeklyListingsEmailSends)
-    .set({ status: 'sending', triggeredBy, error: null })
+    .set({ status: 'sending', triggeredBy, triggeredByUser: triggeredByUser ?? null, error: null })
     .where(
       and(
         eq(weeklyListingsEmailSends.weekStart, range.weekStart),
@@ -114,7 +148,7 @@ export async function claimWeeklySend(
 export async function finalizeWeeklySend(
   id: number,
   update: {
-    status: 'sent' | 'failed' | 'skipped_no_listings';
+    status: 'sent' | 'partially_failed' | 'failed' | 'skipped_no_listings';
     listingCount: number;
     recipientCount: number;
     sentCount: number;
@@ -129,7 +163,7 @@ export async function finalizeWeeklySend(
       recipientCount: update.recipientCount,
       sentCount: update.sentCount,
       error: update.error ?? null,
-      sentAt: update.status === 'sent' ? new Date() : null,
+      sentAt: update.status === 'sent' || update.status === 'partially_failed' ? new Date() : null,
     })
     .where(eq(weeklyListingsEmailSends.id, id));
 }
@@ -161,7 +195,7 @@ export function defaultWeeklySendDeps(): WeeklySendDeps {
 }
 
 export interface WeeklySendResult {
-  status: 'sent' | 'failed' | 'skipped_no_listings' | 'already_sent' | 'claim_lost';
+  status: 'sent' | 'partially_failed' | 'failed' | 'skipped_no_listings' | 'already_sent' | 'claim_lost';
   listingCount: number;
   recipientCount: number;
   sentCount: number;
@@ -182,6 +216,7 @@ export async function executeWeeklySend(
   triggeredBy: 'scheduler' | 'manual',
   deps: WeeklySendDeps = defaultWeeklySendDeps(),
   now: Date = new Date(),
+  triggeredByUser?: string | null,
 ): Promise<WeeklySendResult> {
   const base = { weekStart: range.weekStart, weekEnd: range.weekEnd, label: range.label };
 
@@ -197,7 +232,7 @@ export async function executeWeeklySend(
     };
   }
 
-  const claimed = await deps.claimWeeklySend(range, triggeredBy);
+  const claimed = await deps.claimWeeklySend(range, triggeredBy, triggeredByUser ?? null);
   if (!claimed) {
     return { ...base, status: 'claim_lost', listingCount: 0, recipientCount: 0, sentCount: 0 };
   }
@@ -273,22 +308,30 @@ export async function executeWeeklySend(
       };
     }
 
+    // Partial failure is terminal (retrying would double-send the successes)
+    // but recorded distinctly so admins can see the failed-recipient count.
+    const failedCount = recipients.length - sentCount;
+    const finalStatus: 'sent' | 'partially_failed' = failedCount > 0 ? 'partially_failed' : 'sent';
+    const partialError =
+      failedCount > 0 ? `${failedCount} of ${recipients.length} sends failed` : null;
     await deps.finalizeWeeklySend(claimed.id, {
-      status: 'sent',
+      status: finalStatus,
       listingCount: listings.length,
       recipientCount: recipients.length,
       sentCount,
+      error: partialError,
     });
     logger.info(
-      { weekStart: range.weekStart, listings: listings.length, recipients: recipients.length, sentCount },
+      { weekStart: range.weekStart, listings: listings.length, recipients: recipients.length, sentCount, failedCount },
       '[WeeklyListingsEmail] Weekly campaign sent',
     );
     return {
       ...base,
-      status: 'sent',
+      status: finalStatus,
       listingCount: listings.length,
       recipientCount: recipients.length,
       sentCount,
+      ...(partialError ? { error: partialError } : {}),
     };
   } catch (err) {
     const error = err instanceof Error ? err.message : String(err);

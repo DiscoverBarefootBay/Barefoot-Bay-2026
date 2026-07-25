@@ -14,6 +14,7 @@ import {
 import {
   executeWeeklySend,
   runWeeklyListingsEmailTick,
+  getNextScheduledSend,
   type WeeklySendDeps,
   type WeeklySchedulerDeps,
 } from '../weekly-listings-scheduler';
@@ -56,6 +57,52 @@ describe('getCampaignWeekRange', () => {
     const range = getCampaignWeekRange(new Date('2026-07-27T01:00:00Z'));
     assert.equal(range.weekStart, '2026-07-13');
     assert.equal(range.weekEnd, '2026-07-19');
+  });
+
+  it('handles the spring-forward DST transition week (Mar 8 2026)', () => {
+    // Monday March 9 2026, 09:00 ET (EDT, UTC-4) — the completed week
+    // Mar 2–8 contains the spring-forward transition (Mar 8, 2:00 AM).
+    const range = getCampaignWeekRange(new Date('2026-03-09T13:00:00Z'));
+    assert.equal(range.weekStart, '2026-03-02');
+    assert.equal(range.weekEnd, '2026-03-08');
+  });
+
+  it('handles the fall-back DST transition week (Nov 1 2026)', () => {
+    // Monday November 2 2026, 09:00 ET (EST, UTC-5). Week Oct 26–Nov 1
+    // contains the fall-back transition and spans a month boundary.
+    const range = getCampaignWeekRange(new Date('2026-11-02T14:00:00Z'));
+    assert.equal(range.weekStart, '2026-10-26');
+    assert.equal(range.weekEnd, '2026-11-01');
+    assert.equal(range.label, 'October 26\u2013November 1, 2026');
+  });
+});
+
+describe('getNextScheduledSend', () => {
+  const CFG = { enabled: true, sendDay: 1, sendTime: '09:00', sendWhenEmpty: false };
+
+  it('returns null when the automation is disabled', () => {
+    assert.equal(getNextScheduledSend({ ...CFG, enabled: false }), null);
+  });
+
+  it('same day before the send time → today', () => {
+    // Monday July 27 2026 08:00 ET
+    const n = getNextScheduledSend(CFG, new Date('2026-07-27T12:00:00Z'));
+    assert.equal(n?.dateEt, '2026-07-27');
+    assert.ok(n?.label.includes('Monday, July 27, 2026 at 09:00 ET'));
+  });
+
+  it('same day at/after the send time → next week', () => {
+    // Monday July 27 2026 09:00 ET exactly
+    const n = getNextScheduledSend(CFG, new Date('2026-07-27T13:00:00Z'));
+    assert.equal(n?.dateEt, '2026-08-03');
+  });
+
+  it('mid-week → the coming configured day', () => {
+    // Wednesday July 29 2026
+    const n = getNextScheduledSend(CFG, new Date('2026-07-29T16:00:00Z'));
+    assert.equal(n?.dateEt, '2026-08-03');
+    const fri = getNextScheduledSend({ ...CFG, sendDay: 5 }, new Date('2026-07-29T16:00:00Z'));
+    assert.equal(fri?.dateEt, '2026-07-31');
   });
 });
 
@@ -252,6 +299,7 @@ interface FakeState {
   nextId: number;
   sends: Array<{ to: string; subject: string }>;
   sendResult: boolean;
+  failAddresses?: Set<string>;
 }
 
 function makeDeps(state: FakeState, opts: { listings?: any[]; users?: any[] } = {}): WeeklySendDeps {
@@ -260,9 +308,10 @@ function makeDeps(state: FakeState, opts: { listings?: any[]; users?: any[] } = 
     getUsers: async () => opts.users ?? [user(), user({ email: 'b@example.com' })],
     sendEmail: (async (o: any) => {
       state.sends.push({ to: o.to, subject: o.subject });
+      if (state.failAddresses?.has(o.to)) return false;
       return state.sendResult;
     }) as any,
-    claimWeeklySend: async (range, triggeredBy) => {
+    claimWeeklySend: async (range, triggeredBy, triggeredByUser) => {
       const existing = state.rows.get(range.weekStart);
       if (!existing) {
         const row = {
@@ -271,6 +320,7 @@ function makeDeps(state: FakeState, opts: { listings?: any[]; users?: any[] } = 
           weekEnd: range.weekEnd,
           status: 'sending',
           triggeredBy,
+          triggeredByUser: triggeredByUser ?? null,
           listingCount: 0,
           recipientCount: 0,
           sentCount: 0,
@@ -283,6 +333,7 @@ function makeDeps(state: FakeState, opts: { listings?: any[]; users?: any[] } = 
       if (existing.status === 'failed') {
         existing.status = 'sending';
         existing.triggeredBy = triggeredBy;
+        existing.triggeredByUser = triggeredByUser ?? null;
         return existing;
       }
       return null;
@@ -353,6 +404,33 @@ describe('executeWeeklySend', () => {
     state.sendResult = true; // outage over
     const retry = await executeWeeklySend(RANGE, CONFIG, 'scheduler', deps, NOW);
     assert.equal(retry.status, 'sent');
+  });
+
+  it('records a partial failure distinctly, and it is terminal (no double-send retry)', async () => {
+    const state = freshState();
+    state.failAddresses = new Set(['b@example.com']);
+    const deps = makeDeps(state);
+    const res = await executeWeeklySend(RANGE, CONFIG, 'scheduler', deps, NOW);
+    assert.equal(res.status, 'partially_failed');
+    assert.equal(res.sentCount, 1);
+    assert.equal(res.recipientCount, 2);
+    assert.equal(res.error, '1 of 2 sends failed');
+    const row = state.rows.get(RANGE.weekStart)!;
+    assert.equal(row.status, 'partially_failed');
+    assert.equal(row.error, '1 of 2 sends failed');
+
+    // Terminal: a retry must NOT re-send to the recipient who already got it.
+    state.failAddresses = undefined;
+    const retry = await executeWeeklySend(RANGE, CONFIG, 'manual', deps, NOW);
+    assert.equal(retry.status, 'already_sent');
+    assert.equal(state.sends.length, 2);
+  });
+
+  it('records which admin triggered a manual send', async () => {
+    const state = freshState();
+    const res = await executeWeeklySend(RANGE, CONFIG, 'manual', makeDeps(state), NOW, 'michael.admin');
+    assert.equal(res.status, 'sent');
+    assert.equal(state.rows.get(RANGE.weekStart)!.triggeredByUser, 'michael.admin');
   });
 
   it('excludes opted-out users from the actual send', async () => {

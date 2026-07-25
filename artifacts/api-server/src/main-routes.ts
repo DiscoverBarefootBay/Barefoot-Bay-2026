@@ -51,6 +51,7 @@ import {
   executeWeeklySend,
   getWeeklySendHistory,
   getWeeklyEmailBaseUrl,
+  getNextScheduledSend,
 } from "./weekly-listings-scheduler";
 import { getSendGridCredentials } from "./lib/sendgrid-credentials";
 import {
@@ -13271,7 +13272,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const config = await loadWeeklyListingsEmailConfig();
       const history = await getWeeklySendHistory();
-      return res.json({ config, history });
+      return res.json({ config, history, nextScheduledSend: getNextScheduledSend(config) });
     } catch (error: any) {
       req.log.error({ err: error }, "[WeeklyListingsEmail] Failed to load config");
       return res.status(500).json({ message: "Failed to load weekly email configuration" });
@@ -13306,7 +13307,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         'Weekly "Currently, On The Market" promotional email schedule and options',
         req.user?.id,
       );
-      return res.json({ config: merged });
+      return res.json({ config: merged, nextScheduledSend: getNextScheduledSend(merged) });
     } catch (error: any) {
       req.log.error({ err: error }, "[WeeklyListingsEmail] Failed to save config");
       return res.status(500).json({ message: "Failed to save weekly email configuration" });
@@ -13336,13 +13337,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Send a test copy of the current campaign week's email to the logged-in
-  // admin's own address only.
+  // Send a test copy of the current campaign week's email to a specified
+  // address (defaults to the logged-in admin's own address). Never touches
+  // the campaign record or the real subscriber list.
   app.post("/api/admin/email-activity/weekly-listings/test", requireAuth, requireAdmin, async (req, res) => {
     try {
-      const adminEmail = req.user?.email?.trim();
+      const rawAddress = typeof req.body?.email === "string" ? req.body.email.trim() : "";
+      const adminEmail = rawAddress || req.user?.email?.trim() || "";
+      if (rawAddress && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(rawAddress)) {
+        return res.status(400).json({ message: `"${rawAddress}" is not a valid email address.` });
+      }
       if (!adminEmail || !adminEmail.includes("@")) {
-        return res.status(400).json({ message: "Your account doesn't have a valid email address to send the test to." });
+        return res.status(400).json({ message: "Enter a test email address — your account doesn't have a valid one." });
       }
       const now = new Date();
       const range = getCampaignWeekRange(now);
@@ -13376,7 +13382,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const effectiveConfig = req.body?.forceWhenEmpty === true
         ? { ...config, sendWhenEmpty: true }
         : config;
-      const result = await executeWeeklySend(range, effectiveConfig, "manual", undefined, now);
+      const triggeredByUser = req.user?.username || req.user?.email || `user #${req.user?.id}`;
+      const result = await executeWeeklySend(range, effectiveConfig, "manual", undefined, now, triggeredByUser);
       if (result.status === "already_sent") {
         return res.status(409).json({
           message: `The campaign for ${range.label} was already sent — a week can never send twice.`,
@@ -13391,7 +13398,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       const message = result.status === "skipped_no_listings"
         ? `No new listings for ${range.label} — campaign skipped.`
-        : `Campaign sent to ${result.sentCount} of ${result.recipientCount} recipient(s), covering ${result.listingCount} listing(s).`;
+        : result.status === "partially_failed"
+          ? `Campaign sent to ${result.sentCount} of ${result.recipientCount} recipient(s) — ${result.recipientCount - result.sentCount} failed. Covering ${result.listingCount} listing(s).`
+          : `Campaign sent to ${result.sentCount} of ${result.recipientCount} recipient(s), covering ${result.listingCount} listing(s).`;
       return res.json({ message, result });
     } catch (error: any) {
       req.log.error({ err: error }, "[WeeklyListingsEmail] Manual send failed");
