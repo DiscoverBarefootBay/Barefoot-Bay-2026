@@ -1,5 +1,5 @@
 -- Task #270: weekly "Currently, On The Market" promo email.
--- Idempotent DDL — apply manually via the database skill (dev already applied).
+-- Idempotent DDL — apply manually via the database skill (applied to dev on 2026-07-25).
 -- Do NOT use drizzle-kit push on this legacy database (see replit.md).
 -- On Publish, run this same file against production (environment: "production").
 
