@@ -1,0 +1,68 @@
+Update the existing BarefootBay.com "For Sale" section and rename it to "On The Market."
+
+Requirements:
+
+- Rename "For Sale" to "On The Market" everywhere the old name appears, including:
+  - Main navigation
+  - Page title and heading
+  - Buttons, labels, breadcrumbs, emails, notifications, admin screens, and all user-facing text
+  - Keep existing routes functional (e.g. /for-sale should continue working or redirect to the new route if implemented).
+
+Page Layout:
+
+- Remove the "All Statuses" dropdown from the public On The Market page.
+- Listing status (Draft, Active, etc.) is only relevant to owners managing their listings and should remain available only on the /my-listings page.
+- Expand the "All Filters" dropdown so it occupies the empty space created by removing the status dropdown.
+- Keep the layout balanced and aligned with the existing Barefoot Bay design.
+
+Sorting:
+
+Add a new "Sort By" dropdown next to the existing filters.
+
+Sort options:
+- Newest Listings (default)
+- Oldest Listings
+- Price: Low to High
+- Price: High to Low
+- Recently Updated
+- Title: A–Z
+
+Behavior:
+- Default sorting should be Newest Listings.
+- Sorting should work together with the existing filters.
+- Preserve the selected sort option when filters change.
+- Update the URL query parameters so sorting can be bookmarked and shared.
+- Sorting should happen server-side when possible for better performance.
+
+Filtering:
+
+Keep all existing listing filters and filtering behavior unchanged.
+
+Do not remove:
+- Listing Type
+- Property Filters
+- Existing search/filter functionality
+
+My Listings:
+
+Do not modify the existing /my-listings page except to leave the Status filter available there.
+Owners should still be able to filter Drafts, Active listings, etc. when managing their own listings.
+
+General:
+
+- Reuse existing components where possible.
+- Preserve all existing listing data.
+- Preserve the current Barefoot Bay visual style.
+- Ensure the page remains fully responsive.
+
+Acceptance Criteria:
+
+- No public-facing "For Sale" labels remain.
+- Navigation displays "On The Market."
+- Public listing page no longer displays the "All Statuses" dropdown.
+- "All Filters" expands to use the available space.
+- A new "Sort By" dropdown is available.
+- Listings default to Newest Listings.
+- Sorting works together with all existing filters.
+- /my-listings continues to display the Status filter for listing management.
+- Existing listing functionality and data remain intact.
