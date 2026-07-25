@@ -294,7 +294,7 @@ export async function executeWeeklySend(
       });
       logger.info(
         { weekStart: range.weekStart },
-        '[WeeklyListingsEmail] No new listings this week — campaign skipped',
+        '[WeeklyListingsEmail] No active listings — campaign skipped',
       );
       return { ...base, status: 'skipped_no_listings', listingCount: 0, recipientCount: 0, sentCount: 0 };
     }

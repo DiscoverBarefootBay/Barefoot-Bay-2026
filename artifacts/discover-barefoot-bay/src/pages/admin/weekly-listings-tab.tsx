@@ -291,9 +291,9 @@ export default function WeeklyListingsTab() {
 
           <div className="flex items-center justify-between rounded-lg border p-4">
             <div>
-              <p className="font-medium">Send even when there are no new listings</p>
+              <p className="font-medium">Send even when there are no active listings</p>
               <p className="text-sm text-muted-foreground">
-                Off by default — weeks with zero new listings are skipped.
+                Off by default — weeks with zero active listings are skipped.
               </p>
             </div>
             <Switch

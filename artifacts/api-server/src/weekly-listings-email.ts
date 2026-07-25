@@ -161,6 +161,8 @@ export interface WeeklyEmailListing {
   description: string | null;
   photo: string | null;
   createdAt: string | null;
+  /** True when the listing was first published inside the campaign week. */
+  isNew: boolean;
 }
 
 const LISTING_TYPE_LABELS: Record<string, string> = {
@@ -178,10 +180,13 @@ export function listingTypeLabel(type: string): string {
 }
 
 /**
- * Select the listings featured in a campaign week: status ACTIVE, not past
- * their expiration date at selection time, first published (createdAt, ET)
- * within [weekStart, weekEnd]. Sorted newest first. Only public fields are
- * carried forward — seller contact info is deliberately dropped.
+ * Select the listings featured in a campaign email: EVERY listing that is
+ * currently ACTIVE and not past its expiration date at selection time.
+ * Listings first published (createdAt, ET) within [weekStart, weekEnd] are
+ * flagged `isNew` so the render can highlight them in a "New This Week"
+ * section; the rest appear under "Still On The Market". New listings sort
+ * first, each group newest first. Only public fields are carried forward —
+ * seller contact info is deliberately dropped.
  */
 export function selectListingsForWeek(
   listings: Array<Pick<RealEstateListing, 'id' | 'title' | 'price' | 'listingType' | 'description' | 'photos' | 'status' | 'createdAt' | 'expirationDate'>>,
@@ -193,20 +198,29 @@ export function selectListingsForWeek(
     .filter((l) => {
       if (l.status !== 'ACTIVE') return false;
       if (l.expirationDate && new Date(l.expirationDate).getTime() <= nowMs) return false;
-      if (!l.createdAt) return false;
-      const createdEt = formatInTimeZone(new Date(l.createdAt), EASTERN_TZ, 'yyyy-MM-dd');
-      return createdEt >= range.weekStart && createdEt <= range.weekEnd;
+      return true;
     })
-    .sort((a, b) => new Date(b.createdAt as any).getTime() - new Date(a.createdAt as any).getTime())
-    .map((l) => ({
-      id: l.id,
-      title: l.title,
-      price: l.price ?? null,
-      listingType: l.listingType,
-      description: l.description ?? null,
-      photo: Array.isArray(l.photos) && l.photos.length > 0 ? l.photos[0] ?? null : null,
-      createdAt: l.createdAt ? new Date(l.createdAt).toISOString() : null,
-    }));
+    .map((l) => {
+      const createdEt = l.createdAt
+        ? formatInTimeZone(new Date(l.createdAt), EASTERN_TZ, 'yyyy-MM-dd')
+        : null;
+      return {
+        id: l.id,
+        title: l.title,
+        price: l.price ?? null,
+        listingType: l.listingType,
+        description: l.description ?? null,
+        photo: Array.isArray(l.photos) && l.photos.length > 0 ? l.photos[0] ?? null : null,
+        createdAt: l.createdAt ? new Date(l.createdAt).toISOString() : null,
+        isNew: createdEt !== null && createdEt >= range.weekStart && createdEt <= range.weekEnd,
+      };
+    })
+    .sort((a, b) => {
+      if (a.isNew !== b.isNew) return a.isNew ? -1 : 1;
+      const at = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const bt = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return bt - at;
+    });
 }
 
 // ---------------------------------------------------------------------------
@@ -272,13 +286,23 @@ export interface RenderedWeeklyEmail {
 /** Placeholder tokens the admin can use in the weekly email template. */
 export const WEEKLY_EMAIL_PLACEHOLDERS: Array<{ token: string; description: string }> = [
   { token: '{{weekRange}}', description: 'The campaign week, e.g. "July 20–26, 2026"' },
-  { token: '{{intro}}', description: 'The standard intro sentence (changes automatically when the week has no new listings)' },
-  { token: '{{listings}}', description: 'The "New This Week" heading and the listing cards — required for listings to appear' },
-  { token: '{{listingCount}}', description: 'Number of new listings featured this week' },
+  { token: '{{intro}}', description: 'The standard intro sentence (changes automatically based on how many listings are new this week)' },
+  { token: '{{listings}}', description: 'The "New This Week" / "Still On The Market" sections with the listing cards — required for listings to appear' },
+  { token: '{{listingCount}}', description: 'Total number of active listings featured in the email' },
   { token: '{{forSaleUrl}}', description: 'Link to the On The Market page' },
   { token: '{{baseUrl}}', description: 'The site address, e.g. https://barefootbay.com' },
   { token: '{{subject}}', description: 'The rendered subject line (HTML body only)' },
 ];
+
+/**
+ * Turn a possibly-relative asset path (e.g. "/api/storage-proxy/…") into an
+ * absolute URL email clients can load. Already-absolute URLs pass through.
+ */
+export function toAbsoluteUrl(baseUrl: string, path: string): string {
+  if (/^https?:\/\//i.test(path)) return path;
+  const base = baseUrl.replace(/\/+$/, '');
+  return path.startsWith('/') ? `${base}${path}` : `${base}/${path}`;
+}
 
 /** The built-in template. `{{tokens}}` are substituted at render time. */
 export function getDefaultWeeklyEmailTemplate(): WeeklyEmailTemplate {
@@ -293,10 +317,11 @@ export function getDefaultWeeklyEmailTemplate(): WeeklyEmailTemplate {
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f8;">
     <tr>
       <td align="center" style="padding:24px 12px;">
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:8px;overflow:hidden;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;">
           <tr>
-            <td style="background:${BRAND.navy};padding:28px 24px;text-align:center;">
-              <p style="margin:0 0 6px 0;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:${BRAND.ocean};">Barefoot Bay Community</p>
+            <td style="background-color:${BRAND.ocean};background:linear-gradient(135deg, #90C9D4 0%, #6BB5C1 100%);padding:30px 20px;text-align:center;">
+              <p style="margin:0 0 5px 0;font-size:28px;font-weight:bold;letter-spacing:1px;color:#ffffff;">Barefoot Bay</p>
+              <p style="margin:0 0 14px 0;font-size:12px;letter-spacing:0.5px;color:#ffffff;">Community Platform</p>
               <h1 style="margin:0;font-size:24px;line-height:32px;color:#ffffff;">{{subject}}</h1>
             </td>
           </tr>
@@ -308,13 +333,13 @@ export function getDefaultWeeklyEmailTemplate(): WeeklyEmailTemplate {
           {{listings}}
           <tr>
             <td style="padding:0 24px 24px 24px;text-align:center;">
-              <a href="{{forSaleUrl}}" style="background:${BRAND.navy};color:#ffffff;padding:12px 24px;text-decoration:none;border-radius:5px;display:inline-block;font-size:15px;">View All Listings</a>
+              <a href="{{forSaleUrl}}" style="background-color:${BRAND.ocean};color:#ffffff;padding:14px 32px;text-decoration:none;border-radius:8px;display:inline-block;font-size:15px;font-weight:600;">View All Listings</a>
             </td>
           </tr>
           <tr>
             <td style="padding:0 24px 24px 24px;text-align:center;border-top:1px solid #e5e7eb;">
               <p style="margin:24px 0 12px 0;font-size:15px;line-height:22px;">Have something to sell? Post it on On The Market today.</p>
-              <a href="{{forSaleUrl}}" style="background:${BRAND.coral};color:#ffffff;padding:12px 24px;text-decoration:none;border-radius:5px;display:inline-block;font-size:15px;">Post a Listing</a>
+              <a href="{{forSaleUrl}}" style="background-color:${BRAND.coral};color:#ffffff;padding:14px 32px;text-decoration:none;border-radius:8px;display:inline-block;font-size:15px;font-weight:600;">Post a Listing</a>
             </td>
           </tr>
           <tr>
@@ -360,23 +385,27 @@ export function renderWeeklyListingsEmail(
   template: WeeklyEmailTemplate = getDefaultWeeklyEmailTemplate(),
 ): RenderedWeeklyEmail {
   const forSaleUrl = `${baseUrl}/for-sale`;
-  const placeholderImg = `${baseUrl}/logo.png`;
+  const placeholderImg = toAbsoluteUrl(baseUrl, '/logo.png');
+
+  const newListings = listings.filter((l) => l.isNew);
+  const otherListings = listings.filter((l) => !l.isNew);
 
   const intro =
-    listings.length > 0
-      ? `Here's what's new On The Market in Barefoot Bay this week (${range.label}). Take a look at what your neighbors are selling!`
-      : `No new listings were posted On The Market this week (${range.label}) \u2014 but there's still plenty to browse.`;
+    listings.length === 0
+      ? `There are no active listings On The Market right now (${range.label}) \u2014 check back soon, or be the first to post one!`
+      : newListings.length > 0
+        ? `Here's what's On The Market in Barefoot Bay this week (${range.label}). Take a look at what your neighbors are selling!`
+        : `No new listings were posted this week (${range.label}) \u2014 but these homes and items are still On The Market. Take a look!`;
 
-  const cardsHtml = listings
-    .map((l) => {
-      const url = `${forSaleUrl}/${l.id}`;
-      const img = l.photo || placeholderImg;
-      const alt = l.photo
-        ? `Photo of ${escapeHtml(l.title)}`
-        : `No photo available for ${escapeHtml(l.title)}`;
-      const price = formatPrice(l.price);
-      const desc = l.description ? escapeHtml(truncate(l.description, 160)) : '';
-      return `
+  const cardHtml = (l: WeeklyEmailListing): string => {
+    const url = `${forSaleUrl}/${l.id}`;
+    const img = l.photo ? toAbsoluteUrl(baseUrl, l.photo) : placeholderImg;
+    const alt = l.photo
+      ? `Photo of ${escapeHtml(l.title)}`
+      : `No photo available for ${escapeHtml(l.title)}`;
+    const price = formatPrice(l.price);
+    const desc = l.description ? escapeHtml(truncate(l.description, 160)) : '';
+    return `
         <tr>
           <td style="padding:0 24px 24px 24px;">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;background:#ffffff;">
@@ -391,26 +420,31 @@ export function renderWeeklyListingsEmail(
                   ${price ? `<p style="margin:0 0 4px 0;font-size:16px;font-weight:bold;color:${BRAND.coral};">${price}</p>` : ''}
                   <p style="margin:0 0 8px 0;font-size:13px;color:#6b7280;">${escapeHtml(listingTypeLabel(l.listingType))}</p>
                   ${desc ? `<p style="margin:0 0 12px 0;font-size:14px;line-height:20px;color:${BRAND.charcoal};">${desc}</p>` : ''}
-                  <a href="${url}" style="background:${BRAND.coral};color:#ffffff;padding:10px 18px;text-decoration:none;border-radius:5px;display:inline-block;font-size:14px;">View Listing</a>
+                  <a href="${url}" style="background-color:${BRAND.ocean};color:#ffffff;padding:10px 24px;text-decoration:none;border-radius:8px;display:inline-block;font-size:14px;font-weight:600;">View Listing</a>
                 </td>
               </tr>
             </table>
           </td>
         </tr>`;
-    })
-    .join('\n');
+  };
 
-  // The {{listings}} token expands to the "New This Week" heading plus the
-  // listing cards (nothing at all on an empty week).
-  const listingsBlock =
-    listings.length > 0
-      ? `<tr>
+  const sectionHeading = (label: string): string => `<tr>
             <td style="padding:0 24px 16px 24px;">
-              <h2 style="margin:0;font-size:20px;color:${BRAND.navy};">New This Week</h2>
+              <h2 style="margin:0;font-size:20px;color:${BRAND.navy};border-left:4px solid ${BRAND.ocean};padding-left:12px;">${label}</h2>
             </td>
-          </tr>
-${cardsHtml}`
-      : '';
+          </tr>`;
+
+  // The {{listings}} token expands to the "New This Week" and "Still On The
+  // Market" sections with their listing cards (nothing at all when there are
+  // no active listings).
+  const parts: string[] = [];
+  if (newListings.length > 0) {
+    parts.push(sectionHeading('New This Week'), ...newListings.map(cardHtml));
+  }
+  if (otherListings.length > 0) {
+    parts.push(sectionHeading('Still On The Market'), ...otherListings.map(cardHtml));
+  }
+  const listingsBlock = parts.join('\n');
 
   const subject = applyTokens(template.subject, {
     weekRange: range.label,
@@ -433,9 +467,10 @@ ${cardsHtml}`
     intro,
     '',
   ];
-  if (listings.length > 0) {
-    textLines.push('NEW THIS WEEK', '');
-    for (const l of listings) {
+  const pushTextSection = (heading: string, group: WeeklyEmailListing[]) => {
+    if (group.length === 0) return;
+    textLines.push(heading, '');
+    for (const l of group) {
       textLines.push(`- ${l.title}`);
       const price = formatPrice(l.price);
       if (price) textLines.push(`  Price: ${price}`);
@@ -443,7 +478,9 @@ ${cardsHtml}`
       if (l.description) textLines.push(`  ${truncate(l.description, 160)}`);
       textLines.push(`  View listing: ${forSaleUrl}/${l.id}`, '');
     }
-  }
+  };
+  pushTextSection('NEW THIS WEEK', newListings);
+  pushTextSection('STILL ON THE MARKET', otherListings);
   textLines.push(
     `View all listings: ${forSaleUrl}`,
     '',

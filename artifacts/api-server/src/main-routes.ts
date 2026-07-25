@@ -13466,7 +13466,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(502).json({ message: result.error || "Send failed", result });
       }
       const message = result.status === "skipped_no_listings"
-        ? `No new listings for ${range.label} — campaign skipped.`
+        ? `No active listings for ${range.label} — campaign skipped.`
         : result.status === "partially_failed"
           ? `Campaign sent to ${result.sentCount} of ${result.recipientCount} recipient(s) — ${result.recipientCount - result.sentCount} failed. Covering ${result.listingCount} listing(s).`
           : `Campaign sent to ${result.sentCount} of ${result.recipientCount} recipient(s), covering ${result.listingCount} listing(s).`;

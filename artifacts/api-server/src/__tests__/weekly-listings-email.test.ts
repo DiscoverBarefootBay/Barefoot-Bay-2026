@@ -144,26 +144,27 @@ function listing(overrides: any = {}): any {
 }
 
 describe('selectListingsForWeek', () => {
-  it('includes ACTIVE listings created inside the campaign week', () => {
+  it('includes ACTIVE listings created inside the campaign week, flagged isNew', () => {
     const out = selectListingsForWeek([listing()], RANGE, NOW);
     assert.equal(out.length, 1);
     assert.equal(out[0]!.id, 1);
     assert.equal(out[0]!.photo, 'https://example.com/cart.jpg');
+    assert.equal(out[0]!.isNew, true);
   });
 
-  it('excludes listings created outside the week', () => {
+  it('includes active listings created outside the week, flagged NOT new, sorted after new ones', () => {
     const out = selectListingsForWeek(
       [
-        listing({ id: 2, createdAt: new Date('2026-07-19T15:00:00Z') }), // Sunday before
-        listing({ id: 3, createdAt: new Date('2026-07-27T15:00:00Z') }), // Monday after
+        listing({ id: 2, createdAt: new Date('2026-05-19T15:00:00Z') }), // months ago, still active
+        listing({ id: 3, createdAt: new Date('2026-07-22T15:00:00Z') }), // inside the week
       ],
       RANGE,
       NOW,
     );
-    assert.equal(out.length, 0);
+    assert.deepEqual(out.map((l) => [l.id, l.isNew]), [[3, true], [2, false]]);
   });
 
-  it('uses the ET calendar date for the week boundary', () => {
+  it('uses the ET calendar date for the isNew week boundary', () => {
     // 2026-07-27T02:00:00Z is still Sunday July 26 in ET → inside the week.
     const out = selectListingsForWeek(
       [listing({ id: 4, createdAt: new Date('2026-07-27T02:00:00Z') })],
@@ -171,6 +172,7 @@ describe('selectListingsForWeek', () => {
       NOW,
     );
     assert.equal(out.length, 1);
+    assert.equal(out[0]!.isNew, true);
   });
 
   it('excludes non-ACTIVE and already-expired listings', () => {
@@ -276,10 +278,61 @@ describe('renderWeeklyListingsEmail', () => {
     assert.ok(r.html.includes('&lt;script&gt;'));
   });
 
-  it('renders an empty-week variant without listing cards', () => {
+  it('renders a no-active-listings variant without listing cards', () => {
     const r = renderWeeklyListingsEmail([], RANGE, 'https://barefootbay.com');
-    assert.ok(r.html.includes('No new listings'));
+    assert.ok(r.html.includes('no active listings'));
     assert.ok(!r.html.includes('View Listing<'));
+  });
+
+  it('converts relative photo paths to absolute URLs', () => {
+    const rel = selectListingsForWeek(
+      [listing({ photos: ['/api/storage-proxy/REAL_ESTATE/real-estate-media/photo.jpg'] })],
+      RANGE,
+      NOW,
+    );
+    const r = renderWeeklyListingsEmail(rel, RANGE, 'https://barefootbay.com');
+    assert.ok(
+      r.html.includes('src="https://barefootbay.com/api/storage-proxy/REAL_ESTATE/real-estate-media/photo.jpg"'),
+    );
+    assert.ok(!r.html.includes('src="/api/storage-proxy'));
+  });
+
+  it('leaves absolute photo URLs untouched', () => {
+    const r = renderWeeklyListingsEmail(listings, RANGE, 'https://barefootbay.com');
+    assert.ok(r.html.includes('src="https://example.com/cart.jpg"'));
+  });
+
+  it('splits new and still-on-the-market listings into two sections', () => {
+    const mixed = selectListingsForWeek(
+      [
+        listing({ id: 1, title: 'Fresh listing' }),
+        listing({ id: 2, title: 'Older listing', createdAt: new Date('2026-05-05T15:00:00Z') }),
+      ],
+      RANGE,
+      NOW,
+    );
+    const r = renderWeeklyListingsEmail(mixed, RANGE, 'https://barefootbay.com');
+    assert.ok(r.html.includes('New This Week'));
+    assert.ok(r.html.includes('Still On The Market'));
+    assert.ok(r.html.indexOf('Fresh listing') < r.html.indexOf('Older listing'));
+    assert.ok(r.text.includes('STILL ON THE MARKET'));
+  });
+
+  it('omits the New This Week section when nothing new was posted', () => {
+    const onlyOld = selectListingsForWeek(
+      [listing({ id: 2, createdAt: new Date('2026-05-05T15:00:00Z') })],
+      RANGE,
+      NOW,
+    );
+    const r = renderWeeklyListingsEmail(onlyOld, RANGE, 'https://barefootbay.com');
+    assert.ok(!r.html.includes('New This Week'));
+    assert.ok(r.html.includes('Still On The Market'));
+    assert.ok(r.html.includes('No new listings were posted this week'));
+  });
+
+  it('uses the brand gradient header', () => {
+    const r = renderWeeklyListingsEmail(listings, RANGE, 'https://barefootbay.com');
+    assert.ok(r.html.includes('linear-gradient(135deg, #90C9D4 0%, #6BB5C1 100%)'));
   });
 });
 
@@ -422,11 +475,11 @@ describe('executeWeeklySend', () => {
     assert.equal(state.sends.length, 2); // only Friday's sends
 
     // A window a full week later (Jul 25–31) no longer overlaps — it proceeds
-    // as a fresh campaign (the fake listing from Jul 22 is outside it, so it
-    // resolves to skipped_no_listings, NOT already_sent).
+    // as a fresh campaign (the still-active fake listing from Jul 22 is
+    // featured under "Still On The Market", so it sends — NOT already_sent).
     const nextCycle: WeekRange = { weekStart: '2026-07-25', weekEnd: '2026-07-31', label: 'July 25–31, 2026' };
     const third = await executeWeeklySend(nextCycle, CONFIG, 'scheduler', deps, NOW);
-    assert.equal(third.status, 'skipped_no_listings');
+    assert.equal(third.status, 'sent');
   });
 
   it('an overlapping in-progress ("sending") row from another day blocks a new send', async () => {
