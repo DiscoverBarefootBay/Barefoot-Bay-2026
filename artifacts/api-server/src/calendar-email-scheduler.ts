@@ -88,6 +88,28 @@ let schedulerStarted = false;
 let ticking = false;
 let watchdogRunning = false;
 
+/**
+ * Environment gate: is this process allowed to send scheduler-driven emails
+ * (daily digest, escalations, watchdog alerts, heartbeats)?
+ *
+ * Only the deployed production server should ever send these. The development
+ * workspace runs the very same scheduler code with the same SendGrid
+ * credentials but reads a stale dev database, so when it wakes up it can see
+ * "no send today, past the grace window" and email every real admin a false
+ * "missed its window" alert (this actually happened) — or even blast a
+ * duplicate full digest to everyone.
+ *
+ * Detection matches the rest of the API server (see app.ts): production means
+ * NODE_ENV=production or REPLIT_DEPLOYMENT=true. For deliberate testing in a
+ * dev workspace, set CALENDAR_SCHEDULER_DEV_SENDING=true to opt in explicitly.
+ */
+export function isCalendarEmailSendingEnabled(
+  env: Record<string, string | undefined> = process.env,
+): boolean {
+  if (env["CALENDAR_SCHEDULER_DEV_SENDING"] === "true") return true;
+  return env["NODE_ENV"] === "production" || env["REPLIT_DEPLOYMENT"] === "true";
+}
+
 function isTodayET(date: Date | string | null | undefined, todayET: string): boolean {
   if (!date) return false;
   return formatInTimeZone(new Date(date), FLORIDA_TZ, "yyyy-MM-dd") >= todayET;
@@ -131,6 +153,14 @@ export interface CalendarEmailSchedulerDeps {
   // lastSentAt one-shot guard. Backed by upsertCalendarEmailSchedule.
   recordCalendarEmailRun: typeof storage.upsertCalendarEmailSchedule;
   sendCalendarScheduleEscalationEmail: typeof sendCalendarScheduleEscalationEmail;
+  // Environment gate — must return true for the tick/watchdog to send ANY
+  // email or stamp ANY run/escalation/watchdog state. Defaults to the real
+  // production check ({@link isCalendarEmailSendingEnabled}); tests inject
+  // their own. Optional so pre-existing test harnesses (which exercise the
+  // timing logic, not the environment) keep working — when omitted, sending is
+  // treated as allowed, but every production caller goes through
+  // defaultSchedulerDeps() which always wires the real check.
+  isEmailSendingEnabled?: () => boolean;
 }
 
 function defaultSchedulerDeps(): CalendarEmailSchedulerDeps {
@@ -151,6 +181,7 @@ function defaultSchedulerDeps(): CalendarEmailSchedulerDeps {
     recordCalendarEmailRun: data => storage.upsertCalendarEmailSchedule(data),
     sendCalendarScheduleEscalationEmail: (adminEmails, info) =>
       sendCalendarScheduleEscalationEmail(adminEmails, info),
+    isEmailSendingEnabled: () => isCalendarEmailSendingEnabled(),
   };
 }
 
@@ -166,6 +197,14 @@ export async function runCalendarEmailScheduleTick(
   if (ticking) return;
   ticking = true;
   try {
+    // Defense in depth: even if a tick is somehow triggered in a non-production
+    // environment (e.g. via an endpoint), send nothing and stamp nothing.
+    if (deps.isEmailSendingEnabled && !deps.isEmailSendingEnabled()) {
+      logger.info(
+        "[CalendarEmailScheduler] Sending is disabled in this environment (not deployed production; set CALENDAR_SCHEDULER_DEV_SENDING=true to opt in) — tick skipped",
+      );
+      return;
+    }
     const schedule = await deps.getCalendarEmailSchedule();
     if (!schedule || !schedule.enabled) {
       return;
@@ -613,6 +652,7 @@ export interface WatchdogResult {
   /** Short machine-readable reason for the verdict. */
   reason:
     | "already_running"
+    | "sending_disabled_in_env"
     | "disabled"
     | "pref_none"
     | "ran"
@@ -635,6 +675,15 @@ export async function runCalendarEmailWatchdog(
   }
   watchdogRunning = true;
   try {
+    // Defense in depth: even if the watchdog is triggered in a non-production
+    // environment (e.g. via the public verification endpoint), send nothing
+    // and stamp nothing.
+    if (deps.isEmailSendingEnabled && !deps.isEmailSendingEnabled()) {
+      logger.info(
+        "[CalendarEmailScheduler] Watchdog sending is disabled in this environment (not deployed production; set CALENDAR_SCHEDULER_DEV_SENDING=true to opt in) — check skipped",
+      );
+      return { checked: false, healthy: true, missed: false, alerted: false, reason: "sending_disabled_in_env" };
+    }
     const schedule = await deps.getCalendarEmailSchedule();
     if (!schedule || !schedule.enabled) {
       return { checked: false, healthy: true, missed: false, alerted: false, reason: "disabled" };
@@ -759,6 +808,18 @@ export function startCalendarEmailScheduler(): void {
   if (schedulerStarted) {
     return;
   }
+
+  // Only the deployed production server may run the scheduler/watchdog timers.
+  // The dev workspace shares SendGrid credentials but reads a stale dev DB, so
+  // running here would fire false "missed window" alerts (and could even
+  // duplicate the daily digest) at real admins.
+  if (!isCalendarEmailSendingEnabled()) {
+    logger.info(
+      "[CalendarEmailScheduler] Not starting: scheduler email sending is disabled in this environment (not deployed production). Set CALENDAR_SCHEDULER_DEV_SENDING=true to opt in for testing.",
+    );
+    return;
+  }
+
   schedulerStarted = true;
 
   logger.info(

@@ -5,6 +5,7 @@ import {
   runCalendarEmailScheduleTick,
   runCalendarEmailWatchdog,
   computeCalendarEmailHealth,
+  isCalendarEmailSendingEnabled,
   type CalendarEmailSchedulerDeps,
 } from '../calendar-email-scheduler';
 
@@ -521,6 +522,121 @@ describe('runCalendarEmailScheduleTick — timing safety', () => {
     h.setEvents([eventOnFLDate('2026-03-09')]);
     await runCalendarEmailScheduleTick(mar8_0900, h.deps);
     assert.equal(h.sends.length, 2);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Environment gate: only the deployed production server may send scheduler-
+// driven email. The dev workspace shares SendGrid credentials but reads a
+// stale dev database, so an ungated dev scheduler emailed real admins a false
+// "missed its window" alert. These tests lock the gate so a regression can't
+// silently re-enable dev sending.
+// ---------------------------------------------------------------------------
+describe('environment gate — dev sending suppression', () => {
+  it('isCalendarEmailSendingEnabled: off in a plain dev environment', () => {
+    assert.equal(isCalendarEmailSendingEnabled({}), false);
+    assert.equal(isCalendarEmailSendingEnabled({ NODE_ENV: 'development' }), false);
+    assert.equal(
+      isCalendarEmailSendingEnabled({ REPLIT_DEPLOYMENT: '' }),
+      false,
+    );
+  });
+
+  it('isCalendarEmailSendingEnabled: on in deployed production', () => {
+    assert.equal(isCalendarEmailSendingEnabled({ NODE_ENV: 'production' }), true);
+    assert.equal(isCalendarEmailSendingEnabled({ REPLIT_DEPLOYMENT: 'true' }), true);
+  });
+
+  it('isCalendarEmailSendingEnabled: explicit dev opt-in enables sending', () => {
+    assert.equal(
+      isCalendarEmailSendingEnabled({ CALENDAR_SCHEDULER_DEV_SENDING: 'true' }),
+      true,
+    );
+    // Anything other than the literal "true" does not opt in.
+    assert.equal(
+      isCalendarEmailSendingEnabled({ CALENDAR_SCHEDULER_DEV_SENDING: '1' }),
+      false,
+    );
+  });
+
+  it('tick: sends nothing and stamps nothing when sending is disabled', async () => {
+    // A fully "due" schedule — events, recipients, past send time — that would
+    // normally send. With the gate off, the tick must be a complete no-op:
+    // no digest, no escalation, no lastSentAt/lastRunStatus/lastEscalationAt.
+    const h = makeHarness(makeSchedule({ sendTime: '08:00' }), {
+      events: [eventOnFLDate('2026-01-16')],
+      users: [...oneRecipient, adminUser],
+    });
+    h.deps.isEmailSendingEnabled = () => false;
+    await runCalendarEmailScheduleTick(JAN15_0900_ET, h.deps);
+    assert.equal(h.sends.length, 0);
+    assert.equal(h.claims, 0);
+    assert.equal(h.escalations.length, 0);
+    assert.equal(h.runs.length, 0);
+    assert.equal(h.getSchedule().lastSentAt, null);
+    assert.equal(h.getSchedule().lastEscalationAt ?? null, null);
+  });
+
+  it('tick: does not emit a missed_window escalation in dev even far past the window', async () => {
+    // The exact false-alert shape: dev DB is stale (last send long ago) and the
+    // dev workspace wakes up hours past the window. Gate off → no alert email.
+    const h = makeHarness(
+      makeSchedule({ sendTime: '16:15', lastSentAt: new Date('2026-06-29T20:15:00Z') }),
+      {
+        events: [eventOnFLDate('2026-07-25')],
+        users: [...oneRecipient, adminUser],
+      },
+    );
+    h.deps.isEmailSendingEnabled = () => false;
+    const jul24_2117_ET = new Date('2026-07-25T01:17:00Z'); // Jul 24 21:17 ET
+    await runCalendarEmailScheduleTick(jul24_2117_ET, h.deps);
+    assert.equal(h.escalations.length, 0);
+    assert.equal(h.runs.length, 0);
+    assert.equal(h.getSchedule().lastEscalationAt ?? null, null);
+  });
+
+  it('tick: sends normally when the gate reports production', async () => {
+    const h = makeHarness(makeSchedule({ sendTime: '08:00' }), {
+      events: [eventOnFLDate('2026-01-16')],
+    });
+    h.deps.isEmailSendingEnabled = () => true;
+    await runCalendarEmailScheduleTick(JAN15_0900_ET, h.deps);
+    assert.equal(h.sends.length, 1);
+    assert.equal(h.claims, 1);
+  });
+
+  it('watchdog: alerts nothing and stamps nothing when sending is disabled', async () => {
+    // A genuinely missed day with an eligible admin — would normally alert.
+    const h = makeHarness(
+      makeSchedule({
+        sendTime: '08:00',
+        lastRunAt: new Date('2026-01-14T13:30:00Z'),
+        lastSentAt: new Date('2026-01-14T13:30:00Z'),
+      }),
+      { users: [...oneRecipient, adminUser] },
+    );
+    h.deps.isEmailSendingEnabled = () => false;
+    const result = await runCalendarEmailWatchdog(JAN16_0900_ET, h.deps);
+    assert.equal(h.escalations.length, 0);
+    assert.equal(h.getSchedule().lastWatchdogAt ?? null, null);
+    assert.equal(result.checked, false);
+    assert.equal(result.alerted, false);
+    assert.equal(result.reason, 'sending_disabled_in_env');
+  });
+
+  it('watchdog: alerts normally when the gate reports production', async () => {
+    const h = makeHarness(
+      makeSchedule({
+        sendTime: '08:00',
+        lastRunAt: new Date('2026-01-14T13:30:00Z'),
+        lastSentAt: new Date('2026-01-14T13:30:00Z'),
+      }),
+      { users: [...oneRecipient, adminUser] },
+    );
+    h.deps.isEmailSendingEnabled = () => true;
+    const result = await runCalendarEmailWatchdog(JAN16_0900_ET, h.deps);
+    assert.equal(h.escalations.length, 1);
+    assert.equal(result.alerted, true);
   });
 });
 
