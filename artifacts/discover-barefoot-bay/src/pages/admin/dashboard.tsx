@@ -164,6 +164,13 @@ export default function AdminDashboard() {
       testId: "message-management"
     },
     {
+      title: "On The Market Emails",
+      description: "Configure weekly digest and listing expiration email automation",
+      icon: <Tag className="h-8 w-8 text-primary" />,
+      href: "/admin/on-the-market-emails",
+      testId: "on-the-market-emails"
+    },
+    {
       title: "Email Activity",
       description: "Monitor and review email activity",
       icon: <Mail className="h-8 w-8 text-primary" />,

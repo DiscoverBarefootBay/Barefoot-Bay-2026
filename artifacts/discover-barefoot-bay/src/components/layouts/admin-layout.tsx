@@ -12,7 +12,8 @@ import {
   BarChart3,
   MessageSquare,
   Mail,
-  Sparkles
+  Sparkles,
+  Tag,
 } from 'lucide-react';
 // Analytics components removed per request
 import { useLocation, Link } from 'wouter';
@@ -59,6 +60,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     { href: '/admin', label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
     { href: '/community-settings', label: 'User Management', icon: <Users size={18} /> },
     { href: '/admin/calendar-management', label: 'Calendar Management', icon: <CalendarDays size={18} /> },
+    { href: '/admin/on-the-market-emails', label: 'On The Market Emails', icon: <Tag size={18} /> },
     { href: '/admin/feature-management', label: 'Feature Management', icon: <ToggleLeft size={18} /> },
     { href: '/admin/platinum-sponsor-settings', label: 'Platinum Sponsor Settings', icon: <Sparkles size={18} /> },
     { href: '/admin/membership-management', label: 'Membership Management', icon: <CreditCard size={18} /> },

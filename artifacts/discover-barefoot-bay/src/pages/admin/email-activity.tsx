@@ -22,8 +22,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { EmailActivitySkeleton, EmailTableSkeleton } from "@/components/email-activity-skeleton";
-import ForSaleEmailsTab from "./forsale-emails-tab";
-import WeeklyListingsTab from "./weekly-listings-tab";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useUnsavedChangesPrompt } from "@/hooks/use-unsaved-changes-prompt";
@@ -523,14 +521,6 @@ export default function EmailActivityPage() {
                 <CreditCard className="h-4 w-4 mr-2" />
                 Billing
               </TabsTrigger>
-              <TabsTrigger value="forsale-emails" data-testid="tab-forsale-emails">
-                <Mail className="h-4 w-4 mr-2" />
-                On The Market Emails
-              </TabsTrigger>
-              <TabsTrigger value="weekly-listings" data-testid="tab-weekly-listings">
-                <Mail className="h-4 w-4 mr-2" />
-                Weekly Promo
-              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="stats">
@@ -985,13 +975,6 @@ export default function EmailActivityPage() {
               </Card>
             </TabsContent>
 
-            <TabsContent value="weekly-listings">
-              <WeeklyListingsTab />
-            </TabsContent>
-
-            <TabsContent value="forsale-emails">
-              <ForSaleEmailsTab />
-            </TabsContent>
           </Tabs>
 
           <Card>

@@ -73,6 +73,7 @@ import AnalyticsDashboard from "@/pages/admin/analytics-dashboard";
 import EnhancedAnalyticsDashboard from "@/pages/admin/enhanced-analytics-dashboard";
 import AdminMessagesPage from "@/pages/admin/admin-messages";
 import EmailActivityPage from "@/pages/admin/email-activity";
+import OnTheMarketEmailsPage from "@/pages/admin/on-the-market-emails";
 
 import GenericContentPage from "@/pages/generic-content-page";
 import FormPage from "@/pages/form-page";
@@ -205,6 +206,7 @@ function Router() {
             <ProtectedRoute path="/admin/messages" component={AdminMessagesPage} requiredFeature="ADMIN" />
             <ProtectedRoute path="/admin/analytics" component={AnalyticsDashboard} requiredFeature="ADMIN" />
             <ProtectedRoute path="/admin/email-activity" component={EmailActivityPage} requiredFeature="ADMIN" />
+            <ProtectedRoute path="/admin/on-the-market-emails" component={OnTheMarketEmailsPage} requiredFeature="ADMIN" />
 
             <ProtectedRoute path="/admin/calendar-management" component={CalendarManagement} requiredFeature="ADMIN" />
             <ProtectedRoute path="/admin/feature-management" component={FeatureManagementPage} requiredFeature="ADMIN" />
