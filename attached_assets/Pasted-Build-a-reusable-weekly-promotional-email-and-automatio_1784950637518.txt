@@ -1,0 +1,149 @@
+Build a reusable weekly promotional email and automation for the existing BarefootBay.com marketplace section, and complete the rename from “For Sale” to “On The Market.”
+
+## Rename “For Sale” to “On The Market”
+
+Update all user-facing references to the marketplace, including:
+
+- Main navigation
+- Public listing-page heading
+- Buttons and links
+- Breadcrumbs
+- Search labels and placeholder text
+- Admin screens
+- Listing-management screens
+- Notifications
+- Email templates
+- Page titles and SEO metadata
+- Empty-state and validation messages
+- Mobile navigation
+- Accessibility labels
+
+Requirements:
+
+- No public-facing “For Sale” or “For-Sale” labels should remain.
+- Use “On The Market” consistently as the section name.
+- Keep listing-type labels such as “For Sale by Owner” or “For Sale by Agent” unchanged unless they are intended to be renamed separately.
+- Preserve the existing `/for-sale` route for backward compatibility, or redirect it safely to a new route if one is created.
+- Do not break existing listing URLs, bookmarks, database records, filters, or email links.
+- Internal code names and database fields may remain unchanged when renaming them would create unnecessary risk.
+
+## Weekly email feature
+
+Feature name:
+
+Currently, On The Market
+
+Inspect the existing project, listing database, subscriber system, email provider, and scheduled-job setup before making changes. Reuse the current architecture wherever possible.
+
+## Email content
+
+Dynamic subject:
+
+Currently, On The Market | {{week_start}}–{{week_end}}
+
+Example:
+
+Currently, On The Market | July 20–26, 2026
+
+Email heading:
+
+Currently, On The Market  
+{{week_start}}–{{week_end}}
+
+Intro text:
+
+Here are this week’s newest listings from the Barefoot Bay community.
+
+Section heading:
+
+New This Week
+
+Display each qualifying listing with:
+
+- Primary image
+- Listing title
+- Price
+- Listing type
+- Short description
+- “View Listing” button
+
+Add:
+
+- “View All Listings” button linking to the public On The Market page
+- Closing text: “Have something to sell? Post it on On The Market today.”
+- “Post a Listing” button linking to the listing-submission page
+
+## Listing selection
+
+- Include listings first published within the weekly date range.
+- Include only active, publicly visible listings.
+- Exclude drafts, expired, deleted, and unpublished listings.
+- Sort listings newest first.
+- Use the primary image or a default Barefoot Bay placeholder.
+- Do not include private administrative information.
+
+## Date handling
+
+- Calculate the weekly date range automatically.
+- Use the Barefoot Bay local timezone.
+- Format ranges naturally, including weeks spanning months or years.
+
+Examples:
+
+- July 20–26, 2026
+- July 27–August 2, 2026
+- December 28, 2026–January 3, 2027
+
+## Automation
+
+- Create a recurring weekly scheduled job.
+- Make the send day and time configurable by an administrator.
+- Prevent the same weekly campaign from being sent more than once.
+- Record the date range, listing count, recipient count, send status, timestamp, and errors.
+- Retry temporary failures without creating duplicate sends.
+- Do not send when there are no new listings unless an administrator enables that option.
+
+## Recipients
+
+- Use the existing approved promotional-email subscriber list.
+- Preserve unsubscribe and email-preference behavior.
+- Exclude unsubscribed, suppressed, and invalid addresses.
+- Include the existing business identity, mailing information, and unsubscribe link.
+
+## Admin controls
+
+Allow an administrator to:
+
+- Enable or disable the automation
+- Select the weekly send day and time
+- Preview the email
+- Send a test email
+- Review included listings
+- Manually trigger the campaign
+- View previous send results and errors
+
+## Design
+
+- Match the existing Barefoot Bay branding.
+- Use responsive, email-compatible HTML.
+- Include image alt text.
+- Make the email readable when images are blocked.
+- Include a plain-text version.
+
+## Safety
+
+- Store credentials in environment variables.
+- Keep the automation disabled until the sender identity, schedule, and recipient source are verified.
+- Preserve all existing listing and subscriber data.
+- Add tests for date ranges, listing selection, duplicate-send prevention, unsubscribe exclusions, and email rendering.
+
+## Acceptance criteria
+
+- “On The Market” replaces “For Sale” throughout all user-facing areas.
+- Existing marketplace routes and listing links continue to work.
+- The weekly email automatically displays the correct date range.
+- Active listings published during the week populate automatically.
+- Administrators can preview, test, schedule, and manually send the email.
+- Duplicate campaigns are prevented.
+- Unsubscribed users are excluded.
+- Send history and errors are recorded.
