@@ -48,8 +48,11 @@ function loadImage(src: string, useCrossOrigin: boolean): Promise<HTMLImageEleme
 }
 
 async function cropToBlob(src: string, area: Area): Promise<Blob> {
-  const useCrossOrigin = !isSameOrigin(src);
-  const img = await loadImage(src, useCrossOrigin);
+  // Always use crossOrigin="anonymous" so the canvas isn't tainted by a
+  // cached CORS-flagged response (the storage proxy sets ACAO:* on all
+  // forum images, so same-origin images served with that header must also
+  // be loaded with the attribute to stay consistent with the browser cache).
+  const img = await loadImage(src, true);
   const scale = area.width > MAX_OUTPUT_WIDTH ? MAX_OUTPUT_WIDTH / area.width : 1;
   const outW = Math.round(area.width * scale);
   const outH = Math.round(area.height * scale);
@@ -185,8 +188,13 @@ export function FeaturedImageEditorDialog({
         });
       } catch {
         if (!cancelled) {
-          // External image blocked canvas export (CORS) — crop not possible
-          setCropUnavailable(true);
+          // Only mark as unavailable for genuinely cross-origin images.
+          // Same-origin images should never taint the canvas; if they do it
+          // is transient (e.g. a sidecar restart) and should not permanently
+          // hide the cropper or prevent saving.
+          if (!isSameOrigin(imageSrc)) {
+            setCropUnavailable(true);
+          }
           clearPreviewUrl();
         }
       }
@@ -205,7 +213,9 @@ export function FeaturedImageEditorDialog({
     [],
   );
 
-  const canCrop = !!imageSrc && !cropUnavailable;
+  // Same-origin images are always croppable — canvas tainting can't occur for
+  // resources on the same origin, so never hide the cropper for them.
+  const canCrop = !!imageSrc && (!cropUnavailable || isSameOrigin(imageSrc));
   const previewSrc = previewUrl || imageSrc;
 
   const handleSave = async () => {
@@ -216,8 +226,10 @@ export function FeaturedImageEditorDialog({
       return;
     }
     if (!imageSrc) return;
-    // External image we couldn't crop: save the URL as-is (legacy behavior)
-    if (cropUnavailable && !sourceIsUpload) {
+    // External (cross-origin) image we couldn't crop: save the URL as-is.
+    // Skip this shortcut for same-origin images — they can always be cropped
+    // via canvas and should never silently fall back to the original URL.
+    if (cropUnavailable && !sourceIsUpload && !isSameOrigin(imageSrc)) {
       onSave(urlInput.trim() || imageSrc);
       return;
     }
