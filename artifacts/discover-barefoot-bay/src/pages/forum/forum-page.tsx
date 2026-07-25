@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Link } from "wouter";
+import { Link, useLocation, useSearch } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -137,7 +137,17 @@ export default function ForumPage() {
   const { isAdmin } = usePermissions();
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [descriptionText, setDescriptionText] = useState("");
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  const [, navigate] = useLocation();
+  const searchString = useSearch();
+  // Category filter is URL-addressable (?categoryId=N) so filtered feeds can be
+  // linked directly and browser back/forward works between filters.
+  const rawCategoryId = new URLSearchParams(searchString).get("categoryId");
+  const parsedCategoryId = rawCategoryId ? Number(rawCategoryId) : NaN;
+  const selectedCategoryId =
+    Number.isInteger(parsedCategoryId) && parsedCategoryId > 0 ? parsedCategoryId : null;
+  const setSelectedCategoryId = (categoryId: number | null) => {
+    navigate(categoryId ? `/forum?categoryId=${categoryId}` : "/forum");
+  };
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   // Fetch categories (for filter chips)

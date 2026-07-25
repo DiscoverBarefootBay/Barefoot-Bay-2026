@@ -25,3 +25,5 @@ Apply schema changes with explicit **idempotent SQL** (`CREATE TABLE/INDEX IF NO
 
 ## Gotcha: FK names >63 chars
 Postgres truncates identifiers to 63 chars. Drizzle's generated FK name `analytics_segment_filters_segment_id_analytics_user_segments_id_fk` (65) truncates to 63 (loses `_fk`), so push perpetually shows a benign "drop+re-add" for that FK. No data involved; ignore it.
+
+**Merged-feature schema gaps:** when task branches merge, new tables/columns in the Drizzle schema (lib/db) do NOT exist in the dev DB automatically — endpoints 500 with "column does not exist". After merges touching schema, verify with information_schema and apply the idempotent SQL (dev via database skill; prod is read-only from tasks — schema must be applied on Publish/from the main app).

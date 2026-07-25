@@ -8427,9 +8427,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
               console.log(`[DEBUG: Listings API] Showing all listings for user ${userId} without status filtering (admin=${isAdmin})`);
             }
           } else {
-            // For "All Listings" view, apply filtering based on excludeDrafts parameter
-            // By default, exclude drafts for public view UNLESS specifically requested not to
-            const shouldExcludeDrafts = req.query.excludeDrafts !== 'false'; // Default to true unless explicitly 'false'
+            // For "All Listings" view, apply filtering based on excludeDrafts parameter.
+            // Only admins may opt in to seeing drafts (excludeDrafts=false); for
+            // everyone else the parameter is ignored so public users cannot use
+            // status/draft parameters to expose unpublished listings.
+            const requesterIsAdmin = req.isAuthenticated() && req.user.role === 'admin';
+            const shouldExcludeDrafts = requesterIsAdmin ? req.query.excludeDrafts !== 'false' : true;
             
             const filteredListings = listings.filter(listing => {
               // Check if the authenticated user is an admin

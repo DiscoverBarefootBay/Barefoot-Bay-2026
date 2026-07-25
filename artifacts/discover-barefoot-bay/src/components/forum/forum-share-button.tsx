@@ -39,7 +39,7 @@ export function ForumShareButton({
     : '';
 
   // Create the share title
-  const shareTitle = `${post.title} - Barefoot Bay Community Forum`;
+  const shareTitle = `${post.title} - Barefoot Bay Extra! Extra!`;
 
   // Create personalized share text with context
   const shareText = post.author && post.category

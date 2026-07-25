@@ -864,41 +864,41 @@ export default function AdvancedSettings() {
           </CardContent>
         </Card>
         
-        {/* Community Forum Management Card */}
+        {/* Extra! Extra! Management Card */}
         <Card className="border-orange-500/20">
           <CardHeader>
             <CardTitle className="flex items-center text-orange-600">
               <MessageSquare className="h-5 w-5 mr-2" />
-              Community Forum Management
+              Extra! Extra! Management
             </CardTitle>
             <CardDescription>
-              Operations related to forum posts, comments, and reactions
+              Operations related to Extra! Extra! stories, comments, and reactions
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-6">
-              {/* Delete All Forum Content Section */}
+              {/* Delete All Extra! Extra! Content Section */}
               <div className="flex items-start gap-4 pb-6 border-b border-border">
                 <AlertTriangle className="h-10 w-10 text-amber-500 flex-shrink-0 mt-1" />
                 <div>
-                  <h3 className="font-medium">Delete All Forum Content</h3>
+                  <h3 className="font-medium">Delete All Extra! Extra! Content</h3>
                   <p className="text-sm text-muted-foreground mt-1 mb-3">
-                    This will permanently delete all forum posts, comments, and reactions from the database.
-                    This action cannot be undone and will remove all community forum content.
+                    This will permanently delete all Extra! Extra! stories, comments, and reactions from the database.
+                    This action cannot be undone and will remove all Extra! Extra! content.
                   </p>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="destructive" className="gap-2">
                         <Trash2 className="h-4 w-4" />
-                        Delete All Forum Content
+                        Delete All Extra! Extra! Content
                       </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription>
-                          This action cannot be undone. This will permanently delete ALL forum posts, 
-                          comments, and reactions from the community forum.
+                          This action cannot be undone. This will permanently delete ALL Extra! Extra! stories, 
+                          comments, and reactions.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
@@ -907,7 +907,7 @@ export default function AdvancedSettings() {
                           onClick={(e) => deleteAllForumContentMutation.mutate()}
                           className="bg-red-600 hover:bg-red-700"
                         >
-                          {deleteAllForumContentMutation.isPending ? "Deleting..." : "Delete All Forum Content"}
+                          {deleteAllForumContentMutation.isPending ? "Deleting..." : "Delete All Extra! Extra! Content"}
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -915,28 +915,28 @@ export default function AdvancedSettings() {
                 </div>
               </div>
               
-              {/* Delete All Forum Comments Section */}
+              {/* Delete All Extra! Extra! Comments Section */}
               <div className="flex items-start gap-4">
                 <AlertTriangle className="h-10 w-10 text-amber-500 flex-shrink-0 mt-1" />
                 <div>
-                  <h3 className="font-medium">Delete All Forum Comments</h3>
+                  <h3 className="font-medium">Delete All Extra! Extra! Comments</h3>
                   <p className="text-sm text-muted-foreground mt-1 mb-3">
-                    This will permanently delete all forum comments and their reactions, but will keep all forum posts.
+                    This will permanently delete all Extra! Extra! comments and their reactions, but will keep all stories.
                     This action cannot be undone.
                   </p>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="destructive" className="gap-2">
                         <Trash2 className="h-4 w-4" />
-                        Delete All Forum Comments
+                        Delete All Extra! Extra! Comments
                       </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription>
-                          This action cannot be undone. This will permanently delete ALL forum
-                          comments and their reactions, but will preserve the forum posts.
+                          This action cannot be undone. This will permanently delete ALL Extra! Extra!
+                          comments and their reactions, but will preserve the stories.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
@@ -945,7 +945,7 @@ export default function AdvancedSettings() {
                           onClick={(e) => deleteAllForumCommentsMutation.mutate()}
                           className="bg-red-600 hover:bg-red-700"
                         >
-                          {deleteAllForumCommentsMutation.isPending ? "Deleting..." : "Delete All Forum Comments"}
+                          {deleteAllForumCommentsMutation.isPending ? "Deleting..." : "Delete All Extra! Extra! Comments"}
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
