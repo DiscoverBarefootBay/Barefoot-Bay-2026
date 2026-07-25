@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link, useParams, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -52,18 +52,9 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { ForumShareButton } from "@/components/forum/forum-share-button";
 import { ForumLikes } from "@/components/forum/forum-likes";
+import { FeaturedImageEditorDialog } from "@/components/forum/featured-image-editor-dialog";
 
 interface ForumPost {
   id: number;
@@ -75,6 +66,7 @@ interface ForumPost {
   isPinned?: boolean;
   isEditoriallyUpdated?: boolean;
   featuredImage?: string | null;
+  mediaUrls?: string[] | null;
   createdAt: string;
   updatedAt: string;
   author: {
@@ -239,7 +231,6 @@ export default function ForumPostPage() {
   const [comment, setComment] = useState("");
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isFeaturedImageDialogOpen, setIsFeaturedImageDialogOpen] = useState(false);
-  const [featuredImageUrl, setFeaturedImageUrl] = useState("");
   const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
   const [showPostContent, setShowPostContent] = useState(true);
   const [isAnimationFading, setIsAnimationFading] = useState(false);
@@ -409,6 +400,22 @@ export default function ForumPostPage() {
       };
     }
   });
+
+  // Images available in this post (media attachments + inline images) for the featured-image picker
+  const postImages = useMemo(() => {
+    const urls: string[] = [];
+    if (Array.isArray(post?.mediaUrls)) {
+      for (const u of post.mediaUrls) {
+        if (typeof u === "string" && /\.(jpe?g|png|gif|webp|avif)(\?.*)?$/i.test(u)) urls.push(u);
+        else if (typeof u === "string" && (u.includes("/storage-proxy/") || u.includes("/uploads/"))) urls.push(u);
+      }
+    }
+    if (post?.content) {
+      const matches = post.content.matchAll(/<img[^>]+src="([^">]+)"/gi);
+      for (const m of matches) urls.push(m[1]);
+    }
+    return Array.from(new Set(urls));
+  }, [post?.mediaUrls, post?.content]);
 
   // Fetch comments for the post
   const { 
@@ -1054,74 +1061,29 @@ export default function ForumPostPage() {
                 <BadgeCheck className="mr-2 h-4 w-4" />
                 {post.isEditoriallyUpdated ? "Remove Updated Flag" : "Mark as Updated"}
               </Button>
-              <Dialog
-                open={isFeaturedImageDialogOpen}
-                onOpenChange={(open) => {
-                  setIsFeaturedImageDialogOpen(open);
-                  if (open) setFeaturedImageUrl(post.featuredImage || "");
-                }}
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-navy/20 hover:bg-coral/10 hover:text-coral hover:border-coral"
+                onClick={() => setIsFeaturedImageDialogOpen(true)}
+                data-testid="button-featured-image"
               >
-                <DialogTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="border-navy/20 hover:bg-coral/10 hover:text-coral hover:border-coral"
-                    data-testid="button-featured-image"
-                  >
-                    <ImageIcon className="mr-2 h-4 w-4" /> Featured Image
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Featured Image</DialogTitle>
-                    <DialogDescription>
-                      Set the image shown on this story's card in the Extra! Extra! feed. Leave blank to remove it.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-3">
-                    <Input
-                      placeholder="https://example.com/image.jpg"
-                      value={featuredImageUrl}
-                      onChange={(e) => setFeaturedImageUrl(e.target.value)}
-                      data-testid="input-featured-image-url"
-                    />
-                    {featuredImageUrl.trim() && (
-                      <img
-                        src={featuredImageUrl.trim()}
-                        alt="Featured preview"
-                        className="max-h-40 rounded-md border border-navy/10 object-cover"
-                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                        onLoad={(e) => { (e.target as HTMLImageElement).style.display = ''; }}
-                      />
-                    )}
-                  </div>
-                  <DialogFooter>
-                    <Button
-                      variant="outline"
-                      onClick={() => setIsFeaturedImageDialogOpen(false)}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      className="bg-coral hover:bg-coral/90 text-white"
-                      disabled={updateStorySettingsMutation.isPending}
-                      onClick={() => {
-                        updateStorySettingsMutation.mutate(
-                          { featuredImage: featuredImageUrl.trim() || null },
-                          { onSuccess: () => setIsFeaturedImageDialogOpen(false) },
-                        );
-                      }}
-                      data-testid="button-save-featured-image"
-                    >
-                      {updateStorySettingsMutation.isPending ? (
-                        <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</>
-                      ) : (
-                        "Save"
-                      )}
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+                <ImageIcon className="mr-2 h-4 w-4" /> Featured Image
+              </Button>
+              <FeaturedImageEditorDialog
+                open={isFeaturedImageDialogOpen}
+                onOpenChange={setIsFeaturedImageDialogOpen}
+                currentUrl={post.featuredImage || null}
+                postTitle={post.title}
+                postImages={postImages}
+                saving={updateStorySettingsMutation.isPending}
+                onSave={(url) => {
+                  updateStorySettingsMutation.mutate(
+                    { featuredImage: url },
+                    { onSuccess: () => setIsFeaturedImageDialogOpen(false) },
+                  );
+                }}
+              />
             </>
           )}
 
