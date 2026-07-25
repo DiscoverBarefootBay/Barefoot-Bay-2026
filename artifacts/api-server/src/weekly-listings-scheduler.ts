@@ -274,6 +274,7 @@ export async function executeWeeklySend(
       listings,
       range,
       deps.baseUrl ?? getWeeklyEmailBaseUrl(),
+      config.template,
     );
 
     let sentCount = 0;

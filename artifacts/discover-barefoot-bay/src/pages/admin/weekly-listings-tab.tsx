@@ -21,16 +21,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Send, Save, Eye, Loader2, Mail } from "lucide-react";
+import { Send, Save, Eye, Loader2, Mail, RotateCcw } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 import { format } from "date-fns";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+
+interface WeeklyEmailTemplate {
+  subject: string;
+  html: string;
+}
 
 interface WeeklyListingsEmailConfig {
   enabled: boolean;
   sendDay: number;
   sendTime: string;
   sendWhenEmpty: boolean;
+  template: WeeklyEmailTemplate;
 }
 
 interface WeeklySendRecord {
@@ -52,6 +59,8 @@ interface ConfigResponse {
   config: WeeklyListingsEmailConfig;
   history: WeeklySendRecord[];
   nextScheduledSend: { dateEt: string; time: string; label: string } | null;
+  placeholders?: Array<{ token: string; description: string }>;
+  defaultTemplate?: WeeklyEmailTemplate;
 }
 
 interface PreviewResponse {
@@ -130,6 +139,7 @@ export default function WeeklyListingsTab() {
     },
     onSuccess: (updated) => {
       queryClient.invalidateQueries({ queryKey: [ENDPOINT] });
+      queryClient.invalidateQueries({ queryKey: [`${ENDPOINT}/preview`] });
       setForm({ ...updated.config });
       setBaseline(JSON.stringify(updated.config));
       toast({ title: "Settings saved", description: "Weekly email settings updated." });
@@ -348,6 +358,90 @@ export default function WeeklyListingsTab() {
               )}
               Send Campaign Now
             </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Email Template</CardTitle>
+          <CardDescription>
+            Edit the subject and HTML body of the weekly digest email. Use the placeholder tokens
+            below — they're swapped for real values when the email is sent. Keep{" "}
+            <span className="font-mono">{"{{listings}}"}</span> in the body or the listing cards
+            won't appear. The plain-text version is generated automatically. Save your changes,
+            then use the preview or a test email to check the result.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="weekly-template-subject">Subject</Label>
+            <Input
+              id="weekly-template-subject"
+              value={form.template?.subject ?? ""}
+              onChange={(e) =>
+                setForm({ ...form, template: { ...form.template, subject: e.target.value } })
+              }
+              data-testid="input-weekly-template-subject"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="weekly-template-html">HTML Body</Label>
+            <Textarea
+              id="weekly-template-html"
+              value={form.template?.html ?? ""}
+              onChange={(e) =>
+                setForm({ ...form, template: { ...form.template, html: e.target.value } })
+              }
+              rows={14}
+              className="font-mono text-xs"
+              data-testid="textarea-weekly-template-html"
+            />
+          </div>
+
+          {(data?.placeholders?.length ?? 0) > 0 && (
+            <div className="space-y-2">
+              <Label className="text-xs text-muted-foreground">Available placeholders</Label>
+              <div className="flex flex-wrap gap-2">
+                {data!.placeholders!.map((p) => (
+                  <Badge key={p.token} variant="secondary" title={p.description} className="font-mono">
+                    {p.token}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Button
+              variant="ghost"
+              disabled={!data?.defaultTemplate}
+              onClick={() => {
+                if (data?.defaultTemplate) {
+                  setForm({ ...form, template: { ...data.defaultTemplate } });
+                }
+              }}
+              data-testid="button-weekly-template-reset"
+            >
+              <RotateCcw className="h-4 w-4 mr-2" />
+              Reset template to default
+            </Button>
+            <div className="flex items-center gap-3">
+              {isDirty && <span className="text-sm text-muted-foreground">Unsaved changes</span>}
+              <Button
+                onClick={() => saveMutation.mutate()}
+                disabled={!isDirty || saveMutation.isPending}
+                data-testid="button-weekly-template-save"
+              >
+                {saveMutation.isPending ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Save className="h-4 w-4 mr-2" />
+                )}
+                Save changes
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>

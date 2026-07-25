@@ -9,6 +9,8 @@ import {
   renderWeeklyListingsEmail,
   mergeWeeklyListingsEmailConfig,
   getDefaultWeeklyListingsEmailConfig,
+  getDefaultWeeklyEmailTemplate,
+  WEEKLY_EMAIL_PLACEHOLDERS,
   type WeekRange,
 } from '../weekly-listings-email';
 import {
@@ -78,7 +80,7 @@ describe('getCampaignWeekRange', () => {
 });
 
 describe('getNextScheduledSend', () => {
-  const CFG = { enabled: true, sendDay: 1, sendTime: '09:00', sendWhenEmpty: false };
+  const CFG = { enabled: true, sendDay: 1, sendTime: '09:00', sendWhenEmpty: false, template: getDefaultWeeklyEmailTemplate() };
 
   it('returns null when the automation is disabled', () => {
     assert.equal(getNextScheduledSend({ ...CFG, enabled: false }), null);
@@ -283,12 +285,28 @@ describe('renderWeeklyListingsEmail', () => {
 describe('mergeWeeklyListingsEmailConfig', () => {
   it('defaults: disabled, Monday 09:00, skip empty weeks', () => {
     const d = getDefaultWeeklyListingsEmailConfig();
-    assert.deepEqual(d, { enabled: false, sendDay: 1, sendTime: '09:00', sendWhenEmpty: false });
+    assert.deepEqual(d, { enabled: false, sendDay: 1, sendTime: '09:00', sendWhenEmpty: false, template: getDefaultWeeklyEmailTemplate() });
   });
 
   it('rejects malformed values field-by-field', () => {
     const m = mergeWeeklyListingsEmailConfig({ enabled: 'yes', sendDay: 9, sendTime: '9am', sendWhenEmpty: true });
-    assert.deepEqual(m, { enabled: false, sendDay: 1, sendTime: '09:00', sendWhenEmpty: true });
+    assert.deepEqual(m, { enabled: false, sendDay: 1, sendTime: '09:00', sendWhenEmpty: true, template: getDefaultWeeklyEmailTemplate() });
+  });
+
+  it('advertises every supported placeholder token', () => {
+    const tokens = WEEKLY_EMAIL_PLACEHOLDERS.map((p) => p.token);
+    for (const t of ['{{weekRange}}', '{{intro}}', '{{listings}}', '{{listingCount}}', '{{forSaleUrl}}', '{{baseUrl}}', '{{subject}}']) {
+      assert.ok(tokens.includes(t), `missing placeholder ${t}`);
+    }
+  });
+
+  it('accepts a custom template and falls back to defaults for empty fields', () => {
+    const m = mergeWeeklyListingsEmailConfig({ template: { subject: 'Hi {{weekRange}}', html: '<p>{{listings}}</p>' } });
+    assert.deepEqual(m.template, { subject: 'Hi {{weekRange}}', html: '<p>{{listings}}</p>' });
+    const empty = mergeWeeklyListingsEmailConfig({ template: { subject: '', html: '   ' } });
+    assert.deepEqual(empty.template, getDefaultWeeklyEmailTemplate());
+    const junk = mergeWeeklyListingsEmailConfig({ template: 'nope' });
+    assert.deepEqual(junk.template, getDefaultWeeklyEmailTemplate());
   });
 });
 
@@ -352,7 +370,7 @@ function freshState(sendResult = true): FakeState {
   return { rows: new Map(), nextId: 1, sends: [], sendResult };
 }
 
-const CONFIG = { enabled: true, sendDay: 1, sendTime: '09:00', sendWhenEmpty: false };
+const CONFIG = { enabled: true, sendDay: 1, sendTime: '09:00', sendWhenEmpty: false, template: getDefaultWeeklyEmailTemplate() };
 
 describe('executeWeeklySend', () => {
   it('sends to all eligible recipients and records the week as sent', async () => {

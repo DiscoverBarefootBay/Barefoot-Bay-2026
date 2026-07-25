@@ -18,6 +18,12 @@ export const EASTERN_TZ = 'America/New_York';
 
 export const WEEKLY_LISTINGS_CONFIG_KEY = 'weekly_listings_email_config';
 
+/** Admin-editable subject + HTML body with {{token}} placeholders. */
+export interface WeeklyEmailTemplate {
+  subject: string;
+  html: string;
+}
+
 export interface WeeklyListingsEmailConfig {
   /** Master switch for the automatic weekly send. Ships disabled. */
   enabled: boolean;
@@ -27,6 +33,8 @@ export interface WeeklyListingsEmailConfig {
   sendTime: string;
   /** When true, the email still goes out on weeks with zero new listings. */
   sendWhenEmpty: boolean;
+  /** Admin-editable email template (subject + HTML body with {{tokens}}). */
+  template: WeeklyEmailTemplate;
 }
 
 export function getDefaultWeeklyListingsEmailConfig(): WeeklyListingsEmailConfig {
@@ -35,6 +43,7 @@ export function getDefaultWeeklyListingsEmailConfig(): WeeklyListingsEmailConfig
     sendDay: 1, // Monday
     sendTime: '09:00',
     sendWhenEmpty: false,
+    template: getDefaultWeeklyEmailTemplate(),
   };
 }
 
@@ -44,6 +53,7 @@ export function mergeWeeklyListingsEmailConfig(saved: unknown): WeeklyListingsEm
   if (!saved || typeof saved !== 'object') return defaults;
   const s = saved as Partial<WeeklyListingsEmailConfig>;
   const sendDay = Number(s.sendDay);
+  const tpl = (s.template && typeof s.template === 'object' ? s.template : {}) as Partial<WeeklyEmailTemplate>;
   return {
     enabled: typeof s.enabled === 'boolean' ? s.enabled : defaults.enabled,
     sendDay: Number.isInteger(sendDay) && sendDay >= 0 && sendDay <= 6 ? sendDay : defaults.sendDay,
@@ -52,6 +62,14 @@ export function mergeWeeklyListingsEmailConfig(saved: unknown): WeeklyListingsEm
         ? s.sendTime
         : defaults.sendTime,
     sendWhenEmpty: typeof s.sendWhenEmpty === 'boolean' ? s.sendWhenEmpty : defaults.sendWhenEmpty,
+    template: {
+      subject:
+        typeof tpl.subject === 'string' && tpl.subject.trim()
+          ? tpl.subject
+          : defaults.template.subject,
+      html:
+        typeof tpl.html === 'string' && tpl.html.trim() ? tpl.html : defaults.template.html,
+    },
   };
 }
 
@@ -261,17 +279,96 @@ export interface RenderedWeeklyEmail {
   text: string;
 }
 
+/** Placeholder tokens the admin can use in the weekly email template. */
+export const WEEKLY_EMAIL_PLACEHOLDERS: Array<{ token: string; description: string }> = [
+  { token: '{{weekRange}}', description: 'The campaign week, e.g. "July 20–26, 2026"' },
+  { token: '{{intro}}', description: 'The standard intro sentence (changes automatically when the week has no new listings)' },
+  { token: '{{listings}}', description: 'The "New This Week" heading and the listing cards — required for listings to appear' },
+  { token: '{{listingCount}}', description: 'Number of new listings featured this week' },
+  { token: '{{forSaleUrl}}', description: 'Link to the On The Market page' },
+  { token: '{{baseUrl}}', description: 'The site address, e.g. https://barefootbay.com' },
+  { token: '{{subject}}', description: 'The rendered subject line (HTML body only)' },
+];
+
+/** The built-in template. `{{tokens}}` are substituted at render time. */
+export function getDefaultWeeklyEmailTemplate(): WeeklyEmailTemplate {
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{subject}}</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f6f8;font-family:Arial,Helvetica,sans-serif;color:${BRAND.charcoal};">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f8;">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:8px;overflow:hidden;">
+          <tr>
+            <td style="background:${BRAND.navy};padding:28px 24px;text-align:center;">
+              <p style="margin:0 0 6px 0;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:${BRAND.ocean};">Barefoot Bay Community</p>
+              <h1 style="margin:0;font-size:24px;line-height:32px;color:#ffffff;">{{subject}}</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:24px 24px 8px 24px;">
+              <p style="margin:0 0 16px 0;font-size:15px;line-height:22px;">{{intro}}</p>
+            </td>
+          </tr>
+          {{listings}}
+          <tr>
+            <td style="padding:0 24px 24px 24px;text-align:center;">
+              <a href="{{forSaleUrl}}" style="background:${BRAND.navy};color:#ffffff;padding:12px 24px;text-decoration:none;border-radius:5px;display:inline-block;font-size:15px;">View All Listings</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 24px 24px 24px;text-align:center;border-top:1px solid #e5e7eb;">
+              <p style="margin:24px 0 12px 0;font-size:15px;line-height:22px;">Have something to sell? Post it on On The Market today.</p>
+              <a href="{{forSaleUrl}}" style="background:${BRAND.coral};color:#ffffff;padding:12px 24px;text-decoration:none;border-radius:5px;display:inline-block;font-size:15px;">Post a Listing</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="background:#f8fafc;padding:20px 24px;text-align:center;">
+              <p style="margin:0 0 6px 0;font-size:12px;color:#6b7280;">Barefoot Bay Community Platform &bull; Barefoot Bay, FL 32976</p>
+              <p style="margin:0;font-size:12px;color:#6b7280;">
+                You're receiving this because you're a member of the Barefoot Bay community site.
+                <a href="{{baseUrl}}/unsubscribe" style="color:#6b7280;text-decoration:underline;">Unsubscribe from email notifications</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+  return {
+    subject: 'Currently, On The Market | {{weekRange}}',
+    html,
+  };
+}
+
+/** Replace every occurrence of each {{token}} in a template string. */
+function applyTokens(template: string, tokens: Record<string, string>): string {
+  return template.replace(/\{\{\s*(\w+)\s*\}\}/g, (match, name: string) =>
+    Object.prototype.hasOwnProperty.call(tokens, name) ? tokens[name]! : match,
+  );
+}
+
 /**
  * Render the responsive HTML + plain-text weekly email. Email-safe: table
  * layout, inline styles, alt text on every image, readable with images
  * blocked. `baseUrl` is the public site origin (no trailing slash).
+ * An admin-edited `template` (subject + HTML with {{tokens}}) may be passed;
+ * the built-in default is used otherwise. The plain-text version is always
+ * generated automatically.
  */
 export function renderWeeklyListingsEmail(
   listings: WeeklyEmailListing[],
   range: WeekRange,
   baseUrl: string,
+  template: WeeklyEmailTemplate = getDefaultWeeklyEmailTemplate(),
 ): RenderedWeeklyEmail {
-  const heading = `Currently, On The Market | ${range.label}`;
   const forSaleUrl = `${baseUrl}/for-sale`;
   const placeholderImg = `${baseUrl}/logo.png`;
 
@@ -313,60 +410,35 @@ export function renderWeeklyListingsEmail(
     })
     .join('\n');
 
-  const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${escapeHtml(heading)}</title>
-</head>
-<body style="margin:0;padding:0;background:#f4f6f8;font-family:Arial,Helvetica,sans-serif;color:${BRAND.charcoal};">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f8;">
-    <tr>
-      <td align="center" style="padding:24px 12px;">
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:8px;overflow:hidden;">
-          <tr>
-            <td style="background:${BRAND.navy};padding:28px 24px;text-align:center;">
-              <p style="margin:0 0 6px 0;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:${BRAND.ocean};">Barefoot Bay Community</p>
-              <h1 style="margin:0;font-size:24px;line-height:32px;color:#ffffff;">${escapeHtml(heading)}</h1>
+  // The {{listings}} token expands to the "New This Week" heading plus the
+  // listing cards (nothing at all on an empty week).
+  const listingsBlock =
+    listings.length > 0
+      ? `<tr>
+            <td style="padding:0 24px 16px 24px;">
+              <h2 style="margin:0;font-size:20px;color:${BRAND.navy};">New This Week</h2>
             </td>
           </tr>
-          <tr>
-            <td style="padding:24px 24px 8px 24px;">
-              <p style="margin:0 0 16px 0;font-size:15px;line-height:22px;">${escapeHtml(intro)}</p>
-              ${listings.length > 0 ? `<h2 style="margin:0 0 16px 0;font-size:20px;color:${BRAND.navy};">New This Week</h2>` : ''}
-            </td>
-          </tr>
-          ${cardsHtml}
-          <tr>
-            <td style="padding:0 24px 24px 24px;text-align:center;">
-              <a href="${forSaleUrl}" style="background:${BRAND.navy};color:#ffffff;padding:12px 24px;text-decoration:none;border-radius:5px;display:inline-block;font-size:15px;">View All Listings</a>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:0 24px 24px 24px;text-align:center;border-top:1px solid #e5e7eb;">
-              <p style="margin:24px 0 12px 0;font-size:15px;line-height:22px;">Have something to sell? Post it on On The Market today.</p>
-              <a href="${forSaleUrl}" style="background:${BRAND.coral};color:#ffffff;padding:12px 24px;text-decoration:none;border-radius:5px;display:inline-block;font-size:15px;">Post a Listing</a>
-            </td>
-          </tr>
-          <tr>
-            <td style="background:#f8fafc;padding:20px 24px;text-align:center;">
-              <p style="margin:0 0 6px 0;font-size:12px;color:#6b7280;">Barefoot Bay Community Platform &bull; Barefoot Bay, FL 32976</p>
-              <p style="margin:0;font-size:12px;color:#6b7280;">
-                You're receiving this because you're a member of the Barefoot Bay community site.
-                <a href="${baseUrl}/unsubscribe" style="color:#6b7280;text-decoration:underline;">Unsubscribe from email notifications</a>
-              </p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>`;
+${cardsHtml}`
+      : '';
+
+  const subject = applyTokens(template.subject, {
+    weekRange: range.label,
+    listingCount: String(listings.length),
+  }).trim();
+
+  const html = applyTokens(template.html, {
+    subject: escapeHtml(subject),
+    weekRange: escapeHtml(range.label),
+    intro: escapeHtml(intro),
+    listings: listingsBlock,
+    listingCount: String(listings.length),
+    forSaleUrl,
+    baseUrl,
+  });
 
   const textLines: string[] = [
-    heading,
+    subject,
     '',
     intro,
     '',
@@ -392,5 +464,5 @@ export function renderWeeklyListingsEmail(
     `To stop receiving email notifications, visit: ${baseUrl}/unsubscribe`,
   );
 
-  return { subject: heading, html, text: textLines.join('\n') };
+  return { subject, html, text: textLines.join('\n') };
 }

@@ -42,6 +42,8 @@ import {
   WEEKLY_LISTINGS_CONFIG_KEY,
   loadWeeklyListingsEmailConfig,
   mergeWeeklyListingsEmailConfig,
+  WEEKLY_EMAIL_PLACEHOLDERS,
+  getDefaultWeeklyEmailTemplate,
   getCampaignWeekRange,
   selectListingsForWeek,
   resolveWeeklyEmailRecipients,
@@ -13272,7 +13274,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const config = await loadWeeklyListingsEmailConfig();
       const history = await getWeeklySendHistory();
-      return res.json({ config, history, nextScheduledSend: getNextScheduledSend(config) });
+      return res.json({
+        config,
+        history,
+        nextScheduledSend: getNextScheduledSend(config),
+        placeholders: WEEKLY_EMAIL_PLACEHOLDERS,
+        defaultTemplate: getDefaultWeeklyEmailTemplate(),
+      });
     } catch (error: any) {
       req.log.error({ err: error }, "[WeeklyListingsEmail] Failed to load config");
       return res.status(500).json({ message: "Failed to load weekly email configuration" });
@@ -13298,16 +13306,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (body.sendTime !== undefined && !(typeof body.sendTime === "string" && /^\d{2}:\d{2}$/.test(body.sendTime))) {
         return res.status(400).json({ message: '"sendTime" must be in HH:MM format' });
       }
+      if (body.template !== undefined) {
+        if (typeof body.template !== "object" || body.template === null) {
+          return res.status(400).json({ message: '"template" must be an object' });
+        }
+        if (body.template.subject !== undefined && (typeof body.template.subject !== "string" || !body.template.subject.trim())) {
+          return res.status(400).json({ message: "The email subject cannot be empty" });
+        }
+        if (body.template.html !== undefined && (typeof body.template.html !== "string" || !body.template.html.trim())) {
+          return res.status(400).json({ message: "The email HTML body cannot be empty" });
+        }
+      }
 
       const saved = await loadWeeklyListingsEmailConfig();
-      const merged = mergeWeeklyListingsEmailConfig({ ...saved, ...body });
+      const merged = mergeWeeklyListingsEmailConfig({
+        ...saved,
+        ...body,
+        ...(body.template !== undefined
+          ? { template: { ...saved.template, ...body.template } }
+          : {}),
+      });
       await storage.setSiteSetting(
         WEEKLY_LISTINGS_CONFIG_KEY,
         JSON.stringify(merged),
         'Weekly "Currently, On The Market" promotional email schedule and options',
         req.user?.id,
       );
-      return res.json({ config: merged, nextScheduledSend: getNextScheduledSend(merged) });
+      return res.json({
+        config: merged,
+        nextScheduledSend: getNextScheduledSend(merged),
+        placeholders: WEEKLY_EMAIL_PLACEHOLDERS,
+        defaultTemplate: getDefaultWeeklyEmailTemplate(),
+      });
     } catch (error: any) {
       req.log.error({ err: error }, "[WeeklyListingsEmail] Failed to save config");
       return res.status(500).json({ message: "Failed to save weekly email configuration" });
@@ -13319,10 +13349,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/admin/email-activity/weekly-listings/preview", requireAuth, requireAdmin, async (req, res) => {
     try {
       const now = new Date();
+      const config = await loadWeeklyListingsEmailConfig();
       const range = getCampaignWeekRange(now);
       const listings = selectListingsForWeek(await storage.getListings(), range, now);
       const recipients = resolveWeeklyEmailRecipients(await storage.getUsers());
-      const rendered = renderWeeklyListingsEmail(listings, range, getWeeklyEmailBaseUrl());
+      const rendered = renderWeeklyListingsEmail(listings, range, getWeeklyEmailBaseUrl(), config.template);
       return res.json({
         range,
         listings,
@@ -13351,9 +13382,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Enter a test email address — your account doesn't have a valid one." });
       }
       const now = new Date();
+      const config = await loadWeeklyListingsEmailConfig();
       const range = getCampaignWeekRange(now);
       const listings = selectListingsForWeek(await storage.getListings(), range, now);
-      const rendered = renderWeeklyListingsEmail(listings, range, getWeeklyEmailBaseUrl());
+      const rendered = renderWeeklyListingsEmail(listings, range, getWeeklyEmailBaseUrl(), config.template);
       const ok = await sendEmail({
         to: adminEmail,
         subject: `[TEST] ${rendered.subject}`,
