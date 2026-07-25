@@ -250,8 +250,8 @@ export default function AdminDashboard() {
       category: "content"
     },
     {
-      title: "Forum Categories",
-      description: "Manage forum categories and structure",
+      title: "Extra! Extra! Categories",
+      description: "Manage Extra! Extra! categories and structure",
       icon: <MessageSquare className="h-8 w-8 text-primary" />,
       href: "/admin/manage-forum",
       comingSoon: false,

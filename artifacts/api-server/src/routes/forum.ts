@@ -155,6 +155,37 @@ export function createForumRouter(storage: IStorage) {
     }
   });
 
+  // Get the paginated "Extra! Extra!" story feed (all categories, pinned first, newest first)
+  router.get("/stories", async (req, res) => {
+    try {
+      const categoryIdRaw = req.query.categoryId as string | undefined;
+      const categoryId = categoryIdRaw ? parseInt(categoryIdRaw, 10) : undefined;
+      if (categoryIdRaw && isNaN(categoryId!)) {
+        return res.status(400).json({ message: "Invalid category ID" });
+      }
+
+      const limitRaw = req.query.limit as string | undefined;
+      const offsetRaw = req.query.offset as string | undefined;
+      const limit = limitRaw ? parseInt(limitRaw, 10) : 12;
+      const offset = offsetRaw ? parseInt(offsetRaw, 10) : 0;
+      if ((limitRaw && isNaN(limit)) || (offsetRaw && isNaN(offset))) {
+        return res.status(400).json({ message: "Invalid pagination parameters" });
+      }
+
+      const feed = await storage.getForumStoryFeed({
+        categoryId,
+        limit,
+        offset,
+        userId: req.user?.id
+      });
+
+      res.json(feed);
+    } catch (error) {
+      console.error("Error fetching story feed:", error);
+      res.status(500).json({ message: "Failed to fetch story feed" });
+    }
+  });
+
   // Get a specific post
   router.get("/posts/:id", async (req, res) => {
     try {
@@ -486,6 +517,13 @@ export function createForumRouter(storage: IStorage) {
         mediaUrls, // Add the updated mediaUrls array
         userId: post.userId // Ensure userId is preserved from the original post
       };
+
+      // Editorial fields (pin, updated flag, featured image) are admin-only
+      if (req.user.role !== "admin") {
+        delete updateData.isPinned;
+        delete updateData.isEditoriallyUpdated;
+        delete updateData.featuredImage;
+      }
       
       // Debug logs to help diagnose issues
       console.log("Original post data:", JSON.stringify({

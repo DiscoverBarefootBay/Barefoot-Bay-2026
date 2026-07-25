@@ -22,7 +22,11 @@ import {
   ChevronDown,
   CheckCircle,
   Mail,
-  X
+  X,
+  Pin,
+  PinOff,
+  Image as ImageIcon,
+  BadgeCheck
 } from "lucide-react";
 import { ForumContent } from "@/components/forum/forum-content";
 import { useAuth } from "@/components/providers/auth-provider";
@@ -48,6 +52,16 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { ForumShareButton } from "@/components/forum/forum-share-button";
 import { ForumLikes } from "@/components/forum/forum-likes";
 
@@ -58,6 +72,9 @@ interface ForumPost {
   categoryId: number;
   authorId: number;
   hideDefaultTitle?: boolean;
+  isPinned?: boolean;
+  isEditoriallyUpdated?: boolean;
+  featuredImage?: string | null;
   createdAt: string;
   updatedAt: string;
   author: {
@@ -221,6 +238,8 @@ export default function ForumPostPage() {
   const { isAdmin, hasPermission, checkFeaturePermission } = usePermissions();
   const [comment, setComment] = useState("");
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isFeaturedImageDialogOpen, setIsFeaturedImageDialogOpen] = useState(false);
+  const [featuredImageUrl, setFeaturedImageUrl] = useState("");
   const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
   const [showPostContent, setShowPostContent] = useState(true);
   const [isAnimationFading, setIsAnimationFading] = useState(false);
@@ -643,6 +662,30 @@ export default function ForumPostPage() {
     },
   });
 
+  // Admin story settings mutation (pin, editorially-updated flag, featured image)
+  const updateStorySettingsMutation = useMutation({
+    mutationFn: async (fields: Partial<Pick<ForumPost, "isPinned" | "isEditoriallyUpdated" | "featuredImage">>) => {
+      const response = await apiRequest("PATCH", `/api/forum/posts/${postId}`, fields);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || "Failed to update story settings");
+      }
+      return response.json();
+    },
+    onSuccess: (updated: ForumPost) => {
+      queryClient.setQueryData<ForumPost | undefined>(
+        [`/api/forum/posts/${postId}`],
+        (old) => (old ? { ...old, ...updated } : updated),
+      );
+      queryClient.invalidateQueries({ queryKey: [`/api/forum/posts/${postId}`] });
+      queryClient.invalidateQueries({ queryKey: ["/api/forum/stories"] });
+      toast({ title: "Story updated", description: "Story settings saved." });
+    },
+    onError: (error: Error) => {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    },
+  });
+
   const deletePostMutation = useMutation({
     mutationFn: async () => {
       const response = await fetch(`/api/forum/posts/${postId}`, {
@@ -873,7 +916,7 @@ export default function ForumPostPage() {
         <p className="text-navy/70 mb-6">The post you're looking for doesn't exist or has been removed.</p>
         <Link href="/forum">
           <Button variant="outline" className="border-navy/20">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Forums
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Extra! Extra!
           </Button>
         </Link>
       </div>
@@ -955,6 +998,105 @@ export default function ForumPostPage() {
                 Hide default title
               </Label>
             </div>
+          )}
+
+          {/* Admin story controls: pin, "Updated" flag, featured image */}
+          {isAdmin && (
+            <>
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-navy/20 hover:bg-coral/10 hover:text-coral hover:border-coral"
+                disabled={updateStorySettingsMutation.isPending}
+                onClick={() => updateStorySettingsMutation.mutate({ isPinned: !post.isPinned })}
+                data-testid="button-toggle-pin"
+              >
+                {post.isPinned ? (
+                  <><PinOff className="mr-2 h-4 w-4" /> Unpin</>
+                ) : (
+                  <><Pin className="mr-2 h-4 w-4" /> Pin Story</>
+                )}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className={`border-navy/20 hover:bg-coral/10 hover:text-coral hover:border-coral ${post.isEditoriallyUpdated ? 'bg-coral/10 text-coral border-coral' : ''}`}
+                disabled={updateStorySettingsMutation.isPending}
+                onClick={() => updateStorySettingsMutation.mutate({ isEditoriallyUpdated: !post.isEditoriallyUpdated })}
+                data-testid="button-toggle-updated"
+              >
+                <BadgeCheck className="mr-2 h-4 w-4" />
+                {post.isEditoriallyUpdated ? "Remove Updated Flag" : "Mark as Updated"}
+              </Button>
+              <Dialog
+                open={isFeaturedImageDialogOpen}
+                onOpenChange={(open) => {
+                  setIsFeaturedImageDialogOpen(open);
+                  if (open) setFeaturedImageUrl(post.featuredImage || "");
+                }}
+              >
+                <DialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-navy/20 hover:bg-coral/10 hover:text-coral hover:border-coral"
+                    data-testid="button-featured-image"
+                  >
+                    <ImageIcon className="mr-2 h-4 w-4" /> Featured Image
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Featured Image</DialogTitle>
+                    <DialogDescription>
+                      Set the image shown on this story's card in the Extra! Extra! feed. Leave blank to remove it.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-3">
+                    <Input
+                      placeholder="https://example.com/image.jpg"
+                      value={featuredImageUrl}
+                      onChange={(e) => setFeaturedImageUrl(e.target.value)}
+                      data-testid="input-featured-image-url"
+                    />
+                    {featuredImageUrl.trim() && (
+                      <img
+                        src={featuredImageUrl.trim()}
+                        alt="Featured preview"
+                        className="max-h-40 rounded-md border border-navy/10 object-cover"
+                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                        onLoad={(e) => { (e.target as HTMLImageElement).style.display = ''; }}
+                      />
+                    )}
+                  </div>
+                  <DialogFooter>
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsFeaturedImageDialogOpen(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      className="bg-coral hover:bg-coral/90 text-white"
+                      disabled={updateStorySettingsMutation.isPending}
+                      onClick={() => {
+                        updateStorySettingsMutation.mutate(
+                          { featuredImage: featuredImageUrl.trim() || null },
+                          { onSuccess: () => setIsFeaturedImageDialogOpen(false) },
+                        );
+                      }}
+                      data-testid="button-save-featured-image"
+                    >
+                      {updateStorySettingsMutation.isPending ? (
+                        <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</>
+                      ) : (
+                        "Save"
+                      )}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </>
           )}
 
           {/* Edit button - visible to post author and admins */}

@@ -235,7 +235,7 @@ export default function EditPostPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Edit Forum Post</CardTitle>
+            <CardTitle>Edit Story</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

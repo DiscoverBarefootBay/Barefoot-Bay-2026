@@ -2,23 +2,17 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { 
-  MessageSquare, 
-  Plus,
+  MessageSquare,
   Loader2,
   Settings,
   Edit,
   Save,
   X,
-  CheckCheck
+  CheckCheck,
+  Pin,
+  Newspaper,
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
@@ -33,8 +27,6 @@ interface ForumCategory {
   name: string;
   description: string;
   slug: string;
-  createdAt: string;
-  updatedAt: string;
   postCount: number;
   unreadCount?: number;
 }
@@ -42,8 +34,101 @@ interface ForumCategory {
 interface ForumDescription {
   id: number;
   content: string;
-  createdAt?: string;
-  updatedAt?: string;
+}
+
+interface Story {
+  id: number;
+  title: string;
+  excerpt: string;
+  image: string | null;
+  categoryId: number;
+  categoryName: string | null;
+  isPinned: boolean;
+  isEditoriallyUpdated: boolean;
+  commentCount: number;
+  isUnread: boolean;
+  author?: { id: number; username: string; fullName?: string | null; avatarUrl?: string | null } | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface StoryFeedResponse {
+  stories: Story[];
+  total: number;
+  hasMore: boolean;
+}
+
+const PAGE_SIZE = 12;
+
+function formatStoryDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return "";
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
+function StoryCard({ story }: { story: Story }) {
+  return (
+    <Link href={`/forum/post/${story.id}`}>
+      <Card
+        className={`h-full flex flex-col overflow-hidden cursor-pointer transition-all hover:shadow-lg bg-white ${
+          story.isUnread ? "border-coral/40 shadow-sm" : "border-navy/10"
+        }`}
+      >
+        <div className="relative aspect-[16/9] w-full overflow-hidden bg-navy/5">
+          {story.image ? (
+            <img
+              src={story.image}
+              alt=""
+              loading="lazy"
+              className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).style.display = "none";
+              }}
+            />
+          ) : (
+            <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-ocean/20 to-navy/10">
+              <Newspaper className="h-10 w-10 text-navy/30" />
+            </div>
+          )}
+          <div className="absolute top-2 left-2 flex flex-wrap gap-1.5">
+            {story.isPinned && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-navy text-white shadow">
+                <Pin className="h-3 w-3" /> Pinned
+              </span>
+            )}
+            {story.isEditoriallyUpdated && (
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-coral text-white shadow">
+                Updated
+              </span>
+            )}
+            {story.isUnread && (
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-ocean text-navy shadow">
+                New
+              </span>
+            )}
+          </div>
+        </div>
+        <CardContent className="flex flex-col flex-1 p-4">
+          {story.categoryName && (
+            <span className="text-xs font-semibold uppercase tracking-wide text-coral mb-1.5">
+              {story.categoryName}
+            </span>
+          )}
+          <h3 className="text-lg font-bold text-navy leading-snug line-clamp-2 mb-2">{story.title}</h3>
+          {story.excerpt && (
+            <p className="text-sm text-navy/70 line-clamp-3 mb-3">{story.excerpt}</p>
+          )}
+          <div className="mt-auto flex items-center justify-between text-xs text-navy/60 pt-2 border-t border-navy/5">
+            <span>{formatStoryDate(story.createdAt)}</span>
+            <span className="inline-flex items-center gap-1">
+              <MessageSquare className="h-3.5 w-3.5" />
+              {story.commentCount}
+            </span>
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
+  );
 }
 
 export default function ForumPage() {
@@ -52,34 +137,48 @@ export default function ForumPage() {
   const { isAdmin } = usePermissions();
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [descriptionText, setDescriptionText] = useState("");
-  
-  // Fetch forum categories
-  const { data: categories, isLoading: categoriesLoading, error: categoriesError } = useQuery<ForumCategory[]>({
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+  // Fetch categories (for filter chips)
+  const { data: categories, isLoading: categoriesLoading } = useQuery<ForumCategory[]>({
     queryKey: ["/api/forum/categories"],
   });
-  
-  // Fetch forum description
-  const { 
-    data: description, 
-    isLoading: descriptionLoading, 
-    error: descriptionError 
-  } = useQuery<ForumDescription>({
+
+  // Fetch description
+  const { data: description, isLoading: descriptionLoading } = useQuery<ForumDescription>({
     queryKey: ["/api/forum/description"],
   });
 
-  // Effect to set description text when the description data is loaded
+  // Fetch story feed (paginated via limit; "Load More" grows the limit)
+  const storiesQueryKey = selectedCategoryId
+    ? `/api/forum/stories?limit=${visibleCount}&categoryId=${selectedCategoryId}`
+    : `/api/forum/stories?limit=${visibleCount}`;
+  const {
+    data: feed,
+    isLoading: storiesLoading,
+    isFetching: storiesFetching,
+    error: storiesError,
+  } = useQuery<StoryFeedResponse>({
+    queryKey: [storiesQueryKey],
+  });
+
   useEffect(() => {
     if (description) {
       setDescriptionText(description.content || "");
     }
   }, [description]);
-  
-  // Mutation for updating the forum description
+
+  // Reset pagination when the category filter changes
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [selectedCategoryId]);
+
   const updateDescriptionMutation = useMutation({
     mutationFn: (content: string) => {
-      return apiRequest("POST", "/api/forum/description", { 
+      return apiRequest("POST", "/api/forum/description", {
         content,
-        updatedBy: user?.id
+        updatedBy: user?.id,
       });
     },
     onSuccess: () => {
@@ -87,76 +186,78 @@ export default function ForumPage() {
       setIsEditingDescription(false);
       toast({
         title: "Success",
-        description: "Forum description updated successfully",
+        description: "Description updated successfully",
       });
     },
     onError: (error) => {
       toast({
         title: "Error",
-        description: "Failed to update forum description",
+        description: "Failed to update description",
         variant: "destructive",
       });
-      console.error("Error updating forum description:", error);
-    }
+      console.error("Error updating description:", error);
+    },
   });
 
-  // Mutation for marking all posts as read
   const markAllReadMutation = useMutation({
     mutationFn: () => {
       return apiRequest("POST", "/api/forum/mark-all-read", {});
     },
     onSuccess: (data: any) => {
-      // Invalidate queries to refresh any cached post lists
       queryClient.invalidateQueries({ queryKey: ["/api/forum/categories"] });
+      queryClient.invalidateQueries({
+        predicate: (query) =>
+          typeof query.queryKey[0] === "string" && query.queryKey[0].startsWith("/api/forum/stories"),
+      });
       toast({
         title: "Success",
-        description: `Marked ${data?.updatedCount || 0} threads as read`,
+        description: `Marked ${data?.updatedCount || 0} stories as read`,
       });
     },
     onError: (error) => {
       toast({
         title: "Error",
-        description: "Failed to mark all posts as read",
+        description: "Failed to mark all stories as read",
         variant: "destructive",
       });
-      console.error("Error marking all posts as read:", error);
-    }
+      console.error("Error marking all stories as read:", error);
+    },
   });
 
-  // ALWAYS show loading if we don't have content to display - NEVER show empty states
-  if (categoriesLoading || descriptionLoading || !categories || categories.length === 0) {
+  if ((storiesLoading && !feed) || categoriesLoading || descriptionLoading) {
     return <ForumLoading type="forums" className="min-h-[50vh]" />;
   }
 
-  if (categoriesError) {
+  if (storiesError) {
     return (
       <div className="text-center py-8">
         <h2 className="text-2xl font-bold text-navy mb-2">Something went wrong</h2>
-        <p className="text-navy/70">We couldn't load the forum categories. Please try again later.</p>
+        <p className="text-navy/70">We couldn't load the latest stories. Please try again later.</p>
       </div>
     );
   }
 
-  // Handle description save
   const handleSaveDescription = () => {
     updateDescriptionMutation.mutate(descriptionText);
   };
-  
-  // Handle description cancel
+
   const handleCancelEdit = () => {
     setDescriptionText(description?.content || "");
     setIsEditingDescription(false);
   };
-  
+
+  const stories = feed?.stories ?? [];
+  const hasMore = feed?.hasMore ?? false;
+
   return (
-    <div className="max-w-5xl mx-auto">
-      {/* Desktop header */}
-      <div className="hidden md:flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-navy">Community Forum</h1>
+    <div className="max-w-6xl mx-auto">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-6">
+        <h1 className="text-3xl font-bold text-navy">Extra! Extra!</h1>
         <div className="flex gap-3">
           {user && (
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => markAllReadMutation.mutate()}
               disabled={markAllReadMutation.isPending}
               className="border-navy/20 hover:bg-coral/10 hover:text-coral hover:border-coral"
@@ -171,123 +272,134 @@ export default function ForumPage() {
           {isAdmin && (
             <Link href="/admin/manage-forum">
               <Button variant="outline" className="border-navy/20 hover:bg-coral/10 hover:text-coral hover:border-coral">
-                <Settings className="mr-2 h-4 w-4" /> Manage Forum
+                <Settings className="mr-2 h-4 w-4" /> Manage Extra! Extra!
               </Button>
             </Link>
           )}
-          {/* Create New Topic button removed */}
         </div>
       </div>
-      
-      {/* Forum Description */}
-      <Card className="mb-8 bg-white">
-        <CardContent className="pt-6">
-          {!isEditingDescription ? (
-            <div className="relative">
-              <div className="prose max-w-none">
-                {description?.content ? (
-                  <div dangerouslySetInnerHTML={{ __html: description.content }} />
-                ) : (
-                  <p className="text-navy/50 italic">
-                    {isAdmin 
-                      ? "No forum description available. Click edit to add one." 
-                      : ""}
-                  </p>
-                )}
-              </div>
-              {isAdmin && (
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="absolute right-0 top-0 text-navy/50 hover:text-coral hover:bg-transparent"
-                  onClick={() => setIsEditingDescription(true)}
-                >
-                  <Edit className="h-4 w-4 mr-1" /> Edit
-                </Button>
-              )}
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <Textarea
-                value={descriptionText}
-                onChange={(e) => setDescriptionText(e.target.value)}
-                placeholder="Enter a description for the forum..."
-                className="min-h-[120px]"
-              />
-              <div className="flex justify-end gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={handleCancelEdit}
-                >
-                  <X className="h-4 w-4 mr-1" /> Cancel
-                </Button>
-                <Button 
-                  variant="default" 
-                  size="sm" 
-                  onClick={handleSaveDescription}
-                  disabled={updateDescriptionMutation.isPending}
-                >
-                  {updateDescriptionMutation.isPending ? (
-                    <><Loader2 className="h-4 w-4 mr-1 animate-spin" /> Saving</>
-                  ) : (
-                    <><Save className="h-4 w-4 mr-1" /> Save</>
-                  )}
-                </Button>
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-      
-      {/* Mobile floating action button removed */}
 
-      <div className="grid gap-6">
-        {categories.map((category) => (
-          <Card key={category.id} className={`border transition-all hover:shadow-md bg-white ${
-            (category.unreadCount ?? 0) > 0
-              ? 'border-coral/30 shadow-sm' 
-              : 'border-navy/10'
-          }`}>
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <Link href={`/forum/category/${category.id}`}>
-                    <CardTitle className={`text-xl font-bold cursor-pointer hover:text-coral transition-colors ${
-                      (category.unreadCount ?? 0) > 0
-                        ? 'text-navy' 
-                        : 'text-navy/80'
-                    }`}>
-                      {category.name}
-                    </CardTitle>
-                  </Link>
-                  <CardDescription className="text-navy/70 mt-2">
-                    {category.description}
-                  </CardDescription>
+      {/* Description */}
+      {(description?.content || isAdmin) && (
+        <Card className="mb-6 bg-white">
+          <CardContent className="pt-6">
+            {!isEditingDescription ? (
+              <div className="relative">
+                <div className="prose max-w-none">
+                  {description?.content ? (
+                    <div dangerouslySetInnerHTML={{ __html: description.content }} />
+                  ) : (
+                    <p className="text-navy/50 italic">
+                      {isAdmin ? "No description available. Click edit to add one." : ""}
+                    </p>
+                  )}
                 </div>
-                {(category.unreadCount ?? 0) > 0 && (
-                  <div className="ml-3 flex-shrink-0">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-coral text-white">
-                      {category.unreadCount} NEW
-                    </span>
-                  </div>
+                {isAdmin && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 text-navy/50 hover:text-coral hover:bg-transparent"
+                    onClick={() => setIsEditingDescription(true)}
+                  >
+                    <Edit className="h-4 w-4 mr-1" /> Edit
+                  </Button>
                 )}
               </div>
-            </CardHeader>
-            <CardFooter className="flex justify-between border-t border-navy/5 bg-navy/5 py-3 px-6">
-              <div className="flex items-center text-navy/70">
-                <MessageSquare className="h-4 w-4 mr-2" />
-                <span>{category.postCount || 0} {category.postCount === 1 ? 'topic' : 'topics'}</span>
+            ) : (
+              <div className="space-y-4">
+                <Textarea
+                  value={descriptionText}
+                  onChange={(e) => setDescriptionText(e.target.value)}
+                  placeholder="Enter a description for Extra! Extra!..."
+                  className="min-h-[120px]"
+                />
+                <div className="flex justify-end gap-2">
+                  <Button variant="outline" size="sm" onClick={handleCancelEdit}>
+                    <X className="h-4 w-4 mr-1" /> Cancel
+                  </Button>
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={handleSaveDescription}
+                    disabled={updateDescriptionMutation.isPending}
+                  >
+                    {updateDescriptionMutation.isPending ? (
+                      <><Loader2 className="h-4 w-4 mr-1 animate-spin" /> Saving</>
+                    ) : (
+                      <><Save className="h-4 w-4 mr-1" /> Save</>
+                    )}
+                  </Button>
+                </div>
               </div>
-              <Link href={`/forum/category/${category.id}`}>
-                <Button variant="outline" size="sm" className="border-navy/20 hover:bg-coral/10 hover:text-coral hover:border-coral">
-                  View
-                </Button>
-              </Link>
-            </CardFooter>
-          </Card>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Category filter chips */}
+      <div className="flex flex-wrap gap-2 mb-6">
+        <button
+          onClick={() => setSelectedCategoryId(null)}
+          className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+            selectedCategoryId === null
+              ? "bg-navy text-white"
+              : "bg-white text-navy border border-navy/20 hover:border-coral hover:text-coral"
+          }`}
+        >
+          All Stories
+        </button>
+        {(categories ?? []).map((category) => (
+          <button
+            key={category.id}
+            onClick={() => setSelectedCategoryId(category.id)}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+              selectedCategoryId === category.id
+                ? "bg-navy text-white"
+                : "bg-white text-navy border border-navy/20 hover:border-coral hover:text-coral"
+            }`}
+          >
+            {category.name}
+            {(category.unreadCount ?? 0) > 0 && (
+              <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-coral text-white">
+                {category.unreadCount}
+              </span>
+            )}
+          </button>
         ))}
       </div>
+
+      {/* Story grid */}
+      {stories.length === 0 ? (
+        <div className="text-center py-16">
+          <Newspaper className="h-12 w-12 text-navy/20 mx-auto mb-4" />
+          <h2 className="text-xl font-bold text-navy mb-1">No stories yet</h2>
+          <p className="text-navy/60">Check back soon for the latest community news.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {stories.map((story) => (
+            <StoryCard key={story.id} story={story} />
+          ))}
+        </div>
+      )}
+
+      {/* Load More */}
+      {hasMore && (
+        <div className="flex justify-center mt-8 mb-4">
+          <Button
+            variant="outline"
+            onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+            disabled={storiesFetching}
+            className="border-navy/20 hover:bg-coral/10 hover:text-coral hover:border-coral px-8"
+          >
+            {storiesFetching ? (
+              <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Loading…</>
+            ) : (
+              "Load More Stories"
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

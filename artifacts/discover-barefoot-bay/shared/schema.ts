@@ -1115,6 +1115,8 @@ export const forumPosts = pgTable("forum_posts", {
   customPreview: text("custom_preview"), // Admin-editable preview text override
   notifyPreference: text("notify_preference"), // Email notification preference: 'all_admins' or 'none'
   hideDefaultTitle: boolean("hide_default_title").default(false), // When true, the post detail page hides the auto-rendered title (used when authors style their own headline inside the body)
+  featuredImage: text("featured_image"), // Admin-set featured image URL for the news-card feed
+  isEditoriallyUpdated: boolean("is_editorially_updated").default(false), // Admin-set "Updated" badge for the news feed
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -1208,6 +1210,8 @@ export const insertForumPostSchema = baseForumPostSchema
     mediaUrls: z.array(z.string()).optional().default([]),
     notifyPreference: z.string().optional(),
     hideDefaultTitle: z.boolean().optional().default(false),
+    featuredImage: z.string().nullable().optional(),
+    isEditoriallyUpdated: z.boolean().optional(),
   });
 
 export const insertForumCommentSchema = baseForumCommentSchema

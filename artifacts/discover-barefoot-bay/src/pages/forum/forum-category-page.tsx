@@ -156,7 +156,7 @@ export default function ForumCategoryPage() {
         <p className="text-navy/70 mb-6">The category you're looking for doesn't exist or has been removed.</p>
         <Link href="/forum">
           <Button variant="outline" className="border-navy/20">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Forums
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Extra! Extra!
           </Button>
         </Link>
       </div>
@@ -168,7 +168,7 @@ export default function ForumCategoryPage() {
       <div className="mb-8">
         <Link href="/forum">
           <Button variant="ghost" className="mb-4">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Forums
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Extra! Extra!
           </Button>
         </Link>
         <div className="flex justify-between items-start">

@@ -210,7 +210,7 @@ export default function NewPostPage() {
         )}
         <div className="flex justify-center">
           <Button onClick={() => navigate("/forum")} variant="outline">
-            Back to Forum
+            Back to Extra! Extra!
           </Button>
         </div>
       </div>
@@ -227,7 +227,7 @@ export default function NewPostPage() {
         <p className="text-center mb-6">You don't currently have access to create forum posts. This could be due to account restrictions.</p>
         <div className="flex justify-center">
           <Button onClick={() => navigate("/forum")} variant="outline">
-            Back to Forum
+            Back to Extra! Extra!
           </Button>
         </div>
       </div>
@@ -249,7 +249,7 @@ export default function NewPostPage() {
         }}
       >
         <ArrowLeft className="mr-2 h-4 w-4" /> 
-        {categoryFromUrl ? "Back to Category" : "Back to Forum"}
+        {categoryFromUrl ? "Back to Category" : "Back to Extra! Extra!"}
       </Button>
 
       <Card className="border-navy/10">

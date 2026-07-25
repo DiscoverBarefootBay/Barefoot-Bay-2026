@@ -397,7 +397,7 @@ export function UnifiedSearch() {
   const getTypeLabel = (type: string) => {
     switch (type) {
       case 'event': return 'Events';
-      case 'forum': return 'Forum Posts';
+      case 'forum': return 'Extra! Extra!';
       case 'listing': return 'For Sale';
       case 'vendor': return 'Vendors';
       case 'page': return 'Pages';

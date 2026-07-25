@@ -268,6 +268,7 @@ export interface IStorage {
   getForumPosts(categoryId?: number): Promise<ForumPost[]>;
   getForumPostsWithReadState(categoryId: number, userId: number, sortBy?: string): Promise<ForumPost[]>;
   getForumPost(id: number): Promise<ForumPost | undefined>;
+  getForumStoryFeed(options: { categoryId?: number; limit?: number; offset?: number; userId?: number }): Promise<{ stories: any[]; total: number; hasMore: boolean }>;
   createForumPost(post: InsertForumPost): Promise<ForumPost>;
   updateForumPost(id: number, data: Partial<ForumPost>): Promise<ForumPost>;
   deleteForumPost(id: number): Promise<void>;
@@ -6097,6 +6098,131 @@ export class DatabaseStorage implements IStorage {
       return results;
     } catch (error) {
       console.error("Error retrieving forum posts with read state:", error);
+      throw error;
+    }
+  }
+
+  async getForumStoryFeed(options: { categoryId?: number; limit?: number; offset?: number; userId?: number }): Promise<{ stories: any[]; total: number; hasMore: boolean }> {
+    const { categoryId, userId } = options;
+    const limit = Math.min(Math.max(options.limit ?? 12, 1), 50);
+    const offset = Math.max(options.offset ?? 0, 0);
+    try {
+      const whereClause = categoryId ? eq(forumPosts.categoryId, categoryId) : undefined;
+
+      const totalResult = await db.select({ count: count() })
+        .from(forumPosts)
+        .where(whereClause);
+      const total = totalResult[0]?.count || 0;
+
+      const rows = await db.select({
+        id: forumPosts.id,
+        title: forumPosts.title,
+        content: forumPosts.content,
+        customPreview: forumPosts.customPreview,
+        categoryId: forumPosts.categoryId,
+        userId: forumPosts.userId,
+        isPinned: forumPosts.isPinned,
+        isEditoriallyUpdated: forumPosts.isEditoriallyUpdated,
+        featuredImage: forumPosts.featuredImage,
+        mediaUrls: forumPosts.mediaUrls,
+        views: forumPosts.views,
+        createdAt: forumPosts.createdAt,
+        updatedAt: forumPosts.updatedAt,
+        categoryName: forumCategories.name,
+        categorySlug: forumCategories.slug,
+        author: {
+          id: users.id,
+          username: users.username,
+          fullName: users.fullName,
+          avatarUrl: users.avatarUrl
+        },
+        commentCount: sql<number>`(SELECT COUNT(*)::int FROM forum_comments fc WHERE fc.post_id = ${forumPosts.id})`,
+        latestCommentAt: sql<string | null>`(SELECT MAX(fc.created_at) FROM forum_comments fc WHERE fc.post_id = ${forumPosts.id})`,
+        lastReadAt: forumReadStates.lastReadAt
+      })
+      .from(forumPosts)
+      .leftJoin(forumCategories, eq(forumPosts.categoryId, forumCategories.id))
+      .leftJoin(users, eq(forumPosts.userId, users.id))
+      .leftJoin(forumReadStates, and(
+        eq(forumReadStates.postId, forumPosts.id),
+        eq(forumReadStates.userId, userId ?? -1)
+      ))
+      .where(whereClause)
+      .orderBy(desc(forumPosts.isPinned), desc(forumPosts.createdAt))
+      .limit(limit)
+      .offset(offset);
+
+      const stripHtml = (html: string): string =>
+        html
+          .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+          .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+          .replace(/<[^>]+>/g, ' ')
+          .replace(/&nbsp;/g, ' ')
+          .replace(/&amp;/g, '&')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&#39;|&apos;/g, "'")
+          .replace(/&quot;/g, '"')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+      const isImageUrl = (url: string): boolean =>
+        /\.(jpe?g|png|gif|webp|avif|svg)(\?.*)?$/i.test(url) || url.includes('/storage-proxy/') || url.includes('/uploads/');
+
+      const stories = rows.map((row) => {
+        // Excerpt: custom preview override, else stripped content
+        const rawExcerpt = row.customPreview?.trim()
+          ? stripHtml(row.customPreview)
+          : stripHtml(row.content || '');
+        const excerpt = rawExcerpt.length > 220 ? `${rawExcerpt.slice(0, 220).trimEnd()}…` : rawExcerpt;
+
+        // Image resolution: featured image → first media URL image → first inline <img> → null (client placeholder)
+        let image: string | null = row.featuredImage?.trim() || null;
+        if (!image && Array.isArray(row.mediaUrls)) {
+          image = row.mediaUrls.find((u) => typeof u === 'string' && isImageUrl(u)) || null;
+        }
+        if (!image && row.content) {
+          const imgMatch = row.content.match(/<img[^>]+src="([^">]+)"/i);
+          image = imgMatch ? imgMatch[1] : null;
+        }
+
+        // Unread state (only meaningful for authenticated users)
+        let isUnread = false;
+        if (userId) {
+          const lastReadAt = row.lastReadAt ? new Date(row.lastReadAt) : null;
+          const createdAt = row.createdAt ? new Date(row.createdAt) : null;
+          const latestCommentAt = row.latestCommentAt ? new Date(row.latestCommentAt) : null;
+          if (!lastReadAt) {
+            isUnread = true;
+          } else if (createdAt && createdAt > lastReadAt) {
+            isUnread = true;
+          } else if (latestCommentAt && latestCommentAt > lastReadAt) {
+            isUnread = true;
+          }
+        }
+
+        return {
+          id: row.id,
+          title: row.title,
+          excerpt,
+          image,
+          categoryId: row.categoryId,
+          categoryName: row.categoryName,
+          categorySlug: row.categorySlug,
+          isPinned: !!row.isPinned,
+          isEditoriallyUpdated: !!row.isEditoriallyUpdated,
+          commentCount: row.commentCount || 0,
+          isUnread,
+          views: row.views || 0,
+          author: row.author,
+          createdAt: row.createdAt,
+          updatedAt: row.updatedAt
+        };
+      });
+
+      return { stories, total, hasMore: offset + rows.length < total };
+    } catch (error) {
+      console.error("Error retrieving forum story feed:", error);
       throw error;
     }
   }
