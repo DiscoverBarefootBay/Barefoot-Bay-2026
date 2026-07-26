@@ -728,7 +728,10 @@ export default function ForumPage() {
             <ArrowUpDown className="h-4 w-4 text-navy/70 shrink-0" />
             <span className="text-sm text-navy/70 font-medium shrink-0">Sort by:</span>
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="flex-1 sm:w-[200px] sm:flex-none border-navy/20 bg-white min-w-0" data-testid="select-sort">
+              <SelectTrigger
+                className="flex-1 sm:w-[200px] sm:flex-none border-navy/20 bg-white min-w-0 [&>span]:min-w-0 [&>span]:flex-1 [&>span]:truncate [&>span]:text-left"
+                data-testid="select-sort"
+              >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
