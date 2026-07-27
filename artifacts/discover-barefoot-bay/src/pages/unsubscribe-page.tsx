@@ -22,6 +22,8 @@ export default function UnsubscribePage() {
   const [tokenStatus, setTokenStatus] = useState<"idle" | "working" | "success" | "error">("idle");
   const [tokenMessage, setTokenMessage] = useState<string>("");
   const [unsubscribedEmail, setUnsubscribedEmail] = useState<string>("");
+  const [resubStatus, setResubStatus] = useState<"idle" | "working" | "success" | "error">("idle");
+  const [resubMessage, setResubMessage] = useState<string>("");
   const tokenAttempted = useRef(false);
 
   const token = new URLSearchParams(search).get("token");
@@ -47,6 +49,24 @@ export default function UnsubscribePage() {
       }
     })();
   }, [token]);
+
+  const handleResubscribe = async () => {
+    if (!token || resubStatus === "working") return;
+    setResubStatus("working");
+    try {
+      const response = await apiRequest("POST", "/api/resubscribe", { token });
+      const data = await response.json().catch(() => ({}));
+      if (response.ok && data.success) {
+        setResubStatus("success");
+      } else {
+        setResubStatus("error");
+        setResubMessage(data.message || "Failed to resubscribe. Please sign in to manage your email preferences.");
+      }
+    } catch {
+      setResubStatus("error");
+      setResubMessage("Something went wrong. Please try again or sign in to manage your email preferences.");
+    }
+  };
 
   const handleUnsubscribe = async () => {
     if (!user) {
@@ -121,13 +141,40 @@ export default function UnsubscribePage() {
                     "You will no longer receive email notifications from Barefoot Bay."
                   )}
                 </p>
-                <p className="text-sm text-gray-500">
-                  Changed your mind? You can re-enable notifications anytime from your account settings.
-                </p>
+                {resubStatus === "success" ? (
+                  <div className="bg-white border border-ocean/20 rounded-lg p-4 mb-2" data-testid="status-resubscribed">
+                    <p className="text-navy font-medium">You're subscribed again!</p>
+                    <p className="text-sm text-gray-600">Email notifications have been turned back on.</p>
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-sm text-gray-500">
+                      Changed your mind? You can turn notifications back on right here.
+                    </p>
+                    {resubStatus === "error" && (
+                      <p className="text-sm text-destructive mt-2" data-testid="text-resubscribe-error">{resubMessage}</p>
+                    )}
+                    <Button
+                      onClick={handleResubscribe}
+                      disabled={resubStatus === "working"}
+                      className="mt-4 bg-ocean hover:bg-ocean/90 text-white"
+                      data-testid="button-resubscribe"
+                    >
+                      {resubStatus === "working" ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Resubscribing...
+                        </>
+                      ) : (
+                        "Resubscribe"
+                      )}
+                    </Button>
+                  </>
+                )}
                 <Button
                   onClick={() => navigate("/")}
                   variant="outline"
-                  className="mt-4 border-navy/20 hover:bg-navy/5"
+                  className="mt-4 sm:ml-2 border-navy/20 hover:bg-navy/5"
                 >
                   Return to Home
                 </Button>

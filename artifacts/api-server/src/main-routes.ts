@@ -823,6 +823,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Public tokenized resubscribe: lets a recipient who unsubscribed by mistake
+  // undo it in one click from the unsubscribe success screen, reusing the same
+  // signed token. Idempotent — the token only ever affects its own user.
+  app.post("/api/resubscribe", async (req, res) => {
+    try {
+      const token = (req.body && req.body.token) || req.query.token;
+      const verified = verifyUnsubscribeToken(token);
+      if (!verified) {
+        return res.status(400).json({
+          success: false,
+          message: "This link is invalid or has been tampered with. Please sign in to manage your email preferences.",
+        });
+      }
+
+      const user = await storage.getUser(verified.userId);
+      if (!user) {
+        return res.status(400).json({
+          success: false,
+          message: "This account no longer exists. Please sign in to manage your email preferences.",
+        });
+      }
+
+      await db.execute(
+        sql`UPDATE users SET email_notifications_enabled = true WHERE id = ${verified.userId}`
+      );
+      console.log(`[Resubscribe] User ${verified.userId} resubscribed via tokenized link`);
+
+      res.json({
+        success: true,
+        message: "You have been resubscribed to email notifications",
+        email: user.email ?? undefined,
+      });
+    } catch (error) {
+      console.error("Error processing tokenized resubscribe:", error);
+      res.status(500).json({ success: false, message: "Failed to resubscribe to email notifications" });
+    }
+  });
+
   // PRIORITY ENDPOINT: Self-deletion endpoint - must be registered early to avoid conflicts
   app.delete("/api/user/delete-account", async (req, res) => {
     console.log("🚨 SELF-DELETION ENDPOINT CALLED 🚨", {
