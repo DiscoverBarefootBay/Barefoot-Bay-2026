@@ -2,6 +2,12 @@ import nodemailer from 'nodemailer';
 import { google } from 'googleapis';
 import type { User, Order } from '@workspace/db';
 import { storage } from './storage';
+import {
+  getPublicBaseUrl,
+  getUnsubscribeTokenForEmail,
+  tokenizeUnsubscribeLinks,
+  unsubscribeHeaders,
+} from './unsubscribe-token';
 
 interface EmailOptions {
   from?: string;
@@ -9,6 +15,7 @@ interface EmailOptions {
   subject: string;
   text: string;
   html?: string;
+  headers?: Record<string, string>;
 }
 
 // Initialize email transporter - will be lazily loaded
@@ -188,9 +195,22 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
       defaultFrom = process.env.EMAIL_FROM;
     }
     
+    // Personalize unsubscribe links per recipient: when the recipient matches a
+    // user account, rewrite bare /unsubscribe links to carry a signed token and
+    // attach RFC 8058 List-Unsubscribe headers (one-click unsubscribe).
+    const unsubToken = await getUnsubscribeTokenForEmail(options.to);
+    const unsubHeaders = unsubToken
+      ? unsubscribeHeaders(getPublicBaseUrl(), unsubToken)
+      : {};
+    const personalized = { ...options };
+    if (unsubToken) {
+      if (personalized.html) personalized.html = tokenizeUnsubscribeLinks(personalized.html, unsubToken);
+      if (personalized.text) personalized.text = tokenizeUnsubscribeLinks(personalized.text, unsubToken);
+    }
+
     // Set from address and additional headers to improve deliverability
     const emailOptions = {
-      ...options,
+      ...personalized,
       from: options.from || defaultFrom,
       // Add headers to improve deliverability and prevent Gmail filtering
       headers: {
@@ -198,7 +218,9 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
         'X-Priority': '3',
         'Return-Path': defaultFrom,
         'Reply-To': defaultFrom,
-        'List-Unsubscribe': '<mailto:unsubscribe@barefootbay.com>',
+        // Tokenized RFC 8058 headers when the recipient is a known user; the
+        // old mailto pointed at a mailbox nobody monitored.
+        ...unsubHeaders,
         'Message-ID': `<${Date.now()}-${Math.random().toString(36)}@barefootbay.com>`,
         'X-Entity-ID': 'barefoot-bay-community',
         'X-Auto-Response-Suppress': 'All',

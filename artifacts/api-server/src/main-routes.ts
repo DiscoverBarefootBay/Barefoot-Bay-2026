@@ -5,6 +5,7 @@ import { createServer, type Server } from "http";
 import { setupAuth, requireAuth, requireAdmin, hashPassword } from "./auth";
 import { storage, db } from "./storage";
 import { sql } from "drizzle-orm";
+import { verifyUnsubscribeToken } from "./unsubscribe-token";
 // Import WebSocket for chat functionality
 import { WebSocketServer, WebSocket } from "ws";
 import { processBase64Images } from "./base64-image-processor";
@@ -760,16 +761,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Email notification preference endpoints
+  // Email notification preference endpoints.
+  // Authenticated self-service: a logged-in user can only unsubscribe
+  // THEMSELVES — any client-supplied userId is ignored.
   app.post("/api/user/unsubscribe-emails", async (req, res) => {
     try {
-      const { userId } = req.body;
-      
-      if (!userId) {
-        return res.status(400).json({ message: "User ID is required" });
+      if (!req.isAuthenticated() || !req.user) {
+        return res.status(401).json({ message: "You must be signed in to update email preferences" });
       }
 
-      // Update user's email notification preference
+      const userId = req.user.id;
       await db.execute(
         sql`UPDATE users SET email_notifications_enabled = false WHERE id = ${userId}`
       );
@@ -781,6 +782,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error unsubscribing from emails:", error);
       res.status(500).json({ message: "Failed to unsubscribe from email notifications" });
+    }
+  });
+
+  // Public tokenized unsubscribe: the token is a signed (HMAC) value embedded
+  // in every email's unsubscribe link, so recipients can unsubscribe without
+  // logging in. Idempotent. Also serves RFC 8058 one-click POSTs from mail
+  // clients (List-Unsubscribe-Post: List-Unsubscribe=One-Click), which arrive
+  // as form posts with the token in the query string.
+  app.post("/api/unsubscribe", async (req, res) => {
+    try {
+      const token = (req.body && req.body.token) || req.query.token;
+      const verified = verifyUnsubscribeToken(token);
+      if (!verified) {
+        return res.status(400).json({
+          success: false,
+          message: "This unsubscribe link is invalid or has been tampered with. Please sign in to manage your email preferences.",
+        });
+      }
+
+      const user = await storage.getUser(verified.userId);
+      if (!user) {
+        // Account no longer exists — nothing to unsubscribe; treat as success.
+        return res.json({ success: true, message: "You have been unsubscribed from email notifications" });
+      }
+
+      await db.execute(
+        sql`UPDATE users SET email_notifications_enabled = false WHERE id = ${verified.userId}`
+      );
+      console.log(`[Unsubscribe] User ${verified.userId} unsubscribed via tokenized link`);
+
+      res.json({
+        success: true,
+        message: "You have been unsubscribed from email notifications",
+        email: user.email ?? undefined,
+      });
+    } catch (error) {
+      console.error("Error processing tokenized unsubscribe:", error);
+      res.status(500).json({ success: false, message: "Failed to unsubscribe from email notifications" });
     }
   });
 

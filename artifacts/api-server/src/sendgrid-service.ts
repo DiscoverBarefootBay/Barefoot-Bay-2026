@@ -9,6 +9,11 @@ import {
   type ForSaleEmailConfig,
 } from './forsale-email-config';
 import type { Event } from '@workspace/db';
+import {
+  getUnsubscribeTokenForEmail,
+  tokenizeUnsubscribeLinks,
+  unsubscribeHeaders,
+} from './unsubscribe-token';
 
 /**
  * Shared options for the three configurable For Sale expiration emails.
@@ -64,6 +69,7 @@ interface EmailParams {
   text?: string;
   html?: string;
   attachments?: EmailAttachment[];
+  headers?: Record<string, string>;
 }
 
 /**
@@ -167,6 +173,25 @@ export async function sendEmail(params: EmailParams): Promise<boolean> {
       text: params.text || '',
       html: params.html,
     };
+
+    if (params.headers && Object.keys(params.headers).length > 0) {
+      emailData.headers = { ...params.headers };
+    }
+
+    // Personalize unsubscribe links per recipient: when the recipient matches a
+    // user account, rewrite bare /unsubscribe links to carry a signed token and
+    // attach RFC 8058 List-Unsubscribe headers so mail clients' native
+    // "Unsubscribe" buttons work. Never blocks the send on failure.
+    const unsubToken = await getUnsubscribeTokenForEmail(params.to);
+    if (unsubToken) {
+      const baseUrl = getBaseUrl();
+      if (emailData.html) emailData.html = tokenizeUnsubscribeLinks(emailData.html, unsubToken);
+      if (emailData.text) emailData.text = tokenizeUnsubscribeLinks(emailData.text, unsubToken);
+      emailData.headers = {
+        ...unsubscribeHeaders(baseUrl, unsubToken),
+        ...emailData.headers,
+      };
+    }
 
     // Add attachments if present
     if (params.attachments && params.attachments.length > 0) {
