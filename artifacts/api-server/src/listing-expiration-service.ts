@@ -24,6 +24,29 @@ export async function resolveAdminRecipientEmails(): Promise<string[]> {
 }
 
 /**
+ * Resolve the seller mailboxes for the "your listing expired" reminder while
+ * honoring the global unsubscribe flag: when the owning account has flipped
+ * email_notifications_enabled to false, NO seller reminder is sent at all —
+ * including to the listing's contact email, which belongs to the same seller.
+ * Otherwise, the contact email and account email are deduped so a seller with
+ * both on the same mailbox only gets one copy.
+ */
+export function resolveSellerReminderEmails(
+  contactEmail: string | null | undefined,
+  account: Pick<User, 'email' | 'emailNotificationsEnabled'> | undefined,
+): string[] {
+  if (account && account.emailNotificationsEnabled === false) {
+    return [];
+  }
+  return dedupeRecipientsByEmail([
+    { email: contactEmail ?? null },
+    { email: account?.email ?? null },
+  ])
+    .map((r) => r.email?.trim())
+    .filter((e): e is string => !!e && e.includes('@'));
+}
+
+/**
  * Send the admin "listing expired" alert and the seller "your listing expired"
  * reminder for a single listing that has just transitioned to EXPIRED.
  *
@@ -77,14 +100,13 @@ async function sendListingExpirationEmails(
     }
   }
 
-  // Seller reminder — dedupe the listing contact email against the owning
-  // account email so a seller isn't emailed twice for the same expiration.
-  const sellerEmails = dedupeRecipientsByEmail([
-    { email: contact.email ?? null },
-    { email: account?.email ?? null },
-  ])
-    .map((r) => r.email?.trim())
-    .filter((e): e is string => !!e && e.includes('@'));
+  // Seller reminder — honors the seller's unsubscribe flag and dedupes the
+  // listing contact email against the owning account email so a seller isn't
+  // emailed twice for the same expiration.
+  const sellerEmails = resolveSellerReminderEmails(contact.email, account);
+  if (sellerEmails.length === 0 && account && account.emailNotificationsEnabled === false) {
+    logger.info({ listingId, createdBy }, '[ListingExpiration] Seller unsubscribed from email notifications; skipping seller reminder');
+  }
 
   for (const sellerEmail of sellerEmails) {
     try {

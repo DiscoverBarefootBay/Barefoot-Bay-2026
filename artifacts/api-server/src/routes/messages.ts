@@ -10,7 +10,7 @@ import { isAdmin } from '../utils/role-utils';
 import * as fs from 'fs';
 import * as path from 'path';
 import { uploadAttachmentToObjectStorage, getAttachmentUrl } from '../attachment-storage-proxy';
-import { sendMessageEmail } from '../sendgrid-service';
+import { sendMessageEmail, canReceiveNotificationEmail } from '../sendgrid-service';
 
 const router = express.Router();
 const upload = multer({ dest: 'temp_upload/' });
@@ -792,7 +792,8 @@ router.post('/:id/reply', authenticateUser, upload.array('attachments'), async (
             id: users.id,
             email: users.email,
             username: users.username,
-            fullName: users.fullName
+            fullName: users.fullName,
+            emailNotificationsEnabled: users.emailNotificationsEnabled
           })
           .from(users)
           .where(inArray(users.id, targetedUserIds));
@@ -805,6 +806,13 @@ router.post('/:id/reply', authenticateUser, upload.array('attachments'), async (
           targetedUsersData.forEach(user => {
             const emailAddress = user.email || user.username;
             const userName = user.fullName || user.username || `User ID ${user.id}`;
+            
+            // Honor the global unsubscribe flag: never email users who turned
+            // off email notifications, even when explicitly targeted.
+            if (!canReceiveNotificationEmail(user)) {
+              console.log(`[SendGrid Message] 🚫 Skipping ${userName} (ID: ${user.id}) - unsubscribed from email notifications`);
+              return;
+            }
             
             if (emailAddress && emailAddress.includes('@')) {
               usersWithValidEmails.push(emailAddress);
@@ -845,16 +853,21 @@ router.post('/:id/reply', authenticateUser, upload.array('attachments'), async (
         } else if (recipientId) {
           const recipientData = await db.select({
             email: users.email,
-            username: users.username
+            username: users.username,
+            emailNotificationsEnabled: users.emailNotificationsEnabled
           })
           .from(users)
           .where(eq(users.id, typeof recipientId === 'string' ? parseInt(recipientId, 10) : recipientId))
           .limit(1);
           
           if (recipientData.length > 0) {
-            const recipientEmail = recipientData[0].email || recipientData[0].username;
-            if (recipientEmail && recipientEmail.includes('@')) {
-              recipientEmails.push(recipientEmail);
+            if (!canReceiveNotificationEmail(recipientData[0])) {
+              console.log(`[SendGrid Message] 🚫 Recipient (ID: ${recipientId}) has unsubscribed from email notifications - no email will be sent`);
+            } else {
+              const recipientEmail = recipientData[0].email || recipientData[0].username;
+              if (recipientEmail && recipientEmail.includes('@')) {
+                recipientEmails.push(recipientEmail);
+              }
             }
           }
           
@@ -865,7 +878,8 @@ router.post('/:id/reply', authenticateUser, upload.array('attachments'), async (
         const senderData = await db.select({
           email: users.email,
           username: users.username,
-          fullName: users.fullName
+          fullName: users.fullName,
+          emailNotificationsEnabled: users.emailNotificationsEnabled
         })
         .from(users)
         .where(eq(users.id, currentUserId))
@@ -877,7 +891,9 @@ router.post('/:id/reply', authenticateUser, upload.array('attachments'), async (
         // Send the sender a copy of the email so they have a record in their own inbox.
         // Skip if the sender has no valid email on file - rest of recipients still get emailed.
         const senderInboxAddress = senderData[0]?.email || senderData[0]?.username;
-        if (senderInboxAddress && senderInboxAddress.includes('@')) {
+        if (senderData[0] && !canReceiveNotificationEmail(senderData[0])) {
+          console.log(`[SendGrid Message] 🚫 Sender (ID: ${currentUserId}) has unsubscribed from email notifications - skipping self-copy`);
+        } else if (senderInboxAddress && senderInboxAddress.includes('@')) {
           const alreadyIncluded = recipientEmails.some(
             e => e.toLowerCase() === senderInboxAddress.toLowerCase()
           );
@@ -1407,7 +1423,8 @@ router.post('/', authenticateUser, upload.array('attachments'), async (req, res)
             id: users.id,
             email: users.email,
             username: users.username,
-            fullName: users.fullName
+            fullName: users.fullName,
+            emailNotificationsEnabled: users.emailNotificationsEnabled
           })
           .from(users)
           .where(inArray(users.id, targetedUserIds));
@@ -1422,6 +1439,13 @@ router.post('/', authenticateUser, upload.array('attachments'), async (req, res)
           targetedUsersData.forEach(user => {
             const emailAddress = user.email || user.username;
             const userName = user.fullName || user.username || `User ID ${user.id}`;
+            
+            // Honor the global unsubscribe flag: never email users who turned
+            // off email notifications, even when explicitly targeted.
+            if (!canReceiveNotificationEmail(user)) {
+              console.log(`[SendGrid Message] 🚫 Skipping ${userName} (ID: ${user.id}) - unsubscribed from email notifications`);
+              return;
+            }
             
             if (emailAddress && emailAddress.includes('@')) {
               usersWithValidEmails.push(emailAddress);
@@ -1464,16 +1488,21 @@ router.post('/', authenticateUser, upload.array('attachments'), async (req, res)
           // For individual recipient, get their email
           const recipientData = await db.select({
             email: users.email,
-            username: users.username
+            username: users.username,
+            emailNotificationsEnabled: users.emailNotificationsEnabled
           })
           .from(users)
           .where(eq(users.id, typeof recipientId === 'string' ? parseInt(recipientId, 10) : recipientId))
           .limit(1);
           
           if (recipientData.length > 0) {
-            const recipientEmail = recipientData[0].email || recipientData[0].username;
-            if (recipientEmail && recipientEmail.includes('@')) {
-              recipientEmails.push(recipientEmail);
+            if (!canReceiveNotificationEmail(recipientData[0])) {
+              console.log(`[SendGrid Message] 🚫 Recipient (ID: ${recipientId}) has unsubscribed from email notifications - no email will be sent`);
+            } else {
+              const recipientEmail = recipientData[0].email || recipientData[0].username;
+              if (recipientEmail && recipientEmail.includes('@')) {
+                recipientEmails.push(recipientEmail);
+              }
             }
           }
           
@@ -1484,7 +1513,8 @@ router.post('/', authenticateUser, upload.array('attachments'), async (req, res)
         const senderData = await db.select({
           email: users.email,
           username: users.username,
-          fullName: users.fullName
+          fullName: users.fullName,
+          emailNotificationsEnabled: users.emailNotificationsEnabled
         })
         .from(users)
         .where(eq(users.id, senderId))
@@ -1496,7 +1526,9 @@ router.post('/', authenticateUser, upload.array('attachments'), async (req, res)
         // Send the sender a copy of the email so they have a record in their own inbox.
         // Skip if the sender has no valid email on file - rest of recipients still get emailed.
         const senderInboxAddress = senderData[0]?.email || senderData[0]?.username;
-        if (senderInboxAddress && senderInboxAddress.includes('@')) {
+        if (senderData[0] && !canReceiveNotificationEmail(senderData[0])) {
+          console.log(`[SendGrid Message] 🚫 Sender (ID: ${senderId}) has unsubscribed from email notifications - skipping self-copy`);
+        } else if (senderInboxAddress && senderInboxAddress.includes('@')) {
           const alreadyIncluded = recipientEmails.some(
             e => e.toLowerCase() === senderInboxAddress.toLowerCase()
           );

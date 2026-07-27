@@ -100,6 +100,43 @@ export function dedupeRecipientsByEmail<T extends { email?: string | null }>(
   return result;
 }
 
+/**
+ * A user record carrying the global email opt-out flag. `emailNotificationsEnabled`
+ * is treated as opted-in unless it is EXPLICITLY false (legacy rows may have
+ * null/undefined, which must keep receiving mail like before the flag existed).
+ */
+export interface EmailPreferenceRecipient {
+  email?: string | null;
+  emailNotificationsEnabled?: boolean | null;
+}
+
+/**
+ * True when a user may receive notification email: they have NOT flipped the
+ * global unsubscribe flag (email_notifications_enabled = false).
+ */
+export function canReceiveNotificationEmail(
+  user: Pick<EmailPreferenceRecipient, 'emailNotificationsEnabled'>,
+): boolean {
+  return user.emailNotificationsEnabled !== false;
+}
+
+/**
+ * Split recipients into those allowed to receive notification email and those
+ * excluded because they unsubscribed (email_notifications_enabled = false).
+ * Every notification send path that resolves its own recipients must run them
+ * through this (or an equivalent DB-level filter) before emailing.
+ */
+export function partitionRecipientsByEmailPreference<T extends EmailPreferenceRecipient>(
+  recipients: T[],
+): { allowed: T[]; unsubscribed: T[] } {
+  const allowed: T[] = [];
+  const unsubscribed: T[] = [];
+  for (const recipient of recipients) {
+    (canReceiveNotificationEmail(recipient) ? allowed : unsubscribed).push(recipient);
+  }
+  return { allowed, unsubscribed };
+}
+
 export interface GroupedNotifiedUser {
   username: string;
   email: string;
