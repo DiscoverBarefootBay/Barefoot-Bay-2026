@@ -252,8 +252,28 @@ describe('renderWeeklyListingsEmail', () => {
   it('subject and heading follow the required format', () => {
     const r = renderWeeklyListingsEmail(listings, RANGE, 'https://barefootbay.com');
     assert.equal(r.subject, `Currently, On The Market | ${RANGE.label}`);
-    assert.ok(r.html.includes(`Currently, On The Market | ${RANGE.label}`));
+    // Header shows the title with the week range beneath it (not the whole
+    // subject as one heading).
+    assert.ok(r.html.includes('>Currently, On The Market</h1>'));
+    assert.ok(r.html.includes(`>${RANGE.label}</p>`));
     assert.ok(r.text.startsWith(`Currently, On The Market | ${RANGE.label}`));
+  });
+
+  it('uses the approved intro copy when listings exist', () => {
+    const r = renderWeeklyListingsEmail(listings, RANGE, 'https://barefootbay.com');
+    const intro = `Here&#39;s what&#39;s On The Market in Barefoot Bay this week (${RANGE.label}). Whether you&#39;re searching for a new home, a rental, a yard sale, an open house, or unique items from your neighbors, you&#39;ll find them here. Take a look at what&#39;s new this week.`;
+    assert.ok(r.html.includes(intro));
+    assert.ok(r.text.includes(`Here's what's On The Market in Barefoot Bay this week (${RANGE.label}).`));
+  });
+
+  it('closing block uses the approved copy with the Post a Listing button', () => {
+    const r = renderWeeklyListingsEmail(listings, RANGE, 'https://barefootbay.com');
+    assert.ok(r.html.includes('Have something to sell?'));
+    assert.ok(r.html.includes('From homes and rentals to yard sales and everyday treasures, On The Market is Barefoot Bay&#39;s place to buy and sell.'));
+    assert.ok(r.html.includes('Post a Listing'));
+    assert.ok(r.html.includes('View All Listings'));
+    assert.ok(r.text.includes('Have something to sell?'));
+    assert.ok(r.text.includes("From homes and rentals to yard sales and everyday treasures, On The Market is Barefoot Bay's place to buy and sell."));
   });
 
   it('includes listing card, link, price, and unsubscribe in both parts', () => {
@@ -313,9 +333,11 @@ describe('renderWeeklyListingsEmail', () => {
     );
     const r = renderWeeklyListingsEmail(mixed, RANGE, 'https://barefootbay.com');
     assert.ok(r.html.includes('New This Week'));
-    assert.ok(r.html.includes('Still On The Market'));
+    assert.ok(r.html.includes('>On The Market</h2>'));
+    assert.ok(!r.html.includes('Still On The Market'));
     assert.ok(r.html.indexOf('Fresh listing') < r.html.indexOf('Older listing'));
-    assert.ok(r.text.includes('STILL ON THE MARKET'));
+    assert.ok(r.text.includes('\nON THE MARKET\n'));
+    assert.ok(!r.text.includes('STILL ON THE MARKET'));
   });
 
   it('omits the New This Week section when nothing new was posted', () => {
@@ -326,7 +348,7 @@ describe('renderWeeklyListingsEmail', () => {
     );
     const r = renderWeeklyListingsEmail(onlyOld, RANGE, 'https://barefootbay.com');
     assert.ok(!r.html.includes('New This Week'));
-    assert.ok(r.html.includes('Still On The Market'));
+    assert.ok(r.html.includes('>On The Market</h2>'));
     assert.ok(r.html.includes('No new listings were posted this week'));
   });
 
@@ -354,6 +376,22 @@ describe('mergeWeeklyListingsEmailConfig', () => {
     for (const t of ['{{weekRange}}', '{{intro}}', '{{listings}}', '{{listingCount}}', '{{forSaleUrl}}', '{{baseUrl}}', '{{subject}}']) {
       assert.ok(tokens.includes(t), `missing placeholder ${t}`);
     }
+  });
+
+  it('a stored copy of the OLD default template does not override the new default copy', () => {
+    // Simulate an admin who "saved" the previous built-in template verbatim:
+    // the legacy header heading and closing line must not survive the merge.
+    const legacyHtml = getDefaultWeeklyEmailTemplate().html
+      .replace(
+        /<h1[^>]*>Currently, On The Market<\/h1>\s*<p[^>]*>\{\{weekRange\}\}<\/p>/,
+        '<h1 style="margin:0;font-size:24px;line-height:32px;color:#ffffff;">{{subject}}</h1>',
+      )
+      .replace(
+        /<p[^>]*>Have something to sell\?<\/p>\s*<p[^>]*>From homes and rentals[^<]*<\/p>/,
+        '<p style="margin:24px 0 12px 0;font-size:15px;line-height:22px;">Have something to sell? Post it on On The Market today.</p>',
+      );
+    const m = mergeWeeklyListingsEmailConfig({ template: { subject: 'Currently, On The Market | {{weekRange}}', html: legacyHtml } });
+    assert.equal(m.template.html, getDefaultWeeklyEmailTemplate().html);
   });
 
   it('accepts a custom template and falls back to defaults for empty fields', () => {

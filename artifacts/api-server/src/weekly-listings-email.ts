@@ -47,6 +47,71 @@ export function getDefaultWeeklyListingsEmailConfig(): WeeklyListingsEmailConfig
   };
 }
 
+/**
+ * Previous built-in template bodies (before editorial copy updates). A stored
+ * admin template that is byte-identical to one of these was never really
+ * customized — it was just the old default saved back — so it must not keep
+ * overriding new default copy.
+ */
+const getLegacyDefaultTemplateHtml = (): string[] => [
+  `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{subject}}</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f6f8;font-family:Arial,Helvetica,sans-serif;color:${BRAND.charcoal};">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f8;">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;">
+          <tr>
+            <td style="background-color:${BRAND.ocean};background:linear-gradient(135deg, #90C9D4 0%, #6BB5C1 100%);padding:30px 20px;text-align:center;">
+              <p style="margin:0 0 5px 0;font-size:28px;font-weight:bold;letter-spacing:1px;color:#ffffff;">Barefoot Bay</p>
+              <p style="margin:0 0 14px 0;font-size:12px;letter-spacing:0.5px;color:#ffffff;">Community Platform</p>
+              <h1 style="margin:0;font-size:24px;line-height:32px;color:#ffffff;">{{subject}}</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:24px 24px 8px 24px;">
+              <p style="margin:0 0 16px 0;font-size:15px;line-height:22px;">{{intro}}</p>
+            </td>
+          </tr>
+          {{listings}}
+          <tr>
+            <td style="padding:0 24px 24px 24px;text-align:center;">
+              <a href="{{forSaleUrl}}" style="background-color:${BRAND.ocean};color:#ffffff;padding:14px 32px;text-decoration:none;border-radius:8px;display:inline-block;font-size:15px;font-weight:600;">View All Listings</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 24px 24px 24px;text-align:center;border-top:1px solid #e5e7eb;">
+              <p style="margin:24px 0 12px 0;font-size:15px;line-height:22px;">Have something to sell? Post it on On The Market today.</p>
+              <a href="{{forSaleUrl}}" style="background-color:${BRAND.coral};color:#ffffff;padding:14px 32px;text-decoration:none;border-radius:8px;display:inline-block;font-size:15px;font-weight:600;">Post a Listing</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="background:#f8fafc;padding:20px 24px;text-align:center;">
+              <p style="margin:0 0 6px 0;font-size:12px;color:#6b7280;">Barefoot Bay Community Platform &bull; Barefoot Bay, FL 32976</p>
+              <p style="margin:0;font-size:12px;color:#6b7280;">
+                You're receiving this because you're a member of the Barefoot Bay community site.
+                <a href="{{baseUrl}}/unsubscribe" style="color:#6b7280;text-decoration:underline;">Unsubscribe from email notifications</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`,
+];
+
+/** True when a stored template HTML is just a previous built-in default. */
+export function isLegacyDefaultWeeklyEmailHtml(html: string): boolean {
+  return getLegacyDefaultTemplateHtml().includes(html);
+}
+
 /** Merge a (possibly partial) saved config over the defaults. */
 export function mergeWeeklyListingsEmailConfig(saved: unknown): WeeklyListingsEmailConfig {
   const defaults = getDefaultWeeklyListingsEmailConfig();
@@ -68,7 +133,9 @@ export function mergeWeeklyListingsEmailConfig(saved: unknown): WeeklyListingsEm
           ? tpl.subject
           : defaults.template.subject,
       html:
-        typeof tpl.html === 'string' && tpl.html.trim() ? tpl.html : defaults.template.html,
+        typeof tpl.html === 'string' && tpl.html.trim() && !isLegacyDefaultWeeklyEmailHtml(tpl.html)
+          ? tpl.html
+          : defaults.template.html,
     },
   };
 }
@@ -184,7 +251,7 @@ export function listingTypeLabel(type: string): string {
  * currently ACTIVE and not past its expiration date at selection time.
  * Listings first published (createdAt, ET) within [weekStart, weekEnd] are
  * flagged `isNew` so the render can highlight them in a "New This Week"
- * section; the rest appear under "Still On The Market". New listings sort
+ * section; the rest appear under "On The Market". New listings sort
  * first, each group newest first. Only public fields are carried forward —
  * seller contact info is deliberately dropped.
  */
@@ -287,7 +354,7 @@ export interface RenderedWeeklyEmail {
 export const WEEKLY_EMAIL_PLACEHOLDERS: Array<{ token: string; description: string }> = [
   { token: '{{weekRange}}', description: 'The campaign week, e.g. "July 20–26, 2026"' },
   { token: '{{intro}}', description: 'The standard intro sentence (changes automatically based on how many listings are new this week)' },
-  { token: '{{listings}}', description: 'The "New This Week" / "Still On The Market" sections with the listing cards — required for listings to appear' },
+  { token: '{{listings}}', description: 'The "New This Week" / "On The Market" sections with the listing cards — required for listings to appear' },
   { token: '{{listingCount}}', description: 'Total number of active listings featured in the email' },
   { token: '{{forSaleUrl}}', description: 'Link to the On The Market page' },
   { token: '{{baseUrl}}', description: 'The site address, e.g. https://barefootbay.com' },
@@ -322,7 +389,8 @@ export function getDefaultWeeklyEmailTemplate(): WeeklyEmailTemplate {
             <td style="background-color:${BRAND.ocean};background:linear-gradient(135deg, #90C9D4 0%, #6BB5C1 100%);padding:30px 20px;text-align:center;">
               <p style="margin:0 0 5px 0;font-size:28px;font-weight:bold;letter-spacing:1px;color:#ffffff;">Barefoot Bay</p>
               <p style="margin:0 0 14px 0;font-size:12px;letter-spacing:0.5px;color:#ffffff;">Community Platform</p>
-              <h1 style="margin:0;font-size:24px;line-height:32px;color:#ffffff;">{{subject}}</h1>
+              <h1 style="margin:0 0 6px 0;font-size:24px;line-height:32px;color:#ffffff;">Currently, On The Market</h1>
+              <p style="margin:0;font-size:15px;line-height:22px;color:#ffffff;">{{weekRange}}</p>
             </td>
           </tr>
           <tr>
@@ -338,7 +406,8 @@ export function getDefaultWeeklyEmailTemplate(): WeeklyEmailTemplate {
           </tr>
           <tr>
             <td style="padding:0 24px 24px 24px;text-align:center;border-top:1px solid #e5e7eb;">
-              <p style="margin:24px 0 12px 0;font-size:15px;line-height:22px;">Have something to sell? Post it on On The Market today.</p>
+              <p style="margin:24px 0 4px 0;font-size:17px;line-height:24px;font-weight:bold;color:${BRAND.navy};">Have something to sell?</p>
+              <p style="margin:0 0 16px 0;font-size:15px;line-height:22px;">From homes and rentals to yard sales and everyday treasures, On The Market is Barefoot Bay&#39;s place to buy and sell.</p>
               <a href="{{forSaleUrl}}" style="background-color:${BRAND.coral};color:#ffffff;padding:14px 32px;text-decoration:none;border-radius:8px;display:inline-block;font-size:15px;font-weight:600;">Post a Listing</a>
             </td>
           </tr>
@@ -394,7 +463,7 @@ export function renderWeeklyListingsEmail(
     listings.length === 0
       ? `There are no active listings On The Market right now (${range.label}) \u2014 check back soon, or be the first to post one!`
       : newListings.length > 0
-        ? `Here's what's On The Market in Barefoot Bay this week (${range.label}). Take a look at what your neighbors are selling!`
+        ? `Here's what's On The Market in Barefoot Bay this week (${range.label}). Whether you're searching for a new home, a rental, a yard sale, an open house, or unique items from your neighbors, you'll find them here. Take a look at what's new this week.`
         : `No new listings were posted this week (${range.label}) \u2014 but these homes and items are still On The Market. Take a look!`;
 
   const cardHtml = (l: WeeklyEmailListing): string => {
@@ -434,15 +503,15 @@ export function renderWeeklyListingsEmail(
             </td>
           </tr>`;
 
-  // The {{listings}} token expands to the "New This Week" and "Still On The
-  // Market" sections with their listing cards (nothing at all when there are
-  // no active listings).
+  // The {{listings}} token expands to the "New This Week" and "On The Market"
+  // sections with their listing cards (nothing at all when there are no
+  // active listings).
   const parts: string[] = [];
   if (newListings.length > 0) {
     parts.push(sectionHeading('New This Week'), ...newListings.map(cardHtml));
   }
   if (otherListings.length > 0) {
-    parts.push(sectionHeading('Still On The Market'), ...otherListings.map(cardHtml));
+    parts.push(sectionHeading('On The Market'), ...otherListings.map(cardHtml));
   }
   const listingsBlock = parts.join('\n');
 
@@ -480,11 +549,12 @@ export function renderWeeklyListingsEmail(
     }
   };
   pushTextSection('NEW THIS WEEK', newListings);
-  pushTextSection('STILL ON THE MARKET', otherListings);
+  pushTextSection('ON THE MARKET', otherListings);
   textLines.push(
     `View all listings: ${forSaleUrl}`,
     '',
-    'Have something to sell? Post it on On The Market today.',
+    'Have something to sell?',
+    "From homes and rentals to yard sales and everyday treasures, On The Market is Barefoot Bay's place to buy and sell.",
     `Post a listing: ${forSaleUrl}`,
     '',
     'Barefoot Bay Community Platform - Barefoot Bay, FL 32976',
