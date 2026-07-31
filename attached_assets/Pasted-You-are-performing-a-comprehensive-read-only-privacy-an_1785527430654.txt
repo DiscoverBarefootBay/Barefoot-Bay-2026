@@ -1,0 +1,538 @@
+You are performing a comprehensive, read-only privacy and website-tracking audit of the BarefootBay.com application and its production configuration.
+
+IMPORTANT CONSTRAINTS
+
+1. Do not modify, delete, deploy, reconfigure, or refactor anything.
+2. Do not install new analytics, consent, security, or monitoring packages.
+3. Do not commit changes other than creating the requested Markdown audit report.
+4. Do not expose API keys, authentication tokens, database credentials, private user information, complete cookie values, or other secrets in the report.
+5. Redact all identifiers and sample payload values.
+6. Use test accounts and synthetic test data only.
+7. Clearly distinguish confirmed facts, reasonable inferences, unknowns, and items that require manual verification.
+8. This is a technical and factual audit for review by qualified legal counsel. Do not make definitive legal conclusions.
+
+BACKGROUND AND PURPOSE
+
+BarefootBay.com uses a custom tracking system. The site owner’s law firm has asked for an assessment following the July 14, 2026 decision in D.B. et al. v. Bellesa Enterprises US, Inc.
+
+The relevant concerns from that decision and the related client alert include:
+
+- Whether website activity is collected or intercepted.
+- Whether URLs, page titles, content names, searches, viewing history, form activity, or similar information are transmitted.
+- Whether activity is associated with an account, email address, user ID, cookie ID, session ID, IP address, browser fingerprint, device information, or another identifier.
+- Whether information is transmitted to Google, Meta, TikTok, advertising companies, analytics providers, hosting providers, logging providers, or other third parties.
+- Whether nonessential tracking begins before a user affirmatively consents.
+- Whether the privacy policy and consent interface explicitly identify the tracking tools, recipients, data categories, purposes, and data-sharing practices.
+- Whether statements such as “we do not sell or share personal information” conflict with the site’s actual behavior.
+- Whether rejecting or withdrawing consent actually stops tracking.
+- Whether potentially sensitive browsing or content-access information is involved.
+
+The fact that a tracking system is custom or first-party does not by itself resolve these questions. Determine what the system actually does.
+
+PRIMARY OBJECTIVE
+
+Create a detailed factual report that allows the website owner and legal counsel to understand:
+
+1. Every tracking, analytics, logging, advertising, personalization, session-recording, error-monitoring, and telemetry mechanism in the application.
+2. Exactly what information each mechanism collects.
+3. Where the information is sent.
+4. Whether it is connected or connectable to an identifiable user, household, account, device, or browser.
+5. Whether tracking is appropriately controlled by the consent mechanism.
+6. Whether the privacy policy and other notices accurately describe the implementation.
+7. What technical changes would reduce privacy and litigation risk.
+
+AUDIT PROCEDURE
+
+A. REPOSITORY AND DEPENDENCY REVIEW
+
+Recursively inspect the entire repository, including:
+
+- package.json and all lockfiles
+- frontend entry points and templates
+- server routes and middleware
+- API endpoints
+- database schemas and migrations
+- authentication and account-management code
+- custom analytics or tracking modules
+- background jobs and scheduled tasks
+- serverless functions and edge workers
+- proxy, CDN, caching, and hosting configuration
+- environment-variable names
+- logging and error-reporting configuration
+- privacy-policy, terms, cookie-policy, and consent-interface content
+- robots, headers, CSP, and security configuration
+- administrator dashboards and reporting exports
+
+Search for code, dependencies, configuration, or environment variables associated with terms such as:
+
+analytics
+tracking
+tracker
+telemetry
+pixel
+beacon
+pageview
+event
+session
+visitor
+fingerprint
+device
+userAgent
+referrer
+IP
+cookie
+localStorage
+sessionStorage
+dataLayer
+gtag
+googletagmanager
+Google Analytics
+Google Ads
+Meta Pixel
+Facebook Pixel
+fbq
+TikTok Pixel
+ttq
+PostHog
+Mixpanel
+Amplitude
+Segment
+Plausible
+Matomo
+Hotjar
+Clarity
+FullStory
+Heap
+Sentry
+Datadog
+New Relic
+Cloudflare Analytics
+LogRocket
+Intercom
+HubSpot
+Mailchimp
+reCAPTCHA
+Stripe
+YouTube
+Vimeo
+embedded maps
+social widgets
+advertising
+retargeting
+conversion
+consent
+opt-in
+opt-out
+GPC
+Global Privacy Control
+DNT
+Do Not Track
+
+This list is not exhaustive. Identify additional systems based on the code.
+
+B. CUSTOM TRACKING SYSTEM REVIEW
+
+Locate and document the complete custom tracking implementation.
+
+Determine:
+
+- Where tracking events are created.
+- What causes each event to fire.
+- The complete event schema.
+- Whether events include page URLs, route names, page titles, content titles, search terms, form names, button names, record IDs, listing IDs, message IDs, or user-generated content.
+- Whether query-string parameters or URL fragments are captured.
+- Whether form field values are captured.
+- Whether passwords, authentication tokens, payment information, health information, precise location, private messages, or other sensitive fields could be captured accidentally.
+- Whether account IDs, names, emails, phone numbers, addresses, membership information, or other direct identifiers are included.
+- Whether cookie IDs, session IDs, IP addresses, user-agent strings, screen dimensions, language, operating system, browser version, referrer, or other device/browser attributes are included.
+- Whether identifiers are persistent across sessions.
+- Whether anonymous events are later connected to a registered user.
+- Whether data is stored only in BarefootBay-controlled infrastructure.
+- Whether data is forwarded, exported, synchronized, backed up, logged, or otherwise disclosed to an outside provider.
+- Where the tracking database is hosted.
+- Who has access.
+- Retention periods and deletion procedures.
+- Whether tracking data is included in backups.
+- Whether tracking data can be exported or downloaded.
+- Whether deleted user accounts remain represented in tracking records.
+- Whether IP addresses or other identifiers are truncated, hashed, encrypted, or stored in plain text.
+- Whether hashing is reversible or linkable using other available data.
+
+Trace the entire data lifecycle:
+
+browser → frontend code → API request → server processing → database/logging → reporting dashboard → exports/integrations → backups/deletion
+
+C. THIRD-PARTY DATA FLOW REVIEW
+
+Inventory every outbound request or server-to-server integration that could receive user or usage information.
+
+For each recipient, determine:
+
+- Company/provider name.
+- Domain and endpoint.
+- Tool or service.
+- Purpose.
+- Data transmitted.
+- Identifier transmitted.
+- Whether the full page URL is transmitted.
+- Whether the page title or content identifier is transmitted.
+- Whether query parameters are transmitted.
+- Whether account or login information is transmitted.
+- Whether the third party sets or reads cookies.
+- Whether the third party can combine the information with data it already possesses.
+- Whether transmission occurs before consent.
+- Whether transmission continues after rejection or withdrawal.
+- Relevant source-code locations and configuration.
+- Whether a data-processing agreement or configuration reference exists in the repository.
+
+Include hosting, CDN, security, authentication, email, database, error monitoring, log storage, payment, embedded-media, mapping, CAPTCHA, chat, and customer-support vendors—not only conventional analytics providers.
+
+D. RUNTIME AND NETWORK TESTING
+
+Where technically possible, inspect the live site and local application using browser developer tools or equivalent network inspection.
+
+Test at least these states:
+
+1. New visitor with no existing cookies.
+2. Before interacting with a consent banner.
+3. After selecting “Reject,” “Decline,” or the most privacy-protective option.
+4. After selecting analytics only, if offered.
+5. After selecting advertising only, if offered.
+6. After selecting “Accept All.”
+7. Logged-out user.
+8. Logged-in test user.
+9. After consent is withdrawn or preferences are changed.
+10. After cookies and local storage are cleared.
+
+For each test, record:
+
+- Requests made.
+- Request recipient/domain.
+- Request timing.
+- Cookies created or read.
+- Local-storage and session-storage entries.
+- Beacon, fetch, XHR, image, script, WebSocket, and server-side calls.
+- Redacted request payloads and query parameters.
+- Whether the site functions after nonessential tracking is rejected.
+- Whether rejected tracking reappears after navigation or refresh.
+- Whether the consent choice persists correctly.
+- Whether mobile and desktop behavior differ.
+
+Never include live personal data or complete identifiers in the report.
+
+E. CONSENT-MECHANISM REVIEW
+
+Determine whether the site has a consent banner or consent-management platform.
+
+Document:
+
+- Which users and regions see it.
+- Whether it appears before nonessential tracking begins.
+- Whether “Accept” and “Reject” are equally clear and accessible.
+- Whether choices are granular, such as necessary, analytics, personalization, and advertising.
+- Whether optional categories are disabled by default.
+- Whether the user takes an affirmative action before optional tracking begins.
+- Whether consent is recorded with date, time, policy version, categories, and consent-interface version.
+- Whether consent can be withdrawn as easily as it was given.
+- Whether withdrawing consent stops future collection.
+- Whether previously created optional cookies are removed.
+- Whether server-side tracking honors the same preference.
+- Whether logged-in and logged-out preferences are handled consistently.
+- Whether Global Privacy Control signals are detected and respected.
+- Whether any tool marked “strictly necessary” is actually used for analytics, advertising, profiling, or measurement.
+
+F. POLICY AND DISCLOSURE REVIEW
+
+Locate all current privacy-related representations, including:
+
+- Privacy Policy
+- Terms of Service
+- Cookie Policy
+- Registration notice
+- Login notice
+- Consent banner
+- Footer links
+- Contact forms
+- Account settings
+- Marketing signup forms
+- Mobile-specific notices
+
+Compare each statement against the actual technical behavior.
+
+Specifically identify whether the documents:
+
+- Explicitly name every tracking or analytics tool.
+- Explicitly name or clearly identify every outside recipient.
+- Describe each collected data category.
+- Explain whether URLs, page titles, content viewed, search activity, device information, cookies, IP addresses, and identifiers are collected.
+- Explain each purpose, including analytics, security, advertising, personalization, cross-site tracking, or product improvement.
+- Explain when data is combined with account information.
+- Explain retention and deletion.
+- Explain opt-out and consent-withdrawal methods.
+- Claim that information is not sold, shared, redistributed, tracked, or disclosed when actual practices could conflict with that statement.
+- Use broad phrases such as “may collect,” “service providers,” or “usage information” without explaining the actual implementation.
+- Match the production consent interface.
+- Identify an effective date and version.
+
+Do not rewrite the policy during this task. Provide recommended factual corrections for legal counsel to review.
+
+G. SENSITIVE-ACTIVITY REVIEW
+
+Determine whether BarefootBay.com contains, processes, or could reveal potentially sensitive information through page visits or activity.
+
+Examples include:
+
+- Specific content or media viewed.
+- Searches.
+- Private messages.
+- Account or membership status.
+- Precise property or location information.
+- Health, disability, age, financial, sexual, religious, political, or family information.
+- User interests that could be inferred from page URLs or event names.
+- Administrative, moderation, or private account pages.
+
+Do not assume the information is or is not legally sensitive. Describe the technical facts and flag them for counsel.
+
+H. SECURITY AND DATA-MINIMIZATION REVIEW
+
+Evaluate whether the tracker collects more data than is needed for its documented purpose.
+
+Consider:
+
+- Removing complete URLs where route names would suffice.
+- Removing query strings and fragments.
+- Replacing content titles with nonsensitive internal categories.
+- Avoiding form-field capture.
+- Avoiding direct identifiers in analytics events.
+- Separating account data from analytics data.
+- Rotating or shortening anonymous identifiers.
+- Truncating or avoiding IP storage.
+- Reducing retention.
+- Aggregating statistics.
+- Limiting administrator access.
+- Encrypting data in transit and at rest.
+- Creating deletion procedures.
+- Preventing sensitive information from entering application logs or error reports.
+- Adding a technical kill switch for optional tracking.
+
+REPORT REQUIREMENTS
+
+Create:
+
+docs/PRIVACY_TRACKING_AUDIT.md
+
+If the docs directory does not exist, create it. Do not modify any other application files.
+
+The report must contain the following sections.
+
+1. Executive Summary
+
+Include:
+
+- Overall technical privacy-risk rating: Critical, High, Moderate, Low, or Insufficient Information.
+- A short explanation.
+- The five most important confirmed findings.
+- The five most important unknowns.
+- Any condition requiring immediate suspension of a tracker pending legal review.
+
+The rating is a technical/compliance prioritization, not a legal conclusion.
+
+2. System Architecture
+
+Describe:
+
+- Frontend.
+- Backend.
+- Authentication.
+- Database.
+- Hosting.
+- Logging.
+- Analytics.
+- Tracking.
+- Third-party integrations.
+- Consent mechanism.
+
+3. Tracking Inventory
+
+Create a table with these columns:
+
+- Tool/system
+- First-party or third-party
+- Source-code location
+- Trigger
+- Purpose
+- Data collected
+- Identifiers
+- Recipient
+- Storage location
+- Retention
+- Consent category
+- Fires before consent?
+- Fires after rejection?
+- Confirmed/inferred/unknown
+- Evidence
+
+4. Event Inventory
+
+For every custom tracking event, provide:
+
+- Event name.
+- Trigger.
+- Payload fields.
+- Sample redacted payload.
+- Whether the event may expose a page, content item, search, account, or sensitive activity.
+- Where it is stored or sent.
+- Source-code file and line reference.
+
+5. Data-Flow Matrix
+
+Create a table with:
+
+- Data element
+- Collection source
+- Processing step
+- Internal storage
+- External recipient
+- Purpose
+- Identifier linkage
+- Consent dependency
+- Retention
+- Deletion process
+- Evidence
+- Concern
+
+6. Third-Party Recipient Matrix
+
+List every external domain or company receiving requests or data, including infrastructure and logging providers.
+
+7. Consent Test Results
+
+Provide results for every runtime state tested. Explicitly state whether optional requests occurred before consent, after rejection, or after withdrawal.
+
+8. Privacy-Policy Consistency Matrix
+
+Create a table with:
+
+- Policy or UI statement
+- Actual implementation
+- Consistent?
+- Evidence
+- Severity
+- Recommended factual correction
+- Legal-review question
+
+9. Bellesa-Relevance Matrix
+
+Create a factual comparison table with:
+
+- Issue identified in the Bellesa ruling/client alert
+- BarefootBay.com implementation
+- Evidence
+- Similarity
+- Important distinction
+- Technical risk
+- Question for counsel
+
+At minimum address:
+
+- Specific disclosure of tracking tools.
+- Specific identification of recipients.
+- URL/page-title/content information.
+- Cookie or session identifiers.
+- Account linkage.
+- Device and browser attributes.
+- Third-party sharing.
+- Tracking before consent.
+- Ability to reject or withdraw.
+- Contradictory privacy-policy language.
+- First-party versus third-party tracking.
+- Potentially sensitive activity.
+- Retention and deletion.
+- Registered versus unregistered users.
+- Free versus account-restricted content, if applicable.
+
+10. Findings by Severity
+
+Use:
+
+- Critical: Sensitive or account-linked activity is sent to an outside party before affirmative consent, or secrets/private form data are exposed.
+- High: Optional tracking operates before consent, rejection does not work, policy materially conflicts with behavior, or identifiable activity is shared externally.
+- Moderate: Overcollection, excessive retention, weak consent records, incomplete disclosure, or unclear vendor handling.
+- Low: Documentation or implementation improvement with limited apparent data exposure.
+- Informational: Architecture facts or good practices.
+
+For every finding provide:
+
+- Finding ID.
+- Severity.
+- Confirmed fact.
+- Evidence.
+- Affected files/components.
+- Data involved.
+- Recipient.
+- User state.
+- Potential concern.
+- Recommended remediation.
+- Verification test after remediation.
+- Question for counsel, where applicable.
+
+11. Prioritized Remediation Plan
+
+Separate recommendations into:
+
+- Immediate containment: 0–48 hours.
+- Near term: 1–2 weeks.
+- Medium term: 30–60 days.
+- Longer term.
+
+Do not implement these recommendations during this audit.
+
+12. Questions for Legal Counsel
+
+Provide a concise list of questions that cannot be resolved technically, including:
+
+- Which jurisdictions and state privacy statutes should be evaluated based on actual users.
+- Whether the site’s data constitutes personal, sensitive, or covered information.
+- Whether any recipient relationship constitutes a sale, sharing, disclosure for valuable consideration, or service-provider processing.
+- Whether the proposed consent language is sufficiently specific.
+- Whether existing agreements with vendors are adequate.
+- Whether historical tracking data requires deletion or another response.
+- Whether prior versions of the privacy policy and consent interface need preservation.
+
+13. Unknowns and Limitations
+
+Explicitly list anything the repository or runtime tests could not establish.
+
+14. Evidence Appendix
+
+Include:
+
+- File paths and line numbers.
+- Relevant dependency names and versions.
+- Redacted network examples.
+- External domains.
+- Cookie and storage names.
+- Database tables and fields.
+- Environment-variable names without their values.
+- Screenshots or descriptions of consent states, when available.
+
+QUALITY REQUIREMENTS
+
+- Every material conclusion must point to evidence.
+- Do not characterize a package as active solely because it appears in a dependency file; confirm whether it is imported, configured, or observed at runtime.
+- Do not characterize an external request as harmless solely because the payload appears pseudonymous.
+- Distinguish browser-to-third-party traffic from browser-to-BarefootBay and server-to-third-party traffic.
+- Distinguish operational/security logging from analytics or advertising, but still document the data received by logging providers.
+- Do not omit custom tracking merely because no major analytics package is present.
+- Do not omit third-party hosting or infrastructure simply because it is necessary to operate the website.
+- Clearly state when production behavior could not be tested.
+- Preserve enough detail for an independent developer to reproduce each finding.
+- Do not provide boilerplate recommendations that are unrelated to the observed implementation.
+
+At the end of the task, respond with:
+
+1. The path to the completed report.
+2. The overall technical privacy-risk rating.
+3. The three most urgent findings.
+4. The most important unresolved question for legal counsel.
+5. Confirmation that no production behavior or application code was changed.
