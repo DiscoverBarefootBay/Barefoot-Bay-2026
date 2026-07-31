@@ -13,6 +13,7 @@ import * as printfulService from './printful-service';
 import { sendOrderStatusUpdateEmail } from './email-service';
 import { OrderStatus } from '@workspace/db';
 import { checkExpiredListings } from './listing-expiration-service';
+import { isListingExpirationEmailSendingEnabled } from './scheduler-email-gate';
 import { updateExpiredSubscriptions } from './user-subscriptions';
 import { processMembershipOrders } from './utils/membership-processor';
 import { logTransaction } from './utils/square-logger';
@@ -340,11 +341,18 @@ export async function runScheduledTasks(): Promise<void> {
       console.error('Error in credit reconciliation:', reconcileError);
     }
     
-    // Check for expired real estate listings
+    // Check for expired real estate listings. Environment-gated like the
+    // background scheduler: checkExpiredListings emails admins and sellers, so
+    // a dev workspace (stale DB, real SendGrid key) must never run it — even
+    // via this manual admin trigger — unless explicitly opted in.
     try {
-      console.log('Checking for expired real estate listings...');
-      const expirationResult = await checkExpiredListings();
-      console.log(`Checked ${expirationResult.checked} listings: ${expirationResult.expired} expired`);
+      if (!isListingExpirationEmailSendingEnabled()) {
+        console.log('Skipping expired-listings check: sending is disabled in this environment (not deployed production; set LISTING_SCHEDULER_DEV_SENDING=true to opt in)');
+      } else {
+        console.log('Checking for expired real estate listings...');
+        const expirationResult = await checkExpiredListings();
+        console.log(`Checked ${expirationResult.checked} listings: ${expirationResult.expired} expired`);
+      }
     } catch (listingError) {
       console.error('Error checking expired listings:', listingError);
       // Continue with other tasks even if this one fails

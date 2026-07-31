@@ -35,6 +35,7 @@ import {
   type WeeklyEmailListing,
   type WeekRange,
 } from './weekly-listings-email';
+import { isWeeklyListingsEmailSendingEnabled } from './scheduler-email-gate';
 
 const CHECK_INTERVAL_MS = 60 * 1000; // evaluate once a minute
 const BOOT_DELAY_MS = 45 * 1000;
@@ -402,10 +403,22 @@ export async function executeWeeklySend(
 
 export interface WeeklySchedulerDeps extends WeeklySendDeps {
   loadConfig: () => Promise<WeeklyListingsEmailConfig>;
+  // Environment gate — must return true for the scheduled tick to send ANY
+  // email. Defaults to the real production check (NODE_ENV=production or
+  // REPLIT_DEPLOYMENT=true, with WEEKLY_LISTINGS_SCHEDULER_DEV_SENDING=true as
+  // an explicit dev opt-in). Optional so pre-existing test harnesses that
+  // exercise the timing logic keep working — when omitted, sending is treated
+  // as allowed, but every production caller goes through
+  // defaultWeeklySchedulerDeps() which always wires the real check.
+  isEmailSendingEnabled?: () => boolean;
 }
 
 export function defaultWeeklySchedulerDeps(): WeeklySchedulerDeps {
-  return { ...defaultWeeklySendDeps(), loadConfig: loadWeeklyListingsEmailConfig };
+  return {
+    ...defaultWeeklySendDeps(),
+    loadConfig: loadWeeklyListingsEmailConfig,
+    isEmailSendingEnabled: () => isWeeklyListingsEmailSendingEnabled(),
+  };
 }
 
 /**
@@ -421,6 +434,14 @@ export async function runWeeklyListingsEmailTick(
   if (ticking) return null;
   ticking = true;
   try {
+    // Environment gate: the dev workspace runs this same scheduler with the
+    // real SendGrid key against a stale dev DB — never let it email real users.
+    if (deps.isEmailSendingEnabled && !deps.isEmailSendingEnabled()) {
+      logger.info(
+        '[WeeklyListingsEmail] Sending is disabled in this environment (not deployed production; set WEEKLY_LISTINGS_SCHEDULER_DEV_SENDING=true to opt in) — tick skipped',
+      );
+      return null;
+    }
     const config = await deps.loadConfig();
     if (!config.enabled) return null;
 

@@ -7,6 +7,7 @@ import {
   sendListingExpiredSellerEmail,
 } from './sendgrid-service';
 import { loadForSaleEmailConfig, type ForSaleEmailConfig } from './forsale-email-config';
+import { isListingExpirationEmailSendingEnabled } from './scheduler-email-gate';
 import type { User } from '@workspace/db';
 
 /**
@@ -134,7 +135,31 @@ async function sendListingExpirationEmails(
  * Note: This function is safe to call even if the database schema
  * doesn't have the necessary columns yet. It will gracefully handle that case.
  */
-export async function checkExpiredListings(referenceDate?: Date) {
+export async function checkExpiredListings(
+  referenceDate?: Date,
+  deps: { isEmailSendingEnabled?: () => boolean } = {},
+) {
+  // Environment gate, enforced at the service level so EVERY caller is
+  // covered — the background scheduler, the manual scheduled-tasks trigger,
+  // and the admin/test routes that import this function directly. This scan
+  // both mutates listing status and emails admins + sellers, so a dev
+  // workspace (stale DB, real SendGrid key) must never run it unless
+  // explicitly opted in via LISTING_SCHEDULER_DEV_SENDING=true.
+  const isEnabled = deps.isEmailSendingEnabled ?? isListingExpirationEmailSendingEnabled;
+  if (!isEnabled()) {
+    logger.info(
+      '[ListingExpiration] Skipped: sending is disabled in this environment (not deployed production; set LISTING_SCHEDULER_DEV_SENDING=true to opt in)',
+    );
+    return {
+      checked: 0,
+      renewed: 0,
+      expired: 0,
+      deleted: 0,
+      skipped: true as const,
+      skipReason: 'Email sending is disabled in this environment (not deployed production)',
+    };
+  }
+
   console.log('Checking for expired listings...');
   
   try {

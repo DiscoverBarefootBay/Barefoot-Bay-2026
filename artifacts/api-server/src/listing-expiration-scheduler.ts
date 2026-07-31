@@ -3,6 +3,7 @@ import { checkExpiredListings, resolveAdminRecipientEmails } from "./listing-exp
 import { storage } from "./storage";
 import { sendNoActiveListingsAdminEmail } from "./sendgrid-service";
 import { loadForSaleEmailConfig } from "./forsale-email-config";
+import { isListingExpirationEmailSendingEnabled } from "./scheduler-email-gate";
 
 // How often to scan for newly-expired listings. The expiration window is
 // measured in days, so an hourly cadence is more than enough precision while
@@ -163,15 +164,68 @@ const BOOT_DELAY_MS = 30 * 1000; // 30 seconds
 let started = false;
 let ticking = false;
 
-async function runListingExpirationTick(): Promise<void> {
+// Injectable deps so the environment gate is unit-testable without touching
+// the real DB or SendGrid. Production always uses the defaults.
+export interface ListingExpirationTickDeps {
+  // Must return true for the tick to run at all. The scan both mutates listing
+  // status AND sends admin/seller emails, so in a non-production environment we
+  // skip the whole tick — the dev workspace reads a stale database and would
+  // otherwise email real recipients false alerts (this actually happened; see
+  // calendar-email-scheduler.ts for the identical prior incident).
+  isEmailSendingEnabled: () => boolean;
+  checkExpiredListings: typeof checkExpiredListings;
+  checkNoActiveListingsReminder: () => Promise<void>;
+  // Clears any persisted empty-page tracking state without sending anything.
+  // Runs on the gated-off path so a stale dev "empty since" clock can never
+  // survive to produce a misleading days-empty count after a later opt-in.
+  resetEmptyListingsState: () => Promise<void>;
+}
+
+/**
+ * Clear the persisted empty-page tracking state if it holds anything. Never
+ * sends email. Used when the environment gate is off so stale state (e.g. a
+ * dev DB that has been empty for weeks) can't feed a bogus reminder later.
+ */
+async function resetEmptyListingsStateIfSet(): Promise<void> {
+  const state = await readEmptyListingsState();
+  if (state.emptySince || state.lastReminderAt) {
+    await writeEmptyListingsState({ emptySince: null, lastReminderAt: null });
+    logger.info("[ListingExpirationScheduler] Cleared stale empty-listings tracking state (sending disabled in this environment)");
+  }
+}
+
+function defaultTickDeps(): ListingExpirationTickDeps {
+  return {
+    isEmailSendingEnabled: () => isListingExpirationEmailSendingEnabled(),
+    checkExpiredListings,
+    checkNoActiveListingsReminder,
+    resetEmptyListingsState: resetEmptyListingsStateIfSet,
+  };
+}
+
+export async function runListingExpirationTick(
+  deps: ListingExpirationTickDeps = defaultTickDeps(),
+): Promise<void> {
   if (ticking) {
     return;
   }
   ticking = true;
   try {
+    // Environment gate: only deployed production (or an explicit dev opt-in via
+    // LISTING_SCHEDULER_DEV_SENDING=true) may run the scan and send emails.
+    if (!deps.isEmailSendingEnabled()) {
+      logger.info(
+        "[ListingExpirationScheduler] Sending is disabled in this environment (not deployed production; set LISTING_SCHEDULER_DEV_SENDING=true to opt in) — tick skipped",
+      );
+      // Housekeeping only (no email): clear any persisted empty-page tracking
+      // state so a stale dev clock can't later yield a misleading days-empty
+      // count if someone opts in with LISTING_SCHEDULER_DEV_SENDING=true.
+      await deps.resetEmptyListingsState();
+      return;
+    }
     // The weekly empty-page reminder runs after the expiration scan so any
     // listings that just flipped to EXPIRED are reflected in the active count.
-    const result = await checkExpiredListings();
+    const result = await deps.checkExpiredListings();
     // checkExpiredListings swallows its own errors and returns them on the
     // result object, so surface them here — otherwise an automatic failure
     // would be completely silent.
@@ -191,7 +245,7 @@ async function runListingExpirationTick(): Promise<void> {
     }
 
     // Weekly admin reminder when the public For Sale page has no active listings.
-    await checkNoActiveListingsReminder();
+    await deps.checkNoActiveListingsReminder();
   } catch (err) {
     logger.error({ err }, "[ListingExpirationScheduler] Tick failed");
   } finally {
