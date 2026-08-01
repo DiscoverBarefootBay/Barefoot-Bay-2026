@@ -19,7 +19,12 @@
 
 import { eq, and, desc, inArray, gte, lte } from 'drizzle-orm';
 import { db } from './db';
-import { weeklyListingsEmailSends, type WeeklyListingsEmailSend } from '@workspace/db';
+import {
+  weeklyListingsEmailSends,
+  weeklyListingsEmailActivity,
+  type WeeklyListingsEmailSend,
+  type WeeklyListingsEmailActivity,
+} from '@workspace/db';
 import { storage } from './storage';
 import { logger } from './lib/logger';
 import { formatInTimeZone } from 'date-fns-tz';
@@ -62,6 +67,85 @@ export function getWeeklyEmailBaseUrl(): string {
 export const TERMINAL_SEND_STATUSES = new Set(['sent', 'partially_failed', 'skipped_no_listings']);
 
 /**
+ * The schedule identity a campaign was sent under: "<sendDay>@<HH:mm>".
+ * The overlap rule only treats a prior terminal campaign as blocking when it
+ * was sent under the SAME schedule — an admin schedule change is an explicit
+ * request for the next configured send to go out even in an overlapping week.
+ */
+export function computeScheduleKey(config: Pick<WeeklyListingsEmailConfig, 'sendDay' | 'sendTime'>): string {
+  return `${config.sendDay}@${config.sendTime}`;
+}
+
+// ---------------------------------------------------------------------------
+// Admin-visible activity log
+// ---------------------------------------------------------------------------
+
+export type WeeklyEmailActivityEvent =
+  | 'sent'
+  | 'partially_failed'
+  | 'failed'
+  | 'skipped_no_listings'
+  | 'skipped_already_sent'
+  | 'skipped_window_missed'
+  | 'test_sent'
+  | 'schedule_changed';
+
+// In-memory guard so per-minute ticks don't hammer the DB re-checking whether
+// a dedupe-once event was already logged this process lifetime.
+const loggedActivityKeys = new Set<string>();
+
+/**
+ * Record an admin-visible activity entry. Never throws — a logging failure
+ * must not break a send. `dedupeOnce` collapses per-tick repeats (e.g. the
+ * scheduler evaluating a skipped window once a minute) into a single row per
+ * (event, weekStart).
+ */
+export async function logWeeklyEmailActivity(entry: {
+  event: WeeklyEmailActivityEvent;
+  weekStart?: string | null;
+  weekEnd?: string | null;
+  detail?: string | null;
+  actor?: string | null;
+  dedupeOnce?: boolean;
+}): Promise<void> {
+  try {
+    const values = {
+      event: entry.event,
+      weekStart: entry.weekStart ?? null,
+      weekEnd: entry.weekEnd ?? null,
+      detail: entry.detail ?? null,
+      actor: entry.actor ?? null,
+    };
+    if (entry.dedupeOnce && entry.weekStart) {
+      // Durable dedupe: a partial unique index on (event, week_start) for the
+      // dedupe-once events (see lib/db/sql/2026-08-01-weekly-email-activity.sql)
+      // makes concurrent/restarted inserts collapse via ON CONFLICT DO NOTHING.
+      // The in-memory set is just a fast path to skip the DB round-trip on
+      // subsequent per-minute ticks.
+      const key = `${entry.event}:${entry.weekStart}`;
+      if (loggedActivityKeys.has(key)) return;
+      await db.insert(weeklyListingsEmailActivity).values(values).onConflictDoNothing();
+      loggedActivityKeys.add(key);
+      return;
+    }
+    await db.insert(weeklyListingsEmailActivity).values(values);
+  } catch (err) {
+    logger.warn(
+      { err: err instanceof Error ? err.message : String(err), event: entry.event },
+      '[WeeklyListingsEmail] Failed to record activity entry',
+    );
+  }
+}
+
+export async function getWeeklyEmailActivity(limit = 50): Promise<WeeklyListingsEmailActivity[]> {
+  return db
+    .select()
+    .from(weeklyListingsEmailActivity)
+    .orderBy(desc(weeklyListingsEmailActivity.createdAt), desc(weeklyListingsEmailActivity.id))
+    .limit(limit);
+}
+
+/**
  * Compute the next scheduled automatic send as an ET-labelled string, or null
  * when the automation is disabled. Used by the admin tab.
  */
@@ -91,6 +175,28 @@ export function getNextScheduledSend(
     time: config.sendTime,
     label: `${dayName}, ${monthName} ${next.getUTCDate()}, ${next.getUTCFullYear()} at ${config.sendTime} ET`,
   };
+}
+
+/**
+ * If the NEXT scheduled automatic send would be skipped because an
+ * overlapping campaign already went out under the current schedule, return
+ * that blocking campaign so the admin UI can say so up front. Returns null
+ * when the next send is expected to fire normally (or automation is off).
+ */
+export async function getNextSendBlocker(
+  config: WeeklyListingsEmailConfig,
+  now: Date = new Date(),
+): Promise<WeeklyListingsEmailSend | null> {
+  const next = getNextScheduledSend(config, now);
+  if (!next) return null;
+  // The campaign window for that send: the 7 calendar days ending on the
+  // send date (ET). Pure date arithmetic — no timezone conversion needed.
+  const [y, m, d] = next.dateEt.split('-').map(Number);
+  const start = new Date(Date.UTC(y!, m! - 1, d!, 12));
+  start.setUTCDate(start.getUTCDate() - 6);
+  const range = { weekStart: start.toISOString().slice(0, 10), weekEnd: next.dateEt };
+  const blocker = await getOverlappingBlockingSend(range, computeScheduleKey(config));
+  return blocker ?? null;
 }
 
 export async function getWeeklySendHistory(limit = 26): Promise<WeeklyListingsEmailSend[]> {
@@ -125,9 +231,17 @@ const BLOCKING_SEND_STATUSES = [...TERMINAL_SEND_STATUSES, 'sending'];
  * listings already covered — and an overlapping "sending" row means another
  * instance is currently sending this cycle (even if it claimed a different
  * week_start on an earlier day). Only "failed" rows don't count here.
+ *
+ * When `currentScheduleKey` is provided, a TERMINAL overlapping campaign only
+ * blocks when it was sent under the same schedule (or under an unknown/legacy
+ * NULL schedule — treated as blocking for safety). An admin who changes the
+ * send day/time explicitly wants the next configured send to go out even in
+ * an overlapping week. "sending" rows always block regardless of schedule —
+ * two concurrent sends must never race.
  */
 export async function getOverlappingBlockingSend(
   range: Pick<WeekRange, 'weekStart' | 'weekEnd'>,
+  currentScheduleKey?: string,
 ): Promise<WeeklyListingsEmailSend | undefined> {
   const rows = await db
     .select()
@@ -139,9 +253,14 @@ export async function getOverlappingBlockingSend(
         inArray(weeklyListingsEmailSends.status, BLOCKING_SEND_STATUSES),
       ),
     )
-    .orderBy(desc(weeklyListingsEmailSends.weekStart))
-    .limit(1);
-  return rows[0];
+    .orderBy(desc(weeklyListingsEmailSends.weekStart));
+  if (!currentScheduleKey) return rows[0];
+  return rows.find(
+    (row) =>
+      row.status === 'sending' ||
+      row.scheduleKey == null ||
+      row.scheduleKey === currentScheduleKey,
+  );
 }
 
 /**
@@ -153,6 +272,7 @@ export async function claimWeeklySend(
   range: Pick<WeekRange, 'weekStart' | 'weekEnd'>,
   triggeredBy: 'scheduler' | 'manual',
   triggeredByUser?: string | null,
+  scheduleKey?: string | null,
 ): Promise<WeeklyListingsEmailSend | null> {
   // Fresh claim: only succeeds for the first instance to insert this week.
   const inserted = await db
@@ -163,6 +283,7 @@ export async function claimWeeklySend(
       status: 'sending',
       triggeredBy,
       triggeredByUser: triggeredByUser ?? null,
+      scheduleKey: scheduleKey ?? null,
     })
     .onConflictDoNothing({ target: weeklyListingsEmailSends.weekStart })
     .returning();
@@ -172,7 +293,13 @@ export async function claimWeeklySend(
   // update so concurrent retriers can't both win.
   const reclaimed = await db
     .update(weeklyListingsEmailSends)
-    .set({ status: 'sending', triggeredBy, triggeredByUser: triggeredByUser ?? null, error: null })
+    .set({
+      status: 'sending',
+      triggeredBy,
+      triggeredByUser: triggeredByUser ?? null,
+      scheduleKey: scheduleKey ?? null,
+      error: null,
+    })
     .where(
       and(
         eq(weeklyListingsEmailSends.weekStart, range.weekStart),
@@ -218,6 +345,9 @@ export interface WeeklySendDeps {
   finalizeWeeklySend: typeof finalizeWeeklySend;
   getWeeklySendForWeek: typeof getWeeklySendForWeek;
   getOverlappingBlockingSend: typeof getOverlappingBlockingSend;
+  // Optional so pre-existing test harnesses keep working; production callers
+  // get the real logger via defaultWeeklySendDeps(). Never throws.
+  logActivity?: typeof logWeeklyEmailActivity;
   baseUrl?: string;
 }
 
@@ -230,6 +360,7 @@ export function defaultWeeklySendDeps(): WeeklySendDeps {
     finalizeWeeklySend,
     getWeeklySendForWeek,
     getOverlappingBlockingSend,
+    logActivity: logWeeklyEmailActivity,
     baseUrl: getWeeklyEmailBaseUrl(),
   };
 }
@@ -245,12 +376,25 @@ export interface WeeklySendResult {
   error?: string;
 }
 
+// Serializes all campaign sends within this process so the overlap-check →
+// claim sequence can't race between the scheduler tick and a manual admin
+// send (the claim's unique key is week_start, which doesn't cover two
+// DIFFERENT overlapping week windows). The app runs as a single server
+// process, so an in-process mutex closes the realistic race window.
+let sendChain: Promise<unknown> = Promise.resolve();
+function withSendLock<T>(fn: () => Promise<T>): Promise<T> {
+  const run = sendChain.then(fn, fn);
+  sendChain = run.catch(() => {});
+  return run;
+}
+
 /**
  * Execute a campaign send for the given week: claim → select listings →
  * resolve recipients → render → send per recipient → finalize the record.
  * Never sends twice for a week that already reached a terminal status.
+ * Sends are serialized process-wide (see withSendLock).
  */
-export async function executeWeeklySend(
+export function executeWeeklySend(
   range: WeekRange,
   config: WeeklyListingsEmailConfig,
   triggeredBy: 'scheduler' | 'manual',
@@ -258,16 +402,39 @@ export async function executeWeeklySend(
   now: Date = new Date(),
   triggeredByUser?: string | null,
 ): Promise<WeeklySendResult> {
+  return withSendLock(() => executeWeeklySendInner(range, config, triggeredBy, deps, now, triggeredByUser));
+}
+
+async function executeWeeklySendInner(
+  range: WeekRange,
+  config: WeeklyListingsEmailConfig,
+  triggeredBy: 'scheduler' | 'manual',
+  deps: WeeklySendDeps,
+  now: Date,
+  triggeredByUser?: string | null,
+): Promise<WeeklySendResult> {
   const base = { weekStart: range.weekStart, weekEnd: range.weekEnd, label: range.label };
+  const scheduleKey = computeScheduleKey(config);
+  const logActivity = deps.logActivity ?? (async () => {});
 
   // Fast path: a blocking campaign whose rolling window overlaps this one
   // means the current weekly cycle already went out (terminal) or is being
-  // sent right now by another instance ("sending") — never send twice.
-  const existing = await deps.getOverlappingBlockingSend(range);
+  // sent right now by another instance ("sending") — never send twice. A
+  // terminal campaign sent under a DIFFERENT schedule does not block: the
+  // admin changed the schedule and expects the configured send to go out.
+  const existing = await deps.getOverlappingBlockingSend(range, scheduleKey);
   if (existing) {
     if (existing.status === 'sending') {
       return { ...base, status: 'claim_lost', listingCount: 0, recipientCount: 0, sentCount: 0 };
     }
+    await logActivity({
+      event: 'skipped_already_sent',
+      weekStart: range.weekStart,
+      weekEnd: range.weekEnd,
+      detail: `Skipped — a campaign covering ${existing.weekStart} – ${existing.weekEnd} already went out under the current schedule (${existing.sentCount} of ${existing.recipientCount} delivered).`,
+      actor: triggeredByUser ?? null,
+      dedupeOnce: triggeredBy === 'scheduler',
+    });
     return {
       ...base,
       status: 'already_sent',
@@ -277,7 +444,7 @@ export async function executeWeeklySend(
     };
   }
 
-  const claimed = await deps.claimWeeklySend(range, triggeredBy, triggeredByUser ?? null);
+  const claimed = await deps.claimWeeklySend(range, triggeredBy, triggeredByUser ?? null, scheduleKey);
   if (!claimed) {
     return { ...base, status: 'claim_lost', listingCount: 0, recipientCount: 0, sentCount: 0 };
   }
@@ -297,6 +464,13 @@ export async function executeWeeklySend(
         { weekStart: range.weekStart },
         '[WeeklyListingsEmail] No active listings — campaign skipped',
       );
+      await logActivity({
+        event: 'skipped_no_listings',
+        weekStart: range.weekStart,
+        weekEnd: range.weekEnd,
+        detail: 'Skipped — no active listings this week and "send even when empty" is off.',
+        actor: triggeredByUser ?? null,
+      });
       return { ...base, status: 'skipped_no_listings', listingCount: 0, recipientCount: 0, sentCount: 0 };
     }
 
@@ -311,6 +485,13 @@ export async function executeWeeklySend(
         recipientCount: 0,
         sentCount: 0,
         error,
+      });
+      await logActivity({
+        event: 'failed',
+        weekStart: range.weekStart,
+        weekEnd: range.weekEnd,
+        detail: `Failed — ${error}.`,
+        actor: triggeredByUser ?? null,
       });
       return { ...base, status: 'failed', listingCount: listings.length, recipientCount: 0, sentCount: 0, error };
     }
@@ -344,6 +525,13 @@ export async function executeWeeklySend(
         sentCount: 0,
         error,
       });
+      await logActivity({
+        event: 'failed',
+        weekStart: range.weekStart,
+        weekEnd: range.weekEnd,
+        detail: `Failed — ${error}. The scheduler will retry within the grace window; the campaign can also be sent manually.`,
+        actor: triggeredByUser ?? null,
+      });
       return {
         ...base,
         status: 'failed',
@@ -371,6 +559,16 @@ export async function executeWeeklySend(
       { weekStart: range.weekStart, listings: listings.length, recipients: recipients.length, sentCount, failedCount },
       '[WeeklyListingsEmail] Weekly campaign sent',
     );
+    await logActivity({
+      event: finalStatus,
+      weekStart: range.weekStart,
+      weekEnd: range.weekEnd,
+      detail:
+        finalStatus === 'sent'
+          ? `Sent to ${sentCount} recipient(s), covering ${listings.length} listing(s)${triggeredBy === 'manual' ? ' (manual send)' : ''}.`
+          : `Sent to ${sentCount} of ${recipients.length} recipient(s) — ${failedCount} failed. Covering ${listings.length} listing(s)${triggeredBy === 'manual' ? ' (manual send)' : ''}.`,
+      actor: triggeredByUser ?? null,
+    });
     return {
       ...base,
       status: finalStatus,
@@ -393,6 +591,13 @@ export async function executeWeeklySend(
     } catch (finalizeErr) {
       logger.error({ err: finalizeErr }, '[WeeklyListingsEmail] Failed to record failed send');
     }
+    await logActivity({
+      event: 'failed',
+      weekStart: range.weekStart,
+      weekEnd: range.weekEnd,
+      detail: `Failed — ${error}.`,
+      actor: triggeredByUser ?? null,
+    });
     return { ...base, status: 'failed', listingCount: 0, recipientCount: 0, sentCount: 0, error };
   }
 }
@@ -451,21 +656,51 @@ export async function runWeeklyListingsEmailTick(
     const nowHHMM = formatInTimeZone(now, EASTERN_TZ, 'HH:mm');
     if (nowHHMM < config.sendTime) return null;
 
+    const scheduleKey = computeScheduleKey(config);
+    const logActivity = deps.logActivity ?? (async () => {});
+
     // Past the catch-up grace window: don't fire a very late campaign. The
     // per-week record means the week simply stays unsent (visible in history
     // as absent/failed) and the admin can trigger it manually.
     const [sh, sm] = config.sendTime.split(':').map(Number);
     const [nh, nm] = nowHHMM.split(':').map(Number);
     const pastByMins = nh! * 60 + nm! - (sh! * 60 + sm!);
-    if (pastByMins > CATCHUP_GRACE_MINUTES) return null;
+    if (pastByMins > CATCHUP_GRACE_MINUTES) {
+      // Record the miss (once) so admins can see WHY nothing arrived — but
+      // only when this cycle genuinely never went out under this schedule.
+      const range = getCampaignWeekRange(now);
+      const covered = await deps.getOverlappingBlockingSend(range, scheduleKey);
+      if (!covered) {
+        await logActivity({
+          event: 'skipped_window_missed',
+          weekStart: range.weekStart,
+          weekEnd: range.weekEnd,
+          detail: `No campaign went out during the scheduled ${config.sendTime} ET send window (the server may have been offline, the schedule may have been changed after the window, or a send attempt may have failed — check the entries above). Use "Send Campaign Now" to send it manually, or wait for the next scheduled send.`,
+          dedupeOnce: true,
+        });
+      }
+      return null;
+    }
 
     const range = getCampaignWeekRange(now);
 
     // Cheap pre-checks to avoid claim churn every tick once the cycle is done:
-    // an overlapping terminal campaign (possibly sent manually on another day)
-    // or an overlapping in-progress send blocks the scheduled send.
-    const overlapping = await deps.getOverlappingBlockingSend(range);
-    if (overlapping) return null;
+    // an overlapping in-progress send, or a terminal campaign sent under the
+    // SAME schedule, blocks the scheduled send. A terminal campaign from a
+    // different (old) schedule does NOT block — the admin changed the
+    // schedule and expects this send to fire (executeWeeklySend logs the
+    // skip when it applies).
+    const overlapping = await deps.getOverlappingBlockingSend(range, scheduleKey);
+    if (overlapping) {
+      await logActivity({
+        event: 'skipped_already_sent',
+        weekStart: range.weekStart,
+        weekEnd: range.weekEnd,
+        detail: `Scheduled send skipped — a campaign covering ${overlapping.weekStart} – ${overlapping.weekEnd} already went out this cycle under the current schedule.`,
+        dedupeOnce: true,
+      });
+      return null;
+    }
     const existing = await deps.getWeeklySendForWeek(range.weekStart);
     if (existing && existing.status !== 'failed') {
       // "sending" means another instance is mid-send.

@@ -1817,10 +1817,33 @@ export const weeklyListingsEmailSends = pgTable("weekly_listings_email_sends", {
   error: text("error"),
   triggeredBy: text("triggered_by").notNull().default("scheduler"), // scheduler|manual
   triggeredByUser: text("triggered_by_user"), // admin username for manual triggers
+  // Schedule in effect when this campaign was claimed ("<sendDay>@<HH:mm>",
+  // e.g. "5@18:00"). Used by the overlap rule: a terminal campaign only blocks
+  // a new overlapping send when the schedule is unchanged — an admin schedule
+  // change is an explicit request for the next configured send to go out.
+  // NULL (legacy rows) is treated as blocking, to stay safe across the migration.
+  scheduleKey: text("schedule_key"),
   createdAt: timestamp("created_at").defaultNow(),
   sentAt: timestamp("sent_at"),
 });
 
 export type WeeklyListingsEmailSend = typeof weeklyListingsEmailSends.$inferSelect;
+
+// Admin-visible activity log for the weekly listings email system: every send,
+// skip (with reason), failure, test email, manual trigger, and schedule change
+// gets a row so admins can always see what happened and why.
+export const weeklyListingsEmailActivity = pgTable("weekly_listings_email_activity", {
+  id: serial("id").primaryKey(),
+  // sent|partially_failed|failed|skipped_no_listings|skipped_already_sent|
+  // skipped_window_missed|test_sent|schedule_changed
+  event: text("event").notNull(),
+  weekStart: text("week_start"), // yyyy-MM-dd when the event concerns a campaign week
+  weekEnd: text("week_end"),
+  detail: text("detail"), // human-readable explanation shown to admins
+  actor: text("actor"), // admin username for manual/test/config events; null for scheduler
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export type WeeklyListingsEmailActivity = typeof weeklyListingsEmailActivity.$inferSelect;
 
 // Migration Records Table is defined above around line 389

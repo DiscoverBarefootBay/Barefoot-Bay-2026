@@ -410,6 +410,7 @@ interface FakeState {
   rows: Map<string, any>;
   nextId: number;
   sends: Array<{ to: string; subject: string }>;
+  activity: Array<{ event: string; weekStart?: string | null; detail?: string | null }>;
   sendResult: boolean;
   failAddresses?: Set<string>;
 }
@@ -423,7 +424,7 @@ function makeDeps(state: FakeState, opts: { listings?: any[]; users?: any[] } = 
       if (state.failAddresses?.has(o.to)) return false;
       return state.sendResult;
     }) as any,
-    claimWeeklySend: async (range, triggeredBy, triggeredByUser) => {
+    claimWeeklySend: async (range, triggeredBy, triggeredByUser, scheduleKey) => {
       const existing = state.rows.get(range.weekStart);
       if (!existing) {
         const row = {
@@ -433,6 +434,7 @@ function makeDeps(state: FakeState, opts: { listings?: any[]; users?: any[] } = 
           status: 'sending',
           triggeredBy,
           triggeredByUser: triggeredByUser ?? null,
+          scheduleKey: scheduleKey ?? null,
           listingCount: 0,
           recipientCount: 0,
           sentCount: 0,
@@ -446,6 +448,7 @@ function makeDeps(state: FakeState, opts: { listings?: any[]; users?: any[] } = 
         existing.status = 'sending';
         existing.triggeredBy = triggeredBy;
         existing.triggeredByUser = triggeredByUser ?? null;
+        existing.scheduleKey = scheduleKey ?? null;
         return existing;
       }
       return null;
@@ -456,7 +459,10 @@ function makeDeps(state: FakeState, opts: { listings?: any[]; users?: any[] } = 
       }
     },
     getWeeklySendForWeek: async (weekStart) => state.rows.get(weekStart),
-    getOverlappingBlockingSend: async (range) => {
+    getOverlappingBlockingSend: async (range, currentScheduleKey) => {
+      // Mirrors the real implementation: terminal rows block only when their
+      // scheduleKey is unknown (legacy NULL) or matches the current schedule;
+      // "sending" rows always block.
       const BLOCKING = new Set(['sent', 'partially_failed', 'skipped_no_listings', 'sending']);
       for (const row of state.rows.values()) {
         if (
@@ -464,17 +470,27 @@ function makeDeps(state: FakeState, opts: { listings?: any[]; users?: any[] } = 
           row.weekStart <= range.weekEnd &&
           row.weekEnd >= range.weekStart
         ) {
-          return row;
+          if (
+            !currentScheduleKey ||
+            row.status === 'sending' ||
+            row.scheduleKey == null ||
+            row.scheduleKey === currentScheduleKey
+          ) {
+            return row;
+          }
         }
       }
       return undefined;
+    },
+    logActivity: async (entry) => {
+      state.activity.push(entry);
     },
     baseUrl: 'https://barefootbay.com',
   };
 }
 
 function freshState(sendResult = true): FakeState {
-  return { rows: new Map(), nextId: 1, sends: [], sendResult };
+  return { rows: new Map(), nextId: 1, sends: [], activity: [], sendResult };
 }
 
 const CONFIG = { enabled: true, sendDay: 1, sendTime: '09:00', sendWhenEmpty: false, template: getDefaultWeeklyEmailTemplate() };
@@ -611,6 +627,60 @@ describe('executeWeeklySend', () => {
     assert.equal(state.rows.get(RANGE.weekStart)!.triggeredByUser, 'michael.admin');
   });
 
+  it('a schedule change re-arms the cycle: an overlapping campaign sent under the OLD schedule does not block', async () => {
+    const state = freshState();
+    const deps = makeDeps(state);
+    // Monday 09:00 campaign already went out (window Jul 21–27).
+    const monday: WeekRange = { weekStart: '2026-07-21', weekEnd: '2026-07-27', label: 'July 21–27, 2026' };
+    await executeWeeklySend(monday, CONFIG, 'scheduler', deps, NOW);
+    assert.equal(state.rows.get('2026-07-21')!.scheduleKey, '1@09:00');
+
+    // Admin changes the schedule to Friday 18:00 → the Friday send (window
+    // Jul 25–31, overlapping) must still go out.
+    const fridayCfg = { ...CONFIG, sendDay: 5, sendTime: '18:00' };
+    const friday: WeekRange = { weekStart: '2026-07-25', weekEnd: '2026-07-31', label: 'July 25–31, 2026' };
+    const res = await executeWeeklySend(friday, fridayCfg, 'scheduler', deps, NOW);
+    assert.equal(res.status, 'sent');
+    assert.equal(state.rows.get('2026-07-25')!.scheduleKey, '5@18:00');
+    assert.equal(state.sends.length, 4);
+  });
+
+  it('with NO schedule change, an overlapping sent campaign still blocks (restart safety)', async () => {
+    const state = freshState();
+    const deps = makeDeps(state);
+    const friday: WeekRange = { weekStart: '2026-07-25', weekEnd: '2026-07-31', label: 'July 25–31, 2026' };
+    const cfg = { ...CONFIG, sendDay: 5, sendTime: '18:00' };
+    await executeWeeklySend(friday, cfg, 'scheduler', deps, NOW);
+    // Server restarts minutes later, same schedule, same window → no resend.
+    const again = await executeWeeklySend(friday, cfg, 'scheduler', deps, NOW);
+    assert.equal(again.status, 'already_sent');
+    assert.equal(state.sends.length, 2);
+    // And the skip is visible in the activity log.
+    assert.ok(state.activity.some((a) => a.event === 'skipped_already_sent'));
+  });
+
+  it('a legacy campaign with no recorded schedule (NULL) still blocks for safety', async () => {
+    const state = freshState();
+    const deps = makeDeps(state);
+    state.rows.set('2026-07-21', {
+      id: 70, weekStart: '2026-07-21', weekEnd: '2026-07-27', status: 'sent',
+      scheduleKey: null, listingCount: 1, recipientCount: 2, sentCount: 2, error: null,
+    });
+    const friday: WeekRange = { weekStart: '2026-07-25', weekEnd: '2026-07-31', label: 'July 25–31, 2026' };
+    const res = await executeWeeklySend(friday, { ...CONFIG, sendDay: 5, sendTime: '18:00' }, 'scheduler', deps, NOW);
+    assert.equal(res.status, 'already_sent');
+    assert.equal(state.sends.length, 0);
+  });
+
+  it('records send outcomes in the activity log', async () => {
+    const state = freshState();
+    await executeWeeklySend(RANGE, CONFIG, 'manual', makeDeps(state), NOW, 'michael.admin');
+    assert.deepEqual(state.activity.map((a) => a.event), ['sent']);
+    const emptyState = freshState();
+    await executeWeeklySend(RANGE, CONFIG, 'scheduler', makeDeps(emptyState, { listings: [] }), NOW);
+    assert.deepEqual(emptyState.activity.map((a) => a.event), ['skipped_no_listings']);
+  });
+
   it('excludes opted-out users from the actual send', async () => {
     const state = freshState();
     const deps = makeDeps(state, {
@@ -682,6 +752,52 @@ describe('runWeeklyListingsEmailTick', () => {
     // Monday 13:05 ET — over 180 minutes past 09:00
     const res = await runWeeklyListingsEmailTick(new Date('2026-07-27T17:05:00Z'), tickDeps(state, CONFIG));
     assert.equal(res, null);
+  });
+
+  it('fires on the new day after a schedule change, even when the old-schedule campaign overlaps', async () => {
+    const state = freshState();
+    // Monday 09:00 campaign already sent under the old schedule.
+    state.rows.set('2026-07-21', {
+      id: 80, weekStart: '2026-07-21', weekEnd: '2026-07-27', status: 'sent',
+      scheduleKey: '1@09:00', listingCount: 1, recipientCount: 2, sentCount: 2, error: null,
+    });
+    // Admin moves the send to Friday 18:00. Friday July 31 2026 18:05 ET = 22:05 UTC.
+    const fridayCfg = { ...CONFIG, sendDay: 5, sendTime: '18:00' };
+    const res = await runWeeklyListingsEmailTick(new Date('2026-07-31T22:05:00Z'), tickDeps(state, fridayCfg));
+    assert.equal(res?.status, 'sent');
+    assert.equal(res?.weekStart, '2026-07-25');
+    assert.equal(state.sends.length, 2);
+  });
+
+  it('logs a skipped tick when this cycle already went out under the same schedule', async () => {
+    const state = freshState();
+    state.rows.set('2026-07-21', {
+      id: 81, weekStart: '2026-07-21', weekEnd: '2026-07-27', status: 'sent',
+      scheduleKey: '1@09:00', listingCount: 1, recipientCount: 2, sentCount: 2, error: null,
+    });
+    const res = await runWeeklyListingsEmailTick(dueMoment, tickDeps(state, CONFIG));
+    assert.equal(res, null);
+    assert.equal(state.sends.length, 0);
+    assert.ok(state.activity.some((a) => a.event === 'skipped_already_sent'));
+  });
+
+  it('logs a missed window when the send time passed with no campaign this cycle', async () => {
+    const state = freshState();
+    // Monday 13:05 ET — over 180 minutes past 09:00, nothing sent this cycle.
+    const res = await runWeeklyListingsEmailTick(new Date('2026-07-27T17:05:00Z'), tickDeps(state, CONFIG));
+    assert.equal(res, null);
+    assert.ok(state.activity.some((a) => a.event === 'skipped_window_missed'));
+  });
+
+  it('does NOT log a missed window when the cycle already went out', async () => {
+    const state = freshState();
+    state.rows.set('2026-07-21', {
+      id: 82, weekStart: '2026-07-21', weekEnd: '2026-07-27', status: 'sent',
+      scheduleKey: '1@09:00', listingCount: 1, recipientCount: 2, sentCount: 2, error: null,
+    });
+    const res = await runWeeklyListingsEmailTick(new Date('2026-07-27T17:05:00Z'), tickDeps(state, CONFIG));
+    assert.equal(res, null);
+    assert.equal(state.activity.length, 0);
   });
 
   it('subsequent ticks after a successful send do nothing (idempotent)', async () => {

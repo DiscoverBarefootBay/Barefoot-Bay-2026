@@ -55,10 +55,22 @@ interface WeeklySendRecord {
   createdAt: string | null;
 }
 
+interface WeeklyActivityRecord {
+  id: number;
+  event: string;
+  weekStart: string | null;
+  weekEnd: string | null;
+  detail: string | null;
+  actor: string | null;
+  createdAt: string;
+}
+
 interface ConfigResponse {
   config: WeeklyListingsEmailConfig;
   history: WeeklySendRecord[];
+  activity?: WeeklyActivityRecord[];
   nextScheduledSend: { dateEt: string; time: string; label: string } | null;
+  nextSendBlocker?: WeeklySendRecord | null;
   placeholders?: Array<{ token: string; description: string }>;
   defaultTemplate?: WeeklyEmailTemplate;
 }
@@ -82,6 +94,17 @@ const STATUS_BADGES: Record<string, { label: string; variant: "default" | "secon
   failed: { label: "Failed", variant: "destructive" },
   skipped_no_listings: { label: "Skipped (no listings)", variant: "secondary" },
   sending: { label: "Sending…", variant: "outline" },
+};
+
+const ACTIVITY_BADGES: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
+  sent: { label: "Sent", variant: "default" },
+  partially_failed: { label: "Partially failed", variant: "destructive" },
+  failed: { label: "Failed", variant: "destructive" },
+  skipped_no_listings: { label: "Skipped — no listings", variant: "secondary" },
+  skipped_already_sent: { label: "Skipped — already sent", variant: "secondary" },
+  skipped_window_missed: { label: "Missed window", variant: "destructive" },
+  test_sent: { label: "Test email", variant: "outline" },
+  schedule_changed: { label: "Schedule changed", variant: "outline" },
 };
 
 export default function WeeklyListingsTab() {
@@ -188,6 +211,8 @@ export default function WeeklyListingsTab() {
     },
     onSuccess: (body) => {
       toast({ title: "Test email sent", description: body.message });
+      // The test send is recorded in the activity log — refresh it right away.
+      queryClient.invalidateQueries({ queryKey: [ENDPOINT] });
     },
     onError: (err: Error) => {
       toast({ title: "Test email failed", description: err.message, variant: "destructive" });
@@ -304,9 +329,18 @@ export default function WeeklyListingsTab() {
           </div>
 
           {data?.nextScheduledSend ? (
-            <p className="text-sm text-muted-foreground" data-testid="text-next-scheduled-send">
-              Next automatic send: <span className="font-medium">{data.nextScheduledSend.label}</span>
-            </p>
+            <div className="space-y-1">
+              <p className="text-sm text-muted-foreground" data-testid="text-next-scheduled-send">
+                Next automatic send: <span className="font-medium">{data.nextScheduledSend.label}</span>
+              </p>
+              {data.nextSendBlocker && (
+                <p className="text-sm text-amber-700" data-testid="text-next-send-blocked">
+                  Heads up: this send will be skipped — a campaign covering{" "}
+                  {data.nextSendBlocker.weekStart} – {data.nextSendBlocker.weekEnd} already went
+                  out under the current schedule. Changing the send day or time re-arms it.
+                </p>
+              )}
+            </div>
           ) : (
             <p className="text-sm text-muted-foreground" data-testid="text-next-scheduled-send">
               Automatic sending is off — no send is scheduled.
@@ -541,6 +575,61 @@ export default function WeeklyListingsTab() {
           </CardContent>
         </Card>
       )}
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Activity Log</CardTitle>
+          <CardDescription>
+            Everything the weekly email system does — sends, skips (with the reason), failures,
+            test emails, and schedule changes. Most recent first.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {data && (data.activity?.length ?? 0) > 0 ? (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>When</TableHead>
+                  <TableHead>Event</TableHead>
+                  <TableHead>Details</TableHead>
+                  <TableHead>Who</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.activity!.map((row) => {
+                  const badge = ACTIVITY_BADGES[row.event] ?? {
+                    label: row.event,
+                    variant: "outline" as const,
+                  };
+                  return (
+                    <TableRow key={row.id} data-testid={`row-weekly-activity-${row.id}`}>
+                      <TableCell className="whitespace-nowrap">
+                        {row.createdAt ? format(new Date(row.createdAt), "MMM dd, yyyy h:mm a") : "—"}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={badge.variant}>{badge.label}</Badge>
+                      </TableCell>
+                      <TableCell className="max-w-md">
+                        <span className="text-sm">{row.detail || "—"}</span>
+                        {row.weekStart && (
+                          <p className="text-xs text-muted-foreground">
+                            Week {row.weekStart} – {row.weekEnd}
+                          </p>
+                        )}
+                      </TableCell>
+                      <TableCell>{row.actor || "Scheduler"}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              No activity yet — entries appear here as campaigns send or skip.
+            </p>
+          )}
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>

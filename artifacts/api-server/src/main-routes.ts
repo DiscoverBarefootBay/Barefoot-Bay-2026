@@ -55,6 +55,9 @@ import {
   getWeeklySendHistory,
   getWeeklyEmailBaseUrl,
   getNextScheduledSend,
+  getNextSendBlocker,
+  getWeeklyEmailActivity,
+  logWeeklyEmailActivity,
 } from "./weekly-listings-scheduler";
 import { getSendGridCredentials } from "./lib/sendgrid-credentials";
 import {
@@ -13350,11 +13353,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/admin/email-activity/weekly-listings", requireAuth, requireAdmin, async (req, res) => {
     try {
       const config = await loadWeeklyListingsEmailConfig();
-      const history = await getWeeklySendHistory();
+      const [history, activity, nextSendBlocker] = await Promise.all([
+        getWeeklySendHistory(),
+        getWeeklyEmailActivity(),
+        getNextSendBlocker(config),
+      ]);
       return res.json({
         config,
         history,
+        activity,
         nextScheduledSend: getNextScheduledSend(config),
+        // Set when the next configured automatic send would be skipped because
+        // an overlapping campaign already went out under the current schedule.
+        nextSendBlocker,
         placeholders: WEEKLY_EMAIL_PLACEHOLDERS,
         defaultTemplate: getDefaultWeeklyEmailTemplate(),
       });
@@ -13409,9 +13420,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
         'Weekly "Currently, On The Market" promotional email schedule and options',
         req.user?.id,
       );
+
+      // Record schedule/automation changes in the admin activity log. A
+      // schedule change also re-arms the current cycle: the next configured
+      // send fires even if a campaign already went out this week.
+      const scheduleChanged =
+        saved.enabled !== merged.enabled ||
+        saved.sendDay !== merged.sendDay ||
+        saved.sendTime !== merged.sendTime;
+      if (scheduleChanged) {
+        const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const describe = (c: typeof merged) =>
+          c.enabled ? `${dayNames[c.sendDay]} at ${c.sendTime} ET` : "off";
+        await logWeeklyEmailActivity({
+          event: "schedule_changed",
+          detail: `Schedule changed from ${describe(saved)} to ${describe(merged)}. The next configured send will go out even if a campaign already went out this week under the old schedule.`,
+          actor: req.user?.username || req.user?.email || null,
+        });
+      }
+
       return res.json({
         config: merged,
         nextScheduledSend: getNextScheduledSend(merged),
+        nextSendBlocker: await getNextSendBlocker(merged),
         placeholders: WEEKLY_EMAIL_PLACEHOLDERS,
         defaultTemplate: getDefaultWeeklyEmailTemplate(),
       });
@@ -13508,6 +13539,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!ok) {
         return res.status(502).json({ message: "Test email failed to send — check the email logs." });
       }
+      await logWeeklyEmailActivity({
+        event: "test_sent",
+        weekStart: range.weekStart,
+        weekEnd: range.weekEnd,
+        detail: `Test email sent to ${adminEmail} (${listings.length} listing(s)). Test sends never count as the real campaign.`,
+        actor: req.user?.username || req.user?.email || null,
+      });
       return res.json({ message: `Test email sent to ${adminEmail}`, sentTo: adminEmail, listingCount: listings.length });
     } catch (error: any) {
       req.log.error({ err: error }, "[WeeklyListingsEmail] Failed to send test email");

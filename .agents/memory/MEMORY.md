@@ -16,4 +16,5 @@
 - [Global placeholderData crashes](query-placeholder-data-crashes.md) — web app's global react-query fallback injects []/null for unknown keys; guard data shape or override placeholderData, else full-page error boundary.
 - [Scheduler email env gate](scheduler-email-env-gate.md) — every email-sending scheduler tick must check the shared prod gate (+per-scheduler dev opt-in var) or dev workspace emails real users from stale DB.
 - [Email unsubscribe flag policy](email-unsubscribe-policy.md) — unsubscribe filtering is per-send-path, not central; new notification senders must check email_notifications_enabled themselves; transactional mail ignores it.
+- [Weekly email schedule-key rule](weekly-email-schedule-key.md) — overlapping past campaigns only block sends under the SAME schedule; schedule change re-arms the cycle; sends serialized in-process.
 - [Visitor geolocation map](geo-visitor-map.md) — empty admin geo map = Maps-script load failure (key/LoadScript churn), NOT missing coords; all maps must use ONE shared loader id+libraries or navigation order breaks heatmap.
