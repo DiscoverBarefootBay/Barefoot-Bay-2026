@@ -39,6 +39,9 @@ export function LocationPickerAlt({ value = "", onChange, placeholder }: Locatio
   const [isEditable, setIsEditable] = useState(!value); // Start editable if no initial value
   const inputRef = useRef<HTMLInputElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // Tracks the most-recent query dispatched to the API so we can discard
+  // results that arrive out-of-order (race-condition / stale-closure guard).
+  const latestQueryRef = useRef<string>("");
   
   useEffect(() => {
     // Update input value when external value changes (if not in edit mode)
@@ -121,7 +124,12 @@ export function LocationPickerAlt({ value = "", onChange, placeholder }: Locatio
     }
   }, [inputValue, onChange, geocodeAddress]);
 
-  // Function to fetch address suggestions using the utility functions
+  // Fetch address suggestions. Uses latestQueryRef (a ref, not state) to
+  // discard results that arrive after the user has already typed something
+  // newer — this is the correct race-condition guard for debounced async
+  // calls.  Do NOT add inputValue to the dependency array; that caused the
+  // old stale-closure bug where the debounce timeout always called the old
+  // callback which had a stale snapshot of inputValue that never matched.
   const fetchSuggestions = useCallback(
     async (query: string) => {
       if (!query.trim() || query.length < 3) {
@@ -130,47 +138,40 @@ export function LocationPickerAlt({ value = "", onChange, placeholder }: Locatio
         return;
       }
 
-      // Important: We're no longer setting loading state during typing
-      // This ensures the user can continue typing without interruption
-      // We'll only show loading for the explicit submit button
-      
+      // Stamp this request so we can discard results that arrive out-of-order.
+      latestQueryRef.current = query;
+
       // Clear any previous inline errors (the mount-time soft warning is separate)
       setError(null);
-      
-      try {
-        // Use our utility function to get place suggestions
-        const data = await getPlaceSuggestions(query);
-        
-        // Make sure the input still matches the query we used
-        // Only update suggestions if user hasn't typed something new
-        if (inputValue.trim() === query.trim()) {
-          if (data.predictions && Array.isArray(data.predictions)) {
-            // Store full prediction data for potential future use
-            setPredictionsData(data.predictions);
-            
-            // Extract just the description for display
-            const addressSuggestions = data.predictions.map((p: any) => p.description);
-            setSuggestions(addressSuggestions);
-          } else {
-            console.warn("Place predictions invalid format:", data);
-            setSuggestions([]);
-            setPredictionsData([]);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching place suggestions:", error);
+
+      const result = await getPlaceSuggestions(query);
+
+      // Discard if the user has typed something newer while we were waiting.
+      if (latestQueryRef.current !== query) return;
+
+      if (!result.ok) {
         setSuggestions([]);
         setPredictionsData([]);
-        setError("Could not retrieve address suggestions. You can still enter your address manually.");
+        setError(result.message);
+        return;
       }
+
+      setPredictionsData(result.predictions);
+      setSuggestions(result.predictions.map((p) => p.description));
     },
-    [inputValue] // Add inputValue as dependency to access its current value
+    [] // no captured state — latestQueryRef is a stable ref, setSuggestions etc. are stable setters
   );
 
   // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInputValue(newValue);
+
+    // Invalidate any in-flight request immediately, on every keystroke.
+    // This ensures that even if the debounced request hasn't fired yet, a
+    // request that is already in flight (from a previous keystroke) cannot
+    // land and overwrite the UI with stale results or a stale error.
+    latestQueryRef.current = newValue;
     
     // Always clear any pending timeouts when typing continues
     if (timeoutRef.current) {

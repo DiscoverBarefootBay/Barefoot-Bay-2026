@@ -35,23 +35,47 @@ export async function checkLocationServiceStatus(): Promise<LocationServiceStatu
   }
 }
 
+export type PlaceSuggestionsResult =
+  | { ok: true; predictions: { description: string; place_id: string }[] }
+  | { ok: false; denied: boolean; message: string };
+
 /**
- * Get a place autocomplete suggestion
- * @param input - Search text to get suggestions for
- * @returns Promise with place suggestions
+ * Get place autocomplete suggestions via the server-side proxy.
+ * Returns a discriminated union so callers can distinguish a denied key
+ * (needs Google Cloud Console fix) from a transient error.
  */
-export async function getPlaceSuggestions(input: string) {
+export async function getPlaceSuggestions(input: string): Promise<PlaceSuggestionsResult> {
+  if (!input || input.length < 3) {
+    return { ok: true, predictions: [] };
+  }
+
   try {
-    if (!input || input.length < 3) {
-      return { predictions: [] };
-    }
-    
-    // Call the server-side proxy endpoint for Places API
     const response = await apiRequest('GET', `/api/google/places/autocomplete?input=${encodeURIComponent(input)}`);
-    return await response.json();
+    const data = await response.json();
+
+    // Google returns status:'REQUEST_DENIED' when the Places API isn't enabled
+    // on the key's Cloud project (billing alone is not enough — the API itself
+    // must be toggled on at console.cloud.google.com/apis/library).
+    if (data.status === 'REQUEST_DENIED') {
+      console.error('Places API denied:', data.error_message);
+      return {
+        ok: false,
+        denied: true,
+        message:
+          'Address suggestions unavailable — the Google Places API is not enabled for this project. ' +
+          'Go to console.cloud.google.com/apis/library and enable "Places API".',
+      };
+    }
+
+    if (data.status && data.status !== 'OK' && data.status !== 'ZERO_RESULTS') {
+      console.warn('Places API non-OK status:', data.status, data.error_message);
+      return { ok: false, denied: false, message: 'Address suggestions temporarily unavailable.' };
+    }
+
+    return { ok: true, predictions: Array.isArray(data.predictions) ? data.predictions : [] };
   } catch (error) {
     console.error('Error fetching place suggestions:', error);
-    return { predictions: [] };
+    return { ok: false, denied: false, message: 'Could not fetch address suggestions.' };
   }
 }
 
