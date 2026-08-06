@@ -1,5 +1,5 @@
 import { format, differenceInDays } from "date-fns";
-import { Home, Bed, Bath, Ruler, CalendarDays, Phone, Mail, DollarSign, Tag, Clock, Pencil, Trash2, FileCheck } from "lucide-react";
+import { Home, Bed, Bath, Ruler, CalendarDays, Phone, Mail, DollarSign, Tag, Clock, Pencil, Trash2, FileCheck, Star } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -34,6 +34,7 @@ export function ListingCard({
   onEdit,
   onDelete,
   onPublish,
+  onFeatureUpgrade,
   currentUserId,
   showActionButtons = true,
   isNew = false
@@ -45,6 +46,7 @@ export function ListingCard({
   onEdit?: (id: number) => void,
   onDelete?: (id: number) => void,
   onPublish?: (id: number) => void,
+  onFeatureUpgrade?: (listing: RealEstateListing) => void,
   currentUserId?: number,
   showActionButtons?: boolean,
   isNew?: boolean
@@ -358,12 +360,6 @@ export function ListingCard({
               {typeLabels[listingType as keyof typeof typeLabels] || "Listing"}
             </Badge>
 
-            {listing.featured && !isDraft && (
-              <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-300 font-medium">
-                ★ Featured
-              </Badge>
-            )}
-
             {/* Status Badge - Enhanced Version (uses effective status so a
                 listing past its expiration date never shows a stale "ACTIVE") */}
             {effectiveStatus && (
@@ -537,6 +533,26 @@ export function ListingCard({
             >
               <FileCheck className="h-4 w-4 mr-2" />
               Publish Listing
+            </Button>
+          )}
+
+          {/* Upgrade to Featured — visible to the listing owner when active and not yet featured */}
+          {onFeatureUpgrade &&
+            !listing.featured &&
+            listing.status === "ACTIVE" &&
+            currentUserId &&
+            listing.createdBy === currentUserId && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full border-yellow-400 text-yellow-700 hover:bg-yellow-50"
+              onClick={(e) => {
+                e.stopPropagation();
+                onFeatureUpgrade(listing);
+              }}
+            >
+              <Star className="h-4 w-4 mr-1" />
+              Upgrade to Featured
             </Button>
           )}
           

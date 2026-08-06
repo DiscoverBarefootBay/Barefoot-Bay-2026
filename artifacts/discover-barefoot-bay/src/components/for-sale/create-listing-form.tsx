@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { LocationPickerAlt } from "@/components/calendar/location-picker-alt";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle, X, GripVertical } from "lucide-react";
+import { AlertCircle, X, GripVertical, Star } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -34,6 +34,7 @@ type Props = {
   listingDuration?: string | null;
   selectedType?: string;
   userIntent?: 'payment' | 'draft' | null;
+  onFeatureUpgrade?: () => void;
 };
 
 function formatPhoneNumber(value: string) {
@@ -71,7 +72,8 @@ export function CreateListingForm({
   setSelectedFiles: setExternalSelectedFiles,
   listingDuration,
   selectedType,
-  userIntent
+  userIntent,
+  onFeatureUpgrade,
 }: Props) {
   const [listingType, setListingType] = useState<ListingType | undefined>(
     defaultValues?.listingType as ListingType | undefined
@@ -1086,6 +1088,28 @@ export function CreateListingForm({
                   <p className="font-medium">Update Listing:</p>
                   <p>Updates listing with your edits while keeping it live on the public On The Market page. No additional credits needed.</p>
                 </div>
+              </div>
+            )}
+
+            {/* Upgrade to Featured — shown when editing an active, non-featured listing */}
+            {onFeatureUpgrade &&
+              defaultValues?.status === "ACTIVE" &&
+              !defaultValues?.featured && (
+              <div className="border border-yellow-200 rounded-lg p-3 bg-yellow-50 flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-sm font-medium text-yellow-900">Want more visibility?</p>
+                  <p className="text-xs text-yellow-700">Pin this listing to the top of On The Market and include it first in the weekly email.</p>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="shrink-0 border-yellow-400 text-yellow-700 hover:bg-yellow-100"
+                  onClick={onFeatureUpgrade}
+                >
+                  <Star className="h-4 w-4 mr-1" />
+                  Upgrade to Featured
+                </Button>
               </div>
             )}
           </div>

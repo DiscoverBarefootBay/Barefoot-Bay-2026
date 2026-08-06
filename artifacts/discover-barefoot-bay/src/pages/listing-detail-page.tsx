@@ -22,6 +22,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { CreateListingForm } from "@/components/for-sale/create-listing-form";
+import { FeatureUpgradeDialog } from "@/components/for-sale/feature-upgrade-dialog";
 import { ContactForm } from "@/components/for-sale/contact-form";
 import SubscriptionManager from "@/components/for-sale/subscription-manager";
 import { useAuth } from "@/hooks/use-auth";
@@ -61,6 +62,7 @@ export default function ListingDetailPage() {
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPublishDialogOpen, setIsPublishDialogOpen] = useState(false);
+  const [isFeatureUpgradeOpen, setIsFeatureUpgradeOpen] = useState(false);
   const listingId = params?.id;
 
   // Note: We intentionally do NOT update for-sale visit tracking here.
@@ -450,6 +452,11 @@ export default function ListingDetailPage() {
                             onSubmit={(data) => updateMutation.mutate(data)}
                             isSubmitting={updateMutation.isPending}
                             selectedType={listing.listingType}
+                            onFeatureUpgrade={
+                              isOwner && listing.status === "ACTIVE" && !listing.featured
+                                ? () => setIsFeatureUpgradeOpen(true)
+                                : undefined
+                            }
                           />
                         )}
                       </ScrollableContent>
@@ -708,6 +715,22 @@ export default function ListingDetailPage() {
           )}
         </div>
       </div>
+      {/* Feature upgrade dialog — owner triggered from edit form */}
+      {isOwner && safeListingData.status === "ACTIVE" && !safeListingData.featured && (
+        <FeatureUpgradeDialog
+          isOpen={isFeatureUpgradeOpen}
+          onClose={() => setIsFeatureUpgradeOpen(false)}
+          listingId={safeListingData.id}
+          listingTitle={safeListingData.title}
+          onFeatureSuccess={() => {
+            queryClient.invalidateQueries({ queryKey: [`/api/listings/${listingId}`] });
+            queryClient.invalidateQueries({ queryKey: ["/api/listings"] });
+            setIsFeatureUpgradeOpen(false);
+          }}
+          redirectPath={`/for-sale/${listingId}`}
+        />
+      )}
+
       {/* Publish Payment Dialog */}
       <PublishPaymentDialog
         isOpen={isPublishDialogOpen}

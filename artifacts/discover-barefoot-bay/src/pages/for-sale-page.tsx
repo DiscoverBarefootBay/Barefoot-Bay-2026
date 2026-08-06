@@ -50,6 +50,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { usePermissions } from "@/hooks/use-permissions";
+import { FeatureUpgradeDialog } from "@/components/for-sale/feature-upgrade-dialog";
 
 const LISTING_TYPES = [
   {
@@ -173,6 +174,9 @@ export default function ForSalePage() {
   // Disclaimer dialog state
   const [isUserDisclaimerOpen, setIsUserDisclaimerOpen] = useState(false);
   const [isAdvertiserDisclaimerOpen, setIsAdvertiserDisclaimerOpen] = useState(false);
+
+  // Feature upgrade dialog state (for listing owners on this page)
+  const [featuringListing, setFeaturingListing] = useState<RealEstateListing | null>(null);
 
   // Update visit tracking for new listing notifications
   useEffect(() => {
@@ -1897,6 +1901,7 @@ export default function ForSalePage() {
                       ? handlePublishListing
                       : undefined
                   }
+                  onFeatureUpgrade={user ? setFeaturingListing : undefined}
                   onClick={() =>
                     (window.location.href = `/for-sale/${listing.id}`)
                   }
@@ -1957,6 +1962,21 @@ export default function ForSalePage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Feature upgrade dialog — triggered from listing cards owned by the current user */}
+      {featuringListing && (
+        <FeatureUpgradeDialog
+          isOpen={!!featuringListing}
+          onClose={() => setFeaturingListing(null)}
+          listingId={featuringListing.id}
+          listingTitle={featuringListing.title}
+          onFeatureSuccess={(updatedListing) => {
+            queryClient.invalidateQueries({ queryKey: ["/api/listings"] });
+            setFeaturingListing(null);
+          }}
+          redirectPath="/for-sale"
+        />
+      )}
 
       {/* Floating Action Button for mobile and landscape mode */}
       {canCreateListing ? (
