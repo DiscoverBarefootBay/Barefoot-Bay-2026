@@ -1,0 +1,53 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{subject}}</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f6f8;font-family:Arial,Helvetica,sans-serif;color:#27272A;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f8;">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:8px;overflow:hidden;">
+          <tr>
+            <td style="background:#434054;padding:28px 24px;text-align:center;">
+              <p style="margin:0 0 6px 0;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:#90C9D4;">Barefoot Bay Community</p>
+              <h1 style="margin:0;font-size:24px;line-height:32px;color:#ffffff;">{{subject}}</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:24px 24px 8px 24px;">
+              <p style="margin:0 0 16px 0;font-size:15px;line-height:22px;">{{intro}}</p>
+            </td>
+          </tr>
+          {{listings}}
+          <tr>
+            <td style="padding:0 24px 24px 24px;text-align:center;">
+              <a href="{{forSaleUrl}}" style="background:#434054;color:#ffffff;padding:12px 24px;text-decoration:none;border-radius:5px;display:inline-block;font-size:15px;">View All Listings</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 24px 24px 24px;text-align:center;border-top:1px solid #e5e7eb;">
+              <p style="margin:24px 0 12px 0;font-size:15px;line-height:22px;">
+                <strong>Have something to sell?</strong><br />
+                From homes and rentals to yard sales and everyday treasures, On The Market is Barefoot Bay's place to buy and sell.
+              </p>
+              <a href="{{forSaleUrl}}" style="background:#E15A4F;color:#ffffff;padding:12px 24px;text-decoration:none;border-radius:5px;display:inline-block;font-size:15px;">Post a Listing</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="background:#f8fafc;padding:20px 24px;text-align:center;">
+              <p style="margin:0 0 6px 0;font-size:12px;color:#6b7280;">Barefoot Bay Community Platform &bull; Barefoot Bay, FL 32976</p>
+              <p style="margin:0;font-size:12px;color:#6b7280;">
+                You're receiving this because you're a member of the Barefoot Bay community site.
+                <a href="{{baseUrl}}/unsubscribe" style="color:#6b7280;text-decoration:underline;">Unsubscribe from email notifications</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
