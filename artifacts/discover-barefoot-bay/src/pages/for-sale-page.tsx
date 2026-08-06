@@ -51,6 +51,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { usePermissions } from "@/hooks/use-permissions";
 import { FeatureUpgradeDialog } from "@/components/for-sale/feature-upgrade-dialog";
+import { FeaturedInfoDialog } from "@/components/for-sale/featured-info-dialog";
 
 const LISTING_TYPES = [
   {
@@ -177,6 +178,7 @@ export default function ForSalePage() {
 
   // Feature upgrade dialog state (for listing owners on this page)
   const [featuringListing, setFeaturingListing] = useState<RealEstateListing | null>(null);
+  const [featuredInfoListing, setFeaturedInfoListing] = useState<RealEstateListing | null>(null);
 
   // Update visit tracking for new listing notifications
   useEffect(() => {
@@ -1902,6 +1904,7 @@ export default function ForSalePage() {
                       : undefined
                   }
                   onFeatureUpgrade={user ? setFeaturingListing : undefined}
+                  onFeaturedClick={setFeaturedInfoListing}
                   onClick={() =>
                     (window.location.href = `/for-sale/${listing.id}`)
                   }
@@ -1970,11 +1973,27 @@ export default function ForSalePage() {
           onClose={() => setFeaturingListing(null)}
           listingId={featuringListing.id}
           listingTitle={featuringListing.title}
+          adminComp={isAdmin && featuringListing.createdBy !== user?.id}
           onFeatureSuccess={(updatedListing) => {
             queryClient.invalidateQueries({ queryKey: ["/api/listings"] });
             setFeaturingListing(null);
           }}
           redirectPath="/for-sale"
+        />
+      )}
+
+      {/* Featured info dialog — opened by clicking the ★ Featured badge; owners
+          and admins can also remove the featured status from here */}
+      {featuredInfoListing && (
+        <FeaturedInfoDialog
+          isOpen={!!featuredInfoListing}
+          onClose={() => setFeaturedInfoListing(null)}
+          listing={featuredInfoListing}
+          canUnfeature={!!user && (isAdmin || featuredInfoListing.createdBy === user.id)}
+          onUnfeatureSuccess={() => {
+            queryClient.invalidateQueries({ queryKey: ["/api/listings"] });
+            setFeaturedInfoListing(null);
+          }}
         />
       )}
 

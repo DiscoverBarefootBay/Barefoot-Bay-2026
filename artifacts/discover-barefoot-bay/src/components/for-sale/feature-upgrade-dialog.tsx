@@ -14,6 +14,9 @@ interface FeatureUpgradeDialogProps {
   listingTitle?: string;
   onFeatureSuccess: (listing: any) => void;
   redirectPath?: string;
+  /** Admin featuring ANOTHER user's listing: uses the no-charge admin
+      comp endpoint instead of spending the admin's own credits. */
+  adminComp?: boolean;
 }
 
 /**
@@ -28,6 +31,7 @@ export const FeatureUpgradeDialog: React.FC<FeatureUpgradeDialogProps> = ({
   listingTitle,
   onFeatureSuccess,
   redirectPath,
+  adminComp = false,
 }) => {
   const { toast } = useToast();
   const [userCredits, setUserCredits] = useState<number>(0);
@@ -36,10 +40,15 @@ export const FeatureUpgradeDialog: React.FC<FeatureUpgradeDialogProps> = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
 
-  const hasEnoughCredits = creditCost !== null && userCredits >= creditCost;
+  const hasEnoughCredits = adminComp || (creditCost !== null && userCredits >= creditCost);
 
   useEffect(() => {
     if (!isOpen) return;
+    if (adminComp) {
+      // No credits involved — nothing to fetch.
+      setIsLoading(false);
+      return;
+    }
     const fetchData = async () => {
       setIsLoading(true);
       try {
@@ -67,20 +76,28 @@ export const FeatureUpgradeDialog: React.FC<FeatureUpgradeDialogProps> = ({
       }
     };
     fetchData();
-  }, [isOpen, toast]);
+  }, [isOpen, adminComp, toast]);
 
   const handleUpgrade = async () => {
     if (!hasEnoughCredits || isProcessing) return;
     setIsProcessing(true);
     try {
-      const response = await apiRequest('POST', `/api/listings/${listingId}/feature-with-credits`, {});
+      const response = await apiRequest(
+        'POST',
+        adminComp
+          ? `/api/admin/listings/${listingId}/feature`
+          : `/api/listings/${listingId}/feature-with-credits`,
+        {},
+      );
       const body = await response.json().catch(() => ({}));
       if (!response.ok) {
         throw new Error(body.message || 'Failed to feature listing');
       }
       toast({
         title: 'Listing featured!',
-        description: 'Your listing now gets priority placement on On The Market and in the weekly email.',
+        description: adminComp
+          ? 'The listing is now featured (no credits charged).'
+          : 'Your listing now gets priority placement on On The Market and in the weekly email.',
       });
       onFeatureSuccess(body.listing);
       onClose();
@@ -146,32 +163,44 @@ export const FeatureUpgradeDialog: React.FC<FeatureUpgradeDialogProps> = ({
                 </div>
               )}
 
-              <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-                <div className="flex items-center justify-between mb-1">
-                  <h3 className="font-medium text-green-900">Your Credits</h3>
-                  <span className="text-2xl font-bold text-green-600">{userCredits}</span>
-                </div>
-                <p className="text-sm text-green-700">
-                  Featured upgrade cost: <strong>{creditCost ?? '—'} credits</strong>
-                </p>
-              </div>
-
-              {hasEnoughCredits ? (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+              {adminComp && (
+                <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                   <span className="text-sm text-blue-700 font-medium">
-                    You have enough credits to feature this listing.
+                    Admin action: this listing will be featured at no credit cost.
                   </span>
                 </div>
-              ) : (
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
-                  <div className="flex items-center space-x-2">
-                    <DollarSign className="w-4 h-4 text-yellow-600" />
-                    <span className="text-sm text-yellow-700 font-medium">
-                      You need {creditCost} credits but only have {userCredits}. Purchase more
-                      credits to continue.
-                    </span>
+              )}
+
+              {!adminComp && (
+                <>
+                  <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="flex items-center justify-between mb-1">
+                      <h3 className="font-medium text-green-900">Your Credits</h3>
+                      <span className="text-2xl font-bold text-green-600">{userCredits}</span>
+                    </div>
+                    <p className="text-sm text-green-700">
+                      Featured upgrade cost: <strong>{creditCost ?? '—'} credits</strong>
+                    </p>
                   </div>
-                </div>
+
+                  {hasEnoughCredits ? (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                      <span className="text-sm text-blue-700 font-medium">
+                        You have enough credits to feature this listing.
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
+                      <div className="flex items-center space-x-2">
+                        <DollarSign className="w-4 h-4 text-yellow-600" />
+                        <span className="text-sm text-yellow-700 font-medium">
+                          You need {creditCost} credits but only have {userCredits}. Purchase more
+                          credits to continue.
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
 
               <div className="flex gap-3">
@@ -195,6 +224,8 @@ export const FeatureUpgradeDialog: React.FC<FeatureUpgradeDialogProps> = ({
                         <Spinner size="sm" className="mr-2" />
                         Upgrading...
                       </>
+                    ) : adminComp ? (
+                      'Feature Listing (Admin)'
                     ) : (
                       `Feature for ${creditCost} Credits`
                     )}

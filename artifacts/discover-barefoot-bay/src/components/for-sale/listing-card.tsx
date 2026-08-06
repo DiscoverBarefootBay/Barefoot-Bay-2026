@@ -35,6 +35,7 @@ export function ListingCard({
   onDelete,
   onPublish,
   onFeatureUpgrade,
+  onFeaturedClick,
   currentUserId,
   showActionButtons = true,
   isNew = false
@@ -47,6 +48,7 @@ export function ListingCard({
   onDelete?: (id: number) => void,
   onPublish?: (id: number) => void,
   onFeatureUpgrade?: (listing: RealEstateListing) => void,
+  onFeaturedClick?: (listing: RealEstateListing) => void,
   currentUserId?: number,
   showActionButtons?: boolean,
   isNew?: boolean
@@ -118,7 +120,7 @@ export function ListingCard({
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div className="flex gap-2 flex-wrap">
-              <Badge variant="secondary" className={typeColors[listingType as keyof typeof typeColors] || "bg-gray-100 text-gray-800"}>
+              <Badge variant="secondary" className={`whitespace-nowrap ${typeColors[listingType as keyof typeof typeColors] || "bg-gray-100 text-gray-800"}`}>
                 {typeLabels[listingType as keyof typeof typeLabels] || "Listing"}
               </Badge>
               
@@ -331,9 +333,23 @@ export function ListingCard({
   return (
     <Card className={`bg-white relative ${isDraft ? 'border-amber-500 border-[6px] shadow-lg' : ''} ${isNew ? 'border-red-500 border-[3px] shadow-lg ring-2 ring-red-300' : ''} ${listing.featured && !isDraft ? 'border-yellow-400 border-[3px] shadow-lg ring-2 ring-yellow-200' : ''}`}>
       {listing.featured && !isDraft && (
-        <div className="absolute -top-2 -left-2 z-10 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md flex items-center gap-1">
-          ★ Featured
-        </div>
+        onFeaturedClick ? (
+          <button
+            type="button"
+            className="absolute -top-2 -left-2 z-10 bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md flex items-center gap-1 cursor-pointer"
+            title="About Featured listings"
+            onClick={(e) => {
+              e.stopPropagation();
+              onFeaturedClick(listing);
+            }}
+          >
+            ★ Featured
+          </button>
+        ) : (
+          <div className="absolute -top-2 -left-2 z-10 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md flex items-center gap-1">
+            ★ Featured
+          </div>
+        )
       )}
       {isNew && !isDraft && (
         <div className="absolute -top-2 -right-2 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
@@ -358,19 +374,19 @@ export function ListingCard({
           <div className="flex gap-2 flex-wrap">
             {/* Type + status badges are pinned together so they never split across lines */}
             <div className="flex gap-2 items-center flex-nowrap">
-              <Badge variant="secondary" className={typeColors[listingType as keyof typeof typeColors] || "bg-gray-100 text-gray-800"}>
+              <Badge variant="secondary" className={`whitespace-nowrap ${typeColors[listingType as keyof typeof typeColors] || "bg-gray-100 text-gray-800"}`}>
                 {typeLabels[listingType as keyof typeof typeLabels] || "Listing"}
               </Badge>
 
               {/* Status Badge - Enhanced Version (uses effective status so a
                   listing past its expiration date never shows a stale "ACTIVE") */}
               {effectiveStatus && (
-                <Badge variant={isDraft ? "default" : "outline"} className={
+                <Badge variant={isDraft ? "default" : "outline"} className={`whitespace-nowrap ${
                   effectiveStatus === "DRAFT" ? "bg-amber-500 text-white flex items-center gap-1 font-medium" : 
                   effectiveStatus === "ACTIVE" ? "bg-green-100 text-green-800 border-green-200 flex items-center gap-1 font-medium" : 
                   effectiveStatus === "EXPIRED" ? "bg-red-500 text-white border-red-500 flex items-center gap-1 font-medium" : 
                   "bg-gray-100 text-gray-800 border-gray-200 flex items-center gap-1 font-medium"
-                }>
+                }`}>
                   <span className={`inline-block w-2 h-2 rounded-full ${
                     effectiveStatus === "DRAFT" ? "bg-white" :
                     effectiveStatus === "ACTIVE" ? "bg-green-500" :
@@ -539,12 +555,12 @@ export function ListingCard({
             </Button>
           )}
 
-          {/* Upgrade to Featured — visible to the listing owner when active and not yet featured */}
+          {/* Upgrade to Featured — visible to the listing owner (and admins,
+              who can feature any listing) when active and not yet featured */}
           {onFeatureUpgrade &&
             !listing.featured &&
             listing.status === "ACTIVE" &&
-            currentUserId &&
-            listing.createdBy === currentUserId && (
+            (isAdmin || (currentUserId && listing.createdBy === currentUserId)) && (
             <Button
               variant="outline"
               size="sm"

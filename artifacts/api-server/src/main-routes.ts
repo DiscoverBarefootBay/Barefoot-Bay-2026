@@ -8441,6 +8441,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Remove Featured status from a listing. Allowed for the listing owner or
+  // an admin. No credits are refunded — featuring is a consumable purchase.
+  app.post("/api/listings/:id/unfeature", requireAuth, async (req, res) => {
+    try {
+      const listingId = parseInt(req.params.id);
+      if (!Number.isInteger(listingId)) {
+        return res.status(400).json({ success: false, message: "Invalid listing id" });
+      }
+
+      const listing = await storage.getListing(listingId);
+      if (!listing) {
+        return res.status(404).json({ success: false, message: "Listing not found" });
+      }
+
+      const isAdmin = req.user.role === 'admin';
+      if (listing.createdBy !== req.user.id && !isAdmin) {
+        return res.status(403).json({ success: false, message: "You do not have permission to unfeature this listing" });
+      }
+      if (!listing.featured) {
+        return res.status(400).json({ success: false, message: "This listing is not featured" });
+      }
+
+      await storage.revertFeaturedListing(listingId);
+      const updated = await storage.getListing(listingId);
+
+      console.log(`Listing ${listingId} ("${listing.title}") unfeatured by user ${req.user.id}${isAdmin && listing.createdBy !== req.user.id ? " (admin)" : ""}`);
+      res.json({ success: true, listing: updated });
+    } catch (error) {
+      console.error("Error in unfeature listing endpoint:", error);
+      res.status(500).json({ success: false, message: "Failed to unfeature listing" });
+    }
+  });
+
   // Admin-only: remove Featured status from a listing (no credits refunded).
   // Works regardless of listing status — unfeature is always valid.
   app.post("/api/admin/listings/:id/unfeature", requireAuth, requireAdmin, async (req, res) => {

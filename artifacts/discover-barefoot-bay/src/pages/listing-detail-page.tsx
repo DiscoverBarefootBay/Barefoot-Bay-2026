@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { CreateListingForm } from "@/components/for-sale/create-listing-form";
 import { FeatureUpgradeDialog } from "@/components/for-sale/feature-upgrade-dialog";
+import { FeaturedInfoDialog } from "@/components/for-sale/featured-info-dialog";
 import { ContactForm } from "@/components/for-sale/contact-form";
 import SubscriptionManager from "@/components/for-sale/subscription-manager";
 import { useAuth } from "@/hooks/use-auth";
@@ -63,6 +64,7 @@ export default function ListingDetailPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPublishDialogOpen, setIsPublishDialogOpen] = useState(false);
   const [isFeatureUpgradeOpen, setIsFeatureUpgradeOpen] = useState(false);
+  const [isFeaturedInfoOpen, setIsFeaturedInfoOpen] = useState(false);
   const listingId = params?.id;
 
   // Note: We intentionally do NOT update for-sale visit tracking here.
@@ -332,7 +334,20 @@ export default function ListingDetailPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
         {/* Left Column: Listing Details */}
         <div className="space-y-4 md:space-y-8">
-          <Card>
+          <Card className={safeListingData.featured && safeListingData.status !== "DRAFT"
+            ? "relative border-yellow-400 border-[3px] shadow-lg ring-2 ring-yellow-200"
+            : undefined
+          }>
+            {safeListingData.featured && safeListingData.status !== "DRAFT" && (
+              <button
+                type="button"
+                className="absolute -top-2 -left-2 z-10 bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md flex items-center gap-1 cursor-pointer"
+                title="About Featured listings"
+                onClick={() => setIsFeaturedInfoOpen(true)}
+              >
+                ★ Featured
+              </button>
+            )}
             <CardHeader className="space-y-4">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div className="flex flex-wrap gap-2">
@@ -453,7 +468,7 @@ export default function ListingDetailPage() {
                             isSubmitting={updateMutation.isPending}
                             selectedType={listing.listingType}
                             onFeatureUpgrade={
-                              isOwner && listing.status === "ACTIVE" && !listing.featured
+                              (isOwner || isAdmin) && listing.status === "ACTIVE" && !listing.featured
                                 ? () => setIsFeatureUpgradeOpen(true)
                                 : undefined
                             }
@@ -715,13 +730,30 @@ export default function ListingDetailPage() {
           )}
         </div>
       </div>
-      {/* Feature upgrade dialog — owner triggered from edit form */}
-      {isOwner && safeListingData.status === "ACTIVE" && !safeListingData.featured && (
+      {/* Featured info dialog — opened by clicking the ★ Featured badge; the
+          owner and admins can also remove featured status from here */}
+      {safeListingData.featured && (
+        <FeaturedInfoDialog
+          isOpen={isFeaturedInfoOpen}
+          onClose={() => setIsFeaturedInfoOpen(false)}
+          listing={safeListingData as any}
+          canUnfeature={isOwner || isAdmin}
+          onUnfeatureSuccess={() => {
+            queryClient.invalidateQueries({ queryKey: [`/api/listings/${listingId}`] });
+            queryClient.invalidateQueries({ queryKey: ["/api/listings"] });
+            setIsFeaturedInfoOpen(false);
+          }}
+        />
+      )}
+
+      {/* Feature upgrade dialog — triggered from edit form by owner or admin */}
+      {(isOwner || isAdmin) && safeListingData.status === "ACTIVE" && !safeListingData.featured && (
         <FeatureUpgradeDialog
           isOpen={isFeatureUpgradeOpen}
           onClose={() => setIsFeatureUpgradeOpen(false)}
           listingId={safeListingData.id}
           listingTitle={safeListingData.title}
+          adminComp={isAdmin && !isOwner}
           onFeatureSuccess={() => {
             queryClient.invalidateQueries({ queryKey: [`/api/listings/${listingId}`] });
             queryClient.invalidateQueries({ queryKey: ["/api/listings"] });
