@@ -356,31 +356,34 @@ export function ListingCard({
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex gap-2 flex-wrap">
-            <Badge variant="secondary" className={typeColors[listingType as keyof typeof typeColors] || "bg-gray-100 text-gray-800"}>
-              {typeLabels[listingType as keyof typeof typeLabels] || "Listing"}
-            </Badge>
-
-            {/* Status Badge - Enhanced Version (uses effective status so a
-                listing past its expiration date never shows a stale "ACTIVE") */}
-            {effectiveStatus && (
-              <Badge variant={isDraft ? "default" : "outline"} className={
-                effectiveStatus === "DRAFT" ? "bg-amber-500 text-white flex items-center gap-1 font-medium" : 
-                effectiveStatus === "ACTIVE" ? "bg-green-100 text-green-800 border-green-200 flex items-center gap-1 font-medium" : 
-                effectiveStatus === "EXPIRED" ? "bg-red-500 text-white border-red-500 flex items-center gap-1 font-medium" : 
-                "bg-gray-100 text-gray-800 border-gray-200 flex items-center gap-1 font-medium"
-              }>
-                <span className={`inline-block w-2 h-2 rounded-full ${
-                  effectiveStatus === "DRAFT" ? "bg-white" :
-                  effectiveStatus === "ACTIVE" ? "bg-green-500" :
-                  effectiveStatus === "EXPIRED" ? "bg-red-500" :
-                  "bg-gray-500"
-                }`}></span>
-                {effectiveStatus === "DRAFT" ? "DRAFT" : 
-                 effectiveStatus === "ACTIVE" ? "ACTIVE" : 
-                 effectiveStatus === "EXPIRED" ? "EXPIRED" : 
-                 effectiveStatus || "UNKNOWN"}
+            {/* Type + status badges are pinned together so they never split across lines */}
+            <div className="flex gap-2 items-center flex-nowrap">
+              <Badge variant="secondary" className={typeColors[listingType as keyof typeof typeColors] || "bg-gray-100 text-gray-800"}>
+                {typeLabels[listingType as keyof typeof typeLabels] || "Listing"}
               </Badge>
-            )}
+
+              {/* Status Badge - Enhanced Version (uses effective status so a
+                  listing past its expiration date never shows a stale "ACTIVE") */}
+              {effectiveStatus && (
+                <Badge variant={isDraft ? "default" : "outline"} className={
+                  effectiveStatus === "DRAFT" ? "bg-amber-500 text-white flex items-center gap-1 font-medium" : 
+                  effectiveStatus === "ACTIVE" ? "bg-green-100 text-green-800 border-green-200 flex items-center gap-1 font-medium" : 
+                  effectiveStatus === "EXPIRED" ? "bg-red-500 text-white border-red-500 flex items-center gap-1 font-medium" : 
+                  "bg-gray-100 text-gray-800 border-gray-200 flex items-center gap-1 font-medium"
+                }>
+                  <span className={`inline-block w-2 h-2 rounded-full ${
+                    effectiveStatus === "DRAFT" ? "bg-white" :
+                    effectiveStatus === "ACTIVE" ? "bg-green-500" :
+                    effectiveStatus === "EXPIRED" ? "bg-red-500" :
+                    "bg-gray-500"
+                  }`}></span>
+                  {effectiveStatus === "DRAFT" ? "DRAFT" : 
+                   effectiveStatus === "ACTIVE" ? "ACTIVE" : 
+                   effectiveStatus === "EXPIRED" ? "EXPIRED" : 
+                   effectiveStatus || "UNKNOWN"}
+                </Badge>
+              )}
+            </div>
             
             {/* Admin indicator for other users' draft listings */}
             {isAdmin && listing.status === "DRAFT" && 
