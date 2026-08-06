@@ -327,7 +327,12 @@ export function ListingCard({
   }
 
   return (
-    <Card className={`bg-white relative ${isDraft ? 'border-amber-500 border-[6px] shadow-lg' : ''} ${isNew ? 'border-red-500 border-[3px] shadow-lg ring-2 ring-red-300' : ''}`}>
+    <Card className={`bg-white relative ${isDraft ? 'border-amber-500 border-[6px] shadow-lg' : ''} ${isNew ? 'border-red-500 border-[3px] shadow-lg ring-2 ring-red-300' : ''} ${listing.featured && !isDraft ? 'border-yellow-400 border-[3px] shadow-lg ring-2 ring-yellow-200' : ''}`}>
+      {listing.featured && !isDraft && (
+        <div className="absolute -top-2 -left-2 z-10 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md flex items-center gap-1">
+          ★ Featured
+        </div>
+      )}
       {isNew && !isDraft && (
         <div className="absolute -top-2 -right-2 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
           New
@@ -352,7 +357,13 @@ export function ListingCard({
             <Badge variant="secondary" className={typeColors[listingType as keyof typeof typeColors] || "bg-gray-100 text-gray-800"}>
               {typeLabels[listingType as keyof typeof typeLabels] || "Listing"}
             </Badge>
-            
+
+            {listing.featured && !isDraft && (
+              <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-300 font-medium">
+                ★ Featured
+              </Badge>
+            )}
+
             {/* Status Badge - Enhanced Version (uses effective status so a
                 listing past its expiration date never shows a stale "ACTIVE") */}
             {effectiveStatus && (

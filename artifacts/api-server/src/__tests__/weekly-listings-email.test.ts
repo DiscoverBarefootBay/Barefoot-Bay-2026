@@ -400,9 +400,9 @@ describe('renderWeeklyListingsEmail', () => {
     assert.equal(r.html.split('Premium villa').length, 3); // title + img alt, once each
   });
 
-  it('never renders a Featured section from today\'s storage row shape (no featured column)', () => {
-    // A row exactly as storage.getListings() returns it today: category exists,
-    // but there is no `featured` column until the Featured-upgrade task lands.
+  it('never renders a Featured section when no listing is featured', () => {
+    // A storage row where the seller has not bought the Featured upgrade
+    // (or a legacy row without the field at all) must never produce the section.
     const row = {
       id: 42,
       title: 'Plain FSBO home',

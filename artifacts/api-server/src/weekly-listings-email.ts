@@ -232,7 +232,7 @@ export interface WeeklyEmailListing {
   createdAt: string | null;
   /** True when the listing was first published inside the campaign week. */
   isNew: boolean;
-  /** True for Featured-upgraded listings (field arrives with the Featured task). */
+  /** True for credit-purchased Featured-upgraded listings. */
   featured: boolean;
 }
 
@@ -309,10 +309,9 @@ export function groupListingsByCategory(listings: WeeklyEmailListing[]): WeeklyE
  * Only public fields are carried forward — seller contact info is
  * deliberately dropped.
  *
- * `featured` is an OPTIONAL input: today's listing rows have no such column,
- * so it normalizes to false and the "Featured Listings" section never
- * renders. The separate Featured-upgrade task adds the column and storage
- * projection; this section activates automatically once it does.
+ * `featured` comes from the listing's is_featured column (credit-purchased
+ * Featured upgrade); featured listings render in the "Featured Listings"
+ * section at the top of the email.
  */
 export function selectListingsForWeek(
   listings: Array<

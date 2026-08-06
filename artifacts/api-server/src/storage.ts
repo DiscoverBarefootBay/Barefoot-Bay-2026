@@ -2960,6 +2960,8 @@ export class DatabaseStorage implements IStorage {
         listingDuration: realEstateListings.listingDuration,
         isSubscription: realEstateListings.isSubscription,
         subscriptionId: realEstateListings.subscriptionId,
+        featured: realEstateListings.featured,
+        featuredAt: realEstateListings.featuredAt,
         createdBy: realEstateListings.createdBy,
         createdAt: realEstateListings.createdAt,
         updatedAt: realEstateListings.updatedAt,
@@ -3008,6 +3010,8 @@ export class DatabaseStorage implements IStorage {
         listingDuration: realEstateListings.listingDuration,
         isSubscription: realEstateListings.isSubscription,
         subscriptionId: realEstateListings.subscriptionId,
+        featured: realEstateListings.featured,
+        featuredAt: realEstateListings.featuredAt,
         createdBy: realEstateListings.createdBy,
         createdAt: realEstateListings.createdAt,
         updatedAt: realEstateListings.updatedAt,
@@ -3057,6 +3061,8 @@ export class DatabaseStorage implements IStorage {
         listingDuration: realEstateListings.listingDuration,
         isSubscription: realEstateListings.isSubscription,
         subscriptionId: realEstateListings.subscriptionId,
+        featured: realEstateListings.featured,
+        featuredAt: realEstateListings.featuredAt,
         createdBy: realEstateListings.createdBy,
         createdAt: realEstateListings.createdAt,
         updatedAt: realEstateListings.updatedAt,
@@ -3180,6 +3186,8 @@ export class DatabaseStorage implements IStorage {
         listingDuration: realEstateListings.listingDuration,
         isSubscription: realEstateListings.isSubscription,
         subscriptionId: realEstateListings.subscriptionId,
+        featured: realEstateListings.featured,
+        featuredAt: realEstateListings.featuredAt,
         createdBy: realEstateListings.createdBy,
         createdAt: realEstateListings.createdAt,
         updatedAt: realEstateListings.updatedAt,
@@ -3231,6 +3239,8 @@ export class DatabaseStorage implements IStorage {
         listingDuration: realEstateListings.listingDuration,
         isSubscription: realEstateListings.isSubscription,
         subscriptionId: realEstateListings.subscriptionId,
+        featured: realEstateListings.featured,
+        featuredAt: realEstateListings.featuredAt,
         createdBy: realEstateListings.createdBy,
         createdAt: realEstateListings.createdAt,
         updatedAt: realEstateListings.updatedAt,
@@ -3356,6 +3366,10 @@ export class DatabaseStorage implements IStorage {
           listingDuration: normalizedDuration,
           isSubscription: !!subscriptionId,
           subscriptionId: subscriptionId || null,
+          // Featured status ends with the listing's cycle — a fresh publish
+          // (or republish after expiration) never silently stays featured.
+          featured: false,
+          featuredAt: null,
           updatedAt: new Date()
         })
         .where(eq(realEstateListings.id, id))
@@ -3371,6 +3385,34 @@ export class DatabaseStorage implements IStorage {
       console.error("Error publishing listing:", error);
       throw error;
     }
+  }
+
+  /**
+   * Atomically claim the Featured upgrade for a listing: flips the flag only
+   * when the listing is currently ACTIVE and not already featured, so a
+   * double-click / concurrent request can never claim (and charge) twice.
+   * Returns the updated listing, or undefined when the claim was not won.
+   */
+  async claimFeaturedListing(id: number): Promise<RealEstateListing | undefined> {
+    const [updated] = await db.update(realEstateListings)
+      .set({ featured: true, featuredAt: new Date(), updatedAt: new Date() })
+      .where(and(
+        eq(realEstateListings.id, id),
+        eq(realEstateListings.status, "ACTIVE"),
+        eq(realEstateListings.featured, false),
+      ))
+      .returning();
+    return updated;
+  }
+
+  /**
+   * Revert a Featured claim (used when the credit deduction fails after the
+   * claim was won, so the listing is not left featured without payment).
+   */
+  async revertFeaturedListing(id: number): Promise<void> {
+    await db.update(realEstateListings)
+      .set({ featured: false, featuredAt: null, updatedAt: new Date() })
+      .where(eq(realEstateListings.id, id));
   }
   
   /**

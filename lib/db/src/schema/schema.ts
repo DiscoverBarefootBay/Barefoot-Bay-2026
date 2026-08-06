@@ -165,7 +165,12 @@ export const realEstateListings = pgTable("real_estate_listings", {
   listingDuration: text("listing_duration"), // '3_day', '7_day', '30_day'
   isSubscription: boolean("is_subscription").default(false),
   subscriptionId: text("subscription_id"), // Square subscription ID
-  
+
+  // Featured upgrade (credit-purchased priority placement); lasts until the
+  // listing itself expires — publishing/republishing resets it.
+  featured: boolean("is_featured").default(false).notNull(),
+  featuredAt: timestamp("featured_at"),
+
   createdBy: integer("created_by").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),

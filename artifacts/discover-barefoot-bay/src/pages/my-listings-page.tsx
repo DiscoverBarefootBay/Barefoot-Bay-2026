@@ -5,9 +5,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Edit, Trash2, Search } from "lucide-react";
+import { Loader2, Edit, Trash2, Search, Star } from "lucide-react";
 import { ListingImage } from "@/components/for-sale/listing-image";
 import PublishPaymentDialog from "@/components/for-sale/publish-payment-dialog-new";
+import FeatureUpgradeDialog from "@/components/for-sale/feature-upgrade-dialog";
 import { ForSaleLoadingAnimation } from "@/components/for-sale/loading-animation";
 
 interface RealEstateListing {
@@ -23,6 +24,7 @@ interface RealEstateListing {
   createdAt: string;
   updatedAt: string;
   expirationDate?: string;
+  featured?: boolean;
   createdByUsername?: string;
   createdByFullName?: string;
   createdByEmail?: string;
@@ -32,6 +34,7 @@ export default function MyListingsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isPublishDialogOpen, setIsPublishDialogOpen] = useState(false);
   const [publishingListingId, setPublishingListingId] = useState<number | null>(null);
+  const [featuringListing, setFeaturingListing] = useState<RealEstateListing | null>(null);
   const [adminView, setAdminView] = useState(false);
   const [, setLocation] = useLocation();
 
@@ -244,13 +247,19 @@ export default function MyListingsPage() {
                       <h3 className="font-semibold text-gray-900 line-clamp-2 flex-1">
                         {listing.title}
                       </h3>
-                      <Badge 
-                        variant={listing.status === "ACTIVE" ? "default" : 
-                                listing.status === "DRAFT" ? "secondary" : "destructive"}
-                        className="ml-2 flex-shrink-0"
-                      >
-                        {listing.status}
-                      </Badge>
+                      <div className="ml-2 flex flex-shrink-0 gap-1">
+                        {listing.featured && listing.status === "ACTIVE" && (
+                          <Badge className="bg-yellow-500 text-white hover:bg-yellow-500">
+                            ★ Featured
+                          </Badge>
+                        )}
+                        <Badge 
+                          variant={listing.status === "ACTIVE" ? "default" : 
+                                  listing.status === "DRAFT" ? "secondary" : "destructive"}
+                        >
+                          {listing.status}
+                        </Badge>
+                      </div>
                     </div>
                     
                     {/* Admin view shows creator information prominently at top */}
@@ -315,6 +324,19 @@ export default function MyListingsPage() {
                       </Button>
                     )}
                     
+                    {/* Featured upgrade for Active listings */}
+                    {listing.status === "ACTIVE" && !listing.featured && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setFeaturingListing(listing)}
+                        className="w-full border-yellow-400 text-yellow-700 hover:bg-yellow-50"
+                      >
+                        <Star className="h-4 w-4 mr-1" />
+                        Upgrade to Featured
+                      </Button>
+                    )}
+
                     {/* Republish button for Expired listings */}
                     {listing.status === "EXPIRED" && (
                       <Button
@@ -364,6 +386,18 @@ export default function MyListingsPage() {
           }}
           listingId={publishingListingId}
           onPublishSuccess={handlePublishSuccess}
+          redirectPath="/my-listings"
+        />
+      )}
+
+      {/* Featured Upgrade Dialog */}
+      {featuringListing && (
+        <FeatureUpgradeDialog
+          isOpen={!!featuringListing}
+          onClose={() => setFeaturingListing(null)}
+          listingId={featuringListing.id}
+          listingTitle={featuringListing.title}
+          onFeatureSuccess={() => window.location.reload()}
           redirectPath="/my-listings"
         />
       )}

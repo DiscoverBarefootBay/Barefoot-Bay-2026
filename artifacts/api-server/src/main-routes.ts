@@ -17,6 +17,7 @@ import * as squareService from './square-service';
 import squareAppInfoRouter from './square-app-info';
 // Import credit service for Square payment integration
 import { creditService } from './credit-service';
+import { getFeaturedListingCreditCost, validateFeatureUpgrade } from './featured-listing';
 import { 
   createCreditPurchaseLink, 
   verifyCreditPurchase, 
@@ -8328,6 +8329,80 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Featured upgrade pricing for the seller UI
+  app.get("/api/featured-listings/config", async (_req, res) => {
+    res.json({ creditCost: getFeaturedListingCreditCost() });
+  });
+
+  // Upgrade an ACTIVE listing to Featured by spending credits. Featured
+  // status follows the listing's own expiration (no separate timer) and is
+  // reset whenever the listing is (re)published.
+  app.post("/api/listings/:id/feature-with-credits", requireAuth, async (req, res) => {
+    try {
+      const listingId = parseInt(req.params.id);
+      if (!Number.isInteger(listingId)) {
+        return res.status(400).json({ success: false, message: "Invalid listing id" });
+      }
+
+      const listing = await storage.getListing(listingId);
+      const isAdmin = req.user.role === 'admin';
+      const rejection = validateFeatureUpgrade(listing, req.user.id, isAdmin);
+      if (rejection) {
+        return res.status(rejection.httpStatus).json({ success: false, message: rejection.message });
+      }
+
+      const creditCost = getFeaturedListingCreditCost();
+      const userCredits = await creditService.getUserCredits(req.user.id);
+      if (userCredits < creditCost) {
+        return res.status(400).json({
+          success: false,
+          code: "insufficient_credits",
+          message: `Insufficient credits. You have ${userCredits} credits but need ${creditCost}.`,
+          creditCost,
+          credits: userCredits,
+        });
+      }
+
+      // Claim the flag atomically FIRST — a concurrent double-click loses the
+      // claim and is never charged.
+      const claimed = await storage.claimFeaturedListing(listingId);
+      if (!claimed) {
+        return res.status(409).json({ success: false, message: "This listing is already featured" });
+      }
+
+      const charged = await creditService.useCredits(
+        req.user.id,
+        creditCost,
+        `Featured upgrade for listing: ${listing!.title}`,
+      );
+      if (!charged) {
+        // Credit deduction failed (e.g. balance changed) — release the claim.
+        await storage.revertFeaturedListing(listingId);
+        const balance = await creditService.getUserCredits(req.user.id);
+        return res.status(400).json({
+          success: false,
+          code: "insufficient_credits",
+          message: `Insufficient credits. You have ${balance} credits but need ${creditCost}.`,
+          creditCost,
+          credits: balance,
+        });
+      }
+
+      const remainingCredits = await creditService.getUserCredits(req.user.id);
+      console.log("Featured upgrade successful:", { listingId, userId: req.user.id, creditCost, remainingCredits });
+      res.json({
+        success: true,
+        listing: claimed,
+        creditsUsed: creditCost,
+        remainingCredits,
+        message: "Your listing is now featured!",
+      });
+    } catch (error) {
+      console.error("Error in feature-with-credits endpoint:", error);
+      res.status(500).json({ success: false, message: "Failed to feature listing" });
+    }
+  });
+
   // Endpoint to publish a draft listing after payment
   app.post("/api/listings/:id/publish", requireAuth, async (req, res) => {
     try {
@@ -8643,6 +8718,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
             listings.sort((a, b) => time(b.createdAt) - time(a.createdAt));
             break;
         }
+        // Featured listings always float to the top, keeping the chosen sort
+        // order within each group (Array.prototype.sort is stable).
+        listings.sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
       }
 
       console.log(`[DEBUG: Listings API] Sending response with ${listings ? listings.length : 0} listings`);
