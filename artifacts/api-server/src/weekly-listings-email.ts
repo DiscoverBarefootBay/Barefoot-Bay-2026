@@ -225,11 +225,15 @@ export interface WeeklyEmailListing {
   title: string;
   price: number | null;
   listingType: string;
+  /** Classified sub-category (e.g. "Garage/Yard Sale"); null for other types. */
+  category: string | null;
   description: string | null;
   photo: string | null;
   createdAt: string | null;
   /** True when the listing was first published inside the campaign week. */
   isNew: boolean;
+  /** True for Featured-upgraded listings (field arrives with the Featured task). */
+  featured: boolean;
 }
 
 const LISTING_TYPE_LABELS: Record<string, string> = {
@@ -246,17 +250,77 @@ export function listingTypeLabel(type: string): string {
   return LISTING_TYPE_LABELS[type] ?? type;
 }
 
+// ---------------------------------------------------------------------------
+// Category grouping
+// ---------------------------------------------------------------------------
+
+export interface WeeklyEmailCategory {
+  key: string;
+  heading: string;
+}
+
+/**
+ * Reader-facing category sections for the email, in display order. Each
+ * listing lands in the FIRST category it matches (Featured wins over its
+ * natural category — that's the priority placement Featured buys). The last
+ * entry is a catch-all so no active listing can ever be silently dropped.
+ * Empty categories are hidden by groupListingsByCategory.
+ */
+const CATEGORY_DEFS: Array<WeeklyEmailCategory & { matches: (l: WeeklyEmailListing) => boolean }> = [
+  { key: 'featured', heading: 'Featured Listings', matches: (l) => l.featured },
+  { key: 'homes', heading: 'Homes', matches: (l) => l.listingType === 'FSBO' || l.listingType === 'Agent' },
+  { key: 'rentals', heading: 'Rentals', matches: (l) => l.listingType === 'Rent' },
+  { key: 'openHouses', heading: 'Open Houses', matches: (l) => l.listingType === 'OpenHouse' },
+  {
+    key: 'yardSales',
+    heading: 'Yard Sales',
+    matches: (l) =>
+      l.listingType === 'GarageSale' ||
+      (l.listingType === 'Classified' && (l.category ?? '').trim() === 'Garage/Yard Sale'),
+  },
+  { key: 'classifieds', heading: 'Classifieds & More', matches: () => true },
+];
+
+export interface WeeklyEmailCategoryGroup extends WeeklyEmailCategory {
+  listings: WeeklyEmailListing[];
+}
+
+/**
+ * Group listings into the category sections, preserving the incoming order
+ * within each group (new-this-week first, then newest first — the order
+ * selectListingsForWeek produces). Categories with no listings are omitted.
+ */
+export function groupListingsByCategory(listings: WeeklyEmailListing[]): WeeklyEmailCategoryGroup[] {
+  const groups = CATEGORY_DEFS.map((def) => ({ key: def.key, heading: def.heading, listings: [] as WeeklyEmailListing[] }));
+  for (const l of listings) {
+    const idx = CATEGORY_DEFS.findIndex((def) => def.matches(l));
+    groups[idx]!.listings.push(l);
+  }
+  return groups.filter((g) => g.listings.length > 0);
+}
+
 /**
  * Select the listings featured in a campaign email: EVERY listing that is
  * currently ACTIVE and not past its expiration date at selection time.
  * Listings first published (createdAt, ET) within [weekStart, weekEnd] are
- * flagged `isNew` so the render can highlight them in a "New This Week"
- * section; the rest appear under "On The Market". New listings sort
- * first, each group newest first. Only public fields are carried forward —
- * seller contact info is deliberately dropped.
+ * flagged `isNew` so the render can badge and top-sort them inside their
+ * category section. New listings sort first, then newest first; the render
+ * groups the result into the category sections (see groupListingsByCategory).
+ * Only public fields are carried forward — seller contact info is
+ * deliberately dropped.
+ *
+ * `featured` is an OPTIONAL input: today's listing rows have no such column,
+ * so it normalizes to false and the "Featured Listings" section never
+ * renders. The separate Featured-upgrade task adds the column and storage
+ * projection; this section activates automatically once it does.
  */
 export function selectListingsForWeek(
-  listings: Array<Pick<RealEstateListing, 'id' | 'title' | 'price' | 'listingType' | 'description' | 'photos' | 'status' | 'createdAt' | 'expirationDate'>>,
+  listings: Array<
+    Pick<RealEstateListing, 'id' | 'title' | 'price' | 'listingType' | 'description' | 'photos' | 'status' | 'createdAt' | 'expirationDate'> & {
+      category?: string | null;
+      featured?: boolean | null;
+    }
+  >,
   range: Pick<WeekRange, 'weekStart' | 'weekEnd'>,
   now: Date = new Date(),
 ): WeeklyEmailListing[] {
@@ -276,6 +340,8 @@ export function selectListingsForWeek(
         title: l.title,
         price: l.price ?? null,
         listingType: l.listingType,
+        category: l.category ?? null,
+        featured: Boolean(l.featured),
         description: l.description ?? null,
         photo: Array.isArray(l.photos) && l.photos.length > 0 ? l.photos[0] ?? null : null,
         createdAt: l.createdAt ? new Date(l.createdAt).toISOString() : null,
@@ -354,7 +420,7 @@ export interface RenderedWeeklyEmail {
 export const WEEKLY_EMAIL_PLACEHOLDERS: Array<{ token: string; description: string }> = [
   { token: '{{weekRange}}', description: 'The campaign week, e.g. "July 20–26, 2026"' },
   { token: '{{intro}}', description: 'The standard intro sentence (changes automatically based on how many listings are new this week)' },
-  { token: '{{listings}}', description: 'The "New This Week" / "On The Market" sections with the listing cards — required for listings to appear' },
+  { token: '{{listings}}', description: 'The category sections (Featured Listings, Homes, Rentals, Open Houses, Yard Sales, Classifieds & More) with the listing cards — empty categories are hidden; required for listings to appear' },
   { token: '{{listingCount}}', description: 'Total number of active listings featured in the email' },
   { token: '{{forSaleUrl}}', description: 'Link to the On The Market page' },
   { token: '{{baseUrl}}', description: 'The site address, e.g. https://barefootbay.com' },
@@ -457,7 +523,6 @@ export function renderWeeklyListingsEmail(
   const placeholderImg = toAbsoluteUrl(baseUrl, '/logo.png');
 
   const newListings = listings.filter((l) => l.isNew);
-  const otherListings = listings.filter((l) => !l.isNew);
 
   const intro =
     listings.length === 0
@@ -485,7 +550,7 @@ export function renderWeeklyListingsEmail(
               </tr>
               <tr>
                 <td style="padding:16px 20px;">
-                  <h3 style="margin:0 0 4px 0;font-size:18px;line-height:24px;color:${BRAND.navy};">${escapeHtml(l.title)}</h3>
+                  <h3 style="margin:0 0 4px 0;font-size:18px;line-height:24px;color:${BRAND.navy};">${l.isNew ? `<span style="background-color:${BRAND.coral};color:#ffffff;font-size:11px;font-weight:700;letter-spacing:0.5px;padding:2px 8px;border-radius:10px;vertical-align:middle;">NEW</span> ` : ''}${escapeHtml(l.title)}</h3>
                   ${price ? `<p style="margin:0 0 4px 0;font-size:16px;font-weight:bold;color:${BRAND.coral};">${price}</p>` : ''}
                   <p style="margin:0 0 8px 0;font-size:13px;color:#6b7280;">${escapeHtml(listingTypeLabel(l.listingType))}</p>
                   ${desc ? `<p style="margin:0 0 12px 0;font-size:14px;line-height:20px;color:${BRAND.charcoal};">${desc}</p>` : ''}
@@ -503,15 +568,15 @@ export function renderWeeklyListingsEmail(
             </td>
           </tr>`;
 
-  // The {{listings}} token expands to the "New This Week" and "On The Market"
-  // sections with their listing cards (nothing at all when there are no
-  // active listings).
+  // The {{listings}} token expands to the category sections (Featured
+  // Listings, Homes, Rentals, Open Houses, Yard Sales, Classifieds & More)
+  // with their listing cards. Empty categories are hidden; new-this-week
+  // listings sort first within each section and carry a NEW badge. Nothing
+  // at all is emitted when there are no active listings.
+  const groups = groupListingsByCategory(listings);
   const parts: string[] = [];
-  if (newListings.length > 0) {
-    parts.push(sectionHeading('New This Week'), ...newListings.map(cardHtml));
-  }
-  if (otherListings.length > 0) {
-    parts.push(sectionHeading('On The Market'), ...otherListings.map(cardHtml));
+  for (const g of groups) {
+    parts.push(sectionHeading(escapeHtml(g.heading)), ...g.listings.map(cardHtml));
   }
   const listingsBlock = parts.join('\n');
 
@@ -540,7 +605,7 @@ export function renderWeeklyListingsEmail(
     if (group.length === 0) return;
     textLines.push(heading, '');
     for (const l of group) {
-      textLines.push(`- ${l.title}`);
+      textLines.push(`- ${l.isNew ? '[NEW] ' : ''}${l.title}`);
       const price = formatPrice(l.price);
       if (price) textLines.push(`  Price: ${price}`);
       textLines.push(`  Type: ${listingTypeLabel(l.listingType)}`);
@@ -548,8 +613,9 @@ export function renderWeeklyListingsEmail(
       textLines.push(`  View listing: ${forSaleUrl}/${l.id}`, '');
     }
   };
-  pushTextSection('NEW THIS WEEK', newListings);
-  pushTextSection('ON THE MARKET', otherListings);
+  for (const g of groups) {
+    pushTextSection(g.heading.toUpperCase(), g.listings);
+  }
   textLines.push(
     `View all listings: ${forSaleUrl}`,
     '',

@@ -322,34 +322,133 @@ describe('renderWeeklyListingsEmail', () => {
     assert.ok(r.html.includes('src="https://example.com/cart.jpg"'));
   });
 
-  it('splits new and still-on-the-market listings into two sections', () => {
+  it('groups listings under category headings in the fixed order, hiding empty categories', () => {
     const mixed = selectListingsForWeek(
       [
-        listing({ id: 1, title: 'Fresh listing' }),
-        listing({ id: 2, title: 'Older listing', createdAt: new Date('2026-05-05T15:00:00Z') }),
+        listing({ id: 1, title: 'Cozy villa', listingType: 'FSBO' }),
+        listing({ id: 2, title: 'Lakeside rental', listingType: 'Rent' }),
+        listing({ id: 3, title: 'Golf cart classified', listingType: 'Classified' }),
+        listing({ id: 4, title: 'Saturday sale', listingType: 'GarageSale' }),
       ],
       RANGE,
       NOW,
     );
     const r = renderWeeklyListingsEmail(mixed, RANGE, 'https://barefootbay.com');
-    assert.ok(r.html.includes('New This Week'));
-    assert.ok(r.html.includes('>On The Market</h2>'));
-    assert.ok(!r.html.includes('Still On The Market'));
-    assert.ok(r.html.indexOf('Fresh listing') < r.html.indexOf('Older listing'));
-    assert.ok(r.text.includes('\nON THE MARKET\n'));
-    assert.ok(!r.text.includes('STILL ON THE MARKET'));
+    // Non-empty sections appear in the fixed order…
+    const order = ['>Homes</h2>', '>Rentals</h2>', '>Yard Sales</h2>', '>Classifieds &amp; More</h2>']
+      .map((h) => r.html.indexOf(h));
+    assert.ok(order.every((i) => i >= 0), `missing a section: ${JSON.stringify(order)}`);
+    assert.deepEqual(order, [...order].sort((a, b) => a - b));
+    // …empty categories are hidden entirely.
+    assert.ok(!r.html.includes('Open Houses'));
+    assert.ok(!r.html.includes('Featured Listings'));
+    // Legacy two-section headings are gone.
+    assert.ok(!r.html.includes('New This Week'));
+    assert.ok(!r.html.includes('>On The Market</h2>'));
+    // Plain text mirrors the grouping.
+    assert.ok(r.text.includes('\nHOMES\n'));
+    assert.ok(r.text.includes('\nRENTALS\n'));
+    assert.ok(r.text.includes('\nYARD SALES\n'));
+    assert.ok(r.text.includes('\nCLASSIFIEDS & MORE\n'));
+    assert.ok(!r.text.includes('OPEN HOUSES'));
   });
 
-  it('omits the New This Week section when nothing new was posted', () => {
+  it('maps every listing type to the right category, including agent homes, open houses, and wanted', () => {
+    const mixed = selectListingsForWeek(
+      [
+        listing({ id: 1, title: 'Agent home', listingType: 'Agent' }),
+        listing({ id: 2, title: 'Sunday open house', listingType: 'OpenHouse' }),
+        listing({ id: 3, title: 'Looking for a kayak', listingType: 'Wanted' }),
+      ],
+      RANGE,
+      NOW,
+    );
+    const r = renderWeeklyListingsEmail(mixed, RANGE, 'https://barefootbay.com');
+    assert.ok(r.html.indexOf('>Homes</h2>') < r.html.indexOf('Agent home'));
+    assert.ok(r.html.indexOf('>Open Houses</h2>') < r.html.indexOf('Sunday open house'));
+    assert.ok(r.html.indexOf('>Classifieds &amp; More</h2>') < r.html.indexOf('Looking for a kayak'));
+  });
+
+  it('puts Classified listings with the Garage/Yard Sale category under Yard Sales', () => {
+    const mixed = selectListingsForWeek(
+      [
+        listing({ id: 1, title: 'Driveway sale', listingType: 'Classified', category: 'Garage/Yard Sale' }),
+        listing({ id: 2, title: 'Old lamp', listingType: 'Classified', category: 'Furniture' }),
+      ],
+      RANGE,
+      NOW,
+    );
+    const r = renderWeeklyListingsEmail(mixed, RANGE, 'https://barefootbay.com');
+    assert.ok(r.html.indexOf('>Yard Sales</h2>') < r.html.indexOf('Driveway sale'));
+    assert.ok(r.html.indexOf('Driveway sale') < r.html.indexOf('>Classifieds &amp; More</h2>'));
+    assert.ok(r.html.indexOf('>Classifieds &amp; More</h2>') < r.html.indexOf('Old lamp'));
+  });
+
+  it('shows a Featured Listings section first when featured listings exist', () => {
+    const mixed = selectListingsForWeek(
+      [
+        listing({ id: 1, title: 'Premium villa', listingType: 'FSBO', featured: true }),
+        listing({ id: 2, title: 'Regular villa', listingType: 'FSBO' }),
+      ],
+      RANGE,
+      NOW,
+    );
+    const r = renderWeeklyListingsEmail(mixed, RANGE, 'https://barefootbay.com');
+    // Featured listing appears ONLY in the Featured section (priority placement).
+    assert.ok(r.html.indexOf('>Featured Listings</h2>') < r.html.indexOf('>Homes</h2>'));
+    assert.ok(r.html.indexOf('Premium villa') < r.html.indexOf('>Homes</h2>'));
+    assert.equal(r.html.split('Premium villa').length, 3); // title + img alt, once each
+  });
+
+  it('never renders a Featured section from today\'s storage row shape (no featured column)', () => {
+    // A row exactly as storage.getListings() returns it today: category exists,
+    // but there is no `featured` column until the Featured-upgrade task lands.
+    const row = {
+      id: 42,
+      title: 'Plain FSBO home',
+      price: 250000,
+      listingType: 'FSBO',
+      category: null,
+      description: 'Nice place',
+      photos: [],
+      status: 'ACTIVE',
+      createdAt: new Date('2026-07-22T15:00:00Z'),
+      expirationDate: null,
+      contactInfo: { phone: '555' },
+    };
+    const out = selectListingsForWeek([row as any], RANGE, NOW);
+    assert.equal(out[0]!.featured, false);
+    const r = renderWeeklyListingsEmail(out, RANGE, 'https://barefootbay.com');
+    assert.ok(!r.html.includes('Featured Listings'));
+    assert.ok(r.html.includes('>Homes</h2>'));
+  });
+
+  it('marks new-this-week listings with a NEW badge and sorts them first within their category', () => {
+    const mixed = selectListingsForWeek(
+      [
+        listing({ id: 1, title: 'Fresh cart', listingType: 'Classified' }),
+        listing({ id: 2, title: 'Older cart', listingType: 'Classified', createdAt: new Date('2026-05-05T15:00:00Z') }),
+      ],
+      RANGE,
+      NOW,
+    );
+    const r = renderWeeklyListingsEmail(mixed, RANGE, 'https://barefootbay.com');
+    assert.ok(r.html.includes('>NEW</span>'));
+    assert.ok(r.html.indexOf('Fresh cart') < r.html.indexOf('Older cart'));
+    assert.ok(r.text.includes('- [NEW] Fresh cart'));
+    assert.ok(r.text.includes('- Older cart'));
+  });
+
+  it('keeps the no-new-listings intro when nothing new was posted', () => {
     const onlyOld = selectListingsForWeek(
       [listing({ id: 2, createdAt: new Date('2026-05-05T15:00:00Z') })],
       RANGE,
       NOW,
     );
     const r = renderWeeklyListingsEmail(onlyOld, RANGE, 'https://barefootbay.com');
-    assert.ok(!r.html.includes('New This Week'));
-    assert.ok(r.html.includes('>On The Market</h2>'));
+    assert.ok(!r.html.includes('>NEW</span>'));
     assert.ok(r.html.includes('No new listings were posted this week'));
+    assert.ok(r.html.includes('>Classifieds &amp; More</h2>'));
   });
 
   it('uses the brand gradient header', () => {
