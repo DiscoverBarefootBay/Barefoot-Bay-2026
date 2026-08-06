@@ -257,6 +257,14 @@ export default function AdminDashboard() {
       category: "content"
     },
     {
+      title: "Manage Listings",
+      description: "Feature or unfeature On The Market listings for comp sponsorships or abuse control",
+      icon: <Sparkles className="h-8 w-8 text-primary" />,
+      href: "/admin/manage-listings",
+      comingSoon: false,
+      category: "content"
+    },
+    {
       title: "Extra!!! Categories",
       description: "Manage Extra!!! categories and structure",
       icon: <MessageSquare className="h-8 w-8 text-primary" />,

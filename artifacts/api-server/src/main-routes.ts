@@ -8403,6 +8403,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin-only: comp-feature a listing (no credits charged). Restricted to ACTIVE
+  // non-featured listings via claimFeaturedListing's atomic guard.
+  app.post("/api/admin/listings/:id/feature", requireAuth, requireAdmin, async (req, res) => {
+    try {
+      const listingId = parseInt(req.params.id);
+      if (!Number.isInteger(listingId)) {
+        return res.status(400).json({ success: false, message: "Invalid listing id" });
+      }
+
+      // Fetch first to distinguish 404 / already-featured / not-active
+      const listing = await storage.getListing(listingId);
+      if (!listing) {
+        return res.status(404).json({ success: false, message: "Listing not found" });
+      }
+      if (listing.featured) {
+        return res.status(409).json({ success: false, message: "This listing is already featured" });
+      }
+      if (listing.status !== "ACTIVE") {
+        return res.status(409).json({
+          success: false,
+          message: `Only ACTIVE listings can be featured (current status: ${listing.status})`,
+        });
+      }
+
+      const claimed = await storage.claimFeaturedListing(listingId);
+      if (!claimed) {
+        // Race condition: another request changed the listing between our fetch and the claim
+        return res.status(409).json({ success: false, message: "Listing could not be featured — it may have just changed status" });
+      }
+
+      console.log(`[ADMIN] Admin ${req.user.username} (ID: ${req.user.id}) comp-featured listing ${listingId} ("${listing.title}")`);
+      res.json({ success: true, listing: claimed });
+    } catch (error) {
+      console.error("[ADMIN] Error in admin feature listing endpoint:", error);
+      res.status(500).json({ success: false, message: "Failed to feature listing" });
+    }
+  });
+
+  // Admin-only: remove Featured status from a listing (no credits refunded).
+  // Works regardless of listing status — unfeature is always valid.
+  app.post("/api/admin/listings/:id/unfeature", requireAuth, requireAdmin, async (req, res) => {
+    try {
+      const listingId = parseInt(req.params.id);
+      if (!Number.isInteger(listingId)) {
+        return res.status(400).json({ success: false, message: "Invalid listing id" });
+      }
+
+      const listing = await storage.getListing(listingId);
+      if (!listing) {
+        return res.status(404).json({ success: false, message: "Listing not found" });
+      }
+
+      await storage.revertFeaturedListing(listingId);
+      const updated = await storage.getListing(listingId);
+
+      console.log(`[ADMIN] Admin ${req.user.username} (ID: ${req.user.id}) unfeatured listing ${listingId} ("${listing.title}")`);
+      res.json({ success: true, listing: updated });
+    } catch (error) {
+      console.error("[ADMIN] Error in admin unfeature listing endpoint:", error);
+      res.status(500).json({ success: false, message: "Failed to unfeature listing" });
+    }
+  });
+
   // Endpoint to publish a draft listing after payment
   app.post("/api/listings/:id/publish", requireAuth, async (req, res) => {
     try {
