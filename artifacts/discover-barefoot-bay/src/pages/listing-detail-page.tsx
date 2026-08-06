@@ -28,6 +28,7 @@ import { ContactForm } from "@/components/for-sale/contact-form";
 import SubscriptionManager from "@/components/for-sale/subscription-manager";
 import { useAuth } from "@/hooks/use-auth";
 import { usePermissions } from "@/hooks/use-permissions";
+import { useFlags } from "@/hooks/use-flags";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { RealEstateListing } from "@shared/schema";
@@ -58,6 +59,8 @@ export default function ListingDetailPage() {
   const [, params] = useRoute<{ id: string }>("/for-sale/:id");
   const [, navigate] = useLocation();
   const { user } = useAuth();
+  const { isFeaturedListingsEnabled } = useFlags();
+  const featuredEnabled = isFeaturedListingsEnabled();
   const { isAdmin } = usePermissions();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -334,11 +337,11 @@ export default function ListingDetailPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
         {/* Left Column: Listing Details */}
         <div className="space-y-4 md:space-y-8">
-          <Card className={safeListingData.featured && safeListingData.status !== "DRAFT"
+          <Card className={featuredEnabled && safeListingData.featured && safeListingData.status !== "DRAFT"
             ? "relative border-yellow-400 border-[3px] shadow-lg ring-2 ring-yellow-200"
             : undefined
           }>
-            {safeListingData.featured && safeListingData.status !== "DRAFT" && (
+            {featuredEnabled && safeListingData.featured && safeListingData.status !== "DRAFT" && (
               <button
                 type="button"
                 className="absolute -top-2 -left-2 z-10 bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md flex items-center gap-1 cursor-pointer"
@@ -468,7 +471,7 @@ export default function ListingDetailPage() {
                             isSubmitting={updateMutation.isPending}
                             selectedType={listing.listingType}
                             onFeatureUpgrade={
-                              (isOwner || isAdmin) && listing.status === "ACTIVE" && !listing.featured
+                              featuredEnabled && (isOwner || isAdmin) && listing.status === "ACTIVE" && !listing.featured
                                 ? () => setIsFeatureUpgradeOpen(true)
                                 : undefined
                             }
@@ -732,7 +735,7 @@ export default function ListingDetailPage() {
       </div>
       {/* Featured info dialog — opened by clicking the ★ Featured badge; the
           owner and admins can also remove featured status from here */}
-      {safeListingData.featured && (
+      {featuredEnabled && safeListingData.featured && (
         <FeaturedInfoDialog
           isOpen={isFeaturedInfoOpen}
           onClose={() => setIsFeaturedInfoOpen(false)}
@@ -747,7 +750,7 @@ export default function ListingDetailPage() {
       )}
 
       {/* Feature upgrade dialog — triggered from edit form by owner or admin */}
-      {(isOwner || isAdmin) && safeListingData.status === "ACTIVE" && !safeListingData.featured && (
+      {featuredEnabled && (isOwner || isAdmin) && safeListingData.status === "ACTIVE" && !safeListingData.featured && (
         <FeatureUpgradeDialog
           isOpen={isFeatureUpgradeOpen}
           onClose={() => setIsFeatureUpgradeOpen(false)}

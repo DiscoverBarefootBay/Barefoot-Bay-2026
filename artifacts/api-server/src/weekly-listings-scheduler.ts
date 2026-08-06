@@ -41,6 +41,7 @@ import {
   type WeekRange,
 } from './weekly-listings-email';
 import { isWeeklyListingsEmailSendingEnabled } from './scheduler-email-gate';
+import { isFeaturedListingsEnabled } from './featured-listings-flag';
 
 const CHECK_INTERVAL_MS = 60 * 1000; // evaluate once a minute
 const BOOT_DELAY_MS = 45 * 1000;
@@ -501,6 +502,7 @@ async function executeWeeklySendInner(
       range,
       deps.baseUrl ?? getWeeklyEmailBaseUrl(),
       config.template,
+      { featuredEnabled: await isFeaturedListingsEnabled() },
     );
 
     let sentCount = 0;

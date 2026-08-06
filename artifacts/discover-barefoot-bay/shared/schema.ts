@@ -1393,6 +1393,7 @@ export const FeatureFlagName = {
   WEATHER_ROCKET_ICONS: 'weather_rocket_icons', // Weather and rocket icons in navigation
   MESSAGES: 'messages', // Private messaging between users
   LIVE_CHAT: 'live_chat', // Live chat bubble in navigation
+  FEATURED_LISTINGS: 'featured_listings', // Featured listing upgrades/badges on On The Market (site + weekly email)
 } as const;
 
 // Feature flags table to control visibility of features based on user roles
@@ -1425,6 +1426,7 @@ export const insertFeatureFlagSchema = baseFeatureFlagSchema
       FeatureFlagName.ADMIN,
       FeatureFlagName.WEATHER_ROCKET_ICONS,
       FeatureFlagName.MESSAGES,
+      FeatureFlagName.FEATURED_LISTINGS,
     ]),
     displayName: z.string().min(1, "Display name is required"),
     enabledForRoles: z.array(z.enum([

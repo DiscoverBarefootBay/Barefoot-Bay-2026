@@ -10,6 +10,7 @@ import { ListingImage } from "@/components/for-sale/listing-image";
 import PublishPaymentDialog from "@/components/for-sale/publish-payment-dialog-new";
 import FeatureUpgradeDialog from "@/components/for-sale/feature-upgrade-dialog";
 import { ForSaleLoadingAnimation } from "@/components/for-sale/loading-animation";
+import { useFlags } from "@/hooks/use-flags";
 
 interface RealEstateListing {
   id: number;
@@ -31,6 +32,8 @@ interface RealEstateListing {
 }
 
 export default function MyListingsPage() {
+  const { isFeaturedListingsEnabled } = useFlags();
+  const featuredEnabled = isFeaturedListingsEnabled();
   const [searchTerm, setSearchTerm] = useState("");
   const [isPublishDialogOpen, setIsPublishDialogOpen] = useState(false);
   const [publishingListingId, setPublishingListingId] = useState<number | null>(null);
@@ -248,7 +251,7 @@ export default function MyListingsPage() {
                         {listing.title}
                       </h3>
                       <div className="ml-2 flex flex-shrink-0 gap-1">
-                        {listing.featured && listing.status === "ACTIVE" && (
+                        {featuredEnabled && listing.featured && listing.status === "ACTIVE" && (
                           <Badge className="bg-yellow-500 text-white hover:bg-yellow-500">
                             ★ Featured
                           </Badge>
@@ -325,7 +328,7 @@ export default function MyListingsPage() {
                     )}
                     
                     {/* Featured upgrade for Active listings */}
-                    {listing.status === "ACTIVE" && !listing.featured && (
+                    {featuredEnabled && listing.status === "ACTIVE" && !listing.featured && (
                       <Button
                         variant="outline"
                         size="sm"
@@ -391,7 +394,7 @@ export default function MyListingsPage() {
       )}
 
       {/* Featured Upgrade Dialog */}
-      {featuringListing && (
+      {featuredEnabled && featuringListing && (
         <FeatureUpgradeDialog
           isOpen={!!featuringListing}
           onClose={() => setFeaturingListing(null)}

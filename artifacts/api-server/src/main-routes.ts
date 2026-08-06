@@ -18,6 +18,7 @@ import squareAppInfoRouter from './square-app-info';
 // Import credit service for Square payment integration
 import { creditService } from './credit-service';
 import { getFeaturedListingCreditCost, validateFeatureUpgrade } from './featured-listing';
+import { isFeaturedListingsEnabled } from './featured-listings-flag';
 import { 
   createCreditPurchaseLink, 
   verifyCreditPurchase, 
@@ -8339,6 +8340,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // reset whenever the listing is (re)published.
   app.post("/api/listings/:id/feature-with-credits", requireAuth, async (req, res) => {
     try {
+      if (!(await isFeaturedListingsEnabled())) {
+        return res.status(403).json({ success: false, message: "Featured listings are currently disabled." });
+      }
       const listingId = parseInt(req.params.id);
       if (!Number.isInteger(listingId)) {
         return res.status(400).json({ success: false, message: "Invalid listing id" });
@@ -8407,6 +8411,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // non-featured listings via claimFeaturedListing's atomic guard.
   app.post("/api/admin/listings/:id/feature", requireAuth, requireAdmin, async (req, res) => {
     try {
+      if (!(await isFeaturedListingsEnabled())) {
+        return res.status(403).json({ success: false, message: "Featured listings are currently disabled." });
+      }
       const listingId = parseInt(req.params.id);
       if (!Number.isInteger(listingId)) {
         return res.status(400).json({ success: false, message: "Invalid listing id" });
@@ -9236,6 +9243,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.log("Draft listing - setting expirationDate to null");
       }
 
+      // Featured status can only be granted through the guarded feature
+      // endpoints (credits / admin comp) — never from client create payloads.
+      delete processedListingData.featured;
+      delete processedListingData.featuredAt;
+
       // Enhanced debugging before validation
       console.log("=== LISTING VALIDATION DEBUG ===");
       console.log("Raw listing data being validated:");
@@ -9397,6 +9409,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         photos,
         // Preserve existing status if no status is provided in the update
         status: listingData.status || listing.status,
+        // Featured status can only change through the guarded feature/unfeature
+        // endpoints — ignore any client-supplied values and keep the DB state.
+        featured: listing.featured,
+        featuredAt: listing.featuredAt,
         updatedAt: new Date()
       };
 
@@ -13652,7 +13668,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const range = getCampaignWeekRange(now);
     const listings = selectListingsForWeek(await storage.getListings(), range, now);
     const recipients = resolveWeeklyEmailRecipients(await storage.getUsers());
-    const rendered = renderWeeklyListingsEmail(listings, range, getWeeklyEmailBaseUrl(), template);
+    const rendered = renderWeeklyListingsEmail(listings, range, getWeeklyEmailBaseUrl(), template, {
+      featuredEnabled: await isFeaturedListingsEnabled(),
+    });
     return {
       source,
       range,
@@ -13703,7 +13721,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const config = await loadWeeklyListingsEmailConfig();
       const range = getCampaignWeekRange(now);
       const listings = selectListingsForWeek(await storage.getListings(), range, now);
-      const rendered = renderWeeklyListingsEmail(listings, range, getWeeklyEmailBaseUrl(), config.template);
+      const rendered = renderWeeklyListingsEmail(listings, range, getWeeklyEmailBaseUrl(), config.template, {
+        featuredEnabled: await isFeaturedListingsEnabled(),
+      });
       const ok = await sendEmail({
         to: adminEmail,
         subject: `[TEST] ${rendered.subject}`,

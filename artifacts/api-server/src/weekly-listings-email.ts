@@ -517,7 +517,14 @@ export function renderWeeklyListingsEmail(
   range: WeekRange,
   baseUrl: string,
   template: WeeklyEmailTemplate = getDefaultWeeklyEmailTemplate(),
+  options: { featuredEnabled?: boolean } = {},
 ): RenderedWeeklyEmail {
+  // Featured-listings kill switch: when off, every listing renders in its
+  // natural category (no "Featured Listings" section, no gold highlight).
+  const featuredEnabled = options.featuredEnabled !== false;
+  if (!featuredEnabled) {
+    listings = listings.map((l) => (l.featured ? { ...l, featured: false } : l));
+  }
   const forSaleUrl = `${baseUrl}/for-sale`;
   const placeholderImg = toAbsoluteUrl(baseUrl, '/logo.png');
 
@@ -538,10 +545,20 @@ export function renderWeeklyListingsEmail(
       : `No photo available for ${escapeHtml(l.title)}`;
     const price = formatPrice(l.price);
     const desc = l.description ? escapeHtml(truncate(l.description, 160)) : '';
+    // Featured cards get a gold border + ★ FEATURED ribbon (mirrors the site's
+    // gold outline & badge). Table-safe: border on the card table, ribbon as a
+    // full-width row above the photo.
+    const border = l.featured ? '2px solid #FACC15' : '1px solid #e5e7eb';
+    const featuredRibbon = l.featured
+      ? `
+              <tr>
+                <td style="background-color:#FACC15;padding:6px 20px;font-size:12px;font-weight:700;letter-spacing:1px;color:#713F12;">&#9733; FEATURED</td>
+              </tr>`
+      : '';
     return `
         <tr>
           <td style="padding:0 24px 24px 24px;">
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;background:#ffffff;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:${border};border-radius:8px;overflow:hidden;background:#ffffff;">${featuredRibbon}
               <tr>
                 <td>
                   <img src="${img}" alt="${alt}" width="552" style="width:100%;max-width:552px;height:auto;display:block;background:#f1f5f9;" />
@@ -549,7 +566,7 @@ export function renderWeeklyListingsEmail(
               </tr>
               <tr>
                 <td style="padding:16px 20px;">
-                  <h3 style="margin:0 0 4px 0;font-size:18px;line-height:24px;color:${BRAND.navy};">${l.isNew ? `<span style="background-color:${BRAND.coral};color:#ffffff;font-size:11px;font-weight:700;letter-spacing:0.5px;padding:2px 8px;border-radius:10px;vertical-align:middle;">NEW</span> ` : ''}${escapeHtml(l.title)}</h3>
+                  <h3 style="margin:0 0 4px 0;font-size:18px;line-height:24px;color:${BRAND.navy};">${l.featured ? `<span style="background-color:#FACC15;color:#713F12;font-size:11px;font-weight:700;letter-spacing:0.5px;padding:2px 8px;border-radius:10px;vertical-align:middle;">&#9733; FEATURED</span> ` : ''}${l.isNew ? `<span style="background-color:${BRAND.coral};color:#ffffff;font-size:11px;font-weight:700;letter-spacing:0.5px;padding:2px 8px;border-radius:10px;vertical-align:middle;">NEW</span> ` : ''}${escapeHtml(l.title)}</h3>
                   ${price ? `<p style="margin:0 0 4px 0;font-size:16px;font-weight:bold;color:${BRAND.coral};">${price}</p>` : ''}
                   <p style="margin:0 0 8px 0;font-size:13px;color:#6b7280;">${escapeHtml(listingTypeLabel(l.listingType))}</p>
                   ${desc ? `<p style="margin:0 0 12px 0;font-size:14px;line-height:20px;color:${BRAND.charcoal};">${desc}</p>` : ''}
@@ -604,7 +621,7 @@ export function renderWeeklyListingsEmail(
     if (group.length === 0) return;
     textLines.push(heading, '');
     for (const l of group) {
-      textLines.push(`- ${l.isNew ? '[NEW] ' : ''}${l.title}`);
+      textLines.push(`- ${l.featured ? '[FEATURED] ' : ''}${l.isNew ? '[NEW] ' : ''}${l.title}`);
       const price = formatPrice(l.price);
       if (price) textLines.push(`  Price: ${price}`);
       textLines.push(`  Type: ${listingTypeLabel(l.listingType)}`);

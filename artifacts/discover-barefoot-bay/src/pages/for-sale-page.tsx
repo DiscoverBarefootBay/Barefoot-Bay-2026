@@ -50,6 +50,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { usePermissions } from "@/hooks/use-permissions";
+import { useFlags } from "@/hooks/use-flags";
 import { FeatureUpgradeDialog } from "@/components/for-sale/feature-upgrade-dialog";
 import { FeaturedInfoDialog } from "@/components/for-sale/featured-info-dialog";
 
@@ -107,6 +108,8 @@ const CLASSIFIED_CATEGORIES = [
 export default function ForSalePage() {
   const { user } = useAuth();
   const { canCreateListing, isAdmin } = usePermissions();
+  const { isFeaturedListingsEnabled } = useFlags();
+  const featuredEnabled = isFeaturedListingsEnabled();
   const { toast } = useToast();
   const [location, setLocation] = useLocation();
 
@@ -1903,8 +1906,8 @@ export default function ForSalePage() {
                       ? handlePublishListing
                       : undefined
                   }
-                  onFeatureUpgrade={user ? setFeaturingListing : undefined}
-                  onFeaturedClick={setFeaturedInfoListing}
+                  onFeatureUpgrade={featuredEnabled && user ? setFeaturingListing : undefined}
+                  onFeaturedClick={featuredEnabled ? setFeaturedInfoListing : undefined}
                   onClick={() =>
                     (window.location.href = `/for-sale/${listing.id}`)
                   }
@@ -1967,7 +1970,7 @@ export default function ForSalePage() {
       </Dialog>
 
       {/* Feature upgrade dialog — triggered from listing cards owned by the current user */}
-      {featuringListing && (
+      {featuredEnabled && featuringListing && (
         <FeatureUpgradeDialog
           isOpen={!!featuringListing}
           onClose={() => setFeaturingListing(null)}
@@ -1984,7 +1987,7 @@ export default function ForSalePage() {
 
       {/* Featured info dialog — opened by clicking the ★ Featured badge; owners
           and admins can also remove the featured status from here */}
-      {featuredInfoListing && (
+      {featuredEnabled && featuredInfoListing && (
         <FeaturedInfoDialog
           isOpen={!!featuredInfoListing}
           onClose={() => setFeaturedInfoListing(null)}

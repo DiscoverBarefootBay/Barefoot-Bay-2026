@@ -19,6 +19,7 @@ import {
 import { insertListingSchema, ListingType, type RealEstateListing } from "@shared/schema";
 import { z } from "zod";
 import { Link } from "wouter";
+import { useFlags } from "@/hooks/use-flags";
 
 // Create a specific type for the form values
 type ListingFormValues = z.infer<typeof insertListingSchema> & {
@@ -75,6 +76,8 @@ export function CreateListingForm({
   userIntent,
   onFeatureUpgrade,
 }: Props) {
+  const { isFeaturedListingsEnabled } = useFlags();
+  const featuredListingsEnabled = isFeaturedListingsEnabled();
   const [listingType, setListingType] = useState<ListingType | undefined>(
     defaultValues?.listingType as ListingType | undefined
   );
@@ -1092,7 +1095,8 @@ export function CreateListingForm({
             )}
 
             {/* Upgrade to Featured — shown when editing an active, non-featured listing */}
-            {onFeatureUpgrade &&
+            {featuredListingsEnabled &&
+              onFeatureUpgrade &&
               defaultValues?.status === "ACTIVE" &&
               !defaultValues?.featured && (
               <div className="border border-yellow-200 rounded-lg p-3 bg-yellow-50 flex items-center justify-between gap-3">

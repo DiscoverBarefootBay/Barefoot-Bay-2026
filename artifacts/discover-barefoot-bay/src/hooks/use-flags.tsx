@@ -255,6 +255,19 @@ export function useFlags() {
     return isEnabled;
   };
 
+  /**
+   * Featured-listings kill switch. Unlike role-based flags, this is a GLOBAL
+   * on/off: when the 'featured_listings' flag is inactive, gold outlines,
+   * ★ Featured badges, and upgrade-to-featured CTAs are hidden for EVERYONE,
+   * including admins (no dev admin override). Absent flag or load error
+   * defaults to enabled so a missing seed can't hide a paid feature.
+   */
+  const isFeaturedListingsEnabled = () => {
+    if (isLoading || isError || !flags || !Array.isArray(flags)) return true;
+    const flag = (flags as FeatureFlag[]).find((f) => f.name === 'featured_listings');
+    return flag ? Boolean(flag.isActive) : true;
+  };
+
   // Convenience methods for each feature
   const isCalendarEnabled = () => isFeatureEnabled(FeatureFlagName.CALENDAR);
   const isForumEnabled = () => isFeatureEnabled(FeatureFlagName.FORUM);
@@ -279,5 +292,6 @@ export function useFlags() {
     isCommunityEnabled,
     isAdminEnabled,
     isMessagesEnabled,
+    isFeaturedListingsEnabled,
   };
 }

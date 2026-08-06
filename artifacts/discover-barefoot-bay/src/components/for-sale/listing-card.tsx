@@ -7,6 +7,7 @@ import { Link } from "wouter";
 import { type RealEstateListing } from "@shared/schema";
 import { MediaGallery } from "@/components/shared/media-gallery";
 import { ListingImage } from "@/components/for-sale/listing-image";
+import { useFlags } from "@/hooks/use-flags";
 
 const typeColors = {
   FSBO: "bg-purple-100 text-purple-800",
@@ -53,6 +54,11 @@ export function ListingCard({
   showActionButtons?: boolean,
   isNew?: boolean
 }) {
+  // Featured-listings kill switch: when off, hide the gold outline, the
+  // ★ Featured badge, and the Upgrade to Featured button for everyone.
+  const { isFeaturedListingsEnabled } = useFlags();
+  const featuredEnabled = isFeaturedListingsEnabled();
+
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -331,8 +337,8 @@ export function ListingCard({
   }
 
   return (
-    <Card className={`bg-white relative ${isDraft ? 'border-amber-500 border-[6px] shadow-lg' : ''} ${isNew ? 'border-red-500 border-[3px] shadow-lg ring-2 ring-red-300' : ''} ${listing.featured && !isDraft ? 'border-yellow-400 border-[3px] shadow-lg ring-2 ring-yellow-200' : ''}`}>
-      {listing.featured && !isDraft && (
+    <Card className={`bg-white relative ${isDraft ? 'border-amber-500 border-[6px] shadow-lg' : ''} ${isNew ? 'border-red-500 border-[3px] shadow-lg ring-2 ring-red-300' : ''} ${featuredEnabled && listing.featured && !isDraft ? 'border-yellow-400 border-[3px] shadow-lg ring-2 ring-yellow-200' : ''}`}>
+      {featuredEnabled && listing.featured && !isDraft && (
         onFeaturedClick ? (
           <button
             type="button"
@@ -557,7 +563,8 @@ export function ListingCard({
 
           {/* Upgrade to Featured — visible to the listing owner (and admins,
               who can feature any listing) when active and not yet featured */}
-          {onFeatureUpgrade &&
+          {featuredEnabled &&
+            onFeatureUpgrade &&
             !listing.featured &&
             listing.status === "ACTIVE" &&
             (isAdmin || (currentUserId && listing.createdBy === currentUserId)) && (
