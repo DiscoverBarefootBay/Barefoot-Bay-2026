@@ -1,5 +1,6 @@
 import AdminLayout from "@/components/layouts/admin-layout";
 import { FeatureFlagManager } from "@/components/admin/feature-flag-manager";
+import FeaturedListingsToggle from "@/pages/admin/featured-listings-toggle";
 import { useAuth } from "@/components/providers/auth-provider";
 import { ToggleLeft } from "lucide-react";
 import { useEffect } from "react";
@@ -27,6 +28,10 @@ export default function FeatureManagementPage() {
           <p className="text-muted-foreground">
             Configure feature flags and user permissions to control access to different parts of the platform.
           </p>
+        </div>
+
+        <div className="mb-6">
+          <FeaturedListingsToggle />
         </div>
 
         <div className="mb-10">

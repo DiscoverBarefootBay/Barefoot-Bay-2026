@@ -3,7 +3,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ShoppingBag, Clock } from "lucide-react";
 import WeeklyListingsTab from "./weekly-listings-tab";
 import ForSaleEmailsTab from "./forsale-emails-tab";
-import FeaturedListingsToggle from "./featured-listings-toggle";
 
 export default function OnTheMarketEmailsPage() {
   return (
@@ -15,8 +14,6 @@ export default function OnTheMarketEmailsPage() {
             Configure automated emails for the For Sale / On The Market section — the weekly digest sent to all subscribers and the expiration alerts sent to admins and sellers.
           </p>
         </div>
-
-        <FeaturedListingsToggle />
 
         <Tabs defaultValue="weekly">
           <TabsList>
