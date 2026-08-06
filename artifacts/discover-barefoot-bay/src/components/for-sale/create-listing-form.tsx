@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/select";
 import { insertListingSchema, ListingType, type RealEstateListing } from "@shared/schema";
 import { z } from "zod";
-import { checkLocationServiceStatus } from "@/lib/location-service";
 import { Link } from "wouter";
 
 // Create a specific type for the form values
@@ -115,31 +114,11 @@ export function CreateListingForm({
     prevIsSubmittingRef.current = isSubmitting;
   }, [isSubmitting]);
 
-  // Setup function for address validation
+  // The LocationPickerAlt component handles its own service-status soft warning,
+  // so we no longer check status here to avoid a double (and potentially
+  // blocking) alert.  mapsError is kept for future use (e.g. upload errors).
   useEffect(() => {
-    // We now use server-side address validation via our proxy API
-    // so we don't need direct event handlers for Google Maps
-    
-    // Reset any existing error messages
     setMapsError(null);
-    
-    // Test the connection to our server-side location services
-    const testAddressService = async () => {
-      try {
-        // Use our utility function to check service status
-        const status = await checkLocationServiceStatus();
-        
-        if (!status.available) {
-          setMapsError(`The address lookup service is currently unavailable. ${status.message} You can still create a listing with a manually entered address.`);
-        }
-      } catch (error) {
-        console.warn("Could not verify address service availability:", error);
-        // Don't set error message here as it might be a temporary network issue
-        // The LocationPickerAlt component will handle individual request failures
-      }
-    };
-    
-    testAddressService();
   }, []);
 
   // Default contact info to avoid null/undefined errors

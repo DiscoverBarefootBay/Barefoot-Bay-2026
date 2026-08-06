@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Loader2, X, Search, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { checkLocationServiceStatus, getPlaceSuggestions, geocodeAddress as utilGeocodeAddress } from "@/lib/location-service";
+import type { LocationServiceStatus } from "@/lib/location-service";
 
 type LocationPickerProps = {
   value: string;
@@ -10,12 +11,31 @@ type LocationPickerProps = {
   placeholder?: string;
 };
 
+// Module-level cache so repeated mounts within the same page session don't
+// re-hit the status endpoint.  TTL is 60 seconds.
+let _cachedStatus: LocationServiceStatus | null = null;
+let _cacheTimestamp = 0;
+const STATUS_TTL_MS = 60_000;
+
+async function getCachedLocationServiceStatus(): Promise<LocationServiceStatus> {
+  const now = Date.now();
+  if (_cachedStatus && now - _cacheTimestamp < STATUS_TTL_MS) {
+    return _cachedStatus;
+  }
+  const status = await checkLocationServiceStatus();
+  _cachedStatus = status;
+  _cacheTimestamp = now;
+  return status;
+}
+
 export function LocationPickerAlt({ value = "", onChange, placeholder }: LocationPickerProps) {
   const [inputValue, setInputValue] = useState(value || "");
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [predictionsData, setPredictionsData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // true = soft info note (service may be down but input is still usable)
+  const [isServiceWarning, setIsServiceWarning] = useState(false);
   const [isEditable, setIsEditable] = useState(!value); // Start editable if no initial value
   const inputRef = useRef<HTMLInputElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -27,16 +47,21 @@ export function LocationPickerAlt({ value = "", onChange, placeholder }: Locatio
     }
   }, [value, isEditable]);
   
-  // Check location service status on component mount
+  // Check location service status once on component mount (result is cached).
+  // A negative result shows a soft info note — it does NOT block the input or
+  // prevent autocomplete from being attempted.
   useEffect(() => {
     const checkServiceStatus = async () => {
       try {
-        const status = await checkLocationServiceStatus();
+        const status = await getCachedLocationServiceStatus();
         if (!status.available) {
-          setError(`Address lookup service is currently unavailable: ${status.message}`);
+          // Soft warning only — the input remains editable and suggestions are
+          // still attempted.  The per-suggestion error path handles real failures.
+          setIsServiceWarning(true);
         }
-      } catch (error) {
-        console.error("Error checking location service status:", error);
+      } catch (err) {
+        console.error("Error checking location service status:", err);
+        // Don't surface anything to the user — treat as "assume available".
       }
     };
     
@@ -54,13 +79,6 @@ export function LocationPickerAlt({ value = "", onChange, placeholder }: Locatio
   const geocodeAddress = useCallback(async (searchAddress: string): Promise<string | null> => {
     try {
       console.log("Using server-side geocoding via utility");
-      
-      // Check if location services are available before proceeding
-      const serviceStatus = await checkLocationServiceStatus();
-      if (!serviceStatus.available) {
-        console.warn("Location services unavailable:", serviceStatus.message);
-        return searchAddress; // Return original input if service is down
-      }
       
       // Use our utility function instead of direct fetch
       const data = await utilGeocodeAddress(searchAddress);
@@ -116,20 +134,10 @@ export function LocationPickerAlt({ value = "", onChange, placeholder }: Locatio
       // This ensures the user can continue typing without interruption
       // We'll only show loading for the explicit submit button
       
-      // Clear any previous errors
+      // Clear any previous inline errors (the mount-time soft warning is separate)
       setError(null);
       
       try {
-        // Check if location services are available before proceeding
-        const serviceStatus = await checkLocationServiceStatus();
-        if (!serviceStatus.available) {
-          console.warn("Location services unavailable:", serviceStatus.message);
-          setError(`Address lookup service not available: ${serviceStatus.message}`);
-          setSuggestions([]);
-          setPredictionsData([]);
-          return;
-        }
-        
         // Use our utility function to get place suggestions
         const data = await getPlaceSuggestions(query);
         
@@ -213,7 +221,16 @@ export function LocationPickerAlt({ value = "", onChange, placeholder }: Locatio
 
   return (
     <div className="w-full relative">
-      {/* Show a warning banner if there's an error */}
+      {/* Soft info note when service status check indicates unavailability.
+          Does NOT block typing or autocomplete — just informs the user they
+          can type manually if suggestions don't appear. */}
+      {isServiceWarning && !error && (
+        <div className="p-2 mb-2 text-xs rounded border flex items-center gap-2 bg-muted border-muted-foreground/20 text-muted-foreground">
+          <MapPin className="h-4 w-4 flex-shrink-0" />
+          <p>Address suggestions may be limited. You can still type and submit an address manually.</p>
+        </div>
+      )}
+      {/* Inline error shown only when an actual suggestion fetch fails */}
       {error && (
         <div className="p-2 mb-2 text-xs rounded border flex items-center gap-2 bg-amber-50 border-amber-200 text-amber-700">
           <MapPin className="h-4 w-4 flex-shrink-0 text-amber-500" />

@@ -648,40 +648,47 @@ export async function checkGoogleApiStatus(): Promise<{
     places: { status: 'unknown', message: 'Not tested' }
   };
 
-  // Test Maps API with a simple geocoding request
+  // Test Maps API with a simple geocoding request using proxyGoogleMapsRequest
+  // so the key-resolution chain is identical to all real API calls.
   try {
     const testAddress = '1600 Amphitheatre Parkway, Mountain View, CA';
-    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(testAddress)}&key=${currentConfig.mapsApiKey}`;
+    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(testAddress)}`;
     
-    const response = await fetch(geocodeUrl);
-    const data = await response.json();
-    
-    if (data.status === 'OK') {
-      results.maps = { status: 'working', message: 'Maps API is functional' };
-    } else if (data.status === 'REQUEST_DENIED') {
-      results.maps = { status: 'error', message: 'API key invalid or restricted' };
+    const response = await proxyGoogleMapsRequest(geocodeUrl);
+    if (!response.ok) {
+      results.maps = { status: 'error', message: `HTTP ${response.status}: ${response.statusText}` };
     } else {
-      results.maps = { status: 'error', message: `API returned: ${data.status}` };
+      const data = await response.json();
+      if (data.status === 'OK') {
+        results.maps = { status: 'working', message: 'Maps API is functional' };
+      } else if (data.status === 'REQUEST_DENIED') {
+        results.maps = { status: 'error', message: 'API key invalid or restricted' };
+      } else {
+        results.maps = { status: 'error', message: `API returned: ${data.status}` };
+      }
     }
   } catch (error) {
     logger.error('Maps API test failed:', error);
     results.maps = { status: 'error', message: 'Network error or API unavailable' };
   }
 
-  // Test Places API with a simple autocomplete request
+  // Test Places API with a simple autocomplete request using proxyGoogleMapsRequest
   try {
     const testInput = 'restaurant';
-    const placesUrl = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(testInput)}&key=${currentConfig.placesApiKey}`;
+    const placesUrl = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(testInput)}`;
     
-    const response = await fetch(placesUrl);
-    const data = await response.json();
-    
-    if (data.status === 'OK' || data.status === 'ZERO_RESULTS') {
-      results.places = { status: 'working', message: 'Places API is functional' };
-    } else if (data.status === 'REQUEST_DENIED') {
-      results.places = { status: 'error', message: 'API key invalid or restricted' };
+    const response = await proxyGoogleMapsRequest(placesUrl);
+    if (!response.ok) {
+      results.places = { status: 'error', message: `HTTP ${response.status}: ${response.statusText}` };
     } else {
-      results.places = { status: 'error', message: `API returned: ${data.status}` };
+      const data = await response.json();
+      if (data.status === 'OK' || data.status === 'ZERO_RESULTS') {
+        results.places = { status: 'working', message: 'Places API is functional' };
+      } else if (data.status === 'REQUEST_DENIED') {
+        results.places = { status: 'error', message: 'API key invalid or restricted' };
+      } else {
+        results.places = { status: 'error', message: `API returned: ${data.status}` };
+      }
     }
   } catch (error) {
     logger.error('Places API test failed:', error);
