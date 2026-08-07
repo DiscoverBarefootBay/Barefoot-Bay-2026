@@ -110,7 +110,7 @@ export function ListingCard({
     // Override the isDraft variable to ensure styling is applied
     const isDraftOverride = true;
     return (
-      <Card className="overflow-hidden border-amber-500 border-[6px] shadow-lg bg-white">
+      <Card className="overflow-hidden border-amber-500 border-[6px] shadow-lg bg-white group motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-out motion-safe:hover:-translate-y-1 hover:shadow-2xl">
         {/* Forced draft banner */}
         <div className="bg-amber-500 text-white px-3 py-3 font-bold flex items-center justify-between text-base sticky top-0">
           <div className="flex items-center">
@@ -217,7 +217,7 @@ export function ListingCard({
               <ListingImage 
                 src={listing.photos[0]}
                 alt={listing.title || 'Property listing image'} 
-                className="w-full h-full object-cover" 
+                className="w-full h-full object-cover motion-safe:group-hover:scale-105 motion-safe:transition-transform motion-safe:duration-200 motion-safe:ease-out" 
               />
             </div>
           )}
@@ -338,7 +338,7 @@ export function ListingCard({
   }
 
   return (
-    <Card className={`bg-white relative ${isDraft ? 'border-amber-500 border-[6px] shadow-lg' : ''} ${isNew ? 'border-red-500 border-[3px] shadow-lg ring-2 ring-red-300' : ''} ${featuredEnabled && listing.featured && !isDraft ? 'border-yellow-400 border-[3px] shadow-lg ring-2 ring-yellow-200' : ''}`}>
+    <Card className={`bg-white relative group motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-out motion-safe:hover:-translate-y-1 hover:shadow-xl ${isDraft ? 'border-amber-500 border-[6px] shadow-lg' : ''} ${isNew ? 'border-red-500 border-[3px] shadow-lg ring-2 ring-red-300 hover:ring-red-400 hover:shadow-red-100' : ''} ${featuredEnabled && listing.featured && !isDraft ? 'border-yellow-400 border-[3px] shadow-lg ring-2 ring-yellow-200 hover:ring-yellow-400 hover:shadow-yellow-100' : ''}`}>
       {featuredEnabled && listing.featured && !isDraft && (
         onFeaturedClick ? (
           <button
@@ -489,7 +489,7 @@ export function ListingCard({
             <ListingImage 
               src={listing.photos[0]}
               alt={listing.title || 'Property listing image'} 
-              className="w-full h-full object-cover" 
+              className="w-full h-full object-cover motion-safe:group-hover:scale-105 motion-safe:transition-transform motion-safe:duration-200 motion-safe:ease-out" 
             />
           </div>
         )}
