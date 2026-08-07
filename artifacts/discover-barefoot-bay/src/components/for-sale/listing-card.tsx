@@ -124,28 +124,29 @@ export function ListingCard({
         
         {/* Rest of card content with standard rendering */}
         <CardHeader className="pb-3">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex gap-2 flex-wrap min-w-0">
-              <Badge variant="secondary" className={`h-7 whitespace-nowrap flex-shrink-0 ${typeColors[listingType as keyof typeof typeColors] || "bg-gray-100 text-gray-800"}`}>
-                {typeLabels[listingType as keyof typeof typeLabels] || "Listing"}
+          {/* Single-line header: compact pills that can truncate + a price that never shrinks, so everything shares one row without overlapping */}
+          <div className="flex items-center gap-1.5 min-w-0">
+            <div className="flex items-center gap-1.5 min-w-0 flex-1">
+              <Badge variant="secondary" className={`h-6 px-2 text-[11px] whitespace-nowrap min-w-0 ${typeColors[listingType as keyof typeof typeColors] || "bg-gray-100 text-gray-800"}`}>
+                <span className="truncate">{typeLabels[listingType as keyof typeof typeLabels] || "Listing"}</span>
               </Badge>
               
               {/* Status Badge - Always show DRAFT for this specific listing */}
-              <Badge variant="default" className="h-7 whitespace-nowrap flex-shrink-0 bg-amber-500 text-white gap-1 font-medium">
+              <Badge variant="default" className="h-6 px-2 text-[11px] whitespace-nowrap flex-shrink-0 bg-amber-500 text-white gap-1 font-medium">
                 <span className="inline-block w-2 h-2 rounded-full bg-white flex-shrink-0"></span>
                 DRAFT
               </Badge>
               
               {/* Admin indicator if applicable */}
               {isAdmin && listing.createdBy && currentUserId && listing.createdBy !== currentUserId && (
-                <Badge variant="outline" className="h-7 whitespace-nowrap flex-shrink-0 bg-blue-100 text-blue-800 border-blue-200 ml-1">
-                  Other User's Draft
+                <Badge variant="outline" className="h-6 px-2 text-[11px] whitespace-nowrap min-w-0 bg-blue-100 text-blue-800 border-blue-200">
+                  <span className="truncate">Other User's Draft</span>
                 </Badge>
               )}
             </div>
             
             {listing.price && (
-              <span className="text-lg font-bold whitespace-nowrap flex-shrink-0">
+              <span className="text-base font-bold whitespace-nowrap flex-shrink-0 ml-auto">
                 {(() => {
                   try {
                     // Make sure the price is a valid number
@@ -376,18 +377,19 @@ export function ListingCard({
         </div>
       )}
       <CardHeader className="pb-3">
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex gap-2 flex-wrap min-w-0">
+        {/* Single-line header: compact pills that can truncate + a price that never shrinks, so everything shares one row without overlapping */}
+        <div className="flex items-center gap-1.5 min-w-0">
+          <div className="flex items-center gap-1.5 min-w-0 flex-1">
             {/* Type + status badges are pinned together so they never split across lines */}
-            <div className="flex gap-2 items-center flex-nowrap">
-              <Badge variant="secondary" className={`h-7 whitespace-nowrap flex-shrink-0 ${typeColors[listingType as keyof typeof typeColors] || "bg-gray-100 text-gray-800"}`}>
-                {typeLabels[listingType as keyof typeof typeLabels] || "Listing"}
+            <div className="flex gap-1.5 items-center flex-nowrap min-w-0">
+              <Badge variant="secondary" className={`h-6 px-2 text-[11px] whitespace-nowrap min-w-0 ${typeColors[listingType as keyof typeof typeColors] || "bg-gray-100 text-gray-800"}`}>
+                <span className="truncate">{typeLabels[listingType as keyof typeof typeLabels] || "Listing"}</span>
               </Badge>
 
               {/* Status Badge - Enhanced Version (uses effective status so a
                   listing past its expiration date never shows a stale "ACTIVE") */}
               {effectiveStatus && (
-                <Badge variant={isDraft ? "default" : "outline"} className={`h-7 whitespace-nowrap flex-shrink-0 gap-1 font-medium ${
+                <Badge variant={isDraft ? "default" : "outline"} className={`h-6 px-2 text-[11px] whitespace-nowrap flex-shrink-0 gap-1 font-medium ${
                   effectiveStatus === "DRAFT" ? "bg-amber-500 text-white" : 
                   effectiveStatus === "ACTIVE" ? "bg-green-100 text-green-800 border-green-200" : 
                   effectiveStatus === "EXPIRED" ? "bg-red-500 text-white border-red-500" : 
@@ -410,14 +412,14 @@ export function ListingCard({
             {/* Admin indicator for other users' draft listings */}
             {isAdmin && listing.status === "DRAFT" && 
              listing.createdBy && currentUserId && listing.createdBy !== currentUserId && (
-              <Badge variant="outline" className="h-7 whitespace-nowrap flex-shrink-0 bg-blue-100 text-blue-800 border-blue-200 ml-1">
-                Other User's Draft
+              <Badge variant="outline" className="h-6 px-2 text-[11px] whitespace-nowrap min-w-0 bg-blue-100 text-blue-800 border-blue-200">
+                <span className="truncate">Other User's Draft</span>
               </Badge>
             )}
           </div>
           
           {listing.price && (
-            <span className="text-lg font-bold whitespace-nowrap flex-shrink-0">
+            <span className="text-base font-bold whitespace-nowrap flex-shrink-0 ml-auto">
               {(() => {
                 try {
                   // Make sure the price is a valid number
