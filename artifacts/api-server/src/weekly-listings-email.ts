@@ -533,9 +533,7 @@ export function renderWeeklyListingsEmail(
   const intro =
     listings.length === 0
       ? `There are no active listings On The Market right now (${range.label}) \u2014 check back soon, or be the first to post one!`
-      : newListings.length > 0
-        ? `Here's what's On The Market in Barefoot Bay this week (${range.label}). Whether you're searching for a new home, a rental, a yard sale, an open house, or unique items from your neighbors, you'll find them here. Take a look at what's new this week.`
-        : `No new listings were posted this week (${range.label}) \u2014 but these homes and items are still On The Market. Take a look!`;
+      : `Here's what's On The Market in Barefoot Bay this week (${range.label}). Whether you're searching for a new home, a rental, a yard sale, an open house, or unique items from your neighbors, you'll find them here. Take a look at what's new this week.`;
 
   const cardHtml = (l: WeeklyEmailListing): string => {
     const url = `${forSaleUrl}/${l.id}`;

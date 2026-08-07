@@ -439,7 +439,7 @@ describe('renderWeeklyListingsEmail', () => {
     assert.ok(r.text.includes('- Older cart'));
   });
 
-  it('keeps the no-new-listings intro when nothing new was posted', () => {
+  it('uses the standard intro even when nothing new was posted this week', () => {
     const onlyOld = selectListingsForWeek(
       [listing({ id: 2, createdAt: new Date('2026-05-05T15:00:00Z') })],
       RANGE,
@@ -447,7 +447,10 @@ describe('renderWeeklyListingsEmail', () => {
     );
     const r = renderWeeklyListingsEmail(onlyOld, RANGE, 'https://barefootbay.com');
     assert.ok(!r.html.includes('>NEW</span>'));
-    assert.ok(r.html.includes('No new listings were posted this week'));
+    assert.ok(!r.html.includes('No new listings were posted this week'));
+    const intro = `Here&#39;s what&#39;s On The Market in Barefoot Bay this week (${RANGE.label}). Whether you&#39;re searching for a new home, a rental, a yard sale, an open house, or unique items from your neighbors, you&#39;ll find them here. Take a look at what&#39;s new this week.`;
+    assert.ok(r.html.includes(intro));
+    assert.ok(r.text.includes(`Here's what's On The Market in Barefoot Bay this week (${RANGE.label}).`));
     assert.ok(r.html.includes('>Classifieds &amp; More</h2>'));
   });
 
