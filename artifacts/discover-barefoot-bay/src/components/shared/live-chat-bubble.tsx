@@ -72,7 +72,86 @@ interface LiveChatPreviewContentProps {
   isError: boolean;
 }
 
+// Injected once — keyframes + themed scrollbar pseudo-selectors (can't be inline styles)
+const PREVIEW_STYLE_ID = 'live-chat-preview-styles';
+function ensurePreviewStyles() {
+  if (typeof document === 'undefined') return;
+  if (document.getElementById(PREVIEW_STYLE_ID)) return;
+  const el = document.createElement('style');
+  el.id = PREVIEW_STYLE_ID;
+  el.textContent = `
+    @keyframes lcb-blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    @keyframes lcb-scanline {
+      0%   { opacity: 0.15; }
+      50%  { opacity: 0.35; }
+      100% { opacity: 0.15; }
+    }
+    .lcb-preview-body::-webkit-scrollbar { width: 4px; }
+    .lcb-preview-body::-webkit-scrollbar-track { background: #001400; }
+    .lcb-preview-body::-webkit-scrollbar-thumb { background: #00cc00; border-radius: 2px; }
+    .lcb-preview-body::-webkit-scrollbar-thumb:hover { background: #00ff00; }
+  `;
+  document.head.appendChild(el);
+}
+
+function TerminalLoadingState() {
+  ensurePreviewStyles();
+  return (
+    <div style={{ paddingTop: '4px' }}>
+      {/* "ESTABLISHING UPLINK..." with blinking block cursor */}
+      <div style={{ color: '#00cc00', fontSize: '0.75rem', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '2px' }}>
+        <span>{'>>> ESTABLISHING UPLINK...'}</span>
+        <span
+          style={{
+            display: 'inline-block',
+            width: '8px',
+            height: '0.85em',
+            background: '#00ff00',
+            verticalAlign: 'text-bottom',
+            animation: 'lcb-blink 0.8s step-start infinite',
+          }}
+        />
+      </div>
+      {/* Flickering skeleton rows to simulate incoming data */}
+      {[0.9, 0.7, 0.55].map((opacity, i) => (
+        <div
+          key={i}
+          style={{
+            borderBottom: '1px dashed #003300',
+            padding: '4px 0',
+            marginBottom: '2px',
+            animation: `lcb-scanline ${1.1 + i * 0.3}s ease-in-out infinite`,
+            animationDelay: `${i * 0.18}s`,
+          }}
+        >
+          {/* username placeholder */}
+          <div style={{
+            height: '7px',
+            width: `${38 + i * 12}%`,
+            background: '#004400',
+            borderRadius: '2px',
+            marginBottom: '3px',
+            opacity,
+          }} />
+          {/* message placeholder */}
+          <div style={{
+            height: '6px',
+            width: `${65 + i * 8}%`,
+            background: '#003300',
+            borderRadius: '2px',
+            opacity: opacity * 0.7,
+          }} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function LiveChatPreviewContent({ comments, isLoading, isError }: LiveChatPreviewContentProps) {
+  ensurePreviewStyles();
   return (
     <div
       style={{
@@ -100,10 +179,21 @@ function LiveChatPreviewContent({ comments, isLoading, isError }: LiveChatPrevie
         <span style={{ color: '#00aa00', fontSize: '0.65rem' }}>PREVIEW</span>
       </div>
 
-      {/* Body */}
-      <div style={{ padding: '6px 10px', minHeight: '60px', maxHeight: '180px', overflowY: 'auto' }}>
+      {/* Body — themed scrollbar via .lcb-preview-body class */}
+      <div
+        className="lcb-preview-body"
+        style={{
+          padding: '6px 10px',
+          minHeight: '60px',
+          maxHeight: '180px',
+          overflowY: 'auto',
+          // Firefox scrollbar
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#00cc00 #001400',
+        } as React.CSSProperties}
+      >
         {isLoading ? (
-          <p style={{ color: '#00aa00', fontSize: '0.75rem', margin: 0 }}>{'>>> CONNECTING... <<<'}</p>
+          <TerminalLoadingState />
         ) : isError ? (
           <p style={{ color: '#00aa00', fontSize: '0.75rem', margin: 0 }}>{'>>> UNAVAILABLE <<<'}</p>
         ) : comments.length === 0 ? (
@@ -202,13 +292,12 @@ export function LiveChatBubble() {
   const previewComments = useMemo<PreviewComment[]>(() => {
     // Guard: global placeholderData fallback can inject [] or null for unknown-shaped data
     if (!Array.isArray(rawPreviewData)) return [];
-    // Server returns DESC (newest first); sort a copy ASC so slice(-5) reliably
-    // gives the 5 most-recent messages already in oldest-at-top display order.
+    // Sort DESC (newest first), take top 5, so newest renders at top of preview.
     return (rawPreviewData as PreviewComment[])
       .filter((c) => c.postId === LIVE_CHAT_POST_ID) // defensive: prevent cross-post cache pollution
       .slice()
-      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
-      .slice(-5); // 5 most recent, ascending (newest at bottom)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, 5); // 5 most recent, descending (newest at top)
   }, [rawPreviewData]);
 
   // ---------------------------------------------------------------------------
