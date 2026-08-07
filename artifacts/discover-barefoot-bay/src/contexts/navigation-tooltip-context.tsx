@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useLocation } from 'wouter';
 
 type TooltipType = 'weather' | 'rocket' | 'chat' | null;
 
@@ -12,6 +13,13 @@ const NavigationTooltipContext = createContext<NavigationTooltipContextType | un
 
 export function NavigationTooltipProvider({ children }: { children: ReactNode }) {
   const [activeTooltip, setActiveTooltip] = useState<TooltipType>(null);
+  const [location] = useLocation();
+
+  // Close any open tooltip whenever the route changes so popups never bleed
+  // across pages (the nav bar persists across routes; context state does not reset).
+  useEffect(() => {
+    setActiveTooltip(null);
+  }, [location]);
 
   const toggleTooltip = (tooltip: TooltipType) => {
     setActiveTooltip(current => current === tooltip ? null : tooltip);

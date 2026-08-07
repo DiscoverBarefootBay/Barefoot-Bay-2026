@@ -1,118 +1,304 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo, useRef } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { MessageSquare, X } from "lucide-react";
-import { Link } from "wouter";
+import { X } from "lucide-react";
+import { useLocation } from "wouter";
 import { usePermissions } from "@/hooks/use-permissions";
 import { useNavigationTooltip } from '@/contexts/navigation-tooltip-context';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const LIVE_CHAT_POST_ID = 267; // Specific forum post ID for live chat
 
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function stripHtml(html: string): string {
+  return html
+    .replace(/<[^>]*>/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .trim();
+}
+
+function formatChatTime(createdAt: string): string {
+  try {
+    let dateString = createdAt;
+    // Ensure UTC parsing when no timezone info is present
+    if (!dateString.includes('Z') && !dateString.includes('+') && !dateString.includes('-', 10)) {
+      dateString = dateString.replace(' ', 'T') + 'Z';
+    }
+    const messageDate = new Date(dateString);
+    if (isNaN(messageDate.getTime())) return 'ERR';
+
+    const diffMs = Date.now() - messageDate.getTime();
+    const diffSeconds = Math.floor(diffMs / 1000);
+    const diffMinutes = Math.floor(diffSeconds / 60);
+    const diffHours = Math.floor(diffMinutes / 60);
+
+    if (diffSeconds < 10 && diffSeconds >= 0) return 'NOW';
+    if (diffMinutes < 1 && diffSeconds >= 0) return `${diffSeconds}S`;
+    if (diffMinutes < 60 && diffMinutes >= 0) return `${diffMinutes}M`;
+    if (diffHours < 24 && diffHours >= 0) {
+      return messageDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+    }
+    const mm = String(messageDate.getMonth() + 1).padStart(2, '0');
+    const dd = String(messageDate.getDate()).padStart(2, '0');
+    const hhmm = messageDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+    return `${mm}/${dd} ${hhmm}`;
+  } catch {
+    return 'ERR';
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Preview popup content (terminal-styled)
+// ---------------------------------------------------------------------------
+
+interface PreviewComment {
+  id: number;
+  postId: number;
+  content: string;
+  createdAt: string;
+  author?: { id: number; username: string };
+}
+
+interface LiveChatPreviewContentProps {
+  comments: PreviewComment[];
+  isLoading: boolean;
+  isError: boolean;
+}
+
+function LiveChatPreviewContent({ comments, isLoading, isError }: LiveChatPreviewContentProps) {
+  return (
+    <div
+      style={{
+        background: '#000',
+        border: '2px solid #009900',
+        borderRadius: '4px',
+        fontFamily: 'monospace',
+        width: '280px',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Header */}
+      <div
+        style={{
+          borderBottom: '1px dashed #009900',
+          padding: '6px 10px 4px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <span style={{ color: '#00ff00', fontWeight: 'bold', fontSize: '0.7rem' }}>
+          {'>>> LIVE CHAT <<<'}
+        </span>
+        <span style={{ color: '#00aa00', fontSize: '0.65rem' }}>PREVIEW</span>
+      </div>
+
+      {/* Body */}
+      <div style={{ padding: '6px 10px', minHeight: '60px', maxHeight: '180px', overflowY: 'auto' }}>
+        {isLoading ? (
+          <p style={{ color: '#00aa00', fontSize: '0.75rem', margin: 0 }}>{'>>> CONNECTING... <<<'}</p>
+        ) : isError ? (
+          <p style={{ color: '#00aa00', fontSize: '0.75rem', margin: 0 }}>{'>>> UNAVAILABLE <<<'}</p>
+        ) : comments.length === 0 ? (
+          <p style={{ color: '#00aa00', fontSize: '0.75rem', margin: 0 }}>{'>>> NO MESSAGES YET <<<'}</p>
+        ) : (
+          comments.map((comment) => {
+            const rawText = comment.content.includes('<') ? stripHtml(comment.content) : comment.content;
+            const truncated = rawText.length > 60 ? rawText.slice(0, 60) + '…' : rawText;
+            return (
+              <div
+                key={comment.id}
+                style={{
+                  borderBottom: '1px dashed #004400',
+                  padding: '3px 0',
+                  marginBottom: '2px',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                  <span style={{ color: '#00ff00', fontWeight: 'bold', fontSize: '0.72rem' }}>
+                    {comment.author?.username ?? 'Anonymous'}
+                  </span>
+                  <span style={{ color: '#00aa00', fontSize: '0.65rem', marginLeft: '6px', flexShrink: 0 }}>
+                    {formatChatTime(comment.createdAt)}
+                  </span>
+                </div>
+                <div style={{ color: '#00ff00', fontSize: '0.72rem', marginTop: '1px', lineHeight: 1.3 }}>
+                  {truncated}
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      {/* Footer */}
+      <div
+        style={{
+          borderTop: '1px dashed #009900',
+          padding: '4px 10px',
+          color: '#00aa00',
+          fontSize: '0.65rem',
+        }}
+      >
+        ▶ Click to open live chat
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Main component
+// ---------------------------------------------------------------------------
+
 export function LiveChatBubble() {
   const { user } = useAuth();
   const { canSeeWeatherRocketIcons } = usePermissions();
   const { activeTooltip, toggleTooltip } = useNavigationTooltip();
+  const [, navigate] = useLocation();
   const [isGlitching, setIsGlitching] = useState(false);
   const [showMarkReadX, setShowMarkReadX] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const queryClient = useQueryClient();
-  
-  // Fetch unread comments count for the specific post
-  const { data: unreadData } = useQuery({
+
+  // Show as faded with tooltip when user doesn't have permission or is not logged in
+  const isDisabled = !user || !canSeeWeatherRocketIcons;
+
+  // Whether the live-chat preview tooltip is currently open (registered users only)
+  const isPreviewOpen = !isDisabled && activeTooltip === 'chat';
+
+  // ---------------------------------------------------------------------------
+  // Unread count query (existing — unchanged logic, types tightened for RQ v5)
+  // ---------------------------------------------------------------------------
+  const { data: unreadData } = useQuery<{ unreadCount: number }>({
     queryKey: [`/api/forum/posts/${LIVE_CHAT_POST_ID}/unread-comments`],
     enabled: !!user,
-    refetchInterval: 5000, // Refresh every 5 seconds
-    staleTime: 0, // Always fetch fresh data
+    refetchInterval: 5000,
+    staleTime: 0,
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     retry: 2,
-    onError: (error: any) => {
-      console.error('Error fetching unread comments count:', error);
-    }
+    // Note: onError was removed from useQuery options in TanStack Query v5
   });
 
   const unreadCount = unreadData?.unreadCount || 0;
 
-  // Mutation to mark all comments as read for this specific post
+  // ---------------------------------------------------------------------------
+  // Preview comments query — enabled only while popup is open
+  // ---------------------------------------------------------------------------
+  const { data: rawPreviewData, isLoading: isPreviewLoading, isError: isPreviewError } = useQuery({
+    queryKey: [`/api/forum/posts/${LIVE_CHAT_POST_ID}/comments`],
+    enabled: isPreviewOpen,
+    staleTime: 0,
+    refetchInterval: isPreviewOpen ? 5000 : false,
+  });
+
+  const previewComments = useMemo<PreviewComment[]>(() => {
+    // Guard: global placeholderData fallback can inject [] or null for unknown-shaped data
+    if (!Array.isArray(rawPreviewData)) return [];
+    // Server returns DESC (newest first); sort a copy ASC so slice(-5) reliably
+    // gives the 5 most-recent messages already in oldest-at-top display order.
+    return (rawPreviewData as PreviewComment[])
+      .filter((c) => c.postId === LIVE_CHAT_POST_ID) // defensive: prevent cross-post cache pollution
+      .slice()
+      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+      .slice(-5); // 5 most recent, ascending (newest at bottom)
+  }, [rawPreviewData]);
+
+  // ---------------------------------------------------------------------------
+  // Mark-all-read mutation (existing — unchanged)
+  // ---------------------------------------------------------------------------
   const markAllReadMutation = useMutation({
     mutationFn: async () => {
       const response = await fetch(`/api/forum/posts/${LIVE_CHAT_POST_ID}/mark-all-read`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
       });
-      
       if (!response.ok) {
         throw new Error('Failed to mark live chat comments as read');
       }
-      
       return response.json();
     },
     onMutate: async () => {
-      // Cancel any outgoing refetches so they don't overwrite our optimistic update
       await queryClient.cancelQueries({ queryKey: [`/api/forum/posts/${LIVE_CHAT_POST_ID}/unread-comments`] });
-      
-      // Snapshot the previous value for rollback
       const previousData = queryClient.getQueryData([`/api/forum/posts/${LIVE_CHAT_POST_ID}/unread-comments`]);
-      
-      // Optimistically update the cache
       queryClient.setQueryData([`/api/forum/posts/${LIVE_CHAT_POST_ID}/unread-comments`], { unreadCount: 0 });
-      
-      // Reset the X mode state immediately
       setShowMarkReadX(false);
-      
       return { previousData };
     },
-    onSuccess: (data) => {
-      console.log('Successfully marked all live chat comments as read:', data);
-      // Invalidate queries to refresh with latest server data
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`/api/forum/posts/${LIVE_CHAT_POST_ID}/unread-comments`] });
     },
-    onError: (error, variables, context) => {
-      console.error('Error marking all live chat comments as read:', error);
-      // Rollback optimistic update
+    onError: (_error: any, _variables: any, context: any) => {
+      console.error('Error marking all live chat comments as read:', _error);
       if (context?.previousData) {
         queryClient.setQueryData([`/api/forum/posts/${LIVE_CHAT_POST_ID}/unread-comments`], context.previousData);
       }
-      // Reset the X mode state on error too
       setShowMarkReadX(false);
     }
   });
 
-  // Handle click to trigger glitch effect or show tooltip for disabled state
-  const handleClick = () => {
-    if (isDisabled) {
-      toggleTooltip('chat');
+  // ---------------------------------------------------------------------------
+  // Event handlers — disabled branch
+  // ---------------------------------------------------------------------------
+  const handleDisabledClick = () => {
+    toggleTooltip('chat');
+  };
+
+  // ---------------------------------------------------------------------------
+  // Event handlers — registered branch
+  // ---------------------------------------------------------------------------
+
+  const triggerGlitch = () => {
+    setIsGlitching(true);
+    setTimeout(() => setIsGlitching(false), 300);
+  };
+
+  // Desktop click: close tooltip first, then glitch + navigate
+  const handleChatClick = () => {
+    toggleTooltip(null);
+    triggerGlitch();
+    navigate(`/forum/post/${LIVE_CHAT_POST_ID}`);
+  };
+
+  // Mobile: tap 1 → open preview; tap 2 → close tooltip + navigate
+  const handleChatTouchEnd = (e: React.TouchEvent) => {
+    e.preventDefault(); // prevent synthesised click from also firing
+    if (activeTooltip === 'chat') {
+      // Already open — close popup then navigate
+      toggleTooltip(null);
+      triggerGlitch();
+      navigate(`/forum/post/${LIVE_CHAT_POST_ID}`);
     } else {
-      setIsGlitching(true);
-      // Reset the glitch after animation completes
-      setTimeout(() => setIsGlitching(false), 300); // Adjust timing to match animation duration
+      toggleTooltip('chat');
     }
   };
 
-  // Handle X button click
+  // ---------------------------------------------------------------------------
+  // Badge hover handlers (existing — unchanged)
+  // ---------------------------------------------------------------------------
   const handleMarkAllReadClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    markAllReadMutation.mutate();
+    markAllReadMutation.mutate(undefined);
   };
 
-  // Handle mobile badge click (for mobile direct click to mark all read)
   const handleBadgeClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
-    // On mobile, clicking the badge directly marks all as read
     const isMobile = window.innerWidth <= 768;
     if (isMobile) {
-      markAllReadMutation.mutate();
+      markAllReadMutation.mutate(undefined);
     }
   };
 
-  // Handle hover for desktop
   const handleMouseEnter = () => {
     const isMobile = window.innerWidth <= 768;
     if (!isMobile && unreadCount > 0) {
@@ -129,47 +315,44 @@ export function LiveChatBubble() {
     }
   };
 
-  // Show as faded with tooltip when user doesn't have permission or is not logged in
-  const isDisabled = !user || !canSeeWeatherRocketIcons;
-
+  // ---------------------------------------------------------------------------
+  // Shared visual content (badge lives here — unchanged from original)
+  // ---------------------------------------------------------------------------
   const chatContent = (
     <div className="relative flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 hover:bg-gray-100/20 rounded-full transition-colors">
       {/* Custom chat icon with animated typing dots */}
       <div className="relative w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8">
         {/* Chat bubble outline with glitch effect on click */}
-        <svg 
+        <svg
           className={`w-full h-full fill-transparent ${isGlitching ? 'animate-chat-glitch' : ''}`}
           style={{ stroke: '#00cc00', strokeWidth: '1.5' }}
-          viewBox="0 0 24 24" 
+          viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
         </svg>
-        
+
         {/* Animated typing dots - positioned slightly above center */}
-        <div className="absolute flex items-center justify-center space-x-0.5" 
-             style={{ 
-               top: '43%',
-               left: '50%', 
-               transform: 'translate(-50%, -50%)', 
-               zIndex: 10 
-             }}>
+        <div
+          className="absolute flex items-center justify-center space-x-0.5"
+          style={{ top: '43%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 10 }}
+        >
           <div className="w-0.5 h-0.5 rounded-full animate-typing-pulse-1" style={{ backgroundColor: '#00cc00' }}></div>
           <div className="w-0.5 h-0.5 rounded-full animate-typing-pulse-2" style={{ backgroundColor: '#00cc00' }}></div>
           <div className="w-0.5 h-0.5 rounded-full animate-typing-pulse-3" style={{ backgroundColor: '#00cc00' }}></div>
         </div>
       </div>
-      
-      {/* Badge indicator for unread comments - positioned relative to the chat container */}
+
+      {/* Badge indicator for unread comments — unchanged */}
       {unreadCount > 0 && !isDisabled && (
-        <div 
+        <div
           className="absolute -top-1 -right-1 z-20"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onClick={handleBadgeClick}
         >
           {showMarkReadX ? (
-            <button 
+            <button
               onClick={handleMarkAllReadClick}
               className="bg-red-500 hover:bg-red-600 text-white rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1 transition-colors"
               aria-label="Mark all live chat comments as read"
@@ -186,48 +369,80 @@ export function LiveChatBubble() {
     </div>
   );
 
-  return isDisabled ? (
+  // ---------------------------------------------------------------------------
+  // Render
+  // ---------------------------------------------------------------------------
+
+  // Unregistered / no-permission branch — unchanged
+  if (isDisabled) {
+    return (
+      <TooltipProvider>
+        <Tooltip
+          open={activeTooltip === 'chat'}
+          onOpenChange={(open) => open ? toggleTooltip('chat') : toggleTooltip(null)}
+          delayDuration={0}
+        >
+          <TooltipTrigger asChild>
+            <button
+              className="opacity-40 cursor-not-allowed touch-manipulation"
+              onClick={handleDisabledClick}
+              onTouchEnd={handleDisabledClick}
+              disabled
+              aria-label="Live Chat - Registration Required"
+            >
+              {chatContent}
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <div className="p-3 text-center">
+              <p className="font-bold text-lg mb-2">💬 Live Chat</p>
+              <p className="text-red-500 font-semibold mb-2">For Registered Users Only</p>
+              <p className="text-sm text-gray-600 mb-2">
+                Join community discussions in real-time
+              </p>
+              <a
+                href="/auth?tab=register"
+                className="text-xs text-blue-600 font-medium hover:underline cursor-pointer"
+              >
+                Sign up today to unlock this feature!
+              </a>
+            </div>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
+
+  // Registered branch — hover preview popup
+  return (
     <TooltipProvider>
-      <Tooltip open={activeTooltip === 'chat'} onOpenChange={(open) => open ? toggleTooltip('chat') : toggleTooltip(null)} delayDuration={0}>
+      <Tooltip
+        open={activeTooltip === 'chat'}
+        onOpenChange={(open) => open ? toggleTooltip('chat') : toggleTooltip(null)}
+        delayDuration={0}
+      >
         <TooltipTrigger asChild>
           <button
-            className={`touch-manipulation ${
-              isDisabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'
-            }`}
-            onClick={handleClick}
-            onTouchEnd={handleClick}
-            disabled={isDisabled}
-            aria-label="Live Chat - Registration Required"
+            className="cursor-pointer touch-manipulation"
+            onClick={handleChatClick}
+            onTouchEnd={handleChatTouchEnd}
+            aria-label="Open Live Chat"
           >
             {chatContent}
           </button>
         </TooltipTrigger>
-        <TooltipContent>
-          <div className="p-3 text-center">
-            <p className="font-bold text-lg mb-2">💬 Live Chat</p>
-            <p className="text-red-500 font-semibold mb-2">For Registered Users Only</p>
-            <p className="text-sm text-gray-600 mb-2">
-              Join community discussions in real-time
-            </p>
-            <a 
-              href="/auth?tab=register" 
-              className="text-xs text-blue-600 font-medium hover:underline cursor-pointer"
-            >
-              Sign up today to unlock this feature!
-            </a>
-          </div>
+        <TooltipContent
+          side="bottom"
+          sideOffset={8}
+          className="p-0 border-0 bg-transparent shadow-none"
+        >
+          <LiveChatPreviewContent
+            comments={previewComments}
+            isLoading={isPreviewLoading}
+            isError={isPreviewError}
+          />
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  ) : (
-    <Link href={`/forum/post/${LIVE_CHAT_POST_ID}`}>
-      <button
-        className="cursor-pointer"
-        onClick={handleClick}
-        aria-label="Open Live Chat"
-      >
-        {chatContent}
-      </button>
-    </Link>
   );
 }
