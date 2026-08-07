@@ -2885,11 +2885,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Update user approval status (admin only)
 
 
-
-
-
-
-
   // Delete user endpoint (admin and self-deletion)
   app.delete("/api/users/:id", async (req, res) => {
     console.log("🚨 USER DELETE ENDPOINT CALLED 🚨", {
@@ -13571,9 +13566,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // ==========================================================================
+  // --------------------------------------------------------------------------
   // Weekly "Currently, On The Market" promotional email — admin controls
-  // ==========================================================================
+  // --------------------------------------------------------------------------
 
   // Load config + send history + a preview of the current campaign week.
   app.get("/api/admin/email-activity/weekly-listings", requireAuth, requireAdmin, async (req, res) => {
