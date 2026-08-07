@@ -41,7 +41,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { usePermissions } from "@/hooks/use-permissions";
 import { Textarea } from "@/components/ui/textarea";
-import { ForumLoading } from "@/components/ui/forum-loading";
+import { ForumLoadingAnimation } from "@/components/forum/loading-animation";
 import { apiRequest } from "@/lib/queryClient";
 import { queryClient } from "@/lib/queryClient";
 
@@ -419,10 +419,8 @@ export default function ForumPage() {
     },
   });
 
-  if ((storiesLoading && !feed) || categoriesLoading || descriptionLoading) {
-    return <ForumLoading type="forums" className="min-h-[50vh]" />;
-  }
-
+  // Error state takes precedence — after a failed fetch, feed stays null,
+  // so checking it first would spin the loading animation forever.
   if (storiesError) {
     return (
       <div className="text-center py-8">
@@ -430,6 +428,14 @@ export default function ForumPage() {
         <p className="text-navy/70">We couldn't load the latest stories. Please try again later.</p>
       </div>
     );
+  }
+
+  // NOTE: the app's global react-query placeholderData injects `null` for the
+  // feed query while the real fetch is still in flight, which makes isLoading
+  // report false. Treat a null/undefined feed as "still loading" so the empty
+  // state can never flash before the first real response.
+  if (storiesLoading || feed == null || categoriesLoading || descriptionLoading) {
+    return <ForumLoadingAnimation />;
   }
 
   const handleSaveDescription = () => {
@@ -747,8 +753,12 @@ export default function ForumPage() {
         </div>
       </div>
 
-      {/* Story grid */}
-      {stories.length === 0 ? (
+      {/* Story grid — while a refetch (filter/category/search change) is in
+          flight with nothing to show, keep the loading animation up instead of
+          flashing the empty state */}
+      {stories.length === 0 && storiesFetching ? (
+        <ForumLoadingAnimation compact />
+      ) : stories.length === 0 ? (
         <div className="text-center py-16">
           <Newspaper className="h-12 w-12 text-navy/20 mx-auto mb-4" />
           {debouncedSearch ? (
