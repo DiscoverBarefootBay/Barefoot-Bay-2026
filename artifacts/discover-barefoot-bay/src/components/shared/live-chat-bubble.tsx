@@ -70,6 +70,7 @@ interface LiveChatPreviewContentProps {
   comments: PreviewComment[];
   isLoading: boolean;
   isError: boolean;
+  onOpenChat: () => void;
 }
 
 // Injected once — keyframes + themed scrollbar pseudo-selectors (can't be inline styles)
@@ -150,10 +151,20 @@ function TerminalLoadingState() {
   );
 }
 
-function LiveChatPreviewContent({ comments, isLoading, isError }: LiveChatPreviewContentProps) {
+function LiveChatPreviewContent({ comments, isLoading, isError, onOpenChat }: LiveChatPreviewContentProps) {
   ensurePreviewStyles();
   return (
     <div
+      role="button"
+      tabIndex={0}
+      aria-label="Open live chat"
+      onClick={onOpenChat}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onOpenChat();
+        }
+      }}
       style={{
         background: '#000',
         border: '2px solid #009900',
@@ -161,6 +172,8 @@ function LiveChatPreviewContent({ comments, isLoading, isError }: LiveChatPrevie
         fontFamily: 'monospace',
         width: '280px',
         overflow: 'hidden',
+        cursor: 'pointer',
+        pointerEvents: 'auto',
       }}
     >
       {/* Header */}
@@ -288,6 +301,12 @@ export function LiveChatBubble() {
     staleTime: 0,
     refetchInterval: isPreviewOpen ? 5000 : false,
   });
+
+  // NOTE: the app's global react-query placeholderData injects null for this
+  // query key immediately, which makes isLoading report false before the first
+  // real response. Treat a null/undefined payload as still loading (unless the
+  // fetch errored) so the UPLINK animation actually shows.
+  const isPreviewDataPending = !isPreviewError && (isPreviewLoading || rawPreviewData == null);
 
   const previewComments = useMemo<PreviewComment[]>(() => {
     // Guard: global placeholderData fallback can inject [] or null for unknown-shaped data
@@ -527,8 +546,9 @@ export function LiveChatBubble() {
         >
           <LiveChatPreviewContent
             comments={previewComments}
-            isLoading={isPreviewLoading}
+            isLoading={isPreviewDataPending}
             isError={isPreviewError}
+            onOpenChat={handleChatClick}
           />
         </TooltipContent>
       </Tooltip>
