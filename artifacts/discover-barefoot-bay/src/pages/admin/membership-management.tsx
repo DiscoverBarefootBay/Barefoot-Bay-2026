@@ -4,9 +4,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SponsoredMembershipManager } from '@/components/admin/sponsored-membership-manager';
 import { SubscriptionManager } from '@/components/admin/subscription-manager';
 import { CreditManagementDashboard } from '@/components/admin/credit-management-dashboard';
+import { FeaturedPricingManager } from '@/components/admin/featured-pricing-manager';
 import AdminLayout from '@/components/layouts/admin-layout';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Info, Layers, Users, Award } from 'lucide-react';
+import { Info, Layers, Users, Award, Store } from 'lucide-react';
 import { Button } from '@/components/ui/button'; // Assuming Button is in ui
 
 export default function MembershipManagementPage() {
@@ -33,7 +34,7 @@ export default function MembershipManagementPage() {
           </Alert>
 
           <Tabs defaultValue="subscriptions" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 max-w-lg">
+            <TabsList className="grid w-full grid-cols-4 max-w-xl">
               <TabsTrigger value="subscriptions">
                 <Layers className="h-4 w-4 mr-2" /> 
                 Subscriptions
@@ -45,6 +46,10 @@ export default function MembershipManagementPage() {
               <TabsTrigger value="members">
                 <Users className="h-4 w-4 mr-2" /> 
                 Credits
+              </TabsTrigger>
+              <TabsTrigger value="featured">
+                <Store className="h-4 w-4 mr-2" /> 
+                Featured
               </TabsTrigger>
             </TabsList>
 
@@ -68,6 +73,10 @@ export default function MembershipManagementPage() {
 
             <TabsContent value="members" className="pt-4">
               <CreditManagementDashboard />
+            </TabsContent>
+
+            <TabsContent value="featured" className="pt-4">
+              <FeaturedPricingManager />
             </TabsContent>
           </Tabs>
 

@@ -21,6 +21,46 @@ export function getFeaturedListingCreditCost(env: Record<string, string | undefi
   return Number.isInteger(n) && n >= 1 ? n : DEFAULT_FEATURED_LISTING_CREDIT_COST;
 }
 
+/** Admin-set prices may never go below this floor. */
+export const MIN_FEATURED_LISTING_CREDIT_COST = 5;
+
+/** Sanity ceiling — keeps admin typos and unsafe numbers out of pricing. */
+export const MAX_FEATURED_LISTING_CREDIT_COST = 10000;
+
+/** Site-settings key holding the admin-configured Featured price. */
+export const FEATURED_LISTING_COST_SETTING_KEY = 'featured_listing_credit_cost';
+
+/**
+ * Parse an admin-supplied Featured price. Returns the price when it is a
+ * safe whole number within [floor, ceiling], otherwise null.
+ */
+export function parseFeaturedListingCreditCost(raw: unknown): number | null {
+  if (raw === null || raw === undefined || raw === '') return null;
+  const n = Number(raw);
+  return Number.isSafeInteger(n) &&
+    n >= MIN_FEATURED_LISTING_CREDIT_COST &&
+    n <= MAX_FEATURED_LISTING_CREDIT_COST
+    ? n
+    : null;
+}
+
+/**
+ * The effective Featured price: the admin-configured site setting when valid,
+ * otherwise the env/default fallback. Read errors fall back too — pricing
+ * must never take the feature down.
+ */
+export async function resolveFeaturedListingCreditCost(
+  getSettingValue: (key: string) => Promise<string | null>,
+): Promise<number> {
+  try {
+    const stored = parseFeaturedListingCreditCost(await getSettingValue(FEATURED_LISTING_COST_SETTING_KEY));
+    if (stored !== null) return stored;
+  } catch (error) {
+    console.error('[FeaturedListing] Failed to read configured credit cost, using default:', error);
+  }
+  return getFeaturedListingCreditCost();
+}
+
 export interface FeatureUpgradeListing {
   id: number;
   status: string;

@@ -3,7 +3,11 @@ import assert from 'node:assert/strict';
 
 import {
   DEFAULT_FEATURED_LISTING_CREDIT_COST,
+  MIN_FEATURED_LISTING_CREDIT_COST,
+  MAX_FEATURED_LISTING_CREDIT_COST,
   getFeaturedListingCreditCost,
+  parseFeaturedListingCreditCost,
+  resolveFeaturedListingCreditCost,
   validateFeatureUpgrade,
 } from '../featured-listing';
 
@@ -25,6 +29,55 @@ describe('getFeaturedListingCreditCost', () => {
   it('honors a valid positive integer override', () => {
     assert.equal(getFeaturedListingCreditCost({ FEATURED_LISTING_CREDIT_COST: '3' }), 3);
     assert.equal(getFeaturedListingCreditCost({ FEATURED_LISTING_CREDIT_COST: '10' }), 10);
+  });
+});
+
+describe('parseFeaturedListingCreditCost', () => {
+  it('accepts safe whole numbers within bounds', () => {
+    assert.equal(parseFeaturedListingCreditCost(5), 5);
+    assert.equal(parseFeaturedListingCreditCost('5'), 5);
+    assert.equal(parseFeaturedListingCreditCost('250'), 250);
+    assert.equal(parseFeaturedListingCreditCost(MAX_FEATURED_LISTING_CREDIT_COST), MAX_FEATURED_LISTING_CREDIT_COST);
+  });
+
+  it('rejects below-floor, non-integer, and non-numeric values', () => {
+    assert.equal(parseFeaturedListingCreditCost(MIN_FEATURED_LISTING_CREDIT_COST - 1), null);
+    assert.equal(parseFeaturedListingCreditCost(0), null);
+    assert.equal(parseFeaturedListingCreditCost(-5), null);
+    assert.equal(parseFeaturedListingCreditCost(5.5), null);
+    assert.equal(parseFeaturedListingCreditCost('abc'), null);
+    assert.equal(parseFeaturedListingCreditCost(''), null);
+    assert.equal(parseFeaturedListingCreditCost(null), null);
+    assert.equal(parseFeaturedListingCreditCost(undefined), null);
+    assert.equal(parseFeaturedListingCreditCost(true), null);
+  });
+
+  it('rejects unsafe or unbounded numbers', () => {
+    assert.equal(parseFeaturedListingCreditCost(MAX_FEATURED_LISTING_CREDIT_COST + 1), null);
+    assert.equal(parseFeaturedListingCreditCost('1e100'), null);
+    assert.equal(parseFeaturedListingCreditCost(1e308), null);
+    assert.equal(parseFeaturedListingCreditCost(Infinity), null);
+    assert.equal(parseFeaturedListingCreditCost(Number.MAX_SAFE_INTEGER + 2), null);
+    assert.equal(parseFeaturedListingCreditCost(NaN), null);
+  });
+});
+
+describe('resolveFeaturedListingCreditCost', () => {
+  it('uses a valid stored setting', async () => {
+    assert.equal(await resolveFeaturedListingCreditCost(async () => '12'), 12);
+  });
+
+  it('falls back to the default when the stored value is missing or invalid', async () => {
+    assert.equal(await resolveFeaturedListingCreditCost(async () => null), DEFAULT_FEATURED_LISTING_CREDIT_COST);
+    assert.equal(await resolveFeaturedListingCreditCost(async () => '3'), DEFAULT_FEATURED_LISTING_CREDIT_COST);
+    assert.equal(await resolveFeaturedListingCreditCost(async () => 'garbage'), DEFAULT_FEATURED_LISTING_CREDIT_COST);
+  });
+
+  it('falls back to the default when the settings read throws', async () => {
+    assert.equal(
+      await resolveFeaturedListingCreditCost(async () => { throw new Error('db down'); }),
+      DEFAULT_FEATURED_LISTING_CREDIT_COST,
+    );
   });
 });
 

@@ -17,7 +17,15 @@ import * as squareService from './square-service';
 import squareAppInfoRouter from './square-app-info';
 // Import credit service for Square payment integration
 import { creditService } from './credit-service';
-import { getFeaturedListingCreditCost, validateFeatureUpgrade } from './featured-listing';
+import {
+  getFeaturedListingCreditCost,
+  validateFeatureUpgrade,
+  resolveFeaturedListingCreditCost,
+  parseFeaturedListingCreditCost,
+  MIN_FEATURED_LISTING_CREDIT_COST,
+  MAX_FEATURED_LISTING_CREDIT_COST,
+  FEATURED_LISTING_COST_SETTING_KEY,
+} from './featured-listing';
 import { isFeaturedListingsEnabled } from './featured-listings-flag';
 import { 
   createCreditPurchaseLink, 
@@ -8332,7 +8340,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Featured upgrade pricing for the seller UI
   app.get("/api/featured-listings/config", async (_req, res) => {
-    res.json({ creditCost: getFeaturedListingCreditCost() });
+    res.json({
+      creditCost: await resolveFeaturedListingCreditCost((key) => storage.getSettingValue(key)),
+      minCreditCost: MIN_FEATURED_LISTING_CREDIT_COST,
+      maxCreditCost: MAX_FEATURED_LISTING_CREDIT_COST,
+    });
+  });
+
+  // Admin: set the Featured upgrade price (whole credits, floor enforced).
+  app.put("/api/featured-listings/config", requireAdmin, async (req, res) => {
+    try {
+      const creditCost = parseFeaturedListingCreditCost(req.body?.creditCost);
+      if (creditCost === null) {
+        return res.status(400).json({
+          success: false,
+          message: `Price must be a whole number between ${MIN_FEATURED_LISTING_CREDIT_COST} and ${MAX_FEATURED_LISTING_CREDIT_COST} credits.`,
+        });
+      }
+      await storage.setSiteSetting(
+        FEATURED_LISTING_COST_SETTING_KEY,
+        String(creditCost),
+        'Credit price of the Featured listing upgrade on On The Market',
+        req.user.id,
+      );
+      console.log(`[FeaturedListing] Admin ${req.user.id} set featured price to ${creditCost} credits`);
+      res.json({ success: true, creditCost, minCreditCost: MIN_FEATURED_LISTING_CREDIT_COST });
+    } catch (error) {
+      console.error('Error updating featured listing price:', error);
+      res.status(500).json({ success: false, message: 'Failed to update featured listing price' });
+    }
   });
 
   // Upgrade an ACTIVE listing to Featured by spending credits. Featured
@@ -8355,7 +8391,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(rejection.httpStatus).json({ success: false, message: rejection.message });
       }
 
-      const creditCost = getFeaturedListingCreditCost();
+      const creditCost = await resolveFeaturedListingCreditCost((key) => storage.getSettingValue(key));
       const userCredits = await creditService.getUserCredits(req.user.id);
       if (userCredits < creditCost) {
         return res.status(400).json({
