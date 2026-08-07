@@ -127,14 +127,14 @@ export function ListingCard({
           {/* Single-line header: compact pills that can truncate + a price that never shrinks, so everything shares one row without overlapping */}
           <div className="flex items-center gap-1.5 min-w-0">
             <div className="flex items-center gap-1.5 min-w-0 flex-1">
-              <Badge variant="secondary" className={`h-6 px-2 text-[11px] whitespace-nowrap min-w-0 ${typeColors[listingType as keyof typeof typeColors] || "bg-gray-100 text-gray-800"}`}>
-                <span className="truncate">{typeLabels[listingType as keyof typeof typeLabels] || "Listing"}</span>
-              </Badge>
-              
-              {/* Status Badge - Always show DRAFT for this specific listing */}
+              {/* Status Badge first — it's the most actionable info. Always show DRAFT for this specific listing */}
               <Badge variant="default" className="h-6 px-2 text-[11px] whitespace-nowrap flex-shrink-0 bg-amber-500 text-white gap-1 font-medium">
                 <span className="inline-block w-2 h-2 rounded-full bg-white flex-shrink-0"></span>
                 DRAFT
+              </Badge>
+
+              <Badge variant="secondary" className={`h-6 px-2 text-[11px] whitespace-nowrap min-w-0 ${typeColors[listingType as keyof typeof typeColors] || "bg-gray-100 text-gray-800"}`}>
+                <span className="truncate">{typeLabels[listingType as keyof typeof typeLabels] || "Listing"}</span>
               </Badge>
               
               {/* Admin indicator if applicable */}
@@ -382,11 +382,7 @@ export function ListingCard({
           <div className="flex items-center gap-1.5 min-w-0 flex-1">
             {/* Type + status badges are pinned together so they never split across lines */}
             <div className="flex gap-1.5 items-center flex-nowrap min-w-0">
-              <Badge variant="secondary" className={`h-6 px-2 text-[11px] whitespace-nowrap min-w-0 ${typeColors[listingType as keyof typeof typeColors] || "bg-gray-100 text-gray-800"}`}>
-                <span className="truncate">{typeLabels[listingType as keyof typeof typeLabels] || "Listing"}</span>
-              </Badge>
-
-              {/* Status Badge - Enhanced Version (uses effective status so a
+              {/* Status Badge first — it's the most actionable info. (Uses effective status so a
                   listing past its expiration date never shows a stale "ACTIVE") */}
               {effectiveStatus && (
                 <Badge variant={isDraft ? "default" : "outline"} className={`h-6 px-2 text-[11px] whitespace-nowrap flex-shrink-0 gap-1 font-medium ${
@@ -407,6 +403,10 @@ export function ListingCard({
                    effectiveStatus || "UNKNOWN"}
                 </Badge>
               )}
+
+              <Badge variant="secondary" className={`h-6 px-2 text-[11px] whitespace-nowrap min-w-0 ${typeColors[listingType as keyof typeof typeColors] || "bg-gray-100 text-gray-800"}`}>
+                <span className="truncate">{typeLabels[listingType as keyof typeof typeLabels] || "Listing"}</span>
+              </Badge>
             </div>
             
             {/* Admin indicator for other users' draft listings */}
