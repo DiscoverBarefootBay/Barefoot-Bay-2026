@@ -1,26 +1,26 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useToast } from '@/hooks/use-toast';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Link, useLocation } from 'wouter';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Badge } from '@/components/ui/badge';
-import { Eye, EyeOff } from 'lucide-react';
-import type { PageContent } from '@shared/schema';
+import { useLocation } from 'wouter';
+import type { PageContent, VendorCategory } from '@shared/schema';
 import { usePermissions } from '@/hooks/use-permissions';
 import { useAuth } from '@/hooks/use-auth';
+import {
+  VendorBrowse,
+  vendorDescriptionSnippet,
+  vendorFirstImage,
+  type VendorItem,
+} from './vendor-browse';
 
 interface VendorCategoryPageProps {
   category: string;
 }
 
 export const VendorCategoryPage: React.FC<VendorCategoryPageProps> = ({ category }) => {
-  const { toast } = useToast();
   const [vendors, setVendors] = useState<PageContent[]>([]);
   const { isAdmin } = usePermissions();
   const { user } = useAuth();
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   
   // Ensure we have a valid category from URL parameters
   // Extract from location if category prop is empty (handles direct URLs like /vendors/pressure-washing)
@@ -33,9 +33,7 @@ export const VendorCategoryPage: React.FC<VendorCategoryPageProps> = ({ category
     // Format should be /vendors/category-name
     const pathParts = location.split('/').filter(Boolean);
     if (pathParts.length >= 2 && pathParts[0] === 'vendors') {
-      const extractedCategory = pathParts[1];
-      console.log(`Extracted category from URL path: "${extractedCategory}"`);
-      return extractedCategory;
+      return pathParts[1];
     }
     
     return "";
@@ -55,6 +53,20 @@ export const VendorCategoryPage: React.FC<VendorCategoryPageProps> = ({ category
     }
   });
 
+  // Fetch vendor categories so the toolbar dropdown can navigate between them
+  const { data: dbCategories } = useQuery<VendorCategory[]>({
+    queryKey: ['/api/vendor-categories'],
+    queryFn: async () => {
+      const url = isAdmin
+        ? '/api/vendor-categories?includeHidden=true'
+        : '/api/vendor-categories';
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Failed to fetch vendor categories');
+      return res.json();
+    },
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+
   // Fetch unvisited vendor slugs for the current user
   const { data: unvisitedData } = useQuery<{ unvisitedSlugs: string[] }>({
     queryKey: ['/api/vendors/unvisited'],
@@ -69,7 +81,28 @@ export const VendorCategoryPage: React.FC<VendorCategoryPageProps> = ({ category
     staleTime: 1000 * 30, // 30 seconds
   });
 
-  const unvisitedSlugs = new Set(unvisitedData?.unvisitedSlugs || []);
+  const unvisitedSlugs = useMemo(
+    () => new Set(unvisitedData?.unvisitedSlugs || []),
+    [unvisitedData],
+  );
+
+  const vendorCategories = useMemo(
+    () =>
+      (dbCategories ?? [])
+        .filter(cat => isAdmin || !cat.isHidden)
+        .map(cat => ({ slug: cat.slug, label: cat.name })),
+    [dbCategories, isAdmin],
+  );
+
+  const categoryLabel = useMemo(() => {
+    const match = vendorCategories.find(cat => cat.slug === actualCategory);
+    if (match) return match.label;
+    // Fallback: title-case the slug
+    return actualCategory
+      .split('-')
+      .map(word => word && word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }, [vendorCategories, actualCategory]);
 
   // Filter vendor pages for this category
   useEffect(() => {
@@ -80,18 +113,6 @@ export const VendorCategoryPage: React.FC<VendorCategoryPageProps> = ({ category
       console.error("Expected allPages to be an array, but got:", typeof allPages);
       return;
     }
-    
-    // Log active vendors for debugging
-    const vendorPages = allPages.filter(page => page.slug.startsWith('vendors-'));
-    console.log("All vendor pages:", vendorPages.map(p => p.slug));
-    console.log("Current category:", category);
-    console.log("Using actual category:", actualCategory);
-    
-    // Debug vendors with "pressure-washing" in their slug
-    const pressureWashingVendors = vendorPages.filter(page => 
-      page.slug.includes('pressure-washing')
-    );
-    console.log("Pressure washing vendors found:", pressureWashingVendors.map(p => p.slug));
     
     // Find all vendor pages that match the current category
     // Handle different naming patterns for vendor slug formats
@@ -169,282 +190,166 @@ export const VendorCategoryPage: React.FC<VendorCategoryPageProps> = ({ category
         (slug.startsWith(`vendors-${actualCategory.replace('-', '-and-')} `))
       );
       
-      console.log(`Checking vendor: ${slug}, matches: ${isMatch}`);
       return isMatch;
     });
 
-    console.log(`Found ${categoryVendors.length} vendors for category: ${actualCategory}`);
     setVendors(categoryVendors);
   }, [allPages, category, actualCategory, isAdmin]);
+
+  // Map the matched pages to browse items (name/URL extraction preserved from
+  // the previous table layout)
+  const vendorItems = useMemo<VendorItem[]>(() => {
+    return vendors.map(vendor => {
+      // Extract vendor name from slug, handling both dash-separated and space formats
+      let vendorName: string;
+      
+      // Special case for our problem vendors
+      if (vendor.slug === 'vendors-landscaping-tst vendor') {
+        vendorName = 'tst vendor';
+      } 
+      // Special case for the Computer Healthcare in technology-and-electronics
+      else if (vendor.slug === 'vendors-technology-and-electronics-computer-healthcare') {
+        vendorName = 'computer-healthcare';
+      }
+      // Handle the specific Test vendor case
+      else if (vendor.slug === 'vendors-landscaping-landscaping') {
+        vendorName = 'landscaping';
+      }
+      else if (vendor.slug.includes(' ')) {
+        // Handle slugs with spaces (e.g., "vendors-landscaping tst vendor")
+        const spaceIndex = vendor.slug.indexOf(' ');
+        vendorName = vendor.slug.substring(spaceIndex + 1);
+      } else {
+        // Dynamic compound category detection - automatically adapts to new categories
+        vendorName = '';
+        
+        // Dynamically determine if this is a compound category by checking if actualCategory contains hyphens
+        const isCompoundCategory = actualCategory.includes('-');
+        
+        if (isCompoundCategory) {
+          // For compound categories, extract the part after the full compound category
+          const compoundPrefix = `vendors-${actualCategory}-`;
+          if (vendor.slug.startsWith(compoundPrefix)) {
+            vendorName = vendor.slug.substring(compoundPrefix.length);
+          } else {
+            // ROBUST FALLBACK: Handle all types of malformed slugs
+            // Examples to handle:
+            // - "vendors-retail-shops-and-shops-blues-clues-x" → "blues-clues-x"
+            // - "vendors-retail-shops-retail-shops-blues-clues-x" → "blues-clues-x"
+            // - "vendors-retail-shops-shops-blues-clues-x" → "blues-clues-x"
+            
+            const slugParts = vendor.slug.split('-');
+            const categoryParts = actualCategory.split('-'); // ["retail", "shops"]
+            
+            // Start after "vendors"
+            let vendorStartIndex = 1;
+            
+            // Method 1: Skip the exact category sequence
+            let categoryMatchIndex = 0;
+            for (let i = 1; i < slugParts.length && categoryMatchIndex < categoryParts.length; i++) {
+              if (slugParts[i] === categoryParts[categoryMatchIndex]) {
+                categoryMatchIndex++;
+                vendorStartIndex = i + 1;
+              } else if (categoryMatchIndex > 0) {
+                // We were matching but broke sequence, reset
+                categoryMatchIndex = 0;
+                if (slugParts[i] === categoryParts[0]) {
+                  categoryMatchIndex = 1;
+                  vendorStartIndex = i + 1;
+                }
+              }
+            }
+            
+            // Method 2: Skip any remaining individual category words that appear later
+            while (vendorStartIndex < slugParts.length && categoryParts.includes(slugParts[vendorStartIndex])) {
+              vendorStartIndex++;
+            }
+            
+            // Method 3: Skip common malformed patterns like "and"
+            if (vendorStartIndex < slugParts.length && slugParts[vendorStartIndex] === 'and') {
+              vendorStartIndex++;
+              
+              // Skip any category words that come after "and"
+              while (vendorStartIndex < slugParts.length && categoryParts.includes(slugParts[vendorStartIndex])) {
+                vendorStartIndex++;
+              }
+            }
+            
+            vendorName = slugParts.slice(vendorStartIndex).join('-');
+          }
+        } else {
+          // Handle normal single-word categories (e.g., "vendors-landscaping-test-vendor")
+          const slugParts = vendor.slug.split('-');
+          vendorName = slugParts.slice(2).join('-');
+        }
+      }
+      
+      // Format the vendor name for display
+      const vendorDisplayName = vendorName
+        .split(/[-\s]/) // Split by both dashes and spaces
+        .map(word => word && word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+      
+      // Ensure we don't include category duplications in the URL
+      let vendorURLName = vendorName || '';
+      
+      // Fix for compound categories to avoid duplication in URL
+      if (vendorName.startsWith('services-')) {
+        vendorURLName = vendorName.substring('services-'.length);
+      }
+      
+      // Dynamic compound category detection for URL generation
+      const isCompoundCategoryForURL = actualCategory.includes('-');
+      
+      if (isCompoundCategoryForURL && vendorURLName.startsWith(`${actualCategory}-`)) {
+        // Remove the compound category prefix + hyphen from the vendorURLName
+        vendorURLName = vendorURLName.substring(actualCategory.length + 1);
+      }
+
+      // Special case: Computer Healthcare from Technology & Electronics
+      const href = vendor.slug === 'vendors-technology-and-electronics-computer-healthcare'
+        ? '/vendors/technology-and-electronics/computer-healthcare'
+        : `/vendors/${actualCategory}/${encodeURIComponent(vendorURLName)}`;
+
+      return {
+        slug: vendor.slug,
+        title: vendor.slug === 'vendors-technology-and-electronics-computer-healthcare'
+          ? 'Computer Healthcare'
+          : (vendor.title || vendorDisplayName),
+        description: vendorDescriptionSnippet(vendor.content),
+        href,
+        image: vendorFirstImage(vendor.content),
+        categorySlug: actualCategory,
+        categoryLabel,
+        isUnvisited: !!(user && unvisitedSlugs.has(vendor.slug)),
+        isHidden: !!vendor.isHidden,
+        createdAt: vendor.createdAt ?? null,
+      };
+    });
+  }, [vendors, actualCategory, categoryLabel, user, unvisitedSlugs]);
 
   if (isLoading) {
     return (
       <div className="space-y-4">
-        <Skeleton className="h-12 w-3/4" />
-        <Skeleton className="h-[200px]" />
-        <Skeleton className="h-[200px]" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-[130px] rounded-xl" />
+        <Skeleton className="h-[130px] rounded-xl" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
-      {/* Enhanced Category Table */}
-      <div className="rounded-md border shadow-sm overflow-hidden bg-white">
-        {/* Table Header */}
-        <div className="bg-slate-50 border-b px-4 py-3">
-          <h2 className="text-lg font-bold text-slate-800 capitalize">{actualCategory.replace('-', ' ')} Vendors</h2>
-        </div>
-        
-        {/* Table Structure */}
-        <div className="w-full">
-          {/* Table Header Row */}
-          <div className="hidden md:flex w-full text-left border-b bg-gray-50">
-            <div className="w-3/12 px-4 py-2 font-medium text-slate-500">Name</div>
-            <div className="w-7/12 px-4 py-2 font-medium text-slate-500">Description</div>
-            <div className="w-2/12 px-4 py-2 text-right font-medium text-slate-500">Actions</div>
-          </div>
-
-          {/* Vendor List Rows */}
-          <div className="divide-y divide-gray-200">
-            {vendors.length > 0 ? (
-              vendors.map(vendor => {
-                // Extract vendor name from slug, handling both dash-separated and space formats
-                let vendorName;
-                
-                // Special case for our problem vendors
-                if (vendor.slug === 'vendors-landscaping-tst vendor') {
-                  // For this specific vendor with the known issue, preserve the original name
-                  // This is critical - use the exact "tst vendor" with space to match what's in the URL
-                  vendorName = 'tst vendor';
-                  console.log(`Special case for problematic vendor: ${vendor.slug} → vendorName: ${vendorName}`);
-                } 
-                // Special case for the Computer Healthcare in technology-and-electronics
-                else if (vendor.slug === 'vendors-technology-and-electronics-computer-healthcare') {
-                  // Hard-code the correct vendor name for this problematic one
-                  vendorName = 'computer-healthcare';
-                  console.log(`Special case for Computer Healthcare vendor: ${vendor.slug} → vendorName: ${vendorName}`);
-                }
-                // Handle the specific Test vendor case
-                else if (vendor.slug === 'vendors-landscaping-landscaping') {
-                  // Make sure we use the dash format for the "landscaping" vendor created with "Test"
-                  vendorName = 'landscaping';
-                  console.log(`Special case for Test vendor: ${vendor.slug} → vendorName: ${vendorName}`);
-                }
-                else if (vendor.slug.includes(' ')) {
-                  // Handle slugs with spaces (e.g., "vendors-landscaping tst vendor")
-                  // Extract everything after the category
-                  const spaceIndex = vendor.slug.indexOf(' ');
-                  vendorName = vendor.slug.substring(spaceIndex + 1);
-                  
-                  // Keep the space format for consistent URL handling
-                } else {
-                  // Dynamic compound category detection - automatically adapts to new categories
-                  // Initialize vendorName with a default value to avoid 'undefined' TS errors
-                  vendorName = '';
-                  
-                  // Dynamically determine if this is a compound category by checking if actualCategory contains hyphens
-                  const isCompoundCategory = actualCategory.includes('-');
-                  
-                  if (isCompoundCategory) {
-                    console.log("Processing compound category vendor:", vendor.slug, "actualCategory:", actualCategory);
-                    
-                    // For compound categories, extract the part after the full compound category
-                    const compoundPrefix = `vendors-${actualCategory}-`;
-                    if (vendor.slug.startsWith(compoundPrefix)) {
-                      vendorName = vendor.slug.substring(compoundPrefix.length);
-                      console.log(`Extracted vendorName from compound category: ${vendorName}`);
-                    } else {
-                      // ROBUST FALLBACK: Handle all types of malformed slugs
-                      // Examples to handle:
-                      // - "vendors-retail-shops-and-shops-blues-clues-x" → "blues-clues-x"
-                      // - "vendors-retail-shops-retail-shops-blues-clues-x" → "blues-clues-x"
-                      // - "vendors-retail-shops-shops-blues-clues-x" → "blues-clues-x"
-                      
-                      const slugParts = vendor.slug.split('-');
-                      const categoryParts = actualCategory.split('-'); // ["retail", "shops"]
-                      
-                      console.log(`Debug: slugParts = [${slugParts.join(', ')}]`);
-                      console.log(`Debug: categoryParts = [${categoryParts.join(', ')}]`);
-                      
-                      // Start after "vendors"
-                      let vendorStartIndex = 1;
-                      
-                      // Method 1: Skip the exact category sequence
-                      let categoryMatchIndex = 0;
-                      for (let i = 1; i < slugParts.length && categoryMatchIndex < categoryParts.length; i++) {
-                        if (slugParts[i] === categoryParts[categoryMatchIndex]) {
-                          categoryMatchIndex++;
-                          vendorStartIndex = i + 1;
-                        } else if (categoryMatchIndex > 0) {
-                          // We were matching but broke sequence, reset
-                          categoryMatchIndex = 0;
-                          if (slugParts[i] === categoryParts[0]) {
-                            categoryMatchIndex = 1;
-                            vendorStartIndex = i + 1;
-                          }
-                        }
-                      }
-                      
-                      // Method 2: Skip any remaining individual category words that appear later
-                      while (vendorStartIndex < slugParts.length && categoryParts.includes(slugParts[vendorStartIndex])) {
-                        console.log(`Skipping duplicate category word: ${slugParts[vendorStartIndex]}`);
-                        vendorStartIndex++;
-                      }
-                      
-                      // Method 3: Skip common malformed patterns like "and"
-                      if (vendorStartIndex < slugParts.length && slugParts[vendorStartIndex] === 'and') {
-                        console.log(`Skipping malformed "and" connector`);
-                        vendorStartIndex++;
-                        
-                        // Skip any category words that come after "and"
-                        while (vendorStartIndex < slugParts.length && categoryParts.includes(slugParts[vendorStartIndex])) {
-                          console.log(`Skipping category word after "and": ${slugParts[vendorStartIndex]}`);
-                          vendorStartIndex++;
-                        }
-                      }
-                      
-                      vendorName = slugParts.slice(vendorStartIndex).join('-');
-                      console.log(`🔧 Robust extraction: ${vendor.slug} → ${vendorName} (startIndex: ${vendorStartIndex})`);
-                    }
-                  } else {
-                    // Handle normal single-word categories (e.g., "vendors-landscaping-test-vendor")
-                    const slugParts = vendor.slug.split('-');
-                    vendorName = slugParts.slice(2).join('-');
-                    console.log(`Processing simple category: ${actualCategory} → ${vendorName}`);
-                  }
-                }
-                
-                console.log(`Processing vendor: ${vendor.slug} → vendorName: ${vendorName}`);
-                
-                // Format the vendor name for display
-                const vendorDisplayName = vendorName
-                  .split(/[-\s]/) // Split by both dashes and spaces
-                  .map(word => word && word.charAt(0).toUpperCase() + word.slice(1))
-                  .join(' ');
-                
-                // Ensure we don't include category duplications in the URL
-                let vendorURLName = vendorName || '';
-                
-                // Fix for compound categories to avoid duplication in URL
-                if (vendorName.startsWith('services-')) {
-                  vendorURLName = vendorName.substring('services-'.length);
-                }
-                
-                // Dynamic compound category detection for URL generation
-                // Use the same logic as above to determine if this is a compound category
-                
-                // Dynamic compound category detection for URL generation
-                const isCompoundCategoryForURL = actualCategory.includes('-');
-                
-                // Debug the slug and URL generation
-                console.log(`Debug URL generation:`, {
-                  slug: vendor.slug,
-                  actualCategory,
-                  initialVendorURLName: vendorURLName,
-                  isCompoundCategory: isCompoundCategoryForURL
-                });
-                
-                if (isCompoundCategoryForURL && vendorURLName.startsWith(`${actualCategory}-`)) {
-                  // Remove the compound category prefix + hyphen from the vendorURLName
-                  const oldName = vendorURLName;
-                  vendorURLName = vendorURLName.substring(actualCategory.length + 1);
-                  console.log(`Fixed compound category URL: ${vendor.slug} → from:${oldName} to:${vendorURLName}`);
-                }
-
-                // Check if this vendor is unvisited
-                const isUnvisited = user && unvisitedSlugs.has(vendor.slug);
-
-                return (
-                  <div 
-                    key={vendor.slug} 
-                    className={`flex flex-col md:flex-row hover:bg-gray-50 transition-colors ${
-                      isUnvisited ? 'border-l-4 border-red-500 bg-red-50/30' : ''
-                    }`}
-                  >
-                    {/* Mobile header (shown only on small screens) */}
-                    <div className="md:hidden px-4 pt-3 font-semibold text-slate-800">
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-2">
-                          {vendor.slug === 'vendors-technology-and-electronics-computer-healthcare' ? (
-                            <Link href="/vendors/technology-and-electronics/computer-healthcare" className="text-blue-600 hover:underline">
-                              Computer Healthcare
-                            </Link>
-                          ) : (
-                            vendor.title || vendorDisplayName
-                          )}
-                          {isUnvisited && (
-                            <Badge className="bg-red-500 text-white text-xs">New</Badge>
-                          )}
-                        </div>
-                        {/* Show "Admin Only" badge for hidden vendors on mobile */}
-                        {isAdmin && vendor.isHidden && (
-                          <Badge variant="secondary" className="bg-orange-100 text-orange-800 border-orange-300 w-fit">
-                            <EyeOff className="h-3 w-3 mr-1" />
-                            Admin Only
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                    
-                    {/* Vendor Name (hidden on mobile, shown on desktop) */}
-                    <div className="hidden md:block w-3/12 px-4 py-3 font-medium text-slate-800">
-                      <div className="flex items-center gap-2">
-                        {vendor.slug === 'vendors-technology-and-electronics-computer-healthcare' ? (
-                          <Link href="/vendors/technology-and-electronics/computer-healthcare" className="text-blue-600 hover:underline">
-                            Computer Healthcare
-                          </Link>
-                        ) : (
-                          vendor.title || vendorDisplayName
-                        )}
-                        {isUnvisited && (
-                          <Badge className="bg-red-500 text-white text-xs">New</Badge>
-                        )}
-                        {/* Show "Admin Only" badge for hidden vendors */}
-                        {isAdmin && vendor.isHidden && (
-                          <Badge variant="secondary" className="bg-orange-100 text-orange-800 border-orange-300">
-                            <EyeOff className="h-3 w-3 mr-1" />
-                            Admin Only
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                    
-                    {/* Description */}
-                    <div className="md:w-7/12 px-4 py-2 md:py-3 text-sm text-slate-600">
-                      {vendor.content ? (
-                        <div className="line-clamp-2" dangerouslySetInnerHTML={{ 
-                          __html: vendor.content.replace(/<[^>]*>/g, ' ').substring(0, 200) + '...'
-                        }} />
-                      ) : (
-                        <span className="text-slate-400 italic">No description available</span>
-                      )}
-                    </div>
-                    
-                    {/* Action Button */}
-                    <div className="md:w-2/12 px-4 pb-3 md:py-3 md:text-right">
-                      {vendor.slug === 'vendors-technology-and-electronics-computer-healthcare' ? (
-                        // Special case: Computer Healthcare from Technology & Electronics
-                        <Link href="/vendors/technology-and-electronics/computer-healthcare">
-                          <Button variant="outline" size="sm" className="w-full md:w-auto">View Details</Button>
-                        </Link>
-                      ) : (
-                        <Link href={`/vendors/${actualCategory}/${encodeURIComponent(vendorURLName)}`}>
-                          <Button variant="outline" size="sm" className="w-full md:w-auto">View Details</Button>
-                        </Link>
-                      )}
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div className="p-8 text-center text-slate-500">
-                <p>No vendors found in this category</p>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+    <div className="space-y-4">
+      <h2 className="text-lg font-bold text-navy capitalize">{categoryLabel} Vendors</h2>
+      <VendorBrowse
+        vendors={vendorItems}
+        categories={vendorCategories}
+        selectedCategorySlug={actualCategory}
+        onCategoryChange={(slug) => {
+          navigate(slug ? `/vendors/${slug}` : '/vendors');
+        }}
+        showAdminBadge={isAdmin}
+      />
     </div>
   );
 };

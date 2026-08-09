@@ -1,26 +1,26 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "wouter";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Input } from "@/components/ui/input";
 import type { PageContent, VendorCategory } from "@shared/schema";
 import { usePermissions } from "@/hooks/use-permissions";
 import { useAuth } from "@/hooks/use-auth";
-import { Badge } from "@/components/ui/badge";
-import { Search, X } from "lucide-react";
+import {
+  VendorBrowse,
+  vendorDescriptionSnippet,
+  vendorFirstImage,
+  type VendorItem,
+} from "./vendor-browse";
 
 export const AllVendorsPage: React.FC = () => {
   // State to store organized vendors by category
   const [vendorsByCategory, setVendorsByCategory] = useState<Record<string, PageContent[]>>({});
-  // Search state
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  // Category filter for the browse toolbar (null = All Categories)
+  const [selectedCategorySlug, setSelectedCategorySlug] = useState<string | null>(null);
   // Get user permissions
   const { isAdmin } = usePermissions();
   const { user } = useAuth();
-  
+
   // Fetch all pages to find all vendors
   const { data: allPages, isLoading: isLoadingPages } = useQuery<PageContent[]>({
     queryKey: ['/api/pages'],
@@ -64,13 +64,19 @@ export const AllVendorsPage: React.FC = () => {
     staleTime: 1000 * 30, // 30 seconds
   });
 
-  const unvisitedSlugs = new Set(unvisitedData?.unvisitedSlugs || []);
-  
+  const unvisitedSlugs = useMemo(
+    () => new Set(unvisitedData?.unvisitedSlugs || []),
+    [unvisitedData],
+  );
+
   // Format categories to match our interface
-  const vendorCategories = dbCategories?.map(cat => ({
-    id: cat.slug,
-    label: cat.name
-  })) || [];
+  const vendorCategories = useMemo(
+    () =>
+      (dbCategories ?? [])
+        .filter(cat => isAdmin || !cat.isHidden)
+        .map(cat => ({ slug: cat.slug, label: cat.name })),
+    [dbCategories, isAdmin],
+  );
 
   // Update vendor visit tracking when page loads
   useEffect(() => {
@@ -108,7 +114,6 @@ export const AllVendorsPage: React.FC = () => {
       // For non-admin users, filter out hidden vendors
       return isVendorPage && (isAdmin || !page.isHidden);
     });
-    console.log("Processing vendor pages:", vendorPages.map(p => p.slug));
     
     // Initialize the organized vendors object
     const organizedVendors: Record<string, PageContent[]> = {};
@@ -140,8 +145,6 @@ export const AllVendorsPage: React.FC = () => {
         // For slugs with dashes like "vendors-landscaping-company-name" or "vendors-home-services-company-name"
         const slugParts = slug.split('-');
         if (slugParts.length >= 3 && slugParts[0] === 'vendors') {
-          console.log(`Categorizing vendor ${slug} with parts:`, slugParts);
-          
           // Enhanced slug parsing: Try all possible category combinations from the vendor slug
           // This handles both old pattern (vendors-food-dining-*) and new pattern (vendors-food-and-dining-*)
           const allPossibleCategories: string[] = [];
@@ -152,8 +155,6 @@ export const AllVendorsPage: React.FC = () => {
             allPossibleCategories.push(possibleCategory);
           }
           
-          console.log(`Possible categories for ${slug}:`, allPossibleCategories);
-          
           // Find the first matching category from database categories
           const matchingCategory = dbCategories.find(cat => 
             allPossibleCategories.includes(cat.slug)
@@ -161,14 +162,12 @@ export const AllVendorsPage: React.FC = () => {
           
           if (matchingCategory) {
             vendorCategoryPart = matchingCategory.slug;
-            console.log(`✅ Found exact database match: ${vendorCategoryPart} for vendor ${slug}`);
           } else {
             // Fallback pattern matching for specific known cases
             // Handle "food-and-dining" → "food-dining" mapping
             const foodAndDiningMatch = allPossibleCategories.find(cat => cat === 'food-and-dining');
             if (foodAndDiningMatch && dbCategories.find(cat => cat.slug === 'food-dining')) {
               vendorCategoryPart = 'food-dining';
-              console.log(`✅ Mapped food-and-dining to food-dining for vendor ${slug}`);
             }
             // Handle other potential "and" pattern mappings
             else {
@@ -179,7 +178,6 @@ export const AllVendorsPage: React.FC = () => {
                 const categoryMatch = dbCategories.find(cat => cat.slug === withoutAnd);
                 if (categoryMatch) {
                   vendorCategoryPart = categoryMatch.slug;
-                  console.log(`✅ Mapped ${possibleCat} to ${withoutAnd} for vendor ${slug}`);
                   break;
                 }
               }
@@ -187,7 +185,6 @@ export const AllVendorsPage: React.FC = () => {
               // If still no match, fallback to single word category
               if (!vendorCategoryPart) {
                 vendorCategoryPart = slugParts[1];
-                console.log(`⚠️ Using fallback single word category: ${vendorCategoryPart} for vendor ${slug}`);
               }
             }
           }
@@ -223,96 +220,106 @@ export const AllVendorsPage: React.FC = () => {
             (categoryId === 'food-dining' && (vendorCategoryPart === 'food' || vendorCategoryPart === 'dining')) ||
             (categoryId === 'professional-services' && vendorCategoryPart === 'professional')
         ) {
-          console.log(`Adding vendor ${slug} to category ${categoryId}`);
           organizedVendors[categoryId].push(page);
         }
       });
     });
     
-    console.log("Organized vendors by category:", Object.keys(organizedVendors).map(cat => 
-      `${cat}: ${organizedVendors[cat].length} vendors`
-    ));
-    
     setVendorsByCategory(organizedVendors);
   }, [allPages, dbCategories, isAdmin]);
+
+  // Flatten the categorized vendors into browse items (name/URL extraction
+  // preserved from the previous table layout)
+  const vendorItems = useMemo<VendorItem[]>(() => {
+    const items: VendorItem[] = [];
+
+    vendorCategories.forEach(category => {
+      const vendors = vendorsByCategory[category.slug] || [];
+      vendors.forEach(vendor => {
+        // NOTE: a vendor can match multiple categories in the organizer, and
+        // (matching the previous table layout) it is listed once per matching
+        // category — each entry keeps that category's own detail URL.
+
+        // Extract vendor name from slug, handling both dash-separated and space formats
+        let vendorName: string;
+        
+        // Special case for our problem vendors
+        if (vendor.slug === 'vendors-landscaping-tst vendor') {
+          // For this specific vendor with the known issue, preserve the original name
+          vendorName = 'tst vendor';
+        }
+        // Handle the specific Test vendor case
+        else if (vendor.slug === 'vendors-landscaping-landscaping') {
+          vendorName = 'landscaping';
+        }
+        else if (vendor.slug.includes(' ')) {
+          // Handle slugs with spaces (e.g., "vendors-landscaping tst vendor")
+          const spaceIndex = vendor.slug.indexOf(' ');
+          vendorName = vendor.slug.substring(spaceIndex + 1);
+        } else {
+          // Handle normal dash-separated slugs (e.g., "vendors-landscaping-test-vendor")
+          const slugParts = vendor.slug.split('-');
+          
+          // Check if this vendor belongs to a compound category by matching against database categories
+          let categorySliceEnd = 2; // Default assumption: single word category
+          
+          // Find the matching category from our database categories
+          const matchingCategory = dbCategories && dbCategories.find(cat => {
+            const categoryWords = cat.slug.split('-');
+            const slugPrefix = slugParts.slice(1, 1 + categoryWords.length).join('-');
+            return slugPrefix === cat.slug;
+          });
+          
+          if (matchingCategory) {
+            // Use the actual category length to determine where vendor name starts
+            const categoryWords = matchingCategory.slug.split('-');
+            categorySliceEnd = 1 + categoryWords.length; // 1 for "vendors" + category length
+          }
+          
+          // Extract vendor name starting after the category
+          vendorName = slugParts.slice(categorySliceEnd).join('-');
+        }
+        
+        // Format the vendor name for display
+        const vendorDisplayName = vendorName
+          .split(/[-\s]/) // Split by both dashes and spaces
+          .map(word => word && word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+
+        items.push({
+          slug: vendor.slug,
+          title: vendor.title || vendorDisplayName,
+          description: vendorDescriptionSnippet(vendor.content),
+          href: `/vendors/${category.slug}/${encodeURIComponent(vendorName)}`,
+          image: vendorFirstImage(vendor.content),
+          categorySlug: category.slug,
+          categoryLabel: category.label,
+          isUnvisited: !!(user && unvisitedSlugs.has(vendor.slug)),
+          isHidden: !!vendor.isHidden,
+          createdAt: vendor.createdAt ?? null,
+        });
+      });
+    });
+
+    return items;
+  }, [vendorCategories, vendorsByCategory, dbCategories, user, unvisitedSlugs]);
 
   // Display loading state while fetching data
   if (isLoadingPages || isLoadingCategories) {
     return (
       <div className="space-y-6">
-        {/* Category Navigation Skeleton */}
-        <div className="overflow-x-auto pb-2">
-          <div className="flex space-x-2">
-            {[1, 2, 3, 4, 5].map((_, i) => (
-              <Skeleton key={i} className="h-10 w-24" />
-            ))}
-          </div>
+        {/* Toolbar skeleton */}
+        <div className="flex flex-wrap items-center gap-3">
+          <Skeleton className="h-10 flex-1 min-w-[200px]" />
+          <Skeleton className="h-10 w-28 hidden sm:block" />
+          <Skeleton className="h-10 w-44" />
+          <Skeleton className="h-10 w-44" />
         </div>
-        
-        {/* First Table Category Skeleton */}
-        <div className="rounded-md border bg-white">
-          <div className="flex items-center justify-between px-4 py-3 border-b bg-slate-50">
-            <Skeleton className="h-8 w-40" />
-            <Skeleton className="h-9 w-24" />
-          </div>
-          
-          <div className="hidden md:grid md:grid-cols-12 px-4 py-2 border-b">
-            <Skeleton className="h-5 w-16 md:col-span-3" />
-            <Skeleton className="h-5 w-24 md:col-span-7" />
-            <div className="md:col-span-2 text-right">
-              <Skeleton className="h-5 w-16 ml-auto" />
-            </div>
-          </div>
-          
-          <div className="divide-y">
-            {[1, 2, 3, 4].map((_, i) => (
-              <div key={i} className="grid grid-cols-1 md:grid-cols-12 px-4 py-3 items-center">
-                <div className="md:col-span-3 mb-1 md:mb-0">
-                  <Skeleton className="h-6 w-32" />
-                </div>
-                <div className="md:col-span-7 mb-2 md:mb-0">
-                  <Skeleton className="h-4 w-full mb-1" />
-                  <Skeleton className="h-4 w-2/3" />
-                </div>
-                <div className="md:col-span-2 text-right">
-                  <Skeleton className="h-9 w-24 ml-auto" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        
-        {/* Second Table Category Skeleton */}
-        <div className="rounded-md border bg-white">
-          <div className="flex items-center justify-between px-4 py-3 border-b bg-slate-50">
-            <Skeleton className="h-8 w-36" />
-            <Skeleton className="h-9 w-24" />
-          </div>
-          
-          <div className="hidden md:grid md:grid-cols-12 px-4 py-2 border-b">
-            <Skeleton className="h-5 w-16 md:col-span-3" />
-            <Skeleton className="h-5 w-24 md:col-span-7" />
-            <div className="md:col-span-2 text-right">
-              <Skeleton className="h-5 w-16 ml-auto" />
-            </div>
-          </div>
-          
-          <div className="divide-y">
-            {[1, 2, 3].map((_, i) => (
-              <div key={i} className="grid grid-cols-1 md:grid-cols-12 px-4 py-3 items-center">
-                <div className="md:col-span-3 mb-1 md:mb-0">
-                  <Skeleton className="h-6 w-32" />
-                </div>
-                <div className="md:col-span-7 mb-2 md:mb-0">
-                  <Skeleton className="h-4 w-full mb-1" />
-                  <Skeleton className="h-4 w-2/3" />
-                </div>
-                <div className="md:col-span-2 text-right">
-                  <Skeleton className="h-9 w-24 ml-auto" />
-                </div>
-              </div>
-            ))}
-          </div>
+        {/* Card list skeleton */}
+        <div className="grid grid-cols-1 gap-4">
+          {[1, 2, 3, 4].map((_, i) => (
+            <Skeleton key={i} className="h-[130px] rounded-xl" />
+          ))}
         </div>
       </div>
     );
@@ -330,221 +337,12 @@ export const AllVendorsPage: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Search Bar Section */}
-      <div className="relative">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            ref={searchInputRef}
-            type="text"
-            placeholder="Search vendors by name..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 pr-10 w-full"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => {
-                setSearchQuery("");
-                searchInputRef.current?.focus();
-              }}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Category Navigation Section */}
-      <div className="overflow-x-auto pb-2">
-        <div className="flex space-x-2">
-          {vendorCategories.map(category => (
-            <Link key={category.id} href={`/vendors/${category.id}`}>
-              <Button variant="outline" className="whitespace-nowrap">
-                {category.label}
-              </Button>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* Table-based View of Vendors (Improved) */}
-      {vendorCategories.map(category => {
-        const allVendors = vendorsByCategory[category.id] || [];
-        const searchLower = searchQuery.toLowerCase().trim();
-        const categoryMatches = searchLower && (
-          category.label.toLowerCase().includes(searchLower) ||
-          category.id.toLowerCase().includes(searchLower)
-        );
-        const vendors = searchQuery.trim()
-          ? categoryMatches 
-            ? allVendors // Show all vendors in category if category name matches
-            : allVendors.filter(vendor => 
-                vendor.title?.toLowerCase().includes(searchLower) ||
-                vendor.slug.toLowerCase().includes(searchLower)
-              )
-          : allVendors;
-        return vendors.length > 0 ? (
-          <div key={category.id} className="rounded-md border shadow-sm overflow-hidden bg-white">
-            {/* Category Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b bg-slate-50 gap-3">
-              <h2 className="text-base sm:text-lg font-bold text-slate-800 flex-1 min-w-0 pr-2">{category.label}</h2>
-              <Link href={`/vendors/${category.id}`} className="flex-shrink-0">
-                <Button variant="outline" size="sm" className="whitespace-nowrap text-xs">
-                  <span className="hidden sm:inline">View All {category.label}</span>
-                  <span className="sm:hidden">View All</span>
-                </Button>
-              </Link>
-            </div>
-
-            {/* Table Structure */}
-            <div className="w-full">
-              {/* Table Header */}
-              <div className="hidden md:flex w-full text-left border-b bg-gray-50">
-                <div className="w-3/12 px-4 py-2 font-medium text-slate-500">Name</div>
-                <div className="w-7/12 px-4 py-2 font-medium text-slate-500">Description</div>
-                <div className="w-2/12 px-4 py-2 text-right font-medium text-slate-500">Actions</div>
-              </div>
-              
-              {/* Table Body */}
-              <div className="divide-y divide-gray-200">
-                {vendors.map(vendor => {
-                  // Extract vendor name from slug, handling both dash-separated and space formats
-                  let vendorName;
-                  
-                  // Special case for our problem vendors
-                  if (vendor.slug === 'vendors-landscaping-tst vendor') {
-                    // For this specific vendor with the known issue, preserve the original name
-                    // This is critical - use the exact "tst vendor" with space to match what's in the URL
-                    vendorName = 'tst vendor';
-                    console.log(`Special case for problematic vendor: ${vendor.slug} → vendorName: ${vendorName}`);
-                  }
-                  // Handle the specific Test vendor case
-                  else if (vendor.slug === 'vendors-landscaping-landscaping') {
-                    // Make sure we use the dash format for the "landscaping" vendor created with "Test"
-                    vendorName = 'landscaping';
-                    console.log(`Special case for Test vendor: ${vendor.slug} → vendorName: ${vendorName}`);
-                  }
-                  else if (vendor.slug.includes(' ')) {
-                    // Handle slugs with spaces (e.g., "vendors-landscaping tst vendor")
-                    // Extract everything after the category
-                    const spaceIndex = vendor.slug.indexOf(' ');
-                    vendorName = vendor.slug.substring(spaceIndex + 1);
-                    
-                    // Keep spaces in the URL for consistency with how it's stored in the database
-                  } else {
-                    // Handle normal dash-separated slugs (e.g., "vendors-landscaping-test-vendor")
-                    const slugParts = vendor.slug.split('-');
-                    
-                    // Check if this vendor belongs to a compound category by matching against database categories
-                    let categorySliceEnd = 2; // Default assumption: single word category
-                    
-                    // Find the matching category from our database categories
-                    const matchingCategory = dbCategories && dbCategories.find(cat => {
-                      const categoryWords = cat.slug.split('-');
-                      const slugPrefix = slugParts.slice(1, 1 + categoryWords.length).join('-');
-                      return slugPrefix === cat.slug;
-                    });
-                    
-                    if (matchingCategory) {
-                      // Use the actual category length to determine where vendor name starts
-                      const categoryWords = matchingCategory.slug.split('-');
-                      categorySliceEnd = 1 + categoryWords.length; // 1 for "vendors" + category length
-                      console.log(`Found matching category ${matchingCategory.slug} (${categoryWords.length} words) for vendor ${vendor.slug}`);
-                    }
-                    
-                    // Extract vendor name starting after the category
-                    vendorName = slugParts.slice(categorySliceEnd).join('-');
-                    console.log(`Extracted vendor name: "${vendorName}" from slug: "${vendor.slug}" (category ends at position ${categorySliceEnd})`);
-                  }
-                  
-                  // Format the vendor name for display
-                  const vendorDisplayName = vendorName
-                    .split(/[-\s]/) // Split by both dashes and spaces
-                    .map(word => word && word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(' ');
-
-                  // Check if this vendor is unvisited
-                  const isUnvisited = user && unvisitedSlugs.has(vendor.slug);
-
-                  return (
-                    <div 
-                      key={vendor.slug} 
-                      className={`flex flex-col md:flex-row hover:bg-gray-50 transition-colors ${
-                        isUnvisited ? 'border-l-4 border-red-500 bg-red-50/30' : ''
-                      }`}
-                    >
-                      {/* Mobile header (shown only on small screens) */}
-                      <div className="md:hidden px-4 pt-3 font-semibold text-slate-800 flex items-center gap-2">
-                        {vendor.title || vendorDisplayName}
-                        {isUnvisited && (
-                          <Badge className="bg-red-500 text-white text-xs">New</Badge>
-                        )}
-                      </div>
-                      
-                      {/* Vendor Name (hidden on mobile, shown on desktop) */}
-                      <div className="hidden md:block w-3/12 px-4 py-3 font-medium text-slate-800 flex items-center gap-2">
-                        {vendor.title || vendorDisplayName}
-                        {isUnvisited && (
-                          <Badge className="bg-red-500 text-white text-xs">New</Badge>
-                        )}
-                      </div>
-                      
-                      {/* Description */}
-                      <div className="md:w-7/12 px-4 py-2 md:py-3 text-sm text-slate-600">
-                        {vendor.content ? (
-                          <div className="line-clamp-2" dangerouslySetInnerHTML={{ 
-                            __html: vendor.content.replace(/<[^>]*>/g, ' ').substring(0, 200) + '...'
-                          }} />
-                        ) : (
-                          <span className="text-slate-400 italic">No description available</span>
-                        )}
-                      </div>
-                      
-                      {/* Action Button */}
-                      <div className="md:w-2/12 px-4 pb-3 md:py-3 md:text-right">
-                        <Link href={`/vendors/${category.id}/${encodeURIComponent(vendorName)}`}>
-                          <Button variant="outline" size="sm" className="w-full md:w-auto">View Details</Button>
-                        </Link>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        ) : null;
-      })}
-
-      {/* Show message if no vendors match search or no vendors available */}
-      {searchQuery.trim() && vendorCategories.every(category => {
-        const allVendors = vendorsByCategory[category.id] || [];
-        const searchLower = searchQuery.toLowerCase().trim();
-        const categoryMatches = category.label.toLowerCase().includes(searchLower) ||
-          category.id.toLowerCase().includes(searchLower);
-        if (categoryMatches && allVendors.length > 0) return false;
-        const filtered = allVendors.filter(vendor => 
-          vendor.title?.toLowerCase().includes(searchLower) ||
-          vendor.slug.toLowerCase().includes(searchLower)
-        );
-        return filtered.length === 0;
-      }) && (
-        <Card>
-          <CardContent className="p-6 text-center text-gray-500">
-            <p>No vendors found matching "{searchQuery}". Try a different search term.</p>
-          </CardContent>
-        </Card>
-      )}
-      
-      {!searchQuery.trim() && vendorCategories.every(category => (vendorsByCategory[category.id] || []).length === 0) && (
-        <Card>
-          <CardContent className="p-6 text-center text-gray-500">
-            <p>No vendors are currently available. Please check back later.</p>
-          </CardContent>
-        </Card>
-      )}
-    </div>
+    <VendorBrowse
+      vendors={vendorItems}
+      categories={vendorCategories}
+      selectedCategorySlug={selectedCategorySlug}
+      onCategoryChange={setSelectedCategorySlug}
+      showAdminBadge={isAdmin}
+    />
   );
 };
