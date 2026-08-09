@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
@@ -153,6 +153,30 @@ function TerminalLoadingState() {
 
 function LiveChatPreviewContent({ comments, isLoading, isError, onOpenChat }: LiveChatPreviewContentProps) {
   ensurePreviewStyles();
+
+  // Hover-to-expand: rest the pointer on a truncated message for ~0.5s to see
+  // the full text; collapses again on mouse leave.
+  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const expandTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleRowMouseEnter = (id: number, isTruncated: boolean) => {
+    if (!isTruncated) return;
+    if (expandTimerRef.current) clearTimeout(expandTimerRef.current);
+    expandTimerRef.current = setTimeout(() => setExpandedId(id), 500);
+  };
+
+  const handleRowMouseLeave = () => {
+    if (expandTimerRef.current) {
+      clearTimeout(expandTimerRef.current);
+      expandTimerRef.current = null;
+    }
+    setExpandedId(null);
+  };
+
+  useEffect(() => () => {
+    if (expandTimerRef.current) clearTimeout(expandTimerRef.current);
+  }, []);
+
   return (
     <div
       role="button"
@@ -214,14 +238,20 @@ function LiveChatPreviewContent({ comments, isLoading, isError, onOpenChat }: Li
         ) : (
           comments.map((comment) => {
             const rawText = comment.content.includes('<') ? stripHtml(comment.content) : comment.content;
-            const truncated = rawText.length > 60 ? rawText.slice(0, 60) + '…' : rawText;
+            const isTruncated = rawText.length > 60;
+            const isExpanded = expandedId === comment.id;
+            const displayText = isExpanded || !isTruncated ? rawText : rawText.slice(0, 60) + '…';
             return (
               <div
                 key={comment.id}
+                onMouseEnter={() => handleRowMouseEnter(comment.id, isTruncated)}
+                onMouseLeave={handleRowMouseLeave}
                 style={{
                   borderBottom: '1px dashed #004400',
                   padding: '3px 0',
                   marginBottom: '2px',
+                  background: isExpanded ? '#001a00' : 'transparent',
+                  transition: 'background 0.15s ease',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
@@ -232,8 +262,8 @@ function LiveChatPreviewContent({ comments, isLoading, isError, onOpenChat }: Li
                     {formatChatTime(comment.createdAt)}
                   </span>
                 </div>
-                <div style={{ color: '#00ff00', fontSize: '0.72rem', marginTop: '1px', lineHeight: 1.3 }}>
-                  {truncated}
+                <div style={{ color: '#00ff00', fontSize: '0.72rem', marginTop: '1px', lineHeight: 1.3, wordBreak: 'break-word' }}>
+                  {displayText}
                 </div>
               </div>
             );
@@ -308,6 +338,30 @@ export function LiveChatBubble() {
   // fetch errored) so the UPLINK animation actually shows.
   const isPreviewDataPending = !isPreviewError && (isPreviewLoading || rawPreviewData == null);
 
+  // Minimum display time for the UPLINK animation: play it on EVERY popup open
+  // for ~700ms, even when the data is already cached / arrives instantly.
+  const [minLoadingActive, setMinLoadingActive] = useState(false);
+  // Ref mirrors isPreviewOpen from the previous commit so the very first
+  // render after opening shows the loader synchronously (the effect below
+  // only runs after that commit — without this, cached data would flash).
+  const prevPreviewOpenRef = useRef(false);
+  const justOpened = isPreviewOpen && !prevPreviewOpenRef.current;
+  useEffect(() => {
+    prevPreviewOpenRef.current = isPreviewOpen;
+    if (!isPreviewOpen) {
+      setMinLoadingActive(false);
+      return;
+    }
+    setMinLoadingActive(true);
+    const timer = setTimeout(() => setMinLoadingActive(false), 700);
+    return () => clearTimeout(timer);
+  }, [isPreviewOpen]);
+
+  // The 700ms open-window loader plays on EVERY open (even if the query is in
+  // an error state from a previous attempt); once the window expires, an
+  // errored request shows UNAVAILABLE instead of spinning forever.
+  const showPreviewLoading = minLoadingActive || justOpened || (!isPreviewError && isPreviewDataPending);
+
   const previewComments = useMemo<PreviewComment[]>(() => {
     // Guard: global placeholderData fallback can inject [] or null for unknown-shaped data
     if (!Array.isArray(rawPreviewData)) return [];
@@ -376,17 +430,15 @@ export function LiveChatBubble() {
     navigate(`/forum/post/${LIVE_CHAT_POST_ID}`);
   };
 
-  // Mobile: tap 1 → open preview; tap 2 → close tooltip + navigate
+  // Mobile: single tap goes straight to live chat (no preview step).
+  // Taps on the unread badge are left alone so its synthesized click can
+  // still run mark-all-read (its click handler stops propagation).
   const handleChatTouchEnd = (e: React.TouchEvent) => {
+    if ((e.target as HTMLElement).closest?.('[data-lcb-badge]')) return;
     e.preventDefault(); // prevent synthesised click from also firing
-    if (activeTooltip === 'chat') {
-      // Already open — close popup then navigate
-      toggleTooltip(null);
-      triggerGlitch();
-      navigate(`/forum/post/${LIVE_CHAT_POST_ID}`);
-    } else {
-      toggleTooltip('chat');
-    }
+    toggleTooltip(null);
+    triggerGlitch();
+    navigate(`/forum/post/${LIVE_CHAT_POST_ID}`);
   };
 
   // ---------------------------------------------------------------------------
@@ -455,6 +507,7 @@ export function LiveChatBubble() {
       {unreadCount > 0 && !isDisabled && (
         <div
           className="absolute -top-1 -right-1 z-20"
+          data-lcb-badge
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onClick={handleBadgeClick}
@@ -546,7 +599,7 @@ export function LiveChatBubble() {
         >
           <LiveChatPreviewContent
             comments={previewComments}
-            isLoading={isPreviewDataPending}
+            isLoading={showPreviewLoading}
             isError={isPreviewError}
             onOpenChat={handleChatClick}
           />
