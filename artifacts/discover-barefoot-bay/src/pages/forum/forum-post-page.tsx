@@ -1305,8 +1305,10 @@ export default function ForumPostPage() {
               flex: '1',
               overflowY: 'auto',
               overflowX: 'hidden',
-              scrollPaddingBottom: '20px'
-            }}>
+              scrollPaddingBottom: '20px',
+              scrollbarWidth: 'thin',
+              scrollbarColor: '#00cc00 #001400'
+            } as React.CSSProperties}>
             <style>
               {`
                 .bbs-chat-267 .chat-message { 
@@ -1351,6 +1353,10 @@ export default function ForumPostPage() {
                 .bbs-chat-267 .chat-content table {
                   max-width: 100%;
                 }
+                .bbs-chat-267::-webkit-scrollbar { width: 6px; }
+                .bbs-chat-267::-webkit-scrollbar-track { background: #001400; }
+                .bbs-chat-267::-webkit-scrollbar-thumb { background: #00cc00; border-radius: 3px; }
+                .bbs-chat-267::-webkit-scrollbar-thumb:hover { background: #00ff00; }
                 .bbs-chat-267 .chat-admin-button {
                   background: none;
                   border: 1px solid #009900;
