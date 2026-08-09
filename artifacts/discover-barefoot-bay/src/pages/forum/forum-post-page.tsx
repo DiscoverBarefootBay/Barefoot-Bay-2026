@@ -1293,7 +1293,9 @@ export default function ForumPostPage() {
             borderTop: showPostContent ? 'none' : '2px solid #009900',
             borderRadius: showPostContent ? '0 0 4px 4px' : '4px',
             overflow: 'hidden',
-            marginBottom: '2rem'
+            marginBottom: '2rem',
+            maxWidth: '100%',
+            minWidth: 0
           }}>
             <div className="bbs-chat-267" style={{ 
               background: '#000', 
@@ -1302,6 +1304,7 @@ export default function ForumPostPage() {
               padding: '12px',
               flex: '1',
               overflowY: 'auto',
+              overflowX: 'hidden',
               scrollPaddingBottom: '20px'
             }}>
             <style>
@@ -1325,6 +1328,28 @@ export default function ForumPostPage() {
                 .bbs-chat-267 .chat-content { 
                   color: #00ff00; 
                   margin-top: 2px; 
+                }
+                /* Keep chat locked to viewport width: wrap long tokens instead of widening */
+                .bbs-chat-267,
+                .bbs-chat-267 .chat-message,
+                .bbs-chat-267 .chat-content,
+                .bbs-chat-267 .chat-username {
+                  min-width: 0;
+                  max-width: 100%;
+                  overflow-wrap: anywhere;
+                  word-break: break-word;
+                }
+                .bbs-chat-267 .chat-content pre,
+                .bbs-chat-267 .chat-content code {
+                  white-space: pre-wrap;
+                  overflow-wrap: anywhere;
+                  max-width: 100%;
+                }
+                .bbs-chat-267 .chat-content img,
+                .bbs-chat-267 .chat-content video,
+                .bbs-chat-267 .chat-content iframe,
+                .bbs-chat-267 .chat-content table {
+                  max-width: 100%;
                 }
                 .bbs-chat-267 .chat-admin-button {
                   background: none;
@@ -1403,11 +1428,11 @@ export default function ForumPostPage() {
             </style>
             {/* Live Chat Header with Analytics */}
             <div className="border-bottom-1 border-green-500 pb-2 mb-3" style={{ borderBottom: '1px dashed #009900' }}>
-              <div className="flex justify-between items-center">
-                <div>
+              <div className="flex flex-wrap justify-between items-center gap-x-2" style={{ minWidth: 0 }}>
+                <div style={{ minWidth: 0, overflowWrap: 'anywhere' }}>
                   <span style={{ color: '#00ff00', fontWeight: 'bold' }}>{'>>> BAREFOOT BAY LIVE CHAT <<<'}</span>
                 </div>
-                <div style={{ color: '#00aa00', fontSize: '0.75rem' }}>
+                <div style={{ color: '#00aa00', fontSize: '0.75rem', minWidth: 0, overflowWrap: 'anywhere' }}>
                   {activeUserList && activeUserList.length > 0 ? (
                     <span>ACTIVE: {activeUserList.map(user => user.username).join(', ')} • </span>
                   ) : (
@@ -1430,9 +1455,9 @@ export default function ForumPostPage() {
               <div>
                 {(liveChatComments && liveChatComments.length > 0 ? liveChatComments : comments || []).map((comment) => (
                   <div key={comment.id} className="chat-message">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span className="chat-username">{comment.author?.username || 'Anonymous'}</span>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', minWidth: 0 }}>
+                      <span className="chat-username" style={{ minWidth: 0 }}>{comment.author?.username || 'Anonymous'}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
                         <span className="chat-time">
                           {(() => {
                             if (!comment || !comment.createdAt) return 'ERR';
