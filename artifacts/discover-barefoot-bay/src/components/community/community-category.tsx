@@ -127,10 +127,11 @@ export const CommunityCategoryPage: React.FC<CommunityCategoryPageProps> = ({ ca
     return (
       <div className="space-y-4">
         <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
-          <Skeleton className="h-10 w-full sm:flex-1 sm:mr-auto" />
+          <Skeleton className="h-10 flex-1 sm:mr-auto" />
+          <Skeleton className="h-10 w-24 sm:hidden" />
           <Skeleton className="h-10 w-[130px] hidden sm:block" />
-          <Skeleton className="h-10 w-[200px]" />
-          <Skeleton className="h-10 w-[180px]" />
+          <Skeleton className="h-10 w-[200px] hidden sm:block" />
+          <Skeleton className="h-10 w-[180px] hidden sm:block" />
         </div>
         <Skeleton className="h-[128px] rounded-xl" />
         <Skeleton className="h-[128px] rounded-xl" />

@@ -310,10 +310,11 @@ export const AllVendorsPage: React.FC = () => {
       <div className="space-y-6">
         {/* Toolbar skeleton */}
         <div className="flex flex-wrap items-center gap-3">
-          <Skeleton className="h-10 flex-1 min-w-[200px]" />
+          <Skeleton className="h-10 flex-1 min-w-[160px]" />
+          <Skeleton className="h-10 w-24 sm:hidden" />
           <Skeleton className="h-10 w-28 hidden sm:block" />
-          <Skeleton className="h-10 w-44" />
-          <Skeleton className="h-10 w-44" />
+          <Skeleton className="h-10 w-44 hidden sm:block" />
+          <Skeleton className="h-10 w-44 hidden sm:block" />
         </div>
         {/* Card list skeleton */}
         <div className="grid grid-cols-1 gap-4">

@@ -53,6 +53,7 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { useRotatingList } from "@/hooks/use-rotating-list";
 import { usePlatinumSponsorSettings, PLATINUM_SPONSOR_DEFAULT_SETTINGS } from "@/hooks/use-platinum-sponsor-settings";
+import { FilterSortDrawer, DrawerFilterSection } from "@/components/shared/filter-sort-drawer";
 
 // Helper function to strip HTML tags from text
 const stripHtmlTags = (html: string | null) => {
@@ -100,6 +101,13 @@ export default function CalendarPage() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [showSearchSuggestions, setShowSearchSuggestions] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+
+  // Active-filter badge for the mobile Filters button
+  const calendarActiveFilterCount =
+    (sortOrder !== 'now' ? 1 : 0) +
+    (selectedCategory !== 'all' ? 1 : 0) +
+    (badgeFilter !== null ? 1 : 0);
 
   // Initialize selected date and category from URL parameters - re-run when location changes
   useEffect(() => {
@@ -1163,36 +1171,7 @@ export default function CalendarPage() {
           {/* Refresh button removed as requested */}
         </div>
 
-        {/* Mobile header - removed per request */}
-        <div className="md:hidden mb-8">
-          {/* Community Calendar header removed from mobile view only */}
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="xs" className="text-xs px-2 py-1 h-5 mb-4">
-                <Info className="h-2.5 w-2.5 mr-1" />
-                User Disclaimer
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-md max-h-[85vh] overflow-auto p-6 mt-4">
-              <DialogHeader>
-                <DialogTitle className="text-base sm:text-lg">Calendar Disclaimer</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Please note: Events may change or be canceled due to weather, illness, or unforeseen circumstances.
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  For corrections, updates, photos, or event submissions, email calendar@barefootbay.com
-                </p>
-              </div>
-              <div className="flex justify-end">
-                <DialogClose asChild>
-                  <Button variant="outline">Close</Button>
-                </DialogClose>
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
+        {/* Mobile disclaimer moved into the toolbar row as a compact info icon */}
 
         {/* Floating Action Button for desktop */}
         <div className="hidden md:block fixed bottom-8 right-8 z-10">
@@ -1340,6 +1319,101 @@ export default function CalendarPage() {
                 </Button>
               </div>
 
+              {/* Mobile: compact disclaimer + Filters bottom sheet (sort/category/badge) */}
+              <div className="md:hidden flex items-center gap-1 ml-auto shrink-0 pr-1">
+                <FilterSortDrawer
+                  open={isFilterDrawerOpen}
+                  onOpenChange={setIsFilterDrawerOpen}
+                  activeCount={calendarActiveFilterCount}
+                  onReset={() => {
+                    setSortOrder('now');
+                    setSelectedCategory('all');
+                    setBadgeFilter(null);
+                  }}
+                  data-testid="button-open-calendar-filters"
+                >
+                  <DrawerFilterSection label="Sort" icon={<ArrowUpDown className="h-4 w-4" />}>
+                    <Select value={sortOrder} onValueChange={(value: 'asc' | 'desc' | 'now') => setSortOrder(value)}>
+                      <SelectTrigger className="w-full" data-testid="select-calendar-sort-mobile">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="now">Now &amp; Later</SelectItem>
+                        <SelectItem value="asc">Earliest First</SelectItem>
+                        <SelectItem value="desc">Latest First</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </DrawerFilterSection>
+                  <DrawerFilterSection label="Category" icon={<CalendarIcon className="h-4 w-4" />}>
+                    <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                      <SelectTrigger className="w-full" data-testid="select-calendar-category-mobile">
+                        <SelectValue placeholder="Category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Categories</SelectItem>
+                        <SelectItem value="entertainment" className="font-bold text-[#111827] bg-[#7FD7C6] border border-[#5FC4B1] my-1 rounded-md">Entertainment &amp; Activities</SelectItem>
+                        <SelectItem value="government" className="font-bold text-[#111827] bg-[#6FA8DC] border border-[#4F93D3] my-1 rounded-md">Government &amp; Politics</SelectItem>
+                        <SelectItem value="social" className="font-bold text-[#111827] bg-[#F6D8A8] border border-[#EBC28B] my-1 rounded-md">Social Clubs</SelectItem>
+                        <SelectItem value="promotional" className="font-bold text-[#111827] bg-[#FFF3CD] border border-[#F1E1BA] my-1 rounded-md">Promotional</SelectItem>
+                        <SelectItem value="bulletin" className="font-bold text-[#111827] bg-[#C9C3E6] border border-[#B3AADF] my-1 rounded-md">Bulletin</SelectItem>
+                        <SelectItem value="platinum_sponsor" className="font-bold text-[#111827] bg-[#E5E7EB] border border-[#9CA3AF] my-1 rounded-md">Platinum Sponsors</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </DrawerFilterSection>
+                  <DrawerFilterSection label="Badge" icon={<CreditCard className="h-4 w-4" />}>
+                    <Select
+                      value={badgeFilter === null ? 'all' : badgeFilter === true ? 'required' : 'none'}
+                      onValueChange={(value) => {
+                        if (value === 'all') setBadgeFilter(null);
+                        else if (value === 'required') setBadgeFilter(true);
+                        else setBadgeFilter(false);
+                      }}
+                    >
+                      <SelectTrigger className="w-full" data-testid="select-calendar-badge-mobile">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Events</SelectItem>
+                        <SelectItem value="required">Badge Required</SelectItem>
+                        <SelectItem value="none">No Badge</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </DrawerFilterSection>
+                </FilterSortDrawer>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-9 w-9 text-muted-foreground shrink-0"
+                      aria-label="User Disclaimer"
+                      data-testid="button-calendar-disclaimer-mobile"
+                    >
+                      <Info className="h-4 w-4" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md max-h-[85vh] overflow-auto p-6 mt-4">
+                    <DialogHeader>
+                      <DialogTitle className="text-base sm:text-lg">Calendar Disclaimer</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <p className="text-sm text-muted-foreground">
+                        Please note: Events may change or be canceled due to weather, illness, or unforeseen circumstances.
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        For corrections, updates, photos, or event submissions, email calendar@barefootbay.com
+                      </p>
+                    </div>
+                    <div className="flex justify-end">
+                      <DialogClose asChild>
+                        <Button variant="outline">Close</Button>
+                      </DialogClose>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
+
+              <div className="hidden md:flex gap-2 items-center">
               {/* Sort order filter - visible in all views */}
               <Select value={sortOrder} onValueChange={(value: 'asc' | 'desc' | 'now') => setSortOrder(value)}>
                 <SelectTrigger className="w-[100px] h-9 text-sm whitespace-nowrap">
@@ -1438,6 +1512,7 @@ export default function CalendarPage() {
                   </SelectItem>
                 </SelectContent>
               </Select>
+              </div>
             </div>
 
             {/* Row 2: Search bar full width */}

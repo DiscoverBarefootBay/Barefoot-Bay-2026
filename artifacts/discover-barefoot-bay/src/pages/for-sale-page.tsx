@@ -53,6 +53,11 @@ import { usePermissions } from "@/hooks/use-permissions";
 import { useFlags } from "@/hooks/use-flags";
 import { FeatureUpgradeDialog } from "@/components/for-sale/feature-upgrade-dialog";
 import { FeaturedInfoDialog } from "@/components/for-sale/featured-info-dialog";
+import {
+  FilterSortDrawer,
+  DrawerFilterSection,
+  DisclaimerLink,
+} from "@/components/shared/filter-sort-drawer";
 
 const LISTING_TYPES = [
   {
@@ -174,6 +179,7 @@ export default function ForSalePage() {
   const [isSquareFeetOpen, setIsSquareFeetOpen] = useState(false);
   const [isYearBuiltOpen, setIsYearBuiltOpen] = useState(false);
   const [isAllFiltersOpen, setIsAllFiltersOpen] = useState(false);
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
   // Disclaimer dialog state
   const [isUserDisclaimerOpen, setIsUserDisclaimerOpen] = useState(false);
@@ -1208,6 +1214,442 @@ export default function ForSalePage() {
 
   // We already have isAdmin from usePermissions above
 
+  // Shared filter panel — rendered inside the desktop All Filters dialog and
+  // the mobile Filters & Sort bottom sheet.
+  const filterPanelContent = (
+    <>
+      {/* Listing Type Filter */}
+      <div className="border-b pb-6 mb-6">
+        <h4 className="font-medium mb-4 flex items-center">
+          <Filter className="h-4 w-4 mr-2" />
+          Listing Type
+        </h4>
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant={selectedType === "all" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setSelectedType("all")}
+          >
+            All Listings
+          </Button>
+          {LISTING_TYPES.map((type) => (
+            <Button
+              key={type.value}
+              variant={
+                selectedType === type.value ? "default" : "outline"
+              }
+              size="sm"
+              onClick={() => setSelectedType(type.value)}
+            >
+              {type.label}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      {/* Category Filter - Only shown when Classified is selected */}
+      {selectedType === "Classified" && (
+        <div className="border-b pb-6 mb-6">
+          <h4 className="font-medium mb-4 flex items-center">
+            <Tag className="h-4 w-4 mr-2" />
+            Category
+          </h4>
+          <Select
+            value={selectedCategory}
+            onValueChange={setSelectedCategory}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Categories</SelectItem>
+              <SelectItem value="Furniture">Furniture</SelectItem>
+              <SelectItem value="Electronics">Electronics</SelectItem>
+              <SelectItem value="Clothing">Clothing</SelectItem>
+              <SelectItem value="Tools">Tools</SelectItem>
+              <SelectItem value="Garage/Yard Sale">
+                Garage/Yard Sale
+              </SelectItem>
+              <SelectItem value="Other">Other</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+
+      {/* Price Range Filter */}
+      <div className="border-b pb-6 mb-6">
+        <h4 className="font-medium mb-4 flex items-center">
+          <DollarSign className="h-4 w-4 mr-2" />
+          Price Range
+        </h4>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <label htmlFor="minPrice" className="text-sm font-medium">
+              Min Price
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground font-medium">
+                $
+              </span>
+              <input
+                id="minPrice"
+                type="text"
+                inputMode="numeric"
+                placeholder="Min"
+                value={
+                  priceRange[0] > 0
+                    ? priceRange[0].toLocaleString()
+                    : ""
+                }
+                onFocus={(e) => e.target.select()}
+                onChange={(e) => {
+                  // Remove non-numeric characters and validate as number
+                  const value = e.target.value.replace(/[^\d]/g, "");
+
+                  // Empty value handling
+                  if (value === "") {
+                    setPriceRange([0, priceRange[1]]);
+                    setIsPriceFilterActive(true);
+                    return;
+                  }
+
+                  const numValue = parseInt(value, 10);
+
+                  // Only update if it's a valid number
+                  if (!isNaN(numValue) && numValue >= 0) {
+                    setPriceRange([numValue, priceRange[1]]);
+                    setIsPriceFilterActive(true);
+                  }
+                }}
+                className="pl-8 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="maxPrice" className="text-sm font-medium">
+              Max Price
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground font-medium">
+                $
+              </span>
+              <input
+                id="maxPrice"
+                type="text"
+                inputMode="numeric"
+                placeholder="Max"
+                value={
+                  priceRange[1] > 0
+                    ? priceRange[1].toLocaleString()
+                    : ""
+                }
+                onFocus={(e) => e.target.select()}
+                onChange={(e) => {
+                  // Remove non-numeric characters and validate as number
+                  const value = e.target.value.replace(/[^\d]/g, "");
+
+                  // Empty value handling
+                  if (value === "") {
+                    setPriceRange([priceRange[0], 0]);
+                    setIsPriceFilterActive(true);
+                    return;
+                  }
+
+                  const numValue = parseInt(value, 10);
+
+                  // Only update if it's a valid number
+                  if (!isNaN(numValue) && numValue >= 0) {
+                    setPriceRange([priceRange[0], numValue]);
+                    setIsPriceFilterActive(true);
+                  }
+                }}
+                className="pl-8 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bedrooms Filter */}
+      <div className="border-b pb-6 mb-6">
+        <h4 className="font-medium mb-4 flex items-center">
+          <Bed className="h-4 w-4 mr-2" />
+          Bedrooms
+        </h4>
+        <div className="flex flex-wrap gap-2">
+          {[null, 1, 2, 3, 4, 5].map((value) => (
+            <Button
+              key={value === null ? "any" : value}
+              variant={
+                bedroomFilter === value ? "default" : "outline"
+              }
+              size="sm"
+              onClick={() => setBedroomFilter(value)}
+              className="flex-1"
+            >
+              {value === null ? "Any" : `${value}+`}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      {/* Bathrooms Filter */}
+      <div className="border-b pb-6 mb-6">
+        <h4 className="font-medium mb-4 flex items-center">
+          <Bath className="h-4 w-4 mr-2" />
+          Bathrooms
+        </h4>
+        <div className="flex flex-wrap gap-2">
+          {[null, 1, 2, 3, 4].map((value) => (
+            <Button
+              key={value === null ? "any" : value?.toString()}
+              variant={
+                bathroomFilter === value ? "default" : "outline"
+              }
+              size="sm"
+              onClick={() => setBathroomFilter(value)}
+              className={value === null ? "flex-1" : ""}
+            >
+              {value === null ? "Any" : `${value}+`}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      {/* Square Feet Filter */}
+      <div className="border-b pb-6 mb-6">
+        <h4 className="font-medium mb-4 flex items-center">
+          <Ruler className="h-4 w-4 mr-2" />
+          Square Feet Range
+        </h4>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <label htmlFor="minSqft" className="text-sm font-medium">
+              Min Sq.Ft.
+            </label>
+            <input
+              id="minSqft"
+              type="text"
+              inputMode="numeric"
+              placeholder="Min"
+              value={
+                squareFeetRange[0] > 0
+                  ? squareFeetRange[0].toLocaleString()
+                  : ""
+              }
+              onFocus={(e) => e.target.select()}
+              onChange={(e) => {
+                // Remove non-numeric characters and validate as number
+                const value = e.target.value.replace(/[^\d]/g, "");
+
+                // Empty value handling
+                if (value === "") {
+                  setSquareFeetRange([0, squareFeetRange[1]]);
+                  setIsSquareFeetFilterActive(true);
+                  return;
+                }
+
+                const numValue = parseInt(value, 10);
+
+                // Only update if it's a valid number
+                if (!isNaN(numValue) && numValue >= 0) {
+                  setSquareFeetRange([numValue, squareFeetRange[1]]);
+                  setIsSquareFeetFilterActive(true);
+                }
+              }}
+              className="pl-4 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="maxSqft" className="text-sm font-medium">
+              Max Sq.Ft.
+            </label>
+            <input
+              id="maxSqft"
+              type="text"
+              inputMode="numeric"
+              placeholder="Max"
+              value={
+                squareFeetRange[1] > 0
+                  ? squareFeetRange[1].toLocaleString()
+                  : ""
+              }
+              onFocus={(e) => e.target.select()}
+              onChange={(e) => {
+                // Remove non-numeric characters and validate as number
+                const value = e.target.value.replace(/[^\d]/g, "");
+
+                // Empty value handling
+                if (value === "") {
+                  setSquareFeetRange([squareFeetRange[0], 5000]);
+                  setIsSquareFeetFilterActive(true);
+                  return;
+                }
+
+                const numValue = parseInt(value, 10);
+
+                // Only update if it's a valid number
+                if (!isNaN(numValue) && numValue >= 0) {
+                  setSquareFeetRange([squareFeetRange[0], numValue]);
+                  setIsSquareFeetFilterActive(true);
+                }
+              }}
+              className="pl-4 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Year Built Filter */}
+      <div className="pb-4">
+        <h4 className="font-medium mb-4 flex items-center">
+          <CalendarClock className="h-4 w-4 mr-2" />
+          Year Built Range
+        </h4>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <label htmlFor="minYear" className="text-sm font-medium">
+              From
+            </label>
+            <input
+              id="minYear"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              placeholder="Min"
+              value={
+                yearBuiltRange[0] > 0
+                  ? yearBuiltRange[0].toString()
+                  : ""
+              }
+              onFocus={(e) => {
+                // Force cursor to end of text and select all text
+                // This is critical for mobile where cursor might appear in the wrong position
+                e.target.setSelectionRange(0, e.target.value.length);
+              }}
+              onClick={(e) => {
+                // Ensure clicking anywhere in the field selects all text
+                e.currentTarget.setSelectionRange(
+                  0,
+                  e.currentTarget.value.length,
+                );
+              }}
+              onChange={(e) => {
+                const value = e.target.value;
+
+                // Handle empty value
+                if (value === "") {
+                  setYearBuiltRange([0, yearBuiltRange[1]]);
+                  setIsYearBuiltFilterActive(true);
+                  return;
+                }
+
+                // Only allow numbers
+                if (!/^\d*$/.test(value)) return;
+
+                // Parse the numeric value
+                const numValue = parseInt(value, 10);
+
+                // Update state even if it's a partial number
+                if (!isNaN(numValue)) {
+                  if (numValue <= new Date().getFullYear()) {
+                    setYearBuiltRange([numValue, yearBuiltRange[1]]);
+                    setIsYearBuiltFilterActive(true);
+                  }
+                }
+              }}
+              onBlur={(e) => {
+                // If the value is empty or less than 1900, reset to 1900 on blur
+                const value = e.target.value;
+                const numValue = parseInt(value, 10);
+
+                if (
+                  value === "" ||
+                  isNaN(numValue) ||
+                  numValue < 1900
+                ) {
+                  setYearBuiltRange([1900, yearBuiltRange[1]]);
+                }
+              }}
+              className="pl-4 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="maxYear" className="text-sm font-medium">
+              To
+            </label>
+            <input
+              id="maxYear"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              placeholder="Max"
+              value={
+                yearBuiltRange[1] > 0
+                  ? yearBuiltRange[1].toString()
+                  : ""
+              }
+              onFocus={(e) => {
+                // Force cursor to end of text and select all text
+                // This is critical for mobile where cursor might appear in the wrong position
+                e.target.setSelectionRange(0, e.target.value.length);
+              }}
+              onClick={(e) => {
+                // Ensure clicking anywhere in the field selects all text
+                e.currentTarget.setSelectionRange(
+                  0,
+                  e.currentTarget.value.length,
+                );
+              }}
+              onChange={(e) => {
+                const value = e.target.value;
+
+                // Handle empty value
+                if (value === "") {
+                  setYearBuiltRange([yearBuiltRange[0], 0]);
+                  setIsYearBuiltFilterActive(true);
+                  return;
+                }
+
+                // Only allow numbers
+                if (!/^\d*$/.test(value)) return;
+
+                // Parse the numeric value
+                const numValue = parseInt(value, 10);
+
+                // Update state even if it's a partial number
+                if (!isNaN(numValue)) {
+                  setYearBuiltRange([yearBuiltRange[0], numValue]);
+                  setIsYearBuiltFilterActive(true);
+                }
+              }}
+              onBlur={(e) => {
+                // If the value is empty or less than 1900, reset to current year on blur
+                const value = e.target.value;
+                const numValue = parseInt(value, 10);
+                const currentYear = new Date().getFullYear();
+
+                if (
+                  value === "" ||
+                  isNaN(numValue) ||
+                  numValue < 1900
+                ) {
+                  setYearBuiltRange([yearBuiltRange[0], currentYear]);
+                } else if (numValue > currentYear) {
+                  setYearBuiltRange([yearBuiltRange[0], currentYear]);
+                }
+              }}
+              className="pl-4 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            />
+          </div>
+        </div>
+      </div>
+    </>
+  );
+
   return (
     <div className="max-w-7xl mx-auto space-y-8 p-4">
       {/* Listing Payment Dialog */}
@@ -1256,30 +1698,57 @@ export default function ForSalePage() {
 
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="w-full sm:w-auto">
-          <h1 className="text-2xl sm:text-3xl font-bold">On The Market</h1>
-          <div className="flex flex-row gap-2 mt-2">
-            <Button
-              variant="outline"
-              size="xs"
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <h1 className="text-2xl sm:text-3xl font-bold">On The Market</h1>
+            {/* Mobile: Filters & Sort bottom sheet trigger sits beside the title */}
+            <div className="sm:hidden">
+              <FilterSortDrawer
+                open={isMobileFiltersOpen}
+                onOpenChange={setIsMobileFiltersOpen}
+                activeCount={activeFilterCount + (sortBy !== "newest" ? 1 : 0)}
+                onReset={() => {
+                  resetAllFilters();
+                  setSortBy("newest");
+                }}
+                data-testid="button-open-listing-filters"
+              >
+                <DrawerFilterSection
+                  label="Sort by"
+                  icon={<ArrowUpDown className="h-4 w-4" />}
+                >
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="w-full" aria-label="Sort listings" data-testid="select-listing-sort-mobile">
+                      <SelectValue placeholder="Sort by" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {SORT_OPTIONS.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </DrawerFilterSection>
+                <div className="pt-2">{filterPanelContent}</div>
+              </FilterSortDrawer>
+            </div>
+          </div>
+          {/* Compact disclaimer links (open the same dialogs) */}
+          <div className="flex flex-row gap-4 mt-1.5">
+            <DisclaimerLink
+              label="User Disclaimer"
               onClick={() => setIsUserDisclaimerOpen(true)}
-              className="text-xs px-2 py-1 h-auto"
-            >
-              <Info className="w-3 h-3 mr-1" />
-              User Disclaimer
-            </Button>
-            <Button
-              variant="outline"
-              size="xs"
+              data-testid="link-user-disclaimer"
+            />
+            <DisclaimerLink
+              label="Advertiser Disclaimer"
               onClick={() => setIsAdvertiserDisclaimerOpen(true)}
-              className="text-xs px-2 py-1 h-auto"
-            >
-              <Info className="w-3 h-3 mr-1" />
-              Advertiser Disclaimer
-            </Button>
+              data-testid="link-advertiser-disclaimer"
+            />
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="hidden sm:flex flex-col sm:flex-row gap-4">
           {/* Sort By Dropdown */}
           <Select value={sortBy} onValueChange={setSortBy}>
             <SelectTrigger className="w-full sm:w-[200px]" aria-label="Sort listings">
@@ -1330,436 +1799,7 @@ export default function ForSalePage() {
                   </Button>
                 </div>
 
-                {/* Listing Type Filter */}
-                <div className="border-b pb-6 mb-6">
-                  <h4 className="font-medium mb-4 flex items-center">
-                    <Filter className="h-4 w-4 mr-2" />
-                    Listing Type
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    <Button
-                      variant={selectedType === "all" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setSelectedType("all")}
-                    >
-                      All Listings
-                    </Button>
-                    {LISTING_TYPES.map((type) => (
-                      <Button
-                        key={type.value}
-                        variant={
-                          selectedType === type.value ? "default" : "outline"
-                        }
-                        size="sm"
-                        onClick={() => setSelectedType(type.value)}
-                      >
-                        {type.label}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Category Filter - Only shown when Classified is selected */}
-                {selectedType === "Classified" && (
-                  <div className="border-b pb-6 mb-6">
-                    <h4 className="font-medium mb-4 flex items-center">
-                      <Tag className="h-4 w-4 mr-2" />
-                      Category
-                    </h4>
-                    <Select
-                      value={selectedCategory}
-                      onValueChange={setSelectedCategory}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Categories</SelectItem>
-                        <SelectItem value="Furniture">Furniture</SelectItem>
-                        <SelectItem value="Electronics">Electronics</SelectItem>
-                        <SelectItem value="Clothing">Clothing</SelectItem>
-                        <SelectItem value="Tools">Tools</SelectItem>
-                        <SelectItem value="Garage/Yard Sale">
-                          Garage/Yard Sale
-                        </SelectItem>
-                        <SelectItem value="Other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-
-                {/* Price Range Filter */}
-                <div className="border-b pb-6 mb-6">
-                  <h4 className="font-medium mb-4 flex items-center">
-                    <DollarSign className="h-4 w-4 mr-2" />
-                    Price Range
-                  </h4>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label htmlFor="minPrice" className="text-sm font-medium">
-                        Min Price
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground font-medium">
-                          $
-                        </span>
-                        <input
-                          id="minPrice"
-                          type="text"
-                          inputMode="numeric"
-                          placeholder="Min"
-                          value={
-                            priceRange[0] > 0
-                              ? priceRange[0].toLocaleString()
-                              : ""
-                          }
-                          onFocus={(e) => e.target.select()}
-                          onChange={(e) => {
-                            // Remove non-numeric characters and validate as number
-                            const value = e.target.value.replace(/[^\d]/g, "");
-
-                            // Empty value handling
-                            if (value === "") {
-                              setPriceRange([0, priceRange[1]]);
-                              setIsPriceFilterActive(true);
-                              return;
-                            }
-
-                            const numValue = parseInt(value, 10);
-
-                            // Only update if it's a valid number
-                            if (!isNaN(numValue) && numValue >= 0) {
-                              setPriceRange([numValue, priceRange[1]]);
-                              setIsPriceFilterActive(true);
-                            }
-                          }}
-                          className="pl-8 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label htmlFor="maxPrice" className="text-sm font-medium">
-                        Max Price
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground font-medium">
-                          $
-                        </span>
-                        <input
-                          id="maxPrice"
-                          type="text"
-                          inputMode="numeric"
-                          placeholder="Max"
-                          value={
-                            priceRange[1] > 0
-                              ? priceRange[1].toLocaleString()
-                              : ""
-                          }
-                          onFocus={(e) => e.target.select()}
-                          onChange={(e) => {
-                            // Remove non-numeric characters and validate as number
-                            const value = e.target.value.replace(/[^\d]/g, "");
-
-                            // Empty value handling
-                            if (value === "") {
-                              setPriceRange([priceRange[0], 0]);
-                              setIsPriceFilterActive(true);
-                              return;
-                            }
-
-                            const numValue = parseInt(value, 10);
-
-                            // Only update if it's a valid number
-                            if (!isNaN(numValue) && numValue >= 0) {
-                              setPriceRange([priceRange[0], numValue]);
-                              setIsPriceFilterActive(true);
-                            }
-                          }}
-                          className="pl-8 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Bedrooms Filter */}
-                <div className="border-b pb-6 mb-6">
-                  <h4 className="font-medium mb-4 flex items-center">
-                    <Bed className="h-4 w-4 mr-2" />
-                    Bedrooms
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {[null, 1, 2, 3, 4, 5].map((value) => (
-                      <Button
-                        key={value === null ? "any" : value}
-                        variant={
-                          bedroomFilter === value ? "default" : "outline"
-                        }
-                        size="sm"
-                        onClick={() => setBedroomFilter(value)}
-                        className="flex-1"
-                      >
-                        {value === null ? "Any" : `${value}+`}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Bathrooms Filter */}
-                <div className="border-b pb-6 mb-6">
-                  <h4 className="font-medium mb-4 flex items-center">
-                    <Bath className="h-4 w-4 mr-2" />
-                    Bathrooms
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {[null, 1, 2, 3, 4].map((value) => (
-                      <Button
-                        key={value === null ? "any" : value?.toString()}
-                        variant={
-                          bathroomFilter === value ? "default" : "outline"
-                        }
-                        size="sm"
-                        onClick={() => setBathroomFilter(value)}
-                        className={value === null ? "flex-1" : ""}
-                      >
-                        {value === null ? "Any" : `${value}+`}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Square Feet Filter */}
-                <div className="border-b pb-6 mb-6">
-                  <h4 className="font-medium mb-4 flex items-center">
-                    <Ruler className="h-4 w-4 mr-2" />
-                    Square Feet Range
-                  </h4>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label htmlFor="minSqft" className="text-sm font-medium">
-                        Min Sq.Ft.
-                      </label>
-                      <input
-                        id="minSqft"
-                        type="text"
-                        inputMode="numeric"
-                        placeholder="Min"
-                        value={
-                          squareFeetRange[0] > 0
-                            ? squareFeetRange[0].toLocaleString()
-                            : ""
-                        }
-                        onFocus={(e) => e.target.select()}
-                        onChange={(e) => {
-                          // Remove non-numeric characters and validate as number
-                          const value = e.target.value.replace(/[^\d]/g, "");
-
-                          // Empty value handling
-                          if (value === "") {
-                            setSquareFeetRange([0, squareFeetRange[1]]);
-                            setIsSquareFeetFilterActive(true);
-                            return;
-                          }
-
-                          const numValue = parseInt(value, 10);
-
-                          // Only update if it's a valid number
-                          if (!isNaN(numValue) && numValue >= 0) {
-                            setSquareFeetRange([numValue, squareFeetRange[1]]);
-                            setIsSquareFeetFilterActive(true);
-                          }
-                        }}
-                        className="pl-4 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <label htmlFor="maxSqft" className="text-sm font-medium">
-                        Max Sq.Ft.
-                      </label>
-                      <input
-                        id="maxSqft"
-                        type="text"
-                        inputMode="numeric"
-                        placeholder="Max"
-                        value={
-                          squareFeetRange[1] > 0
-                            ? squareFeetRange[1].toLocaleString()
-                            : ""
-                        }
-                        onFocus={(e) => e.target.select()}
-                        onChange={(e) => {
-                          // Remove non-numeric characters and validate as number
-                          const value = e.target.value.replace(/[^\d]/g, "");
-
-                          // Empty value handling
-                          if (value === "") {
-                            setSquareFeetRange([squareFeetRange[0], 5000]);
-                            setIsSquareFeetFilterActive(true);
-                            return;
-                          }
-
-                          const numValue = parseInt(value, 10);
-
-                          // Only update if it's a valid number
-                          if (!isNaN(numValue) && numValue >= 0) {
-                            setSquareFeetRange([squareFeetRange[0], numValue]);
-                            setIsSquareFeetFilterActive(true);
-                          }
-                        }}
-                        className="pl-4 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Year Built Filter */}
-                <div className="pb-4">
-                  <h4 className="font-medium mb-4 flex items-center">
-                    <CalendarClock className="h-4 w-4 mr-2" />
-                    Year Built Range
-                  </h4>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label htmlFor="minYear" className="text-sm font-medium">
-                        From
-                      </label>
-                      <input
-                        id="minYear"
-                        type="text"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        placeholder="Min"
-                        value={
-                          yearBuiltRange[0] > 0
-                            ? yearBuiltRange[0].toString()
-                            : ""
-                        }
-                        onFocus={(e) => {
-                          // Force cursor to end of text and select all text
-                          // This is critical for mobile where cursor might appear in the wrong position
-                          e.target.setSelectionRange(0, e.target.value.length);
-                        }}
-                        onClick={(e) => {
-                          // Ensure clicking anywhere in the field selects all text
-                          e.currentTarget.setSelectionRange(
-                            0,
-                            e.currentTarget.value.length,
-                          );
-                        }}
-                        onChange={(e) => {
-                          const value = e.target.value;
-
-                          // Handle empty value
-                          if (value === "") {
-                            setYearBuiltRange([0, yearBuiltRange[1]]);
-                            setIsYearBuiltFilterActive(true);
-                            return;
-                          }
-
-                          // Only allow numbers
-                          if (!/^\d*$/.test(value)) return;
-
-                          // Parse the numeric value
-                          const numValue = parseInt(value, 10);
-
-                          // Update state even if it's a partial number
-                          if (!isNaN(numValue)) {
-                            if (numValue <= new Date().getFullYear()) {
-                              setYearBuiltRange([numValue, yearBuiltRange[1]]);
-                              setIsYearBuiltFilterActive(true);
-                            }
-                          }
-                        }}
-                        onBlur={(e) => {
-                          // If the value is empty or less than 1900, reset to 1900 on blur
-                          const value = e.target.value;
-                          const numValue = parseInt(value, 10);
-
-                          if (
-                            value === "" ||
-                            isNaN(numValue) ||
-                            numValue < 1900
-                          ) {
-                            setYearBuiltRange([1900, yearBuiltRange[1]]);
-                          }
-                        }}
-                        className="pl-4 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <label htmlFor="maxYear" className="text-sm font-medium">
-                        To
-                      </label>
-                      <input
-                        id="maxYear"
-                        type="text"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        placeholder="Max"
-                        value={
-                          yearBuiltRange[1] > 0
-                            ? yearBuiltRange[1].toString()
-                            : ""
-                        }
-                        onFocus={(e) => {
-                          // Force cursor to end of text and select all text
-                          // This is critical for mobile where cursor might appear in the wrong position
-                          e.target.setSelectionRange(0, e.target.value.length);
-                        }}
-                        onClick={(e) => {
-                          // Ensure clicking anywhere in the field selects all text
-                          e.currentTarget.setSelectionRange(
-                            0,
-                            e.currentTarget.value.length,
-                          );
-                        }}
-                        onChange={(e) => {
-                          const value = e.target.value;
-
-                          // Handle empty value
-                          if (value === "") {
-                            setYearBuiltRange([yearBuiltRange[0], 0]);
-                            setIsYearBuiltFilterActive(true);
-                            return;
-                          }
-
-                          // Only allow numbers
-                          if (!/^\d*$/.test(value)) return;
-
-                          // Parse the numeric value
-                          const numValue = parseInt(value, 10);
-
-                          // Update state even if it's a partial number
-                          if (!isNaN(numValue)) {
-                            setYearBuiltRange([yearBuiltRange[0], numValue]);
-                            setIsYearBuiltFilterActive(true);
-                          }
-                        }}
-                        onBlur={(e) => {
-                          // If the value is empty or less than 1900, reset to current year on blur
-                          const value = e.target.value;
-                          const numValue = parseInt(value, 10);
-                          const currentYear = new Date().getFullYear();
-
-                          if (
-                            value === "" ||
-                            isNaN(numValue) ||
-                            numValue < 1900
-                          ) {
-                            setYearBuiltRange([yearBuiltRange[0], currentYear]);
-                          } else if (numValue > currentYear) {
-                            setYearBuiltRange([yearBuiltRange[0], currentYear]);
-                          }
-                        }}
-                        className="pl-4 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-                </div>
-
+                {filterPanelContent}
                 <div className="flex justify-end gap-2 mt-6 pt-4 border-t">
                   <Button variant="outline" onClick={resetAllFilters}>
                     Reset All

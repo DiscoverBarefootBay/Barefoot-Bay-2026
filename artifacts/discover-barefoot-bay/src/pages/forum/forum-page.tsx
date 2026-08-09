@@ -42,6 +42,7 @@ import { useToast } from "@/hooks/use-toast";
 import { usePermissions } from "@/hooks/use-permissions";
 import { Textarea } from "@/components/ui/textarea";
 import { ForumLoadingAnimation } from "@/components/forum/loading-animation";
+import { FilterSortDrawer, DrawerFilterSection } from "@/components/shared/filter-sort-drawer";
 import { apiRequest } from "@/lib/queryClient";
 import { queryClient } from "@/lib/queryClient";
 
@@ -288,6 +289,7 @@ export default function ForumPage() {
   // Text search: raw input updates instantly; debounced value drives the server query
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(searchInput.trim()), 300);
@@ -623,7 +625,7 @@ export default function ForumPage() {
 
       {/* Search + View toggle + Sort Dropdown */}
       <div className="mb-6 flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
-        <div className="relative w-full sm:flex-1 sm:mr-auto">
+        <div className="relative flex-1 min-w-0 sm:mr-auto">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-navy/40 pointer-events-none" />
           <Input
             type="text"
@@ -645,6 +647,71 @@ export default function ForumPage() {
               <X className="h-4 w-4" />
             </button>
           )}
+        </div>
+        {/* Mobile: slim Filters button opening a bottom sheet with category + sort */}
+        <div className="sm:hidden">
+          <FilterSortDrawer
+            open={isFilterDrawerOpen}
+            onOpenChange={setIsFilterDrawerOpen}
+            activeCount={(selectedCategoryId ? 1 : 0) + (sortBy !== "newest_created" ? 1 : 0)}
+            onReset={() => {
+              setSelectedCategoryId(null);
+              setSortBy("newest_created");
+            }}
+            data-testid="button-open-story-filters"
+          >
+            <DrawerFilterSection label="Category" icon={<Tag className="h-4 w-4" />}>
+              <Select
+                value={selectedCategoryId === null ? "all" : selectedCategoryId.toString()}
+                onValueChange={(val) => {
+                  setSelectedCategoryId(val === "all" ? null : parseInt(val, 10));
+                }}
+              >
+                <SelectTrigger
+                  className="w-full border-navy/20 bg-white [&>span]:min-w-0 [&>span]:truncate [&>span]:text-left"
+                  data-testid="select-category-mobile"
+                >
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Stories</SelectItem>
+                  {(categories ?? []).map((category) => {
+                    const unread = category.unreadCount ?? 0;
+                    return (
+                      <SelectItem key={category.id} value={category.id.toString()}>
+                        <span className="flex items-center gap-2">
+                          {category.name}
+                          {unread > 0 && (
+                            <span className="inline-flex items-center justify-center min-w-[18px] px-1.5 py-0.5 rounded-full text-[10px] font-bold text-white bg-coral">
+                              {unread}
+                            </span>
+                          )}
+                        </span>
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+            </DrawerFilterSection>
+            <DrawerFilterSection label="Sort by" icon={<ArrowUpDown className="h-4 w-4" />}>
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger
+                  className="w-full border-navy/20 bg-white [&>span]:min-w-0 [&>span]:truncate [&>span]:text-left"
+                  data-testid="select-sort-mobile"
+                >
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="newest_created">Newest Created</SelectItem>
+                  <SelectItem value="oldest_created">Oldest Created</SelectItem>
+                  <SelectItem value="newest_comment">Newest Comment</SelectItem>
+                  <SelectItem value="oldest_comment">Oldest Comment</SelectItem>
+                  <SelectItem value="newest_edited">Newest Edited</SelectItem>
+                  <SelectItem value="oldest_edited">Oldest Edited</SelectItem>
+                </SelectContent>
+              </Select>
+            </DrawerFilterSection>
+          </FilterSortDrawer>
         </div>
         <div className="hidden sm:flex items-center gap-2">
           <span className="text-sm text-navy/70 font-medium">View as:</span>
@@ -694,7 +761,8 @@ export default function ForumPage() {
             </button>
           </div>
         </div>
-        <div className="flex flex-row gap-2 w-full sm:contents">
+        {/* Desktop: inline category + sort (in the bottom sheet on mobile) */}
+        <div className="hidden sm:contents">
           <div className="flex items-center gap-2 flex-1 sm:flex-none min-w-0">
             <Tag className="h-4 w-4 text-navy/70 shrink-0" />
             <span className="text-sm text-navy/70 font-medium shrink-0">Category:</span>

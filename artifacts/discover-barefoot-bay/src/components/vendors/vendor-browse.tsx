@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState, type CSSProperties } from "react";
+import { FilterSortDrawer, DrawerFilterSection } from "@/components/shared/filter-sort-drawer";
 import { Link } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -253,6 +254,13 @@ export function VendorBrowse({
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [view, setView] = useState<VendorView>(() => loadStoredVendorView(storageKey));
   const [sortBy, setSortBy] = useState<VendorSort>("name_asc");
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+
+  // Active-filter badge for the mobile Filters button. Category only counts
+  // when "All Categories" is a real option (on community pages the dropdown is
+  // pure navigation, so it is never "active").
+  const activeFilterCount =
+    (includeAllCategories && selectedCategorySlug ? 1 : 0) + (sortBy !== "name_asc" ? 1 : 0);
 
   const handleViewChange = (next: VendorView) => {
     setView(next);
@@ -298,7 +306,7 @@ export function VendorBrowse({
     <div>
       {/* Search + View toggle + Category + Sort — mirrors the Extra!! toolbar */}
       <div className="mb-6 flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
-        <div className="relative w-full sm:flex-1 sm:mr-auto">
+        <div className="relative flex-1 min-w-0 sm:mr-auto">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-navy/40 pointer-events-none" />
           <Input
             ref={searchInputRef}
@@ -324,6 +332,57 @@ export function VendorBrowse({
               <X className="h-4 w-4" />
             </button>
           )}
+        </div>
+        {/* Mobile: single slim row — search + Filters button opening a bottom sheet */}
+        <div className="sm:hidden">
+          <FilterSortDrawer
+            open={isFilterDrawerOpen}
+            onOpenChange={setIsFilterDrawerOpen}
+            activeCount={activeFilterCount}
+            onReset={() => {
+              if (includeAllCategories) onCategoryChange(null);
+              setSortBy("name_asc");
+            }}
+            data-testid="button-open-vendor-filters"
+          >
+            <DrawerFilterSection label="Category" icon={<Tag className="h-4 w-4" />}>
+              <Select
+                value={selectedCategorySlug ?? "all"}
+                onValueChange={(val) => onCategoryChange(val === "all" ? null : val)}
+              >
+                <SelectTrigger
+                  className="w-full border-navy/20 bg-white [&>span]:min-w-0 [&>span]:truncate [&>span]:text-left"
+                  data-testid="select-vendor-category-mobile"
+                >
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {includeAllCategories && <SelectItem value="all">All Categories</SelectItem>}
+                  {categories.map((category) => (
+                    <SelectItem key={category.slug} value={category.slug}>
+                      {category.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </DrawerFilterSection>
+            <DrawerFilterSection label="Sort by" icon={<ArrowUpDown className="h-4 w-4" />}>
+              <Select value={sortBy} onValueChange={(val) => setSortBy(val as VendorSort)}>
+                <SelectTrigger
+                  className="w-full border-navy/20 bg-white [&>span]:min-w-0 [&>span]:truncate [&>span]:text-left"
+                  data-testid="select-vendor-sort-mobile"
+                >
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="name_asc">Name A–Z</SelectItem>
+                  <SelectItem value="name_desc">Name Z–A</SelectItem>
+                  <SelectItem value="newest_added">Newest Added</SelectItem>
+                  <SelectItem value="oldest_added">Oldest Added</SelectItem>
+                </SelectContent>
+              </Select>
+            </DrawerFilterSection>
+          </FilterSortDrawer>
         </div>
         <div className="hidden sm:flex items-center gap-2">
           <span className="text-sm text-navy/70 font-medium">View as:</span>
@@ -373,7 +432,8 @@ export function VendorBrowse({
             </button>
           </div>
         </div>
-        <div className="flex flex-row gap-2 w-full sm:contents">
+        {/* Desktop: inline category + sort (moved into the bottom sheet on mobile) */}
+        <div className="hidden sm:contents">
           <div className="flex items-center gap-2 flex-1 sm:flex-none min-w-0">
             <Tag className="h-4 w-4 text-navy/70 shrink-0" />
             <span className="text-sm text-navy/70 font-medium shrink-0">Category:</span>

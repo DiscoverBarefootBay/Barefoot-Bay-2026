@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { EyeOff } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { ShareButton } from "@/components/shared/share-button";
+import { DisclaimerLink } from "@/components/shared/filter-sort-drawer";
 
 // Need to include RouteComponentProps to properly handle wouter route params
 import { RouteComponentProps } from "wouter";
@@ -1005,13 +1006,11 @@ export default function GenericContentPage(props: GenericContentPageProps) {
                 Barefoot Bay Preferred Vendors
               </h1>
               
-              {/* Disclaimer Buttons */}
-              <div className="flex flex-wrap gap-2 mb-6">
+              {/* Compact disclaimer links */}
+              <div className="flex flex-wrap gap-4 -mt-4 mb-6">
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="outline" size="sm" className="text-xs">
-                      User Disclaimer
-                    </Button>
+                    <DisclaimerLink label="User Disclaimer" data-testid="link-user-disclaimer" />
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-md max-h-[85vh] overflow-auto p-4 sm:p-6 mt-4">
                     <DialogHeader className="pb-2">
@@ -1027,9 +1026,7 @@ export default function GenericContentPage(props: GenericContentPageProps) {
 
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="outline" size="sm" className="text-xs">
-                      Vendor Disclaimer
-                    </Button>
+                    <DisclaimerLink label="Vendor Disclaimer" data-testid="link-vendor-disclaimer" />
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-md max-h-[85vh] overflow-auto p-4 sm:p-6 mt-4">
                     <DialogHeader className="pb-2">
