@@ -17,15 +17,17 @@ export const DEFAULT_FEATURED_LISTING_CREDIT_COST = 5;
  * anything unset/invalid falls back to the default.
  */
 export function getFeaturedListingCreditCost(env: Record<string, string | undefined> = process.env): number {
-  const n = Number(env.FEATURED_LISTING_CREDIT_COST);
-  return Number.isInteger(n) && n >= 1 ? n : DEFAULT_FEATURED_LISTING_CREDIT_COST;
+  // Same bounds as admin-set prices: whole credits within [floor, ceiling].
+  // An out-of-range env override must not bypass the pricing ceiling.
+  const n = parseFeaturedListingCreditCost(env.FEATURED_LISTING_CREDIT_COST);
+  return n ?? DEFAULT_FEATURED_LISTING_CREDIT_COST;
 }
 
 /** Admin-set prices may never go below this floor. */
-export const MIN_FEATURED_LISTING_CREDIT_COST = 5;
+export const MIN_FEATURED_LISTING_CREDIT_COST = 1;
 
 /** Sanity ceiling — keeps admin typos and unsafe numbers out of pricing. */
-export const MAX_FEATURED_LISTING_CREDIT_COST = 10000;
+export const MAX_FEATURED_LISTING_CREDIT_COST = 1000000;
 
 /** Site-settings key holding the admin-configured Featured price. */
 export const FEATURED_LISTING_COST_SETTING_KEY = 'featured_listing_credit_cost';
@@ -35,7 +37,10 @@ export const FEATURED_LISTING_COST_SETTING_KEY = 'featured_listing_credit_cost';
  * safe whole number within [floor, ceiling], otherwise null.
  */
 export function parseFeaturedListingCreditCost(raw: unknown): number | null {
-  if (raw === null || raw === undefined || raw === '') return null;
+  // Only accept numbers or numeric strings; Number(true) === 1 would
+  // otherwise slip through now that the floor is 1 credit.
+  if (typeof raw !== 'number' && typeof raw !== 'string') return null;
+  if (raw === '') return null;
   const n = Number(raw);
   return Number.isSafeInteger(n) &&
     n >= MIN_FEATURED_LISTING_CREDIT_COST &&

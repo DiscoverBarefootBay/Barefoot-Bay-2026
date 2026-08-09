@@ -36,8 +36,8 @@ export function FeaturedPricingManager() {
     queryKey: ['/api/featured-listings/config'],
   });
 
-  const minCost = config?.minCreditCost ?? 5;
-  const maxCost = config?.maxCreditCost ?? 10000;
+  const minCost = config?.minCreditCost ?? 1;
+  const maxCost = config?.maxCreditCost ?? 1000000;
 
   // Seed the input with the current price once loaded.
   useEffect(() => {
@@ -123,11 +123,12 @@ export function FeaturedPricingManager() {
               />
               {!isValid && price !== '' && (
                 <p className="text-sm text-destructive">
-                  Enter a whole number between {minCost} and {maxCost} credits.
+                  Enter a whole number of at least {minCost} credit
+                  {minCost === 1 ? '' : 's'} (up to {maxCost.toLocaleString()}).
                 </p>
               )}
               <p className="text-sm text-muted-foreground">
-                Whole credits only, between {minCost} and {maxCost}.
+                Whole credits only, from {minCost} up to {maxCost.toLocaleString()}.
               </p>
             </div>
 

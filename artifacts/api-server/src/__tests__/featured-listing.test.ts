@@ -29,11 +29,26 @@ describe('getFeaturedListingCreditCost', () => {
   it('honors a valid positive integer override', () => {
     assert.equal(getFeaturedListingCreditCost({ FEATURED_LISTING_CREDIT_COST: '3' }), 3);
     assert.equal(getFeaturedListingCreditCost({ FEATURED_LISTING_CREDIT_COST: '10' }), 10);
+    assert.equal(
+      getFeaturedListingCreditCost({ FEATURED_LISTING_CREDIT_COST: String(MAX_FEATURED_LISTING_CREDIT_COST) }),
+      MAX_FEATURED_LISTING_CREDIT_COST,
+    );
+  });
+
+  it('rejects env overrides above the ceiling or unsafe', () => {
+    assert.equal(
+      getFeaturedListingCreditCost({ FEATURED_LISTING_CREDIT_COST: String(MAX_FEATURED_LISTING_CREDIT_COST + 1) }),
+      DEFAULT_FEATURED_LISTING_CREDIT_COST,
+    );
+    assert.equal(getFeaturedListingCreditCost({ FEATURED_LISTING_CREDIT_COST: '1e20' }), DEFAULT_FEATURED_LISTING_CREDIT_COST);
   });
 });
 
 describe('parseFeaturedListingCreditCost', () => {
   it('accepts safe whole numbers within bounds', () => {
+    assert.equal(parseFeaturedListingCreditCost(MIN_FEATURED_LISTING_CREDIT_COST), MIN_FEATURED_LISTING_CREDIT_COST);
+    assert.equal(parseFeaturedListingCreditCost(2), 2);
+    assert.equal(parseFeaturedListingCreditCost(20000), 20000);
     assert.equal(parseFeaturedListingCreditCost(5), 5);
     assert.equal(parseFeaturedListingCreditCost('5'), 5);
     assert.equal(parseFeaturedListingCreditCost('250'), 250);
@@ -69,8 +84,13 @@ describe('resolveFeaturedListingCreditCost', () => {
 
   it('falls back to the default when the stored value is missing or invalid', async () => {
     assert.equal(await resolveFeaturedListingCreditCost(async () => null), DEFAULT_FEATURED_LISTING_CREDIT_COST);
-    assert.equal(await resolveFeaturedListingCreditCost(async () => '3'), DEFAULT_FEATURED_LISTING_CREDIT_COST);
+    assert.equal(await resolveFeaturedListingCreditCost(async () => '0'), DEFAULT_FEATURED_LISTING_CREDIT_COST);
     assert.equal(await resolveFeaturedListingCreditCost(async () => 'garbage'), DEFAULT_FEATURED_LISTING_CREDIT_COST);
+  });
+
+  it('honors low stored prices now that the floor is 1', async () => {
+    assert.equal(await resolveFeaturedListingCreditCost(async () => '1'), 1);
+    assert.equal(await resolveFeaturedListingCreditCost(async () => '3'), 3);
   });
 
   it('falls back to the default when the settings read throws', async () => {

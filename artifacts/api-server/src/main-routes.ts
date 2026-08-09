@@ -8349,7 +8349,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (creditCost === null) {
         return res.status(400).json({
           success: false,
-          message: `Price must be a whole number between ${MIN_FEATURED_LISTING_CREDIT_COST} and ${MAX_FEATURED_LISTING_CREDIT_COST} credits.`,
+          message: `Price must be a whole number of at least ${MIN_FEATURED_LISTING_CREDIT_COST} credit (up to ${MAX_FEATURED_LISTING_CREDIT_COST.toLocaleString('en-US')}).`,
         });
       }
       await storage.setSiteSetting(
