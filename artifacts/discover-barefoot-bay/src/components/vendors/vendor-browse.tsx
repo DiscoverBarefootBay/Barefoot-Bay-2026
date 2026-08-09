@@ -193,8 +193,8 @@ function HorizontalVendorCard({
               New
             </div>
           )}
-          <div className="flex items-stretch min-h-[110px] sm:min-h-[128px]">
-            <div className="story-banner-shine relative w-[110px] sm:w-[180px] md:w-[220px] flex-shrink-0 overflow-hidden bg-navy/5">
+          <div className="flex items-stretch min-h-[128px] sm:min-h-[146px] group-hover:min-h-[176px] sm:group-hover:min-h-[204px] transition-all duration-300">
+            <div className="story-banner-shine relative w-[148px] sm:w-[210px] md:w-[264px] group-hover:w-[188px] sm:group-hover:w-[260px] md:group-hover:w-[320px] flex-shrink-0 overflow-hidden bg-navy/5 transition-all duration-300">
               <VendorImage vendor={vendor} />
               <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/20 pointer-events-none" />
             </div>
@@ -209,7 +209,7 @@ function HorizontalVendorCard({
                 {vendor.title}
               </h3>
               {vendor.description && (
-                <p className="text-xs sm:text-sm text-navy/70 line-clamp-2 mt-1">
+                <p className="story-banner-excerpt text-xs sm:text-sm text-navy/70 line-clamp-2 max-h-0 opacity-0 overflow-hidden group-hover:max-h-16 group-hover:opacity-100 group-hover:mt-1.5 transition-all duration-300">
                   {vendor.description}
                 </p>
               )}
