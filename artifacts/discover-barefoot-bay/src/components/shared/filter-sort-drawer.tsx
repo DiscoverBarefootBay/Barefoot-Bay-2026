@@ -64,7 +64,22 @@ export function FilterSortDrawer({
           </span>
         )}
       </Button>
-      <DrawerContent className="max-h-[85vh]">
+      <DrawerContent
+        className="max-h-[85vh]"
+        onPointerDownOutside={(e) => {
+          // Radix Select portals its content outside the Drawer DOM tree;
+          // without this guard Vaul sees the tap as an "outside click" and
+          // closes the drawer before the selection registers.
+          if ((e.target as Element)?.closest?.("[data-radix-popper-content-wrapper]")) {
+            e.preventDefault();
+          }
+        }}
+        onInteractOutside={(e) => {
+          if ((e.target as Element)?.closest?.("[data-radix-popper-content-wrapper]")) {
+            e.preventDefault();
+          }
+        }}
+      >
         <DrawerHeader className="pb-2">
           <DrawerTitle>{title}</DrawerTitle>
         </DrawerHeader>
