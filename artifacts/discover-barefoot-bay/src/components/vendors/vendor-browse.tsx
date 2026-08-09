@@ -55,15 +55,34 @@ const VENDOR_VIEW_CLASSES: Record<VendorView, string> = {
   single: "grid grid-cols-1 gap-4",
 };
 
-function loadStoredVendorView(): VendorView {
+function loadStoredVendorView(storageKey: string): VendorView {
   try {
-    const stored = window.localStorage.getItem(VENDOR_VIEW_STORAGE_KEY);
+    const stored = window.localStorage.getItem(storageKey);
     if (stored === "grid" || stored === "dual" || stored === "single") return stored;
   } catch {
     // localStorage unavailable — fall back to default
   }
   return "single";
 }
+
+/** User-facing copy so the browse layout can be reused for non-vendor content. */
+export interface VendorBrowseLabels {
+  searchPlaceholder: string;
+  searchAriaLabel: string;
+  emptySearchTitle: string;
+  emptySearchBody: string;
+  emptyTitle: string;
+  emptyBody: string;
+}
+
+const DEFAULT_LABELS: VendorBrowseLabels = {
+  searchPlaceholder: "Search vendors…",
+  searchAriaLabel: "Search vendors",
+  emptySearchTitle: "No vendors match your search",
+  emptySearchBody: "Try a different word or clear the search to see all vendors.",
+  emptyTitle: "No vendors found",
+  emptyBody: "Please check back later.",
+};
 
 type VendorSort = "name_asc" | "name_desc" | "newest_added" | "oldest_added";
 
@@ -212,6 +231,12 @@ interface VendorBrowseProps {
   onCategoryChange: (slug: string | null) => void;
   /** Show "Admin Only" badges on hidden vendors (admins only) */
   showAdminBadge: boolean;
+  /** localStorage key for the view preference (defaults to the vendors key) */
+  storageKey?: string;
+  /** Override the user-facing copy (defaults to vendor wording) */
+  labels?: VendorBrowseLabels;
+  /** Offer an "All Categories" option in the category dropdown (default true) */
+  includeAllCategories?: boolean;
 }
 
 export function VendorBrowse({
@@ -220,16 +245,19 @@ export function VendorBrowse({
   selectedCategorySlug,
   onCategoryChange,
   showAdminBadge,
+  storageKey = VENDOR_VIEW_STORAGE_KEY,
+  labels = DEFAULT_LABELS,
+  includeAllCategories = true,
 }: VendorBrowseProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const [view, setView] = useState<VendorView>(() => loadStoredVendorView());
+  const [view, setView] = useState<VendorView>(() => loadStoredVendorView(storageKey));
   const [sortBy, setSortBy] = useState<VendorSort>("name_asc");
 
   const handleViewChange = (next: VendorView) => {
     setView(next);
     try {
-      window.localStorage.setItem(VENDOR_VIEW_STORAGE_KEY, next);
+      window.localStorage.setItem(storageKey, next);
     } catch {
       // localStorage unavailable — preference just won't persist
     }
@@ -277,8 +305,8 @@ export function VendorBrowse({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search vendors…"
-            aria-label="Search vendors"
+            placeholder={labels.searchPlaceholder}
+            aria-label={labels.searchAriaLabel}
             data-testid="input-vendor-search"
             className="pl-9 pr-8 border-navy/20 bg-white"
           />
@@ -360,7 +388,7 @@ export function VendorBrowse({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
+                {includeAllCategories && <SelectItem value="all">All Categories</SelectItem>}
                 {categories.map((category) => (
                   <SelectItem
                     key={category.slug}
@@ -399,13 +427,13 @@ export function VendorBrowse({
           <Store className="h-12 w-12 text-navy/20 mx-auto mb-4" />
           {searchQuery.trim() ? (
             <>
-              <h2 className="text-xl font-bold text-navy mb-1">No vendors match your search</h2>
-              <p className="text-navy/60">Try a different word or clear the search to see all vendors.</p>
+              <h2 className="text-xl font-bold text-navy mb-1">{labels.emptySearchTitle}</h2>
+              <p className="text-navy/60">{labels.emptySearchBody}</p>
             </>
           ) : (
             <>
-              <h2 className="text-xl font-bold text-navy mb-1">No vendors found</h2>
-              <p className="text-navy/60">Please check back later.</p>
+              <h2 className="text-xl font-bold text-navy mb-1">{labels.emptyTitle}</h2>
+              <p className="text-navy/60">{labels.emptyBody}</p>
             </>
           )}
         </div>
