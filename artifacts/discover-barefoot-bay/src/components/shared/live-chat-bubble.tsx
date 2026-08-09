@@ -234,7 +234,7 @@ function LiveChatPreviewContent({ comments, isLoading, isError, onOpenChat }: Li
         ) : isError ? (
           <p style={{ color: '#00aa00', fontSize: '0.75rem', margin: 0 }}>{'>>> UNAVAILABLE <<<'}</p>
         ) : comments.length === 0 ? (
-          <p style={{ color: '#00aa00', fontSize: '0.75rem', margin: 0 }}>{'>>> NO MESSAGES YET <<<'}</p>
+          <TerminalLoadingState />
         ) : (
           comments.map((comment) => {
             const rawText = comment.content.includes('<') ? stripHtml(comment.content) : comment.content;
