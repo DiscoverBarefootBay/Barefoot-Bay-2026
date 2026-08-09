@@ -9,6 +9,7 @@ import { authenticateUser } from '../middleware/auth';
 import { isAdmin } from '../utils/role-utils';
 import * as fs from 'fs';
 import * as path from 'path';
+import { sendMessageEmail } from '../sendgrid-service';
 
 const router = express.Router();
 const upload = multer({ dest: 'temp_upload/' });
@@ -560,7 +561,39 @@ router.post('/:id/reply', authenticateUser, upload.array('attachments'), async (
       attachments,
       read: true // Sender has read their own message
     };
-    
+
+    // Send email notifications for the reply (non-blocking)
+    (async () => {
+      try {
+        const replySubject = `Re: ${parentMessage[0].subject}`;
+        // `attachments` is the DB metadata array fetched above — extract display filenames only,
+        // no binary content is available here so nothing is forwarded to SendGrid as a real attachment.
+        const displayFilenames = attachments.map((a: { filename: string }) => a.filename).filter(Boolean);
+
+        if (messageType === 'user' && recipientId) {
+          const recipientRows = await db.select().from(users).where(eq(users.id, recipientId)).limit(1);
+          if (recipientRows.length > 0) {
+            const r = recipientRows[0];
+            if (r.email && r.emailNotificationsEnabled !== false) {
+              const recipientDisplayName = r.fullName || r.username || undefined;
+              await sendMessageEmail(r.email, replySubject, content, senderName, '', undefined, recipientDisplayName, true, displayFilenames.length > 0 ? displayFilenames : undefined);
+            }
+          }
+        } else if (messageType === 'admin') {
+          const adminUsers = await db.select().from(users).where(eq(users.role, 'admin'));
+          for (const admin of adminUsers) {
+            if (admin.id !== currentUserId && admin.email && admin.emailNotificationsEnabled !== false) {
+              const adminDisplayName = admin.fullName || admin.username || undefined;
+              await sendMessageEmail(admin.email, replySubject, content, senderName, '', undefined, adminDisplayName, true, displayFilenames.length > 0 ? displayFilenames : undefined);
+            }
+          }
+        }
+        // Skip 'all', 'registered', 'badge_holders' — no mass email blast
+      } catch (emailError) {
+        console.error('[sendMessageEmail] Failed to send reply notification email:', emailError);
+      }
+    })().catch(console.error);
+
     return res.status(201).json({ message: messageResponse });
   } catch (error) {
     console.error('Error creating reply:', error);
@@ -752,6 +785,45 @@ router.post('/', authenticateUser, upload.array('attachments'), async (req, res)
       }
     }
     
+    // Send email notifications (non-blocking — do not delay HTTP response)
+    (async () => {
+      try {
+        // Fetch sender display name
+        const senderRows = await db.select().from(users).where(eq(users.id, senderId)).limit(1);
+        const senderDisplayName = senderRows.length > 0
+          ? (senderRows[0].fullName || senderRows[0].username || 'A community member')
+          : 'A community member';
+
+        // Fetch attachment filenames saved for this message (display-only in email body)
+        const savedAttachments = await db.select().from(messageAttachments)
+          .where(eq(messageAttachments.messageId, newMessage.id));
+        const displayFilenames = savedAttachments.map(a => a.filename).filter(Boolean);
+
+        if (recipientType === 'user' && recipientId) {
+          const numericRecipientId = typeof recipientId === 'string' ? parseInt(recipientId, 10) : recipientId;
+          const recipientRows = await db.select().from(users).where(eq(users.id, numericRecipientId)).limit(1);
+          if (recipientRows.length > 0) {
+            const r = recipientRows[0];
+            if (r.email && r.emailNotificationsEnabled !== false) {
+              const recipientDisplayName = r.fullName || r.username || undefined;
+              await sendMessageEmail(r.email, subject, content, senderDisplayName, '', undefined, recipientDisplayName, false, displayFilenames.length > 0 ? displayFilenames : undefined);
+            }
+          }
+        } else if (recipientType === 'admin') {
+          const adminUsers = await db.select().from(users).where(eq(users.role, 'admin'));
+          for (const admin of adminUsers) {
+            if (admin.id !== senderId && admin.email && admin.emailNotificationsEnabled !== false) {
+              const adminDisplayName = admin.fullName || admin.username || undefined;
+              await sendMessageEmail(admin.email, subject, content, senderDisplayName, '', undefined, adminDisplayName, false, displayFilenames.length > 0 ? displayFilenames : undefined);
+            }
+          }
+        }
+        // Skip 'all', 'registered', 'badge_holders' — no mass email blast
+      } catch (emailError) {
+        console.error('[sendMessageEmail] Failed to send message notification email:', emailError);
+      }
+    })().catch(console.error);
+
     return res.status(201).json({ message: 'Message sent successfully', data: newMessage });
   } catch (error) {
     console.error('Error creating message:', error);

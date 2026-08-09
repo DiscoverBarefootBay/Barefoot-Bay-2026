@@ -1649,171 +1649,171 @@ export async function sendMessageEmail(
   messageContent: string,
   senderName: string,
   senderEmail: string,
-  attachments?: EmailAttachment[]
+  attachments?: EmailAttachment[],
+  recipientName?: string,
+  isReply?: boolean,
+  /** Display-only attachment filenames shown in the email body. No file content is
+   *  forwarded to SendGrid — use this instead of `attachments` when you only have
+   *  database metadata (filename, size, etc.) and not the actual binary content. */
+  attachmentNames?: string[]
 ): Promise<boolean> {
+  // Merge display names: prefer explicit attachmentNames, fall back to the
+  // filenames already present in any real-content attachments.
+  const displayNames: string[] = attachmentNames && attachmentNames.length > 0
+    ? attachmentNames
+    : (attachments ?? []).map(a => a.filename).filter(Boolean);
+
+  // Only forward attachments to SendGrid when they carry real base64 content.
+  const outboundAttachments = (attachments ?? []).filter(a => a.content && a.content.length > 0);
+
   console.log('[SendGrid Message] Sending message email:', {
     recipientEmail,
     subject,
     senderName,
+    isReply: isReply ?? false,
     contentLength: messageContent.length,
-    attachmentCount: attachments?.length || 0
+    displayAttachmentCount: displayNames.length,
+    outboundAttachmentCount: outboundAttachments.length,
   });
 
   const baseUrl = getBaseUrl();
-  
-  const attachmentText = attachments && attachments.length > 0 
-    ? `\n\nAttachments (${attachments.length}): ${attachments.map(a => a.filename).join(', ')}`
+
+  const introVerb = isReply ? 'replied to your message' : 'sent you a message';
+  const emailSubject = isReply
+    ? `${senderName} replied to your message: ${subject}`
+    : `${senderName} sent you a message: ${subject}`;
+
+  const greeting = recipientName ? `Hi ${recipientName},` : 'Hello,';
+
+  const attachmentText = displayNames.length > 0
+    ? `\n\nAttachments (${displayNames.length}): ${displayNames.join(', ')}`
     : '';
-  
+
   const text = `
-You have received a new message from ${senderName}.
+${greeting}
+
+${senderName} has ${introVerb}.
 
 Subject: ${subject}
 
 ${messageContent}${attachmentText}
 
 ---
-View your messages: ${baseUrl}/messages
+View your messages and reply: ${baseUrl}/messages
 
 To stop receiving email notifications, visit: ${baseUrl}/unsubscribe
   `.trim();
 
-  const attachmentHtml = attachments && attachments.length > 0 
+  const attachmentHtml = displayNames.length > 0
     ? `
-      <div style="margin-top: 20px; padding: 15px; background: #f0f9ff; border-radius: 4px;">
-        <p style="margin: 0 0 10px 0; font-weight: 600; color: #0369a1;">
-          📎 Attachments (${attachments.length}):
-        </p>
-        <ul style="margin: 0; padding-left: 20px;">
-          ${attachments.map(a => `<li style="color: #374151;">${a.filename}</li>`).join('')}
-        </ul>
-      </div>
+      <tr>
+        <td style="padding:0 24px 20px 24px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+                 style="background:#f0f9f9;border-radius:6px;padding:14px 18px;">
+            <tr>
+              <td>
+                <p style="margin:0 0 8px 0;font-size:13px;font-weight:600;color:#434054;">
+                  &#128206; Attachments (${displayNames.length}):
+                </p>
+                <ul style="margin:0;padding-left:18px;font-size:13px;color:#374151;">
+                  ${displayNames.map(name => `<li>${name.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</li>`).join('')}
+                </ul>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
     `
     : '';
 
-  const html = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>${subject}</title>
-      <style>
-        body {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-          line-height: 1.6;
-          color: #333333;
-          margin: 0;
-          padding: 0;
-          background-color: #f5f5f5;
-        }
-        .container {
-          max-width: 600px;
-          margin: 0 auto;
-          background: white;
-        }
-        .header {
-          background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
-          color: white;
-          padding: 30px;
-          text-align: center;
-        }
-        .header h1 {
-          margin: 0;
-          font-size: 24px;
-          font-weight: 600;
-        }
-        .content {
-          padding: 30px;
-        }
-        .message-box {
-          background: #f8fafc;
-          border-left: 4px solid #0ea5e9;
-          padding: 20px;
-          margin: 20px 0;
-          border-radius: 4px;
-        }
-        .message-subject {
-          font-size: 18px;
-          font-weight: 600;
-          color: #1e40af;
-          margin-bottom: 15px;
-        }
-        .message-content {
-          color: #374151;
-          white-space: pre-wrap;
-          word-wrap: break-word;
-        }
-        .cta-button {
-          display: inline-block;
-          background: #0ea5e9;
-          color: white;
-          padding: 12px 30px;
-          text-decoration: none;
-          border-radius: 6px;
-          font-weight: 500;
-          margin: 20px 0;
-        }
-        .cta-button:hover {
-          background: #0284c7;
-        }
-        .footer {
-          background: #f9fafb;
-          padding: 20px 30px;
-          text-align: center;
-          font-size: 14px;
-          color: #71717a;
-          border-top: 1px solid #e5e7eb;
-        }
-        .footer p {
-          margin: 5px 0;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <div class="header">
-          <h1>💬 Barefoot Bay</h1>
-          <p style="margin: 5px 0 0 0; opacity: 0.95;">Community Platform</p>
-        </div>
-        
-        <div class="content">
-          <p>You have received a new message from <strong>${senderName}</strong>:</p>
-          
-          <div class="message-box">
-            <div class="message-subject">${subject}</div>
-            <div class="message-content">${messageContent.replace(/\n/g, '<br>')}</div>
-          </div>
-          
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${emailSubject}</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f6f8;font-family:Arial,Helvetica,sans-serif;color:#27272A;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f8;">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0"
+               style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;">
+
+          <!-- Header -->
+          <tr>
+            <td style="background-color:#90C9D4;background:linear-gradient(135deg, #90C9D4 0%, #6BB5C1 100%);padding:30px 20px;text-align:center;">
+              <p style="margin:0 0 4px 0;font-size:28px;font-weight:bold;letter-spacing:1px;color:#ffffff;">Barefoot Bay</p>
+              <p style="margin:0;font-size:12px;letter-spacing:0.5px;color:#ffffff;">Community Platform</p>
+            </td>
+          </tr>
+
+          <!-- Intro -->
+          <tr>
+            <td style="padding:28px 24px 8px 24px;">
+              <p style="margin:0 0 6px 0;font-size:15px;line-height:22px;color:#27272A;">${greeting}</p>
+              <p style="margin:0;font-size:15px;line-height:22px;color:#27272A;">
+                <strong>${senderName}</strong> has ${introVerb}:
+              </p>
+            </td>
+          </tr>
+
+          <!-- Message quote block -->
+          <tr>
+            <td style="padding:16px 24px 20px 24px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+                     style="background:#f8fafc;border-left:4px solid #6BB5C1;border-radius:4px;">
+                <tr>
+                  <td style="padding:16px 20px;">
+                    <p style="margin:0 0 10px 0;font-size:16px;font-weight:600;color:#434054;">${subject}</p>
+                    <p style="margin:0;font-size:14px;line-height:22px;color:#374151;white-space:pre-wrap;word-wrap:break-word;">${messageContent.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br />')}</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Attachments (if any) -->
           ${attachmentHtml}
-          
-          <div style="text-align: center;">
-            <a href="${baseUrl}/messages" class="cta-button">View Your Messages</a>
-          </div>
-        </div>
-        
-        <div class="footer">
-          <p><strong>Barefoot Bay Community Platform</strong></p>
-          <p>This message was sent through the Barefoot Bay messaging system.</p>
-          <p>
-            <a href="${baseUrl}/unsubscribe" 
-               style="color: #71717a; text-decoration: underline;">
-              Unsubscribe from email notifications
-            </a>
-          </p>
-        </div>
-      </div>
-    </body>
-    </html>
-  `;
+
+          <!-- CTA button -->
+          <tr>
+            <td style="padding:0 24px 28px 24px;text-align:center;">
+              <a href="${baseUrl}/messages"
+                 style="background-color:#E15A4F;color:#ffffff;padding:14px 32px;text-decoration:none;border-radius:8px;display:inline-block;font-size:15px;font-weight:600;">
+                View Message &amp; Reply
+              </a>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background:#f8fafc;padding:20px 24px;text-align:center;border-top:1px solid #e5e7eb;">
+              <p style="margin:0 0 6px 0;font-size:12px;color:#6b7280;">
+                Barefoot Bay Community Platform &bull; Barefoot Bay, FL 32976
+              </p>
+              <p style="margin:0;font-size:12px;color:#6b7280;">
+                <a href="${baseUrl}/unsubscribe" style="color:#6b7280;text-decoration:underline;">
+                  Unsubscribe from email notifications
+                </a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
 
   return await sendEmail({
     to: recipientEmail,
     from: FROM_EMAIL,
-    subject: subject,
+    subject: emailSubject,
     text,
     html,
-    attachments
+    attachments: outboundAttachments.length > 0 ? outboundAttachments : undefined
   });
 }
 
