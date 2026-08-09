@@ -18,4 +18,5 @@
 - [Email unsubscribe flag policy](email-unsubscribe-policy.md) — unsubscribe filtering is per-send-path, not central; new notification senders must check email_notifications_enabled themselves; transactional mail ignores it.
 - [Weekly email schedule-key rule](weekly-email-schedule-key.md) — overlapping past campaigns only block sends under the SAME schedule; schedule change re-arms the cycle; sends serialized in-process.
 - [Featured listings kill switch](featured-listings-kill-switch.md) — featured_listings flag is global fail-open; featured/featuredAt must never be client-settable on listing create/PATCH.
+- [Mobile dialog CSS overrides](mobile-dialog-css-overrides.md) — global mobile [role="dialog"] rules hijack Vaul bottom sheets too; exclude drawers with :not([data-vaul-drawer]).
 - [Visitor geolocation map](geo-visitor-map.md) — empty admin geo map = Maps-script load failure (key/LoadScript churn), NOT missing coords; all maps must use ONE shared loader id+libraries or navigation order breaks heatmap.

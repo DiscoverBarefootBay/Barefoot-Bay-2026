@@ -76,11 +76,18 @@ export function FilterSortDrawer({
   const contentRef = React.useRef<HTMLDivElement>(null);
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
+      {/* Keep ONE variant in both states: switching variants dropped the border
+          and made the button vanish against white toolbars, and shifted layout.
+          Active state only tints colors — same border width, padding, size. */}
       <Button
         type="button"
-        variant={activeCount > 0 ? "secondary" : "outline"}
+        variant="outline"
         size="sm"
-        className={`h-10 shrink-0 gap-1.5 border-navy/20 bg-white ${triggerClassName}`}
+        className={`h-10 shrink-0 gap-1.5 bg-white ${
+          activeCount > 0
+            ? "border-ocean/60 text-ocean font-semibold hover:bg-ocean/5"
+            : "border-navy/20"
+        } ${triggerClassName}`}
         onClick={() => onOpenChange(true)}
         aria-label={`${title}${activeCount > 0 ? ` (${activeCount} active)` : ""}`}
         data-testid={testId}
@@ -106,13 +113,16 @@ export function FilterSortDrawer({
           if (shouldBlockOutsideDismiss(e.target, contentRef.current)) e.preventDefault();
         }}
       >
-        <DrawerHeader className="pb-2">
-          <DrawerTitle>{title}</DrawerTitle>
+        <DrawerHeader className="pb-2 shrink-0">
+          {/* leading-normal: the site's display font clips ascenders under the
+              default leading-none, cutting the top off "Filters & Sort". */}
+          <DrawerTitle className="leading-normal">{title}</DrawerTitle>
         </DrawerHeader>
         {/* data-vaul-no-drag: touches on the controls/footer must scroll or tap,
             never start Vaul's swipe-to-dismiss drag — only the handle/header
-            area dismisses by swipe. */}
-        <div className="px-4 pb-2 overflow-y-auto space-y-4" data-vaul-no-drag>
+            area dismisses by swipe. flex-1/min-h-0 lets the controls use all
+            the vertical space the sheet has instead of leaving dead space. */}
+        <div className="px-4 pb-2 flex-1 min-h-0 overflow-y-auto space-y-4" data-vaul-no-drag>
           {children}
         </div>
         <DrawerFooter className="flex-row gap-2 pt-2" data-vaul-no-drag>
