@@ -18,6 +18,34 @@ import {
  * children. Designed to sit inside a single-row toolbar on phones while the
  * desktop layout keeps its inline controls.
  */
+/**
+ * Should an "outside interaction" be prevented from dismissing the drawer?
+ *
+ * True when the interaction belongs to an open Radix Select (or other floating
+ * popper). Checking only the event target is unreliable on touch: by the time
+ * Vaul's outside-dismiss event fires, the tapped SelectItem may already be
+ * detached and the reported target is often the overlay or <body>. So we also
+ * treat "any floating popper is currently open in the document" as
+ * select-interaction — in that state the tap's job is to pick an option or
+ * close the dropdown, never to dismiss the drawer.
+ */
+function shouldBlockOutsideDismiss(
+  target: EventTarget | null,
+  drawerContent: HTMLElement | null,
+): boolean {
+  if ((target as Element)?.closest?.("[data-radix-popper-content-wrapper]")) {
+    return true;
+  }
+  // Ownership-aware fallback: only block when a dropdown opened from INSIDE
+  // this drawer is currently expanded (Radix keeps the trigger's
+  // aria-expanded="true" for the whole time its popper is open, including at
+  // pointer-down time). An unrelated popper elsewhere on the page must not
+  // stop a genuine background tap from dismissing the drawer.
+  return (
+    drawerContent?.querySelector('[aria-expanded="true"][aria-haspopup]') != null
+  );
+}
+
 interface FilterSortDrawerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -45,6 +73,7 @@ export function FilterSortDrawer({
   children,
   "data-testid": testId = "button-open-filters",
 }: FilterSortDrawerProps) {
+  const contentRef = React.useRef<HTMLDivElement>(null);
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
       <Button
@@ -65,26 +94,28 @@ export function FilterSortDrawer({
         )}
       </Button>
       <DrawerContent
+        ref={contentRef}
         className="max-h-[85vh]"
         onPointerDownOutside={(e) => {
           // Radix Select portals its content outside the Drawer DOM tree;
           // without this guard Vaul sees the tap as an "outside click" and
           // closes the drawer before the selection registers.
-          if ((e.target as Element)?.closest?.("[data-radix-popper-content-wrapper]")) {
-            e.preventDefault();
-          }
+          if (shouldBlockOutsideDismiss(e.target, contentRef.current)) e.preventDefault();
         }}
         onInteractOutside={(e) => {
-          if ((e.target as Element)?.closest?.("[data-radix-popper-content-wrapper]")) {
-            e.preventDefault();
-          }
+          if (shouldBlockOutsideDismiss(e.target, contentRef.current)) e.preventDefault();
         }}
       >
         <DrawerHeader className="pb-2">
           <DrawerTitle>{title}</DrawerTitle>
         </DrawerHeader>
-        <div className="px-4 pb-2 overflow-y-auto space-y-4">{children}</div>
-        <DrawerFooter className="flex-row gap-2 pt-2">
+        {/* data-vaul-no-drag: touches on the controls/footer must scroll or tap,
+            never start Vaul's swipe-to-dismiss drag — only the handle/header
+            area dismisses by swipe. */}
+        <div className="px-4 pb-2 overflow-y-auto space-y-4" data-vaul-no-drag>
+          {children}
+        </div>
+        <DrawerFooter className="flex-row gap-2 pt-2" data-vaul-no-drag>
           {onReset && (
             <Button
               type="button"
