@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -16,6 +16,10 @@ import { AlertCircle, Code, RefreshCw, FormInput } from "lucide-react";
 import { EmbeddedForm } from "@/components/forms/embedded-form";
 import WysiwygEditor from "./wysiwyg-editor-direct";
 import { normalizeMediaUrl } from "@/lib/media-cache";
+import {
+  captureDetailsDisclosureToggle,
+  restoreDetailsDisclosureState,
+} from "@/lib/details-disclosure-state";
 
 // Using an enhanced HTML editor without TinyMCE
 
@@ -36,6 +40,8 @@ export function EditableContent({ slug, section = "", content, defaultTitle = ""
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [jsonError, setJsonError] = useState<string | null>(null);
   const [editorMode, setEditorMode] = useState<"visual" | "code">("visual");
+  const contentContainerRef = useRef<HTMLDivElement>(null);
+  const detailsDisclosureStateRef = useRef(new Map<string, boolean>());
   
   // Check if user is admin for permission-based rendering
   const isAdmin = user?.role === "admin";
@@ -1334,6 +1340,37 @@ export function EditableContent({ slug, section = "", content, defaultTitle = ""
     }
   };
 
+  const normalizedContent = useMemo(
+    () => normalizeHtmlContent(editorContent),
+    [editorContent],
+  );
+
+  // Page content is rendered as CMS HTML. A refetch can replace that HTML
+  // while a visitor has a native <details> disclosure open, which resets the
+  // browser-managed `open` state. Capture only visitor toggles and restore
+  // them before paint whenever the HTML changes.
+  useLayoutEffect(() => {
+    const container = contentContainerRef.current;
+    if (!container) return;
+    restoreDetailsDisclosureState(container, detailsDisclosureStateRef.current);
+  }, [normalizedContent]);
+
+  useLayoutEffect(() => {
+    if (isEditing) return;
+    const container = contentContainerRef.current;
+    if (!container) return;
+
+    const captureDisclosureState = (event: Event) => {
+      captureDetailsDisclosureToggle(container, detailsDisclosureStateRef.current, event);
+    };
+
+    // `toggle` is captured because native <details> content comes from the
+    // CMS rather than React event props. Capture phase also handles browsers
+    // where the event does not bubble.
+    container.addEventListener("toggle", captureDisclosureState, true);
+    return () => container.removeEventListener("toggle", captureDisclosureState, true);
+  }, [isEditing]);
+
   const renderContent = () => {
     if (isJsonContent) {
       try {
@@ -1364,9 +1401,6 @@ export function EditableContent({ slug, section = "", content, defaultTitle = ""
       }
     }
 
-    // Apply our URL normalization before rendering HTML content
-    const normalizedContent = normalizeHtmlContent(editorContent);
-
     // Log the content being rendered for debugging
     console.log(`Rendering content for ${pageSlug}:`, {
       contentLength: normalizedContent?.length || 0,
@@ -1381,6 +1415,7 @@ export function EditableContent({ slug, section = "", content, defaultTitle = ""
     return (
       <>
         <div 
+          ref={contentContainerRef}
           dangerouslySetInnerHTML={{ __html: normalizedContent }} 
           className="vendor-content-container"
         />
