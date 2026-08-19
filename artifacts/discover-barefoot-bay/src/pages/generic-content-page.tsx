@@ -19,6 +19,7 @@ import { EyeOff } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { ShareButton } from "@/components/shared/share-button";
 import { DisclaimerLink } from "@/components/shared/filter-sort-drawer";
+import type { DetailsDisclosureState } from "@/lib/details-disclosure-state";
 
 // Need to include RouteComponentProps to properly handle wouter route params
 import { RouteComponentProps } from "wouter";
@@ -330,6 +331,23 @@ export default function GenericContentPage(props: GenericContentPageProps) {
 
     return pathParts[0] || 'page-not-found';
   })();
+
+  // Keep native contact-disclosure state above EditableContent so a transient
+  // loading branch can remove and recreate that child without losing the
+  // visitor's first click. Reset naturally when navigation changes the slug.
+  const detailsDisclosureStateRef = useRef<{
+    slug: string;
+    state: DetailsDisclosureState;
+  } | null>(null);
+  if (
+    !detailsDisclosureStateRef.current ||
+    detailsDisclosureStateRef.current.slug !== derivedSlug
+  ) {
+    detailsDisclosureStateRef.current = {
+      slug: derivedSlug,
+      state: new Map(),
+    };
+  }
 
   // Get available pages for this category to display tabs based on the navbar dropdown structure
   const getRelatedPages = useCallback(() => {
@@ -1083,6 +1101,7 @@ export default function GenericContentPage(props: GenericContentPageProps) {
               content={content}
               defaultTitle={generateDefaultTitle()}
               defaultContent={``}
+              detailsDisclosureState={detailsDisclosureStateRef.current.state}
               // Pass the titleReset flag to EditableContent to prevent title flashing
               titleReset={titleReset}
             />

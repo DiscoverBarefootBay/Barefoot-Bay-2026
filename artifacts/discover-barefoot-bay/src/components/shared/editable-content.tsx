@@ -17,8 +17,11 @@ import { EmbeddedForm } from "@/components/forms/embedded-form";
 import WysiwygEditor from "./wysiwyg-editor-direct";
 import { normalizeMediaUrl } from "@/lib/media-cache";
 import {
+  captureDetailsDisclosureClickIntent,
   captureDetailsDisclosureToggle,
+  rollbackDetailsDisclosureClickIntent,
   restoreDetailsDisclosureState,
+  type DetailsDisclosureState,
 } from "@/lib/details-disclosure-state";
 
 // Using an enhanced HTML editor without TinyMCE
@@ -30,9 +33,18 @@ interface EditableContentProps {
   defaultTitle?: string;
   defaultContent?: string;
   titleReset?: boolean; // Add this flag to control title reset during navigation
+  detailsDisclosureState?: DetailsDisclosureState;
 }
 
-export function EditableContent({ slug, section = "", content, defaultTitle = "", defaultContent = "", titleReset = false }: EditableContentProps) {
+export function EditableContent({
+  slug,
+  section = "",
+  content,
+  defaultTitle = "",
+  defaultContent = "",
+  titleReset = false,
+  detailsDisclosureState: providedDetailsDisclosureState,
+}: EditableContentProps) {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -41,7 +53,9 @@ export function EditableContent({ slug, section = "", content, defaultTitle = ""
   const [jsonError, setJsonError] = useState<string | null>(null);
   const [editorMode, setEditorMode] = useState<"visual" | "code">("visual");
   const contentContainerRef = useRef<HTMLDivElement>(null);
-  const detailsDisclosureStateRef = useRef(new Map<string, boolean>());
+  const localDetailsDisclosureStateRef = useRef<DetailsDisclosureState>(new Map());
+  const detailsDisclosureState =
+    providedDetailsDisclosureState ?? localDetailsDisclosureStateRef.current;
   
   // Check if user is admin for permission-based rendering
   const isAdmin = user?.role === "admin";
@@ -1352,24 +1366,48 @@ export function EditableContent({ slug, section = "", content, defaultTitle = ""
   useLayoutEffect(() => {
     const container = contentContainerRef.current;
     if (!container) return;
-    restoreDetailsDisclosureState(container, detailsDisclosureStateRef.current);
-  }, [normalizedContent]);
+    restoreDetailsDisclosureState(container, detailsDisclosureState);
+  }, [normalizedContent, detailsDisclosureState]);
 
   useLayoutEffect(() => {
     if (isEditing) return;
     const container = contentContainerRef.current;
     if (!container) return;
 
-    const captureDisclosureState = (event: Event) => {
-      captureDetailsDisclosureToggle(container, detailsDisclosureStateRef.current, event);
+    const captureDisclosureClickIntent = (event: MouseEvent) => {
+      const intent = captureDetailsDisclosureClickIntent(
+        container,
+        detailsDisclosureState,
+        event,
+      );
+      if (!intent) return;
+
+      // A target/bubble handler can still cancel the activation after this
+      // capture listener runs. Reconcile at the end of event propagation,
+      // before the browser paints any speculative restored state.
+      queueMicrotask(() => {
+        if (!event.defaultPrevented) return;
+        rollbackDetailsDisclosureClickIntent(
+          contentContainerRef.current,
+          detailsDisclosureState,
+          intent,
+        );
+      });
+    };
+    const captureDisclosureToggle = (event: Event) => {
+      captureDetailsDisclosureToggle(container, detailsDisclosureState, event);
     };
 
-    // `toggle` is captured because native <details> content comes from the
-    // CMS rather than React event props. Capture phase also handles browsers
-    // where the event does not bubble.
-    container.addEventListener("toggle", captureDisclosureState, true);
-    return () => container.removeEventListener("toggle", captureDisclosureState, true);
-  }, [isEditing]);
+    // Capture click intent before the browser's delayed `toggle` event so a
+    // same-click content refresh cannot discard the intended state. `toggle`
+    // remains the source of truth once it arrives.
+    container.addEventListener("click", captureDisclosureClickIntent, true);
+    container.addEventListener("toggle", captureDisclosureToggle, true);
+    return () => {
+      container.removeEventListener("click", captureDisclosureClickIntent, true);
+      container.removeEventListener("toggle", captureDisclosureToggle, true);
+    };
+  }, [isEditing, detailsDisclosureState]);
 
   const renderContent = () => {
     if (isJsonContent) {

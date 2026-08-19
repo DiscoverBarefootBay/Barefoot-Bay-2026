@@ -5,6 +5,13 @@
  */
 export type DetailsDisclosureState = Map<string, boolean>;
 
+export interface DetailsDisclosureClickIntent {
+  key: string;
+  previousOpen: boolean;
+  previousState: boolean | undefined;
+  hadPreviousState: boolean;
+}
+
 function normalizeSummaryText(details: HTMLDetailsElement): string {
   return (details.querySelector("summary")?.textContent ?? "")
     .replace(/\s+/g, " ")
@@ -53,6 +60,77 @@ export function captureDetailsDisclosureToggle(
     return;
   }
   captureDetailsDisclosureState(container, state, details);
+}
+
+/**
+ * Record the state a native summary activation is about to produce. Browsers
+ * may queue the `toggle` event until after React has already replaced the CMS
+ * node, so waiting for `toggle` alone can lose the visitor's first click.
+ *
+ * This intentionally does not prevent the click or change `details.open`;
+ * native details/summary behavior remains the only thing controlling the DOM.
+ */
+export function captureDetailsDisclosureClickIntent(
+  container: HTMLElement,
+  state: DetailsDisclosureState,
+  event: MouseEvent,
+): DetailsDisclosureClickIntent | null {
+  if (event.defaultPrevented || event.button !== 0) return null;
+
+  const view = container.ownerDocument.defaultView;
+  const ElementClass = view?.Element;
+  const DetailsElement = view?.HTMLDetailsElement;
+  const target = event.target;
+  if (!ElementClass || !DetailsElement || !(target instanceof ElementClass)) return null;
+
+  const summary = target.closest("summary");
+  const details = summary?.parentElement;
+  if (
+    !summary ||
+    !(details instanceof DetailsElement) ||
+    !container.contains(details)
+  ) {
+    return null;
+  }
+
+  const allDetails = Array.from(container.querySelectorAll<HTMLDetailsElement>("details"));
+  const index = allDetails.indexOf(details);
+  if (index === -1) return null;
+
+  const key = disclosureKey(details, index);
+  const intent: DetailsDisclosureClickIntent = {
+    key,
+    previousOpen: details.open,
+    previousState: state.get(key),
+    hadPreviousState: state.has(key),
+  };
+  details.dataset.disclosureKey = key;
+  state.set(key, !details.open);
+  return intent;
+}
+
+/**
+ * Undo a speculative click intent if a later target/bubble handler cancelled
+ * the native summary activation. This also repairs a replacement container
+ * that may already have restored the speculative value during the event.
+ */
+export function rollbackDetailsDisclosureClickIntent(
+  container: HTMLElement | null,
+  state: DetailsDisclosureState,
+  intent: DetailsDisclosureClickIntent,
+): void {
+  if (intent.hadPreviousState) {
+    state.set(intent.key, intent.previousState!);
+  } else {
+    state.delete(intent.key);
+  }
+
+  if (!container) return;
+  Array.from(container.querySelectorAll<HTMLDetailsElement>("details")).forEach((details, index) => {
+    if (disclosureKey(details, index) === intent.key) {
+      details.open = intent.previousOpen;
+    }
+  });
 }
 
 /**
