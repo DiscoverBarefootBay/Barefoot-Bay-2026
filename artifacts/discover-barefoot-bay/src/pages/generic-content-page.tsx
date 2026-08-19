@@ -268,32 +268,6 @@ export default function GenericContentPage(props: GenericContentPageProps) {
     if (pathParts[0] === 'community' && pathParts.length >= 3) {
       const slug = `${pathParts[1]}-${pathParts[2]}`;
       console.log(`🔍 Converting /community path to slug: ${slug}`);
-
-      // Immediately prefetch content for the slug to ensure it's available
-      fetch(`/api/pages/${encodeURIComponent(slug)}`)
-        .then(res => {
-          if (res.ok) return res.json();
-          return null;
-        })
-        .then(content => {
-          if (content) {
-            console.log(`✅ Found content for slug: "${slug}":`, content);
-            queryClient.setQueryData(["/api/pages", slug], content);
-
-            // Dispatch content refresh event
-            const refreshEvent = new CustomEvent('content-cache-refreshed', {
-              detail: { 
-                slug: slug,
-                content: content
-              }
-            });
-            window.dispatchEvent(refreshEvent);
-          } else {
-            console.log(`⚠️ No content found for slug: "${slug}"`);
-          }
-        })
-        .catch(err => console.error(`Error fetching content for slug "${slug}":`, err));
-
       return slug;
     }
 
@@ -450,8 +424,22 @@ export default function GenericContentPage(props: GenericContentPageProps) {
     isLoading,
     isError,
     refetch
-  } = useQuery<PageContent>({
+  } = useQuery<PageContent | null>({
     queryKey: ["/api/pages", derivedSlug],
+    queryFn: async () => {
+      if (!derivedSlug) return null;
+
+      const response = await fetch(
+        `/api/pages/${encodeURIComponent(derivedSlug)}`,
+      );
+      if (response.status === 404) return null;
+      if (!response.ok) {
+        throw new Error(
+          `Failed to load page content (${response.status} ${response.statusText})`,
+        );
+      }
+      return response.json();
+    },
     refetchOnWindowFocus: false,
     refetchOnMount: true,
     // Phase 3: Dynamic staleTime based on content type
@@ -1098,7 +1086,7 @@ export default function GenericContentPage(props: GenericContentPageProps) {
           ) : (
             <EditableContent
               slug={derivedSlug}
-              content={content}
+              content={content ?? undefined}
               defaultTitle={generateDefaultTitle()}
               defaultContent={``}
               detailsDisclosureState={detailsDisclosureStateRef.current.state}
