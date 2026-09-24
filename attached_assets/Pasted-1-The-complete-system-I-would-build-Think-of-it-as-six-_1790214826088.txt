@@ -1,0 +1,1052 @@
+1. The complete system I would build
+
+Think of it as six connected components:
+
+PUBLIC DMCA PAGE / NOTICE FORM
+             │
+             ▼
+       DMCA CASE SYSTEM
+             │
+      Admin/legal review
+             │
+             ▼
+       TAKEDOWN ACTION
+       /      |       \
+      /       |        \
+ Database   Storage    Audit
+  hidden    private     log
+      \       |        /
+       \      |       /
+        PUBLIC BLOCK
+             │
+             ▼
+      UPLOADER NOTICE
+             │
+             ▼
+       COUNTER-NOTICE
+             │
+      10–14 business-day
+       restoration process
+             │
+       ┌─────┴─────┐
+       ▼           ▼
+    Restore     Court hold
+
+             +
+   Repeat-infringer tracking
+             +
+       Legal-hold system
+
+The Copyright Office's current guidance says a hosting service seeking §512 safe-harbor protection should have a registered/publicly identified DMCA agent, respond expeditiously to compliant notices, promptly notify the uploader after disabling content, process counter-notices, and maintain a repeat-infringer policy.
+
+2. Database/content model
+
+Do not make deleted the only alternative to published.
+
+Every user-generated content type should have a common visibility state, such as:
+
+draft
+published
+moderation_hidden
+dmca_hidden
+user_deleted
+admin_deleted
+
+And separately:
+
+legal_hold = true/false
+
+I would avoid making legal_hold itself the content status because something can simultaneously be:
+
+status = dmca_hidden
+legal_hold = true
+Content fields
+
+At minimum:
+
+status
+hidden_at
+hidden_by_admin_id
+hidden_reason
+dmca_case_id
+legal_hold
+restored_at
+restored_by_admin_id
+deleted_at
+
+The important rule is:
+
+DMCA takedown is a reversible visibility action, not a deletion operation.
+
+3. DMCA case database
+
+Create a dedicated dmca_cases table.
+
+Example:
+
+dmca_cases
+-----------
+id
+case_number
+case_type
+status
+received_at
+submitted_via
+claimant_name
+claimant_company
+claimant_email
+claimant_phone
+claimant_address
+copyright_owner_name
+admin_assigned_id
+validity_status
+takedown_at
+uploader_notified_at
+counter_notice_received_at
+claimant_counter_notified_at
+restore_eligible_at
+restore_deadline_at
+restored_at
+court_action_received_at
+closed_at
+internal_notes
+created_at
+updated_at
+
+Do not store only the affected content ID in this table because one notice may identify several URLs/items.
+
+Create:
+
+dmca_targets
+------------
+id
+dmca_case_id
+content_type
+content_id
+original_url
+storage_object_id
+uploader_user_id
+status
+taken_down_at
+restored_at
+
+That lets one case cover:
+
+Forum post #912
+Image #4421
+Listing #733
+Attachment #813
+
+without creating four unrelated cases.
+
+4. Preserve the actual notices
+
+I would create another record such as:
+
+dmca_submissions
+----------------
+id
+dmca_case_id
+submission_type
+    notice
+    supplemental_notice
+    counter_notice
+    court_action_notice
+
+submitted_by
+received_at
+form_payload
+original_document_path
+email_message_id
+signature_value
+ip_address
+user_agent
+
+Keep the actual notice/counter-notice separately from the editable case record.
+
+That gives you an evidentiary record of what BarefootBay actually received at that point in time.
+
+5. Public DMCA page
+
+Add a permanent footer link:
+
+Copyright / DMCA
+
+The page should contain counsel-approved language plus BarefootBay's designated DMCA-agent information.
+
+The Copyright Office currently requires a service provider seeking the relevant safe harbor to make the agent's contact information publicly accessible and register the agent with the Copyright Office.
+
+The site page should ultimately include:
+
+Copyright/DMCA Policy
+Designated Agent
+Mailing address
+Telephone
+Email address
+
+How to submit a copyright notice
+How to submit a counter-notice
+Repeat-infringer policy
+What happens after a notice
+What happens after a counter-notice
+
+Counsel should provide the final legal wording.
+
+6. Online takedown form for copyright owners
+
+I would provide a web form in addition to the published agent email/address.
+
+The Copyright Office expressly recognizes that sites can provide their own DMCA webforms.
+
+The form should collect substantially:
+
+Your name
+Company/organization
+Email
+Phone
+Mailing address
+
+Are you:
+[ ] Copyright owner
+[ ] Authorized agent
+
+Copyrighted work being claimed
+Description of copyrighted work
+Original/reference URL if available
+
+BarefootBay URL(s) complained of
+Additional explanation
+
+Required good-faith statement
+
+Required accuracy / authority /
+penalty-of-perjury statement
+
+Electronic signature
+Typed legal name
+
+Submit
+
+Those fields track the elements identified by the Copyright Office for a takedown notice.
+
+On submission
+
+This part should be automatic:
+
+Generate case ID:
+BB-DMCA-2026-000142
+
+Save immutable submission
+
+Send claimant confirmation email
+
+Alert DMCA administrators
+
+Put case in:
+RECEIVED — REVIEW REQUIRED
+Important
+
+Do not automatically take content down merely because the form was submitted.
+
+Software can determine:
+
+“All required fields appear to be populated.”
+
+It should not determine:
+
+“Copyright infringement legally occurred.”
+
+That stays an admin/legal review decision.
+
+7. Admin DMCA dashboard
+
+Add:
+
+Admin → Legal / Compliance → DMCA
+
+Dashboard example:
+
+Case	Status	Received	Content	Uploader	Deadline	Assigned
+BB-DMCA-142	Review Required	Sep 4	3 items	user123	—	Jane
+BB-DMCA-141	Counter Received	Sep 1	1 image	user456	Sep 17	John
+BB-DMCA-139	Content Disabled	Aug 29	2 posts	user789	—	Jane
+
+Filters:
+
+New
+Needs Information
+Awaiting Review
+Takedown Approved
+Content Disabled
+Counter-Notice Received
+Restoration Waiting Period
+Court Action/Hold
+Restored
+Closed
+8. Admin case review screen
+
+Opening a case should show:
+
+Notice
+
+Claimant details and original notice.
+
+Copyright claim
+
+Work identified and statements supplied.
+
+BarefootBay content
+
+Show each reported URL/content record.
+
+Uploader
+
+Account information and previous copyright events.
+
+Existing content state
+Published
+DMCA hidden
+Deleted
+Legal hold
+Admin actions
+Request Missing Information
+
+Approve Takedown
+
+Reject / Close Notice
+
+Add Content to Case
+
+Add Legal Hold
+
+Record Counter-Notice
+
+Record Court Action
+
+Restore Content
+
+Close Case
+
+Each action must require confirmation and become an audit entry.
+
+9. The takedown button should trigger an entire transaction
+
+This is where the existing BarefootBay “delete” behavior needs to be replaced.
+
+Clicking:
+
+Approve Takedown
+
+should automatically cause:
+
+1. content.status = dmca_hidden
+
+2. Associate content with DMCA case
+
+3. Save original URL and state
+
+4. Disable public content endpoint
+
+5. Quarantine original file
+
+6. Quarantine thumbnails/derivatives
+
+7. Revoke active file URLs
+
+8. Purge CDN/cache
+
+9. Remove from internal/public search indexes
+
+10. Remove from feeds/listings/profile activity
+
+11. Remove from sitemap where applicable
+
+12. Write audit entry
+
+13. Record copyright event against uploader
+
+14. Send uploader takedown notification
+
+15. Update DMCA case
+
+That should be one server-side service, not fifteen unrelated UI calls.
+
+For example:
+
+dmcaService.executeTakedown(caseId, adminId)
+10. One visibility enforcement service
+
+This is one of the most important architectural changes.
+
+Don't spread code like this around the application:
+
+if (post.status !== "dmca_hidden")
+
+Build one shared policy:
+
+ContentVisibilityService
+
+Conceptually:
+
+canViewPublicly(content) {
+    return content.status === "published";
+}
+
+Then make public content loaders use it universally.
+
+BarefootBay's public query pattern becomes effectively:
+
+WHERE status = 'published'
+
+for all public UGC.
+
+This should govern:
+
+forum threads
+forum posts
+listings
+images
+attachments
+profile posts
+activity feeds
+search
+homepage widgets
+API responses
+related-content modules
+sitemaps
+RSS feeds
+embeds/previews
+11. Direct URL protection
+
+Suppose this exists:
+
+barefootbay.com/uploads/image123.jpg
+
+Changing the post status isn't enough.
+
+Someone could still bookmark the image.
+
+For DMCA-hidden content:
+
+Old public URL
+       ↓
+404
+
+The actual object becomes:
+
+private/dmca/BB-DMCA-142/image123.jpg
+
+or remains in a private bucket with equivalent access controls.
+
+Only an authorized server/admin request can obtain it.
+
+12. Derivatives must also disappear
+
+This is easy to overlook.
+
+If BarefootBay generates:
+
+original.jpg
+original_thumbnail.jpg
+original_400x400.webp
+original_1200x800.webp
+
+all four must become unavailable.
+
+The storage model should know that those objects belong to the same asset.
+
+Something like:
+
+media_asset
+ ├ original
+ ├ thumbnail
+ ├ web_400
+ └ web_1200
+
+A quarantine action affects the entire asset tree.
+
+13. Uploader notification
+
+After takedown, the uploader should automatically receive an email and preferably an in-site notification.
+
+The Copyright Office guidance calls for reasonable steps to promptly notify the user whose material was removed.
+
+The notice should be generated from counsel-approved templates and contain something like:
+
+BarefootBay copyright case number
+
+Content affected
+
+Original URL
+
+Date access was disabled
+
+Basic identification of the claim
+
+Instructions for responding
+
+Link to counter-notice information/form
+
+There should also be:
+
+My Account → Copyright Notices
+
+so the uploader can see their cases.
+
+14. End-user counter-notice form
+
+For an authenticated uploader, provide:
+
+Submit Counter-Notice
+
+The form should prepopulate:
+
+Case number
+Affected content
+Original URL
+
+and require the statutory information counsel approves.
+
+Current Copyright Office guidance identifies, among other things, signature, identification of the removed material and former location, a penalty-of-perjury statement regarding mistake or misidentification, contact information, federal-court jurisdiction consent, and agreement to accept service.
+
+So the system should not allow:
+
+"I disagree. Put my picture back."
+
+to be treated as a completed statutory counter-notice.
+
+15. Counter-notice automation
+
+Once an authorized admin determines that the counter-notice is complete:
+
+COUNTER NOTICE ACCEPTED
+        ↓
+automatically copy/store it
+        ↓
+send/forward to original claimant
+        ↓
+record claimant_notified_at
+        ↓
+calculate restoration window
+        ↓
+case = RESTORATION WAITING PERIOD
+
+The Copyright Office says restoration occurs after not less than 10 nor more than 14 business days following a compliant counter-notice unless the original claimant informs the provider of qualifying court action.
+
+So your system should calculate:
+
+restore_eligible_at
+restore_deadline_at
+
+using the business-day rules approved by counsel.
+
+16. Don't silently miss the 10–14-day window
+
+This is an ideal place for automation.
+
+For example:
+
+Day 0
+Counter-notice accepted
+
+Day 8
+Admin reminder:
+"Restoration window approaching"
+
+Day 10
+Case becomes:
+ELIGIBLE FOR RESTORATION
+
+Day 12
+Escalation to DMCA administrator
+
+Day 14
+Critical deadline alert
+
+I would initially make the actual Restore operation require an admin click.
+
+Once BarefootBay's counsel approves the workflow, you could optionally automate restoration at the chosen point in the permissible window unless a court-action hold exists.
+
+The safer first implementation is automated deadlines + human final authorization.
+
+17. Court-action hold
+
+There should be a button:
+
+Record Court Action / Prevent Restoration
+
+This does:
+
+court_action_received_at = now
+legal_hold = true
+automatic_restore = cancelled
+status remains dmca_hidden
+
+It should require supporting documentation or internal notes.
+
+The Copyright Office states that if the original notice sender informs the provider during the counter-notice period that it has filed the relevant court action, the provider does not restore the content through that counter-notice process.
+
+18. Restore action
+
+When restoration is approved:
+
+DMCA RESTORE
+     ↓
+status = published
+     ↓
+restore storage object
+     ↓
+restore derivatives
+     ↓
+re-enable public delivery
+     ↓
+invalidate stale caches
+     ↓
+reindex search
+     ↓
+record audit event
+     ↓
+notify uploader
+     ↓
+close/update DMCA case
+
+Importantly, do not create a new post or new image.
+
+Restore the original object's identity where possible so:
+
+original URL
+original post ID
+original comments
+original listing
+
+remain intact.
+
+19. Repeat-infringer system
+
+This needs to be separate from a generic moderation-strike system.
+
+Create:
+
+user_copyright_events
+---------------------
+user_id
+dmca_case_id
+event_type
+event_date
+counts_toward_repeat_policy
+status
+notes
+
+Possible events:
+
+notice_received
+content_removed
+counter_notice_received
+content_restored
+copyright_warning
+repeat_infringer_review
+account_suspended
+account_terminated
+
+Do not simply increment a permanent strike every time someone submits a notice.
+
+For example:
+
+notice received ≠ infringement determination
+
+and:
+
+takedown later restored
+
+needs to be represented accurately.
+
+The current Copyright Office guidance says OSPs seeking safe harbor must adopt and reasonably implement a policy for terminating repeat infringers.
+
+Counsel should establish BarefootBay's actual policy and threshold.
+
+20. Repeat-infringer automation
+
+Once counsel defines that policy, the software can automate enforcement.
+
+For example, rather than immediately banning someone:
+
+Copyright event recorded
+        ↓
+Policy engine evaluates account
+        ↓
+Threshold reached?
+       / \
+     no   yes
+          ↓
+ REPEAT-INFRINGER REVIEW
+          ↓
+ notify authorized admin
+
+Then counsel may decide certain circumstances can trigger automatic suspension.
+
+I would not implement an arbitrary “3 DMCA notices = ban” rule without that policy being expressly approved.
+
+21. Legal hold
+
+Your reports specifically call this out. The application should preserve records subject to a dispute, subpoena, investigation, or legal hold, and prevent hard deletion while the hold exists.
+
+Create:
+
+legal_holds
+-----------
+id
+case_type
+case_id
+content_id
+user_id
+reason
+placed_by
+placed_at
+released_by
+released_at
+
+Every permanent-delete function should contain:
+
+if (record.legal_hold) {
+    throw LegalHoldError();
+}
+
+That rule should apply even to super-admins unless there is a separate audited legal-hold-release operation.
+
+22. Replace your current Delete button
+
+You told me BarefootBay currently has only Delete.
+
+I would change the admin UI from:
+
+DELETE
+
+to:
+
+Hide / Moderate
+Copyright / DMCA
+Permanent Delete
+
+If Copyright / DMCA is selected:
+
+Select existing DMCA case
+or
+Create DMCA case
+
+The ordinary delete button should never be the way a DMCA notice is processed.
+
+23. DMCA audit log
+
+Every meaningful event should create an append-only record:
+
+dmca_audit_log
+--------------
+case_id
+event
+actor_type
+actor_id
+timestamp
+ip_address
+previous_value
+new_value
+notes
+
+Examples:
+
+notice_received
+case_assigned
+missing_information_requested
+takedown_approved
+content_quarantined
+uploader_notified
+counter_notice_received
+claimant_notified
+legal_hold_applied
+restoration_eligible
+restoration_approved
+content_restored
+case_closed
+
+The privacy review independently recommends limiting administrative access by role and logging access to detailed administrative information.
+
+24. Admin permissions
+
+I would introduce permissions roughly like:
+
+dmca.view
+dmca.create
+dmca.review
+dmca.takedown
+dmca.restore
+dmca.manage_holds
+dmca.manage_repeat_infringer
+dmca.view_private_files
+dmca.permanent_delete
+
+A normal forum moderator probably should not automatically receive all of those.
+
+For example:
+
+Moderator
+    can flag content for DMCA review
+
+DMCA Admin
+    can process notices/takedowns
+
+Legal Admin
+    can place/release holds,
+    record litigation notices,
+    authorize sensitive actions
+25. Notifications and automation engine
+
+I would implement this through a job/outbox system instead of having the HTTP request perform everything synchronously.
+
+Events might look like:
+
+dmca.notice.received
+dmca.notice.needs_info
+dmca.takedown.approved
+dmca.content.disabled
+dmca.uploader.notify
+dmca.counter.received
+dmca.counter.forward
+dmca.restore.eligible
+dmca.restore.deadline
+dmca.court_action.received
+dmca.content.restore
+dmca.repeat_infringer.review
+
+That way, if email temporarily fails, the takedown itself does not roll back.
+
+The job can retry the email separately.
+
+26. Admin reminder automations
+
+I'd include these:
+
+Trigger	Automatic action
+New notice	Create case + notify DMCA admins
+Notice untouched internally	Escalation reminder
+Incomplete notice	Generate missing-information workflow
+Takedown	Notify uploader
+Counter-notice	Notify admins
+Counter accepted	Forward to claimant + start timer
+Restoration window nearing	Alert assigned admin
+Restoration eligible	Dashboard/email alert
+Day-14 deadline approaching	High-priority escalation
+Court action recorded	Cancel restoration + legal hold
+Repeat threshold reached	Compliance review alert
+DMCA agent renewal approaching	Admin reminder
+Hidden file becomes publicly reachable	Security/compliance alert
+
+The DMCA designation itself has to remain current; the Copyright Office says it expires after three years unless renewed and also sends its own renewal reminders.
+
+BarefootBay can maintain its own reminder as defense in depth.
+
+27. Automated leakage checker
+
+This is worth implementing.
+
+Nightly or periodically:
+
+Find content where:
+status = dmca_hidden
+
+For each item verify:
+    public page inaccessible
+    original asset inaccessible
+    thumbnail inaccessible
+    search result absent
+
+If any fails:
+
+DMCA CONTENT EXPOSURE ALERT
+
+This catches regressions when a developer later creates a new public endpoint but forgets the visibility filter.
+
+28. Search engines and caches
+
+Takedown should trigger removal/invalidation of:
+
+site search
+Redis/application cache
+CDN cache
+image cache
+RSS feed cache
+API cache
+homepage cache
+
+For external search engines, removing the public page/file means their crawler should eventually stop receiving it.
+
+Your system should also stop putting the URL into:
+
+sitemap.xml
+structured feeds
+public APIs
+29. Signed/private file access
+
+For private DMCA evidence, don't generate permanent private URLs.
+
+Use short-lived signed URLs:
+
+expires in 5–15 minutes
+authorized admin only
+
+and log which admin accessed them.
+
+That gives you preservation without accidentally creating a second permanent public URL.
+
+30. Notifications visible inside the user's account
+
+I would add:
+
+My Account → Copyright
+
+A user should be able to see:
+
+Case: BB-DMCA-2026-142
+Status: Content disabled
+Content: Forum post...
+Date: September 4, 2026
+
+[View notice information]
+[Submit counter-notice]
+
+After a counter-notice:
+
+Counter-notice received
+September 6
+
+Waiting period in progress
+
+After restoration:
+
+Content restored
+September 21
+
+Don't expose the admin's internal notes or privileged/legal discussion.
+
+31. Claimant case acknowledgement
+
+Rightsholders submitting the public form should get:
+
+Case number
+Date received
+Copy/summary of submitted information
+DMCA agent contact
+
+I would not give an unauthenticated claimant a URL that exposes the uploader's account information.
+
+If you provide online case status, use a random high-entropy token and show only safe information such as:
+
+Received
+Under review
+Content disabled
+Counter-notice received
+Closed
+32. Missing-information workflow
+
+A notice may be incomplete.
+
+The Copyright Office says that in some circumstances an OSP should contact the sender or take reasonable steps to obtain missing information rather than simply ignore the notice.
+
+So add:
+
+Request Missing Information
+
+Admin selects:
+
+Missing copyrighted-work identification
+Missing infringing URL/location
+Missing contact information
+Missing required statement
+Missing signature
+Other
+
+The system generates an email and puts the case into:
+
+AWAITING CLAIMANT INFORMATION
+33. Things I would deliberately NOT automate
+
+This is equally important.
+
+I would not automatically have AI/software decide:
+
+"This is copyright infringement."
+
+"This is fair use."
+
+"This counter-notice is legally valid."
+
+"This person is legally a repeat infringer."
+
+"This lawsuit notice satisfies §512."
+
+
+You can automate completeness checks, workflow, deadlines, visibility, storage, notifications and records.
+
+Legal judgments remain with an authorized human.
+
+Also, the Copyright Office specifically notes that a provider does not have an affirmative obligation to monitor its service to search for infringement to obtain §512 protection.
+
+So I would not treat proactive image/audio copyright scanning as a requirement for this project.
+
+34. Recommended state machine
+
+I'd make the case states explicit:
+
+RECEIVED
+   ↓
+UNDER_REVIEW
+   ├──→ NEEDS_INFORMATION
+   │          ↓
+   │      UNDER_REVIEW
+   │
+   ├──→ CLOSED_NO_ACTION
+   │
+   └──→ TAKEDOWN_APPROVED
+              ↓
+        CONTENT_DISABLED
+              ↓
+       UPLOADER_NOTIFIED
+              │
+              ├──→ CLOSED_REMOVED
+              │
+              └──→ COUNTER_RECEIVED
+                         ↓
+                  COUNTER_REVIEWED
+                         ↓
+                 CLAIMANT_NOTIFIED
+                         ↓
+                 RESTORE_WAITING
+                    /          \
+                   /            \
+          COURT_ACTION         ELIGIBLE
+               ↓                  ↓
+           LEGAL_HOLD          RESTORED
+               ↓                  ↓
+            CLOSED              CLOSED
+
+That alone will make the system substantially easier to reason about and test.
+
+35. Developer build order
+
+For the actual BarefootBay implementation, I would do it in this sequence:
+
+Database migrations and status model
+Central visibility policy
+Private/quarantine storage
+DMCA case + target tables
+Audit/legal-hold infrastructure
+Admin DMCA dashboard
+Admin takedown/restore actions
+Public DMCA policy page
+Public notice form
+Uploader notification system
+Counter-notice form
+Counter-notice timers/restoration workflow
+Repeat-infringer records/policy engine
+Scheduled reminders
+CDN/search/cache cleanup
+Leakage/integrity checker
+Automated tests
