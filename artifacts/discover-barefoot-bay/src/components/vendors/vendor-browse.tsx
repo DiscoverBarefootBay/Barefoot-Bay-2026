@@ -23,6 +23,7 @@ import {
   X,
 } from "lucide-react";
 import bfbLogo from "@assets/image_1784954979351.png";
+import { RemovedContentNotice } from "@/components/dmca/removed-content-notice";
 
 export interface VendorItem {
   slug: string;
@@ -39,6 +40,7 @@ export interface VendorItem {
   isUnvisited: boolean;
   isHidden: boolean;
   createdAt: string | Date | null;
+  contentVisibility?: { removed?: boolean; status?: string };
 }
 
 export interface VendorBrowseCategory {
@@ -137,6 +139,7 @@ function VendorCard({ vendor, showAdminBadge }: { vendor: VendorItem; showAdminB
         }`}
         data-testid={`vendor-card-${vendor.slug}`}
       >
+        <RemovedContentNotice contentVisibility={vendor.contentVisibility} compact />
         {vendor.isUnvisited && (
           <div className="absolute -top-2 -right-2 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
             New
@@ -188,6 +191,7 @@ function HorizontalVendorCard({
           }`}
           data-testid={`vendor-banner-${vendor.slug}`}
         >
+          <RemovedContentNotice contentVisibility={vendor.contentVisibility} compact />
           {vendor.isUnvisited && (
             <div className="absolute top-2 right-2 z-20 bg-red-500 text-white text-[10px] sm:text-xs font-bold px-2.5 py-0.5 rounded-full shadow-md">
               New

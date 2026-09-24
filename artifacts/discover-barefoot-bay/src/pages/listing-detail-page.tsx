@@ -37,6 +37,7 @@ import { useState, useEffect } from "react";
 import PublishPaymentDialog from "@/components/for-sale/publish-payment-dialog-new";
 import { ShareButton } from "@/components/shared/share-button";
 import { ContentModerationMenu } from "@/components/admin/dmca/content-moderation-menu";
+import { RemovedContentNotice } from "@/components/dmca/removed-content-notice";
 
 const typeLabels = {
   FSBO: "For Sale By Owner",
@@ -335,6 +336,7 @@ export default function ListingDetailPage() {
 
   return (
     <div className="max-w-7xl mx-auto p-2 sm:p-4 md:p-6">
+      <RemovedContentNotice contentVisibility={(listing as any).contentVisibility} />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
         {/* Left Column: Listing Details */}
         <div className="space-y-4 md:space-y-8">

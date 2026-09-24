@@ -324,6 +324,7 @@ export const VendorCategoryPage: React.FC<VendorCategoryPageProps> = ({ category
         isUnvisited: !!(user && unvisitedSlugs.has(vendor.slug)),
         isHidden: !!vendor.isHidden,
         createdAt: vendor.createdAt ?? null,
+        contentVisibility: (vendor as any).contentVisibility,
       };
     });
   }, [vendors, actualCategory, categoryLabel, user, unvisitedSlugs]);

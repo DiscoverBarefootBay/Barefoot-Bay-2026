@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { AlertTriangle, Flag, Plus, Search, ShieldAlert } from "lucide-react";
+import { AlertTriangle, Check, Flag, Plus, ScanSearch, Search, ShieldAlert } from "lucide-react";
 import AdminLayout from "@/components/layouts/admin-layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,8 @@ type CaseRow = {
 };
 type CasesResponse = { cases: CaseRow[]; total: number; counts: Record<string, number> };
 type DmcaFlag = { id: string; contentType: string; contentId: string; reason: string; flaggedAt: string; flaggedByName?: string };
+type DmcaAlert = { id: string; alertType: string; severity: "info" | "warning" | "critical"; title: string; body: string; dmcaCaseId: string | null; caseNumber: string | null; userId: string | null; createdAt: string; acknowledgedAt: string | null };
+type LeakageResult = { checkedItems: number; failures: Array<{ caseNumber: string; contentType: string; contentId: string; check: "public_page" | "public_api" | "file_url" | "search" | "sitemap"; detail: string }> };
 
 function deadlineClass(at: string) {
   const hours = (new Date(at).getTime() - Date.now()) / 3_600_000;
@@ -46,6 +48,21 @@ export default function DmcaDashboard() {
     enabled: me.can(DmcaPerm.VIEW),
     placeholderData: undefined,
   });
+  const alertsQuery = useQuery<{ alerts: DmcaAlert[] }>({
+    queryKey: [DMCA_ADMIN_API, "alerts", "open"],
+    queryFn: () => dmcaFetch("/alerts?status=open"),
+    enabled: me.can(DmcaPerm.VIEW),
+    placeholderData: undefined,
+  });
+  const acknowledgeAlert = useMutation({
+    mutationFn: (id: string) => dmcaFetch(`/alerts/${id}/acknowledge`, { method: "POST" }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [DMCA_ADMIN_API, "alerts", "open"] }),
+    onError: (error: Error) => toast({ title: "Could not acknowledge alert", description: error.message, variant: "destructive" }),
+  });
+  const leakageCheck = useMutation<LeakageResult>({
+    mutationFn: () => dmcaFetch("/leakage-check", { method: "POST" }),
+    onError: (error: Error) => toast({ title: "Leakage check failed", description: error.message, variant: "destructive" }),
+  });
   const resolveFlag = useMutation({
     mutationFn: ({ id, resolution, caseId }: { id: string; resolution: "dismissed" | "added_to_case"; caseId?: string }) =>
       dmcaFetch(`/flags/${id}/resolve`, { method: "POST", body: { resolution, caseId: caseId ? Number(caseId) : undefined } }),
@@ -58,6 +75,7 @@ export default function DmcaDashboard() {
   });
   const data = !casesQuery.isPlaceholderData && casesQuery.data && Array.isArray(casesQuery.data.cases) ? casesQuery.data : undefined;
   const flags = !flagsQuery.isPlaceholderData && Array.isArray(flagsQuery.data) ? flagsQuery.data : [];
+  const alerts = !alertsQuery.isPlaceholderData && alertsQuery.data && Array.isArray(alertsQuery.data.alerts) ? alertsQuery.data.alerts : [];
 
   if (!me.isLoading && !me.can(DmcaPerm.VIEW)) {
     return <AdminLayout><div className="p-8 text-center"><ShieldAlert className="mx-auto h-12 w-12 text-destructive" /><h1 className="mt-3 text-2xl font-bold">Access denied</h1><p className="text-muted-foreground">The dmca.view permission is required.</p></div></AdminLayout>;
@@ -103,6 +121,33 @@ export default function DmcaDashboard() {
                 {data && data.cases.length === 0 && <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground">No cases in this queue.</TableCell></TableRow>}
               </TableBody>
             </Table>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <CardTitle className="flex items-center gap-2"><ShieldAlert className="h-5 w-5" />Open alerts <Badge>{alerts.length}</Badge></CardTitle>
+              {me.can(DmcaPerm.REVIEW) && <Button className="bg-red-700 text-white hover:bg-red-800" onClick={() => leakageCheck.mutate()} disabled={leakageCheck.isPending} data-testid="button-run-leakage-check"><ScanSearch className="mr-2 h-4 w-4" />{leakageCheck.isPending ? "Checking…" : "Run leakage check"}</Button>}
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {alertsQuery.error && <p className="text-red-700">{(alertsQuery.error as Error).message}</p>}
+            {alerts.map((alert) => (
+              <div key={alert.id} className={`rounded-md border p-3 ${alert.severity === "critical" ? "border-red-500 bg-red-50 text-red-950" : alert.severity === "warning" ? "border-amber-400 bg-amber-50 text-amber-950" : "border-blue-300 bg-blue-50 text-blue-950"}`} data-testid={`alert-dmca-${alert.id}`}>
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div><p className="font-semibold">{alert.title}</p><p className="text-sm">{alert.body}</p><p className="mt-1 text-xs opacity-75">{alert.caseNumber ? `Case ${alert.caseNumber} · ` : ""}{new Date(alert.createdAt).toLocaleString()}</p></div>
+                  <Button size="sm" variant="outline" onClick={() => acknowledgeAlert.mutate(alert.id)} disabled={acknowledgeAlert.isPending} data-testid={`button-acknowledge-alert-${alert.id}`}><Check className="mr-2 h-4 w-4" />Acknowledge</Button>
+                </div>
+              </div>
+            ))}
+            {!alertsQuery.isLoading && alerts.length === 0 && <p className="text-muted-foreground">No open alerts.</p>}
+            {leakageCheck.data && (
+              <div className={`rounded-md border p-4 ${leakageCheck.data.failures.length ? "border-red-500 bg-red-50" : "border-green-400 bg-green-50"}`} data-testid="results-leakage-check">
+                <p className="font-semibold">Checked {leakageCheck.data.checkedItems} hidden items — {leakageCheck.data.failures.length} failures</p>
+                {leakageCheck.data.failures.map((failure, index) => <div key={`${failure.contentType}-${failure.contentId}-${failure.check}-${index}`} className="mt-2 text-sm"><strong>Case {failure.caseNumber}: {failure.contentType} {failure.contentId}</strong> · {failure.check.replace("_", " ")} — {failure.detail}</div>)}
+              </div>
+            )}
           </CardContent>
         </Card>
 

@@ -181,6 +181,7 @@ import { productionAuthRouter } from "./fix-production-auth";
 import storageBrowserRouter from './routes/storage-browser';
 import bannerSlideHelpersRouter from './routes/banner-slide-helpers';
 import messagesRouter from './routes/messages-updated';
+import dmcaUploaderRouter from './routes/dmca-uploader';
 // Import message diagnostics router for troubleshooting message visibility issues
 import messageDiagnosticsRouter from './routes/message-diagnostics';
 // Import new message debug router for analyzing message read status
@@ -2938,6 +2939,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         details: "You can only delete your own account unless you are an administrator",
         code: "ACCESS_DENIED"
       });
+    }
+
+    // Deleting another user's account permanently removes their content: needs the explicit grant.
+    if (!isSelfDeletion) {
+      try {
+        await assertCanPermanentDelete(req, null);
+      } catch (e) {
+        if (e instanceof PermanentDeletePermissionError) return res.status(403).json({ message: e.message, code: "ACCESS_DENIED" });
+        throw e;
+      }
     }
 
     // Log the type of deletion being performed
@@ -10427,9 +10438,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const commentId = parseInt(req.params.id);
       const isAdmin = req.user.role === 'admin';
       const commentOwner = (await db.execute(sql`SELECT user_id FROM event_comments WHERE id=${commentId}`)).rows[0] as any;
-      if (isAdmin && Number(commentOwner?.user_id) !== Number(req.user.id) &&
-          !(await hasDmcaPermission(req.user as any, DmcaPermission.PERMANENT_DELETE))) {
-        return res.status(403).json({ message: "Missing permission: dmca.permanent_delete" });
+      if (isAdmin) {
+        try {
+          await assertCanPermanentDelete(req, commentOwner?.user_id ?? null);
+        } catch (e) {
+          if (e instanceof PermanentDeletePermissionError) return res.status(403).json({ message: e.message });
+          throw e;
+        }
       }
       
       // If user is admin, they can delete any comment
@@ -13012,6 +13027,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use("/api/vendor-categories", createVendorCategoryRouter(storage));
   app.use("/api/community-categories", createCommunityCategoryRouter(storage));
   app.use("/api/messages", messagesRouter);
+  app.use("/api/dmca", dmcaUploaderRouter);
   
   // Forms API routes for custom form management
   const { default: formsRouter } = await import('./routes/forms');

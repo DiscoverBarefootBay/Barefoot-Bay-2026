@@ -47,6 +47,7 @@ import { SeriesOccurrencesDialog } from "@/components/calendar/series-occurrence
 import { Repeat, Link2 } from "lucide-react";
 import { Link } from "wouter";
 import { ContentModerationMenu } from "@/components/admin/dmca/content-moderation-menu";
+import { RemovedContentNotice } from "@/components/dmca/removed-content-notice";
 
 
 // keep existing type definitions
@@ -648,6 +649,7 @@ export default function EventDetailPage() {
         <meta name="twitter:description" content={event.description || shareText} />
         {shareImageUrl && <meta name="twitter:image" content={shareImageUrl} />}
       </Helmet>
+      <RemovedContentNotice contentVisibility={(event as any).contentVisibility} />
       
       <div className="max-w-4xl mx-auto space-y-8 p-4">
       {isModerator && !isAdmin && event && (
@@ -1360,6 +1362,7 @@ export default function EventDetailPage() {
                   )}
                 </div>
                 <div className="flex-1">
+                  <RemovedContentNotice contentVisibility={(comment as any).contentVisibility} compact />
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <p className="font-semibold">{comment.user?.username ?? 'Anonymous'}</p>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Camera, CreditCard, Calendar, AlertCircle, Store, Trash2, ChevronDown } from "lucide-react";
+import { Loader2, Camera, CreditCard, Calendar, AlertCircle, Store, Trash2, ChevronDown, Copyright } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuth } from "@/hooks/use-auth";
@@ -344,6 +344,15 @@ export default function ProfileSettings() {
 
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2"><Copyright className="h-5 w-5" />Copyright Notices</CardTitle>
+          <CardDescription>Review notices affecting content you uploaded and submit a counter-notice when available.</CardDescription>
+        </CardHeader>
+        <CardFooter>
+          <Link href="/copyright-notices"><Button variant="outline" data-testid="link-profile-copyright-notices">View Copyright Notices</Button></Link>
+        </CardFooter>
+      </Card>
       {/* Profile Settings Card */}
       <Card>
         <CardHeader>

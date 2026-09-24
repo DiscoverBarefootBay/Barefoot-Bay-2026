@@ -8,6 +8,7 @@ import { type RealEstateListing } from "@shared/schema";
 import { MediaGallery } from "@/components/shared/media-gallery";
 import { ListingImage } from "@/components/for-sale/listing-image";
 import { useFlags } from "@/hooks/use-flags";
+import { RemovedContentNotice } from "@/components/dmca/removed-content-notice";
 
 const typeColors = {
   FSBO: "bg-purple-100 text-purple-800",
@@ -111,6 +112,7 @@ export function ListingCard({
     const isDraftOverride = true;
     return (
       <Card className="overflow-hidden border-amber-500 border-[6px] shadow-lg bg-white group motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-out motion-safe:hover:-translate-y-1 hover:shadow-2xl">
+        <RemovedContentNotice contentVisibility={(listing as any).contentVisibility} compact />
         {/* Forced draft banner */}
         <div className="bg-amber-500 text-white px-3 py-3 font-bold flex items-center justify-between text-base sticky top-0">
           <div className="flex items-center">
@@ -339,6 +341,7 @@ export function ListingCard({
 
   return (
     <Card className={`bg-white relative group motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-out motion-safe:hover:-translate-y-1 hover:shadow-xl ${isDraft ? 'border-amber-500 border-[6px] shadow-lg' : ''} ${isNew ? 'border-red-500 border-[3px] shadow-lg ring-2 ring-red-300 hover:ring-red-400 hover:shadow-red-100' : ''} ${featuredEnabled && listing.featured && !isDraft ? 'border-yellow-400 border-[3px] shadow-lg ring-2 ring-yellow-200 hover:ring-yellow-400 hover:shadow-yellow-100' : ''}`}>
+      <RemovedContentNotice contentVisibility={(listing as any).contentVisibility} compact />
       {featuredEnabled && listing.featured && !isDraft && (
         onFeaturedClick ? (
           <button

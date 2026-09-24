@@ -23,6 +23,7 @@ import {
 } from "../dmca/permissions";
 import { LegalHoldError } from "../dmca/legal-hold";
 import { matchTarget } from "./dmca-public";
+import { runLeakageCheck } from "../dmca/leakage-checker";
 
 export const DMCA_ADMIN_FILTERS = {
   new: { label: "New", statuses: [S.RECEIVED] },
@@ -163,6 +164,25 @@ router.get("/assignees", required(P.VIEW), route(async (_req, res) => {
   res.json(r.rows.map(camel));
 }));
 
+router.get("/alerts", required(P.VIEW), route(async (req, res) => {
+  const open = String(req.query.status || "open") !== "all";
+  const r = await db.execute(sql`
+    SELECT a.id,a.alert_type,a.severity,a.title,a.body,a.dmca_case_id,c.case_number,
+           a.user_id,a.created_at,a.acknowledged_at
+    FROM dmca_admin_alerts a LEFT JOIN dmca_cases c ON c.id=a.dmca_case_id
+    WHERE ${open ? sql`a.acknowledged_at IS NULL` : sql`true`}
+    ORDER BY a.created_at DESC`);
+  res.json({ alerts: r.rows.map(camel) });
+}));
+router.post("/alerts/:id/acknowledge", required(P.VIEW), route(async (req, res) => {
+  await db.execute(sql`UPDATE dmca_admin_alerts SET acknowledged_at=COALESCE(acknowledged_at,now()),
+    acknowledged_by=COALESCE(acknowledged_by,${Number((req.user as any).id)}) WHERE id=${id.parse(req.params.id)}`);
+  res.json({ ok: true });
+}));
+router.post("/leakage-check", required(P.REVIEW), route(async (_req, res) => {
+  res.json(await runLeakageCheck({ baseUrl: `http://127.0.0.1:${process.env.PORT}` }));
+}));
+
 router.get("/cases", required(P.VIEW), route(async (req, res) => {
   const q = String(req.query.q || "").trim(), assigned = String(req.query.assigned || "");
   const page = Math.max(1, Number(req.query.page) || 1), pageSize = Math.min(100, Math.max(1, Number(req.query.pageSize) || 25));
@@ -288,7 +308,7 @@ router.get("/holds", required(P.MANAGE_HOLDS), route(async(req,res)=>{const acti
 router.post("/holds", required(P.MANAGE_HOLDS), route(async(req,res)=>{const b=z.object({target:z.enum(["user","content","case"]),userId:id.optional(),contentType:z.string().optional(),contentId:id.optional(),caseId:id.optional(),reason:text()}).parse(req.body);if(b.target==="case"){if(!b.caseId)throw new DmcaServiceError("caseId is required");await placeCaseHold(b.caseId,b.reason,actor(req));}else await applyLegalHold({userId:b.userId,contentType:b.contentType as any,contentId:b.contentId,reason:b.reason,actor:actor(req)});res.status(201).json({ok:true});}));
 router.post("/holds/:holdId/release", required(P.MANAGE_HOLDS), route(async(req,res)=>{const holdId=id.parse(req.params.holdId),hold=(await db.execute(sql`SELECT case_type,case_id FROM legal_holds WHERE id=${holdId}`)).rows[0] as any;await releaseLegalHold({holdId,actor:actor(req),reason:z.object({reason:text()}).parse(req.body).reason});if(hold?.case_type==="dmca"&&hold.case_id)return res.json(await detail(req,Number(hold.case_id)));res.json({ok:true});}));
 
-router.get("/repeat-infringers", required(P.MANAGE_REPEAT_INFRINGER), route(async(_req,res)=>{const settings=(await db.execute(sql`SELECT * FROM dmca_settings WHERE id=1`)).rows[0] as any;const months=settings.repeat_infringer_window_months, threshold=settings.repeat_infringer_threshold;const rows=(await db.execute(sql`SELECT u.id,u.username,u.full_name,u.email,u.is_blocked,json_agg(e ORDER BY e.event_date DESC) events,count(*) FILTER(WHERE e.counts_toward_repeat_policy AND e.status='active')::int active_strikes,count(*)::int total_events,max(e.event_date) last_event_at FROM users u JOIN user_copyright_events e ON e.user_id=u.id WHERE e.event_date >= now()-(${months}||' months')::interval GROUP BY u.id ORDER BY (count(*) FILTER(WHERE e.counts_toward_repeat_policy AND e.status='active') >= ${threshold}) DESC,max(e.event_date) DESC`)).rows as any[];res.json({threshold,windowMonths:months,users:rows.map(r=>{const events=((r.events as any[])||[]).map(camel);return{...camel(r),events,overThreshold:r.active_strikes>=threshold,lastDecision:events.find(e=>!e.countsTowardRepeatPolicy)||null};})});}));
+router.get("/repeat-infringers", required(P.MANAGE_REPEAT_INFRINGER), route(async(_req,res)=>{const settings=(await db.execute(sql`SELECT * FROM dmca_settings WHERE id=1`)).rows[0] as any;const months=settings.repeat_infringer_window_months, threshold=settings.repeat_infringer_threshold;const rows=(await db.execute(sql`SELECT u.id,u.username,u.full_name,u.email,u.is_blocked,json_agg(e ORDER BY e.event_date DESC) events,count(*) FILTER(WHERE e.counts_toward_repeat_policy AND e.status='active')::int active_strikes,count(*)::int total_events,max(e.event_date) last_event_at, (r.opened_at IS NOT NULL) in_review, r.opened_at review_opened_at FROM users u JOIN user_copyright_events e ON e.user_id=u.id LEFT JOIN LATERAL (SELECT opened_at FROM dmca_repeat_infringer_reviews WHERE user_id=u.id AND status='open' LIMIT 1) r ON true WHERE e.event_date >= now()-(${months}||' months')::interval GROUP BY u.id,r.opened_at ORDER BY (count(*) FILTER(WHERE e.counts_toward_repeat_policy AND e.status='active') >= ${threshold}) DESC,max(e.event_date) DESC`)).rows as any[];res.json({threshold,windowMonths:months,users:rows.map(r=>{const events=((r.events as any[])||[]).map(camel);return{...camel(r),events,inReview:!!r.in_review,reviewOpenedAt:r.review_opened_at??null,overThreshold:r.active_strikes>=threshold,lastDecision:events.find(e=>!e.countsTowardRepeatPolicy)||null};})});}));
 router.post("/repeat-infringers/:userId/decision", required(P.MANAGE_REPEAT_INFRINGER), route(async(req,res)=>{const b=z.object({decision:z.enum(["warning","dismiss","suspend","terminate"]),notes:text()}).parse(req.body);await recordRepeatInfringerDecision(id.parse(req.params.userId),b.decision,b.notes,actor(req));res.json({ok:true});}));
 
 async function settingsResponse(){const r=(await db.execute(sql`SELECT * FROM dmca_settings WHERE id=1`)).rows[0] as any;return{agent:{name:r.agent_name,organization:r.agent_organization,address:r.agent_address,phone:r.agent_phone,email:r.agent_email},registrationNumber:r.registration_number,registrationExpiresAt:r.registration_expires_at,repeatInfringerThreshold:r.repeat_infringer_threshold,repeatInfringerWindowMonths:r.repeat_infringer_window_months,reminderOffsets:r.reminder_offsets,policySections:r.policy_sections};}

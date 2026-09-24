@@ -36,6 +36,7 @@ import {
   Menu,
   Star,
   X,
+  Copyright,
 } from "lucide-react";
 import { usePermissions } from "@/hooks/use-permissions";
 import { useFlags } from "@/hooks/use-flags";
@@ -879,6 +880,13 @@ export function NavBar() {
                     <Link href="/subscriptions" className="flex items-center w-full">
                       <CreditCard className="mr-2 h-4 w-4" />
                       <span>Sponsorship</span>
+                    </Link>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem className="hover:bg-coral/10 hover:text-coral focus:bg-coral/10 focus:text-coral py-2 mt-1">
+                    <Link href="/copyright-notices" className="flex items-center w-full" data-testid="link-account-copyright-notices">
+                      <Copyright className="mr-2 h-4 w-4" />
+                      <span>Copyright Notices</span>
                     </Link>
                   </DropdownMenuItem>
 

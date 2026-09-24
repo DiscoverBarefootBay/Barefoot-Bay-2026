@@ -22,3 +22,4 @@
 - [Visitor geolocation map](geo-visitor-map.md) — empty admin geo map = Maps-script load failure (key/LoadScript churn), NOT missing coords; all maps must use ONE shared loader id+libraries or navigation order breaks heatmap.
 - [CMS native disclosures](cms-native-disclosures.md) — preserve only visitor-toggled `<details>` state across injected HTML refreshes; leave untouched CMS defaults alone.
 - [DMCA foundation](dmca-foundation.md) — takedown=reversible hide; legal-hold layers; token redaction; req.ip; private docs in object storage; service enforces restore/holds.
+- [UI theme quirks](ui-theme-quirks.md) — shadcn `destructive` button variant is invisible in this theme; use explicit red classes.

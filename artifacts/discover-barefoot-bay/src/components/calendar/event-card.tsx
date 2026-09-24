@@ -11,6 +11,7 @@ import { Link } from "wouter";
 import { getMediaUrl } from "@/lib/media-helper";
 import { usePermissions } from "@/hooks/use-permissions";
 import { SeriesOccurrencesDialog } from "./series-occurrences-dialog";
+import { RemovedContentNotice } from "@/components/dmca/removed-content-notice";
 
 const categoryColors = {
   entertainment: "bg-[#7FD7C6] border border-[#5FC4B1] text-[#111827] !font-bold text-sm hover:scale-105 hover:shadow-md hover:brightness-95 transition-all duration-200 ease-in-out cursor-pointer",
@@ -128,6 +129,7 @@ export function EventCard({ event, returnDate }: { event: Event; returnDate?: st
 
   return (
     <Card className={`hover:shadow-lg transition-shadow border-2 flex flex-col h-full ${event.category === 'promotional' ? 'promotional-detail-card' : 'bg-white'}`}>
+      <RemovedContentNotice contentVisibility={(event as any).contentVisibility} compact />
       <CardHeader className="pb-4">
         {/* Consistent stacked layout for all screen sizes */}
         <div className="flex flex-col space-y-2">

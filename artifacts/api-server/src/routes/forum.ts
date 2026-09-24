@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { IStorage } from "../storage";
 import { requireAuth } from "../auth";
+import { assertCanPermanentDelete, PermanentDeletePermissionError } from "../dmca/permanent-delete";
 import { z } from "zod/v4";
 import { 
   insertForumCategorySchema, 
@@ -116,6 +117,13 @@ export function createForumRouter(storage: IStorage) {
       // Check if user is admin
       if (req.user.role !== "admin") {
         return res.status(403).json({ message: "Only administrators can delete categories" });
+      }
+      // Deleting a category removes every post in it: needs the explicit grant.
+      try {
+        await assertCanPermanentDelete(req, null);
+      } catch (e) {
+        if (e instanceof PermanentDeletePermissionError) return res.status(403).json({ message: e.message });
+        throw e;
       }
 
       const categoryId = parseInt(req.params.id, 10);

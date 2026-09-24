@@ -27,6 +27,9 @@ export const LISTING_SCHEDULER_DEV_SENDING = "LISTING_SCHEDULER_DEV_SENDING";
 /** Dev opt-in flag for the weekly "Currently, On The Market" email scheduler. */
 export const WEEKLY_LISTINGS_SCHEDULER_DEV_SENDING = "WEEKLY_LISTINGS_SCHEDULER_DEV_SENDING";
 
+/** Deliberate development opt-in for DMCA scheduler-generated staff email. */
+export const DMCA_SCHEDULER_DEV_SENDING = "DMCA_SCHEDULER_DEV_SENDING";
+
 /** Environment gate for the listing-expiration scheduler's emails. */
 export function isListingExpirationEmailSendingEnabled(
   env: Record<string, string | undefined> = process.env,
@@ -39,4 +42,10 @@ export function isWeeklyListingsEmailSendingEnabled(
   env: Record<string, string | undefined> = process.env,
 ): boolean {
   return isSchedulerEmailSendingEnabled(WEEKLY_LISTINGS_SCHEDULER_DEV_SENDING, env);
+}
+
+export function isDmcaSchedulerEmailSendingEnabled(
+  env: Record<string, string | undefined> = process.env,
+): boolean {
+  return isSchedulerEmailSendingEnabled(DMCA_SCHEDULER_DEV_SENDING, env);
 }

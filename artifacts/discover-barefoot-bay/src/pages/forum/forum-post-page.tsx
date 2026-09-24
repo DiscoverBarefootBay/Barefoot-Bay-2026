@@ -38,6 +38,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserAvatar } from "@/components/shared/user-avatar";
 import { usePermissions } from "@/hooks/use-permissions";
+import { RemovedContentNotice } from "@/components/dmca/removed-content-notice";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -79,6 +80,7 @@ interface ForumPost {
     id: number;
     name: string;
   };
+  contentVisibility?: { removed?: boolean; status?: string };
 }
 
 interface ForumComment {
@@ -93,6 +95,7 @@ interface ForumComment {
     username: string;
     avatarUrl: string | null;
   };
+  contentVisibility?: { removed?: boolean; status?: string };
 }
 
 interface CommentComposerProps {
@@ -958,6 +961,7 @@ export default function ForumPostPage() {
 
   return (
     <div className="max-w-5xl mx-auto">
+      <RemovedContentNotice contentVisibility={post.contentVisibility} />
       {/* Mobile-first navigation and actions */}
       <div className="mb-6">
         <Link href={`/forum?categoryId=${post.categoryId}`}>
@@ -1428,6 +1432,7 @@ export default function ForumPostPage() {
               <div>
                 {(liveChatComments && liveChatComments.length > 0 ? liveChatComments : comments || []).map((comment) => (
                   <div key={comment.id} className="chat-message">
+                    <RemovedContentNotice contentVisibility={comment.contentVisibility} compact />
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', minWidth: 0 }}>
                       <span className="chat-username" style={{ minWidth: 0 }}>{comment.author?.username || 'Anonymous'}</span>
                       <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
@@ -1556,6 +1561,7 @@ export default function ForumPostPage() {
                 {comments.filter(comment => comment && comment.id).map((comment) => (
                   <Card key={comment.id} className="border border-navy/10 bg-white">
                     <CardContent className="pt-4">
+                      <RemovedContentNotice contentVisibility={comment.contentVisibility} compact />
                       <div className="flex items-start gap-3">
                         <UserAvatar 
                           user={comment.author || {

@@ -24,6 +24,8 @@ import { assertTransition, DmcaCaseStatus as S, type DmcaCaseStatus } from "./st
 import { collectContentFileUrls, getContentTypeDef, isDmcaContentType, type DmcaContentType } from "./content-registry";
 import { getUserDmcaPermissions, DmcaPermission, type DmcaPermission as Perm } from "./permissions";
 import { enqueueNotification } from "./outbox";
+import { raiseDmcaAdminAlert } from "./admin-alerts";
+import { uploaderClosureEmail, uploaderRestorationEmail, uploaderTakedownEmail } from "./email-templates";
 import {
   moveQuarantinedBack,
   moveRegisteredToQuarantine,
@@ -106,6 +108,59 @@ async function userEmail(tx: DbExecutor, userId: number | null | undefined): Pro
   const r = await tx.execute(sql`SELECT email, username, full_name FROM users WHERE id = ${userId}`);
   const u = r.rows[0] as any;
   return { email: u?.email ?? null, name: u?.full_name || u?.username || null };
+}
+
+async function insertInboxMessage(tx: DbExecutor, senderId: number, recipientId: number, subject: string, content: string): Promise<void> {
+  const result = await tx.execute(sql`
+    INSERT INTO messages (subject, content, sender_id, message_type, created_at, updated_at)
+    VALUES (${subject}, ${content}, ${senderId}, 'system', now(), now()) RETURNING id`);
+  await tx.execute(sql`
+    INSERT INTO message_recipients (message_id, recipient_id, status, created_at, updated_at)
+    VALUES (${Number((result.rows[0] as any).id)}, ${recipientId}, 'unread', now(), now())`);
+}
+
+async function recordNoticeReceived(tx: DbExecutor, userId: number | null, caseId: number, targetId: number, actorId: number | null): Promise<void> {
+  if (userId == null) return;
+  await tx.execute(sql`
+    INSERT INTO user_copyright_events
+      (user_id, dmca_case_id, dmca_target_id, event_type, counts_toward_repeat_policy, status, created_by)
+    VALUES (${userId}, ${caseId}, ${targetId}, 'notice_received', false, 'active', ${actorId})
+    ON CONFLICT DO NOTHING`);
+}
+
+export async function checkRepeatInfringerThreshold(userId: number, executor: DbExecutor = db): Promise<number | null> {
+  const settings = (await executor.execute(sql`SELECT repeat_infringer_threshold, repeat_infringer_window_months FROM dmca_settings WHERE id=1`)).rows[0] as any;
+  if (!settings) throw new DmcaServiceError("DMCA settings are not configured", 500);
+  const strikes = Number(((await executor.execute(sql`
+    SELECT count(*)::int AS n FROM user_copyright_events
+    WHERE user_id=${userId} AND counts_toward_repeat_policy=true AND status='active'
+      AND event_date >= now() - (${Number(settings.repeat_infringer_window_months)} || ' months')::interval`)).rows[0] as any).n);
+  if (strikes < Number(settings.repeat_infringer_threshold)) return null;
+  // A human disposition of these same strikes is final until a NEW counting
+  // event occurs; otherwise the scheduler recreates a dismissed review.
+  const previous = (await executor.execute(sql`
+    SELECT resolved_at FROM dmca_repeat_infringer_reviews
+    WHERE user_id=${userId} AND status='resolved' ORDER BY resolved_at DESC LIMIT 1`)).rows[0] as any;
+  if (previous?.resolved_at) {
+    const newer = await executor.execute(sql`
+      SELECT 1 FROM user_copyright_events WHERE user_id=${userId}
+        AND counts_toward_repeat_policy=true AND status='active'
+        AND event_date > ${previous.resolved_at} LIMIT 1`);
+    if (!newer.rows.length) return null;
+  }
+  const inserted = await executor.execute(sql`
+    INSERT INTO dmca_repeat_infringer_reviews (user_id, status, strike_count)
+    VALUES (${userId}, 'open', ${strikes})
+    ON CONFLICT (user_id) WHERE status='open' DO NOTHING RETURNING id`);
+  const reviewId = Number((inserted.rows[0] as any)?.id);
+  if (!reviewId) return null;
+  await raiseDmcaAdminAlert({
+    alertType: "repeat_infringer_threshold", severity: "warning",
+    title: "Repeat-infringer threshold reached",
+    body: `User ${userId} has ${strikes} active counting copyright events and requires human review.`,
+    userId, emailTo: "all", dedupeKey: `repeat:${reviewId}`,
+  }, executor);
+  return reviewId;
 }
 
 // ---------------------------------------------------------------------------
@@ -199,7 +254,14 @@ export async function createCase(input: CreateCaseInput): Promise<{ id: number; 
     const caseId = Number((ins.rows[0] as any).id);
     const receivedAt = new Date((ins.rows[0] as any).received_at);
     const submissionId = await insertSubmission(tx, caseId, input.submission);
+    const seenTargets = new Set<string>();
     for (const t of input.targets) {
+      // The same item listed twice in one notice is one target (restore relies on it).
+      if (t.contentId != null) {
+        const key = `${t.contentType}:${t.contentId}`;
+        if (seenTargets.has(key)) continue;
+        seenTargets.add(key);
+      }
       const meta = await resolveTargetMeta(tx, t);
       if (t.contentId != null) {
         // Serialize all claims for this item. Admin-created/attached targets
@@ -214,9 +276,10 @@ export async function createCase(input: CreateCaseInput): Promise<{ id: number; 
           if (conflict.rows.length) throw new DmcaServiceError("This item already belongs to another active DMCA case", 409);
         }
       }
-      await tx.execute(sql`
+      const targetInsert = await tx.execute(sql`
         INSERT INTO dmca_targets (dmca_case_id, content_type, content_id, original_url, uploader_user_id, status)
-        VALUES (${caseId}, ${t.contentType}, ${t.contentId}, ${meta.originalUrl}, ${meta.uploaderUserId}, 'pending')`);
+        VALUES (${caseId}, ${t.contentType}, ${t.contentId}, ${meta.originalUrl}, ${meta.uploaderUserId}, 'pending') RETURNING id`);
+      await recordNoticeReceived(tx, meta.uploaderUserId, caseId, Number((targetInsert.rows[0] as any).id), input.actor.id);
     }
     await writeDmcaAudit(
       {
@@ -268,7 +331,7 @@ export async function transitionCase(
   caseId: number,
   to: DmcaCaseStatus,
   actor: DmcaActor,
-  opts: { notes?: string | null; closedReason?: string | null } = {},
+  opts: { notes?: string | null; closedReason?: string | null; now?: Date } = {},
 ): Promise<void> {
   if (to === S.CONTENT_REMOVED || to === S.RESTORED || to === S.COURT_ACTION_RECEIVED) {
     throw new DmcaServiceError(`Use the dedicated operation to move a case to ${to}`);
@@ -284,12 +347,13 @@ export async function transitionCase(
     if (to === S.COUNTER_NOTICE_RECEIVED && !c.counter_notice_received_at) extra.counter_notice_received_at = new Date();
     if (to === S.UPLOADER_NOTIFIED && !c.uploader_notified_at) extra.uploader_notified_at = new Date();
     if (to === S.WAITING_FOR_RESTORATION_WINDOW) {
-      if (!c.counter_notice_received_at) throw new DmcaServiceError("Counter-notice receipt date is missing");
-      const w = computeRestorationWindow(new Date(c.counter_notice_received_at));
+      const windowStart = c.claimant_counter_notified_at || c.counter_notice_received_at;
+      if (!windowStart) throw new DmcaServiceError("Claimant notification date is missing");
+      const w = computeRestorationWindow(new Date(windowStart));
       extra.restore_eligible_at = w.eligibleAt;
       extra.restore_deadline_at = w.deadlineAt;
     }
-    if (to === S.RESTORATION_ELIGIBLE && c.restore_eligible_at && new Date(c.restore_eligible_at) > new Date()) {
+    if (to === S.RESTORATION_ELIGIBLE && c.restore_eligible_at && new Date(c.restore_eligible_at) > (opts.now ?? new Date())) {
       throw new DmcaServiceError("The 10-business-day waiting period has not elapsed yet", 409);
     }
     if (to === S.CLOSED) {
@@ -329,9 +393,14 @@ export async function executeTakedown(opts: {
     assertTransition(c.status, S.CONTENT_REMOVED);
     const targets = (await tx.execute(sql`SELECT * FROM dmca_targets WHERE dmca_case_id = ${c.id} AND status = 'pending' ORDER BY id FOR UPDATE`)).rows as any[];
     if (targets.length === 0) throw new DmcaServiceError("This case has no pending targets to take down", 409);
+    // The case status/window is case-wide. Separate notices are required for
+    // different uploaders so one person cannot initiate restoration of another's item.
+    const owners = new Set(targets.map(t => t.uploader_user_id == null ? "unattributed" : `user:${Number(t.uploader_user_id)}`));
+    if (owners.size > 1) throw new DmcaServiceError("Separate DMCA cases are required for content posted by different or unattributed uploaders", 409);
 
     const registryIds: number[] = [];
     const uploaders = new Map<number, string[]>();
+    const countingUsers = new Set<number>();
     let taken = 0;
     for (const t of targets) {
       if (t.content_id == null || !isDmcaContentType(t.content_type)) {
@@ -385,8 +454,9 @@ export async function executeTakedown(opts: {
         await tx.execute(sql`
           INSERT INTO user_copyright_events (user_id, dmca_case_id, dmca_target_id, event_type, counts_toward_repeat_policy, status, created_by, notes)
           VALUES (${uploader}, ${c.id}, ${t.id}, 'content_taken_down', true, 'active', ${actor.id}, ${reason})`);
+        countingUsers.add(Number(uploader));
         const list = uploaders.get(uploader) ?? [];
-        list.push(t.original_url || `${t.content_type} #${t.content_id}`);
+        list.push(`${String(t.content_type).replace(/_/g, " ")} #${t.content_id} — Original URL: ${t.original_url || "not available"}`);
         uploaders.set(uploader, list);
       }
       await writeDmcaAudit(
@@ -411,38 +481,31 @@ export async function executeTakedown(opts: {
     if (notify) {
       for (const [uid, items] of uploaders) {
         const u = await userEmail(tx, uid);
+        const claimant = String(c.claimant_company || c.claimant_name || "Copyright claimant");
+        const work = String(c.work_description || "The copyrighted work identified in the notice");
+        const relativeUrl = `/copyright-notices/${encodeURIComponent(String(c.case_number))}/counter-notice`;
+        const disabledAt = new Date();
+        const inbox = uploaderTakedownEmail({ caseNumber: String(c.case_number), name: u.name, items, disabledAt, claimantName: claimant, workDescription: work, counterNoticeUrl: relativeUrl });
+        await insertInboxMessage(tx, Number(actor.id), uid, inbox.subject, inbox.text);
         if (!u.email) {
           await writeDmcaAudit({ event: "uploader_notice_skipped_no_email", actorType: "system", dmcaCaseId: c.id, targetType: "user", targetId: uid }, tx);
           continue;
         }
+        const email = uploaderTakedownEmail({ caseNumber: String(c.case_number), name: u.name, items, disabledAt, claimantName: claimant, workDescription: work, counterNoticeUrl: `${appBaseUrl()}${relativeUrl}` });
         const id = await enqueueNotification(
           {
             eventType: "dmca.uploader_takedown_notice",
             dmcaCaseId: c.id,
             dedupeKey: `dmca:${c.id}:takedown_notice:${uid}`,
             data: { caseId: c.id, userId: uid, onSent: "mark_uploader_notified" },
-            email: {
-              to: u.email,
-              subject: `Content removed after a copyright notice (case ${c.case_number})`,
-              text: [
-                `Hello${u.name ? ` ${u.name}` : ""},`,
-                ``,
-                `We received a copyright notice under the Digital Millennium Copyright Act (DMCA) and have disabled access to the following content you posted on Barefoot Bay:`,
-                ...items.map((i) => `  - ${i}`),
-                ``,
-                `Case number: ${c.case_number}`,
-                ``,
-                `The content has not been deleted. If you believe it was removed by mistake or misidentification, you may submit a counter-notice. See ${appBaseUrl()}/dmca for our copyright policy and instructions, and quote your case number.`,
-                ``,
-                `Barefoot Bay Community`,
-              ].join("\n"),
-            },
+            email: { to: u.email, ...email },
           },
           tx,
         );
         if (id != null) noticesQueued++;
       }
     }
+    for (const uid of countingUsers) await checkRepeatInfringerThreshold(uid, tx);
 
     // Verified physical quarantine is REQUIRED before the takedown commits:
     // every stored file is moved off its public key (so even direct
@@ -463,6 +526,11 @@ export async function executeTakedown(opts: {
     );
 
     await setCaseStatus(tx, c, S.CONTENT_REMOVED, actor, { takedown_at: new Date() }, reason);
+    // An uploader with no email has still been notified in their on-site
+    // inbox. There is no outbox delivery callback to advance this case.
+    if (notify && uploaders.size > 0 && noticesQueued === 0) {
+      await setCaseStatus(tx, c, S.UPLOADER_NOTIFIED, { type: "system" }, { uploader_notified_at: new Date() }, "Notice delivered to uploader inbox (no email available)");
+    }
     return { caseNumber: String(c.case_number), taken, registryIds, noticesQueued };
   }).catch(async (err) => {
     if (takedownMoves.length) {
@@ -601,7 +669,7 @@ export async function restoreCase(opts: { caseId: number; actor: DmcaActor; reas
     await tx.execute(sql`
       UPDATE user_copyright_events SET status = 'reversed', counts_toward_repeat_policy = false,
         notes = COALESCE(notes, '') || ${`\n[restored ${new Date().toISOString()}] ${opts.reason}`}
-      WHERE dmca_case_id = ${c.id} AND status = 'active'`);
+      WHERE dmca_case_id = ${c.id} AND status = 'active' AND counts_toward_repeat_policy = true`);
     await tx.execute(sql`
       UPDATE notification_outbox SET status = 'cancelled', last_error = 'case restored'
       WHERE dmca_case_id = ${c.id} AND status IN ('pending', 'failed') AND event_type LIKE 'dmca.restoration_%'`);
@@ -609,18 +677,18 @@ export async function restoreCase(opts: { caseId: number; actor: DmcaActor; reas
     if (notify) {
       for (const uid of uploaders) {
         const u = await userEmail(tx, uid);
+        const relativeUrl = `/copyright-notices/${encodeURIComponent(String(c.case_number))}`;
+        const inbox = uploaderRestorationEmail({ caseNumber: String(c.case_number), name: u.name, caseUrl: relativeUrl });
+        await insertInboxMessage(tx, Number(actor.id), uid, inbox.subject, inbox.text);
         if (!u.email) continue;
+        const email = uploaderRestorationEmail({ caseNumber: String(c.case_number), name: u.name, caseUrl: `${appBaseUrl()}${relativeUrl}` });
         await enqueueNotification(
           {
             eventType: "dmca.uploader_restored_notice",
             dmcaCaseId: c.id,
             dedupeKey: `dmca:${c.id}:restored_notice:${uid}`,
             data: { caseId: c.id, userId: uid },
-            email: {
-              to: u.email,
-              subject: `Your content has been restored (case ${c.case_number})`,
-              text: `Hello${u.name ? ` ${u.name}` : ""},\n\nThe content that was disabled under DMCA case ${c.case_number} has been restored at its original location.\n\nBarefoot Bay Community`,
-            },
+            email: { to: u.email, ...email },
           },
           tx,
         );
@@ -873,11 +941,15 @@ export async function addTargetToCase(caseId: number, target: TargetInput, actor
     if (target.contentType !== "url" && !isDmcaContentType(target.contentType)) throw new DmcaServiceError("Unknown content type");
     if (target.contentId != null) {
       await tx.execute(sql`SELECT pg_advisory_xact_lock(hashtext(${`${target.contentType}:${target.contentId}`}))`);
-      const conflict = await tx.execute(sql`SELECT t.id FROM dmca_targets t JOIN dmca_cases c ON c.id=t.dmca_case_id WHERE t.content_type=${target.contentType} AND t.content_id=${target.contentId} AND t.status IN ('pending','taken_down') AND c.status <> 'CLOSED' AND c.id <> ${caseId} LIMIT 1`);
-      if (conflict.rows.length) throw new DmcaServiceError("This item already belongs to another active DMCA case", 409);
+      const conflict = await tx.execute(sql`SELECT t.id, c.id AS case_id FROM dmca_targets t JOIN dmca_cases c ON c.id=t.dmca_case_id WHERE t.content_type=${target.contentType} AND t.content_id=${target.contentId} AND t.status IN ('pending','taken_down') AND c.status <> 'CLOSED' LIMIT 1`);
+      if (conflict.rows.length) {
+        const sameCase = Number((conflict.rows[0] as any).case_id) === Number(caseId);
+        throw new DmcaServiceError(sameCase ? "This item is already part of this case" : "This item already belongs to another active DMCA case", 409);
+      }
     }
     const meta = await resolveTargetMeta(tx, target);
     const ins = await tx.execute(sql`INSERT INTO dmca_targets (dmca_case_id,content_type,content_id,original_url,uploader_user_id,status) VALUES (${caseId},${target.contentType},${target.contentId},${meta.originalUrl},${meta.uploaderUserId},'pending') RETURNING id`);
+    await recordNoticeReceived(tx, meta.uploaderUserId, caseId, Number((ins.rows[0] as any).id), actor.id);
     await writeDmcaAudit({ event: "case_target_added", actorType: actor.type, actorId: actor.id, dmcaCaseId: caseId, targetType: target.contentType, targetId: target.contentId, ipAddress: actor.ipAddress, newValue: { targetId: (ins.rows[0] as any).id, originalUrl: meta.originalUrl } }, tx);
   });
 }
@@ -901,6 +973,50 @@ export async function recordCounterNotice(caseId: number, payload: Record<string
   });
 }
 
+export const UPLOADER_COUNTER_FIELDS = ["materialIdentification","formerLocation","perjuryStatement","name","address","phone","email","jurisdictionConsent","serviceOfProcessConsent","signature"] as const;
+export class DmcaValidationError extends DmcaServiceError {
+  constructor(readonly fieldErrors: Record<string, string>) { super("Validation failed", 400); }
+}
+export async function submitCounterNoticeByUploader(
+  caseId: number, userId: number, payload: Record<string, unknown>,
+  meta: { ipAddress: string | null; userAgent: string | null },
+): Promise<void> {
+  const fieldErrors: Record<string, string> = {};
+  for (const field of UPLOADER_COUNTER_FIELDS) {
+    const value = payload[field];
+    if ((["perjuryStatement","jurisdictionConsent","serviceOfProcessConsent"] as string[]).includes(field)) {
+      if (value !== true) fieldErrors[field] = "You must affirm this statement";
+    } else if (typeof value !== "string" || !value.trim()) fieldErrors[field] = "This field is required";
+  }
+  if (typeof payload.email === "string" && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(payload.email.trim())) fieldErrors.email = "Enter a valid email address";
+  if (Object.keys(fieldErrors).length) throw new DmcaValidationError(fieldErrors);
+  await db.transaction(async (tx) => {
+    const c = await lockCase(tx, caseId);
+    const owned = await tx.execute(sql`SELECT 1 FROM dmca_targets WHERE dmca_case_id=${caseId} AND uploader_user_id=${userId} AND status IN ('taken_down','restored') LIMIT 1`);
+    if (!owned.rows.length) throw new DmcaServiceError("DMCA case not found", 404);
+    const others = await tx.execute(sql`SELECT 1 FROM dmca_targets WHERE dmca_case_id=${caseId} AND uploader_user_id IS DISTINCT FROM ${userId} LIMIT 1`);
+    if (others.rows.length) throw new DmcaServiceError("Separate cases are required for content posted by different uploaders", 409);
+    if (c.legal_hold || c.court_action_received_at || ![S.CONTENT_REMOVED,S.UPLOADER_NOTIFIED,S.COUNTER_NOTICE_INCOMPLETE].includes(c.status)) {
+      throw new DmcaServiceError("A counter-notice is not allowed for this case now", 409);
+    }
+    if (c.status === S.CONTENT_REMOVED) await setCaseStatus(tx, c, S.UPLOADER_NOTIFIED, { type: "user", id: userId, ipAddress: meta.ipAddress }, { uploader_notified_at: new Date() }, "Uploader submitted a counter-notice");
+    const receivedAt = new Date();
+    const statutoryPayload = Object.fromEntries(UPLOADER_COUNTER_FIELDS.map((field) => [field, typeof payload[field] === "string" ? (payload[field] as string).trim() : payload[field]]));
+    (statutoryPayload as any).receivedAt = receivedAt.toISOString();
+    const submissionId = await addSubmission(caseId, {
+      submissionType: "counter_notice", formPayload: statutoryPayload,
+      submittedByUserId: userId, submittedByName: statutoryPayload.name as string,
+      signatureValue: statutoryPayload.signature as string, ipAddress: meta.ipAddress, userAgent: meta.userAgent,
+    }, { type: "user", id: userId, ipAddress: meta.ipAddress }, tx);
+    await setCaseStatus(tx, c, S.COUNTER_NOTICE_RECEIVED, { type: "user", id: userId, ipAddress: meta.ipAddress }, { counter_notice_received_at: receivedAt }, "Counter-notice submitted by uploader");
+    await raiseDmcaAdminAlert({
+      alertType: "counter_notice_received", severity: "warning", title: "Uploader counter-notice received",
+      body: `A counter-notice was submitted for case ${c.case_number} and requires review.`,
+      dmcaCaseId: caseId, emailTo: "all", dedupeKey: `counter-notice:${submissionId}`,
+    }, tx);
+  });
+}
+
 export async function acceptCounter(caseId: number, actor: DmcaActor): Promise<void> {
   await transitionCase(caseId, S.COUNTER_NOTICE_ACCEPTED, actor);
 }
@@ -915,14 +1031,24 @@ export async function forwardCounterNotice(caseId: number, actor: DmcaActor): Pr
     if (!c.claimant_email) throw new DmcaServiceError("The claimant has no email address", 409);
     const sub = (await tx.execute(sql`SELECT form_payload FROM dmca_submissions WHERE dmca_case_id=${caseId} AND submission_type='counter_notice' ORDER BY id DESC LIMIT 1`)).rows[0] as any;
     if (!sub) throw new DmcaServiceError("Counter-notice submission not found", 409);
-    const window = computeRestorationWindow(new Date(c.counter_notice_received_at));
+    const claimantNotifiedAt = new Date();
+    const window = computeRestorationWindow(claimantNotifiedAt);
     const p = sub.form_payload || {};
     const counterNotice = {
       name: p.name, address: p.address, phone: p.phone, email: p.email ?? null,
-      materialIdentification: p.materialIdentification, goodFaithStatement: p.goodFaithStatement,
-      jurisdictionConsent: p.jurisdictionConsent, signature: p.signature, receivedAt: p.receivedAt,
+      materialIdentification: p.materialIdentification, formerLocation: p.formerLocation,
+      perjuryStatement: p.perjuryStatement === true
+        ? "I swear, under penalty of perjury, that I have a good faith belief that the material was removed or disabled as a result of mistake or misidentification of the material to be removed or disabled."
+        : p.goodFaithStatement,
+      jurisdictionConsent: p.jurisdictionConsent === true
+        ? "I consent to the jurisdiction of the Federal District Court for the judicial district in which my address is located, or, if outside the United States, any judicial district in which the service provider may be found."
+        : p.jurisdictionConsent,
+      serviceOfProcessConsent: p.serviceOfProcessConsent === true
+        ? "I agree to accept service of process from the person who provided the original notification or their agent."
+        : p.serviceOfProcessConsent,
+      signature: p.signature, receivedAt: p.receivedAt,
     };
-    await setCaseStatus(tx, c, S.CLAIMANT_NOTIFIED_OF_COUNTER, actor, { claimant_counter_notified_at: new Date() });
+    await setCaseStatus(tx, c, S.CLAIMANT_NOTIFIED_OF_COUNTER, actor, { claimant_counter_notified_at: claimantNotifiedAt });
     await setCaseStatus(tx, c, S.WAITING_FOR_RESTORATION_WINDOW, actor, { restore_eligible_at: window.eligibleAt, restore_deadline_at: window.deadlineAt });
     await enqueueNotification({ eventType: "dmca.claimant_counter_forward", dmcaCaseId: caseId, dedupeKey: `dmca:${caseId}:counter_forward`, data: { caseId, counterNotice, restoreEligibleAt: window.eligibleAt }, email: { to: c.claimant_email, subject: `Counter-notice received (${c.case_number})`, text: `A counter-notice was received for case ${c.case_number}.\n\n${JSON.stringify(counterNotice, null, 2)}\n\nAbsent notice of court action, restoration becomes eligible ${window.eligibleAt.toISOString()}.` } }, tx);
     return { restoreEligibleAt: window.eligibleAt, restoreDeadlineAt: window.deadlineAt };
@@ -936,9 +1062,17 @@ export async function closeCase(caseId: number, outcome: "removed" | "restored",
     const allowed = outcome === "restored" ? [S.RESTORED] : [S.UPLOADER_NOTIFIED, S.COUNTER_NOTICE_INCOMPLETE, S.COURT_ACTION_RECEIVED];
     if (!allowed.includes(c.status)) throw new DmcaServiceError(`Case cannot be closed with outcome ${outcome}`, 409);
     await setCaseStatus(tx, c, S.CLOSED, actor, { closed_at: new Date(), closed_reason: outcome }, notes ?? null);
-    const recipients = (await tx.execute(sql`SELECT DISTINCT u.id,u.email FROM dmca_targets t JOIN users u ON u.id=t.uploader_user_id WHERE t.dmca_case_id=${caseId} AND u.email IS NOT NULL`)).rows as any[];
+    const recipients = (await tx.execute(sql`SELECT DISTINCT u.id,u.email FROM dmca_targets t JOIN users u ON u.id=t.uploader_user_id WHERE t.dmca_case_id=${caseId}`)).rows as any[];
     if (c.claimant_email) await enqueueNotification({ eventType: "dmca.claimant_closure_notice", dmcaCaseId: caseId, dedupeKey: `dmca:${caseId}:closure:claimant`, data: { caseId, outcome }, email: { to: c.claimant_email, subject: `DMCA case closed (${c.case_number})`, text: `Case ${c.case_number} has been closed. Outcome: ${outcome}.` } }, tx);
-    for (const u of recipients) await enqueueNotification({ eventType: "dmca.uploader_closure_notice", dmcaCaseId: caseId, dedupeKey: `dmca:${caseId}:closure:${u.id}`, data: { caseId, outcome, userId: u.id }, email: { to: u.email, subject: `DMCA case closed (${c.case_number})`, text: `Case ${c.case_number} has been closed. Outcome: ${outcome}.` } }, tx);
+    for (const u of recipients) {
+      const relativeUrl = `/copyright-notices/${encodeURIComponent(String(c.case_number))}`;
+      const inbox = uploaderClosureEmail(String(c.case_number), outcome, relativeUrl);
+      await insertInboxMessage(tx, Number(actor.id), Number(u.id), inbox.subject, inbox.text);
+      if (u.email) {
+        const email = uploaderClosureEmail(String(c.case_number), outcome, `${appBaseUrl()}${relativeUrl}`);
+        await enqueueNotification({ eventType: "dmca.uploader_closure_notice", dmcaCaseId: caseId, dedupeKey: `dmca:${caseId}:closure:${u.id}`, data: { caseId, outcome, userId: u.id }, email: { to: u.email, ...email } }, tx);
+      }
+    }
   });
 }
 
@@ -966,6 +1100,7 @@ export async function recordRepeatInfringerDecision(userId: number, decision: "w
     const u = (await tx.execute(sql`SELECT * FROM users WHERE id=${userId} FOR UPDATE`)).rows[0] as any;
     if (!u) throw new DmcaServiceError("User not found", 404);
     await tx.execute(sql`INSERT INTO user_copyright_events(user_id,event_type,counts_toward_repeat_policy,status,notes,created_by) VALUES(${userId},${eventType},false,'active',${notes},${actor.id})`);
+    await tx.execute(sql`UPDATE dmca_repeat_infringer_reviews SET status='resolved',resolved_at=now(),resolved_by=${actor.id},decision=${decision} WHERE user_id=${userId} AND status='open'`);
     if (decision === "suspend" || decision === "terminate") await tx.execute(sql`UPDATE users SET is_blocked=true WHERE id=${userId}`);
     await writeDmcaAudit({ event: "repeat_infringer_decision", actorType: actor.type, actorId: actor.id, targetType: "user", targetId: userId, ipAddress: actor.ipAddress, newValue: { decision, eventType }, notes }, tx);
     if (decision === "warning" && u.email) await enqueueNotification({ eventType: "dmca.repeat_infringer_warning", dedupeKey: `dmca:repeat-warning:${userId}:${Date.now()}`, data: { userId }, email: { to: u.email, subject: "Copyright policy warning", text: `Your account has received a copyright policy warning.\n\nPlease review the Barefoot Bay copyright policy.` } }, tx);

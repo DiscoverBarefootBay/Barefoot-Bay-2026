@@ -125,12 +125,15 @@ describe("DMCA service lifecycle", () => {
         SELECT
           (SELECT count(*) FROM dmca_audit_log WHERE dmca_case_id = ${created.id})::int AS audits,
           (SELECT count(*) FROM user_copyright_events WHERE dmca_case_id = ${created.id})::int AS copyright_events,
+          (SELECT count(*) FROM user_copyright_events
+           WHERE dmca_case_id = ${created.id} AND counts_toward_repeat_policy = true)::int AS counting_copyright_events,
           (SELECT count(*) FROM notification_outbox WHERE dmca_case_id = ${created.id})::int AS notices,
           (SELECT status FROM dmca_cases WHERE id = ${created.id}) AS case_status,
           (SELECT status FROM dmca_quarantined_objects WHERE dmca_case_id = ${created.id} LIMIT 1) AS registry_status`);
       const effect = effects.rows[0] as any;
       assert.ok(Number(effect.audits) >= 4);
-      assert.equal(Number(effect.copyright_events), 1);
+      assert.equal(Number(effect.copyright_events), 2);
+      assert.equal(Number(effect.counting_copyright_events), 1);
       assert.equal(Number(effect.notices), 1);
       assert.equal(effect.case_status, DmcaCaseStatus.CONTENT_REMOVED);
       assert.equal(effect.registry_status, "quarantined");

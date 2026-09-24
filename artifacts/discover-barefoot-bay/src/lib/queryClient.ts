@@ -197,6 +197,14 @@ export async function apiRequest(
       const error: any = new Error(friendlyMessage);
       error.status = res.status;
       error.statusText = res.statusText;
+      try {
+        const parsed = JSON.parse(responseText);
+        if (parsed && typeof parsed === "object" && parsed.fieldErrors && typeof parsed.fieldErrors === "object") {
+          error.fieldErrors = parsed.fieldErrors;
+        }
+      } catch {
+        // Non-JSON errors have no structured field errors.
+      }
       console.error(`API request failed: ${method} ${url} - Status: ${res.status}`, error);
       throw error;
     }

@@ -261,6 +261,10 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
               <Link href="/subscriptions" onClick={onClose}>
                 <div className="py-2 text-navy hover:text-coral">Sponsorship</div>
               </Link>
+
+              <Link href="/copyright-notices" onClick={onClose}>
+                <div className="py-2 text-navy hover:text-coral" data-testid="link-mobile-copyright-notices">Copyright Notices</div>
+              </Link>
               
               <Link href="/contact-us" onClick={onClose}>
                 <div className="py-2 text-navy hover:text-coral">Contact Us</div>

@@ -33,6 +33,9 @@ import ForgotPasswordPage from "@/pages/forgot-password";
 import ResetPasswordPage from "@/pages/reset-password";
 import ProfileSettings from "@/pages/profile-settings";
 import SubscriptionsPage from "@/pages/subscriptions";
+import CopyrightNoticesPage from "@/pages/copyright-notices/list-page";
+import CopyrightNoticeDetailPage from "@/pages/copyright-notices/detail-page";
+import CounterNoticePage from "@/pages/copyright-notices/counter-notice-page";
 import MessagesPage from "@/pages/messages";
 import CommunitySettings from "@/pages/community-settings";
 // Analytics direct access page
@@ -182,6 +185,9 @@ function Router() {
             {/* User Settings Routes */}
             <ProtectedRoute path="/profile" component={ProfileSettings} />
             <ProtectedRoute path="/subscriptions" component={SubscriptionsPage} />
+             <ProtectedRoute path="/copyright-notices" component={CopyrightNoticesPage} />
+             <ProtectedRoute path="/copyright-notices/:caseNumber" component={CopyrightNoticeDetailPage} />
+             <ProtectedRoute path="/copyright-notices/:caseNumber/counter-notice" component={CounterNoticePage} />
             <Route path="/subscription-test" component={SubscriptionTestPage} />
             {/* Subscription Flow Pages */}
             <Route path="/subscription/success" component={SubscriptionSuccessPage} />

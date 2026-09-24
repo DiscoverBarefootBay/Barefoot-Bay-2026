@@ -26,6 +26,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ContentModerationMenu } from "@/components/admin/dmca/content-moderation-menu";
+import { RemovedContentNotice } from "@/components/dmca/removed-content-notice";
 
 interface VendorCommentsProps {
   pageSlug: string;
@@ -212,6 +213,7 @@ export function VendorComments({ pageSlug }: VendorCommentsProps) {
                   )}
                 </div>
                 <div className="flex-1">
+                  <RemovedContentNotice contentVisibility={(comment as any).contentVisibility} compact />
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <p className="font-semibold">{comment.user?.username ?? 'Anonymous'}</p>

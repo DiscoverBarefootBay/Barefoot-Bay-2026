@@ -6,6 +6,7 @@ import { startWeeklyListingsEmailScheduler } from "./weekly-listings-scheduler";
 import { startForumBadgeExpirationScheduler } from "./forum-badge-expiration-scheduler";
 import { ensureFeaturedListingsFlag } from "./featured-listings-flag";
 import { startNotificationOutboxDispatcher } from "./dmca/outbox";
+import { startDmcaScheduler } from "./dmca/dmca-scheduler";
 
 // Catch unhandled rejections from optional services (e.g. Object Storage when
 // no bucket is provisioned) so they don't crash the server process.
@@ -57,6 +58,8 @@ getApp().then(({ server }) => {
     startForumBadgeExpirationScheduler();
     // Deliver queued DMCA notifications with retry (email env-gated). Idempotent.
     startNotificationOutboxDispatcher();
+    // DMCA statutory deadline alerts and anonymous leakage verification.
+    startDmcaScheduler();
     // Seed the featured_listings feature flag so the admin toggle exists.
     // Idempotent; fire-and-forget (errors are logged inside).
     void ensureFeaturedListingsFlag();

@@ -10,11 +10,16 @@ description: Durable evidence-preservation and quarantine rules for DMCA work �
 - Drizzle's `sql` template does NOT turn a JS array into a PG array (`ANY(${arr}::int[])` → 22P02); use an ARRAY[...] builder.
 - Schema ships as idempotent SQL in lib/db/sql and must be applied to the prod DB at Publish.
 - DMCA status links (/dmca/status/<token>) are bearer credentials: every place that logs or stores URLs (pino req serializer, error logs, analytics pageviews/events/referrers, active-users) must pass them through the shared redact-path helper; the status page also sets referrer=no-referrer.
-  **Why:** review found the token landing in request logs and analytics_page_views, which admins can read.
+  **Why:** tokens in request logs or analytics_page_views would be readable by site admins.
   **How to apply:** any new logger/analytics sink or any new tokenized public URL must redact the same way.
 - Client IP for audit/rate-limit must come from req.ip (app sets trust proxy=1), never the raw X-Forwarded-For header, which the client controls. express-rate-limit keyGenerator must wrap it in ipKeyGenerator.
 - Private DMCA documents (original notices, court docs) go to object storage under the `dmca-quarantine/` prefix (blocked by the quarantine gate on every public proxy route), served only through HMAC-signed ≤5-min admin links. Never local disk.
-  **Why:** a subagent wrote them to PRIVATE_OBJECT_DIR as a filesystem path; deployment disks are ephemeral, so legal evidence would vanish on republish.
+  **Why:** deployment disks are ephemeral, so legal evidence on local disk would vanish on republish.
 - DMCA legal rules (restore eligibility, holds, one active case per item, what may appear in emails) are enforced in the service layer, never only in routes or UI; every case-level hold must leave a releasable hold record.
-  **Why:** review found route-only checks bypassable and URL-only cases left permanently held.
-- The site theme's `destructive` button variant renders invisibly; style danger buttons explicitly (red bg + white text).
+  **Why:** route-only checks are bypassable, and a hold without a record can never be released.
+- A case that can receive an uploader counter-notice must cover one identifiable uploader only; separate mixed-owner and unattributed targets into different cases before takedown. Do not solve this by letting one uploader submit for all case targets.
+  **Why:** the counter-notice and restoration window are case-wide, so one uploader could otherwise trigger restoration of someone else's or unattributed content.
+  **How to apply:** preserve this boundary if case creation, target attachment, or counter-notice routing changes.
+- Restoration eligibility is an exact timestamp on the tenth business day, not merely the start of that calendar day. A bad case must not stop other scheduler cases or the exposure check.
+  **Why:** the business-day counter reaches day ten before a time-preserving eligibility timestamp; a transition too early rejects and can abort the batch.
+  **How to apply:** compare the eligibility timestamp and isolate per-case scheduler errors when changing reminder cadence.

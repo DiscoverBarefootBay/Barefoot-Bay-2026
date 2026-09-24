@@ -20,6 +20,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { ShareButton } from "@/components/shared/share-button";
 import { DisclaimerLink } from "@/components/shared/filter-sort-drawer";
 import type { DetailsDisclosureState } from "@/lib/details-disclosure-state";
+import { RemovedContentNotice } from "@/components/dmca/removed-content-notice";
 
 // Need to include RouteComponentProps to properly handle wouter route params
 import { RouteComponentProps } from "wouter";
@@ -987,6 +988,7 @@ export default function GenericContentPage(props: GenericContentPageProps) {
 
   return (
     <div className="space-y-6">
+      <RemovedContentNotice contentVisibility={(content as any)?.contentVisibility} />
       {/* Admin-only notice for hidden vendor pages */}
       {isHiddenVendorPage && (
         <Alert className="border-orange-200 bg-orange-50">

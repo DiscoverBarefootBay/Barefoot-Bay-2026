@@ -119,6 +119,7 @@ export const CommunityCategoryPage: React.FC<CommunityCategoryPageProps> = ({ ca
           isUnvisited: false,
           isHidden: !!page.isHidden,
           createdAt: page.createdAt ?? null,
+          contentVisibility: (page as any).contentVisibility,
         };
       });
   }, [allPages, category, categoryLabel]);

@@ -45,6 +45,7 @@ import { ForumLoadingAnimation } from "@/components/forum/loading-animation";
 import { FilterSortDrawer, DrawerFilterSection } from "@/components/shared/filter-sort-drawer";
 import { apiRequest } from "@/lib/queryClient";
 import { queryClient } from "@/lib/queryClient";
+import { RemovedContentNotice } from "@/components/dmca/removed-content-notice";
 
 interface ForumCategory {
   id: number;
@@ -74,6 +75,7 @@ interface Story {
   author?: { id: number; username: string; fullName?: string | null; avatarUrl?: string | null } | null;
   createdAt: string;
   updatedAt: string;
+  contentVisibility?: { removed?: boolean; status?: string };
 }
 
 interface StoryFeedResponse {
@@ -125,6 +127,7 @@ function HorizontalStoryCard({ story, index }: { story: Story; index: number }) 
           }`}
           data-testid={`story-banner-${story.id}`}
         >
+          <RemovedContentNotice contentVisibility={story.contentVisibility} compact />
           {story.isUnread && (
             <div className="absolute top-2 right-2 z-20 bg-red-500 text-white text-[10px] sm:text-xs font-bold px-2.5 py-0.5 rounded-full shadow-md">
               New
@@ -203,6 +206,7 @@ function StoryCard({ story }: { story: Story }) {
           story.isUnread ? "border-red-500 border-[3px] shadow-lg ring-2 ring-red-300" : "border-navy/10"
         }`}
       >
+        <RemovedContentNotice contentVisibility={story.contentVisibility} compact />
         {story.isUnread && (
           <div className="absolute -top-2 -right-2 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
             New

@@ -5,6 +5,10 @@ const escapeHtml = (value: unknown) => String(value ?? "").replace(/[&<>"']/g, (
 const shell = (heading: string, content: string) =>
   `<div style="font-family:Arial,sans-serif;line-height:1.5;color:#222;max-width:680px;margin:auto"><h2 style="color:#174f3b">${escapeHtml(heading)}</h2>${content}</div>`;
 
+/** Legal copy has not yet been approved. Keep this visible in every uploader notice. */
+export const UPLOADER_DMCA_TEMPLATE_STATUS = "pending counsel review" as const;
+const counselFooter = `Template status: ${UPLOADER_DMCA_TEMPLATE_STATUS}`;
+
 const formatReceived = (d: Date) =>
   `${d.toLocaleString("en-US", { timeZone: "America/New_York", dateStyle: "long", timeStyle: "long" })} (${d.toISOString()})`;
 
@@ -87,6 +91,34 @@ export const claimantCounterForwardEmail = (caseNumber: string, counter: unknown
   simpleCaseEmail("Counter-notice received", `Counter-notice received (case ${caseNumber})`, [`Case ${caseNumber}`, JSON.stringify(counter, null, 2), `Restoration eligibility date: ${eligibleAt.toISOString()}`]);
 export const claimantClosureEmail = (caseNumber: string, outcome: string) =>
   simpleCaseEmail("DMCA case closed", `DMCA case closed (${caseNumber})`, [`Case ${caseNumber} has been closed.`, `Outcome: ${outcome}`]);
-export const uploaderClosureEmail = claimantClosureEmail;
+export function uploaderTakedownEmail(input: {
+  caseNumber: string; name?: string | null; items: string[]; disabledAt: Date;
+  claimantName: string; workDescription: string; counterNoticeUrl: string;
+}) {
+  return simpleCaseEmail("Content disabled after a copyright notice", `Content removed after a copyright notice (case ${input.caseNumber})`, [
+    `Hello${input.name ? ` ${input.name}` : ""},`, "",
+    "We received a DMCA copyright notice and disabled access to content you posted.",
+    `Case number: ${input.caseNumber}`,
+    `Access disabled: ${input.disabledAt.toISOString()}`,
+    "Affected content:", ...input.items.map((item) => `- ${item}`), "",
+    `Claimant: ${input.claimantName}`,
+    `Copyrighted work described: ${input.workDescription}`,
+    "If you believe the material was removed by mistake or misidentification, review the notice information and submit a complete counter-notice using the link below.",
+    `Counter-notice form: ${input.counterNoticeUrl}`, "", counselFooter,
+  ]);
+}
+export function uploaderRestorationEmail(input: { caseNumber: string; name?: string | null; caseUrl: string }) {
+  return simpleCaseEmail("Your content has been restored", `Your content has been restored (case ${input.caseNumber})`, [
+    `Hello${input.name ? ` ${input.name}` : ""},`, "",
+    `The content disabled under DMCA case ${input.caseNumber} has been restored at its original location.`,
+    `View notice information: ${input.caseUrl}`, "", counselFooter,
+  ]);
+}
+export function uploaderClosureEmail(caseNumber: string, outcome: string, caseUrl?: string) {
+  return simpleCaseEmail("DMCA case closed", `DMCA case closed (${caseNumber})`, [
+    `Case ${caseNumber} has been closed.`, `Outcome: ${outcome}.`,
+    ...(caseUrl ? [`View notice information: ${caseUrl}`] : []), "", counselFooter,
+  ]);
+}
 export const repeatInfringerWarningEmail = () =>
   simpleCaseEmail("Copyright policy warning", "Copyright policy warning", ["Your account has received a copyright policy warning.", "Please review the Barefoot Bay copyright policy."]);
