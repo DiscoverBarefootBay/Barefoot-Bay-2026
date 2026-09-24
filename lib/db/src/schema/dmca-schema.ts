@@ -199,3 +199,17 @@ export const notificationOutbox = pgTable("notification_outbox", {
   sentAt: timestamp("sent_at"),
 });
 export type NotificationOutboxRow = typeof notificationOutbox.$inferSelect;
+
+export const dmcaContentFlags = pgTable("dmca_content_flags", {
+  id: serial("id").primaryKey(),
+  contentType: text("content_type").notNull(),
+  contentId: integer("content_id").notNull(),
+  reason: text("reason").notNull(),
+  flaggedBy: integer("flagged_by").notNull(),
+  flaggedAt: timestamp("flagged_at").notNull().defaultNow(),
+  resolvedAt: timestamp("resolved_at"),
+  resolvedBy: integer("resolved_by"),
+  resolution: text("resolution"),
+  dmcaCaseId: integer("dmca_case_id"),
+});
+export type DmcaContentFlag = typeof dmcaContentFlags.$inferSelect;

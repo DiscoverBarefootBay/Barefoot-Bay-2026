@@ -125,6 +125,8 @@ async function buildApp() {
   expressApp.use("/api/dmca", dmcaEvidenceRouter);
   const dmcaPublicRouter = (await import("./routes/dmca-public")).default;
   expressApp.use("/api/dmca", dmcaPublicRouter);
+  const dmcaAdminRouter = (await import("./routes/dmca-admin")).default;
+  expressApp.use("/api/admin/dmca", dmcaAdminRouter);
 
   try {
     const { analyticsMiddleware } = await import("./analytics-service");

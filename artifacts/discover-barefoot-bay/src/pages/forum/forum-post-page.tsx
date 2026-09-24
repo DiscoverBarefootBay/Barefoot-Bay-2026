@@ -55,6 +55,7 @@ import { Label } from "@/components/ui/label";
 import { ForumShareButton } from "@/components/forum/forum-share-button";
 import { ForumLikes } from "@/components/forum/forum-likes";
 import { FeaturedImageEditorDialog } from "@/components/forum/featured-image-editor-dialog";
+import { ContentModerationMenu } from "@/components/admin/dmca/content-moderation-menu";
 
 interface ForumPost {
   id: number;
@@ -227,9 +228,8 @@ export default function ForumPostPage() {
   const [location, navigate] = useLocation();
   const { user } = useAuth();
   const { toast } = useToast();
-  const { isAdmin, hasPermission, checkFeaturePermission } = usePermissions();
+  const { isAdmin, isModerator, hasPermission, checkFeaturePermission } = usePermissions();
   const [comment, setComment] = useState("");
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isFeaturedImageDialogOpen, setIsFeaturedImageDialogOpen] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
   const [showPostContent, setShowPostContent] = useState(true);
@@ -1099,47 +1099,14 @@ export default function ForumPostPage() {
             </Button>
           )}
 
-          {/* Delete button - visible to admins only */}
-          {isAdmin && (
-            <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-              <AlertDialogTrigger asChild>
-                <Button 
-                  variant="destructive" 
-                  size="sm"
-                >
-                  <Trash2 className="mr-2 h-4 w-4" /> Delete Post
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete the post
-                    and all associated comments.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => deletePostMutation.mutate()}
-                    className="bg-red-600 hover:bg-red-700"
-                    disabled={deletePostMutation.isPending}
-                  >
-                    {deletePostMutation.isPending ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Deleting...
-                      </>
-                    ) : (
-                      <>
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Delete
-                      </>
-                    )}
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+          {/* Administrative deletion is routed through the legal-compliance menu. */}
+          {isModerator && (
+            <ContentModerationMenu
+              contentType="forum_post"
+              contentId={post.id}
+              label="Moderate"
+              deleteFn={() => deletePostMutation.mutateAsync()}
+            />
           )}
         </div>
       </div>
@@ -1502,7 +1469,13 @@ export default function ForumPostPage() {
                             }
                           })()}
                         </span>
-                        {checkFeaturePermission?.('comments') && (isAdmin || (user && comment.author?.id === user.id) || (user && post && post.authorId === user.id)) && (
+                        {isModerator && (!user || comment.author?.id !== user.id) ? (
+                          <ContentModerationMenu
+                            contentType="forum_comment"
+                            contentId={comment.id}
+                            deleteFn={() => deleteCommentMutation.mutateAsync(comment.id)}
+                          />
+                        ) : checkFeaturePermission?.('comments') && ((user && comment.author?.id === user.id) || (user && post && post.authorId === user.id)) ? (
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
                               <button className="chat-admin-button">DEL</button>
@@ -1532,7 +1505,7 @@ export default function ForumPostPage() {
                               </AlertDialogFooter>
                             </AlertDialogContent>
                           </AlertDialog>
-                        )}
+                        ) : null}
                       </div>
                     </div>
                     <div className="chat-content">
@@ -1638,7 +1611,13 @@ export default function ForumPostPage() {
                                   })()
                                 ) : ''}
                               </span>
-                              {checkFeaturePermission?.('comments') && (isAdmin || (user && comment.author?.id === user.id) || (user && post && post.authorId === user.id)) && (
+                              {isModerator && (!user || comment.author?.id !== user.id) ? (
+                                <ContentModerationMenu
+                                  contentType="forum_comment"
+                                  contentId={comment.id}
+                                  deleteFn={() => deleteCommentMutation.mutateAsync(comment.id)}
+                                />
+                              ) : checkFeaturePermission?.('comments') && ((user && comment.author?.id === user.id) || (user && post && post.authorId === user.id)) ? (
                                 <AlertDialog>
                                   <AlertDialogTrigger asChild>
                                     <Button 
@@ -1674,7 +1653,7 @@ export default function ForumPostPage() {
                                     </AlertDialogFooter>
                                   </AlertDialogContent>
                                 </AlertDialog>
-                              )}
+                              ) : null}
                             </div>
                           </div>
                           <div className="text-navy/80">

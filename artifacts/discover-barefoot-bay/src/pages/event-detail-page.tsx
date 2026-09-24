@@ -46,6 +46,7 @@ import { EventDetailSkeleton } from "@/components/calendar/event-detail-skeleton
 import { SeriesOccurrencesDialog } from "@/components/calendar/series-occurrences-dialog";
 import { Repeat, Link2 } from "lucide-react";
 import { Link } from "wouter";
+import { ContentModerationMenu } from "@/components/admin/dmca/content-moderation-menu";
 
 
 // keep existing type definitions
@@ -82,7 +83,7 @@ export default function EventDetailPage() {
   const urlParams = new URLSearchParams(window.location.search);
   const returnDate = urlParams.get('returnDate');
   const calendarReturnUrl = returnDate ? `/calendar?date=${returnDate}` : '/calendar';
-  const { isAdmin, canInteractWithEvent, canCommentOnEvent } = usePermissions();
+  const { isAdmin, isModerator, canInteractWithEvent, canCommentOnEvent } = usePermissions();
   const { toast } = useToast();
   const [comment, setComment] = useState("");
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -649,6 +650,16 @@ export default function EventDetailPage() {
       </Helmet>
       
       <div className="max-w-4xl mx-auto space-y-8 p-4">
+      {isModerator && !isAdmin && event && (
+        <div className="flex justify-end">
+          <ContentModerationMenu
+            contentType="event"
+            contentId={event.id}
+            label="Moderate event"
+            deleteFn={() => deleteMutation.mutateAsync()}
+          />
+        </div>
+      )}
       {isAdmin && (
         <div className="flex flex-col sm:flex-row sm:justify-end gap-2 sm:gap-4">
           {/* Duplicate Event Button */}
@@ -797,39 +808,14 @@ export default function EventDetailPage() {
             </DialogContent>
           </Dialog>
 
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" className="gap-2 w-full sm:w-auto text-sm sm:text-base order-2 sm:order-3 justify-start sm:justify-center">
-                <Trash2 className="h-4 w-4 flex-shrink-0" />
-                <span className="truncate">Delete {event?.parentEventId ? 'This Occurrence' : 'Event'}</span>
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  {event?.parentEventId ? 'Delete This Occurrence Only?' : event?.isRecurring ? 'Delete Entire Series?' : 'Delete Event?'}
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  {event?.parentEventId ? (
-                    <>This action cannot be undone. This will permanently delete <strong>only this occurrence</strong> from the recurring series. Other occurrences will remain unchanged.</>
-                  ) : event?.isRecurring && event?.childCount ? (
-                    <>This action cannot be undone. This will permanently delete the <strong>entire series</strong> including all {event.childCount + 1} events (1 parent + {event.childCount} occurrence{event.childCount !== 1 ? 's' : ''}).</>
-                  ) : (
-                    <>This action cannot be undone. This will permanently delete this event and remove it from the calendar.</>
-                  )}
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => deleteMutation.mutate()}
-                  className="bg-red-600 hover:bg-red-700"
-                >
-                  {deleteMutation.isPending ? "Deleting..." : event?.parentEventId ? "Delete This Occurrence" : "Delete"}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          {event && (
+            <ContentModerationMenu
+              contentType="event"
+              contentId={event.id}
+              label="Moderate event"
+              deleteFn={() => deleteMutation.mutateAsync()}
+            />
+          )}
 
           {/* Duplicate Event Dialog */}
           <Dialog open={isCreateDuplicateDialogOpen} onOpenChange={setIsCreateDuplicateDialogOpen}>
@@ -1382,25 +1368,12 @@ export default function EventDetailPage() {
                         {comment.createdAt ? format(new Date(comment.createdAt), "PPp") : ""}
                       </p>
                     </div>
-                    {isAdmin && (
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1 h-auto"
-                              onClick={() => deleteCommentMutation.mutate(comment.id)}
-                              disabled={deleteCommentMutation.isPending}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Delete comment</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
+                    {isModerator && (
+                      <ContentModerationMenu
+                        contentType="event_comment"
+                        contentId={comment.id}
+                        deleteFn={() => deleteCommentMutation.mutateAsync(comment.id)}
+                      />
                     )}
                   </div>
                   <p className="mt-2 text-gray-700">{comment.content}</p>

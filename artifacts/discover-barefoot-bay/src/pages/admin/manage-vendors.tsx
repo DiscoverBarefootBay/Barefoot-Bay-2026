@@ -171,11 +171,12 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { GenericPageLoading } from "@/components/shared/generic-page-loading";
 import WysiwygEditor from "@/components/shared/wysiwyg-editor-direct";
-import { Plus, Edit, Trash2, ExternalLink, ArrowUp, ArrowDown, RefreshCw, Briefcase, EyeOff, Eye } from "lucide-react";
+import { Plus, Edit, ExternalLink, ArrowUp, ArrowDown, RefreshCw, Briefcase, EyeOff, Eye } from "lucide-react";
 import { usePermissions } from "@/hooks/use-permissions";
 
 // Import our vendor categories management component
 import ManageVendorCategories from "@/components/admin/manage-vendor-categories";
+import { ContentModerationMenu } from "@/components/admin/dmca/content-moderation-menu";
 
 // Original hardcoded categories for backward compatibility
 const VENDOR_CATEGORIES = [
@@ -218,7 +219,6 @@ export default function ManageVendorsAdmin() {
   // State management
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedPage, setSelectedPage] = useState<any>(null);
   const [editorContent, setEditorContent] = useState("");
   // Tracks which open vendor dialog the admin is trying to close while it has
@@ -601,7 +601,6 @@ export default function ManageVendorsAdmin() {
         title: "Success",
         description: "Vendor page deleted successfully",
       });
-      setIsDeleteDialogOpen(false);
       setSelectedPage(null);
     },
     onError: (error: Error) => {
@@ -1319,11 +1318,6 @@ export default function ManageVendorsAdmin() {
   };
 
   // Handle page deletion
-  const onDeletePage = () => {
-    if (!selectedPage) return;
-    deletePageMutation.mutate(selectedPage.id);
-  };
-
   // Redirect non-admin users
   useEffect(() => {
     if (user && user.role !== "admin") {
@@ -1537,17 +1531,11 @@ export default function ManageVendorsAdmin() {
                             >
                               {page.isHidden ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
                             </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="text-red-500 hover:text-red-700"
-                              onClick={() => {
-                                setSelectedPage(page);
-                                setIsDeleteDialogOpen(true);
-                              }}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
+                            <ContentModerationMenu
+                              contentType="page"
+                              contentId={page.id}
+                              deleteFn={() => deletePageMutation.mutateAsync(page.id)}
+                            />
                           </div>
                         </TableCell>
                       </TableRow>
@@ -1867,44 +1855,6 @@ export default function ManageVendorsAdmin() {
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Delete Vendor Page</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete this vendor page? This action cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-4">
-            {selectedPage && (
-              <div className="space-y-2">
-                <div className="font-semibold">Page Information:</div>
-                <div><span className="font-medium">Title:</span> {selectedPage.title}</div>
-                <div><span className="font-medium">Slug:</span> {selectedPage.slug}</div>
-              </div>
-            )}
-          </div>
-          <DialogFooter>
-            <Button 
-              variant="outline" 
-              onClick={() => setIsDeleteDialogOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button 
-              variant="destructive"
-              onClick={onDeletePage}
-              disabled={deletePageMutation.isPending}
-            >
-              {deletePageMutation.isPending && (
-                <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              Delete
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

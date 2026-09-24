@@ -36,6 +36,7 @@ import { Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import PublishPaymentDialog from "@/components/for-sale/publish-payment-dialog-new";
 import { ShareButton } from "@/components/shared/share-button";
+import { ContentModerationMenu } from "@/components/admin/dmca/content-moderation-menu";
 
 const typeLabels = {
   FSBO: "For Sale By Owner",
@@ -61,7 +62,7 @@ export default function ListingDetailPage() {
   const { user } = useAuth();
   const { isFeaturedListingsEnabled } = useFlags();
   const featuredEnabled = isFeaturedListingsEnabled();
-  const { isAdmin } = usePermissions();
+  const { isAdmin, isModerator } = usePermissions();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -414,7 +415,7 @@ export default function ListingDetailPage() {
               </div>
 
               {/* Edit, Publish and Delete buttons */}
-              {(isOwner || isAdmin) && (
+              {(isOwner || isModerator) && (
                 <div className="flex flex-wrap gap-2 mt-4">
                   {/* Publish Button - Only for draft listings */}
                   {safeListingData.status === "DRAFT" && isOwner && (
@@ -446,7 +447,7 @@ export default function ListingDetailPage() {
                   )}
                 
                   {/* Edit button for both owner and admin */}
-                  <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                  {(isOwner || isAdmin) && <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <DialogTrigger asChild>
                       <Button 
                         variant="outline" 
@@ -479,8 +480,16 @@ export default function ListingDetailPage() {
                         )}
                       </ScrollableContent>
                     </DialogContent>
-                  </Dialog>
+                  </Dialog>}
 
+                  {isModerator && !isOwner ? (
+                    <ContentModerationMenu
+                      contentType="listing"
+                      contentId={Number(listingId)}
+                      label="Moderate listing"
+                      deleteFn={() => deleteMutation.mutateAsync()}
+                    />
+                  ) : (
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button 
@@ -514,6 +523,7 @@ export default function ListingDetailPage() {
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
+                  )}
                 </div>
               )}
               

@@ -22,6 +22,7 @@ import {
 import { apiRequest } from "@/lib/queryClient";
 import { Star, StarOff, Search, RefreshCw } from "lucide-react";
 import AdminLayout from "@/components/layouts/admin-layout";
+import { ContentModerationMenu } from "@/components/admin/dmca/content-moderation-menu";
 
 // Shape returned by /api/admin/all-listings (includes joined user fields)
 interface AdminListing {
@@ -112,6 +113,20 @@ export default function ManageListingsPage() {
         description: err.message,
         variant: "destructive",
       });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const response = await apiRequest("DELETE", `/api/listings/${id}`);
+      return response.text();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+      toast({ title: "Listing deleted" });
+    },
+    onError: (err: Error) => {
+      toast({ title: "Could not delete listing", description: err.message, variant: "destructive" });
     },
   });
 
@@ -272,6 +287,7 @@ export default function ManageListingsPage() {
                               : "—"}
                           </TableCell>
                           <TableCell className="text-right">
+                            <div className="flex items-center justify-end gap-2">
                             {canUnfeature ? (
                               <Button
                                 size="sm"
@@ -302,6 +318,12 @@ export default function ManageListingsPage() {
                                 Not eligible
                               </span>
                             )}
+                            <ContentModerationMenu
+                              contentType="listing"
+                              contentId={listing.id}
+                              deleteFn={() => deleteMutation.mutateAsync(listing.id)}
+                            />
+                            </div>
                           </TableCell>
                         </TableRow>
                       );

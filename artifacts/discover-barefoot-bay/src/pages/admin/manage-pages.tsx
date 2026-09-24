@@ -68,11 +68,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ArrowUp, ArrowDown, Edit, Trash, Plus, Save, ExternalLink } from "lucide-react";
+import { ArrowUp, ArrowDown, Edit, Plus, Save, ExternalLink } from "lucide-react";
 import { ContentEditor } from "@/components/admin/content-editor";
 import { GenericPageLoading } from "@/components/shared/generic-page-loading";
 import { Badge } from "@/components/ui/badge";
 import ManageCommunityCategories from "@/components/admin/manage-community-categories";
+import { ContentModerationMenu } from "@/components/admin/dmca/content-moderation-menu";
 
 // Instead of hardcoded categories, we'll fetch them from the API
 // This is just a fallback in case the API call fails
@@ -108,7 +109,6 @@ export default function ManagePagesPage() {
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedPage, setSelectedPage] = useState<any>(null);
   const [editorContent, setEditorContent] = useState("");
   // Tracks which open page-edit dialog the admin is trying to close while it
@@ -402,7 +402,6 @@ export default function ManagePagesPage() {
         title: "Success",
         description: "Page deleted successfully",
       });
-      setIsDeleteDialogOpen(false);
       setSelectedPage(null);
     },
     onError: (error: Error) => {
@@ -810,11 +809,6 @@ export default function ManagePagesPage() {
   };
 
   // Handle page deletion
-  const onDeletePage = () => {
-    if (!selectedPage) return;
-    deletePageMutation.mutate(selectedPage.id);
-  };
-
   // Redirect non-admin users
   useEffect(() => {
     if (user && user.role !== "admin") {
@@ -1002,17 +996,11 @@ export default function ManagePagesPage() {
                             >
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="text-destructive"
-                              onClick={() => {
-                                setSelectedPage(page);
-                                setIsDeleteDialogOpen(true);
-                              }}
-                            >
-                              <Trash className="h-4 w-4" />
-                            </Button>
+                            <ContentModerationMenu
+                              contentType="page"
+                              contentId={page.id}
+                              deleteFn={() => deletePageMutation.mutateAsync(page.id)}
+                            />
                           </div>
                         </TableCell>
                       </TableRow>
@@ -1255,40 +1243,6 @@ export default function ManagePagesPage() {
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Delete Page</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete this page? This action cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <p className="font-bold">
-            {selectedPage?.title}
-          </p>
-          <p className="text-sm text-muted-foreground">
-            Slug: {selectedPage?.slug}
-          </p>
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setIsDeleteDialogOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              variant="destructive"
-              onClick={onDeletePage}
-              disabled={deletePageMutation.isPending}
-            >
-              {deletePageMutation.isPending ? "Deleting..." : "Delete Page"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
         </TabsContent>
         
         <TabsContent value="community-categories">

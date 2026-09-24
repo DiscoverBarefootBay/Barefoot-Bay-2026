@@ -79,6 +79,14 @@ import EmailActivityPage from "@/pages/admin/email-activity";
 import OnTheMarketEmailsPage from "@/pages/admin/on-the-market-emails";
 import ManageListingsPage from "@/pages/admin/manage-listings";
 
+const DmcaDashboard = lazy(() => import("@/pages/admin/dmca/dashboard"));
+const DmcaNewCase = lazy(() => import("@/pages/admin/dmca/new-case"));
+const DmcaCaseDetail = lazy(() => import("@/pages/admin/dmca/case-detail"));
+const DmcaLegalHolds = lazy(() => import("@/pages/admin/dmca/legal-holds"));
+const DmcaRepeatInfringers = lazy(() => import("@/pages/admin/dmca/repeat-infringers"));
+const DmcaSettings = lazy(() => import("@/pages/admin/dmca/settings"));
+const DmcaPermissions = lazy(() => import("@/pages/admin/dmca/permissions"));
+
 import GenericContentPage from "@/pages/generic-content-page";
 import FormPage from "@/pages/form-page";
 import MockTrackingPage from "@/pages/testing/mock-tracking";
@@ -197,6 +205,13 @@ function Router() {
             
             {/* Admin Routes - All require admin access */}
             <ProtectedRoute path="/admin" component={AdminDashboard} requiredFeature="ADMIN" />
+            <ProtectedRoute path="/admin/dmca" component={DmcaDashboard} requiredFeature="ADMIN" />
+            <ProtectedRoute path="/admin/dmca/new" component={DmcaNewCase} requiredFeature="ADMIN" />
+            <ProtectedRoute path="/admin/dmca/cases/:id" component={DmcaCaseDetail} requiredFeature="ADMIN" />
+            <ProtectedRoute path="/admin/dmca/holds" component={DmcaLegalHolds} requiredFeature="ADMIN" />
+            <ProtectedRoute path="/admin/dmca/repeat-infringers" component={DmcaRepeatInfringers} requiredFeature="ADMIN" />
+            <ProtectedRoute path="/admin/dmca/settings" component={DmcaSettings} requiredFeature="ADMIN" />
+            <ProtectedRoute path="/admin/dmca/permissions" component={DmcaPermissions} requiredFeature="ADMIN" />
             <ProtectedRoute path="/admin/version-fix" component={VersionFixPage} requiredFeature="ADMIN" />
             <ProtectedRoute path="/admin/products" component={ProductManagementPage} requiredFeature="ADMIN" />
             <ProtectedRoute path="/admin/orders" component={OrderManagementPage} requiredFeature="ADMIN" />

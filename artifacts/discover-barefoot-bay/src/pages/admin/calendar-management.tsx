@@ -67,6 +67,7 @@ import CalendarMediaMigration from "@/components/admin/calendar-media-migration"
 import { Link, useLocation } from "wouter";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { ContentModerationMenu } from "@/components/admin/dmca/content-moderation-menu";
 
 type Event = {
   id: number;
@@ -340,7 +341,12 @@ export default function CalendarManagement() {
       });
       
       if (!response.ok) {
-        throw new Error("Failed to delete event");
+        const body = await response.json().catch(() => null);
+        const error: Error & { status?: number } = new Error(
+          body?.message || `Failed to delete event (status ${response.status})`,
+        );
+        error.status = response.status;
+        throw error;
       }
       
       return eventId;
@@ -373,9 +379,13 @@ export default function CalendarManagement() {
       );
       const results = await Promise.all(promises);
       
-      const failedDeletions = results.filter(r => !r.ok).length;
-      if (failedDeletions > 0) {
-        throw new Error(`Failed to delete ${failedDeletions} events`);
+      const failed = results.filter(r => !r.ok);
+      if (failed.length > 0) {
+        const messages = await Promise.all(failed.map(async (response) => {
+          const body = await response.json().catch(() => null);
+          return body?.message || `Failed to delete event (status ${response.status})`;
+        }));
+        throw new Error(messages.join("\n"));
       }
       
       return eventIds;
@@ -406,7 +416,8 @@ export default function CalendarManagement() {
       });
       
       if (!response.ok) {
-        throw new Error("Failed to delete all events");
+        const body = await response.json().catch(() => null);
+        throw new Error(body?.message || `Failed to delete all events (status ${response.status})`);
       }
       
       return await response.json();
@@ -1003,24 +1014,11 @@ export default function CalendarManagement() {
             )}
           </Button>
           
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button 
-                  variant="destructive" 
-                  size="icon" 
-                  className="h-6 w-6 sm:h-7 sm:w-7"
-                  onClick={() => deleteEventMutation.mutate(row.original.id)}
-                  disabled={deleteEventMutation.isPending}
-                >
-                  <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Delete Event</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <ContentModerationMenu
+            contentType="event"
+            contentId={row.original.id}
+            deleteFn={() => deleteEventMutation.mutateAsync(row.original.id)}
+          />
         </div>
       ),
       meta: {

@@ -4,6 +4,10 @@ import { requireAuth } from "../auth";
 import { filterForViewer, getViewerContext, canViewerSee, sendContentUnavailable } from "../dmca/content-visibility";
 import { z } from "zod/v4";
 import { insertVendorCommentSchema, insertVendorInteractionSchema } from "@workspace/db";
+import { sql } from "drizzle-orm";
+import { db } from "../db";
+import { LegalHoldError } from "../dmca/legal-hold";
+import { assertCanPermanentDelete, PermanentDeletePermissionError } from "../dmca/permanent-delete";
 
 export function createVendorRouter(storage: IStorage) {
   const router = Router();
@@ -110,6 +114,8 @@ export function createVendorRouter(storage: IStorage) {
       }
 
       const isAdmin = req.user.role === 'admin';
+      const owner = (await db.execute(sql`SELECT user_id FROM vendor_comments WHERE id=${commentId}`)).rows[0] as any;
+      if (isAdmin) await assertCanPermanentDelete(req, owner?.user_id);
       
       // Admin can delete any comment
       // Regular users can only delete their own comments
@@ -121,6 +127,8 @@ export function createVendorRouter(storage: IStorage) {
       
       res.json({ success: true, message: "Comment deleted successfully" });
     } catch (error) {
+      if (error instanceof PermanentDeletePermissionError) return res.status(403).json({ message: error.message });
+      if (error instanceof LegalHoldError) return res.status(423).json({ error: "legal_hold", message: error.message });
       console.error("Error deleting vendor comment:", error);
       res.status(500).json({ message: "Failed to delete vendor comment" });
     }

@@ -75,3 +75,18 @@ export function adminNoticeEmail(input: {
     html: shell("New DMCA notice", `<p><strong>Case:</strong> ${escapeHtml(input.caseNumber)}<br><strong>Claimant:</strong> ${escapeHtml(input.claimantName)} &lt;${escapeHtml(input.claimantEmail)}&gt;<br><strong>URLs:</strong> ${escapeHtml(input.urlCount)}<br><strong>Completeness:</strong> ${escapeHtml(summary)}</p><p><a href="${escapeHtml(input.adminUrl)}">Open admin dashboard</a></p>`),
   };
 }
+
+function simpleCaseEmail(heading: string, subject: string, lines: string[]) {
+  const text = lines.join("\n");
+  return { subject, text, html: shell(heading, `<p>${lines.map(escapeHtml).join("<br>")}</p>`) };
+}
+
+export const claimantMissingInfoEmail = (caseNumber: string, message: string) =>
+  simpleCaseEmail("More information required", `More information required (case ${caseNumber})`, [`Case ${caseNumber}`, message]);
+export const claimantCounterForwardEmail = (caseNumber: string, counter: unknown, eligibleAt: Date) =>
+  simpleCaseEmail("Counter-notice received", `Counter-notice received (case ${caseNumber})`, [`Case ${caseNumber}`, JSON.stringify(counter, null, 2), `Restoration eligibility date: ${eligibleAt.toISOString()}`]);
+export const claimantClosureEmail = (caseNumber: string, outcome: string) =>
+  simpleCaseEmail("DMCA case closed", `DMCA case closed (${caseNumber})`, [`Case ${caseNumber} has been closed.`, `Outcome: ${outcome}`]);
+export const uploaderClosureEmail = claimantClosureEmail;
+export const repeatInfringerWarningEmail = () =>
+  simpleCaseEmail("Copyright policy warning", "Copyright policy warning", ["Your account has received a copyright policy warning.", "Please review the Barefoot Bay copyright policy."]);

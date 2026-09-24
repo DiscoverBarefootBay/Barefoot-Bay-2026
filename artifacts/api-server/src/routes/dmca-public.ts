@@ -165,7 +165,7 @@ async function matchMedia(tx: DbExecutor, url: URL): Promise<TargetInput | null>
   return hits.length === 1 ? hits[0] : null;
 }
 
-async function matchTarget(tx: DbExecutor, url: URL): Promise<TargetInput> {
+export async function matchTarget(tx: DbExecutor, url: URL): Promise<TargetInput> {
   const path = url.pathname.replace(/\/+$/, "") || "/";
   let match: RegExpMatchArray | null;
   if ((match = path.match(/^\/forum\/post\/(\d+)$/))) {
@@ -199,7 +199,7 @@ async function matchTarget(tx: DbExecutor, url: URL): Promise<TargetInput> {
   return (await matchMedia(tx, url)) || { contentType: "url", contentId: null, originalUrl: url.toString() };
 }
 
-async function loadSettings(executor: DbExecutor = db): Promise<any> {
+export async function loadSettings(executor: DbExecutor = db): Promise<any> {
   const result = await executor.execute(sql`SELECT * FROM dmca_settings WHERE id = 1`);
   return result.rows[0] || {};
 }

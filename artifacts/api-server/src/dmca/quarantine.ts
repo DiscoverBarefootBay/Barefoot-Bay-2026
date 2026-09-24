@@ -77,6 +77,20 @@ async function getAdapter(): Promise<QuarantineStorageAdapter> {
   return adapterOverride ?? defaultObjectStorageAdapter();
 }
 
+/**
+ * Private DMCA documents (original notices, court documents) live in object
+ * storage under the quarantine prefix, which quarantineGateMiddleware already
+ * refuses to serve on any public route. Never the local disk: deployments
+ * have an ephemeral filesystem, and these files are legal evidence.
+ */
+export const PRIVATE_DOCUMENT_PREFIX = `${QUARANTINE_PREFIX}/_documents`;
+export async function putPrivateDocument(name: string, data: Buffer): Promise<void> {
+  await (await getAdapter()).put(`${PRIVATE_DOCUMENT_PREFIX}/${name}`, data);
+}
+export async function getPrivateDocument(name: string): Promise<Buffer | null> {
+  return (await getAdapter()).get(`${PRIVATE_DOCUMENT_PREFIX}/${name}`);
+}
+
 function localRoot(): string {
   return localRootOverride ?? process.cwd();
 }

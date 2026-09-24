@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { ContentModerationMenu } from "@/components/admin/dmca/content-moderation-menu";
 
 interface VendorCommentsProps {
   pageSlug: string;
@@ -32,7 +33,7 @@ interface VendorCommentsProps {
 
 export function VendorComments({ pageSlug }: VendorCommentsProps) {
   const { user } = useAuth();
-  const { isAdmin, canComment: baseCanComment, hasPermission } = usePermissions();
+  const { isAdmin, isModerator, canComment: baseCanComment, hasPermission } = usePermissions();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [comment, setComment] = useState("");
@@ -122,7 +123,10 @@ export function VendorComments({ pageSlug }: VendorCommentsProps) {
       });
       
       if (!response.ok) {
-        throw new Error("Failed to delete comment");
+        const body = await response.json().catch(() => null);
+        const error: Error & { status?: number } = new Error(body?.message || "Failed to delete comment");
+        error.status = response.status;
+        throw error;
       }
     },
     onSuccess: () => {
@@ -216,7 +220,13 @@ export function VendorComments({ pageSlug }: VendorCommentsProps) {
                         {comment.createdAt ? format(new Date(comment.createdAt), "PPp") : ""}
                       </p>
                     </div>
-                    {(isAdmin || (user && comment.userId === user.id)) && (
+                    {isModerator && (!user || comment.userId !== user.id) ? (
+                      <ContentModerationMenu
+                        contentType="vendor_comment"
+                        contentId={comment.id}
+                        deleteFn={() => deleteCommentMutation.mutateAsync(comment.id)}
+                      />
+                    ) : user && comment.userId === user.id ? (
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -235,7 +245,7 @@ export function VendorComments({ pageSlug }: VendorCommentsProps) {
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
-                    )}
+                    ) : null}
                   </div>
                   <p className="mt-2 text-gray-700">{comment.content}</p>
                 </div>

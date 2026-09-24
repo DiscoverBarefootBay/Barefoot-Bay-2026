@@ -44,6 +44,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 
+async function throwDeleteError(response: Response, fallback: string): Promise<never> {
+  const body = await response.json().catch(() => null);
+  const error: Error & { status?: number } = new Error(body?.message || fallback);
+  error.status = response.status;
+  throw error;
+}
+
 export default function AdvancedSettings() {
   const { isAdmin } = usePermissions();
   const { toast } = useToast();
@@ -63,7 +70,7 @@ export default function AdvancedSettings() {
       });
       
       if (!response.ok) {
-        throw new Error('Failed to delete all events');
+        await throwDeleteError(response, 'Failed to delete all events');
       }
       
       return response.json();
@@ -123,7 +130,7 @@ export default function AdvancedSettings() {
       });
       
       if (!response.ok) {
-        throw new Error('Failed to delete all forum content');
+        await throwDeleteError(response, 'Failed to delete all forum content');
       }
       
       return response.json();
@@ -153,7 +160,7 @@ export default function AdvancedSettings() {
       });
       
       if (!response.ok) {
-        throw new Error('Failed to delete all forum comments');
+        await throwDeleteError(response, 'Failed to delete all forum comments');
       }
       
       return response.json();
@@ -183,7 +190,7 @@ export default function AdvancedSettings() {
       });
       
       if (!response.ok) {
-        throw new Error('Failed to delete all property listings');
+        await throwDeleteError(response, 'Failed to delete all property listings');
       }
       
       return response.json();
@@ -466,7 +473,7 @@ export default function AdvancedSettings() {
       });
       
       if (!response.ok) {
-        throw new Error('Failed to delete all vendors');
+        await throwDeleteError(response, 'Failed to delete all vendors');
       }
       
       return response.json();
@@ -496,7 +503,7 @@ export default function AdvancedSettings() {
       });
       
       if (!response.ok) {
-        throw new Error('Failed to delete community pages');
+        await throwDeleteError(response, 'Failed to delete community pages');
       }
       
       return response.json();
@@ -526,7 +533,7 @@ export default function AdvancedSettings() {
       });
       
       if (!response.ok) {
-        throw new Error('Failed to delete all community pages');
+        await throwDeleteError(response, 'Failed to delete all community pages');
       }
       
       return response.json();

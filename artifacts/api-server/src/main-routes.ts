@@ -5,6 +5,8 @@ import { createServer, type Server } from "http";
 import { setupAuth, requireAuth, requireAdmin, hashPassword } from "./auth";
 import { storage, db } from "./storage";
 import { sql } from "drizzle-orm";
+import { LegalHoldError } from "./dmca/legal-hold";
+import { assertCanPermanentDelete, PermanentDeletePermissionError } from "./dmca/permanent-delete";
 import { verifyUnsubscribeToken } from "./unsubscribe-token";
 // Import WebSocket for chat functionality
 import { WebSocketServer, WebSocket } from "ws";
@@ -4505,6 +4507,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!eventToDelete) {
         return res.status(404).json({ message: "Event not found" });
       }
+      await assertCanPermanentDelete(req, Number((eventToDelete as any).createdBy ?? (eventToDelete as any).created_by));
       
       await storage.deleteEvent(eventId);
       
@@ -4522,6 +4525,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.sendStatus(200);
     } catch (err) {
+      if (err instanceof PermanentDeletePermissionError) return res.status(403).json({ message: err.message });
+      if (err instanceof LegalHoldError) return res.status(423).json({ error: "legal_hold", message: err.message });
       console.error("Error deleting event:", err);
       res.status(500).json({ message: "Failed to delete event" });
     }
@@ -4538,6 +4543,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
 
     try {
+      await assertCanPermanentDelete(req);
       const eventId = parseInt(req.params.id);
       
       // Get the parent event before deleting the series
@@ -4558,6 +4564,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.sendStatus(200);
     } catch (err) {
+      if (err instanceof PermanentDeletePermissionError) return res.status(403).json({ message: err.message });
+      if (err instanceof LegalHoldError) return res.status(423).json({ error: "legal_hold", message: err.message });
       console.error("Error deleting event series:", err);
       res.status(500).json({ message: "Failed to delete event series" });
     }
@@ -4574,6 +4582,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
 
     try {
+      await assertCanPermanentDelete(req);
       await storage.deleteAllEvents();
       
       // Broadcast a message to all clients that all events have been deleted
@@ -4583,6 +4592,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.status(200).json({ message: "All events have been deleted successfully" });
     } catch (err) {
+      if (err instanceof PermanentDeletePermissionError) return res.status(403).json({ message: err.message });
+      if (err instanceof LegalHoldError) return res.status(423).json({ error: "legal_hold", message: err.message });
       console.error("Error deleting all events:", err);
       res.status(500).json({ message: "Failed to delete all events" });
     }
@@ -9537,10 +9548,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (listing.createdBy !== req.user.id && !isAdmin) {
         return res.status(403).json({ message: "Not authorized to delete this listing" });
       }
+      await assertCanPermanentDelete(req, listing.createdBy);
 
       await storage.deleteListing(listingId);
       res.sendStatus(200);
     } catch (err) {
+      if (err instanceof PermanentDeletePermissionError) return res.status(403).json({ message: err.message });
+      if (err instanceof LegalHoldError) return res.status(423).json({ error: "legal_hold", message: err.message });
       console.error("Error deleting listing:", err);
       res.status(500).json({ message: "Failed to delete listing" });
     }
@@ -9557,9 +9571,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
 
     try {
+      await assertCanPermanentDelete(req);
       await storage.deleteAllListings();
       res.status(200).json({ message: "All listings have been deleted successfully" });
     } catch (err) {
+      if (err instanceof PermanentDeletePermissionError) return res.status(403).json({ message: err.message });
+      if (err instanceof LegalHoldError) return res.status(423).json({ error: "legal_hold", message: err.message });
       console.error("Error deleting all listings:", err);
       res.status(500).json({ message: "Failed to delete all listings" });
     }
@@ -10409,6 +10426,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const commentId = parseInt(req.params.id);
       const isAdmin = req.user.role === 'admin';
+      const commentOwner = (await db.execute(sql`SELECT user_id FROM event_comments WHERE id=${commentId}`)).rows[0] as any;
+      if (isAdmin && Number(commentOwner?.user_id) !== Number(req.user.id) &&
+          !(await hasDmcaPermission(req.user as any, DmcaPermission.PERMANENT_DELETE))) {
+        return res.status(403).json({ message: "Missing permission: dmca.permanent_delete" });
+      }
       
       // If user is admin, they can delete any comment
       // Otherwise users can only delete their own comments
@@ -10422,6 +10444,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.sendStatus(200);
     } catch (err) {
+      if (err instanceof LegalHoldError) return res.status(423).json({ error: "legal_hold", message: err.message });
       console.error("Error deleting comment:", err);
       res.status(500).json({ message: "Failed to delete comment" });
     }
@@ -10485,6 +10508,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     try {
       const id = parseInt(req.params.id);
+      // page_contents has no immutable creator column (updated_by changes on every edit),
+      // so there is no owner exception: every admin page delete needs dmca.permanent_delete.
+      await assertCanPermanentDelete(req, null);
       const success = await storage.deletePageContent(id);
       
       if (!success) {
@@ -10493,6 +10519,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json({ success: true, message: "Page content deleted successfully" });
     } catch (err) {
+      if (err instanceof PermanentDeletePermissionError) return res.status(403).json({ message: err.message });
+      if (err instanceof LegalHoldError) return res.status(423).json({ error: "legal_hold", message: err.message });
       console.error("Error deleting page content:", err);
       res.status(500).json({ 
         message: "Failed to delete page content",
@@ -10512,6 +10540,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
 
     try {
+      await assertCanPermanentDelete(req);
       const result = await storage.deleteCommunityPages();
       
       res.json({ 
@@ -10521,6 +10550,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         deletedIds: result.deletedIds
       });
     } catch (err) {
+      if (err instanceof PermanentDeletePermissionError) return res.status(403).json({ message: err.message });
+      if (err instanceof LegalHoldError) return res.status(423).json({ error: "legal_hold", message: err.message });
       console.error("Error deleting community pages:", err);
       res.status(500).json({ 
         message: "Failed to delete community pages",
@@ -10540,6 +10571,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
 
     try {
+      await assertCanPermanentDelete(req);
       const result = await storage.deleteAllCommunityPages();
       
       res.json({ 
@@ -10549,6 +10581,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         deletedIds: result.deletedIds
       });
     } catch (err) {
+      if (err instanceof PermanentDeletePermissionError) return res.status(403).json({ message: err.message });
+      if (err instanceof LegalHoldError) return res.status(423).json({ error: "legal_hold", message: err.message });
       console.error("Error deleting all community pages:", err);
       res.status(500).json({ 
         message: "Failed to delete all community pages",

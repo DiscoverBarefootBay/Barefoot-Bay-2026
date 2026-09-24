@@ -11,6 +11,8 @@ import {
 } from "@workspace/db";
 import { filterByHiddenIndex, getViewerContext, resolveDetailForViewer, isContentIdPublic, canViewerSee, sendContentUnavailable, filterForViewer } from "../dmca/content-visibility";
 import { sendForumPostNotificationEmail, sendForumCommentNotificationEmail, groupNotifiedUsersByEmail } from "../sendgrid-service";
+import { LegalHoldError } from "../dmca/legal-hold";
+import { assertCanPermanentDelete, PermanentDeletePermissionError } from "../dmca/permanent-delete";
 
 console.log("🚨🚨🚨 FORUM MODULE LOADED - This proves TypeScript file is being executed! 🚨🚨🚨");
 
@@ -597,11 +599,14 @@ export function createForumRouter(storage: IStorage) {
       if (post.userId !== req.user.id && req.user.role !== "admin") {
         return res.status(403).json({ message: "You don't have permission to delete this post" });
       }
+      await assertCanPermanentDelete(req, post.userId);
 
       await storage.deleteForumPost(postId);
       
       res.json({ success: true, message: "Post deleted successfully" });
     } catch (error) {
+      if (error instanceof PermanentDeletePermissionError) return res.status(403).json({ message: error.message });
+      if (error instanceof LegalHoldError) return res.status(423).json({ error: "legal_hold", message: error.message });
       console.error("Error deleting forum post:", error);
       res.status(500).json({ message: "Failed to delete forum post" });
     }
@@ -830,8 +835,9 @@ export function createForumRouter(storage: IStorage) {
   });
 
   // Delete a comment
-  router.delete("/comments/:id", requireAuth, async (req, res) => {
+  router.delete("/comments/:id", requireAuth, async (req, res, next) => {
     try {
+      if (req.params.id === "all") return next();
       const commentId = parseInt(req.params.id, 10);
       if (isNaN(commentId)) {
         return res.status(400).json({ message: "Invalid comment ID" });
@@ -848,11 +854,14 @@ export function createForumRouter(storage: IStorage) {
       if (comment.authorId !== req.user.id && post?.userId !== req.user.id && req.user.role !== "admin") {
         return res.status(403).json({ message: "You don't have permission to delete this comment" });
       }
+      if (req.user.role === "admin") await assertCanPermanentDelete(req, comment.authorId);
 
       await storage.deleteForumComment(commentId);
       
       res.json({ success: true, message: "Comment deleted successfully" });
     } catch (error) {
+      if (error instanceof PermanentDeletePermissionError) return res.status(403).json({ message: error.message });
+      if (error instanceof LegalHoldError) return res.status(423).json({ error: "legal_hold", message: error.message });
       console.error("Error deleting forum comment:", error);
       res.status(500).json({ message: "Failed to delete forum comment" });
     }
@@ -889,6 +898,7 @@ export function createForumRouter(storage: IStorage) {
       if (req.user.role !== "admin") {
         return res.status(403).json({ message: "Only administrators can delete all forum content" });
       }
+      await assertCanPermanentDelete(req);
 
       const result = await storage.deleteAllForumContent();
       
@@ -898,6 +908,7 @@ export function createForumRouter(storage: IStorage) {
         deletedCounts: result 
       });
     } catch (error) {
+      if (error instanceof PermanentDeletePermissionError) return res.status(403).json({ message: error.message });
       console.error("Error deleting all forum content:", error);
       res.status(500).json({ message: "Failed to delete all forum content" });
     }
@@ -910,6 +921,7 @@ export function createForumRouter(storage: IStorage) {
       if (req.user.role !== "admin") {
         return res.status(403).json({ message: "Only administrators can delete all forum comments" });
       }
+      await assertCanPermanentDelete(req);
 
       const result = await storage.deleteAllForumComments();
       
@@ -919,6 +931,7 @@ export function createForumRouter(storage: IStorage) {
         deletedCounts: result 
       });
     } catch (error) {
+      if (error instanceof PermanentDeletePermissionError) return res.status(403).json({ message: error.message });
       console.error("Error deleting all forum comments:", error);
       res.status(500).json({ message: "Failed to delete all forum comments" });
     }

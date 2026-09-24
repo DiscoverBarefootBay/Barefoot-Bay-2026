@@ -48,13 +48,16 @@ import {
   LogOut,
   Menu,
   Mail,
-  Sparkles
+  Sparkles,
+  Scale
 } from "lucide-react";
+import { DmcaPerm, useDmcaMe } from "@/lib/dmca-admin";
 
 export default function AdminDashboard() {
   const { user, logoutMutation } = useAuth();
   const { toast } = useToast();
   const [, setLocation] = useLocation();
+  const dmca = useDmcaMe();
   
   // State to force module rendering
   const [isReady, setIsReady] = useState(false);
@@ -100,6 +103,42 @@ export default function AdminDashboard() {
 
   // Sidebar navigation items (for mobile access)
   const sidebarNavItems = [
+    ...(dmca.can(DmcaPerm.VIEW) ? [
+      {
+        title: "Legal / Compliance — DMCA Cases",
+        description: "Review notices, counter-notices, deadlines, and content actions",
+        icon: <Scale className="h-8 w-8 text-primary" />,
+        href: "/admin/dmca",
+        testId: "dmca-cases"
+      },
+      ...(dmca.can(DmcaPerm.MANAGE_HOLDS) ? [{
+        title: "Legal Holds",
+        description: "Manage active and released legal holds",
+        icon: <Scale className="h-8 w-8 text-primary" />,
+        href: "/admin/dmca/holds",
+        testId: "dmca-holds"
+      }] : []),
+      ...(dmca.can(DmcaPerm.MANAGE_REPEAT_INFRINGER) ? [{
+        title: "Repeat-Infringer Review",
+        description: "Make documented repeat-infringer decisions",
+        icon: <Scale className="h-8 w-8 text-primary" />,
+        href: "/admin/dmca/repeat-infringers",
+        testId: "dmca-repeat-infringers"
+      }] : []),
+      ...(dmca.can(DmcaPerm.MANAGE_PERMISSIONS) ? [{
+        title: "DMCA Settings",
+        description: "Configure agent and compliance policy settings",
+        icon: <Settings className="h-8 w-8 text-primary" />,
+        href: "/admin/dmca/settings",
+        testId: "dmca-settings"
+      }, {
+        title: "DMCA Permissions",
+        description: "Manage legal-compliance access grants",
+        icon: <ShieldAlert className="h-8 w-8 text-primary" />,
+        href: "/admin/dmca/permissions",
+        testId: "dmca-permissions"
+      }] : []),
+    ] : []),
     {
       title: "Analytics Dashboard",
       description: "View comprehensive analytics and reports",

@@ -14,6 +14,7 @@ import {
   Mail,
   Sparkles,
   Tag,
+  Scale,
 } from 'lucide-react';
 // Analytics components removed per request
 import { useLocation, Link } from 'wouter';
@@ -23,6 +24,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/components/providers/auth-provider';
 import { usePermissions } from '@/hooks/use-permissions';
+import { DmcaPerm, useDmcaMe } from '@/lib/dmca-admin';
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -39,6 +41,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [location] = useLocation();
   const { user, logoutMutation } = useAuth();
   const { isAdmin } = usePermissions();
+  const dmca = useDmcaMe();
 
   // If not an admin, show unauthorized message
   if (!isAdmin) {
@@ -126,6 +129,33 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   ))}
               </nav>
             </div>
+
+            {dmca.can(DmcaPerm.VIEW) && (
+              <div className="mb-4" data-testid="nav-section-legal-compliance">
+                <h4 className="text-sm font-semibold text-muted-foreground mb-2">Legal / Compliance</h4>
+                <nav className="space-y-1">
+                  {[
+                    { href: '/admin/dmca', label: 'DMCA Cases', show: true },
+                    { href: '/admin/dmca/holds', label: 'Legal Holds', show: dmca.can(DmcaPerm.MANAGE_HOLDS) },
+                    { href: '/admin/dmca/repeat-infringers', label: 'Repeat-Infringer Review', show: dmca.can(DmcaPerm.MANAGE_REPEAT_INFRINGER) },
+                    { href: '/admin/dmca/settings', label: 'DMCA Settings', show: dmca.can(DmcaPerm.MANAGE_PERMISSIONS) },
+                    { href: '/admin/dmca/permissions', label: 'DMCA Permissions', show: dmca.can(DmcaPerm.MANAGE_PERMISSIONS) },
+                  ].filter(item => item.show).map(item => (
+                    <Link key={item.href} href={item.href}>
+                      <Button
+                        variant={location === item.href ? "secondary" : "ghost"}
+                        className="w-full justify-start"
+                        size="sm"
+                        data-testid={`link-${item.href.split('/').pop() || 'dmca'}`}
+                      >
+                        <Scale size={18} className="mr-2" />
+                        {item.label}
+                      </Button>
+                    </Link>
+                  ))}
+                </nav>
+              </div>
+            )}
 
             <Separator className="my-4" />
 

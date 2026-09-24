@@ -13,3 +13,8 @@ description: Durable evidence-preservation and quarantine rules for DMCA work â€
   **Why:** review found the token landing in request logs and analytics_page_views, which admins can read.
   **How to apply:** any new logger/analytics sink or any new tokenized public URL must redact the same way.
 - Client IP for audit/rate-limit must come from req.ip (app sets trust proxy=1), never the raw X-Forwarded-For header, which the client controls. express-rate-limit keyGenerator must wrap it in ipKeyGenerator.
+- Private DMCA documents (original notices, court docs) go to object storage under the `dmca-quarantine/` prefix (blocked by the quarantine gate on every public proxy route), served only through HMAC-signed â‰¤5-min admin links. Never local disk.
+  **Why:** a subagent wrote them to PRIVATE_OBJECT_DIR as a filesystem path; deployment disks are ephemeral, so legal evidence would vanish on republish.
+- DMCA legal rules (restore eligibility, holds, one active case per item, what may appear in emails) are enforced in the service layer, never only in routes or UI; every case-level hold must leave a releasable hold record.
+  **Why:** review found route-only checks bypassable and URL-only cases left permanently held.
+- The site theme's `destructive` button variant renders invisibly; style danger buttons explicitly (red bg + white text).
