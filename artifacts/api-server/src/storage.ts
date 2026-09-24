@@ -1,4 +1,6 @@
 import { sql, eq, and, or, desc, asc, inArray, count, isNull, isNotNull, lt, gt, like } from "drizzle-orm";
+import { installLegalHoldGuards } from "./dmca/storage-guards";
+import { installServerOnlyFieldStripping } from "./dmca/server-only-fields";
 import { db, pool } from "./db";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
@@ -2857,6 +2859,11 @@ export class DatabaseStorage implements IStorage {
         createdAt: eventComments.createdAt,
         updatedAt: eventComments.updatedAt,
         eventId: eventComments.eventId,
+        visibilityStatus: eventComments.visibilityStatus,
+        hiddenAt: eventComments.hiddenAt,
+        hiddenReason: eventComments.hiddenReason,
+        dmcaCaseId: eventComments.dmcaCaseId,
+        legalHold: eventComments.legalHold,
         userId: eventComments.userId,
         user: {
           id: users.id,
@@ -2963,6 +2970,11 @@ export class DatabaseStorage implements IStorage {
         featured: realEstateListings.featured,
         featuredAt: realEstateListings.featuredAt,
         createdBy: realEstateListings.createdBy,
+        visibilityStatus: realEstateListings.visibilityStatus,
+        hiddenAt: realEstateListings.hiddenAt,
+        hiddenReason: realEstateListings.hiddenReason,
+        dmcaCaseId: realEstateListings.dmcaCaseId,
+        legalHold: realEstateListings.legalHold,
         createdAt: realEstateListings.createdAt,
         updatedAt: realEstateListings.updatedAt,
       }).from(realEstateListings);
@@ -3013,6 +3025,11 @@ export class DatabaseStorage implements IStorage {
         featured: realEstateListings.featured,
         featuredAt: realEstateListings.featuredAt,
         createdBy: realEstateListings.createdBy,
+        visibilityStatus: realEstateListings.visibilityStatus,
+        hiddenAt: realEstateListings.hiddenAt,
+        hiddenReason: realEstateListings.hiddenReason,
+        dmcaCaseId: realEstateListings.dmcaCaseId,
+        legalHold: realEstateListings.legalHold,
         createdAt: realEstateListings.createdAt,
         updatedAt: realEstateListings.updatedAt,
         createdByUsername: users.username,
@@ -3064,6 +3081,11 @@ export class DatabaseStorage implements IStorage {
         featured: realEstateListings.featured,
         featuredAt: realEstateListings.featuredAt,
         createdBy: realEstateListings.createdBy,
+        visibilityStatus: realEstateListings.visibilityStatus,
+        hiddenAt: realEstateListings.hiddenAt,
+        hiddenReason: realEstateListings.hiddenReason,
+        dmcaCaseId: realEstateListings.dmcaCaseId,
+        legalHold: realEstateListings.legalHold,
         createdAt: realEstateListings.createdAt,
         updatedAt: realEstateListings.updatedAt,
         createdByUsername: users.username,
@@ -3117,6 +3139,11 @@ export class DatabaseStorage implements IStorage {
         contactInfo: realEstateListings.contactInfo,
         isApproved: realEstateListings.isApproved,
         createdBy: realEstateListings.createdBy,
+        visibilityStatus: realEstateListings.visibilityStatus,
+        hiddenAt: realEstateListings.hiddenAt,
+        hiddenReason: realEstateListings.hiddenReason,
+        dmcaCaseId: realEstateListings.dmcaCaseId,
+        legalHold: realEstateListings.legalHold,
         createdAt: realEstateListings.createdAt,
         updatedAt: realEstateListings.updatedAt,
       })
@@ -3189,6 +3216,11 @@ export class DatabaseStorage implements IStorage {
         featured: realEstateListings.featured,
         featuredAt: realEstateListings.featuredAt,
         createdBy: realEstateListings.createdBy,
+        visibilityStatus: realEstateListings.visibilityStatus,
+        hiddenAt: realEstateListings.hiddenAt,
+        hiddenReason: realEstateListings.hiddenReason,
+        dmcaCaseId: realEstateListings.dmcaCaseId,
+        legalHold: realEstateListings.legalHold,
         createdAt: realEstateListings.createdAt,
         updatedAt: realEstateListings.updatedAt,
       })
@@ -3242,6 +3274,11 @@ export class DatabaseStorage implements IStorage {
         featured: realEstateListings.featured,
         featuredAt: realEstateListings.featuredAt,
         createdBy: realEstateListings.createdBy,
+        visibilityStatus: realEstateListings.visibilityStatus,
+        hiddenAt: realEstateListings.hiddenAt,
+        hiddenReason: realEstateListings.hiddenReason,
+        dmcaCaseId: realEstateListings.dmcaCaseId,
+        legalHold: realEstateListings.legalHold,
         createdAt: realEstateListings.createdAt,
         updatedAt: realEstateListings.updatedAt,
         // User information
@@ -3517,6 +3554,8 @@ export class DatabaseStorage implements IStorage {
           WHERE expiration_date IS NOT NULL 
             AND expiration_date < $1
             AND status = 'ACTIVE'
+            -- DMCA: hidden or held listings are evidence and must never be auto-deleted
+            AND visibility_status = 'published' AND legal_hold = false
         `;
         
         const result = await pool.query(query, [currentDate.toISOString()]);
@@ -3756,7 +3795,12 @@ export class DatabaseStorage implements IStorage {
           hideDefaultTitle: content.hide_default_title,
           createdAt: content.created_at,
           updatedAt: content.updated_at,
-          lastEditedBy: content.last_edited_by
+          lastEditedBy: content.last_edited_by,
+          visibilityStatus: content.visibility_status,
+          hiddenAt: content.hidden_at,
+          hiddenReason: content.hidden_reason,
+          dmcaCaseId: content.dmca_case_id,
+          legalHold: content.legal_hold,
         } as PageContent;
       } else {
         return undefined;
@@ -5812,6 +5856,11 @@ export class DatabaseStorage implements IStorage {
           content: forumPosts.content,
           categoryId: forumPosts.categoryId,
           userId: forumPosts.userId,
+          visibilityStatus: forumPosts.visibilityStatus,
+          hiddenAt: forumPosts.hiddenAt,
+          hiddenReason: forumPosts.hiddenReason,
+          dmcaCaseId: forumPosts.dmcaCaseId,
+          legalHold: forumPosts.legalHold,
           isPinned: forumPosts.isPinned,
           isLocked: forumPosts.isLocked,
           isEditoriallyUpdated: forumPosts.isEditoriallyUpdated,
@@ -5883,6 +5932,11 @@ export class DatabaseStorage implements IStorage {
           content: forumPosts.content,
           categoryId: forumPosts.categoryId,
           userId: forumPosts.userId,
+          visibilityStatus: forumPosts.visibilityStatus,
+          hiddenAt: forumPosts.hiddenAt,
+          hiddenReason: forumPosts.hiddenReason,
+          dmcaCaseId: forumPosts.dmcaCaseId,
+          legalHold: forumPosts.legalHold,
           isPinned: forumPosts.isPinned,
           isLocked: forumPosts.isLocked,
           isEditoriallyUpdated: forumPosts.isEditoriallyUpdated,
@@ -5930,6 +5984,11 @@ export class DatabaseStorage implements IStorage {
         content: forumPosts.content,
         categoryId: forumPosts.categoryId,
         userId: forumPosts.userId,
+        visibilityStatus: forumPosts.visibilityStatus,
+        hiddenAt: forumPosts.hiddenAt,
+        hiddenReason: forumPosts.hiddenReason,
+        dmcaCaseId: forumPosts.dmcaCaseId,
+        legalHold: forumPosts.legalHold,
         isPinned: forumPosts.isPinned,
         isLocked: forumPosts.isLocked,
         isEditoriallyUpdated: forumPosts.isEditoriallyUpdated,
@@ -6017,6 +6076,11 @@ export class DatabaseStorage implements IStorage {
         content: forumPosts.content,
         categoryId: forumPosts.categoryId,
         userId: forumPosts.userId,
+        visibilityStatus: forumPosts.visibilityStatus,
+        hiddenAt: forumPosts.hiddenAt,
+        hiddenReason: forumPosts.hiddenReason,
+        dmcaCaseId: forumPosts.dmcaCaseId,
+        legalHold: forumPosts.legalHold,
         isPinned: forumPosts.isPinned,
         isLocked: forumPosts.isLocked,
         isEditoriallyUpdated: forumPosts.isEditoriallyUpdated,
@@ -6177,6 +6241,8 @@ export class DatabaseStorage implements IStorage {
         )`);
       }
 
+      // DMCA/moderation: the public story feed only ever lists published posts.
+      conditions.push(eq(forumPosts.visibilityStatus, 'published'));
       const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
       // Server-side sorting so pagination ("Load More") stays correct across the whole feed.
@@ -6217,6 +6283,11 @@ export class DatabaseStorage implements IStorage {
         customPreview: forumPosts.customPreview,
         categoryId: forumPosts.categoryId,
         userId: forumPosts.userId,
+        visibilityStatus: forumPosts.visibilityStatus,
+        hiddenAt: forumPosts.hiddenAt,
+        hiddenReason: forumPosts.hiddenReason,
+        dmcaCaseId: forumPosts.dmcaCaseId,
+        legalHold: forumPosts.legalHold,
         isPinned: forumPosts.isPinned,
         isEditoriallyUpdated: forumPosts.isEditoriallyUpdated,
         featuredImage: forumPosts.featuredImage,
@@ -6455,6 +6526,7 @@ export class DatabaseStorage implements IStorage {
           fc.content, 
           fc.post_id as "postId", 
           fc.author_id as "authorId",
+          fc.visibility_status as "visibilityStatus", fc.hidden_at as "hiddenAt", fc.hidden_reason as "hiddenReason", fc.dmca_case_id as "dmcaCaseId", fc.legal_hold as "legalHold",
           fc.created_at as "createdAt", 
           fc.updated_at as "updatedAt",
           jsonb_build_object(
@@ -6500,6 +6572,7 @@ export class DatabaseStorage implements IStorage {
           fc.content, 
           fc.post_id as "postId", 
           fc.author_id as "authorId",
+          fc.visibility_status as "visibilityStatus", fc.hidden_at as "hiddenAt", fc.hidden_reason as "hiddenReason", fc.dmca_case_id as "dmcaCaseId", fc.legal_hold as "legalHold",
           fc.created_at as "createdAt", 
           fc.updated_at as "updatedAt",
           jsonb_build_object(
@@ -7168,6 +7241,11 @@ export class DatabaseStorage implements IStorage {
         createdAt: vendorComments.createdAt,
         updatedAt: vendorComments.updatedAt,
         pageSlug: vendorComments.pageSlug,
+        visibilityStatus: vendorComments.visibilityStatus,
+        hiddenAt: vendorComments.hiddenAt,
+        hiddenReason: vendorComments.hiddenReason,
+        dmcaCaseId: vendorComments.dmcaCaseId,
+        legalHold: vendorComments.legalHold,
         userId: vendorComments.userId,
         user: {
           id: users.id,
@@ -9148,3 +9226,7 @@ export class DatabaseStorage implements IStorage {
 }
 
 export const storage = new DatabaseStorage();
+// Legal holds: every permanent-delete method refuses held content (423).
+installLegalHoldGuards(storage);
+// DMCA: visibility/hold fields are never writable through normal create/update.
+installServerOnlyFieldStripping(storage);

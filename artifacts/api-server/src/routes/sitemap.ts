@@ -136,12 +136,13 @@ function renderEntry(entry: Entry): string {
   return lines.join("\n");
 }
 
-async function collectEvents(): Promise<Entry[]> {
+export async function collectEvents(): Promise<Entry[]> {
   try {
     const rows = await db.execute(sql`
       SELECT id, updated_at, end_date
       FROM events
       WHERE end_date >= NOW() - INTERVAL '1 day'
+        AND visibility_status = 'published'
     `);
     const list = (rows as any).rows ?? rows;
     const entries = (list as Array<{ id: number; updated_at: Date | null }>).map((row) => ({
@@ -158,13 +159,14 @@ async function collectEvents(): Promise<Entry[]> {
   }
 }
 
-async function collectListings(): Promise<Entry[]> {
+export async function collectListings(): Promise<Entry[]> {
   try {
     const rows = await db.execute(sql`
       SELECT id, listing_type, updated_at
       FROM real_estate_listings
       WHERE status = 'ACTIVE'
         AND (expiration_date IS NULL OR expiration_date > NOW())
+        AND visibility_status = 'published'
     `);
     const list = (rows as any).rows ?? rows;
     const entries = (list as Array<{ id: number; listing_type: string; updated_at: Date | null }>).map((row) => ({
@@ -181,11 +183,12 @@ async function collectListings(): Promise<Entry[]> {
   }
 }
 
-async function collectForumPosts(): Promise<Entry[]> {
+export async function collectForumPosts(): Promise<Entry[]> {
   try {
     const rows = await db.execute(sql`
       SELECT id, updated_at
       FROM forum_posts
+      WHERE visibility_status = 'published'
     `);
     const list = (rows as any).rows ?? rows;
     const entries = (list as Array<{ id: number; updated_at: Date | null }>).map((row) => ({
@@ -202,12 +205,13 @@ async function collectForumPosts(): Promise<Entry[]> {
   }
 }
 
-async function collectPageContents(): Promise<Entry[]> {
+export async function collectPageContents(): Promise<Entry[]> {
   try {
     const rows = await db.execute(sql`
       SELECT slug, updated_at
       FROM page_contents
       WHERE slug IS NOT NULL AND slug <> ''
+        AND visibility_status = 'published'
     `);
     const list = (rows as any).rows ?? rows;
     const entries: Entry[] = [];

@@ -5,6 +5,7 @@ import { startListingExpirationScheduler } from "./listing-expiration-scheduler"
 import { startWeeklyListingsEmailScheduler } from "./weekly-listings-scheduler";
 import { startForumBadgeExpirationScheduler } from "./forum-badge-expiration-scheduler";
 import { ensureFeaturedListingsFlag } from "./featured-listings-flag";
+import { startNotificationOutboxDispatcher } from "./dmca/outbox";
 
 // Catch unhandled rejections from optional services (e.g. Object Storage when
 // no bucket is provisioned) so they don't crash the server process.
@@ -54,6 +55,8 @@ getApp().then(({ server }) => {
     // Start the daily job that clears the "Updated" badge from forum posts
     // once their 7-day expiration window has elapsed. Idempotent.
     startForumBadgeExpirationScheduler();
+    // Deliver queued DMCA notifications with retry (email env-gated). Idempotent.
+    startNotificationOutboxDispatcher();
     // Seed the featured_listings feature flag so the admin toggle exists.
     // Idempotent; fire-and-forget (errors are logged inside).
     void ensureFeaturedListingsFlag();

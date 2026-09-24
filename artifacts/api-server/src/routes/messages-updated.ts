@@ -1,6 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import { db } from '../db';
+import { assertMessageDeletable } from '../dmca/legal-hold';
 import { users } from '@workspace/db';
 import { messages, messageAttachments, messageRecipients } from '@workspace/db';
 import { eq, and, or, desc, inArray, sql } from 'drizzle-orm';
@@ -1076,6 +1077,8 @@ router.delete('/:id', authenticateUser, async (req, res) => {
     try {
       // Use a transaction for all database operations
       await db.transaction(async (tx) => {
+        // Legal hold: refuse before deleting anything (message or its replies).
+        for (const id of [messageId, ...replyIds]) await assertMessageDeletable(id, tx);
         // First delete all replies (if any)
         if (replyIds.length > 0) {
           // Delete recipients for replies

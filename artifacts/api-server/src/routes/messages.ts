@@ -1,4 +1,5 @@
 import express from 'express';
+import { assertMessageDeletable } from "../dmca/legal-hold";
 import multer from 'multer';
 import { db } from '../db';
 import { users } from '@workspace/db';
@@ -107,6 +108,7 @@ router.post('/bulk-delete', authenticateUser, async (req, res) => {
         } else if (isSender) {
           // If user is sender but not recipient, they can still "delete" it from their sent items
           // by removing all recipients (effectively hiding it from everyone)
+          await assertMessageDeletable(messageId);
           await db.delete(messageRecipients)
             .where(eq(messageRecipients.messageId, messageId));
             
@@ -1893,6 +1895,8 @@ router.delete('/:id', authenticateUser, async (req, res) => {
           .from(messageAttachments)
           .where(eq(messageAttachments.messageId, messageId));
         
+        // Legal hold: refuse before deleting anything.
+        await assertMessageDeletable(messageId, tx);
         // Delete in proper order: recipients -> attachments -> message
         await tx.delete(messageRecipients)
           .where(eq(messageRecipients.messageId, messageId));

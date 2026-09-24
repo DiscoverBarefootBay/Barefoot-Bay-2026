@@ -9,6 +9,7 @@ import {
   insertForumDescriptionSchema,
   insertForumReadStateSchema 
 } from "@workspace/db";
+import { filterByHiddenIndex, getViewerContext, resolveDetailForViewer, isContentIdPublic, canViewerSee, sendContentUnavailable, filterForViewer } from "../dmca/content-visibility";
 import { sendForumPostNotificationEmail, sendForumCommentNotificationEmail, groupNotifiedUsersByEmail } from "../sendgrid-service";
 
 console.log("🚨🚨🚨 FORUM MODULE LOADED - This proves TypeScript file is being executed! 🚨🚨🚨");
@@ -143,11 +144,12 @@ export function createForumRouter(storage: IStorage) {
       // If user is authenticated, add read state information with sorting
       if (req.user) {
         const postsWithReadState = await storage.getForumPostsWithReadState(categoryId, req.user.id, sortBy);
-        res.json(postsWithReadState);
+        // DMCA/moderation: hidden posts only reach their author (flagged).
+        res.json(await filterByHiddenIndex("forum_post", postsWithReadState as any[], await getViewerContext(req)));
       } else {
         // For unauthenticated users, get posts with sorting (no read state)
         const posts = await storage.getForumPosts(categoryId, sortBy);
-        res.json(posts);
+        res.json(await filterByHiddenIndex("forum_post", posts as any[]));
       }
     } catch (error) {
       console.error("Error fetching posts for category:", error);
@@ -203,10 +205,13 @@ export function createForumRouter(storage: IStorage) {
         return res.status(400).json({ message: "Invalid post ID" });
       }
 
-      const post = await storage.getForumPost(postId);
-      if (!post) {
+      const found = await storage.getForumPost(postId);
+      if (!found) {
         return res.status(404).json({ message: "Post not found" });
       }
+      // DMCA/moderation visibility (generic 404 publicly; flagged for author/dmca.view).
+      const post = await resolveDetailForViewer(req, res, found, (found as any).userId, "Post");
+      if (!post) return;
 
       res.json(post);
     } catch (error) {
@@ -610,10 +615,14 @@ export function createForumRouter(storage: IStorage) {
         return res.status(400).json({ message: "Invalid post ID" });
       }
 
+      // Comments on a hidden post are hidden with it.
+      const viewer = await getViewerContext(req);
+      const parentPost = await storage.getForumPost(postId);
+      if (parentPost && !canViewerSee(parentPost, viewer, (parentPost as any).userId)) return sendContentUnavailable(res, "Post");
       const comments = await storage.getForumComments(postId);
       
       // Ensure we always return an array, even if comments is undefined
-      let commentsArray = Array.isArray(comments) ? comments : [];
+      let commentsArray = filterForViewer(Array.isArray(comments) ? comments : [], viewer, (c: any) => c.authorId);
       
       // CRITICAL: Verify all comments belong to this post (defensive check)
       const validComments = commentsArray.filter(comment => comment.postId === postId);

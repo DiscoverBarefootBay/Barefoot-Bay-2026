@@ -19,4 +19,4 @@
 
 export * from "./schema";
 export * from "./analytics-schema";
-export { messageAttachments } from "./schema-messages";
+export { messageAttachments } from "./schema-messages";export * from "./dmca-schema";

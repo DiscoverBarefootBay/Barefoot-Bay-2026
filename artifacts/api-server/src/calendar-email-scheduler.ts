@@ -24,6 +24,7 @@
  */
 
 import { storage } from "./storage";
+import { publicOnly } from "./dmca/content-visibility";
 import { logger } from "./lib/logger";
 import { formatInTimeZone } from "date-fns-tz";
 import {
@@ -174,7 +175,8 @@ function defaultSchedulerDeps(): CalendarEmailSchedulerDeps {
       storage.claimCalendarEmailWatchdog(scheduleId, expectedLastWatchdogAt, now),
     claimCalendarEmailHeartbeat: (scheduleId, expectedLastHeartbeatAt, now) =>
       storage.claimCalendarEmailHeartbeat(scheduleId, expectedLastHeartbeatAt, now),
-    getEvents: () => storage.getEvents(),
+    // DMCA/moderation: hidden events are never emailed.
+    getEvents: async () => publicOnly(await storage.getEvents()),
     getUsers: forceRefresh => storage.getUsers(forceRefresh),
     sendCalendarEventNotificationEmail: (events, recipientEmails, daysAhead, options) =>
       sendCalendarEventNotificationEmail(events, recipientEmails, daysAhead, options),

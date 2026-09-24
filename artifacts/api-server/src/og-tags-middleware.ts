@@ -1,5 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { storage } from './storage';
+import { isPubliclyVisible } from './dmca/content-visibility';
+
+// Share previews never expose hidden (DMCA/moderation) content: treat it as not found.
+function publicOrUndefined<T>(row: T | undefined | null): T | undefined {
+  return row && isPubliclyVisible(row as any) ? row : undefined;
+}
 import { 
   isSocialMediaCrawler, 
   generateHTMLWithOGTags, 
@@ -156,7 +162,7 @@ export async function ogTagsMiddleware(req: Request, res: Response, next: NextFu
 
 async function handleForumPost(postId: number, fullUrl: string, baseUrl: string, res: Response, next: NextFunction) {
   try {
-    const post = await storage.getForumPost(postId);
+    const post = publicOrUndefined(await storage.getForumPost(postId));
     
     if (!post) {
       console.log(`❌ OG Tags: Forum post ${postId} not found`);
@@ -207,7 +213,7 @@ async function handleForumPost(postId: number, fullUrl: string, baseUrl: string,
 
 async function handleCalendarEvent(eventId: number, fullUrl: string, baseUrl: string, res: Response, next: NextFunction) {
   try {
-    const event = await storage.getEvent(eventId);
+    const event = publicOrUndefined(await storage.getEvent(eventId));
     
     if (!event) {
       return next();
@@ -268,7 +274,7 @@ async function handleCalendarEvent(eventId: number, fullUrl: string, baseUrl: st
 
 async function handleForSaleListing(listingId: number, fullUrl: string, baseUrl: string, res: Response, next: NextFunction) {
   try {
-    const listing = await storage.getListing(listingId);
+    const listing = publicOrUndefined(await storage.getListing(listingId));
     
     if (!listing || (listing.listingType !== 'Classified' && listing.listingType !== 'GarageSale')) {
       console.log(`❌ OG Tags: For-sale listing ${listingId} not found or wrong type (listingType: ${listing?.listingType})`);
@@ -313,7 +319,7 @@ async function handleForSaleListing(listingId: number, fullUrl: string, baseUrl:
 
 async function handleRealEstateListing(listingId: number, fullUrl: string, baseUrl: string, res: Response, next: NextFunction) {
   try {
-    const listing = await storage.getListing(listingId);
+    const listing = publicOrUndefined(await storage.getListing(listingId));
     
     const realEstateTypes = ['FSBO', 'Agent', 'Rent', 'OpenHouse', 'Wanted'];
     if (!listing || !realEstateTypes.includes(listing.listingType)) {
@@ -365,7 +371,7 @@ async function handleVendorPage(vendorSlug: string, fullUrl: string, baseUrl: st
     console.log(`🔍 OG Tags: Looking up vendor page with slug: "${vendorSlug}"`);
     
     // Fetch the vendor page content
-    const pageContent = await storage.getPageContent(vendorSlug, true);
+    const pageContent = publicOrUndefined(await storage.getPageContent(vendorSlug, true));
     
     if (!pageContent) {
       console.log(`❌ OG Tags: Vendor page not found for slug: "${vendorSlug}"`);
@@ -417,7 +423,7 @@ async function handleCommunityPage(pageSlug: string, fullUrl: string, baseUrl: s
     console.log(`🔍 OG Tags: Looking up community page with slug: "${pageSlug}"`);
     
     // Fetch the community page content
-    const pageContent = await storage.getPageContent(pageSlug, true);
+    const pageContent = publicOrUndefined(await storage.getPageContent(pageSlug, true));
     
     if (!pageContent) {
       console.log(`❌ OG Tags: Community page not found for slug: "${pageSlug}"`);

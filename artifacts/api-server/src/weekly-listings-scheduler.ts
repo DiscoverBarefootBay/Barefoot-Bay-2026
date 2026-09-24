@@ -18,6 +18,7 @@
  */
 
 import { eq, and, desc, inArray, gte, lte } from 'drizzle-orm';
+import { publicOnly } from "./dmca/content-visibility";
 import { db } from './db';
 import {
   weeklyListingsEmailSends,
@@ -354,7 +355,8 @@ export interface WeeklySendDeps {
 
 export function defaultWeeklySendDeps(): WeeklySendDeps {
   return {
-    getListings: () => storage.getListings(),
+    // DMCA/moderation: hidden listings are never emailed.
+    getListings: async () => publicOnly(await storage.getListings()),
     getUsers: () => storage.getUsers(),
     sendEmail,
     claimWeeklySend,

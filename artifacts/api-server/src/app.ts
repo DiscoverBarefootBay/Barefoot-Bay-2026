@@ -80,6 +80,17 @@ async function buildApp() {
   expressApp.use(express.urlencoded({ extended: true, limit: "200mb" }));
   expressApp.use(cookieParser());
 
+  // DMCA quarantine gate: 404 any media request for a quarantined file before
+  // any storage proxy / static / direct-file route can serve it. Fails closed.
+  const { quarantineGateMiddleware } = await import("./dmca/quarantine");
+  expressApp.use(quarantineGateMiddleware());
+  // Legal holds: turn a refused permanent delete into a clear 423 response
+  // even when the route's own catch block would answer a generic 500.
+  const { legalHoldResponseMiddleware } = await import("./dmca/storage-guards");
+  expressApp.use(legalHoldResponseMiddleware());
+  const { stripServerOnlyBodyFieldsMiddleware } = await import("./dmca/server-only-fields");
+  expressApp.use(stripServerOnlyBodyFieldsMiddleware());
+
   const connectPgSimple = (await import("connect-pg-simple")).default;
   const PgSession = connectPgSimple(session);
 
@@ -108,6 +119,9 @@ async function buildApp() {
 
   const { setupAuth } = await import("./auth");
   setupAuth(expressApp);
+
+  const dmcaEvidenceRouter = (await import("./routes/dmca-evidence")).default;
+  expressApp.use("/api/dmca", dmcaEvidenceRouter);
 
   try {
     const { analyticsMiddleware } = await import("./analytics-service");

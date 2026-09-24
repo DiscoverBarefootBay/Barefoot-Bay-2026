@@ -1,4 +1,5 @@
 import express from 'express';
+import { publicOnly } from "../dmca/content-visibility";
 import { storage } from '../storage';
 import { logger } from '../utils/logger';
 import { z } from 'zod';
@@ -217,7 +218,7 @@ function createExcerpt(content: string, maxLength: number = 150): string {
 // Enhanced event search with smart filtering for time, category, badge, and location
 async function searchEvents(query: string): Promise<SearchResult[]> {
   try {
-    const events = await storage.getEvents();
+    const events = publicOnly(await storage.getEvents());
     
     // Count how many events we're processing
     let processedCount = 0;
@@ -667,7 +668,7 @@ async function searchForumPosts(query: string): Promise<SearchResult[]> {
     const results: SearchResult[] = [];
     
     for (const category of categories) {
-      const posts = await storage.getForumPosts(category.id);
+      const posts = publicOnly(await storage.getForumPosts(category.id));
       
       for (const post of posts) {
         const titleScore = calculateSimilarity(query, post.title);
@@ -706,7 +707,7 @@ async function searchForumPosts(query: string): Promise<SearchResult[]> {
 async function searchRealEstate(query: string): Promise<SearchResult[]> {
   try {
     console.log(`[REAL ESTATE SEARCH DEBUG] Starting search for: "${query}"`);
-    const listings = await storage.getListings();
+    const listings = publicOnly(await storage.getListings());
     console.log(`[REAL ESTATE SEARCH DEBUG] Retrieved ${listings.length} listings from storage`);
     
     // Filter out draft and expired listings for public search
@@ -835,7 +836,7 @@ async function searchRealEstate(query: string): Promise<SearchResult[]> {
 async function searchCommunityPages(query: string): Promise<SearchResult[]> {
   try {
     console.log(`[COMMUNITY SEARCH DEBUG] Starting community page search for query: "${query}"`);
-    const pages = await storage.getAllPageContents();
+    const pages = publicOnly(await storage.getAllPageContents());
     console.log(`[COMMUNITY SEARCH DEBUG] Found ${pages.length} total pages`);
     const results: SearchResult[] = [];
     
@@ -909,7 +910,7 @@ async function searchVendors(query: string): Promise<SearchResult[]> {
     const vendorCategories = await storage.getVendorCategories();
     console.log(`🔍 [VENDOR SEARCH DEBUG] Found ${vendorCategories.length} vendor categories`);
     
-    const allPages = await storage.getAllPageContents();
+    const allPages = publicOnly(await storage.getAllPageContents());
     console.log(`🔍 [VENDOR SEARCH DEBUG] Loaded ${allPages.length} total pages`);
     
     const vendorPages = allPages.filter(page => {
@@ -1169,7 +1170,7 @@ router.get('/test', async (req, res) => {
     };
     
     // Test basic event search
-    const events = await storage.getEvents();
+    const events = publicOnly(await storage.getEvents());
     debugInfo.totalEvents = events.length;
     
     // Check first few events for pickleball content

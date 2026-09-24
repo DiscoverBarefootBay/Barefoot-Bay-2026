@@ -21,6 +21,46 @@ export const UserRole = {
   ADMIN: 'admin'
 } as const;
 
+// ---------------------------------------------------------------------------
+// Common content-visibility model (DMCA / moderation).
+//
+// Every user-generated content table carries the same visibility columns so
+// one central policy (api-server content-visibility.ts) decides what the public
+// may see. A DMCA takedown is a reversible visibility change, never a delete.
+// `legal_hold` is deliberately separate from `visibility_status`: an item can
+// be dmca_hidden AND under legal hold at the same time. None of these columns
+// may ever be client-settable (see DMCA_SERVER_ONLY_FIELDS).
+// ---------------------------------------------------------------------------
+export const ContentVisibility = {
+  DRAFT: 'draft',
+  PUBLISHED: 'published',
+  MODERATION_HIDDEN: 'moderation_hidden',
+  DMCA_HIDDEN: 'dmca_hidden',
+  USER_DELETED: 'user_deleted',
+  ADMIN_DELETED: 'admin_deleted',
+} as const;
+export type ContentVisibility = typeof ContentVisibility[keyof typeof ContentVisibility];
+
+const contentVisibilityColumns = () => ({
+  visibilityStatus: text("visibility_status").notNull().default(ContentVisibility.PUBLISHED),
+  legalHold: boolean("legal_hold").notNull().default(false),
+  hiddenAt: timestamp("hidden_at"),
+  hiddenByAdminId: integer("hidden_by_admin_id"),
+  hiddenReason: text("hidden_reason"),
+  dmcaCaseId: integer("dmca_case_id"),
+  restoredAt: timestamp("restored_at"),
+  restoredByAdminId: integer("restored_by_admin_id"),
+  deletedAt: timestamp("deleted_at"),
+});
+
+/** Field names that only the server (DMCA / moderation services) may write. */
+export const DMCA_SERVER_ONLY_FIELDS = [
+  'visibilityStatus', 'legalHold', 'hiddenAt', 'hiddenByAdminId', 'hiddenReason',
+  'dmcaCaseId', 'restoredAt', 'restoredByAdminId', 'deletedAt',
+  'visibility_status', 'legal_hold', 'hidden_at', 'hidden_by_admin_id', 'hidden_reason',
+  'dmca_case_id', 'restored_at', 'restored_by_admin_id', 'deleted_at',
+] as const;
+
 // Define listing types
 export const ListingType = {
   FSBO: 'FSBO',
@@ -132,6 +172,8 @@ export const users = pgTable("users", {
   marketingEmailsEnabled: boolean("marketing_emails_enabled").notNull().default(true),
   // Club memberships - stores slugs of social clubs the user belongs to
   clubMemberships: text("club_memberships").array(),
+  // Legal hold: blocks account deletion until an audited hold release.
+  legalHold: boolean("legal_hold").notNull().default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -171,6 +213,7 @@ export const realEstateListings = pgTable("real_estate_listings", {
   featured: boolean("is_featured").default(false).notNull(),
   featuredAt: timestamp("featured_at"),
 
+  ...contentVisibilityColumns(),
   createdBy: integer("created_by").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -234,6 +277,7 @@ export const events = pgTable("events", {
   sponsorIsPoliticalAd: boolean("sponsor_is_political_ad").default(false),
   sponsorPoliticalAdText: text("sponsor_political_ad_text"),
   
+  ...contentVisibilityColumns(),
   createdBy: integer("created_by").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -254,6 +298,7 @@ export const eventComments = pgTable("event_comments", {
   eventId: integer("event_id").references(() => events.id, { onDelete: "cascade" }).notNull(),
   userId: integer("user_id").references(() => users.id).notNull(),
   content: text("content").notNull(),
+  ...contentVisibilityColumns(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -268,6 +313,7 @@ export const pageContents = pgTable("page_contents", {
   isHidden: boolean("is_hidden").notNull().default(false), // To hide pages like vendor pages
   hideDefaultTitle: boolean("hide_default_title").notNull().default(false), // When true, the detail page hides the auto-rendered title (used when the body already contains its own styled headline)
   order: integer("order").default(0), // Added for controlling display order
+  ...contentVisibilityColumns(),
   updatedBy: integer("updated_by").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -1123,6 +1169,7 @@ export const forumPosts = pgTable("forum_posts", {
   hideDefaultTitle: boolean("hide_default_title").default(false), // When true, the post detail page hides the auto-rendered title (used when authors style their own headline inside the body)
   featuredImage: text("featured_image"), // Admin-set featured image URL for the news-card feed
   isEditoriallyUpdated: boolean("is_editorially_updated").default(false), // Admin-set "Updated" badge for the news feed
+  ...contentVisibilityColumns(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -1134,6 +1181,7 @@ export const forumComments = pgTable("forum_comments", {
   postId: integer("post_id").references(() => forumPosts.id).notNull(),
   authorId: integer("author_id").references(() => users.id).notNull(), // Using authorId instead of userId to match database
   mediaUrls: text("media_urls").array(),
+  ...contentVisibilityColumns(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -1302,6 +1350,7 @@ export const vendorComments = pgTable("vendor_comments", {
   pageSlug: text("page_slug").notNull(), // Vendor page slug
   userId: integer("user_id").references(() => users.id).notNull(),
   content: text("content").notNull(),
+  ...contentVisibilityColumns(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -1535,6 +1584,7 @@ export const messages = pgTable("messages", {
   messageType: text("message_type").notNull().default(MessageType.DIRECT), // 'direct' or 'broadcast'
   deletedAt: timestamp("deleted_at"), // Soft delete for senders
   deletedBySender: boolean("deleted_by_sender").default(false),
+  legalHold: boolean("legal_hold").notNull().default(false),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   inReplyTo: integer("in_reply_to").references((): AnyPgColumn => messages.id), // For message threading

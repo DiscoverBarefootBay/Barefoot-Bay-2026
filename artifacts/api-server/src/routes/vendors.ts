@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { IStorage } from "../storage";
 import { requireAuth } from "../auth";
+import { filterForViewer, getViewerContext, canViewerSee, sendContentUnavailable } from "../dmca/content-visibility";
 import { z } from "zod/v4";
 import { insertVendorCommentSchema, insertVendorInteractionSchema } from "@workspace/db";
 
@@ -15,10 +16,14 @@ export function createVendorRouter(storage: IStorage) {
         return res.status(400).json({ message: "Invalid vendor page slug" });
       }
 
+      // Comments on a hidden vendor page are hidden with it.
+      const viewer = await getViewerContext(req);
+      const page = await storage.getPageContent(pageSlug, true);
+      if (page && !canViewerSee(page, viewer, (page as any).updatedBy ?? (page as any).updated_by)) return sendContentUnavailable(res, "Page");
       const comments = await storage.getVendorComments(pageSlug);
       
       // Ensure we always return an array, even if comments is undefined
-      const commentsArray = Array.isArray(comments) ? comments : [];
+      const commentsArray = filterForViewer(Array.isArray(comments) ? comments : [], viewer, (c: any) => c.userId);
       console.log(`Retrieved ${commentsArray.length} comments for vendor page ${pageSlug}`);
       
       res.json(commentsArray);

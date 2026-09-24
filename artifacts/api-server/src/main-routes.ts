@@ -193,6 +193,8 @@ import { mediaSyncMiddleware } from "./media-sync-middleware";
 import { realEstateObjectStorageMiddleware } from "./real-estate-object-storage-middleware";
 import { handleCalendarMediaUpload } from "./calendar-media-upload-handler";
 import { processUploadedFiles, processUploadedFile, VALID_SECTIONS } from "./media-upload-middleware";
+import { assertUserDeletable, assertMessageDeletable } from "./dmca/legal-hold";
+import { isPubliclyVisible, canViewerSee, filterForViewer, getViewerContext, publicOnly, resolveDetailForViewer, sendContentUnavailable, enforceVisibilityOnJson } from "./dmca/content-visibility";
 // WebSocket already imported at the top
 
 const scryptAsync = promisify(scrypt);
@@ -550,6 +552,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // User deletion helper function - defined before endpoints that use it
   async function deleteUserData(userId: number) {
     console.log(`Starting enhanced deletion for user ID: ${userId}`);
+    // Legal hold: refuse before touching anything (the cascade below would
+    // otherwise destroy held content/messages).
+    await assertUserDeletable(userId);
     
     return await db.transaction(async (tx) => {
       try {
@@ -3652,14 +3657,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  app.get("/api/events", async (_req, res) => {
+  app.get("/api/events", async (req, res) => {
     const events = await storage.getEvents();
-    res.json(events);
+    // DMCA/moderation visibility: public sees published only; owners see their own hidden events flagged.
+    const viewer = await getViewerContext(req);
+    res.json(filterForViewer(events, viewer, (e: any) => e.createdBy));
   });
 
   app.get("/api/events/platinum-sponsors", async (_req, res) => {
     try {
-      const allEvents = await storage.getEvents();
+      const allEvents = publicOnly(await storage.getEvents());
       const now = new Date();
       const activePlatinumSponsors = allEvents
         .filter(event => {
@@ -3686,7 +3693,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
     
     try {
-      const allEvents = await storage.getEvents();
+      const viewer = await getViewerContext(req);
+      const allEvents = filterForViewer(await storage.getEvents(), viewer, (e: any) => e.createdBy);
       const childEvents = allEvents
         .filter(e => e.parentEventId === parentId)
         .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
@@ -3855,7 +3863,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const event = await storage.getEvent(parseInt(req.params.id));
       if (!event) return res.status(404).json({ message: "Event not found" });
-      res.json(event);
+      const visible = await resolveDetailForViewer(req, res, event, (event as any).createdBy, "Event");
+      if (!visible) return;
+      res.json(visible);
     } catch (err) {
       console.error("Error fetching event:", err);
       res.status(500).json({ message: "Failed to fetch event" });
@@ -4678,7 +4688,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/admin/send-calendar-events/week", requireAdmin, async (req, res) => {
     try {
       const { notifyPreference = "everyone" } = req.body;
-      const allEvents = await storage.getEvents();
+      const allEvents = publicOnly(await storage.getEvents());
       const allUsers = await storage.getAllUsers();
       
       // Use Florida/Eastern Time for all date calculations
@@ -4797,7 +4807,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/admin/send-calendar-events/today", requireAdmin, async (req, res) => {
     try {
       const { notifyPreference = "everyone" } = req.body;
-      const allEvents = await storage.getEvents();
+      const allEvents = publicOnly(await storage.getEvents());
       const allUsers = await storage.getUsers();
 
       const FLORIDA_TZ = 'America/New_York';
@@ -4921,7 +4931,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/admin/send-calendar-events/day", requireAdmin, async (req, res) => {
     try {
       const { notifyPreference = "everyone" } = req.body;
-      const allEvents = await storage.getEvents();
+      const allEvents = publicOnly(await storage.getEvents());
       const allUsers = await storage.getUsers();
       
       // Use Florida/Eastern Time for all date calculations
@@ -5322,7 +5332,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const tomorrowStartUTC = fromZonedTime(tomorrowDateFL + 'T00:00:00', FLORIDA_TZ);
       const tomorrowEndUTC = fromZonedTime(tomorrowDateFL + 'T23:59:59.999', FLORIDA_TZ);
 
-      const allEvents = await storage.getEvents();
+      const allEvents = publicOnly(await storage.getEvents());
       const rawUpcomingEvents = allEvents.filter(event => {
         const eventStartDate = new Date(event.startDate);
         const eventEndDate = new Date(event.endDate);
@@ -5491,8 +5501,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Debug endpoint to check event media status
   app.get("/api/debug/check-event-media", async (req, res) => {
     try {
-      // Get all events
-      const events = await storage.getEvents();
+      // Get all events (public: published only)
+      const events = publicOnly(await storage.getEvents());
       
       // Count events with media
       const eventsWithMedia = events.filter(event => 
@@ -8680,6 +8690,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           listings = await storage.getListings();
         }
         console.log(`[DEBUG: Listings API] Retrieved ${listings ? listings.length : 0} listings`);
+        // DMCA/moderation visibility: hidden listings only reach their owner (flagged).
+        listings = filterForViewer(listings, await getViewerContext(req), (l: any) => l.createdBy);
         
         // Log the data structure of the first listing to help diagnose issues
         if (listings && listings.length > 0) {
@@ -8921,8 +8933,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/listings/:id", async (req, res) => {
     // Make individual listings available with security restrictions for drafts
     try {
-      const listing = await storage.getListing(parseInt(req.params.id));
-      if (!listing) return res.status(404).json({ message: "Listing not found" });
+      const found = await storage.getListing(parseInt(req.params.id));
+      if (!found) return res.status(404).json({ message: "Listing not found" });
+      // DMCA/moderation visibility (generic 404 for the public; flagged copy for owner/dmca.view).
+      const listing = await resolveDetailForViewer(req, res, found, found.createdBy, "Listing");
+      if (!listing) return;
       
       // Check if the listing is a draft - if so, only creator can view it
       if (listing.status === 'DRAFT') {
@@ -10373,8 +10388,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/events/:id/comments", async (req, res) => {
     try {
       const eventId = parseInt(req.params.id);
+      // Comments on a hidden event are hidden with it.
+      const viewer = await getViewerContext(req);
+      const parent = await storage.getEvent(eventId);
+      if (parent && !canViewerSee(parent, viewer, (parent as any).createdBy)) return sendContentUnavailable(res, "Event");
       const comments = await storage.getEventComments(eventId);
-      res.json(comments);
+      res.json(filterForViewer(comments, viewer, (c: any) => c.userId));
     } catch (err) {
       console.error("Error fetching comments:", err);
       res.status(500).json({ message: "Failed to fetch comments" });
@@ -10425,6 +10444,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       let contents = await storage.getAllPageContents(includeHidden);
+      contents = filterForViewer(contents, await getViewerContext(req), (p: any) => p.updatedBy ?? p.updated_by);
       
       // Handle type filtering for vendor pages
       const typeFilter = req.query.type as string;
@@ -10540,7 +10560,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Public endpoint to get all social clubs for registration/profile selection
   app.get("/api/social-clubs", async (req, res) => {
     try {
-      const allPages = await storage.getAllPageContents(false);
+      const allPages = publicOnly(await storage.getAllPageContents(false));
       const socialClubs = allPages
         .filter(page => page.slug.startsWith('social-') && !page.isHidden)
         .map(page => ({
@@ -10574,7 +10594,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     
     try {
       console.log(`🎯 Serving banner slides endpoint for exact path match: ${pathname}`);
-      const content = await storage.getPageContent("banner-slides");
+      const bannerRow = await storage.getPageContent("banner-slides");
+      // DMCA/moderation: a hidden banner page is treated as absent.
+      const content = bannerRow && isPubliclyVisible(bannerRow) ? bannerRow : undefined;
       if (!content) {
         return res.status(404).json({ message: "Page content not found for banner-slides" });
       }
@@ -10587,6 +10609,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   app.get("/api/pages/:slug", async (req, res) => {
     try {
+      // DMCA/moderation visibility applies to every response path below.
+      await enforceVisibilityOnJson(req, res, (p: any) => p.updatedBy ?? p.updated_by, "Page");
       // Extract the full slug from the request
       const fullSlug = req.params.slug;
       
@@ -13697,7 +13721,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       source = "draft";
     }
     const range = getCampaignWeekRange(now);
-    const listings = selectListingsForWeek(await storage.getListings(), range, now);
+    const listings = selectListingsForWeek(publicOnly(await storage.getListings()), range, now);
     const recipients = resolveWeeklyEmailRecipients(await storage.getUsers());
     const rendered = renderWeeklyListingsEmail(listings, range, getWeeklyEmailBaseUrl(), template, {
       featuredEnabled: await isFeaturedListingsEnabled(),
@@ -13751,7 +13775,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const now = new Date();
       const config = await loadWeeklyListingsEmailConfig();
       const range = getCampaignWeekRange(now);
-      const listings = selectListingsForWeek(await storage.getListings(), range, now);
+      const listings = selectListingsForWeek(publicOnly(await storage.getListings()), range, now);
       const rendered = renderWeeklyListingsEmail(listings, range, getWeeklyEmailBaseUrl(), config.template, {
         featuredEnabled: await isFeaturedListingsEnabled(),
       });
@@ -14819,6 +14843,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
+      // Legal hold: refuse before deleting attachments/recipients.
+      await assertMessageDeletable(messageId);
+
       // Delete message attachments first
       await db.delete(messageAttachments).where(eq(messageAttachments.messageId, messageId));
       
@@ -14857,6 +14884,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           message: "Invalid message ID" 
         });
       }
+
+      // Legal hold: refuse before deleting attachments/recipients.
+      await assertMessageDeletable(messageId);
 
       // Delete message attachments first
       await db.delete(messageAttachments).where(eq(messageAttachments.messageId, messageId));
