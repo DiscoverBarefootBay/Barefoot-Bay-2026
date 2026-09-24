@@ -9,6 +9,9 @@ description: Durable evidence-preservation and quarantine rules for DMCA work â€
 - Every new public surface (route, email, OG, sitemap, scheduler, auto-delete job) must go through the central visibility policy; duplicate slug rows exist (e.g. banner-slides), so hide/filter by slug-returned row, not by an assumed single id.
 - Drizzle's `sql` template does NOT turn a JS array into a PG array (`ANY(${arr}::int[])` â†’ 22P02); use an ARRAY[...] builder.
 - Schema ships as idempotent SQL in lib/db/sql and must be applied to the prod DB at Publish.
+- DMCA permission grants are explicit data, not site-admin-role powers. Production may have the DMCA schema and current frontend yet hide all legal tools because rollout grant rows from development were not copied by Publish. Verify permission counts in each environment before blaming the bundle.
+  **Why:** a production rollout had the same frontend bytes and tables as development but zero DMCA-view grants for site admins; a controlled, owner-approved production grant restored the admin menu.
+  **How to apply:** after schema publication, verify production grant data separately. Use a narrowly scoped, auditable bootstrap approved by the owner; never overwrite production data or silently make site admins legal admins in code.
 - DMCA status links (/dmca/status/<token>) are bearer credentials: every place that logs or stores URLs (pino req serializer, error logs, analytics pageviews/events/referrers, active-users) must pass them through the shared redact-path helper; the status page also sets referrer=no-referrer.
   **Why:** tokens in request logs or analytics_page_views would be readable by site admins.
   **How to apply:** any new logger/analytics sink or any new tokenized public URL must redact the same way.
