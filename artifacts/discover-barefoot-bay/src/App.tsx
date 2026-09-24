@@ -42,6 +42,9 @@ import AmenitiesPage from "@/pages/amenities-page";
 import BannerPage from "@/pages/banner-page";
 import StorePage from "@/pages/store-page";
 import ContactUsPage from "@/pages/contact-us";
+import DMCAPolicyPage from "@/pages/dmca/dmca-policy-page";
+import DMCANoticePage from "@/pages/dmca/dmca-notice-page";
+import DMCAStatusPage from "@/pages/dmca/dmca-status-page";
 import ProductDetailPage from "@/pages/product-detail-page";
 import OrderCompletePage from "@/pages/store/order-complete-page";
 import { OrderTrackingPage } from "@/pages/store/order-tracking-page";
@@ -257,6 +260,9 @@ function Router() {
             {/* Terms & Privacy pages */}
             <Route path="/terms" component={() => <GenericContentPage slug="terms-and-agreements" />} />
             <Route path="/privacy" component={() => <GenericContentPage slug="privacy-policy" />} />
+            <Route path="/dmca" component={DMCAPolicyPage} />
+            <Route path="/dmca/notice" component={DMCANoticePage} />
+            <Route path="/dmca/status/:token" component={DMCAStatusPage} />
             
             {/* Dedicated routes for Vendors pages */}
             <ProtectedRoute path="/vendors" component={() => <GenericContentPage slug="vendors-main" />} requiredFeature="VENDORS" />

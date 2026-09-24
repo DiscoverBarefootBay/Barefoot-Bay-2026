@@ -126,7 +126,7 @@ export interface SubmissionInput {
 }
 
 export interface TargetInput {
-  contentType: DmcaContentType;
+  contentType: DmcaContentType | "url";
   contentId: number | null;
   originalUrl?: string | null;
 }
@@ -146,6 +146,11 @@ export interface CreateCaseInput {
   targets: TargetInput[];
   submittedVia?: "web_form" | "email" | "mail" | "fax" | "admin_entry";
   actor: DmcaActor;
+  /** Runs after all base rows are inserted, inside the case transaction. */
+  afterCreate?: (
+    tx: DbExecutor,
+    created: { id: number; caseNumber: string; statusToken: string; receivedAt: Date },
+  ) => Promise<void>;
 }
 
 async function insertSubmission(tx: DbExecutor, caseId: number, s: SubmissionInput): Promise<number> {
@@ -161,6 +166,7 @@ async function insertSubmission(tx: DbExecutor, caseId: number, s: SubmissionInp
 
 async function resolveTargetMeta(tx: DbExecutor, t: TargetInput): Promise<{ uploaderUserId: number | null; originalUrl: string | null }> {
   if (t.contentId == null) return { uploaderUserId: null, originalUrl: t.originalUrl ?? null };
+  if (t.contentType === "url") return { uploaderUserId: null, originalUrl: t.originalUrl ?? null };
   const def = getContentTypeDef(t.contentType);
   const r = await tx.execute(sql`SELECT * FROM ${sql.identifier(def.table)} WHERE id = ${t.contentId}`);
   const row = r.rows[0] as any;
@@ -174,7 +180,7 @@ async function resolveTargetMeta(tx: DbExecutor, t: TargetInput): Promise<{ uplo
 
 export async function createCase(input: CreateCaseInput): Promise<{ id: number; caseNumber: string; statusToken: string }> {
   for (const t of input.targets) {
-    if (!isDmcaContentType(t.contentType)) throw new DmcaServiceError(`Unknown content type ${t.contentType}`);
+    if (t.contentType !== "url" && !isDmcaContentType(t.contentType)) throw new DmcaServiceError(`Unknown content type ${t.contentType}`);
   }
   return db.transaction(async (tx) => {
     const caseNumber = await allocateCaseNumber(tx);
@@ -186,8 +192,9 @@ export async function createCase(input: CreateCaseInput): Promise<{ id: number; 
       VALUES (${caseNumber}, 'notice', ${S.RECEIVED}, ${input.submittedVia ?? "web_form"}, ${c.name ?? null}, ${c.company ?? null},
         ${c.email ?? null}, ${c.phone ?? null}, ${c.address ?? null}, ${c.role ?? null}, ${c.copyrightOwnerName ?? null},
         ${c.workDescription ?? null}, ${statusToken})
-      RETURNING id`);
+      RETURNING id, received_at`);
     const caseId = Number((ins.rows[0] as any).id);
+    const receivedAt = new Date((ins.rows[0] as any).received_at);
     const submissionId = await insertSubmission(tx, caseId, input.submission);
     for (const t of input.targets) {
       const meta = await resolveTargetMeta(tx, t);
@@ -208,6 +215,7 @@ export async function createCase(input: CreateCaseInput): Promise<{ id: number; 
       },
       tx,
     );
+    await input.afterCreate?.(tx, { id: caseId, caseNumber, statusToken, receivedAt });
     return { id: caseId, caseNumber, statusToken };
   });
 }

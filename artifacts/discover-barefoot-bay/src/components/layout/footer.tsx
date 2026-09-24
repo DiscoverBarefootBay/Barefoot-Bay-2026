@@ -12,7 +12,7 @@ export function Footer() {
               Copyright © 2022-2026 Tattler Media - All Rights Reserved.
             </p>
           </div>
-          <div className="flex space-x-6">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
             <Link href="/terms">
               <span className="hover:text-gray-600 transition-colors cursor-pointer">
                 Terms and Agreements
@@ -21,6 +21,11 @@ export function Footer() {
             <Link href="/privacy">
               <span className="hover:text-gray-600 transition-colors cursor-pointer">
                 Privacy Policy
+              </span>
+            </Link>
+            <Link href="/dmca">
+              <span className="hover:text-gray-600 transition-colors cursor-pointer">
+                Copyright / DMCA
               </span>
             </Link>
           </div>

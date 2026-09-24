@@ -11,6 +11,7 @@ import geoip from 'geoip-lite';
 import crypto from 'crypto';
 import { and, asc, count, desc, eq, gte, or, sql } from 'drizzle-orm';
 import { logger } from '../lib/logger';
+import { redactSensitivePath, redactSensitiveProps } from "../lib/redact-path";
 
 // Comprehensive list of bot/crawler user-agent patterns to filter out
 const BOT_USER_AGENT_PATTERNS = [
@@ -170,12 +171,12 @@ class AnalyticsService {
                 userId,
                 ip,
                 userAgent,
-                path: (data && data.url) ? data.url : (req && req.url) ? req.url : '/', 
-                referrer: (data && data.properties?.referrer) || (req && req.headers && req.headers.referer) || null, 
+                path: redactSensitivePath((data && data.url) ? data.url : (req && req.url) ? req.url : '/'), 
+                referrer: redactSensitivePath((data && data.properties?.referrer) || (req && req.headers && req.headers.referer) || null), 
                 pageType: (data && data.properties?.pageType) || 'page', 
                 pageCategory: (data && data.properties?.pageCategory) || 'uncategorized', 
                 timestamp: new Date(),
-                customDimensions: (data && data.properties) || {} 
+                customDimensions: redactSensitiveProps((data && data.properties) || {}) 
             };
 
             await db.update(analyticsSessions)
@@ -216,9 +217,9 @@ class AnalyticsService {
                 action: data.eventAction || 'interaction',
                 label: data.eventLabel || '',
                 value: data.eventValue || null,
-                path: data.path || data.properties?.url || req.path,
+                path: redactSensitivePath(data.path || data.properties?.url || req.path),
                 timestamp: new Date(),
-                eventData: data.properties || {},
+                eventData: redactSensitiveProps(data.properties || {}),
                 positionData: data.positionData || {}
             };
 

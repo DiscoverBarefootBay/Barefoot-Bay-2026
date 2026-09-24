@@ -39,9 +39,11 @@ export async function writeDmcaAudit(entry: DmcaAuditInput, executor: DbExecutor
   });
 }
 
-/** Best-effort client IP for audit rows. */
+/**
+ * Client IP for audit rows. Uses req.ip, which Express derives from
+ * X-Forwarded-For only up to the configured "trust proxy" hop count, so a
+ * client cannot forge the recorded address by sending its own header.
+ */
 export function requestIp(req: { ip?: string; headers?: Record<string, any>; socket?: { remoteAddress?: string } }): string | null {
-  const fwd = req.headers?.["x-forwarded-for"];
-  if (typeof fwd === "string" && fwd.trim()) return fwd.split(",")[0].trim();
   return req.ip || req.socket?.remoteAddress || null;
 }

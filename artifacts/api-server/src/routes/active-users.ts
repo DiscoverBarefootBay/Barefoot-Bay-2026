@@ -6,6 +6,7 @@
 
 import { Request, Response, Router } from 'express';
 import { storage } from '../storage';
+import { redactSensitivePath } from "../lib/redact-path";
 
 // Track active users with a simple in-memory store
 interface ActiveUser {
@@ -36,7 +37,7 @@ const router = Router();
 // Track user activity on a specific page
 router.post('/track-activity', async (req: Request, res: Response) => {
   try {
-    const { path } = req.body;
+    const path = redactSensitivePath(req.body?.path);
     const sessionId = req.sessionID || 'anonymous';
     const userId = req.session?.passport?.user;
     
@@ -54,7 +55,7 @@ router.post('/track-activity', async (req: Request, res: Response) => {
         userAgent,
         lastActive: new Date(),
         sessionId,
-        path: path || req.headers.referer || '/'
+        path: path || redactSensitivePath(req.headers.referer) || '/'
       });
       
       console.log(`[Activity Tracker] User ${user?.username || userId} (ID: ${userId}) active on ${path}`);

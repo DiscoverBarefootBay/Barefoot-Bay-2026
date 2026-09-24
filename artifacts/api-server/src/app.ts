@@ -7,6 +7,7 @@ import { createServer } from "http";
 import { logger } from "./lib/logger";
 import { pool } from "./db";
 import healthRoutes from "./routes/index";
+import { redactSensitivePath } from "./lib/redact-path";
 
 let app: Express;
 let server: ReturnType<typeof createServer>;
@@ -19,7 +20,7 @@ async function buildApp() {
       logger,
       serializers: {
         req(req) {
-          return { id: req.id, method: req.method, url: req.url?.split("?")[0] };
+          return { id: req.id, method: req.method, url: redactSensitivePath(req.url?.split("?")[0]) };
         },
         res(res) {
           return { statusCode: res.statusCode };
@@ -122,6 +123,8 @@ async function buildApp() {
 
   const dmcaEvidenceRouter = (await import("./routes/dmca-evidence")).default;
   expressApp.use("/api/dmca", dmcaEvidenceRouter);
+  const dmcaPublicRouter = (await import("./routes/dmca-public")).default;
+  expressApp.use("/api/dmca", dmcaPublicRouter);
 
   try {
     const { analyticsMiddleware } = await import("./analytics-service");
@@ -162,7 +165,7 @@ async function buildApp() {
     // limit. Surface it as a clear 413 so the client can show a friendly toast
     // instead of a generic 500 / silently stuck Save button.
     if (err && err.code === "LIMIT_FILE_SIZE") {
-      logger.warn({ url: req.url }, "Upload rejected: file too large");
+      logger.warn({ url: redactSensitivePath(req.url) }, "Upload rejected: file too large");
       if (!res.headersSent) {
         res.status(413).json({
           message: "File too large. Please choose a file under 200MB.",
@@ -173,7 +176,7 @@ async function buildApp() {
 
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
-    logger.error({ err, url: req.url }, "Unhandled error");
+    logger.error({ err, url: redactSensitivePath(req.url) }, "Unhandled error");
     if (!res.headersSent) {
       res.status(status).json({ message });
     }

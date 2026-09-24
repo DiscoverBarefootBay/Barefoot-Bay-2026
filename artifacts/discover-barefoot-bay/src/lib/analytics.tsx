@@ -7,6 +7,10 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
+// DMCA status links carry a private token in the path; never send it to analytics.
+const redactSensitivePath = (value: string) =>
+  value ? value.replace(/(\/dmca\/status\/)[^/?#\s]+/gi, "$1[redacted]") : value;
+
 // Types
 export interface TrackPageViewOptions {
   url?: string;
@@ -54,7 +58,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
   // Track page view
   const trackPageView = async (options?: TrackPageViewOptions) => {
     try {
-      const url = options?.url || window.location.pathname;
+      const url = redactSensitivePath(options?.url || window.location.pathname);
       const title = options?.title || document.title;
       const properties = options?.properties || {};
 
@@ -83,7 +87,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
           screen,
           properties: {
             ...properties,
-            referrer: document.referrer || null,
+            referrer: redactSensitivePath(document.referrer) || null,
             userAgent: navigator.userAgent,
             language: navigator.language,
             timestamp: new Date().toISOString()
@@ -114,10 +118,10 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
           eventLabel: options.eventLabel,
           eventValue: options.eventValue,
           positionData: options.positionData || {},
-          path: window.location.pathname,
+          path: redactSensitivePath(window.location.pathname),
           properties: {
             ...options.properties,
-            url: window.location.pathname,
+            url: redactSensitivePath(window.location.pathname),
             title: document.title,
             timestamp: new Date().toISOString()
           }
@@ -312,7 +316,7 @@ export const useAnalytics = () => {
 // Standalone tracking functions
 export const trackPageView = async (options?: TrackPageViewOptions) => {
   try {
-    const url = options?.url || window.location.pathname;
+    const url = options?.url || redactSensitivePath(window.location.pathname);
     const title = options?.title || document.title;
     const properties = options?.properties || {};
 
@@ -341,7 +345,7 @@ export const trackPageView = async (options?: TrackPageViewOptions) => {
         screen,
         properties: {
           ...properties,
-          referrer: document.referrer || null,
+          referrer: redactSensitivePath(document.referrer) || null,
           userAgent: navigator.userAgent,
           language: navigator.language,
           timestamp: new Date().toISOString()
@@ -373,7 +377,7 @@ export const trackEvent = async (options: TrackEventOptions) => {
         positionData: options.positionData || {},
         properties: {
           ...options.properties,
-          url: window.location.pathname,
+          url: redactSensitivePath(window.location.pathname),
           title: document.title,
           timestamp: new Date().toISOString()
         }
