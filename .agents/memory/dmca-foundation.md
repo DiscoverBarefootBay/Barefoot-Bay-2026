@@ -26,3 +26,6 @@ description: Durable evidence-preservation and quarantine rules for DMCA work â€
 - Restoration eligibility is an exact timestamp on the tenth business day, not merely the start of that calendar day. A bad case must not stop other scheduler cases or the exposure check.
   **Why:** the business-day counter reaches day ten before a time-preserving eligibility timestamp; a transition too early rejects and can abort the batch.
   **How to apply:** compare the eligibility timestamp and isolate per-case scheduler errors when changing reminder cadence.
+- Owner-run production policy SQL must embed the complete approved text and report an actual write; do not make the owner paste a long legal document into a heading-splitting template with a silent zero-row guard.
+  **Why:** the public policy API falls back to placeholders when the settings singleton is absent, and a guarded template can appear to run successfully while inserting nothing.
+  **How to apply:** generate from the source document, verify every section against it, and confirm the statement returns a changed row before telling the owner to reload the page.
