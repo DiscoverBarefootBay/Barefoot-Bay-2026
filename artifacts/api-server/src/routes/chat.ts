@@ -38,7 +38,9 @@ router.get('/recipients', authenticateUser, async (req, res) => {
       // Format user IDs as strings for consistency and format display name
       const formattedUsers = allUsers.map(user => ({
         id: user.id.toString(),
-        name: `${user.fullName || `User ${user.id}`} (${user.username})`
+        name: `${user.fullName || `User ${user.id}`} (${user.username})`,
+        fullName: user.fullName,
+        username: user.username
       }));
       
       // Add special recipient types
@@ -64,7 +66,9 @@ router.get('/recipients', authenticateUser, async (req, res) => {
       // Format user IDs as strings for consistency and format display name
       const formattedUsers = allUsers.map(user => ({
         id: user.id.toString(),
-        name: `${user.fullName || `User ${user.id}`} (${user.username})`
+        name: `${user.fullName || `User ${user.id}`} (${user.username})`,
+        fullName: user.fullName,
+        username: user.username
       }));
       
       return res.json(formattedUsers);

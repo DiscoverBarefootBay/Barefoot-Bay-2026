@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { MESSAGE_TEMPLATES } from '../../types/message-templates';
 import { useAuth } from '../../hooks/use-auth';
+import { organizeRecipients, type ChatRecipient, type RecipientSort } from './recipient-options';
 
 interface EnhancedMessageComposerProps {
-  recipients: Array<{ id: string | number; name: string }>;
+  recipients: ChatRecipient[];
   onSend: (formData: FormData) => Promise<void>;
   onCancel: () => void;
   loading?: boolean;
@@ -18,6 +19,8 @@ export const EnhancedMessageComposer: React.FC<EnhancedMessageComposerProps> = (
   const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
   const [recipient, setRecipient] = useState('');
+  const [recipientSearch, setRecipientSearch] = useState('');
+  const [recipientSort, setRecipientSort] = useState<RecipientSort>('name-asc');
   const [attachments, setAttachments] = useState<File[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState('custom');
   const [sendEmail, setSendEmail] = useState(false);
@@ -26,6 +29,12 @@ export const EnhancedMessageComposer: React.FC<EnhancedMessageComposerProps> = (
   // Get user authentication info to determine admin status
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
+  const { groups, people } = useMemo(
+    () => organizeRecipients(recipients, recipientSearch, recipientSort),
+    [recipients, recipientSearch, recipientSort]
+  );
+  const selectedEntry = recipients.find(r => String(r.id) === recipient);
+  const selectedIsFiltered = selectedEntry && ![...groups, ...people].includes(selectedEntry);
 
   // State to track the targeted users info
   const [targetedUsers, setTargetedUsers] = useState<{ count: number, sample: string[] }>({ count: 0, sample: [] });
@@ -252,6 +261,40 @@ export const EnhancedMessageComposer: React.FC<EnhancedMessageComposerProps> = (
                 )}
               </div>
             )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+              <div>
+                <label className="block text-sm font-medium mb-1" htmlFor="recipient-search">
+                  Find a person
+                </label>
+                <input
+                  id="recipient-search"
+                  type="search"
+                  className="w-full p-2 border rounded"
+                  placeholder="Full name or username"
+                  value={recipientSearch}
+                  onChange={e => setRecipientSearch(e.target.value)}
+                  disabled={targetedUsers.count > 0}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1" htmlFor="recipient-sort">
+                  Sort people
+                </label>
+                <select
+                  id="recipient-sort"
+                  className="w-full p-2 border rounded"
+                  value={recipientSort}
+                  onChange={e => setRecipientSort(e.target.value as RecipientSort)}
+                  disabled={targetedUsers.count > 0}
+                >
+                  <option value="name-asc">Full name A–Z</option>
+                  <option value="name-desc">Full name Z–A</option>
+                  <option value="username-asc">Username A–Z</option>
+                  <option value="username-desc">Username Z–A</option>
+                </select>
+              </div>
+            </div>
             
             <select
               id="recipient"
@@ -262,16 +305,29 @@ export const EnhancedMessageComposer: React.FC<EnhancedMessageComposerProps> = (
               disabled={targetedUsers.count > 0}
             >
               <option value="">Select recipient</option>
-              {/* Add "Admins" option for non-admin users */}
-              {!isAdmin && (
-                <option value="admins">Admins</option>
+              {(groups.length > 0 || !isAdmin) && (
+                <optgroup label="Groups">
+                  {!isAdmin && <option value="admins">Admins</option>}
+                  {groups.map(r => <option key={String(r.id)} value={String(r.id)}>{r.name}</option>)}
+                </optgroup>
               )}
-              {recipients.map((r) => (
-                <option key={String(r.id)} value={String(r.id)}>
-                  {r.name}
-                </option>
-              ))}
+              {people.length > 0 && (
+                <optgroup label="People">
+                  {people.map(r => <option key={String(r.id)} value={String(r.id)}>{r.name}</option>)}
+                </optgroup>
+              )}
+              {selectedIsFiltered && (
+                <optgroup label="Selected person">
+                  <option value={recipient}>{selectedEntry.name}</option>
+                </optgroup>
+              )}
+              {recipient && !selectedEntry && recipient !== 'admins' && (
+                <option value={recipient}>{recipient.startsWith('template:') ? 'Template recipients' : 'Selected recipient'}</option>
+              )}
             </select>
+            {recipientSearch.trim() && people.length === 0 && targetedUsers.count === 0 && (
+              <p className="mt-1 text-sm text-gray-600" role="status">No people match your search. Try another name or username.</p>
+            )}
             
             {targetedUsers.count > 0 && (
               <p className="mt-1 text-xs text-gray-500">

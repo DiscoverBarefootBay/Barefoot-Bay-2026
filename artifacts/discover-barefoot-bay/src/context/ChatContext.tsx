@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useAuth } from '@/components/providers/auth-provider';
+import type { ChatRecipient } from '../components/chat/recipient-options';
 
 // Message type
 export type Message = {
@@ -38,7 +39,7 @@ type ChatContextType = {
   selectMessage: (message: Message | null) => void;
   fetchMessages: () => Promise<void>;
   clearError: () => void;
-  recipients: Array<{id: number | string, name: string}>;
+  recipients: ChatRecipient[];
 };
 
 // Create context
@@ -51,7 +52,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [recipients, setRecipients] = useState<Array<{id: number | string, name: string}>>([]);
+  const [recipients, setRecipients] = useState<ChatRecipient[]>([]);
   const { user } = useAuth();
 
   // Fetch messages when component mounts
