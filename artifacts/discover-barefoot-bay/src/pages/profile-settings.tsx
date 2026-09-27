@@ -5,6 +5,7 @@ import { Loader2, Camera, CreditCard, Calendar, AlertCircle, Store, Trash2, Chev
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuth } from "@/hooks/use-auth";
+import { useCopyrightActivity } from "@/hooks/use-copyright-activity";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import {
@@ -78,7 +79,8 @@ type ProfileFormData = z.infer<typeof profileSchema>;
 type PasswordFormData = z.infer<typeof passwordSchema>;
 
 export default function ProfileSettings() {
-  const { user, updateProfileMutation, logoutMutation } = useAuth();
+  const { user, effectiveRole, updateProfileMutation, logoutMutation } = useAuth();
+  const hasCopyrightActivity = useCopyrightActivity(effectiveRole === "guest" ? null : user?.id ?? null);
   const { isAdmin } = usePermissions();
   const { toast } = useToast();
   const [isUploading, setIsUploading] = useState(false);
@@ -344,15 +346,17 @@ export default function ProfileSettings() {
 
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2"><Copyright className="h-5 w-5" />Copyright Notices</CardTitle>
-          <CardDescription>Review notices affecting content you uploaded and submit a counter-notice when available.</CardDescription>
-        </CardHeader>
-        <CardFooter>
-          <Link href="/copyright-notices"><Button variant="outline" data-testid="link-profile-copyright-notices">View Copyright Notices</Button></Link>
-        </CardFooter>
-      </Card>
+      {hasCopyrightActivity && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2"><Copyright className="h-5 w-5" />Copyright Notices</CardTitle>
+            <CardDescription>Review notices affecting your uploads and copyright claims you filed while signed in.</CardDescription>
+          </CardHeader>
+          <CardFooter>
+            <Link href="/copyright-notices"><Button variant="outline" data-testid="link-profile-copyright-notices">View Copyright Notices</Button></Link>
+          </CardFooter>
+        </Card>
+      )}
       {/* Profile Settings Card */}
       <Card>
         <CardHeader>
