@@ -449,6 +449,93 @@ describe("DMCA admin UI contracts", () => {
 });
 
 describe("moderation-hidden recovery", () => {
+  it("finds and restores comments, events, listings, and pages without granting public search access", async () => {
+    const postId = await insertPost();
+    const created: Array<{ type: string; table: string; id: number }> = [];
+    const add = async (type: string, table: string, statement: any) => {
+      const result = await db.execute(statement);
+      const contentId = Number((result.rows[0] as any).id);
+      created.push({ type, table, id: contentId });
+      return contentId;
+    };
+    try {
+      const suffix = `${Date.now()}-${postId}`;
+      const forumComment = await add("forum_comment", "forum_comments", sql`
+        INSERT INTO forum_comments(post_id,author_id,content) VALUES(${postId},${noGrantId},${`Review comment ${suffix}`}) RETURNING id`);
+      const eventId = await add("event", "events", sql`
+        INSERT INTO events(title,description,start_date,end_date,event_date,start_time,end_time,category,created_by)
+        VALUES(${`Review event ${suffix}`},'Test event',now(),now() + interval '1 hour',current_date,'10:00','11:00','Community',${noGrantId}) RETURNING id`);
+      const eventComment = await add("event_comment", "event_comments", sql`
+        INSERT INTO event_comments(event_id,user_id,content) VALUES(${eventId},${noGrantId},${`Review event reply ${suffix}`}) RETURNING id`);
+      const listingId = await add("listing", "real_estate_listings", sql`
+        INSERT INTO real_estate_listings(listing_type,title,price,address,bedrooms,bathrooms,square_feet,year_built,contact_info,status,created_by)
+        VALUES('FSBO',${`Review listing ${suffix}`},100000,'Test address',2,1,800,2000,'{}'::jsonb,'DRAFT',${noGrantId}) RETURNING id`);
+      const pageId = await add("page", "page_contents", sql`
+        INSERT INTO page_contents(slug,title,content,updated_by)
+        VALUES(${`recovery-${suffix}`},${`Review page ${suffix}`},${`Distinct body phrase ${suffix}`},${noGrantId}) RETURNING id`);
+      const vendorComment = await add("vendor_comment", "vendor_comments", sql`
+        INSERT INTO vendor_comments(page_slug,user_id,content)
+        VALUES(${`recovery-${suffix}`},${noGrantId},${`Review vendor reply ${suffix}`}) RETURNING id`);
+
+      for (const item of created) {
+        const response = await api("moderator", "POST", `/api/admin/dmca/content/${item.type}/${item.id}/moderate`, { hidden: true, reason: "Needs review" });
+        assert.equal(response.status, 200, JSON.stringify(response.body));
+      }
+      const base = "/api/admin/dmca/moderated-content";
+      assert.equal((await api("none", "GET", base)).status, 401);
+      assert.equal((await api("member", "GET", base)).status, 403);
+      assert.equal((await api("admin", "GET", `${base}?type=avatar`)).status, 400);
+      for (const item of created) {
+        const result = await api("moderator", "GET", `${base}?type=${item.type}&q=${item.id}`);
+        assert.equal(result.status, 200, JSON.stringify(result.body));
+        assert.equal(result.body.total, 1);
+        assert.equal(result.body.items[0].contentType, item.type);
+        assert.equal(result.body.items[0].hiddenReason, "Needs review");
+        assert.equal(result.body.items[0].visibilityStatus, "moderation_hidden");
+      }
+      const all = await api("admin", "GET", `${base}?q=${encodeURIComponent(suffix)}`);
+      assert.equal(all.status, 200, JSON.stringify(all.body));
+      assert.equal(all.body.total, created.length);
+      const bodySearch = await api("admin", "GET", `${base}?type=page&q=${encodeURIComponent(`Distinct body phrase ${suffix}`)}`);
+      assert.equal(bodySearch.body.items[0]?.id, pageId, JSON.stringify(bodySearch.body));
+      assert.equal(all.body.items.find((item: any) => item.id === forumComment && item.contentType === "forum_comment")?.publicPath, `/forum/post/${postId}#comment-${forumComment}`);
+      assert.equal(all.body.items.find((item: any) => item.id === eventComment && item.contentType === "event_comment")?.publicPath, `/events/${eventId}`);
+      assert.ok(all.body.items.some((item: any) => item.id === vendorComment && item.contentType === "vendor_comment"));
+      assert.equal((await api("moderator", "POST", `/api/admin/dmca/content/page/${pageId}/moderate`, { hidden: false, reason: "" })).status, 400);
+      await db.execute(sql`UPDATE page_contents SET legal_hold=true WHERE id=${pageId}`);
+      const held = await api("admin", "GET", `${base}?type=page&q=${pageId}`);
+      assert.equal(held.body.items[0].legalHold, true);
+      assert.equal((await api("admin", "POST", `/api/admin/dmca/content/page/${pageId}/moderate`, { hidden: false, reason: "Held" })).status, 423);
+      await db.execute(sql`UPDATE page_contents SET legal_hold=false WHERE id=${pageId}`);
+      const hold = await api("admin", "POST", "/api/admin/dmca/holds", { target: "content", contentType: "page", contentId: pageId, reason: "Preserve record" });
+      assert.equal(hold.status, 201, JSON.stringify(hold.body));
+      const holdId = Number((await db.execute(sql`SELECT id FROM legal_holds WHERE content_type='page' AND content_id=${pageId} AND released_at IS NULL ORDER BY id DESC LIMIT 1`)).rows[0]?.id);
+      assert.equal((await api("admin", "GET", `${base}?type=page&q=${pageId}`)).body.items[0].activeHold, true);
+      assert.equal((await api("moderator", "POST", `/api/admin/dmca/content/page/${pageId}/moderate`, { hidden: false, reason: "Held in record" })).status, 423);
+      assert.equal((await api("admin", "POST", `/api/admin/dmca/holds/${holdId}/release`, { reason: "Resolved" })).status, 200);
+      const caseId = await createUrlCase(`recovery-${suffix}`);
+      const attached = await api("admin", "POST", `/api/admin/dmca/cases/${caseId}/targets`, { contentType: "page", contentId: pageId });
+      assert.equal(attached.status, 200, JSON.stringify(attached.body));
+      assert.equal((await api("admin", "GET", `${base}?type=page&q=${pageId}`)).body.items[0].activeDmcaCase, true);
+      assert.equal((await api("admin", "POST", `/api/admin/dmca/content/page/${pageId}/moderate`, { hidden: false, reason: "Wrong workflow" })).status, 409);
+      await db.execute(sql`UPDATE dmca_cases SET status='CLOSED' WHERE id=${caseId}`);
+      const restored = await api("moderator", "POST", `/api/admin/dmca/content/page/${pageId}/moderate`, { hidden: false, reason: "Reviewed page" });
+      assert.equal(restored.status, 200, JSON.stringify(restored.body));
+      assert.equal((await api("admin", "GET", `${base}?type=page&q=${pageId}`)).body.total, 0);
+      assert.equal((await db.execute(sql`SELECT notes FROM dmca_audit_log WHERE target_type='page' AND target_id=${pageId} AND event='content_moderation_unhidden' ORDER BY id DESC LIMIT 1`)).rows[0]?.notes, "Reviewed page");
+      assert.ok(listingId > 0);
+    } finally {
+      await db.transaction(async tx => {
+        await tx.execute(sql`SET LOCAL dmca.allow_purge='on'`);
+        for (const { type, table, id: contentId } of [...created].reverse()) {
+          await tx.execute(sql`DELETE FROM legal_holds WHERE content_type=${type} AND content_id=${contentId}`);
+          await tx.execute(sql`DELETE FROM dmca_audit_log WHERE target_type=${type} AND target_id=${contentId}`);
+          await tx.execute(sql`DELETE FROM ${sql.identifier(table)} WHERE id=${contentId}`);
+        }
+      });
+    }
+  });
+
   it("searches only moderation-hidden posts for staff and requires an audited reason to restore", async () => {
     const postId = await insertPost();
     const path = `/api/admin/dmca/content/forum_post/${postId}/moderate`;

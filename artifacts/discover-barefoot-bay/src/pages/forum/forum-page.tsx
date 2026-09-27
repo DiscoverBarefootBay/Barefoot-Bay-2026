@@ -481,7 +481,7 @@ export default function ForumPage() {
         <div className="flex flex-wrap gap-3">
           {isModerator && (
             <Link href="/admin/moderated-posts">
-              <Button variant="outline" data-testid="link-forum-hidden-posts"><EyeOff className="mr-2 h-4 w-4" /> Hidden Posts</Button>
+              <Button variant="outline" data-testid="link-forum-hidden-posts"><EyeOff className="mr-2 h-4 w-4" /> Hidden Content</Button>
             </Link>
           )}
           {user &&

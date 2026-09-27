@@ -321,6 +321,61 @@ router.post("/permissions/:userId/grant", required(P.MANAGE_PERMISSIONS), route(
 router.post("/permissions/:userId/revoke", required(P.MANAGE_PERMISSIONS), route(async(req,res)=>{const b=z.object({permissions:z.array(z.string()).min(1)}).parse(req.body),uid=id.parse(req.params.userId),perms=b.permissions.filter(isDmcaPermission);if(perms.includes(P.MANAGE_PERMISSIONS)){const n=Number(((await db.execute(sql`SELECT count(DISTINCT user_id)::int n FROM dmca_permission_grants WHERE permission=${P.MANAGE_PERMISSIONS} AND user_id<>${uid}`)).rows[0] as any).n);if(!n)throw new DmcaServiceError("Cannot remove the last holder of dmca.manage_permissions",409);}await db.transaction(tx=>revokeDmcaPermissions({userId:uid,permissions:perms,revokedBy:Number((req.user as any).id),ipAddress:requestIp(req)},tx));res.json({ok:true});}));
 
 async function contentStatus(type:string,contentId:number){if(!isDmcaContentType(type)||type==="avatar")throw new DmcaServiceError("Unknown content type",404);const def=getContentTypeDef(type);const row=(await db.execute(sql`SELECT * FROM ${sql.identifier(def.table)} WHERE id=${contentId}`)).rows[0] as any;if(!row)throw new DmcaServiceError("Content not found",404);const active=(await db.execute(sql`SELECT c.id,c.case_number,c.status FROM dmca_targets t JOIN dmca_cases c ON c.id=t.dmca_case_id WHERE t.content_type=${type} AND t.content_id=${contentId} AND c.status<>'CLOSED' ORDER BY c.id DESC LIMIT 1`)).rows[0] as any;return{row,active};}
+const recoveryTypes = ["forum_post", "forum_comment", "event", "event_comment", "listing", "page", "vendor_comment"] as const;
+type RecoveryType = typeof recoveryTypes[number];
+const recoveryFields: Record<RecoveryType, { label: string; search: string; parent: string }> = {
+  forum_post: { label: "p.title", search: "p.title || ' ' || p.content", parent: "NULL::text" },
+  forum_comment: { label: "p.content", search: "p.content", parent: "p.post_id::text" },
+  event: { label: "p.title", search: "p.title || ' ' || COALESCE(p.description,'')", parent: "NULL::text" },
+  event_comment: { label: "p.content", search: "p.content", parent: "p.event_id::text" },
+  listing: { label: "p.title", search: "p.title || ' ' || COALESCE(p.description,'')", parent: "NULL::text" },
+  page: { label: "p.title", search: "p.title || ' ' || p.slug || ' ' || p.content", parent: "p.slug" },
+  vendor_comment: { label: "p.content", search: "p.content || ' ' || p.page_slug", parent: "p.page_slug" },
+};
+router.get("/moderated-content", route(async (req, res) => {
+  if (!req.isAuthenticated?.()) return res.status(401).json({ message: "Not authenticated" });
+  if (!["admin", "moderator"].includes((req.user as any).role)) return res.status(403).json({ message: "Site admin or moderator required" });
+  const { q, page, type } = z.object({
+    q: z.string().trim().max(100).default(""),
+    page: z.coerce.number().int().min(1).max(1000).default(1),
+    type: z.enum(["all", ...recoveryTypes]).default("all"),
+  }).parse(req.query);
+  const search = `%${q.replace(/[\\%_]/g, "\\$&")}%`;
+  const exactId = /^\d+$/.test(q) ? Number(q) : -1;
+  const types = type === "all" ? recoveryTypes : [type];
+  const branches = types.map(t => {
+    const def = getContentTypeDef(t);
+    const fields = recoveryFields[t];
+    return sql`SELECT ${t}::text AS content_type,p.id,
+      left(${sql.raw(fields.label)}, 180) AS title,${sql.raw(fields.parent)} AS parent_ref,
+      p.visibility_status,p.hidden_reason,p.hidden_at,p.legal_hold,p.dmca_case_id,
+      u.username AS author_name,
+      EXISTS(SELECT 1 FROM legal_holds h WHERE h.content_type=${t} AND h.content_id=p.id AND h.released_at IS NULL) AS active_hold,
+      EXISTS(SELECT 1 FROM dmca_targets d JOIN dmca_cases c ON c.id=d.dmca_case_id
+        WHERE d.content_type=${t} AND d.content_id=p.id AND c.status NOT IN ('CLOSED','REJECTED','RESTORED')) AS active_dmca_case
+      FROM ${sql.identifier(def.table)} p LEFT JOIN users u ON u.id=p.${sql.identifier(def.ownerColumn)}
+      WHERE p.visibility_status='moderation_hidden'
+        AND (${q === ""} OR p.id=${exactId} OR ${sql.raw(fields.search)} ILIKE ${search} ESCAPE '\\')`;
+  });
+  // Identifiers and search expressions above come only from this fixed server-side allowlist.
+  const combined = sql.join(branches, sql` UNION ALL `);
+  const total = Number((await db.execute(sql`SELECT count(*)::int AS total FROM (${combined}) hidden`)).rows[0]?.total ?? 0);
+  const rows = (await db.execute(sql`
+    SELECT * FROM (${combined}) hidden ORDER BY hidden_at DESC NULLS LAST,content_type,id DESC
+    LIMIT 20 OFFSET ${(page - 1) * 20}
+  `)).rows as any[];
+  res.json({
+    items: rows.map(row => {
+      const t = row.content_type as RecoveryType;
+      const ref = row.parent_ref;
+      const { parent_ref: _parentRef, ...visibleFields } = row;
+      const pathRow = { id: row.id, post_id: ref, event_id: ref, slug: ref, page_slug: ref };
+      return { ...camel(visibleFields), title: String(row.title || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim() || "(No text)",
+        publicPath: getContentTypeDef(t).publicPath?.(pathRow) ?? null };
+    }),
+    total, page, pageSize: 20,
+  });
+}));
 router.get("/moderated-posts", route(async (req, res) => {
   if (!req.isAuthenticated?.()) return res.status(401).json({ message: "Not authenticated" });
   if (!["admin", "moderator"].includes((req.user as any).role)) return res.status(403).json({ message: "Site admin or moderator required" });

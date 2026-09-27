@@ -136,7 +136,7 @@ export default function AdminLayout({ children, allowModerator = false }: AdminL
               <h4 className="text-sm font-semibold text-muted-foreground mb-2">Moderation</h4>
               <Link href="/admin/moderated-posts">
                 <Button variant={location === '/admin/moderated-posts' ? "secondary" : "ghost"} className="w-full justify-start" size="sm" data-testid="link-moderated-posts">
-                  <EyeOff size={18} className="mr-2" /> Hidden Posts
+                  <EyeOff size={18} className="mr-2" /> Hidden Content
                 </Button>
               </Link>
             </div>
@@ -216,7 +216,7 @@ export default function AdminLayout({ children, allowModerator = false }: AdminL
             <div className="font-bold text-lg">Admin Panel</div>
           </Link>
           <Link href="/admin/moderated-posts">
-            <Button variant="outline" size="sm" data-testid="link-mobile-moderated-posts">Hidden Posts</Button>
+            <Button variant="outline" size="sm" data-testid="link-mobile-moderated-posts">Hidden Content</Button>
           </Link>
         </header>
 
