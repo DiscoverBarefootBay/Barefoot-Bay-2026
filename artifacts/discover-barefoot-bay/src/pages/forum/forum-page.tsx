@@ -21,6 +21,7 @@ import {
   Search,
   Tag,
   Info,
+  EyeOff,
 } from "lucide-react";
 import {
   Dialog,
@@ -272,7 +273,7 @@ function StoryCard({ story }: { story: Story }) {
 export default function ForumPage() {
   const { user } = useAuth();
   const { toast } = useToast();
-  const { isAdmin, canCreateTopic, canCreateTopicInCategory } = usePermissions();
+  const { isAdmin, isModerator, canCreateTopic, canCreateTopicInCategory } = usePermissions();
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [descriptionText, setDescriptionText] = useState("");
   const [isInfoOpen, setIsInfoOpen] = useState(false);
@@ -478,6 +479,11 @@ export default function ForumPage() {
           )}
         </div>
         <div className="flex flex-wrap gap-3">
+          {isModerator && (
+            <Link href="/admin/moderated-posts">
+              <Button variant="outline" data-testid="link-forum-hidden-posts"><EyeOff className="mr-2 h-4 w-4" /> Hidden Posts</Button>
+            </Link>
+          )}
           {user &&
             (selectedCategoryId
               ? canCreateTopicInCategory(selectedCategoryId)

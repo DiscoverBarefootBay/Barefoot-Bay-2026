@@ -271,7 +271,7 @@ export function ContentModerationMenu({
           {statusQuery.isError && (
             <DropdownMenuItem disabled>Unable to load content status</DropdownMenuItem>
           )}
-          {status?.canHide && (
+          {status?.canHide && ["published", "moderation_hidden"].includes(status.visibilityStatus) && (
             <DropdownMenuItem onSelect={() => setAction("moderate")}>
               <EyeOff className="mr-2 h-4 w-4" />{isModerationHidden ? "Unhide" : "Hide / Moderate"}
             </DropdownMenuItem>

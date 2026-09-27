@@ -7,6 +7,9 @@ description: Durable evidence-preservation and quarantine rules for DMCA work �
   **How to apply:** any new delete path, cleanup job, or test cleanup must respect this — republish/release first; never add a trigger bypass.
 - Physical quarantine must be verified BEFORE a takedown commits (files leave their public keys so direct storage URLs die too); a failed move aborts the takedown, and file moves are compensated whenever the surrounding DB transaction fails (takedown and restore). Bytes must always match committed DB state.
 - Every new public surface (route, email, OG, sitemap, scheduler, auto-delete job) must go through the central visibility policy; duplicate slug rows exist (e.g. banner-slides), so hide/filter by slug-returned row, not by an assumed single id.
+- Moderation hiding and DMCA hiding have different audiences: moderation-hidden content is for site admins and moderators only, never its author by ownership alone; DMCA-hidden content keeps its separate owner/legal-view access.
+  **Why:** the owner explicitly chose admins plus moderators as the only audience for non-DMCA hidden content, with a visible hidden indicator for staff.
+  **How to apply:** keep this distinction in every new content loader and staff UI; do not use the DMCA copyright notice for moderation-hidden items.
 - Drizzle's `sql` template does NOT turn a JS array into a PG array (`ANY(${arr}::int[])` → 22P02); use an ARRAY[...] builder.
 - Schema ships as idempotent SQL in lib/db/sql and must be applied to the prod DB at Publish.
 - DMCA permission grants are explicit data, not site-admin-role powers. Production may have the DMCA schema and current frontend yet hide all legal tools because rollout grant rows from development were not copied by Publish. Verify permission counts in each environment before blaming the bundle.

@@ -7,10 +7,9 @@
  *   - Public (anonymous or unrelated user): only `published` rows exist. Any
  *     other status (dmca_hidden, moderation_hidden, user_deleted, ...) is a
  *     plain 404 "no longer available" — we never reveal why.
- *   - The owner of the item: sees their own hidden item, flagged with
- *     `contentVisibility` so the UI can show a "removed" banner.
- *   - Admins holding dmca.view: see hidden items flagged on detail routes and
- *     on admin/owner list routes (never mixed into public lists).
+ *   - Moderation-hidden: only site admins and moderators see a flagged copy.
+ *   - DMCA-hidden: the owner or a dmca.view holder sees a flagged copy.
+ *     Hidden items never mix into public lists.
  *
  * Existing listing lifecycle statuses (DRAFT/ACTIVE/EXPIRED) are separate and
  * keep working; this policy is layered on top of them.
@@ -57,6 +56,8 @@ export interface ViewerContext {
   userId: number | null;
   /** holds dmca.view — may see hidden content (flagged) */
   canViewHidden: boolean;
+  /** site staff may see moderation-hidden content, independently of DMCA grants */
+  canViewModerated?: boolean;
 }
 
 export const ANONYMOUS_VIEWER: ViewerContext = { userId: null, canViewHidden: false };
@@ -66,7 +67,7 @@ export async function getViewerContext(req: Request): Promise<ViewerContext> {
   if (!authed) return ANONYMOUS_VIEWER;
   const userId = typeof (req.user as any).id === "number" ? (req.user as any).id : null;
   const perms = await getRequestDmcaPermissions(req);
-  return { userId, canViewHidden: perms.has(DmcaPermission.VIEW) };
+  return { userId, canViewHidden: perms.has(DmcaPermission.VIEW), canViewModerated: ["admin", "moderator"].includes((req.user as any).role) };
 }
 
 export interface ContentVisibilityFlag {
@@ -95,11 +96,11 @@ export function withVisibilityFlag<T extends AnyRow>(row: T): T & { contentVisib
 }
 
 /**
- * May this viewer see this row? Published → yes. Otherwise only the owner or
- * a dmca.view admin (who then get a flagged copy).
+ * Moderation-hidden content is staff-only; DMCA visibility is separate.
  */
 export function canViewerSee(row: AnyRow, viewer: ViewerContext, ownerId: number | null | undefined): boolean {
   if (isPubliclyVisible(row)) return true;
+  if (visibilityOf(row) === "moderation_hidden") return !!viewer.canViewModerated;
   if (viewer.canViewHidden) return true;
   return viewer.userId != null && ownerId != null && Number(ownerId) === viewer.userId;
 }
@@ -124,12 +125,13 @@ export function filterForViewer<T extends AnyRow>(
       out.push(row);
       continue;
     }
-    if (opts.includeHiddenForAdmins && viewer.canViewHidden) {
+    if (opts.includeHiddenForAdmins && canViewerSee(row, viewer, null)) {
       out.push(withVisibilityFlag(row));
       continue;
     }
     const owner = ownerOf(row);
-    if (includeOwn && viewer.userId != null && owner != null && Number(owner) === viewer.userId) {
+    if (includeOwn && visibilityOf(row) !== "moderation_hidden"
+      && viewer.userId != null && owner != null && Number(owner) === viewer.userId) {
       out.push(withVisibilityFlag(row));
     }
   }
@@ -227,7 +229,8 @@ export async function loadHiddenIndex(type: DmcaContentType): Promise<Map<number
 
 /**
  * Filter rows (matched by `idOf(row)`, default `row.id`) against the hidden
- * index. Owners keep their own hidden rows, flagged; everyone else loses them.
+ * index. Moderation-hidden rows are staff-only; DMCA-hidden rows remain
+ * accessible to owners. Public surfaces pass ANONYMOUS_VIEWER.
  * Pass `ANONYMOUS_VIEWER` for strictly public surfaces (sitemap, OG, search).
  */
 export async function filterByHiddenIndex<T extends AnyRow>(
@@ -246,7 +249,9 @@ export async function filterByHiddenIndex<T extends AnyRow>(
       out.push(row);
       continue;
     }
-    if (viewer.userId != null && info.ownerId === viewer.userId) {
+    if (info.visibilityStatus === "moderation_hidden"
+      ? viewer.canViewModerated
+      : viewer.userId != null && info.ownerId === viewer.userId) {
       out.push(withVisibilityFlag({ ...row, visibilityStatus: info.visibilityStatus, hiddenAt: info.hiddenAt, hiddenReason: info.hiddenReason, dmcaCaseId: info.dmcaCaseId, legalHold: info.legalHold }));
     }
   }

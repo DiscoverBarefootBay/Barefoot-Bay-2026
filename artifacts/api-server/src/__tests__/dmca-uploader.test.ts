@@ -111,7 +111,7 @@ describe("DMCA uploader routes and persistence", () => {
     assert.equal(seed.rows.length, 3, "three users with email are required");
     [actorId, uploaderId, otherId] = seed.rows.map((r: any) => Number(r.id));
     categoryId = Number((seed.rows[0] as any).category_id);
-    for (const permission of [DmcaPermission.REVIEW, DmcaPermission.TAKEDOWN, DmcaPermission.RESTORE]) {
+    for (const permission of [DmcaPermission.REVIEW, DmcaPermission.TAKEDOWN, DmcaPermission.RESTORE, DmcaPermission.MANAGE_REPEAT_INFRINGER]) {
       const inserted = await db.execute(sql`
         INSERT INTO dmca_permission_grants(user_id,permission,granted_by)
         VALUES(${actorId},${permission},${actorId}) ON CONFLICT DO NOTHING RETURNING permission`);

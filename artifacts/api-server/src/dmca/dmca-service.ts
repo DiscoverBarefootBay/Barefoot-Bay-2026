@@ -1113,6 +1113,7 @@ export async function moderateContent(type: DmcaContentType, contentId: number, 
     const row = (await tx.execute(sql`SELECT * FROM ${sql.identifier(def.table)} WHERE id=${contentId} FOR UPDATE`)).rows[0] as any;
     if (!row) throw new DmcaServiceError("Content not found", 404);
     if (row.visibility_status === "dmca_hidden") throw new DmcaServiceError("Content is under DMCA takedown — use the case", 409);
+    if (hidden && row.visibility_status !== "published") throw new DmcaServiceError("Only published content can be hidden by moderation", 409);
     if (!hidden) {
       if (row.visibility_status !== "moderation_hidden") throw new DmcaServiceError("Only moderation-hidden content can be unhidden", 409);
       if (row.legal_hold || (await tx.execute(sql`SELECT 1 FROM legal_holds WHERE content_type=${type} AND content_id=${contentId} AND released_at IS NULL LIMIT 1`)).rows.length) {

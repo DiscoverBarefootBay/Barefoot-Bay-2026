@@ -11,7 +11,7 @@ import { markUploaderNotified } from "../dmca/dmca-service";
 import { __setQuarantineTestHooks, type QuarantineStorageAdapter } from "../dmca/quarantine";
 import { assertCanPermanentDelete, PermanentDeletePermissionError } from "../dmca/permanent-delete";
 
-type Mode = "none" | "nogrant" | "moderator" | "admin";
+type Mode = "none" | "member" | "nogrant" | "moderator" | "admin";
 const caseIds: number[] = [];
 const postIds: number[] = [];
 const flagIds: number[] = [];
@@ -120,7 +120,7 @@ before(async () => {
       req.user = {
         id: mode === "admin" ? actorId : noGrantId,
         username: `test-${mode}`,
-        role: mode === "moderator" ? "moderator" : "admin",
+        role: mode === "moderator" ? "moderator" : mode === "member" ? "registered" : "admin",
       };
     }
     next();
@@ -445,6 +445,59 @@ describe("DMCA admin UI contracts", () => {
     const released = await api("admin", "POST", `/api/admin/dmca/holds/${active[0].id}/release`, { reason: "Matter resolved" });
     assert.equal(released.status, 200, JSON.stringify(released.body));
     assert.equal(released.body.case.legalHold, false);
+  });
+});
+
+describe("moderation-hidden recovery", () => {
+  it("searches only moderation-hidden posts for staff and requires an audited reason to restore", async () => {
+    const postId = await insertPost();
+    const path = `/api/admin/dmca/content/forum_post/${postId}/moderate`;
+    assert.equal((await api("moderator", "POST", path, { hidden: true, reason: "Off topic" })).status, 200);
+    const url = `/api/admin/dmca/moderated-posts?q=${postId}`;
+    assert.equal((await api("none", "GET", url)).status, 401);
+    assert.equal((await api("member", "GET", url)).status, 403);
+    assert.equal((await api("member", "POST", path, { hidden: false, reason: "Not authorized" })).status, 403);
+    for (const mode of ["admin", "moderator"] as const) {
+      const found = await api(mode, "GET", url);
+      assert.equal(found.status, 200, JSON.stringify(found.body));
+      assert.equal(found.body.total, 1);
+      assert.equal(Number(found.body.posts[0].id), postId);
+      assert.equal(found.body.posts[0].hiddenReason, "Off topic");
+      const detail = await api(mode, "GET", `/api/forum/posts/${postId}`);
+      assert.equal(detail.status, 200, JSON.stringify(detail.body));
+      assert.equal(detail.body.contentVisibility?.status, "moderation_hidden");
+    }
+    assert.equal((await api("nogrant", "GET", `/api/forum/posts/${postId}`)).body.contentVisibility?.status, "moderation_hidden");
+    const titleSearch = await api("moderator", "GET", "/api/admin/dmca/moderated-posts?q=DMCA%20admin%20test");
+    assert.equal(titleSearch.status, 200);
+    assert.ok(titleSearch.body.posts.some((post: any) => Number(post.id) === postId));
+    assert.equal((await api("admin", "POST", path, { hidden: false, reason: "" })).status, 400);
+    assert.equal((await api("member", "GET", `/api/forum/posts/${postId}`)).status, 404);
+    const beforeAudit = Number(((await db.execute(sql`SELECT count(*)::int n FROM dmca_audit_log WHERE target_type='forum_post' AND target_id=${postId} AND event='content_moderation_unhidden'`)).rows[0] as any).n);
+    const restored = await api("moderator", "POST", path, { hidden: false, reason: "Review completed" });
+    assert.equal(restored.status, 200, JSON.stringify(restored.body));
+    assert.equal((await api("admin", "GET", url)).body.total, 0);
+    const row = (await db.execute(sql`SELECT visibility_status FROM forum_posts WHERE id=${postId}`)).rows[0] as any;
+    assert.equal(row.visibility_status, "published");
+    const audit = (await db.execute(sql`SELECT notes,actor_id FROM dmca_audit_log WHERE target_type='forum_post' AND target_id=${postId} AND event='content_moderation_unhidden' ORDER BY id DESC LIMIT 1`)).rows[0] as any;
+    assert.equal(audit.notes, "Review completed");
+    assert.equal(Number(audit.actor_id), noGrantId);
+    assert.equal(Number(((await db.execute(sql`SELECT count(*)::int n FROM dmca_audit_log WHERE target_type='forum_post' AND target_id=${postId} AND event='content_moderation_unhidden'`)).rows[0] as any).n), beforeAudit + 1);
+    assert.equal((await api("admin", "POST", path, { hidden: false, reason: "Again" })).status, 409);
+  });
+
+  it("refuses to restore DMCA-hidden content or moderation-hidden content under legal hold or an active case", async () => {
+    const postId = await insertPost();
+    const path = `/api/admin/dmca/content/forum_post/${postId}/moderate`;
+    await db.execute(sql`UPDATE forum_posts SET visibility_status='dmca_hidden' WHERE id=${postId}`);
+    assert.equal((await api("admin", "GET", `/api/admin/dmca/moderated-posts?q=${postId}`)).body.total, 0);
+    assert.equal((await api("admin", "POST", path, { hidden: false, reason: "Wrong workflow" })).status, 409);
+    await db.execute(sql`UPDATE forum_posts SET visibility_status='moderation_hidden',legal_hold=true WHERE id=${postId}`);
+    assert.equal((await api("moderator", "POST", path, { hidden: false, reason: "Held" })).status, 423);
+    await db.execute(sql`UPDATE forum_posts SET legal_hold=false WHERE id=${postId}`);
+    const caseId = await createCaseForPost(postId);
+    assert.equal((await api("admin", "POST", path, { hidden: false, reason: "Active case" })).status, 409);
+    assert.equal((await db.execute(sql`SELECT visibility_status FROM forum_posts WHERE id=${postId}`)).rows[0]?.visibility_status, "moderation_hidden");
   });
 });
 

@@ -215,7 +215,9 @@ export default function AdminLayout({ children, allowModerator = false }: AdminL
           <Link href="/">
             <div className="font-bold text-lg">Admin Panel</div>
           </Link>
-          {/* Mobile menu button would go here - simplified for example */}
+          <Link href="/admin/moderated-posts">
+            <Button variant="outline" size="sm" data-testid="link-mobile-moderated-posts">Hidden Posts</Button>
+          </Link>
         </header>
 
         {/* Content area */}

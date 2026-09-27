@@ -24,6 +24,7 @@ const hidden = {
   dmcaCaseId: 4,
   legalHold: true,
 };
+const moderated = { id: 3, userId: 10, visibilityStatus: "moderation_hidden", hiddenReason: "Off topic" };
 
 function response() {
   const state: any = { statusCode: 200, body: undefined };
@@ -43,6 +44,9 @@ describe("central DMCA visibility policy", () => {
     assert.equal(canViewerSee(hidden, ANONYMOUS_VIEWER, 10), false);
     assert.equal(canViewerSee(hidden, { userId: 10, canViewHidden: false }, 10), true);
     assert.equal(canViewerSee(hidden, { userId: 99, canViewHidden: true }, 10), true);
+    assert.equal(canViewerSee(moderated, { userId: 10, canViewHidden: false }, 10), false);
+    assert.equal(canViewerSee(moderated, { userId: 99, canViewHidden: true }, 10), false);
+    assert.equal(canViewerSee(moderated, { userId: 99, canViewHidden: false, canViewModerated: true }, 10), true);
   });
 
   it("flags hidden rows without changing published rows", () => {
@@ -69,6 +73,10 @@ describe("central DMCA visibility policy", () => {
       ownerOf,
       { includeHiddenForAdmins: true },
     ).length, 2);
+    assert.deepEqual(filterForViewer([published, moderated], { userId: 10, canViewHidden: false }, ownerOf), [published]);
+    const staff = { userId: 99, canViewHidden: false, canViewModerated: true };
+    assert.deepEqual(filterForViewer([published, moderated], staff, ownerOf), [published]);
+    assert.equal(filterForViewer([published, moderated], staff, ownerOf, { includeHiddenForAdmins: true })[1].contentVisibility.status, "moderation_hidden");
   });
 
   it("resolveDetailForViewer returns a generic removed 404 to anonymous users", async () => {
@@ -85,6 +93,12 @@ describe("central DMCA visibility policy", () => {
     const row = await resolveDetailForViewer(req, res, hidden, 10);
     assert.equal(row?.contentVisibility?.removed, true);
     assert.equal(res.body, undefined);
+  });
+  it("does not return moderation-hidden content to its owner", async () => {
+    const req: any = { isAuthenticated: () => true, user: { id: 10, role: "member" } };
+    const res = response();
+    assert.equal(await resolveDetailForViewer(req, res, moderated, 10), null);
+    assert.equal(res.statusCode, 404);
   });
 
   it("enforceVisibilityOnJson polices both single rows and arrays", async () => {
@@ -128,6 +142,10 @@ describe("central DMCA visibility policy", () => {
       );
       assert.equal(ownerRows.length, 1);
       assert.equal(ownerRows[0].contentVisibility.status, "dmca_hidden");
+      await db.execute(sql`UPDATE forum_posts SET visibility_status = 'moderation_hidden' WHERE id = ${postId}`);
+      assert.deepEqual(await filterByHiddenIndex("forum_post", [{ id: postId }], { userId, canViewHidden: false }), []);
+      const staffRows = await filterByHiddenIndex("forum_post", [{ id: postId }], { userId: null, canViewHidden: false, canViewModerated: true });
+      assert.equal(staffRows[0].contentVisibility.status, "moderation_hidden");
 
       await db.execute(sql`UPDATE forum_posts SET visibility_status = 'published' WHERE id = ${postId}`);
       assert.equal(await isContentIdPublic("forum_post", postId), true);
