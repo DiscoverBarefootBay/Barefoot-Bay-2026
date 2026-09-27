@@ -89,6 +89,7 @@ const DmcaLegalHolds = lazy(() => import("@/pages/admin/dmca/legal-holds"));
 const DmcaRepeatInfringers = lazy(() => import("@/pages/admin/dmca/repeat-infringers"));
 const DmcaSettings = lazy(() => import("@/pages/admin/dmca/settings"));
 const DmcaPermissions = lazy(() => import("@/pages/admin/dmca/permissions"));
+const ModeratedPosts = lazy(() => import("@/pages/admin/moderated-posts"));
 
 import GenericContentPage from "@/pages/generic-content-page";
 import FormPage from "@/pages/form-page";
@@ -211,6 +212,7 @@ function Router() {
             
             {/* Admin Routes - All require admin access */}
             <ProtectedRoute path="/admin" component={AdminDashboard} requiredFeature="ADMIN" />
+            <ProtectedRoute path="/admin/moderated-posts" component={ModeratedPosts} />
             <ProtectedRoute path="/admin/dmca" component={DmcaDashboard} requiredFeature="ADMIN" />
             <ProtectedRoute path="/admin/dmca/new" component={DmcaNewCase} requiredFeature="ADMIN" />
             <ProtectedRoute path="/admin/dmca/cases/:id" component={DmcaCaseDetail} requiredFeature="ADMIN" />

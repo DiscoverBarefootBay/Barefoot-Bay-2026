@@ -321,6 +321,28 @@ router.post("/permissions/:userId/grant", required(P.MANAGE_PERMISSIONS), route(
 router.post("/permissions/:userId/revoke", required(P.MANAGE_PERMISSIONS), route(async(req,res)=>{const b=z.object({permissions:z.array(z.string()).min(1)}).parse(req.body),uid=id.parse(req.params.userId),perms=b.permissions.filter(isDmcaPermission);if(perms.includes(P.MANAGE_PERMISSIONS)){const n=Number(((await db.execute(sql`SELECT count(DISTINCT user_id)::int n FROM dmca_permission_grants WHERE permission=${P.MANAGE_PERMISSIONS} AND user_id<>${uid}`)).rows[0] as any).n);if(!n)throw new DmcaServiceError("Cannot remove the last holder of dmca.manage_permissions",409);}await db.transaction(tx=>revokeDmcaPermissions({userId:uid,permissions:perms,revokedBy:Number((req.user as any).id),ipAddress:requestIp(req)},tx));res.json({ok:true});}));
 
 async function contentStatus(type:string,contentId:number){if(!isDmcaContentType(type)||type==="avatar")throw new DmcaServiceError("Unknown content type",404);const def=getContentTypeDef(type);const row=(await db.execute(sql`SELECT * FROM ${sql.identifier(def.table)} WHERE id=${contentId}`)).rows[0] as any;if(!row)throw new DmcaServiceError("Content not found",404);const active=(await db.execute(sql`SELECT c.id,c.case_number,c.status FROM dmca_targets t JOIN dmca_cases c ON c.id=t.dmca_case_id WHERE t.content_type=${type} AND t.content_id=${contentId} AND c.status<>'CLOSED' ORDER BY c.id DESC LIMIT 1`)).rows[0] as any;return{row,active};}
+router.get("/moderated-posts", route(async (req, res) => {
+  if (!req.isAuthenticated?.()) return res.status(401).json({ message: "Not authenticated" });
+  if (!["admin", "moderator"].includes((req.user as any).role)) return res.status(403).json({ message: "Site admin or moderator required" });
+  const { q, page } = z.object({
+    q: z.string().trim().max(100).default(""),
+    page: z.coerce.number().int().min(1).max(1000).default(1),
+  }).parse(req.query);
+  const search = `%${q.replace(/[\\%_]/g, "\\$&")}%`;
+  const exactId = /^\d+$/.test(q) ? Number(q) : -1;
+  const where = sql`p.visibility_status='moderation_hidden' AND (${q === ""} OR p.title ILIKE ${search} ESCAPE '\\' OR p.id=${exactId})`;
+  const total = Number((await db.execute(sql`SELECT count(*)::int AS total FROM forum_posts p WHERE ${where}`)).rows[0]?.total ?? 0);
+  const rows = (await db.execute(sql`
+    SELECT p.id,p.title,p.visibility_status,p.hidden_reason,p.hidden_at,p.legal_hold,p.dmca_case_id,
+      u.username AS author_name,
+      EXISTS(SELECT 1 FROM legal_holds h WHERE h.content_type='forum_post' AND h.content_id=p.id AND h.released_at IS NULL) AS active_hold,
+      EXISTS(SELECT 1 FROM dmca_targets t JOIN dmca_cases c ON c.id=t.dmca_case_id
+        WHERE t.content_type='forum_post' AND t.content_id=p.id AND c.status NOT IN ('CLOSED','REJECTED','RESTORED')) AS active_dmca_case
+    FROM forum_posts p LEFT JOIN users u ON u.id=p.user_id
+    WHERE ${where} ORDER BY p.hidden_at DESC NULLS LAST,p.id DESC LIMIT 20 OFFSET ${(page - 1) * 20}
+  `)).rows;
+  res.json({ posts: rows.map(camel), total, page, pageSize: 20 });
+}));
 router.get("/content/:type/:id/status", route(async(req,res)=>{if(!req.isAuthenticated?.())return res.status(401).json({message:"Not authenticated"});const u=req.user as any,perms=await getRequestDmcaPermissions(req);if(!["admin","moderator"].includes(u.role)&&!perms.has(P.VIEW))return res.status(403).json({message:"Not permitted"});const {row,active}=await contentStatus(req.params.type,id.parse(req.params.id));res.json({visibilityStatus:row.visibility_status,legalHold:row.legal_hold,activeCase:active?camel(active):null,canHide:["admin","moderator"].includes(u.role),canDmca:perms.has(active?P.REVIEW:P.CREATE),canFlag:perms.has(P.FLAG),canPermanentDelete:perms.has(P.PERMANENT_DELETE)});}));
 router.post("/content/:type/:id/moderate", route(async(req,res)=>{if(!req.isAuthenticated?.())return res.status(401).json({message:"Not authenticated"});if(!["admin","moderator"].includes((req.user as any).role))return res.status(403).json({message:"Site admin or moderator required"});const b=z.object({hidden:z.boolean(),reason:text()}).parse(req.body);await moderateContent(req.params.type as any,id.parse(req.params.id),b.hidden,b.reason,actor(req));res.json({ok:true});}));
 router.post("/content/:type/:id/dmca", route(async(req,res)=>{if(!req.isAuthenticated?.())return res.status(401).json({message:"Not authenticated"});const contentId=id.parse(req.params.id),type=req.params.type as any,b=z.union([z.object({caseId:id}),z.object({newCase:z.object({claimantName:text(),claimantEmail:z.string().email().optional(),submittedVia:z.string(),notes:z.string().optional()})})]).parse(req.body),perms=await getRequestDmcaPermissions(req);if("caseId"in b){if(!perms.has(P.REVIEW))return res.status(403).json({message:"Missing permission: dmca.review"});await addTargetToCase(b.caseId,{contentType:type,contentId},actor(req));const c=await caseRow(b.caseId);return res.json({caseId:b.caseId,caseNumber:c.case_number});}if(!perms.has(P.CREATE))return res.status(403).json({message:"Missing permission: dmca.create"});await assertTargetsAvailable([{contentType:type,contentId}]);const c=await createCase({actor:actor(req),submittedVia:"admin_entry",claimant:{name:b.newCase.claimantName,email:b.newCase.claimantEmail},targets:[{contentType:type,contentId}],enforceActiveTargets:true,submission:{submissionType:"notice",submittedByName:b.newCase.claimantName,formPayload:b.newCase}});res.json({caseId:c.id,caseNumber:c.caseNumber});}));

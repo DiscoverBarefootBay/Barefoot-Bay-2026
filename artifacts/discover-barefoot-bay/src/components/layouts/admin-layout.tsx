@@ -15,6 +15,7 @@ import {
   Sparkles,
   Tag,
   Scale,
+  EyeOff,
 } from 'lucide-react';
 // Analytics components removed per request
 import { useLocation, Link } from 'wouter';
@@ -28,6 +29,7 @@ import { DmcaPerm, useDmcaMe } from '@/lib/dmca-admin';
 
 interface AdminLayoutProps {
   children: ReactNode;
+  allowModerator?: boolean;
 }
 
 interface NavItem {
@@ -37,14 +39,14 @@ interface NavItem {
   highlight?: boolean;
 }
 
-export default function AdminLayout({ children }: AdminLayoutProps) {
+export default function AdminLayout({ children, allowModerator = false }: AdminLayoutProps) {
   const [location] = useLocation();
   const { user, logoutMutation } = useAuth();
   const { isAdmin } = usePermissions();
   const dmca = useDmcaMe();
 
   // If not an admin, show unauthorized message
-  if (!isAdmin) {
+  if (!isAdmin && !(allowModerator && user?.role === "moderator")) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-4">
         <ShieldAlert size={48} className="text-destructive mb-4" />
@@ -94,7 +96,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         <ScrollArea className="flex-1">
           <div className="p-4">
             {/* Analytics Section - Special highlight */}
-            <div className="mb-4">
+            {isAdmin && <div className="mb-4">
               <h4 className="text-sm font-bold text-primary mb-2">Analytics & Reports</h4>
               <div className="bg-primary/5 rounded-md p-2 border border-primary/20">
                 <a href="/analytics-dashboard">
@@ -108,9 +110,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   </Button>
                 </a>
               </div>
-            </div>
+            </div>}
             
-            <div className="mb-4">
+            {isAdmin && <div className="mb-4">
               <h4 className="text-sm font-semibold text-muted-foreground mb-2">Administration</h4>
               <nav className="space-y-1">
                 {navItems
@@ -128,6 +130,15 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     </Link>
                   ))}
               </nav>
+            </div>}
+
+            <div className="mb-4">
+              <h4 className="text-sm font-semibold text-muted-foreground mb-2">Moderation</h4>
+              <Link href="/admin/moderated-posts">
+                <Button variant={location === '/admin/moderated-posts' ? "secondary" : "ghost"} className="w-full justify-start" size="sm" data-testid="link-moderated-posts">
+                  <EyeOff size={18} className="mr-2" /> Hidden Posts
+                </Button>
+              </Link>
             </div>
 
             {dmca.can(DmcaPerm.VIEW) && (

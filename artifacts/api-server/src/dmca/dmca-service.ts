@@ -1113,6 +1113,16 @@ export async function moderateContent(type: DmcaContentType, contentId: number, 
     const row = (await tx.execute(sql`SELECT * FROM ${sql.identifier(def.table)} WHERE id=${contentId} FOR UPDATE`)).rows[0] as any;
     if (!row) throw new DmcaServiceError("Content not found", 404);
     if (row.visibility_status === "dmca_hidden") throw new DmcaServiceError("Content is under DMCA takedown — use the case", 409);
+    if (!hidden) {
+      if (row.visibility_status !== "moderation_hidden") throw new DmcaServiceError("Only moderation-hidden content can be unhidden", 409);
+      if (row.legal_hold || (await tx.execute(sql`SELECT 1 FROM legal_holds WHERE content_type=${type} AND content_id=${contentId} AND released_at IS NULL LIMIT 1`)).rows.length) {
+        throw new DmcaServiceError("Content is under legal hold; it cannot be unhidden", 423);
+      }
+      if (row.dmca_case_id || (await tx.execute(sql`
+        SELECT 1 FROM dmca_targets t JOIN dmca_cases c ON c.id=t.dmca_case_id
+        WHERE t.content_type=${type} AND t.content_id=${contentId} AND c.status NOT IN ('CLOSED','REJECTED','RESTORED') LIMIT 1
+      `)).rows.length) throw new DmcaServiceError("Content has an active DMCA case — use the case", 409);
+    }
     const status = hidden ? "moderation_hidden" : "published";
     await tx.execute(sql`UPDATE ${sql.identifier(def.table)} SET visibility_status=${status}, hidden_at=${hidden ? new Date() : null}, hidden_by_admin_id=${hidden ? actor.id : null}, hidden_reason=${hidden ? reason : null} WHERE id=${contentId}`);
     await writeDmcaAudit({ event: hidden ? "content_moderation_hidden" : "content_moderation_unhidden", actorType: actor.type, actorId: actor.id, targetType: type, targetId: contentId, ipAddress: actor.ipAddress, previousValue: { visibilityStatus: row.visibility_status }, newValue: { visibilityStatus: status }, notes: reason }, tx);
