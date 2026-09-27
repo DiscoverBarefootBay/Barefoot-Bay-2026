@@ -2,7 +2,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useForm } from "react-hook-form";
 import { zodV4Resolver } from "@/lib/zod-v4-resolver";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, CheckCircle2, XCircle, Loader2, PartyPopper, Sparkles } from "lucide-react";
 import { PhoneInput } from "@/components/ui/phone-input";
@@ -311,9 +311,9 @@ export default function AuthPage() {
         </CardHeader>
         <CardContent className="px-4 md:px-6">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="login" className="text-base">Login</TabsTrigger>
-              <TabsTrigger value="register" className="text-base">Register</TabsTrigger>
+            <TabsList className="flex w-full mb-6">
+              <TabsTrigger value="login" className="flex-1 text-base">Login</TabsTrigger>
+              <TabsTrigger value="register" className="flex-1 text-base">Register</TabsTrigger>
             </TabsList>
 
             <TabsContent value="login">
@@ -481,6 +481,58 @@ export default function AuthPage() {
                 })} className="space-y-4">
                   <FormField
                     control={registerForm.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Username</FormLabel>
+                        <div className="relative">
+                          <FormControl>
+                            <Input
+                              type="text"
+                              placeholder="Choose a username"
+                              className={`py-6 px-4 text-base rounded-md pr-12 transition-all duration-300 ${
+                                usernameStatus === 'available' ? 'border-green-500 focus:ring-green-500' :
+                                usernameStatus === 'taken' ? 'border-red-500 focus:ring-red-500' : ''
+                              }`}
+                              {...field}
+                              value={field.value || ""}
+                              onChange={(e) => {
+                                field.onChange(e);
+                                setUsernameInput(e.target.value);
+                              }}
+                            />
+                          </FormControl>
+                          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                            {usernameStatus === 'checking' && (
+                              <Loader2 className="h-5 w-5 text-muted-foreground animate-spin" />
+                            )}
+                            {usernameStatus === 'available' && (
+                              <CheckCircle2 className="h-5 w-5 text-green-500 animate-in zoom-in-50 duration-300" />
+                            )}
+                            {usernameStatus === 'taken' && (
+                              <XCircle className="h-5 w-5 text-red-500 animate-in zoom-in-50 duration-300" />
+                            )}
+                          </div>
+                        </div>
+                        <FormDescription>
+                          Your username is the name other members will see across the site.
+                        </FormDescription>
+                        {usernameStatus === 'taken' && usernameMessage && (
+                          <p className="text-sm font-medium text-red-500 animate-in slide-in-from-top-1 duration-200">
+                            {usernameMessage}
+                          </p>
+                        )}
+                        {usernameStatus === 'available' && usernameMessage && (
+                          <p className="text-sm font-medium text-green-600 animate-in slide-in-from-top-1 duration-200">
+                            {usernameMessage}
+                          </p>
+                        )}
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={registerForm.control}
                     name="fullName"
                     render={({ field }) => (
                       <FormItem>
@@ -591,55 +643,6 @@ export default function AuthPage() {
                             placeholder="(555) 555-5555"
                           />
                         </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={registerForm.control}
-                    name="username"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Username</FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <Input 
-                              type="text"
-                              placeholder="Choose a username"
-                              className={`py-6 px-4 text-base rounded-md pr-12 transition-all duration-300 ${
-                                usernameStatus === 'available' ? 'border-green-500 focus:ring-green-500' :
-                                usernameStatus === 'taken' ? 'border-red-500 focus:ring-red-500' : ''
-                              }`}
-                              {...field}
-                              value={field.value || ""}
-                              onChange={(e) => {
-                                field.onChange(e);
-                                setUsernameInput(e.target.value);
-                              }}
-                            />
-                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                              {usernameStatus === 'checking' && (
-                                <Loader2 className="h-5 w-5 text-muted-foreground animate-spin" />
-                              )}
-                              {usernameStatus === 'available' && (
-                                <CheckCircle2 className="h-5 w-5 text-green-500 animate-in zoom-in-50 duration-300" />
-                              )}
-                              {usernameStatus === 'taken' && (
-                                <XCircle className="h-5 w-5 text-red-500 animate-in zoom-in-50 duration-300" />
-                              )}
-                            </div>
-                          </div>
-                        </FormControl>
-                        {usernameStatus === 'taken' && usernameMessage && (
-                          <p className="text-sm font-medium text-red-500 animate-in slide-in-from-top-1 duration-200">
-                            {usernameMessage}
-                          </p>
-                        )}
-                        {usernameStatus === 'available' && usernameMessage && (
-                          <p className="text-sm font-medium text-green-600 animate-in slide-in-from-top-1 duration-200">
-                            {usernameMessage}
-                          </p>
-                        )}
                         <FormMessage />
                       </FormItem>
                     )}
