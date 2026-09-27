@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
 import ReCAPTCHA from "react-google-recaptcha";
 import { 
@@ -65,6 +65,7 @@ type SuccessResponse = {
 };
 
 export default function DMCANoticePage() {
+  const queryClient = useQueryClient();
   const recaptchaRef = useRef<ReCAPTCHA>(null);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [globalError, setGlobalError] = useState<string | null>(null);
@@ -129,6 +130,8 @@ export default function DMCANoticePage() {
     },
     onSuccess: (data) => {
       setSuccessData(data);
+      queryClient.invalidateQueries({ queryKey: ["/api/dmca/my-activity"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/dmca/my-claims"] });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
     onError: (err: any) => {

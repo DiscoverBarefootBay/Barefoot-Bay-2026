@@ -13,6 +13,7 @@ import { VendorCategoryBadge } from "@/components/shared/vendor-category-badge";
 import { useVendorCategoryCounts } from "@/hooks/use-vendor-category-counts";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { useCopyrightActivity } from "@/hooks/use-copyright-activity";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -27,6 +28,7 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
   
   // Check if we're viewing as a guest (or not logged in)
   const isViewingAsGuest = effectiveRole === 'guest' || !user;
+  const hasCopyrightActivity = useCopyrightActivity(isViewingAsGuest ? null : user?.id ?? null);
   const { 
     isCalendarEnabled, 
     isForumEnabled, 
@@ -262,10 +264,6 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
                 <div className="py-2 text-navy hover:text-coral">Sponsorship</div>
               </Link>
 
-              <Link href="/copyright-notices" onClick={onClose}>
-                <div className="py-2 text-navy hover:text-coral" data-testid="link-mobile-copyright-notices">Copyright Notices</div>
-              </Link>
-              
               <Link href="/contact-us" onClick={onClose}>
                 <div className="py-2 text-navy hover:text-coral">Contact Us</div>
               </Link>
@@ -273,6 +271,12 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
               {isAdmin && (
                 <Link href="/admin" onClick={onClose}>
                   <div className="py-2 text-navy hover:text-coral">Admin Dashboard</div>
+                </Link>
+              )}
+
+              {hasCopyrightActivity && (
+                <Link href="/copyright-notices" onClick={onClose}>
+                  <div className="py-2 text-navy hover:text-coral" data-testid="link-mobile-copyright-notices">Copyright Notices</div>
                 </Link>
               )}
               

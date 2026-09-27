@@ -74,7 +74,9 @@ describe("public DMCA endpoints", () => {
     app.set("trust proxy", 1); // mirror app.ts so req.ip semantics match production
     app.use(express.json());
     app.use((req: any, _res, next) => {
-      req.isAuthenticated = () => false;
+      const testId = req.headers["x-test-user"];
+      req.isAuthenticated = () => !!testId;
+      if (testId) req.user = { id: Number(testId), role: "user" };
       next();
     });
     app.use("/api/dmca", router);
@@ -148,6 +150,7 @@ describe("public DMCA endpoints", () => {
     assert.equal((submissions.rows[0] as any).ip_address, "192.0.2.25");
     assert.equal((submissions.rows[0] as any).signature_value, "Notice Claimant");
     assert.equal((submissions.rows[0] as any).submission_type, "notice");
+    assert.equal((submissions.rows[0] as any).submitted_by_user_id, null);
     // Immutable: the append-only trigger rejects edits.
     await assert.rejects(db.execute(sql`UPDATE dmca_submissions SET signature_value='tampered' WHERE id=${(submissions.rows[0] as any).id}`));
     assert.equal((submissions.rows[0] as any).form_payload.recaptchaToken, undefined);
@@ -186,6 +189,30 @@ describe("public DMCA endpoints", () => {
 
     const missing = await fetch(`${origin}/api/dmca/status/${"x".repeat(32)}`);
     assert.equal(missing.status, 404);
+  });
+
+  it("links a signed-in claimant to their own case, not to a supplied identity", async () => {
+    const ownerId = Number((await db.execute(sql`SELECT id FROM users ORDER BY id LIMIT 1`)).rows[0]?.id);
+    assert.ok(ownerId);
+    const response = await fetch(`${origin}/api/dmca/notices`, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-test-user": String(ownerId), "x-forwarded-for": "192.0.2.73" },
+      body: JSON.stringify({ ...validNotice, infringingUrls: ["https://barefootbay.com/forum/post/999999997"] }),
+    });
+    const created: any = await response.json();
+    assert.equal(response.status, 201, JSON.stringify(created));
+    const row = (await db.execute(sql`
+      SELECT c.id,s.submitted_by_user_id FROM dmca_cases c
+      JOIN dmca_submissions s ON s.dmca_case_id=c.id
+      WHERE c.case_number=${created.caseNumber}`)).rows[0] as any;
+    caseIds.push(Number(row.id));
+    assert.equal(Number(row.submitted_by_user_id), ownerId);
+    const forged = await fetch(`${origin}/api/dmca/notices`, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-test-user": String(ownerId), "x-forwarded-for": "192.0.2.74" },
+      body: JSON.stringify({ ...validNotice, submittedByUserId: ownerId + 1 }),
+    });
+    assert.equal(forged.status, 400);
   });
 
   it("rejects a failed CAPTCHA without creating a case", async () => {

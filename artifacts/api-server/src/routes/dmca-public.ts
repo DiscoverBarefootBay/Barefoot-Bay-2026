@@ -309,6 +309,7 @@ router.post("/notices", noticeLimiter, async (req, res, next) => {
       },
       submission: {
         submissionType: "notice", formPayload: payload, submittedByName: data.name, signatureValue: data.signature,
+        submittedByUserId: req.isAuthenticated?.() && (req.user as any)?.id ? Number((req.user as any).id) : null,
         ipAddress: ip, userAgent: req.headers["user-agent"] || null,
       },
       targets, submittedVia: "web_form", actor: { type: "public", id: null, ipAddress: ip },

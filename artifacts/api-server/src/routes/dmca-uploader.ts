@@ -7,6 +7,7 @@ import {
 } from "../dmca/dmca-service";
 import { DmcaCaseStatus as S } from "../dmca/state-machine";
 import { getContentTypeDef, isDmcaContentType } from "../dmca/content-registry";
+import { statusLabels } from "./dmca-public";
 
 const router = Router();
 const counterLimiter = rateLimit({
@@ -36,6 +37,35 @@ const statuses = [
   S.RESTORED, S.CLOSED,
 ] as string[];
 const statusArray = sql`ARRAY[${sql.join(statuses.map((s) => sql`${s}`), sql`, `)}]::text[]`;
+
+// Only takedown notices visible on the uploader page qualify; pre-takedown
+// investigations must not be disclosed to the alleged uploader.
+router.get("/my-activity", route(async (req, res) => {
+  res.setHeader("Cache-Control", "private, no-store");
+  const userId = Number((req.user as any).id);
+  const result = await db.execute(sql`
+    SELECT (
+      EXISTS (SELECT 1 FROM dmca_cases c JOIN dmca_targets t ON t.dmca_case_id=c.id
+        WHERE t.uploader_user_id=${userId} AND c.takedown_at IS NOT NULL AND c.status=ANY(${statusArray}))
+      OR EXISTS (SELECT 1 FROM dmca_submissions s
+        WHERE s.submitted_by_user_id=${userId} AND s.submission_type='notice')
+    ) AS has_activity`);
+  res.json({ hasActivity: result.rows[0]?.has_activity === true });
+}));
+
+router.get("/my-claims", route(async (req, res) => {
+  res.setHeader("Cache-Control", "private, no-store");
+  const userId = Number((req.user as any).id);
+  const result = await db.execute(sql`
+    SELECT DISTINCT c.id,c.case_number,c.received_at,c.updated_at,c.status
+    FROM dmca_cases c JOIN dmca_submissions s ON s.dmca_case_id=c.id
+    WHERE s.submitted_by_user_id=${userId} AND s.submission_type='notice'
+    ORDER BY c.received_at DESC,c.id DESC`);
+  res.json({ claims: result.rows.map((row: any) => ({
+    caseNumber: row.case_number, receivedAt: new Date(row.received_at).toISOString(),
+    updatedAt: new Date(row.updated_at).toISOString(), status: statusLabels[row.status] || "Under review",
+  })) });
+}));
 
 function publicStatus(status: string): { status: string; statusLabel: string } {
   if ([S.CONTENT_REMOVED, S.UPLOADER_NOTIFIED, S.COURT_ACTION_RECEIVED].includes(status as any)) return { status: "content_disabled", statusLabel: "Content disabled" };

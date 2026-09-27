@@ -52,6 +52,7 @@ import { VendorBadge } from "@/components/shared/vendor-badge";
 import { VendorCategoryBadge } from "@/components/shared/vendor-category-badge";
 import { useVendorCategoryCounts } from "@/hooks/use-vendor-category-counts";
 import { MobileMenu } from "./mobile-menu";
+import { useCopyrightActivity } from "@/hooks/use-copyright-activity";
 import { 
   FaHome, FaBriefcase, FaLeaf, FaStore, FaUtensils, FaCar, FaWrench, 
   FaHammer, FaPaintBrush, FaShoppingCart, FaWater, FaSwimmingPool,
@@ -108,7 +109,8 @@ import {
 } from "react-icons/fa";
 
 export function NavBar() {
-  const { user, logoutMutation } = useAuth();
+  const { user, effectiveRole, logoutMutation } = useAuth();
+  const hasCopyrightActivity = useCopyrightActivity(effectiveRole === "guest" ? null : user?.id ?? null);
   const { isAdmin } = usePermissions();
   const { 
     isCalendarEnabled, 
@@ -884,13 +886,6 @@ export function NavBar() {
                   </DropdownMenuItem>
 
                   <DropdownMenuItem className="hover:bg-coral/10 hover:text-coral focus:bg-coral/10 focus:text-coral py-2 mt-1">
-                    <Link href="/copyright-notices" className="flex items-center w-full" data-testid="link-account-copyright-notices">
-                      <Copyright className="mr-2 h-4 w-4" />
-                      <span>Copyright Notices</span>
-                    </Link>
-                  </DropdownMenuItem>
-
-                  <DropdownMenuItem className="hover:bg-coral/10 hover:text-coral focus:bg-coral/10 focus:text-coral py-2 mt-1">
                     <Link href="/contact-us" className="flex items-center w-full">
                       <MessageSquare className="mr-2 h-4 w-4" />
                       <span>Contact Us</span>
@@ -902,6 +897,15 @@ export function NavBar() {
                       <Link href="/admin" className="flex items-center w-full">
                         <Shield className="mr-2 h-4 w-4" />
                         <span>Admin Dashboard</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+
+                  {hasCopyrightActivity && (
+                    <DropdownMenuItem className="hover:bg-coral/10 hover:text-coral focus:bg-coral/10 focus:text-coral py-2 mt-1">
+                      <Link href="/copyright-notices" className="flex items-center w-full" data-testid="link-account-copyright-notices">
+                        <Copyright className="mr-2 h-4 w-4" />
+                        <span>Copyright Notices</span>
                       </Link>
                     </DropdownMenuItem>
                   )}

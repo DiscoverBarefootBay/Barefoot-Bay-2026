@@ -91,7 +91,7 @@ describe("DMCA uploader routes and persistence", () => {
   let server: ReturnType<ReturnType<typeof express>["listen"]>;
   let origin = "";
 
-  async function api(as: "uploader" | "other", method: string, path: string, body?: unknown) {
+  async function api(as: "uploader" | "other" | "none", method: string, path: string, body?: unknown) {
     const response = await fetch(`${origin}${path}`, {
       method,
       headers: { "content-type": "application/json", "x-test-user": as },
@@ -107,6 +107,9 @@ describe("DMCA uploader routes and persistence", () => {
       FROM users u WHERE u.email IS NOT NULL
         AND NOT EXISTS (SELECT 1 FROM user_copyright_events e WHERE e.user_id=u.id)
         AND NOT EXISTS (SELECT 1 FROM dmca_repeat_infringer_reviews r WHERE r.user_id=u.id)
+        AND NOT EXISTS (SELECT 1 FROM dmca_submissions s WHERE s.submitted_by_user_id=u.id AND s.submission_type='notice')
+        AND NOT EXISTS (SELECT 1 FROM dmca_targets t JOIN dmca_cases c ON c.id=t.dmca_case_id
+          WHERE t.uploader_user_id=u.id AND c.takedown_at IS NOT NULL)
       ORDER BY u.id LIMIT 3`);
     assert.equal(seed.rows.length, 3, "three users with email are required");
     [actorId, uploaderId, otherId] = seed.rows.map((r: any) => Number(r.id));
@@ -128,8 +131,8 @@ describe("DMCA uploader routes and persistence", () => {
     app.use(express.json());
     app.use((req: any, _res, next) => {
       const id = req.headers["x-test-user"] === "other" ? otherId : uploaderId;
-      req.isAuthenticated = () => true;
-      req.user = { id, username: `uploader-${id}`, role: "user" };
+      req.isAuthenticated = () => req.headers["x-test-user"] !== "none";
+      if (req.isAuthenticated()) req.user = { id, username: `uploader-${id}`, role: "user" };
       next();
     });
     app.use("/api/dmca", dmcaUploaderRouter);
@@ -182,6 +185,33 @@ describe("DMCA uploader routes and persistence", () => {
     });
   });
 
+  it("shows only account-linked claims, including closed ones, without exposing status tokens", async () => {
+    assert.equal((await api("none", "GET", "/api/dmca/my-activity")).status, 401);
+    assert.equal((await api("none", "GET", "/api/dmca/my-claims")).status, 401);
+    assert.equal((await api("uploader", "GET", "/api/dmca/my-activity")).body.hasActivity, false);
+    const before = await api("uploader", "GET", "/api/dmca/my-claims");
+    const created = await createCase({
+      actor: { type: "public", id: null },
+      claimant: { name: "Claim owner" },
+      submission: { submissionType: "notice", submittedByUserId: uploaderId, formPayload: {} },
+      targets: [{ contentType: "url", contentId: null, originalUrl: "https://barefootbay.com/not-found" }],
+      submittedVia: "web_form",
+    });
+    caseIds.push(created.id);
+    caseNumbers.push(created.caseNumber);
+    const owned = await api("uploader", "GET", "/api/dmca/my-claims");
+    assert.equal(owned.body.claims.length, before.body.claims.length + 1);
+    assert.ok(owned.body.claims.some((claim: any) => claim.caseNumber === created.caseNumber && claim.status === "Received"));
+    assert.equal((await api("uploader", "GET", "/api/dmca/my-activity")).body.hasActivity, true);
+    assert.equal((await api("other", "GET", "/api/dmca/my-claims")).body.claims.some((claim: any) => claim.caseNumber === created.caseNumber), false);
+    assert.equal((await api("other", "GET", "/api/dmca/my-activity")).body.hasActivity, false);
+    assert.equal(JSON.stringify(owned.body).includes(created.statusToken), false);
+    await db.execute(sql`UPDATE dmca_cases SET status='CLOSED' WHERE id=${created.id}`);
+    assert.equal((await api("uploader", "GET", "/api/dmca/my-activity")).body.hasActivity, true);
+    assert.ok((await api("uploader", "GET", "/api/dmca/my-claims")).body.claims.some((claim: any) =>
+      claim.caseNumber === created.caseNumber && claim.status === "Closed"));
+  });
+
   it("notifies the uploader, exposes only safe owner data, and accepts one immutable counter-notice", async () => {
     const post = await db.execute(sql`
       INSERT INTO forum_posts(title,content,category_id,user_id,media_urls)
@@ -230,6 +260,7 @@ describe("DMCA uploader routes and persistence", () => {
     const item = listed.body.cases.find((c: any) => c.caseNumber === created.caseNumber);
     assert.equal(item.status, "content_disabled");
     assert.equal(item.canSubmitCounterNotice, true);
+    assert.equal((await api("uploader", "GET", "/api/dmca/my-activity")).body.hasActivity, true);
     const detail = await api("uploader", "GET", `/api/dmca/my-cases/${created.caseNumber}`);
     assert.equal(detail.status, 200);
     const serialized = JSON.stringify(detail.body);
@@ -298,6 +329,7 @@ describe("DMCA uploader routes and persistence", () => {
       caseId: created.id, actor, reason: "Claimant withdrew the notice",
       notify: false, mode: "notice_withdrawn",
     });
+    assert.equal((await api("uploader", "GET", "/api/dmca/my-activity")).body.hasActivity, true);
     const events = await db.execute(sql`
       SELECT event_type,status,counts_toward_repeat_policy
       FROM user_copyright_events WHERE dmca_case_id=${created.id}`);
