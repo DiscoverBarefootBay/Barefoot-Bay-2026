@@ -535,7 +535,6 @@ describe("moderation-hidden recovery", () => {
       });
     }
   });
-
   it("searches only moderation-hidden posts for staff and requires an audited reason to restore", async () => {
     const postId = await insertPost();
     const path = `/api/admin/dmca/content/forum_post/${postId}/moderate`;

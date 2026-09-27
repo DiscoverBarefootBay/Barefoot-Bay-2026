@@ -48,9 +48,8 @@ export default function ModeratedPosts() {
       await dmcaFetch(`/content/${selected.contentType}/${selected.id}/moderate`, {
         method: "POST", body: { hidden: false, reason: reason.trim() },
       });
-      await queryClient.invalidateQueries({ queryKey: [DMCA_ADMIN_API, "moderated-content"] });
-      await queryClient.invalidateQueries({ queryKey: ["dmca-content-status", selected.contentType, String(selected.id)] });
-      await queryClient.invalidateQueries({ queryKey: ["/api"] });
+      // Content pages use different cache keys; restoration is rare, so refresh all views.
+      await queryClient.invalidateQueries();
       setSelected(null);
       setReason("");
       toast({ title: "Content unhidden" });
@@ -66,15 +65,19 @@ export default function ModeratedPosts() {
       <div className="mx-auto max-w-5xl p-4 md:p-8 space-y-6">
         <div>
           <h1 className="text-2xl font-bold">Hidden content</h1>
-          <p className="text-muted-foreground">Find content hidden by moderation. DMCA takedowns are managed separately.</p>
+          <p className="text-muted-foreground">Find content hidden by moderation. Items under DMCA cases or legal holds cannot be restored here; use the legal process instead.</p>
         </div>
-        <form className="flex flex-wrap gap-2" onSubmit={(event) => { event.preventDefault(); setPage(1); setSearch(input.trim()); }}>
-          <Label className="sr-only" htmlFor="hidden-content-type">Content type</Label>
-          <select id="hidden-content-type" className="h-10 rounded-md border border-input bg-background px-3 text-sm" value={type} onChange={event => { setType(event.target.value as keyof typeof types); setPage(1); }}>
-            {Object.entries(types).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-          </select>
-          <Label className="sr-only" htmlFor="hidden-post-search">ID, title, or text</Label>
-          <Input id="hidden-post-search" data-testid="input-hidden-post-search" className="max-w-md" maxLength={100} placeholder="Search by ID, title, or text" value={input} onChange={event => setInput(event.target.value)} />
+        <form className="flex flex-wrap items-end gap-2" onSubmit={event => { event.preventDefault(); setPage(1); setSearch(input.trim()); }}>
+          <div>
+            <Label htmlFor="hidden-content-type">Content type</Label>
+            <select id="hidden-content-type" className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm" value={type} onChange={event => { setType(event.target.value as keyof typeof types); setPage(1); }}>
+              {Object.entries(types).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+            </select>
+          </div>
+          <div className="flex-1 min-w-48">
+            <Label htmlFor="hidden-post-search">ID, title, or text</Label>
+            <Input id="hidden-post-search" data-testid="input-hidden-post-search" maxLength={100} placeholder="Search by ID, title, or text" value={input} onChange={event => setInput(event.target.value)} />
+          </div>
           <Button type="submit" data-testid="button-search-hidden-posts">Search</Button>
         </form>
         {list.isLoading && <p>Loading hidden content…</p>}
