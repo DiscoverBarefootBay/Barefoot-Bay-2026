@@ -433,11 +433,12 @@ export default function ProfileSettings() {
                     <FormControl>
                       <Input {...field} disabled={!isAdmin} />
                     </FormControl>
-                    {!isAdmin && (
-                      <FormDescription>
-                        Only administrators can change usernames
-                      </FormDescription>
-                    )}
+                    <FormDescription>
+                      Your username is the name other members will see across the site.
+                      {!isAdmin && (
+                        <span className="block mt-1">Only administrators can change usernames</span>
+                      )}
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
