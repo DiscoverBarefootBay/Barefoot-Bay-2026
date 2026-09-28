@@ -92,7 +92,7 @@ export default function PaymentDiagnostics() {
       </div>
       
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="flex w-full">
           <TabsTrigger value="system">System Status</TabsTrigger>
           <TabsTrigger value="payment">Payment Verification</TabsTrigger>
           <TabsTrigger value="subscription">Subscription Verification</TabsTrigger>

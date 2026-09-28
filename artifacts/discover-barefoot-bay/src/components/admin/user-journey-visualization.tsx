@@ -311,7 +311,7 @@ export function UserJourneyVisualization() {
       
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="flex w-full">
             <TabsTrigger value="path-transitions">Path Transitions</TabsTrigger>
             <TabsTrigger value="entry-pages">Entry Pages</TabsTrigger>
             <TabsTrigger value="exit-pages">Exit Pages</TabsTrigger>

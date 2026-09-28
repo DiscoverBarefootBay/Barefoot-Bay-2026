@@ -459,7 +459,7 @@ export default function StorePage() {
           onValueChange={setActiveCategory}
           className="mb-8"
         >
-          <TabsList className="grid w-full grid-cols-5 mb-8">
+          <TabsList className="flex w-full mb-8">
             <TabsTrigger value={ProductCategory.ALL}>All</TabsTrigger>
             <TabsTrigger value={ProductCategory.SPONSORSHIP}>Sponsorship</TabsTrigger>
             <TabsTrigger value={ProductCategory.APPAREL}>Apparel</TabsTrigger>

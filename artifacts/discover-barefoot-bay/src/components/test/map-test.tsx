@@ -97,7 +97,7 @@ export function MapTest() {
       </Card>
 
       <Tabs defaultValue="proxy" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="flex w-full">
           <TabsTrigger value="proxy">Server Proxy Approach</TabsTrigger>
           <TabsTrigger value="direct">Enhanced Component</TabsTrigger>
         </TabsList>

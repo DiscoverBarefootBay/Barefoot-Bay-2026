@@ -165,7 +165,7 @@ export default function OrderManagementPage() {
             </CardHeader>
             <CardContent>
               <Tabs value={currentTab} onValueChange={setCurrentTab} className="mb-6">
-                <TabsList className="grid w-full grid-cols-3">
+                <TabsList className="flex w-full">
                   <TabsTrigger value="all">All Orders</TabsTrigger>
                   <TabsTrigger value="printful">Printful Orders</TabsTrigger>
                   <TabsTrigger value="self-fulfilled">Self-Fulfilled</TabsTrigger>

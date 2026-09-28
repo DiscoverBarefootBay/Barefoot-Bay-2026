@@ -454,7 +454,7 @@ const AnalyticsDashboard: React.FC = () => {
 
           {/* Main Dashboard Tabs */}
           <Tabs defaultValue="traffic" className="w-full">
-            <TabsList className="grid grid-cols-5 w-full md:w-auto">
+            <TabsList className="flex w-full md:w-auto">
               <TabsTrigger value="traffic">Traffic</TabsTrigger>
               <TabsTrigger value="pages">Pages</TabsTrigger>
               <TabsTrigger value="users">Users</TabsTrigger>

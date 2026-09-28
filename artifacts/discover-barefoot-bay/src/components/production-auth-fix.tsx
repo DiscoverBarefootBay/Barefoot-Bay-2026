@@ -215,7 +215,7 @@ export default function ProductionAuthFix() {
       </p>
       
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="flex w-full">
           <TabsTrigger value="diagnose">Diagnose</TabsTrigger>
           <TabsTrigger value="fix">Fix</TabsTrigger>
           <TabsTrigger value="test">Database Test</TabsTrigger>

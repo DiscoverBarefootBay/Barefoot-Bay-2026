@@ -400,7 +400,7 @@ export default function CommunitySettings() {
       <h1 className="text-3xl font-bold mb-6">Community Settings</h1>
       
       <Tabs defaultValue="user-roles" value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="flex w-full">
           <TabsTrigger value="blocked-users" className="text-base">
             <div className="flex items-center gap-2">
               <Ban size={18} />

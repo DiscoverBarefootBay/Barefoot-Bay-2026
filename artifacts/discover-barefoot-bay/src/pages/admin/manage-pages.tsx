@@ -898,7 +898,7 @@ export default function ManagePagesPage() {
       <h1 className="text-3xl font-bold mb-6">Community Content Management</h1>
       
       <Tabs defaultValue="pages" className="mb-8">
-        <TabsList className="grid grid-cols-2 mb-6">
+        <TabsList className="flex max-w-full mb-6">
           <TabsTrigger value="pages">Content Pages</TabsTrigger>
           <TabsTrigger value="community-categories">Community Categories</TabsTrigger>
         </TabsList>

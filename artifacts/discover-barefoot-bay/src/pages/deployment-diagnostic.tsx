@@ -384,7 +384,7 @@ export default function DeploymentDiagnosticPage() {
           </CardHeader>
           <CardContent className="pt-6">
             <Tabs defaultValue="session" value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid grid-cols-4 mb-4">
+              <TabsList className="flex w-full mb-4">
                 <TabsTrigger value="session">Session</TabsTrigger>
                 <TabsTrigger value="request">Request</TabsTrigger>
                 <TabsTrigger value="environment">Environment</TabsTrigger>

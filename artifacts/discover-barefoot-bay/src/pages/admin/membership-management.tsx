@@ -34,7 +34,7 @@ export default function MembershipManagementPage() {
           </Alert>
 
           <Tabs defaultValue="subscriptions" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 max-w-xl">
+            <TabsList className="flex w-full max-w-xl">
               <TabsTrigger value="subscriptions">
                 <Layers className="h-4 w-4 mr-2" /> 
                 Subscriptions

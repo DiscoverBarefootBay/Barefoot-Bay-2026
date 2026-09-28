@@ -282,7 +282,7 @@ export function UserSegments() {
           value={activeTab} 
           onValueChange={setActiveTab}
         >
-          <TabsList className="grid w-full grid-cols-4 mb-6">
+          <TabsList className="flex w-full mb-6">
             <TabsTrigger value="activity">Activity</TabsTrigger>
             <TabsTrigger value="frequency">Frequency</TabsTrigger>
             <TabsTrigger value="retention">Retention</TabsTrigger>

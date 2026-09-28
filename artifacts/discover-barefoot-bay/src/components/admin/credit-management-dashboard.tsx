@@ -271,7 +271,7 @@ export function CreditManagementDashboard() {
       </div>
 
       <Tabs defaultValue="users" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="flex w-full">
           <TabsTrigger value="users">
             <Users className="h-4 w-4 mr-2" />
             User Credits

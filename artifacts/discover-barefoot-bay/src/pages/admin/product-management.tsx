@@ -408,7 +408,7 @@ export default function ProductManagementPage() {
       </div>
       
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="flex w-full">
           <TabsTrigger value="products">Products</TabsTrigger>
           <TabsTrigger value="designs">Design Upload</TabsTrigger>
           <TabsTrigger value="printful">Printful Products</TabsTrigger>
