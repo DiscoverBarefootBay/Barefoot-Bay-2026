@@ -25,3 +25,4 @@
 - [UI theme quirks](ui-theme-quirks.md) — shadcn `destructive` button variant is invisible in this theme; use explicit red classes.
 - [Legal acceptance scope](legal-consent-decisions.md) — every published change requires reacceptance; snapshot publication is not a newly assigned legal effective date.
 - [Legal policy rollout gap](legal-policy-rollout-gap.md) — live schema tables may exist without policy publication functions; a 503 cannot be fixed by re-login or a client-only modal.
+- [Message body formats](message-body-formats.md) — messages lack a saved text/HTML format marker; favor escaped plain text with preserved newlines and treat only recognizable legacy rich text as sanitized HTML.

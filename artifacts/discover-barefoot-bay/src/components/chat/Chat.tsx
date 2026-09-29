@@ -4,6 +4,7 @@ import { MessageList } from './MessageList';
 import { MessageDetail } from './MessageDetail';
 import { EnhancedMessageComposer } from './EnhancedMessageComposer';
 import { MessageSendProgress } from './MessageSendProgress';
+import { MessageBody } from './MessageBody';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import '../../styles/messages.css';
 
@@ -77,14 +78,7 @@ const ThreadMessage: React.FC<{
       </div>
 
       <div className="bg-gray-50 p-3 rounded-lg mb-2">
-        <div className="prose max-w-none">
-          {message.content && typeof message.content === 'string' 
-            ? message.content.split('\n').map((paragraph, index) => (
-                <p key={index} className="text-sm">{paragraph}</p>
-              ))
-            : <p className="text-sm text-gray-500">No content</p>
-          }
-        </div>
+        {message.content ? <MessageBody content={message.content} /> : <p className="text-sm text-gray-500">No content</p>}
       </div>
 
       {/* Attachments if any */}

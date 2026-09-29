@@ -5,6 +5,7 @@ import { getMediaUrl } from '../../lib/media-helper';
 import { useChat } from '../../context/ChatContext';
 import { useAuth } from "@/components/providers/auth-provider";
 import { submitMessageForm } from "./message-submission";
+import { MessageBody } from './MessageBody';
 
 interface MessageDetailProps {
   message: Message;
@@ -59,10 +60,7 @@ const MessageReply: React.FC<{
           <div className="text-xs text-gray-500">{formatDate(reply.timestamp || reply.createdAt)}</div>
         </div>
       </div>
-      <div 
-        className="prose prose-sm max-w-none"
-        dangerouslySetInnerHTML={{ __html: reply.content }}
-      />
+      <MessageBody content={reply.content} />
       
       {/* Display reply attachments if any */}
       {reply.attachments && reply.attachments.length > 0 && (
@@ -363,10 +361,7 @@ export const MessageDetail: React.FC<MessageDetailProps> = ({
       </div>
 
       <div className="bg-white p-6 rounded-lg border border-gray-200 mb-6">
-        <div 
-          className="prose prose-sm max-w-none"
-          dangerouslySetInnerHTML={{ __html: message.content }}
-        />
+        <MessageBody content={message.content} />
       </div>
 
       {/* Display message attachments if any */}
