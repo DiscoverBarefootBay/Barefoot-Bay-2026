@@ -11,10 +11,17 @@ import { isAdmin } from '../utils/role-utils';
 import * as fs from 'fs';
 import * as path from 'path';
 import { uploadAttachmentToObjectStorage, getAttachmentUrl } from '../attachment-storage-proxy';
-import { sendMessageEmail, canReceiveNotificationEmail } from '../sendgrid-service';
+import { reserveMessageSend, recordCreatedMessage, enqueueMessageEmail, listSendProgress } from "../message-email-progress";
+import { ListMessageSendProgressResponse } from "@workspace/api-zod";
 
 const router = express.Router();
 const upload = multer({ dest: 'temp_upload/' });
+
+router.get('/send-progress', authenticateUser, async (req, res) => {
+  if (!req.user?.id) return res.sendStatus(401);
+  // Sender scope is derived exclusively from authentication, never query input.
+  return res.json(ListMessageSendProgressResponse.parse({ jobs: await listSendProgress(req.user.id) }));
+});
 
 // Ensure temp upload directory exists
 if (!fs.existsSync('temp_upload')) {
@@ -470,7 +477,7 @@ router.get('/:id', authenticateUser, async (req, res) => {
 });
 
 // Reply to a message
-router.post('/:id/reply', authenticateUser, upload.array('attachments'), async (req, res) => {
+router.post('/:id/reply', authenticateUser, upload.array('attachments'), reserveMessageSend, async (req, res) => {
   try {
     console.log('📨 Processing reply to message ID:', req.params.id);
     
@@ -561,6 +568,7 @@ router.post('/:id/reply', authenticateUser, upload.array('attachments'), async (
       })
       .returning();
     
+    await recordCreatedMessage(res.locals.sendRequest, newMessage[0].id);
     if (messageType === 'user' && recipientId) {
       // Add specific user as recipient
       await db.insert(messageRecipients)
@@ -781,230 +789,8 @@ router.post('/:id/reply', authenticateUser, upload.array('attachments'), async (
     // replying via /messages with email delivery enabled get the same
     // SendGrid email the recipients receive (sender self-copy).
     if (sendEmail === 'true') {
-      try {
-        const replySubject = `Re: ${parentMessage[0].subject}`;
-        console.log('[SendGrid Message] Email sending requested for reply:', newMessage[0].id);
-        
-        let recipientEmails: string[] = [];
-        
-        if (targetedUserIds && targetedUserIds.length > 0) {
-          console.log(`[SendGrid Message] 📊 Fetching email data for ${targetedUserIds.length} targeted users`);
-          
-          const targetedUsersData = await db.select({
-            id: users.id,
-            email: users.email,
-            username: users.username,
-            fullName: users.fullName,
-            emailNotificationsEnabled: users.emailNotificationsEnabled
-          })
-          .from(users)
-          .where(inArray(users.id, targetedUserIds));
-          
-          console.log(`[SendGrid Message] 📋 Retrieved ${targetedUsersData.length} user records from database`);
-          
-          const usersWithValidEmails: string[] = [];
-          const usersWithoutValidEmails: Array<{id: number, name: string, email: string | null, username: string | null}> = [];
-          
-          targetedUsersData.forEach(user => {
-            const emailAddress = user.email || user.username;
-            const userName = user.fullName || user.username || `User ID ${user.id}`;
-            
-            // Honor the global unsubscribe flag: never email users who turned
-            // off email notifications, even when explicitly targeted.
-            if (!canReceiveNotificationEmail(user)) {
-              console.log(`[SendGrid Message] 🚫 Skipping ${userName} (ID: ${user.id}) - unsubscribed from email notifications`);
-              return;
-            }
-            
-            if (emailAddress && emailAddress.includes('@')) {
-              usersWithValidEmails.push(emailAddress);
-              console.log(`[SendGrid Message] ✅ Valid email found for ${userName}: ${emailAddress}`);
-            } else {
-              usersWithoutValidEmails.push({
-                id: user.id,
-                name: userName,
-                email: user.email,
-                username: user.username
-              });
-              console.log(`[SendGrid Message] ❌ No valid email for ${userName} (email: ${user.email || 'null'}, username: ${user.username || 'null'})`);
-            }
-          });
-          
-          recipientEmails = usersWithValidEmails;
-          
-          console.log(`[SendGrid Message] ═══════════════════════════════════════════`);
-          console.log(`[SendGrid Message] 📧 EMAIL SENDING SUMMARY (reply)`);
-          console.log(`[SendGrid Message] Total targeted users: ${targetedUserIds.length}`);
-          console.log(`[SendGrid Message] Users with valid emails: ${usersWithValidEmails.length}`);
-          console.log(`[SendGrid Message] Users WITHOUT valid emails: ${usersWithoutValidEmails.length}`);
-          
-          if (usersWithoutValidEmails.length > 0) {
-            console.log(`[SendGrid Message] ⚠️  WARNING: ${usersWithoutValidEmails.length} users will NOT receive emails!`);
-            console.log(`[SendGrid Message] Users being skipped:`);
-            usersWithoutValidEmails.forEach(user => {
-              console.log(`[SendGrid Message]   - ${user.name} (ID: ${user.id})`);
-            });
-          }
-          
-          if (usersWithValidEmails.length === 0) {
-            console.log(`[SendGrid Message] ⚠️  CRITICAL: No valid email addresses found! No emails will be sent.`);
-          } else {
-            console.log(`[SendGrid Message] 📨 Will send ${usersWithValidEmails.length} emails`);
-          }
-          console.log(`[SendGrid Message] ═══════════════════════════════════════════`);
-        } else if (recipientId) {
-          const recipientData = await db.select({
-            email: users.email,
-            username: users.username,
-            emailNotificationsEnabled: users.emailNotificationsEnabled
-          })
-          .from(users)
-          .where(eq(users.id, typeof recipientId === 'string' ? parseInt(recipientId, 10) : recipientId))
-          .limit(1);
-          
-          if (recipientData.length > 0) {
-            if (!canReceiveNotificationEmail(recipientData[0])) {
-              console.log(`[SendGrid Message] 🚫 Recipient (ID: ${recipientId}) has unsubscribed from email notifications - no email will be sent`);
-            } else {
-              const recipientEmail = recipientData[0].email || recipientData[0].username;
-              if (recipientEmail && recipientEmail.includes('@')) {
-                recipientEmails.push(recipientEmail);
-              }
-            }
-          }
-          
-          console.log(`[SendGrid Message] Found ${recipientEmails.length} email address for individual recipient`);
-        }
-        
-        // Get sender info (also used for self-copy below)
-        const senderData = await db.select({
-          email: users.email,
-          username: users.username,
-          fullName: users.fullName,
-          emailNotificationsEnabled: users.emailNotificationsEnabled
-        })
-        .from(users)
-        .where(eq(users.id, currentUserId))
-        .limit(1);
-        
-        const senderDisplayName = senderData[0]?.fullName || senderData[0]?.username || 'Message System';
-        const senderEmail = senderData[0]?.email || 'noreply@barefootbay.com';
-        
-        // Send the sender a copy of the email so they have a record in their own inbox.
-        // Skip if the sender has no valid email on file - rest of recipients still get emailed.
-        const senderInboxAddress = senderData[0]?.email || senderData[0]?.username;
-        if (senderData[0] && !canReceiveNotificationEmail(senderData[0])) {
-          console.log(`[SendGrid Message] 🚫 Sender (ID: ${currentUserId}) has unsubscribed from email notifications - skipping self-copy`);
-        } else if (senderInboxAddress && senderInboxAddress.includes('@')) {
-          const alreadyIncluded = recipientEmails.some(
-            e => e.toLowerCase() === senderInboxAddress.toLowerCase()
-          );
-          if (alreadyIncluded) {
-            console.log(`[SendGrid Message] 📨 Sender ${senderInboxAddress} is already in the recipient list; no duplicate self-copy will be sent`);
-          } else {
-            recipientEmails.push(senderInboxAddress);
-            console.log(`[SendGrid Message] 📨 Sender added as additional recipient for self-copy: ${senderInboxAddress} (recipient count now ${recipientEmails.length})`);
-          }
-        } else {
-          console.log(`[SendGrid Message] ⚠️ Sender (ID: ${currentUserId}) has no valid email on file - skipping self-copy. Other recipients will still receive the email.`);
-        }
-
-        // Normalize to lowercase and dedupe so two users sharing a mailbox
-        // (e.g. a couple registered with the same email) only get one copy.
-        const recipientCountBeforeDedup = recipientEmails.length;
-        recipientEmails = Array.from(
-          new Set(recipientEmails.map(e => e.toLowerCase()))
-        );
-        if (recipientEmails.length !== recipientCountBeforeDedup) {
-          const duplicatesRemoved = recipientCountBeforeDedup - recipientEmails.length;
-          console.log(`[SendGrid Message] 🧹 Removed ${duplicatesRemoved} duplicate reply recipient email(s); ${recipientEmails.length} unique mailbox(es) will be emailed`);
-        }
-
-        if (recipientEmails.length > 0) {
-          // Prepare email attachments from uploaded files (if any)
-          const emailAttachments: Array<{ content: string; filename: string; type: string }> = [];
-          
-          if (uploadedAttachments.length > 0) {
-            console.log(`[SendGrid Message] Processing ${uploadedAttachments.length} attachment(s) for email`);
-            
-            for (const attachment of uploadedAttachments) {
-              try {
-                if (fs.existsSync(attachment.path)) {
-                  const fileBuffer = fs.readFileSync(attachment.path);
-                  const base64Content = fileBuffer.toString('base64');
-                  
-                  emailAttachments.push({
-                    content: base64Content,
-                    filename: attachment.filename,
-                    type: attachment.mimetype
-                  });
-                  
-                  console.log(`[SendGrid Message] Added attachment to email: ${attachment.filename} (${attachment.mimetype})`);
-                } else {
-                  console.warn(`[SendGrid Message] Attachment file not found: ${attachment.path}`);
-                }
-              } catch (attachmentError) {
-                console.error(`[SendGrid Message] Error processing attachment ${attachment.filename}:`, attachmentError);
-              }
-            }
-          }
-          
-          let successCount = 0;
-          const failedEmails: Array<{email: string, error?: string}> = [];
-          
-          console.log(`[SendGrid Message] 📤 Starting to send ${recipientEmails.length} reply emails...`);
-          
-          for (const recipientEmail of recipientEmails) {
-            try {
-              const success = await sendMessageEmail(
-                recipientEmail,
-                replySubject,
-                content,
-                senderDisplayName,
-                senderEmail,
-                emailAttachments.length > 0 ? emailAttachments : undefined
-              );
-              
-              if (success) {
-                successCount++;
-                console.log(`[SendGrid Message] ✅ Email sent successfully to ${recipientEmail}`);
-              } else {
-                failedEmails.push({email: recipientEmail, error: 'SendGrid returned false'});
-                console.error(`[SendGrid Message] ❌ Failed to send email to ${recipientEmail} (sendMessageEmail returned false)`);
-              }
-            } catch (emailError: any) {
-              const errorMessage = emailError?.message || 'Unknown error';
-              failedEmails.push({email: recipientEmail, error: errorMessage});
-              console.error(`[SendGrid Message] ❌ Error sending email to ${recipientEmail}:`, emailError);
-            }
-          }
-          
-          console.log(`[SendGrid Message] ═══════════════════════════════════════════`);
-          console.log(`[SendGrid Message] 📬 FINAL EMAIL DELIVERY REPORT (reply)`);
-          console.log(`[SendGrid Message] Successfully sent: ${successCount}/${recipientEmails.length} emails`);
-          
-          if (failedEmails.length > 0) {
-            console.log(`[SendGrid Message] ⚠️  Failed to send ${failedEmails.length} emails:`);
-            failedEmails.forEach(failure => {
-              console.log(`[SendGrid Message]   - ${failure.email}: ${failure.error || 'Unknown error'}`);
-            });
-          }
-          
-          if (successCount === 0 && recipientEmails.length > 0) {
-            console.log(`[SendGrid Message] 🚨 CRITICAL: ALL email sends failed! Check SendGrid configuration.`);
-          } else if (successCount === recipientEmails.length) {
-            console.log(`[SendGrid Message] ✅ All emails sent successfully!`);
-          }
-          console.log(`[SendGrid Message] ═══════════════════════════════════════════`);
-        } else {
-          console.log('[SendGrid Message] No valid email addresses found for reply recipients');
-        }
-      } catch (emailError) {
-        console.error('[SendGrid Message] Error in reply email sending process:', emailError);
-        // Don't fail the reply creation if email fails, just log the error
-      }
+      await enqueueMessageEmail(res.locals.sendRequest, newMessage[0].id, currentUserId, Array.isArray(req.files) ? req.files.length : 0);
     }
-    
     // Format response with all needed data
     const messageResponse = {
       ...newMessage[0],
@@ -1042,7 +828,7 @@ router.post('/:id/reply', authenticateUser, upload.array('attachments'), async (
 });
 
 // Create a new message
-router.post('/', authenticateUser, upload.array('attachments'), async (req, res) => {
+router.post('/', authenticateUser, upload.array('attachments'), reserveMessageSend, async (req, res) => {
   try {
     const { recipient, subject, content, templateId, sendEmail } = req.body;
     const senderId = req.user?.id;
@@ -1164,6 +950,7 @@ router.post('/', authenticateUser, upload.array('attachments'), async (req, res)
       
     // Use the result from the insert operation instead of querying again
     const newMessage = result[0];
+    await recordCreatedMessage(res.locals.sendRequest, newMessage.id);
     
     // Create message recipients based on recipient type
     if (recipientType.startsWith('template_')) {
@@ -1409,256 +1196,11 @@ router.post('/', authenticateUser, upload.array('attachments'), async (req, res)
       }
     }
     
-    // Send email if requested
+    // The request only enqueues; the durable worker records provider outcomes.
     if (sendEmail === 'true') {
-      try {
-        console.log('[SendGrid Message] Email sending requested for message:', newMessage.id);
-        
-        // Get recipient email addresses based on the recipient type
-        let recipientEmails: string[] = [];
-        
-        if (targetedUserIds && targetedUserIds.length > 0) {
-          // For template-targeted or admin messages, get emails from targeted users
-          console.log(`[SendGrid Message] 📊 Fetching email data for ${targetedUserIds.length} targeted users`);
-          
-          const targetedUsersData = await db.select({
-            id: users.id,
-            email: users.email,
-            username: users.username,
-            fullName: users.fullName,
-            emailNotificationsEnabled: users.emailNotificationsEnabled
-          })
-          .from(users)
-          .where(inArray(users.id, targetedUserIds));
-          
-          console.log(`[SendGrid Message] 📋 Retrieved ${targetedUsersData.length} user records from database`);
-          
-          // Track users with and without valid emails for detailed logging
-          const usersWithValidEmails: string[] = [];
-          const usersWithoutValidEmails: Array<{id: number, name: string, email: string | null, username: string | null}> = [];
-          
-          // Process each user and categorize them
-          targetedUsersData.forEach(user => {
-            const emailAddress = user.email || user.username;
-            const userName = user.fullName || user.username || `User ID ${user.id}`;
-            
-            // Honor the global unsubscribe flag: never email users who turned
-            // off email notifications, even when explicitly targeted.
-            if (!canReceiveNotificationEmail(user)) {
-              console.log(`[SendGrid Message] 🚫 Skipping ${userName} (ID: ${user.id}) - unsubscribed from email notifications`);
-              return;
-            }
-            
-            if (emailAddress && emailAddress.includes('@')) {
-              usersWithValidEmails.push(emailAddress);
-              console.log(`[SendGrid Message] ✅ Valid email found for ${userName}: ${emailAddress}`);
-            } else {
-              usersWithoutValidEmails.push({
-                id: user.id,
-                name: userName,
-                email: user.email,
-                username: user.username
-              });
-              console.log(`[SendGrid Message] ❌ No valid email for ${userName} (email: ${user.email || 'null'}, username: ${user.username || 'null'})`);
-            }
-          });
-          
-          recipientEmails = usersWithValidEmails;
-          
-          // Log comprehensive summary
-          console.log(`[SendGrid Message] ═══════════════════════════════════════════`);
-          console.log(`[SendGrid Message] 📧 EMAIL SENDING SUMMARY`);
-          console.log(`[SendGrid Message] Total targeted users: ${targetedUserIds.length}`);
-          console.log(`[SendGrid Message] Users with valid emails: ${usersWithValidEmails.length}`);
-          console.log(`[SendGrid Message] Users WITHOUT valid emails: ${usersWithoutValidEmails.length}`);
-          
-          if (usersWithoutValidEmails.length > 0) {
-            console.log(`[SendGrid Message] ⚠️  WARNING: ${usersWithoutValidEmails.length} users will NOT receive emails!`);
-            console.log(`[SendGrid Message] Users being skipped:`);
-            usersWithoutValidEmails.forEach(user => {
-              console.log(`[SendGrid Message]   - ${user.name} (ID: ${user.id})`);
-            });
-          }
-          
-          if (usersWithValidEmails.length === 0) {
-            console.log(`[SendGrid Message] ⚠️  CRITICAL: No valid email addresses found! No emails will be sent.`);
-          } else {
-            console.log(`[SendGrid Message] 📨 Will send ${usersWithValidEmails.length} emails`);
-          }
-          console.log(`[SendGrid Message] ═══════════════════════════════════════════`);
-        } else if (recipientId) {
-          // For individual recipient, get their email
-          const recipientData = await db.select({
-            email: users.email,
-            username: users.username,
-            emailNotificationsEnabled: users.emailNotificationsEnabled
-          })
-          .from(users)
-          .where(eq(users.id, typeof recipientId === 'string' ? parseInt(recipientId, 10) : recipientId))
-          .limit(1);
-          
-          if (recipientData.length > 0) {
-            if (!canReceiveNotificationEmail(recipientData[0])) {
-              console.log(`[SendGrid Message] 🚫 Recipient (ID: ${recipientId}) has unsubscribed from email notifications - no email will be sent`);
-            } else {
-              const recipientEmail = recipientData[0].email || recipientData[0].username;
-              if (recipientEmail && recipientEmail.includes('@')) {
-                recipientEmails.push(recipientEmail);
-              }
-            }
-          }
-          
-          console.log(`[SendGrid Message] Found ${recipientEmails.length} email address for individual recipient`);
-        }
-        
-        // Get sender info (also used for self-copy below)
-        const senderData = await db.select({
-          email: users.email,
-          username: users.username,
-          fullName: users.fullName,
-          emailNotificationsEnabled: users.emailNotificationsEnabled
-        })
-        .from(users)
-        .where(eq(users.id, senderId))
-        .limit(1);
-        
-        const senderName = senderData[0]?.fullName || senderData[0]?.username || 'Message System';
-        const senderEmail = senderData[0]?.email || 'noreply@barefootbay.com';
-        
-        // Send the sender a copy of the email so they have a record in their own inbox.
-        // Skip if the sender has no valid email on file - rest of recipients still get emailed.
-        const senderInboxAddress = senderData[0]?.email || senderData[0]?.username;
-        if (senderData[0] && !canReceiveNotificationEmail(senderData[0])) {
-          console.log(`[SendGrid Message] 🚫 Sender (ID: ${senderId}) has unsubscribed from email notifications - skipping self-copy`);
-        } else if (senderInboxAddress && senderInboxAddress.includes('@')) {
-          const alreadyIncluded = recipientEmails.some(
-            e => e.toLowerCase() === senderInboxAddress.toLowerCase()
-          );
-          if (alreadyIncluded) {
-            console.log(`[SendGrid Message] 📨 Sender ${senderInboxAddress} is already in the recipient list; no duplicate self-copy will be sent`);
-          } else {
-            recipientEmails.push(senderInboxAddress);
-            console.log(`[SendGrid Message] 📨 Sender added as additional recipient for self-copy: ${senderInboxAddress} (recipient count now ${recipientEmails.length})`);
-          }
-        } else {
-          console.log(`[SendGrid Message] ⚠️ Sender (ID: ${senderId}) has no valid email on file - skipping self-copy. Other recipients will still receive the email.`);
-        }
-
-        // Normalize to lowercase and dedupe so two users sharing a mailbox
-        // (e.g. a couple registered with the same email) only get one copy.
-        const recipientCountBeforeDedup = recipientEmails.length;
-        recipientEmails = Array.from(
-          new Set(recipientEmails.map(e => e.toLowerCase()))
-        );
-        if (recipientEmails.length !== recipientCountBeforeDedup) {
-          const duplicatesRemoved = recipientCountBeforeDedup - recipientEmails.length;
-          console.log(`[SendGrid Message] 🧹 Removed ${duplicatesRemoved} duplicate recipient email(s); ${recipientEmails.length} unique mailbox(es) will be emailed`);
-        }
-
-        // Send email to each recipient
-        if (recipientEmails.length > 0) {
-          
-          // Process template variables in content if templateId exists
-          let processedContent = content;
-          if (templateId && templateId !== 'custom') {
-            // Replace template variables - this is a basic implementation
-            // In a real scenario, you'd replace these with actual user data
-            processedContent = content
-              .replace(/\{\{firstName\}\}/g, 'Member')
-              .replace(/\{\{expirationDate\}\}/g, '[Date]');
-          }
-          
-          // Prepare email attachments from uploaded files (if any)
-          let emailAttachments: Array<{ content: string; filename: string; type: string }> = [];
-          
-          if (uploadedAttachments.length > 0) {
-            console.log(`[SendGrid Message] Processing ${uploadedAttachments.length} attachment(s) for email`);
-            
-            for (const attachment of uploadedAttachments) {
-              try {
-                // Check if file exists
-                if (fs.existsSync(attachment.path)) {
-                  // Read file and convert to base64
-                  const fileBuffer = fs.readFileSync(attachment.path);
-                  const base64Content = fileBuffer.toString('base64');
-                  
-                  emailAttachments.push({
-                    content: base64Content,
-                    filename: attachment.filename,
-                    type: attachment.mimetype
-                  });
-                  
-                  console.log(`[SendGrid Message] Added attachment to email: ${attachment.filename} (${attachment.mimetype})`);
-                } else {
-                  console.warn(`[SendGrid Message] Attachment file not found: ${attachment.path}`);
-                }
-              } catch (attachmentError) {
-                console.error(`[SendGrid Message] Error processing attachment ${attachment.filename}:`, attachmentError);
-                // Continue with other attachments even if one fails
-              }
-            }
-          }
-          
-          // Send email to each recipient using the proper template
-          let successCount = 0;
-          let failedEmails: Array<{email: string, error?: string}> = [];
-          
-          console.log(`[SendGrid Message] 📤 Starting to send ${recipientEmails.length} emails...`);
-          
-          for (const recipientEmail of recipientEmails) {
-            try {
-              const success = await sendMessageEmail(
-                recipientEmail,
-                subject,
-                processedContent,
-                senderName,
-                senderEmail,
-                emailAttachments.length > 0 ? emailAttachments : undefined
-              );
-              
-              if (success) {
-                successCount++;
-                console.log(`[SendGrid Message] ✅ Email sent successfully to ${recipientEmail}`);
-              } else {
-                failedEmails.push({email: recipientEmail, error: 'SendGrid returned false'});
-                console.error(`[SendGrid Message] ❌ Failed to send email to ${recipientEmail} (sendMessageEmail returned false)`);
-              }
-            } catch (emailError: any) {
-              const errorMessage = emailError?.message || 'Unknown error';
-              failedEmails.push({email: recipientEmail, error: errorMessage});
-              console.error(`[SendGrid Message] ❌ Error sending email to ${recipientEmail}:`, emailError);
-              // Continue sending to other recipients even if one fails
-            }
-          }
-          
-          // Final summary
-          console.log(`[SendGrid Message] ═══════════════════════════════════════════`);
-          console.log(`[SendGrid Message] 📬 FINAL EMAIL DELIVERY REPORT`);
-          console.log(`[SendGrid Message] Successfully sent: ${successCount}/${recipientEmails.length} emails`);
-          
-          if (failedEmails.length > 0) {
-            console.log(`[SendGrid Message] ⚠️  Failed to send ${failedEmails.length} emails:`);
-            failedEmails.forEach(failure => {
-              console.log(`[SendGrid Message]   - ${failure.email}: ${failure.error || 'Unknown error'}`);
-            });
-          }
-          
-          if (successCount === 0 && recipientEmails.length > 0) {
-            console.log(`[SendGrid Message] 🚨 CRITICAL: ALL email sends failed! Check SendGrid configuration.`);
-          } else if (successCount === recipientEmails.length) {
-            console.log(`[SendGrid Message] ✅ All emails sent successfully!`);
-          }
-          console.log(`[SendGrid Message] ═══════════════════════════════════════════`);
-        } else {
-          console.log('[SendGrid Message] No valid email addresses found for recipients');
-        }
-      } catch (emailError) {
-        console.error('[SendGrid Message] Error in email sending process:', emailError);
-        // Don't fail the message creation if email fails, just log the error
-      }
+      await enqueueMessageEmail(res.locals.sendRequest, newMessage.id, senderId, Array.isArray(req.files) ? req.files.length : 0);
     }
-    
-    return res.status(201).json({ message: 'Message sent successfully', data: newMessage });
+    return res.status(201).json({ message: newMessage, data: newMessage, success: true });
   } catch (error) {
     console.error('Error creating message:', error);
     

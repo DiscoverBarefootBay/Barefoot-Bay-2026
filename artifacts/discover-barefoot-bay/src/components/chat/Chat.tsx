@@ -3,6 +3,7 @@ import { useChat, Message } from '../../context/ChatContext';
 import { MessageList } from './MessageList';
 import { MessageDetail } from './MessageDetail';
 import { EnhancedMessageComposer } from './EnhancedMessageComposer';
+import { MessageSendProgress } from './MessageSendProgress';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import '../../styles/messages.css';
 
@@ -355,6 +356,7 @@ const MessageComposer: React.FC<{
 
 // Main Chat component
 const Chat = () => {
+  const [submitting, setSubmitting] = useState(false);
   const { 
     messages, 
     selectedMessage,
@@ -391,6 +393,8 @@ const Chat = () => {
 
   // Handle message submission
   const handleSubmitMessage = async (formData: FormData) => {
+    if (submitting) return;
+    setSubmitting(true);
     try {
       console.log('Sending message...');
 
@@ -400,14 +404,16 @@ const Chat = () => {
         subject: formData.get('subject'),
         content: formData.get('content'),
         sendEmail: formData.get('sendEmail'),
+        templateId: formData.get('templateId'),
         attachments: formData.getAll('attachments')
       });
 
       console.log('Message sent successfully, new message object:', newMessage);
+      if (!newMessage?.id) return;
 
       // Close composer and show success message
       setShowComposer(false);
-      setSuccessMessage('Message sent successfully!');
+      setSuccessMessage('In-site message created. Email status is shown in Recent send progress.');
 
       // Important: Ensure we have the latest messages, including the one we just sent
       await fetchMessages();
@@ -468,6 +474,8 @@ const Chat = () => {
     } catch (err) {
       console.error('Error sending message:', err);
       alert(`Failed to send message: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -615,6 +623,7 @@ const Chat = () => {
 
   return (
     <div className="bg-white rounded-lg shadow">
+      <MessageSendProgress />
       {/* Error and success notifications */}
       {error && (
         <div className="p-4 bg-red-100 text-red-800 rounded-t-lg flex justify-between items-center">
@@ -734,6 +743,7 @@ const Chat = () => {
         <div className={`${isMobile && !selectedMessage && !showComposer ? 'hidden' : 'block'} col-span-2 bg-white`}>
           {showComposer ? (
             <EnhancedMessageComposer 
+              loading={submitting}
               recipients={recipients}
               onSend={handleSubmitMessage}
               onCancel={() => setShowComposer(false)}

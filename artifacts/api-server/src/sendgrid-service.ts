@@ -14,6 +14,7 @@ import {
   tokenizeUnsubscribeLinks,
   unsubscribeHeaders,
 } from './unsubscribe-token';
+import { renderMessageEmailContent } from './message-email-renderer';
 
 /**
  * Shared options for the three configurable For Sale expiration emails.
@@ -179,7 +180,13 @@ export function groupNotifiedUsersByEmail(
   return Array.from(map.values());
 }
 
-export async function sendEmail(params: EmailParams): Promise<boolean> {
+export interface EmailOutcomeOptions {
+  /** Preserve transport uncertainty for durable workers; legacy callers keep boolean behavior. */
+  throwOnUncertain?: boolean;
+}
+
+export async function sendEmail(params: EmailParams, options: EmailOutcomeOptions = {}): Promise<boolean> {
+  let transportStarted = false;
   try {
     // Validate email parameters
     if (!params.to || !params.to.trim()) {
@@ -242,11 +249,18 @@ export async function sendEmail(params: EmailParams): Promise<boolean> {
     }
 
     sgMail.setApiKey(await getSendGridApiKey());
+    transportStarted = true;
     await sgMail.send(emailData);
 
     console.log('[SendGrid] ✅ Email sent successfully to:', params.to);
     return true;
   } catch (error: any) {
+    // An explicit 4xx provider rejection is known unsuccessful. A transport
+    // failure or 5xx may have happened after acceptance; never report certainty.
+    const status = Number(error?.response?.statusCode ?? error?.response?.status ?? error?.code);
+    if (options.throwOnUncertain && transportStarted && !(status >= 400 && status < 500)) {
+      throw error;
+    }
     console.error('[SendGrid] ❌ Email send error:', {
       to: params.to,
       from: FROM_EMAIL,
@@ -1655,7 +1669,8 @@ export async function sendMessageEmail(
   /** Display-only attachment filenames shown in the email body. No file content is
    *  forwarded to SendGrid — use this instead of `attachments` when you only have
    *  database metadata (filename, size, etc.) and not the actual binary content. */
-  attachmentNames?: string[]
+  attachmentNames?: string[],
+  outcomeOptions?: EmailOutcomeOptions
 ): Promise<boolean> {
   // Merge display names: prefer explicit attachmentNames, fall back to the
   // filenames already present in any real-content attachments.
@@ -1677,32 +1692,12 @@ export async function sendMessageEmail(
   });
 
   const baseUrl = getBaseUrl();
-
+  const {
+    emailSubject, titleHtml, text, bodyHtml, greetingHtml, senderHtml, subjectHtml, attachmentNamesHtml,
+  } = renderMessageEmailContent({
+    subject, messageContent, senderName, recipientName, isReply, displayNames, baseUrl,
+  });
   const introVerb = isReply ? 'replied to your message' : 'sent you a message';
-  const emailSubject = isReply
-    ? `${senderName} replied to your message: ${subject}`
-    : `${senderName} sent you a message: ${subject}`;
-
-  const greeting = recipientName ? `Hi ${recipientName},` : 'Hello,';
-
-  const attachmentText = displayNames.length > 0
-    ? `\n\nAttachments (${displayNames.length}): ${displayNames.join(', ')}`
-    : '';
-
-  const text = `
-${greeting}
-
-${senderName} has ${introVerb}.
-
-Subject: ${subject}
-
-${messageContent}${attachmentText}
-
----
-View your messages and reply: ${baseUrl}/messages
-
-To stop receiving email notifications, visit: ${baseUrl}/unsubscribe
-  `.trim();
 
   const attachmentHtml = displayNames.length > 0
     ? `
@@ -1716,7 +1711,7 @@ To stop receiving email notifications, visit: ${baseUrl}/unsubscribe
                   &#128206; Attachments (${displayNames.length}):
                 </p>
                 <ul style="margin:0;padding-left:18px;font-size:13px;color:#374151;">
-                  ${displayNames.map(name => `<li>${name.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</li>`).join('')}
+                  ${attachmentNamesHtml.map(name => `<li>${name}</li>`).join('')}
                 </ul>
               </td>
             </tr>
@@ -1731,7 +1726,7 @@ To stop receiving email notifications, visit: ${baseUrl}/unsubscribe
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${emailSubject}</title>
+  <title>${titleHtml}</title>
 </head>
 <body style="margin:0;padding:0;background:#f4f6f8;font-family:Arial,Helvetica,sans-serif;color:#27272A;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f8;">
@@ -1751,9 +1746,9 @@ To stop receiving email notifications, visit: ${baseUrl}/unsubscribe
           <!-- Intro -->
           <tr>
             <td style="padding:28px 24px 8px 24px;">
-              <p style="margin:0 0 6px 0;font-size:15px;line-height:22px;color:#27272A;">${greeting}</p>
+              <p style="margin:0 0 6px 0;font-size:15px;line-height:22px;color:#27272A;">${greetingHtml}</p>
               <p style="margin:0;font-size:15px;line-height:22px;color:#27272A;">
-                <strong>${senderName}</strong> has ${introVerb}:
+                <strong>${senderHtml}</strong> has ${introVerb}:
               </p>
             </td>
           </tr>
@@ -1765,8 +1760,8 @@ To stop receiving email notifications, visit: ${baseUrl}/unsubscribe
                      style="background:#f8fafc;border-left:4px solid #6BB5C1;border-radius:4px;">
                 <tr>
                   <td style="padding:16px 20px;">
-                    <p style="margin:0 0 10px 0;font-size:16px;font-weight:600;color:#434054;">${subject}</p>
-                    <p style="margin:0;font-size:14px;line-height:22px;color:#374151;white-space:pre-wrap;word-wrap:break-word;">${messageContent.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br />')}</p>
+                     <p style="margin:0 0 10px 0;font-size:16px;font-weight:600;color:#434054;">${subjectHtml}</p>
+                     ${bodyHtml}
                   </td>
                 </tr>
               </table>
@@ -1814,7 +1809,7 @@ To stop receiving email notifications, visit: ${baseUrl}/unsubscribe
     text,
     html,
     attachments: outboundAttachments.length > 0 ? outboundAttachments : undefined
-  });
+  }, outcomeOptions);
 }
 
 /**

@@ -7,10 +7,16 @@ import { MessageDetail } from './MessageDetail';
 import { EnhancedMessageComposer } from './EnhancedMessageComposer';
 import { queryClient } from '@/lib/queryClient';
 
+import { useAuth } from "@/components/providers/auth-provider";
+import { submitMessageForm } from "./message-submission";
+import { MessageSendProgress } from "./MessageSendProgress";
+
 const MobileChat: React.FC = () => {
+  const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [loading, setLoading] = useState(true);
+  const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [recipients, setRecipients] = useState<Array<{id: string, name: string}>>([]);
   const [showComposer, setShowComposer] = useState(false);
@@ -135,21 +141,19 @@ const MobileChat: React.FC = () => {
   };
 
   const handleSubmitMessage = async (formData: FormData) => {
+    setSending(true);
     try {
-      const response = await fetch('/api/messages', {
-        method: 'POST',
-        body: formData,
-      });
-      
-      if (response.ok) {
+      await submitMessageForm('/api/messages', formData, user!.id);
+      {
         // Refresh messages list
         fetchMessages();
         setShowComposer(false);
-      } else {
-        throw new Error('Failed to send message');
       }
     } catch (err) {
       console.error('Error sending message:', err);
+      alert(err instanceof Error ? err.message : "Submission uncertain. Check send progress before retrying.");
+    } finally {
+      setSending(false);
     }
   };
 
@@ -222,6 +226,7 @@ const MobileChat: React.FC = () => {
   if (view === 'detail' && selectedMessage) {
     return (
       <div className="flex flex-col h-full">
+        <MessageSendProgress />
         <div className="sticky top-0 bg-white p-4 border-b z-10">
           <Button 
             variant="ghost"
@@ -244,6 +249,7 @@ const MobileChat: React.FC = () => {
         
         {showComposer && (
           <EnhancedMessageComposer
+            loading={sending}
             onCancel={() => setShowComposer(false)}
             onSend={handleSubmitMessage}
             recipients={recipients}
@@ -256,6 +262,7 @@ const MobileChat: React.FC = () => {
   // List view
   return (
     <div className="flex flex-col h-full">
+      <MessageSendProgress />
       <div className="flex justify-between items-center mb-4 sticky top-0 bg-white p-4 border-b z-10">
         {selectionMode ? (
           // Selection mode header
@@ -337,6 +344,7 @@ const MobileChat: React.FC = () => {
       
       {showComposer && (
         <EnhancedMessageComposer
+          loading={sending}
           onCancel={() => setShowComposer(false)}
           onSend={handleSubmitMessage}
           recipients={recipients}

@@ -23,6 +23,9 @@ import type {
   LegalConsentStatus,
   LegalHistory,
   LegalPolicyManifest,
+  ListMessageSendProgress200,
+  MessageSubmission,
+  MessageSubmissionResult,
 } from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
@@ -33,6 +36,302 @@ type AwaitedInput<T> = PromiseLike<T> | T;
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+/**
+ * @summary Create an in-site message and durably enqueue optional email
+ */
+export const getSubmitMessageUrl = () => {
+  return `/api/messages`;
+};
+
+export const submitMessage = async (
+  messageSubmission: MessageSubmission,
+  options?: RequestInit,
+): Promise<MessageSubmissionResult> => {
+  const formData = new FormData();
+  if (messageSubmission.recipient !== undefined) {
+    formData.append(`recipient`, messageSubmission.recipient);
+  }
+  if (messageSubmission.subject !== undefined) {
+    formData.append(`subject`, messageSubmission.subject);
+  }
+  formData.append(`content`, messageSubmission.content);
+  if (messageSubmission.templateId !== undefined) {
+    formData.append(`templateId`, messageSubmission.templateId);
+  }
+  if (messageSubmission.inReplyTo !== undefined) {
+    formData.append(`inReplyTo`, messageSubmission.inReplyTo);
+  }
+  if (messageSubmission.sendEmail !== undefined) {
+    formData.append(`sendEmail`, messageSubmission.sendEmail);
+  }
+  if (messageSubmission.attachments !== undefined) {
+    messageSubmission.attachments.forEach((value) =>
+      formData.append(`attachments`, value),
+    );
+  }
+
+  return customFetch<MessageSubmissionResult>(getSubmitMessageUrl(), {
+    ...options,
+    method: "POST",
+    body: formData,
+  });
+};
+
+export const getSubmitMessageMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof submitMessage>>,
+    TError,
+    { data: BodyType<MessageSubmission> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof submitMessage>>,
+  TError,
+  { data: BodyType<MessageSubmission> },
+  TContext
+> => {
+  const mutationKey = ["submitMessage"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof submitMessage>>,
+    { data: BodyType<MessageSubmission> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return submitMessage(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SubmitMessageMutationResult = NonNullable<
+  Awaited<ReturnType<typeof submitMessage>>
+>;
+export type SubmitMessageMutationBody = BodyType<MessageSubmission>;
+export type SubmitMessageMutationError = ErrorType<void>;
+
+/**
+ * @summary Create an in-site message and durably enqueue optional email
+ */
+export const useSubmitMessage = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof submitMessage>>,
+    TError,
+    { data: BodyType<MessageSubmission> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof submitMessage>>,
+  TError,
+  { data: BodyType<MessageSubmission> },
+  TContext
+> => {
+  return useMutation(getSubmitMessageMutationOptions(options));
+};
+
+/**
+ * @summary Create a reply with the same durable submission and email semantics
+ */
+export const getSubmitMessageReplyUrl = (id: number) => {
+  return `/api/messages/${id}/reply`;
+};
+
+export const submitMessageReply = async (
+  id: number,
+  messageSubmission: MessageSubmission,
+  options?: RequestInit,
+): Promise<MessageSubmissionResult> => {
+  const formData = new FormData();
+  if (messageSubmission.recipient !== undefined) {
+    formData.append(`recipient`, messageSubmission.recipient);
+  }
+  if (messageSubmission.subject !== undefined) {
+    formData.append(`subject`, messageSubmission.subject);
+  }
+  formData.append(`content`, messageSubmission.content);
+  if (messageSubmission.templateId !== undefined) {
+    formData.append(`templateId`, messageSubmission.templateId);
+  }
+  if (messageSubmission.inReplyTo !== undefined) {
+    formData.append(`inReplyTo`, messageSubmission.inReplyTo);
+  }
+  if (messageSubmission.sendEmail !== undefined) {
+    formData.append(`sendEmail`, messageSubmission.sendEmail);
+  }
+  if (messageSubmission.attachments !== undefined) {
+    messageSubmission.attachments.forEach((value) =>
+      formData.append(`attachments`, value),
+    );
+  }
+
+  return customFetch<MessageSubmissionResult>(getSubmitMessageReplyUrl(id), {
+    ...options,
+    method: "POST",
+    body: formData,
+  });
+};
+
+export const getSubmitMessageReplyMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof submitMessageReply>>,
+    TError,
+    { id: number; data: BodyType<MessageSubmission> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof submitMessageReply>>,
+  TError,
+  { id: number; data: BodyType<MessageSubmission> },
+  TContext
+> => {
+  const mutationKey = ["submitMessageReply"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof submitMessageReply>>,
+    { id: number; data: BodyType<MessageSubmission> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return submitMessageReply(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SubmitMessageReplyMutationResult = NonNullable<
+  Awaited<ReturnType<typeof submitMessageReply>>
+>;
+export type SubmitMessageReplyMutationBody = BodyType<MessageSubmission>;
+export type SubmitMessageReplyMutationError = ErrorType<void>;
+
+/**
+ * @summary Create a reply with the same durable submission and email semantics
+ */
+export const useSubmitMessageReply = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof submitMessageReply>>,
+    TError,
+    { id: number; data: BodyType<MessageSubmission> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof submitMessageReply>>,
+  TError,
+  { id: number; data: BodyType<MessageSubmission> },
+  TContext
+> => {
+  return useMutation(getSubmitMessageReplyMutationOptions(options));
+};
+
+/**
+ * @summary Authenticated sender's last 20 durable submission outcomes, without recipient addresses
+ */
+export const getListMessageSendProgressUrl = () => {
+  return `/api/messages/send-progress`;
+};
+
+export const listMessageSendProgress = async (
+  options?: RequestInit,
+): Promise<ListMessageSendProgress200> => {
+  return customFetch<ListMessageSendProgress200>(
+    getListMessageSendProgressUrl(),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+export const getListMessageSendProgressQueryKey = () => {
+  return [`/api/messages/send-progress`] as const;
+};
+
+export const getListMessageSendProgressQueryOptions = <
+  TData = Awaited<ReturnType<typeof listMessageSendProgress>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof listMessageSendProgress>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getListMessageSendProgressQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listMessageSendProgress>>
+  > = ({ signal }) => listMessageSendProgress({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listMessageSendProgress>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListMessageSendProgressQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listMessageSendProgress>>
+>;
+export type ListMessageSendProgressQueryError = ErrorType<void>;
+
+/**
+ * @summary Authenticated sender's last 20 durable submission outcomes, without recipient addresses
+ */
+
+export function useListMessageSendProgress<
+  TData = Awaited<ReturnType<typeof listMessageSendProgress>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof listMessageSendProgress>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListMessageSendProgressQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
 
 /**
  * @summary Authorized publication and acceptance history

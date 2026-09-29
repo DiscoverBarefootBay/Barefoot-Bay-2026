@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useAuth } from '@/components/providers/auth-provider';
 import type { ChatRecipient } from '../components/chat/recipient-options';
+import { submitMessageForm } from '../components/chat/message-submission';
 
 // Message type
 export type Message = {
@@ -200,6 +201,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (message.sendEmail !== undefined) {
         formData.append('sendEmail', message.sendEmail);
       }
+      if (message.templateId) formData.append('templateId', message.templateId);
       
       if (message.attachments && message.attachments.length > 0) {
         for (const file of message.attachments) {
@@ -207,17 +209,9 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
       }
       
-      const response = await fetch('/api/messages', {
-        method: 'POST',
-        body: formData,
-        credentials: 'include'
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to send message');
-      }
-      
-      const data = await response.json();
+      const data = await submitMessageForm('/api/messages', formData, user.id);
+      // Legacy servers return a success string in message and the record in data.
+      data.message = typeof data.message === "object" ? data.message : data.data;
       console.log('Message sent successfully, API response:', data);
       
       // Add the new message to our state and select it
@@ -247,7 +241,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     } catch (error) {
       console.error('Error sending message:', error);
       setError(error instanceof Error ? error.message : 'Failed to send message');
-      return null;
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -430,17 +424,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       
       // Send the reply to the correct endpoint (/:id/reply)
-      const response = await fetch(`/api/messages/${originalMessageId}/reply`, {
-        method: 'POST',
-        body: formData,
-        credentials: 'include'
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to send reply');
-      }
-      
-      const data = await response.json();
+      const data = await submitMessageForm(`/api/messages/${originalMessageId}/reply`, formData, user.id);
       
       // Handle the reply message from the server
       if (data.message) {

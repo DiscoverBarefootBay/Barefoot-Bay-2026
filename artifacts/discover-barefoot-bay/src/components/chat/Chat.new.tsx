@@ -63,7 +63,11 @@ function chatReducer(state: ChatState, action: ChatActionType): ChatState {
 }
 
 // Export both as default and named export for compatibility
+import { useAuth } from "@/components/providers/auth-provider";
+import { submitMessageForm } from "./message-submission";
+
 const Chat = () => {
+  const { user } = useAuth();
   const [state, dispatch] = useReducer(chatReducer, initialState);
   const { messages, selectedMessage, loading, error, unreadCount } = state;
 
@@ -199,16 +203,7 @@ const Chat = () => {
       });
       
       // Since we're sending FormData, we need to use fetch directly
-      const response = await fetch('/api/messages', {
-        method: 'POST',
-        body: data,
-        credentials: 'include'
-      });
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to send message: ${response.status} ${errorText}`);
-      }
+      await submitMessageForm('/api/messages', data, user!.id);
       
       // Refresh messages list after sending
       await fetchMessages();

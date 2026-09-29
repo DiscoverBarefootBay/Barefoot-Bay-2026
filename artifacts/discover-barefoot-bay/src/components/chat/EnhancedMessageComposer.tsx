@@ -2,6 +2,7 @@ import React, { useState, useRef, useMemo } from 'react';
 import { MESSAGE_TEMPLATES } from '../../types/message-templates';
 import { useAuth } from '../../hooks/use-auth';
 import { organizeRecipients, type ChatRecipient, type RecipientSort } from './recipient-options';
+import { MessageSendProgress } from "./MessageSendProgress";
 
 interface EnhancedMessageComposerProps {
   recipients: ChatRecipient[];
@@ -205,6 +206,7 @@ export const EnhancedMessageComposer: React.FC<EnhancedMessageComposerProps> = (
       <div className="bg-white rounded-t-lg sm:rounded-lg shadow-xl max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] flex flex-col">
         <div className="p-4 border-b flex-shrink-0">
           <h2 className="text-xl font-bold">New Message</h2>
+          {loading && <MessageSendProgress />}
         </div>
         
         <form onSubmit={handleSubmit} className="flex-1 flex flex-col min-h-0">
@@ -439,7 +441,7 @@ export const EnhancedMessageComposer: React.FC<EnhancedMessageComposerProps> = (
                   disabled={loading}
                   className="px-4 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 disabled:opacity-50"
                 >
-                  {loading ? 'Sending...' : 'Send Message'}
+                  {loading ? 'Creating message & preparing email…' : 'Send Message'}
                 </button>
               </div>
             </div>

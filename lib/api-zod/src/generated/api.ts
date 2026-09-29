@@ -8,6 +8,88 @@
 import * as zod from "zod";
 
 /**
+ * @summary Create an in-site message and durably enqueue optional email
+ */
+export const submitMessageHeaderIdempotencyKeyMin = 16;
+export const submitMessageHeaderIdempotencyKeyMax = 100;
+
+export const SubmitMessageHeader = zod.object({
+  "Idempotency-Key": zod
+    .string()
+    .min(submitMessageHeaderIdempotencyKeyMin)
+    .max(submitMessageHeaderIdempotencyKeyMax),
+});
+
+export const SubmitMessageBody = zod.object({
+  recipient: zod.string().optional(),
+  subject: zod.string().optional(),
+  content: zod.string().min(1),
+  templateId: zod.string().optional(),
+  inReplyTo: zod.string().optional(),
+  sendEmail: zod.enum(["true", "false"]).optional(),
+  attachments: zod
+    .array(zod.instanceof(File))
+    .optional()
+    .describe(
+      "Multipart file parts, handled by the upload middleware separately from text fields",
+    ),
+});
+
+/**
+ * @summary Create a reply with the same durable submission and email semantics
+ */
+export const SubmitMessageReplyParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const submitMessageReplyHeaderIdempotencyKeyMin = 16;
+export const submitMessageReplyHeaderIdempotencyKeyMax = 100;
+
+export const SubmitMessageReplyHeader = zod.object({
+  "Idempotency-Key": zod
+    .string()
+    .min(submitMessageReplyHeaderIdempotencyKeyMin)
+    .max(submitMessageReplyHeaderIdempotencyKeyMax),
+});
+
+export const SubmitMessageReplyBody = zod.object({
+  recipient: zod.string().optional(),
+  subject: zod.string().optional(),
+  content: zod.string().min(1),
+  templateId: zod.string().optional(),
+  inReplyTo: zod.string().optional(),
+  sendEmail: zod.enum(["true", "false"]).optional(),
+  attachments: zod
+    .array(zod.instanceof(File))
+    .optional()
+    .describe(
+      "Multipart file parts, handled by the upload middleware separately from text fields",
+    ),
+});
+
+/**
+ * @summary Authenticated sender's last 20 durable submission outcomes, without recipient addresses
+ */
+export const ListMessageSendProgressResponse = zod.object({
+  jobs: zod.array(
+    zod.object({
+      id: zod.string(),
+      messageId: zod.number().nullable(),
+      state: zod.string(),
+      createdAt: zod.coerce.date(),
+      emailRequested: zod.boolean(),
+      total: zod.number(),
+      queued: zod.number(),
+      attempted: zod.number(),
+      accepted: zod.number(),
+      failed: zod.number(),
+      skipped: zod.number(),
+      unknown: zod.number(),
+    }),
+  ),
+});
+
+/**
  * @summary Authorized publication and acceptance history
  */
 export const getLegalHistoryQueryPageDefault = 1;

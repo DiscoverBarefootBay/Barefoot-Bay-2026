@@ -18,6 +18,7 @@
 //   export type Post = typeof postsTable.$inferSelect;
 
 export * from "./schema";
+export * from "./message-email-jobs";
 export * from "./legal-schema";
 export * from "./analytics-schema";
 export { messageAttachments } from "./schema-messages";export * from "./dmca-schema";

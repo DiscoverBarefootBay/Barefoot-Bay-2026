@@ -201,6 +201,11 @@ function Router() {
             <ProtectedRoute path="/community-settings" component={CommunitySettings} />
             <ProtectedRoute path="/advanced-settings" component={AdvancedSettings} />
             {/* Chat Interface - New messaging system */}
+            <Route path="/messaging">
+              <Suspense fallback={<div className="text-center p-8">Loading chat...</div>}>
+                {React.createElement(lazy(() => import('./pages/chat')))}
+              </Suspense>
+            </Route>
             <Route path="/messages">
               <Suspense fallback={<div className="text-center p-8">Loading chat...</div>}>
                 {React.createElement(lazy(() => import('./pages/chat')))}

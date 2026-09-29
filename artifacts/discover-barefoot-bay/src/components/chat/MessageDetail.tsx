@@ -3,6 +3,8 @@ import { Message } from '../../types/chat';
 import AttachmentViewer from './AttachmentViewer';
 import { getMediaUrl } from '../../lib/media-helper';
 import { useChat } from '../../context/ChatContext';
+import { useAuth } from "@/components/providers/auth-provider";
+import { submitMessageForm } from "./message-submission";
 
 interface MessageDetailProps {
   message: Message;
@@ -121,6 +123,7 @@ export const MessageDetail: React.FC<MessageDetailProps> = ({
   onDelete,
   onBack
 }) => {
+  const { user } = useAuth();
   const [replies, setReplies] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [viewerOpen, setViewerOpen] = useState(false);
@@ -212,14 +215,8 @@ export const MessageDetail: React.FC<MessageDetailProps> = ({
         formData.append('attachments', file);
       });
 
-      const response = await fetch(`/api/messages/${message.id}/reply`, {
-        method: 'POST',
-        body: formData,
-        credentials: 'include'
-      });
-
-      if (response.ok) {
-        const result = await response.json();
+      const result = await submitMessageForm(`/api/messages/${message.id}/reply`, formData, user!.id);
+      {
         console.log('Reply sent successfully:', result);
         
         // Clear the reply form
@@ -233,11 +230,6 @@ export const MessageDetail: React.FC<MessageDetailProps> = ({
         if (result.message) {
           setReplies(prev => [...prev, result.message]);
         }
-      } else {
-        console.error('Failed to send reply - HTTP status:', response.status);
-        const errorText = await response.text();
-        console.error('Error response:', errorText);
-        alert('Failed to send reply. Please try again.');
       }
 
       // Auto-hide the success message after 3 seconds
@@ -246,6 +238,7 @@ export const MessageDetail: React.FC<MessageDetailProps> = ({
       }, 3000);
     } catch (error) {
       console.error("Error sending reply:", error);
+      alert(error instanceof Error ? error.message : "Reply outcome is uncertain. Check send progress before retrying.");
     }
     setReplyLoading(false);
   };

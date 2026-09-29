@@ -11,6 +11,89 @@ tags:
   - name: health
     description: Health operations
 paths:
+  /messages:
+    post:
+      operationId: submitMessage
+      summary: Create an in-site message and durably enqueue optional email
+      parameters:
+        - { in: header, name: Idempotency-Key, required: true, schema: { type: string, minLength: 16, maxLength: 100 } }
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/MessageSubmission"
+      responses:
+        "201":
+          description: In-site message created; email is not yet guaranteed accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageSubmissionResult"
+        "400": { description: Invalid submission or idempotency key }
+        "401": { description: Authentication required }
+        "403": { description: Unauthorized recipient targeting }
+        "409": { description: Key reused with different content or original submission still uncertain; do not resend with a new key }
+        "500": { description: Creation or email setup failed; inspect saved progress before retrying }
+  /messages/{id}/reply:
+    post:
+      operationId: submitMessageReply
+      summary: Create a reply with the same durable submission and email semantics
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: integer } }
+        - { in: header, name: Idempotency-Key, required: true, schema: { type: string, minLength: 16, maxLength: 100 } }
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/MessageSubmission"
+      responses:
+        "201":
+          description: Reply created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageSubmissionResult"
+        "400": { description: Invalid submission }
+        "401": { description: Authentication required }
+        "403": { description: Not authorized to reply }
+        "404": { description: Parent message missing }
+        "409": { description: Changed or uncertain duplicate submission }
+        "500": { description: Creation or email setup failed; inspect saved progress }
+  /messages/send-progress:
+    get:
+      operationId: listMessageSendProgress
+      summary: Authenticated sender's last 20 durable submission outcomes, without recipient addresses
+      responses:
+        "200":
+          description: Counts reflect provider acceptance, not inbox delivery. Unknown attempts are never automatically retried.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [jobs]
+                properties:
+                  jobs:
+                    type: array
+                    items:
+                      type: object
+                      required: [id, messageId, state, createdAt, emailRequested, total, queued, attempted, accepted, failed, skipped, unknown]
+                      properties:
+                        id: { type: string }
+                        messageId: { type: [integer, "null"] }
+                        state: { type: string }
+                        createdAt: { type: string, format: date-time }
+                        emailRequested: { type: boolean }
+                        total: { type: integer }
+                        queued: { type: integer }
+                        attempted: { type: integer }
+                        accepted: { type: integer }
+                        failed: { type: integer }
+                        skipped: { type: integer }
+                        unknown: { type: integer }
+        "401":
+          description: Authentication required
   /legal/history:
     get:
       operationId: getLegalHistory
@@ -103,6 +186,34 @@ paths:
                 $ref: "#/components/schemas/HealthStatus"
 components:
   schemas:
+    MessageSubmission:
+      type: object
+      required: [content]
+      properties:
+        recipient: { type: string }
+        subject: { type: string }
+        content: { type: string, minLength: 1 }
+        templateId: { type: string }
+        inReplyTo: { type: string }
+        sendEmail: { type: string, enum: ["true", "false"] }
+        attachments:
+          type: array
+          description: Multipart file parts, handled by the upload middleware separately from text fields
+          items: { type: string, format: binary }
+    MessageSubmissionResult:
+      type: object
+      required: [message, success]
+      properties:
+        success: { type: boolean }
+        message:
+          type: object
+          additionalProperties: true
+          required: [id, subject, content, senderId]
+          properties:
+            id: { type: integer }
+            subject: { type: string }
+            content: { type: string }
+            senderId: { type: integer }
     LegalAcceptanceRecord:
       type: object
       required: [userId, policyKey, versionId, acceptedAt, source]

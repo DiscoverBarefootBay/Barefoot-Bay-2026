@@ -5,6 +5,39 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+export type MessageSubmissionSendEmail =
+  (typeof MessageSubmissionSendEmail)[keyof typeof MessageSubmissionSendEmail];
+
+export const MessageSubmissionSendEmail = {
+  true: "true",
+  false: "false",
+} as const;
+
+export interface MessageSubmission {
+  recipient?: string;
+  subject?: string;
+  /** @minLength 1 */
+  content: string;
+  templateId?: string;
+  inReplyTo?: string;
+  sendEmail?: MessageSubmissionSendEmail;
+  /** Multipart file parts, handled by the upload middleware separately from text fields */
+  attachments?: Blob[];
+}
+
+export type MessageSubmissionResultMessage = {
+  id: number;
+  subject: string;
+  content: string;
+  senderId: number;
+  [key: string]: unknown;
+};
+
+export interface MessageSubmissionResult {
+  success: boolean;
+  message: MessageSubmissionResultMessage;
+}
+
 export type LegalAcceptanceRecordPolicyKey =
   (typeof LegalAcceptanceRecordPolicyKey)[keyof typeof LegalAcceptanceRecordPolicyKey];
 
@@ -97,6 +130,26 @@ export interface LegalConsentInput {
 export interface HealthStatus {
   status: string;
 }
+
+export type ListMessageSendProgress200JobsItem = {
+  id: string;
+  /** @nullable */
+  messageId: number | null;
+  state: string;
+  createdAt: string;
+  emailRequested: boolean;
+  total: number;
+  queued: number;
+  attempted: number;
+  accepted: number;
+  failed: number;
+  skipped: number;
+  unknown: number;
+};
+
+export type ListMessageSendProgress200 = {
+  jobs: ListMessageSendProgress200JobsItem[];
+};
 
 export type GetLegalHistoryParams = {
   /**
