@@ -169,7 +169,7 @@ function ConsentPrompt({ outstanding, onRecheck, userId }: { outstanding: LegalP
               {multiple ? "Please review our updated policies" : "Please review our updated policy"}
             </h2>
             <p id="legal-consent-desc" className="text-gray-700 mt-2">
-              Before you continue using Discover Barefoot Bay, read and accept the current version of
+              Before you continue using Barefoot Bay, read and accept the current version of
               {multiple ? " each policy listed below." : " the policy below."} Check each box separately.
             </p>
           </div>
