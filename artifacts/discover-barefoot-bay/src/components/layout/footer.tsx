@@ -1,7 +1,9 @@
 import { Link } from "wouter";
+import { useLegalPolicies } from "@/hooks/use-legal";
+import { LEGAL_POLICY_KEYS, LEGAL_POLICY_LABELS, LEGAL_POLICY_PATHS } from "@/lib/legal";
 
 export function Footer() {
-  const currentYear = new Date().getFullYear();
+  const { data: policies } = useLegalPolicies();
 
   return (
     <footer className="bg-transparent text-black py-6 mt-8">
@@ -13,21 +15,16 @@ export function Footer() {
             </p>
           </div>
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-            <Link href="/terms">
-              <span className="hover:text-gray-600 transition-colors cursor-pointer">
-                Terms and Agreements
-              </span>
-            </Link>
-            <Link href="/privacy">
-              <span className="hover:text-gray-600 transition-colors cursor-pointer">
-                Privacy Policy
-              </span>
-            </Link>
-            <Link href="/dmca">
-              <span className="hover:text-gray-600 transition-colors cursor-pointer">
-                Copyright / DMCA
-              </span>
-            </Link>
+            {LEGAL_POLICY_KEYS.map((key) => {
+              const policy = policies?.find((p) => p.key === key);
+              return (
+                <Link key={key} href={LEGAL_POLICY_PATHS[key]} data-testid={`link-footer-${key}`}>
+                  <span className="hover:text-gray-600 transition-colors cursor-pointer">
+                    {policy?.title || LEGAL_POLICY_LABELS[key]}
+                  </span>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </div>

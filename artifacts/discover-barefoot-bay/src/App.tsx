@@ -116,6 +116,9 @@ import { Footer } from "./components/layout/footer";
 import { ProtectedRoute } from "./lib/protected-route";
 import { BackgroundVideo } from "./components/shared/background-video";
 import { ViewAsSwitcher } from "./components/admin/view-as-switcher";
+import { LegalConsentGate } from "./components/legal/legal-consent-gate";
+import LegalPolicyPage from "@/pages/legal/legal-policy-page";
+import LegalHistoryPage from "@/pages/admin/legal-history";
 
 // Custom route for the launch page - rendered outside main layout without any navigation
 function LaunchPageRoute() {
@@ -133,11 +136,12 @@ function Router() {
   
   // If we're on the launch page, render only the launch page without regular layout
   if (isLaunchPage) {
-    return <LaunchPageRoute />;
+    return <LegalConsentGate><LaunchPageRoute /></LegalConsentGate>;
   }
   
   // Otherwise render the regular app layout
   return (
+    <LegalConsentGate>
     <div className="min-h-screen relative flex flex-col">
       <BackgroundVideo 
         videoUrl="/static/videos/BackgroundVideo.mp4"
@@ -226,6 +230,7 @@ function Router() {
             <ProtectedRoute path="/admin/returns" component={ManageReturnsPage} requiredFeature="ADMIN" />
             <ProtectedRoute path="/admin/product-image-test" component={ProductImageTest} requiredFeature="ADMIN" />
             <ProtectedRoute path="/admin/form-submissions" component={FormSubmissionsAdmin} requiredFeature="ADMIN" />
+            <ProtectedRoute path="/admin/legal-history" component={LegalHistoryPage} requiredFeature="ADMIN" />
             <ProtectedRoute path="/admin/manage-pages" component={ManagePagesAdmin} requiredFeature="ADMIN" />
             <ProtectedRoute path="/admin/manage-vendors" component={ManageVendorsAdmin} requiredFeature="ADMIN" />
             <ProtectedRoute path="/admin/manage-forum" component={ManageForumCategories} requiredFeature="ADMIN" />
@@ -281,8 +286,8 @@ function Router() {
             }} />
             
             {/* Terms & Privacy pages */}
-            <Route path="/terms" component={() => <GenericContentPage slug="terms-and-agreements" />} />
-            <Route path="/privacy" component={() => <GenericContentPage slug="privacy-policy" />} />
+            <Route path="/terms" component={() => <LegalPolicyPage policyKey="terms" />} />
+            <Route path="/privacy" component={() => <LegalPolicyPage policyKey="privacy" />} />
             <Route path="/dmca" component={DMCAPolicyPage} />
             <Route path="/dmca/notice" component={DMCANoticePage} />
             <Route path="/dmca/status/:token" component={DMCAStatusPage} />
@@ -504,6 +509,7 @@ function Router() {
       </div>
       <ViewAsSwitcher />
     </div>
+    </LegalConsentGate>
   );
 }
 

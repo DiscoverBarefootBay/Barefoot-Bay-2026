@@ -8,6 +8,148 @@
 import * as zod from "zod";
 
 /**
+ * @summary Authorized publication and acceptance history
+ */
+export const getLegalHistoryQueryPageDefault = 1;
+export const getLegalHistoryQueryPageMax = 1000;
+
+export const getLegalHistoryQueryPageSizeDefault = 50;
+export const getLegalHistoryQueryPageSizeMax = 100;
+
+export const GetLegalHistoryQueryParams = zod.object({
+  page: zod.coerce
+    .number()
+    .min(1)
+    .max(getLegalHistoryQueryPageMax)
+    .default(getLegalHistoryQueryPageDefault),
+  pageSize: zod.coerce
+    .number()
+    .min(1)
+    .max(getLegalHistoryQueryPageSizeMax)
+    .default(getLegalHistoryQueryPageSizeDefault),
+  policyKey: zod.enum(["terms", "privacy", "dmca"]).optional(),
+});
+
+export const GetLegalHistoryResponse = zod.object({
+  versions: zod.array(
+    zod.object({
+      key: zod.enum(["terms", "privacy", "dmca"]),
+      versionId: zod.number(),
+      title: zod.string(),
+      url: zod.string(),
+      publishedAt: zod.coerce.date(),
+      contentHtml: zod.string(),
+      changeNotes: zod.string().nullable(),
+    }),
+  ),
+  acceptances: zod.array(
+    zod.object({
+      userId: zod.number(),
+      policyKey: zod.enum(["terms", "privacy", "dmca"]),
+      versionId: zod.number(),
+      acceptedAt: zod.coerce.date(),
+      source: zod.enum(["signup", "subsequent"]),
+    }),
+  ),
+  page: zod.number(),
+  pageSize: zod.number(),
+  total: zod.number(),
+  versionTotal: zod.number(),
+  acceptanceTotal: zod.number(),
+});
+
+/**
+ * @summary Read current immutable legal publications
+ */
+export const GetLegalPoliciesResponse = zod.object({
+  policies: zod.array(
+    zod.object({
+      key: zod.enum(["terms", "privacy", "dmca"]),
+      versionId: zod.number(),
+      title: zod.string(),
+      url: zod.string(),
+      publishedAt: zod.coerce.date(),
+      contentHtml: zod.string(),
+      changeNotes: zod.string().nullable(),
+    }),
+  ),
+});
+
+/**
+ * @summary Read current account acceptance requirements
+ */
+export const GetLegalConsentResponse = zod.object({
+  policies: zod.array(
+    zod.object({
+      key: zod.enum(["terms", "privacy", "dmca"]),
+      versionId: zod.number(),
+      title: zod.string(),
+      url: zod.string(),
+      publishedAt: zod.coerce.date(),
+      contentHtml: zod.string(),
+      changeNotes: zod.string().nullable(),
+    }),
+  ),
+  outstanding: zod.array(
+    zod.object({
+      key: zod.enum(["terms", "privacy", "dmca"]),
+      versionId: zod.number(),
+      title: zod.string(),
+      url: zod.string(),
+      publishedAt: zod.coerce.date(),
+      contentHtml: zod.string(),
+      changeNotes: zod.string().nullable(),
+    }),
+  ),
+  requiresAcceptance: zod.boolean(),
+});
+
+/**
+ * @summary Explicitly accept exact current policy versions
+ */
+
+export const acceptLegalPoliciesBodyAcceptancesMax = 3;
+
+export const AcceptLegalPoliciesBody = zod.object({
+  acceptances: zod
+    .array(
+      zod.object({
+        key: zod.enum(["terms", "privacy", "dmca"]),
+        versionId: zod.number().min(1),
+        accepted: zod.literal(true),
+      }),
+    )
+    .min(1)
+    .max(acceptLegalPoliciesBodyAcceptancesMax),
+});
+
+export const AcceptLegalPoliciesResponse = zod.object({
+  policies: zod.array(
+    zod.object({
+      key: zod.enum(["terms", "privacy", "dmca"]),
+      versionId: zod.number(),
+      title: zod.string(),
+      url: zod.string(),
+      publishedAt: zod.coerce.date(),
+      contentHtml: zod.string(),
+      changeNotes: zod.string().nullable(),
+    }),
+  ),
+  outstanding: zod.array(
+    zod.object({
+      key: zod.enum(["terms", "privacy", "dmca"]),
+      versionId: zod.number(),
+      title: zod.string(),
+      url: zod.string(),
+      publishedAt: zod.coerce.date(),
+      contentHtml: zod.string(),
+      changeNotes: zod.string().nullable(),
+    }),
+  ),
+  requiresAcceptance: zod.boolean(),
+});
+
+/**
  * Returns server health status
  * @summary Health check
  */

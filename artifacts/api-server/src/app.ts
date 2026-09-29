@@ -118,6 +118,9 @@ async function buildApp() {
 
   expressApp.use(session(sessionConfig));
 
+  const { initializeLegalDefaults } = await import("./legal-policy");
+  try { await initializeLegalDefaults(); }
+  catch (err) { logger.error({ err }, "Legal policy initialization failed; consent fails closed"); }
   const { setupAuth } = await import("./auth");
   setupAuth(expressApp);
 

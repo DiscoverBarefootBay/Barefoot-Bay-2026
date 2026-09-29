@@ -11,6 +11,83 @@ tags:
   - name: health
     description: Health operations
 paths:
+  /legal/history:
+    get:
+      operationId: getLegalHistory
+      summary: Authorized publication and acceptance history
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1, maximum: 1000, default: 1 }
+        - in: query
+          name: pageSize
+          schema: { type: integer, minimum: 1, maximum: 100, default: 50 }
+        - in: query
+          name: policyKey
+          schema: { type: string, enum: [terms, privacy, dmca] }
+      responses:
+        "200":
+          description: Independently paginated publications and acceptances
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LegalHistory"
+        "403":
+          description: Administrator permission required
+        "428":
+          description: Current policy acceptance required
+  /legal/policies:
+    get:
+      operationId: getLegalPolicies
+      summary: Read current immutable legal publications
+      responses:
+        "200":
+          description: Current publications
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LegalPolicyManifest"
+        "503":
+          description: Publications temporarily unavailable
+  /legal/consent:
+    get:
+      operationId: getLegalConsent
+      summary: Read current account acceptance requirements
+      responses:
+        "200":
+          description: Current consent status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LegalConsentStatus"
+        "401":
+          description: Sign in required
+        "503":
+          description: Consent store unavailable; account access remains blocked
+    post:
+      operationId: acceptLegalPolicies
+      summary: Explicitly accept exact current policy versions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LegalConsentInput"
+      responses:
+        "200":
+          description: Durable acceptance recorded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LegalConsentStatus"
+        "400":
+          description: Missing explicit acceptance
+        "401":
+          description: Sign in required
+        "409":
+          description: Policy version changed; review again
+        "503":
+          description: Consent store unavailable; no access granted
   /healthz:
     get:
       operationId: healthCheck
@@ -26,6 +103,95 @@ paths:
                 $ref: "#/components/schemas/HealthStatus"
 components:
   schemas:
+    LegalAcceptanceRecord:
+      type: object
+      required: [userId, policyKey, versionId, acceptedAt, source]
+      properties:
+        userId: { type: integer }
+        policyKey: { type: string, enum: [terms, privacy, dmca] }
+        versionId: { type: integer }
+        acceptedAt: { type: string, format: date-time }
+        source: { type: string, enum: [signup, subsequent] }
+    LegalHistory:
+      type: object
+      required: [versions, acceptances, page, pageSize, total, versionTotal, acceptanceTotal]
+      properties:
+        versions:
+          type: array
+          items: { $ref: "#/components/schemas/LegalPolicy" }
+        acceptances:
+          type: array
+          items: { $ref: "#/components/schemas/LegalAcceptanceRecord" }
+        page: { type: integer }
+        pageSize: { type: integer }
+        total: { type: integer }
+        versionTotal: { type: integer }
+        acceptanceTotal: { type: integer }
+    LegalPolicy:
+      type: object
+      required: [key, versionId, title, url, publishedAt, contentHtml, changeNotes]
+      properties:
+        key:
+          type: string
+          enum: [terms, privacy, dmca]
+        versionId:
+          type: integer
+        title:
+          type: string
+        url:
+          type: string
+        publishedAt:
+          type: string
+          format: date-time
+        contentHtml:
+          type: string
+        changeNotes:
+          type: [string, "null"]
+    LegalPolicyManifest:
+      type: object
+      required: [policies]
+      properties:
+        policies:
+          type: array
+          items:
+            $ref: "#/components/schemas/LegalPolicy"
+    LegalConsentStatus:
+      type: object
+      required: [policies, outstanding, requiresAcceptance]
+      properties:
+        policies:
+          type: array
+          items:
+            $ref: "#/components/schemas/LegalPolicy"
+        outstanding:
+          type: array
+          items:
+            $ref: "#/components/schemas/LegalPolicy"
+        requiresAcceptance:
+          type: boolean
+    LegalAcceptance:
+      type: object
+      required: [key, versionId, accepted]
+      properties:
+        key:
+          type: string
+          enum: [terms, privacy, dmca]
+        versionId:
+          type: integer
+          minimum: 1
+        accepted:
+          type: boolean
+          enum: [true]
+    LegalConsentInput:
+      type: object
+      required: [acceptances]
+      properties:
+        acceptances:
+          type: array
+          minItems: 1
+          maxItems: 3
+          items:
+            $ref: "#/components/schemas/LegalAcceptance"
     HealthStatus:
       type: object
       properties:

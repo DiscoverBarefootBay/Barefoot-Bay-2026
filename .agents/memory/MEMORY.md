@@ -23,3 +23,4 @@
 - [CMS native disclosures](cms-native-disclosures.md) — preserve only visitor-toggled `<details>` state across injected HTML refreshes; leave untouched CMS defaults alone.
 - [DMCA foundation](dmca-foundation.md) — reversible takedowns, production grants, and policy SQL that embeds legal text and reports writes; Publish transfers schema, not grant rows.
 - [UI theme quirks](ui-theme-quirks.md) — shadcn `destructive` button variant is invisible in this theme; use explicit red classes.
+- [Legal acceptance scope](legal-consent-decisions.md) — every published change requires reacceptance; snapshot publication is not a newly assigned legal effective date.

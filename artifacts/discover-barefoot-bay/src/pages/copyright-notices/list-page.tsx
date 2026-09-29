@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import type { CopyrightCaseSummary } from "./types";
 import { formatNoticeDate } from "./types";
 import { useAuth } from "@/hooks/use-auth";
+import { LegalApiError, isPolicyRequiredError } from "@/lib/legal";
 
 type FiledClaim = { caseNumber: string; receivedAt: string; updatedAt: string; status: string };
 
@@ -29,11 +30,16 @@ export default function CopyrightNoticesPage() {
     enabled: userId != null,
     queryFn: async () => {
       const response = await fetch("/api/dmca/my-claims", { credentials: "include" });
-      if (!response.ok) throw new Error("Could not load filed claims");
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        throw new LegalApiError("Could not load filed claims", response.status, typeof body?.code === "string" ? body.code : null);
+      }
       return response.json();
     },
     placeholderData: undefined,
+    retry: (count, err) => !isPolicyRequiredError(err) && count < 2,
   });
+  const claimsNeedPolicy = claimsQuery.isError && isPolicyRequiredError(claimsQuery.error);
   const claims = claimsQuery.data && !Array.isArray(claimsQuery.data) && Array.isArray(claimsQuery.data.claims) ? claimsQuery.data.claims : [];
   const submitted = new URLSearchParams(window.location.search).get("submitted") === "1";
 
@@ -52,7 +58,13 @@ export default function CopyrightNoticesPage() {
       {query.isLoading && <p data-testid="status-copyright-notices-loading">Loading copyright notices…</p>}
       {claimsQuery.isLoading && <p>Loading filed claims…</p>}
       {query.error && <p className="rounded-md border border-red-300 bg-red-50 p-4 text-red-800" data-testid="status-copyright-notices-error">{(query.error as Error).message}</p>}
-      {claimsQuery.error && <p role="alert" className="rounded-md border border-red-300 bg-red-50 p-4 text-red-800">Could not load filed claims. Please try again.</p>}
+      {claimsNeedPolicy && (
+        <div role="status" data-testid="claims-policy-required" className="rounded-md border border-amber-300 bg-amber-50 p-4 text-amber-900">
+          Claims you have filed are shown after you accept the current site policies. Your notices about your own uploads remain available below.{" "}
+          <Link href="/" className="font-semibold underline" data-testid="link-claims-review-policies">Review policies</Link>
+        </div>
+      )}
+      {claimsQuery.error && !claimsNeedPolicy && <p role="alert" className="rounded-md border border-red-300 bg-red-50 p-4 text-red-800">Could not load filed claims. Please try again.</p>}
       {!query.isLoading && !claimsQuery.isLoading && !query.error && !claimsQuery.error && cases.length === 0 && claims.length === 0 && (
         <Card data-testid="status-copyright-notices-empty">
           <CardContent className="py-12 text-center">

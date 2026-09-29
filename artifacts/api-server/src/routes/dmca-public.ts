@@ -11,6 +11,7 @@ import { requestIp, writeDmcaAudit, type DbExecutor } from "../dmca/audit";
 import { enqueueNotification } from "../dmca/outbox";
 import { adminNoticeEmail, claimantNoticeEmail } from "../dmca/email-templates";
 import { DEFAULT_DMCA_POLICY_SECTIONS, DMCA_POLICY_KEYS, mergePolicySections } from "../dmca/policy-defaults";
+import { ensureLegalDefaults, legalFailure } from "../legal-policy";
 
 const router = Router();
 // req.ip honours the app's "trust proxy" hop count, so a client-supplied
@@ -205,6 +206,7 @@ export async function loadSettings(executor: DbExecutor = db): Promise<any> {
 }
 
 async function policyResponse(req: Request, executor: DbExecutor = db) {
+  await ensureLegalDefaults();
   const row = await loadSettings(executor);
   const agent = {
     name: row.agent_name ?? null, organization: row.agent_organization ?? null, address: row.agent_address ?? null,
@@ -221,7 +223,8 @@ async function policyResponse(req: Request, executor: DbExecutor = db) {
 }
 
 router.get("/policy", async (req, res, next) => {
-  try { res.json(await policyResponse(req)); } catch (error) { next(error); }
+  res.set("Cache-Control", "no-store");
+  try { res.json(await policyResponse(req)); } catch (error) { legalFailure(res, error); }
 });
 
 router.put("/settings", requireDmcaPermission(DmcaPermission.MANAGE_PERMISSIONS), async (req, res, next) => {
@@ -233,6 +236,7 @@ router.put("/settings", requireDmcaPermission(DmcaPermission.MANAGE_PERMISSIONS)
   }
   try {
     await db.transaction(async (tx) => {
+      await tx.execute(sql`SELECT pg_advisory_xact_lock(736201)`);
       const previous = await loadSettings(tx);
       const { agent, sections } = parsed.data;
       await tx.execute(sql`UPDATE dmca_settings SET agent_name=${agent.name || null}, agent_organization=${agent.organization || null},

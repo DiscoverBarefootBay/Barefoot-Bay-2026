@@ -550,7 +550,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create HTTP server
   const server = createServer(app);
   
-  setupAuth(app);
+  // Authentication and global legal gate are installed once by app.ts.
 
   // User deletion helper function - defined before endpoints that use it
   async function deleteUserData(userId: number) {
@@ -1049,7 +1049,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Configure WebSockets for chat
   // Setup WebSockets for real-time messaging feature
-  const wss = new WebSocketServer({ server });
+  // This legacy unauthenticated broadcaster is disabled. Express session/consent
+  // middleware does not cover upgrade requests; never accept them implicitly.
+  const wss = new WebSocketServer({ server, verifyClient: () => false });
   
   wss.on('connection', (ws) => {
     console.log('New WebSocket connection established');
@@ -15732,7 +15734,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
    * API endpoint to get a presigned URL for Object Storage media
    * This enables client-side access to private Object Storage files
    */
-  app.get('/api/media/presigned', async (req, res) => {
+  app.get('/api/media/presigned', requireAdmin, async (req, res) => {
     try {
       // Import the object storage module
       const objectStorage = await import('./object-storage');

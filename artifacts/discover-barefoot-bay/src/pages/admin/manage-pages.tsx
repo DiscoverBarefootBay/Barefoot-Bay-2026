@@ -3,7 +3,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
+
+const LEGAL_PAGE_SLUGS: Array<string | undefined> = ["terms-and-agreements", "privacy-policy"];
 import {
   Card,
   CardContent,
@@ -374,9 +376,15 @@ export default function ManagePagesPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/pages"] });
+      const wasLegal = LEGAL_PAGE_SLUGS.includes(selectedPage?.slug);
+      if (wasLegal) {
+        queryClient.invalidateQueries({ queryKey: ["legal"] });
+      }
       toast({
         title: "Success",
-        description: "Page updated successfully",
+        description: wasLegal
+          ? "Page saved. If the policy text changed, a new version is now published and members must accept it again."
+          : "Page updated successfully",
       });
       setIsEditDialogOpen(false);
       setSelectedPage(null);
@@ -895,7 +903,12 @@ export default function ManagePagesPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <h1 className="text-3xl font-bold mb-6">Community Content Management</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <h1 className="text-3xl font-bold">Community Content Management</h1>
+        <Link href="/admin/legal-history" className="text-sm font-medium text-sky-700 hover:underline" data-testid="link-legal-history">
+          Legal policy history
+        </Link>
+      </div>
       
       <Tabs defaultValue="pages" className="mb-8">
         <TabsList className="flex max-w-full mb-6">
@@ -1140,6 +1153,13 @@ export default function ManagePagesPage() {
               Update the page content and settings
             </DialogDescription>
           </DialogHeader>
+          {LEGAL_PAGE_SLUGS.includes(selectedPage?.slug) && (
+            <div role="note" className="rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900" data-testid="text-legal-republish-warning">
+              <p className="font-semibold">This is a legal policy page.</p>
+              <p>Saving a change to the published text creates a new policy version. Every signed-in member will be asked to review and accept it again before using the site. Saving without text changes does not create a new version.</p>
+              <Link href="/admin/legal-history" className="underline font-medium">View policy history</Link>
+            </div>
+          )}
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onEditSubmit)} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">

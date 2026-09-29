@@ -18,6 +18,7 @@ let welcomeCalls: Array<{ email: string; fullName?: string | null }>;
 let createdUsers: any[];
 let existingUsername: any;
 let existingEmail: any;
+let initializedReadStates: number[];
 
 let nextUserId = 1;
 
@@ -67,8 +68,39 @@ mock.module('../storage.ts', {
         return user;
       },
       getUser: async (id: number) => createdUsers.find((u) => u.id === id),
+      markAllContentAsReadForNewUser: async (id: number) => {
+        assert.ok(createdUsers.some(u => u.id === id), 'read state initializes only after account/consent helper resolves');
+        initializedReadStates.push(id);
+      },
       initializeVendorPageVisitsForNewUser: async () => {},
       createFormSubmission: async () => ({ id: 1 }),
+    },
+  },
+});
+
+// Keep real strict input validation/error mapping; mock only the transactional
+// account+consent persistence boundary. Database atomicity is covered separately
+// by legal-policy.test.ts, and this email suite must not persist accounts.
+const legalPolicy = await import('../legal-policy');
+const currentAcceptances = [
+  { key: 'terms', versionId: 101, accepted: true },
+  { key: 'privacy', versionId: 102, accepted: true },
+  { key: 'dmca', versionId: 103, accepted: true },
+];
+mock.module('../legal-policy.ts', {
+  namedExports: {
+    ...legalPolicy,
+    registerWithConsent: async (insertUser: any, input: unknown) => {
+      const acceptances = legalPolicy.acceptanceSchema.parse(input);
+      if (acceptances.length !== 3) throw new legalPolicy.LegalError(400, 'INVALID_POLICY_ACCEPTANCE', 'Accept all three policies');
+      for (const acceptance of acceptances) {
+        if (!currentAcceptances.some(p => p.key === acceptance.key && p.versionId === acceptance.versionId)) {
+          throw new legalPolicy.LegalError(409, 'POLICY_VERSION_CHANGED', 'Review current versions');
+        }
+      }
+      const user = { id: nextUserId++, ...insertUser };
+      createdUsers.push(user);
+      return user;
     },
   },
 });
@@ -79,7 +111,7 @@ let baseUrl: string;
 before(async () => {
   const { default: express } = await import('express');
   const { default: session } = await import('express-session');
-  const { setupAuth } = await import('../auth.ts');
+  const { setupAuth } = await import('../auth');
 
   const app = express();
   app.use(express.json());
@@ -111,6 +143,7 @@ beforeEach(() => {
   createdUsers = [];
   existingUsername = undefined;
   existingEmail = undefined;
+  initializedReadStates = [];
 });
 
 function registerBody(overrides: Record<string, unknown> = {}) {
@@ -120,6 +153,7 @@ function registerBody(overrides: Record<string, unknown> = {}) {
     email: `newuser${nextUserId}@example.com`,
     fullName: 'New User',
     acceptedTerms: true,
+    legalAcceptances: currentAcceptances.map(p => ({ ...p })),
     recaptchaToken: 'test-token',
     ...overrides,
   };
@@ -148,6 +182,7 @@ describe('POST /api/register welcome email', () => {
     const user = (await res.json()) as { id: number; username: string };
     assert.ok(user.id, 'response should include the created user id');
     assert.equal(createdUsers.length, 1, 'user should have been created');
+    assert.deepEqual(initializedReadStates, [user.id], 'existing content is initialized as read after signup');
 
     // Logged in: passport sets a session cookie on successful req.login.
     const setCookie = res.headers.get('set-cookie');
@@ -167,6 +202,7 @@ describe('POST /api/register welcome email', () => {
     const user = (await res.json()) as { id: number };
     assert.ok(user.id, 'response should include the created user id');
     assert.equal(createdUsers.length, 1, 'user should have been created');
+    assert.deepEqual(initializedReadStates, [user.id], 'read initialization survives welcome-email failure');
 
     const setCookie = res.headers.get('set-cookie');
     assert.ok(setCookie && /connect\.sid=/.test(setCookie), 'session cookie should be set');
@@ -187,12 +223,25 @@ describe('POST /api/register welcome email', () => {
   });
 
   it('does not send a welcome email when registration fails validation', async () => {
-    const res = await postRegister(registerBody({ acceptedTerms: false }));
+    const res = await postRegister(registerBody({
+      legalAcceptances: currentAcceptances.map(p => ({ ...p, accepted: p.key !== 'dmca' })),
+    }));
     assert.equal(res.status, 400);
 
     await flushMicrotasks();
 
     assert.equal(welcomeCalls.length, 0, 'no welcome email when registration is rejected');
     assert.equal(createdUsers.length, 0, 'no user created when registration is rejected');
+    assert.deepEqual(initializedReadStates, [], 'no read initialization for a rejected signup');
+  });
+  it('does not initialize read state or send email for stale legal versions', async () => {
+    const res = await postRegister(registerBody({
+      legalAcceptances: currentAcceptances.map(p => ({ ...p, versionId: p.versionId + 1 })),
+    }));
+    assert.equal(res.status, 409);
+    await flushMicrotasks();
+    assert.equal(welcomeCalls.length, 0);
+    assert.equal(createdUsers.length, 0);
+    assert.deepEqual(initializedReadStates, []);
   });
 });

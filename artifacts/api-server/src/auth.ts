@@ -10,6 +10,7 @@ import { pool } from "./db";
 import { applyPerformanceOptimizations } from "./performance";
 import { sendBotDetectionAlertEmail, isSuspiciousUsername } from "./bot-detection";
 import { sendWelcomeEmail } from "./sendgrid-service";
+import { legalGate, mountLegalRoutes, registerWithConsent, legalFailure, acceptanceSchema } from "./legal-policy";
 
 declare global {
   namespace Express {
@@ -92,7 +93,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
   
   // Check for token in query parameter for cross-domain API requests
   const authToken = req.query.authToken as string;
-  if (authToken && process.env.NODE_ENV === 'production') {
+  if (false && authToken && process.env.NODE_ENV === 'production') {
     // Token should be in format userId.timestamp.CHECKSUM
     const tokenParts = authToken.split('.');
     if (tokenParts.length === 3) {
@@ -192,12 +193,16 @@ export function requireAdmin(req: Request, res: Response, next: NextFunction) {
 export const validateAdmin = requireAdmin;
 
 export function setupAuth(app: Express) {
+  if (app.locals.legalAuthInstalled) return;
+  app.locals.legalAuthInstalled = true;
   if (!process.env.SESSION_SECRET && process.env.NODE_ENV === 'production') {
     throw new Error("SESSION_SECRET environment variable is required in production");
   }
 
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(legalGate);
+  mountLegalRoutes(app);
   
   // Add a special authentication status endpoint that can be used to check login state
   // This is especially useful for the messages page and cross-domain verification
@@ -322,11 +327,7 @@ export function setupAuth(app: Express) {
         return res.status(400).json({ message: "Registration failed" });
       }
 
-      if (!req.body.acceptedTerms) {
-        return res.status(400).json({ 
-          message: "You must accept the Terms and Conditions to register" 
-        });
-      }
+      acceptanceSchema.parse(req.body.legalAcceptances);
 
       // Verify reCAPTCHA token
       const recaptchaToken = req.body.recaptchaToken;
@@ -412,7 +413,7 @@ export function setupAuth(app: Express) {
       
       console.log(`User ${req.body.username} registration: Badge Holder status: ${isBadgeHolder}, assigning role: ${userRole}`);
       
-      const user = await storage.createUser({
+      const user = await registerWithConsent({
         username: req.body.username,
         password: hashedPassword,
         email: req.body.email,
@@ -420,7 +421,6 @@ export function setupAuth(app: Express) {
         isResident: req.body.isResident || false, // Legacy field kept for backward compatibility, use Badge Holder role instead
         avatarUrl: req.body.avatarUrl,
         role: userRole, // Set role based on Badge Holder status
-        isApproved: false, // Still require approval for moderation
         
         // Resident section survey fields
         isLocalResident: isLocalResident,
@@ -442,7 +442,11 @@ export function setupAuth(app: Express) {
         neverHeardOfBB: req.body.neverHeardOfBB || false,
         // Club memberships - array of social club slugs
         clubMemberships: Array.isArray(req.body.clubMemberships) ? req.body.clubMemberships : [],
-      });
+      }, req.body.legalAcceptances);
+
+      // Preserve the existing new-account read-state initialization, but only
+      // after account creation and all consent evidence have committed.
+      await storage.markAllContentAsReadForNewUser(user.id);
 
       // Record Terms & Privacy acceptance as a form submission
       // This makes the acceptance visible in /admin/form-submissions
@@ -531,14 +535,11 @@ export function setupAuth(app: Express) {
           console.error("Login error after registration:", err);
           return res.status(500).json({ message: "Registration successful but login failed" });
         }
-        res.status(201).json(user);
+        const { password: _password, ...publicUser } = user;
+        res.status(201).json(publicUser);
       });
     } catch (err: any) {
-      console.error("Registration error:", err);
-      res.status(500).json({ 
-        message: "Registration failed. Please try again later.",
-        details: process.env.NODE_ENV === "development" ? err.message : undefined
-      });
+      return legalFailure(res, err);
     }
   });
 

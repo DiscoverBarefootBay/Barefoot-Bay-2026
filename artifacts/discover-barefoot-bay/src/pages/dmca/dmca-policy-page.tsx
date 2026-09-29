@@ -13,6 +13,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { useLegalPolicies } from "@/hooks/use-legal";
+import { PolicyDocument, PolicySkeleton, PolicyVersionMeta } from "@/components/legal/policy-document";
+import { LEGAL_QUERY_KEYS } from "@/lib/legal";
 
 type DMCAAgent = {
   name: string | null;
@@ -96,6 +99,8 @@ export default function DMCAPolicyPage() {
   const { data, isLoading, isPlaceholderData, error } = useQuery<DMCAPolicyResponse>({
     queryKey: ["/api/dmca/policy"],
   });
+  const { data: legalPolicies, isLoading: legalLoading, isError: legalError, refetch: refetchLegal } = useLegalPolicies();
+  const dmcaSnapshot = legalPolicies?.find((p) => p.key === "dmca");
 
   const updateMutation = useMutation({
     mutationFn: async (payload: PolicyFormValues) => {
@@ -104,10 +109,12 @@ export default function DMCAPolicyPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/dmca/policy"] });
+      queryClient.invalidateQueries({ queryKey: LEGAL_QUERY_KEYS.policies });
+      queryClient.invalidateQueries({ queryKey: LEGAL_QUERY_KEYS.consentRoot });
       setIsEditing(false);
       toast({
-        title: "Policy updated",
-        description: "The DMCA policy has been successfully updated.",
+        title: "Policy saved",
+        description: "If the published text changed, a new version was created and signed-in members must accept it again before continuing.",
       });
     },
     onError: (err: any) => {
@@ -187,11 +194,13 @@ export default function DMCAPolicyPage() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
         <div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 mb-2">Copyright / DMCA Policy</h1>
-          {data.updatedAt && (
+          {dmcaSnapshot ? (
+            <PolicyVersionMeta policy={dmcaSnapshot} />
+          ) : data.updatedAt ? (
             <p className="text-sm text-gray-500">
               Last updated: {new Date(data.updatedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
-          )}
+          ) : null}
         </div>
         <div className="flex items-center gap-3">
           {data.canEdit && !isEditing && (
@@ -210,7 +219,12 @@ export default function DMCAPolicyPage() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
           <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Edit Mode</h2>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">Edit Mode</h2>
+                <p className="text-sm text-amber-800 mt-1" role="note" data-testid="text-dmca-republish-warning">
+                  Saving changed text publishes a new policy version. Every signed-in member will be asked to review and accept it again.
+                </p>
+              </div>
               <div className="flex gap-3">
                 <Button type="button" variant="ghost" onClick={handleCancelClick}>
                   <X className="w-4 h-4 mr-2" /> Cancel
@@ -295,117 +309,18 @@ export default function DMCAPolicyPage() {
           </div>
         </form>
       ) : (
-        <div className="flex flex-col md:flex-row gap-12">
-          {/* Table of Contents - Desktop Only */}
-          <div className="hidden md:block w-64 shrink-0">
-            <div className="sticky top-24">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">Contents</h3>
-              <nav className="space-y-2">
-                {allSections.map((section) => (
-                  <a 
-                    key={section.key} 
-                    href={`#${section.key}`}
-                    className="block text-sm text-gray-600 hover:text-primary transition-colors py-1 group flex items-center"
-                  >
-                    <ChevronRight className="w-3 h-3 opacity-0 group-hover:opacity-100 mr-1 transition-opacity text-primary" />
-                    <span className="truncate">{section.title}</span>
-                  </a>
-                ))}
-              </nav>
+        <div className="bg-white/95 rounded-xl">
+          {legalLoading ? (
+            <PolicySkeleton />
+          ) : legalError || !dmcaSnapshot ? (
+            <div role="alert" className="text-center py-10">
+              <AlertTriangle className="w-8 h-8 text-amber-500 mx-auto mb-3" />
+              <p className="text-gray-700 mb-4">The current published Copyright / DMCA policy could not be loaded.</p>
+              <Button onClick={() => refetchLegal()}>Try again</Button>
             </div>
-          </div>
-
-          <div className="flex-1 space-y-16">
-            {allSections.map((section) => {
-              if (section.key === "designated_agent") {
-                return (
-                  <section key={section.key} id={section.key} className="scroll-mt-24">
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-6">
-                      <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">{section.title}</h2>
-                      {section.pendingCounselReview && (
-                        <span className="inline-flex items-center whitespace-nowrap px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                          <AlertTriangle className="w-3 h-3 mr-1" /> Pending counsel review
-                        </span>
-                      )}
-                    </div>
-                    <div className="mb-8 text-lg">
-                      <RenderText text={section.body} />
-                    </div>
-
-                    <Card className="bg-white border-2 border-gray-100 shadow-sm overflow-hidden">
-                      {!data.agentConfigured ? (
-                        <div className="p-8 text-center bg-gray-50 border-b border-gray-100">
-                          <AlertTriangle className="w-8 h-8 text-amber-500 mx-auto mb-3" />
-                          <h3 className="text-lg font-semibold text-gray-900">Designated Agent Details Pending</h3>
-                          <p className="text-gray-600 mt-1 max-w-md mx-auto">
-                            The contact information for our designated agent is currently being finalized. Please check back soon.
-                          </p>
-                        </div>
-                      ) : (
-                        <div className="p-0">
-                          <div className="bg-gray-50/80 p-6 border-b border-gray-100">
-                            <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                              {data.agent.name || "DMCA Designated Agent"}
-                            </h3>
-                            {data.agent.organization && (
-                              <p className="text-gray-600 font-medium mt-1 flex items-center gap-2">
-                                <Building className="w-4 h-4 text-gray-400" />
-                                {data.agent.organization}
-                              </p>
-                            )}
-                          </div>
-                          <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-8">
-                            <div>
-                              <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Mailing Address</h4>
-                              <div className="flex items-start gap-3 text-gray-800">
-                                <MapPin className="w-5 h-5 text-gray-400 shrink-0 mt-0.5" />
-                                <div className="whitespace-pre-wrap leading-relaxed">
-                                  {data.agent.address || "No address provided"}
-                                </div>
-                              </div>
-                            </div>
-                            <div>
-                              <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Contact</h4>
-                              <div className="space-y-4">
-                                {data.agent.phone && (
-                                  <a href={`tel:${data.agent.phone.replace(/[^0-9+]/g, '')}`} className="flex items-center gap-3 text-gray-800 hover:text-primary transition-colors group">
-                                    <Phone className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors" />
-                                    <span>{data.agent.phone}</span>
-                                  </a>
-                                )}
-                                {data.agent.email && (
-                                  <a href={`mailto:${data.agent.email}`} className="flex items-center gap-3 text-gray-800 hover:text-primary transition-colors group">
-                                    <Mail className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors" />
-                                    <span>{data.agent.email}</span>
-                                  </a>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </Card>
-                  </section>
-                );
-              }
-
-              return (
-                <section key={section.key} id={section.key} className="scroll-mt-24">
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-6">
-                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">{section.title}</h2>
-                    {section.pendingCounselReview && (
-                      <span className="inline-flex items-center whitespace-nowrap px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                        <AlertTriangle className="w-3 h-3 mr-1" /> Pending counsel review
-                      </span>
-                    )}
-                  </div>
-                  <div className="prose max-w-none text-lg">
-                    <RenderText text={section.body} />
-                  </div>
-                </section>
-              );
-            })}
-          </div>
+          ) : (
+            <PolicyDocument policy={dmcaSnapshot} showHeader={false} />
+          )}
         </div>
       )}
     </div>

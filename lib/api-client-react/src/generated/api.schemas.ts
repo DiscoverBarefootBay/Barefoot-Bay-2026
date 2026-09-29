@@ -5,6 +5,118 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+export type LegalAcceptanceRecordPolicyKey =
+  (typeof LegalAcceptanceRecordPolicyKey)[keyof typeof LegalAcceptanceRecordPolicyKey];
+
+export const LegalAcceptanceRecordPolicyKey = {
+  terms: "terms",
+  privacy: "privacy",
+  dmca: "dmca",
+} as const;
+
+export type LegalAcceptanceRecordSource =
+  (typeof LegalAcceptanceRecordSource)[keyof typeof LegalAcceptanceRecordSource];
+
+export const LegalAcceptanceRecordSource = {
+  signup: "signup",
+  subsequent: "subsequent",
+} as const;
+
+export interface LegalAcceptanceRecord {
+  userId: number;
+  policyKey: LegalAcceptanceRecordPolicyKey;
+  versionId: number;
+  acceptedAt: string;
+  source: LegalAcceptanceRecordSource;
+}
+
+export type LegalPolicyKey =
+  (typeof LegalPolicyKey)[keyof typeof LegalPolicyKey];
+
+export const LegalPolicyKey = {
+  terms: "terms",
+  privacy: "privacy",
+  dmca: "dmca",
+} as const;
+
+export interface LegalPolicy {
+  key: LegalPolicyKey;
+  versionId: number;
+  title: string;
+  url: string;
+  publishedAt: string;
+  contentHtml: string;
+  /** @nullable */
+  changeNotes: string | null;
+}
+
+export interface LegalHistory {
+  versions: LegalPolicy[];
+  acceptances: LegalAcceptanceRecord[];
+  page: number;
+  pageSize: number;
+  total: number;
+  versionTotal: number;
+  acceptanceTotal: number;
+}
+
+export interface LegalPolicyManifest {
+  policies: LegalPolicy[];
+}
+
+export interface LegalConsentStatus {
+  policies: LegalPolicy[];
+  outstanding: LegalPolicy[];
+  requiresAcceptance: boolean;
+}
+
+export type LegalAcceptanceKey =
+  (typeof LegalAcceptanceKey)[keyof typeof LegalAcceptanceKey];
+
+export const LegalAcceptanceKey = {
+  terms: "terms",
+  privacy: "privacy",
+  dmca: "dmca",
+} as const;
+
+export interface LegalAcceptance {
+  key: LegalAcceptanceKey;
+  /** @minimum 1 */
+  versionId: number;
+  accepted: boolean;
+}
+
+export interface LegalConsentInput {
+  /**
+   * @minItems 1
+   * @maxItems 3
+   */
+  acceptances: LegalAcceptance[];
+}
+
 export interface HealthStatus {
   status: string;
 }
+
+export type GetLegalHistoryParams = {
+  /**
+   * @minimum 1
+   * @maximum 1000
+   */
+  page?: number;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  pageSize?: number;
+  policyKey?: GetLegalHistoryPolicyKey;
+};
+
+export type GetLegalHistoryPolicyKey =
+  (typeof GetLegalHistoryPolicyKey)[keyof typeof GetLegalHistoryPolicyKey];
+
+export const GetLegalHistoryPolicyKey = {
+  terms: "terms",
+  privacy: "privacy",
+  dmca: "dmca",
+} as const;

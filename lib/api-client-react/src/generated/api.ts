@@ -5,24 +5,364 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
+  MutationFunction,
   QueryFunction,
   QueryKey,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query";
 
-import type { HealthStatus } from "./api.schemas";
+import type {
+  GetLegalHistoryParams,
+  HealthStatus,
+  LegalConsentInput,
+  LegalConsentStatus,
+  LegalHistory,
+  LegalPolicyManifest,
+} from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
-import type { ErrorType } from "../custom-fetch";
+import type { ErrorType, BodyType } from "../custom-fetch";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+/**
+ * @summary Authorized publication and acceptance history
+ */
+export const getGetLegalHistoryUrl = (params?: GetLegalHistoryParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/legal/history?${stringifiedParams}`
+    : `/api/legal/history`;
+};
+
+export const getLegalHistory = async (
+  params?: GetLegalHistoryParams,
+  options?: RequestInit,
+): Promise<LegalHistory> => {
+  return customFetch<LegalHistory>(getGetLegalHistoryUrl(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetLegalHistoryQueryKey = (params?: GetLegalHistoryParams) => {
+  return [`/api/legal/history`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetLegalHistoryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getLegalHistory>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetLegalHistoryParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getLegalHistory>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetLegalHistoryQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getLegalHistory>>> = ({
+    signal,
+  }) => getLegalHistory(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getLegalHistory>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetLegalHistoryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getLegalHistory>>
+>;
+export type GetLegalHistoryQueryError = ErrorType<void>;
+
+/**
+ * @summary Authorized publication and acceptance history
+ */
+
+export function useGetLegalHistory<
+  TData = Awaited<ReturnType<typeof getLegalHistory>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetLegalHistoryParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getLegalHistory>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetLegalHistoryQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Read current immutable legal publications
+ */
+export const getGetLegalPoliciesUrl = () => {
+  return `/api/legal/policies`;
+};
+
+export const getLegalPolicies = async (
+  options?: RequestInit,
+): Promise<LegalPolicyManifest> => {
+  return customFetch<LegalPolicyManifest>(getGetLegalPoliciesUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetLegalPoliciesQueryKey = () => {
+  return [`/api/legal/policies`] as const;
+};
+
+export const getGetLegalPoliciesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getLegalPolicies>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getLegalPolicies>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetLegalPoliciesQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getLegalPolicies>>
+  > = ({ signal }) => getLegalPolicies({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getLegalPolicies>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetLegalPoliciesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getLegalPolicies>>
+>;
+export type GetLegalPoliciesQueryError = ErrorType<void>;
+
+/**
+ * @summary Read current immutable legal publications
+ */
+
+export function useGetLegalPolicies<
+  TData = Awaited<ReturnType<typeof getLegalPolicies>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getLegalPolicies>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetLegalPoliciesQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Read current account acceptance requirements
+ */
+export const getGetLegalConsentUrl = () => {
+  return `/api/legal/consent`;
+};
+
+export const getLegalConsent = async (
+  options?: RequestInit,
+): Promise<LegalConsentStatus> => {
+  return customFetch<LegalConsentStatus>(getGetLegalConsentUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetLegalConsentQueryKey = () => {
+  return [`/api/legal/consent`] as const;
+};
+
+export const getGetLegalConsentQueryOptions = <
+  TData = Awaited<ReturnType<typeof getLegalConsent>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getLegalConsent>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetLegalConsentQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getLegalConsent>>> = ({
+    signal,
+  }) => getLegalConsent({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getLegalConsent>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetLegalConsentQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getLegalConsent>>
+>;
+export type GetLegalConsentQueryError = ErrorType<void>;
+
+/**
+ * @summary Read current account acceptance requirements
+ */
+
+export function useGetLegalConsent<
+  TData = Awaited<ReturnType<typeof getLegalConsent>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getLegalConsent>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetLegalConsentQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Explicitly accept exact current policy versions
+ */
+export const getAcceptLegalPoliciesUrl = () => {
+  return `/api/legal/consent`;
+};
+
+export const acceptLegalPolicies = async (
+  legalConsentInput: LegalConsentInput,
+  options?: RequestInit,
+): Promise<LegalConsentStatus> => {
+  return customFetch<LegalConsentStatus>(getAcceptLegalPoliciesUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(legalConsentInput),
+  });
+};
+
+export const getAcceptLegalPoliciesMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof acceptLegalPolicies>>,
+    TError,
+    { data: BodyType<LegalConsentInput> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof acceptLegalPolicies>>,
+  TError,
+  { data: BodyType<LegalConsentInput> },
+  TContext
+> => {
+  const mutationKey = ["acceptLegalPolicies"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof acceptLegalPolicies>>,
+    { data: BodyType<LegalConsentInput> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return acceptLegalPolicies(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AcceptLegalPoliciesMutationResult = NonNullable<
+  Awaited<ReturnType<typeof acceptLegalPolicies>>
+>;
+export type AcceptLegalPoliciesMutationBody = BodyType<LegalConsentInput>;
+export type AcceptLegalPoliciesMutationError = ErrorType<void>;
+
+/**
+ * @summary Explicitly accept exact current policy versions
+ */
+export const useAcceptLegalPolicies = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof acceptLegalPolicies>>,
+    TError,
+    { data: BodyType<LegalConsentInput> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof acceptLegalPolicies>>,
+  TError,
+  { data: BodyType<LegalConsentInput> },
+  TContext
+> => {
+  return useMutation(getAcceptLegalPoliciesMutationOptions(options));
+};
 
 /**
  * Returns server health status

@@ -6,4 +6,17 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./getLegalHistoryParams";
+export * from "./getLegalHistoryPolicyKey";
 export * from "./healthStatus";
+export * from "./legalAcceptance";
+export * from "./legalAcceptanceKey";
+export * from "./legalAcceptanceRecord";
+export * from "./legalAcceptanceRecordPolicyKey";
+export * from "./legalAcceptanceRecordSource";
+export * from "./legalConsentInput";
+export * from "./legalConsentStatus";
+export * from "./legalHistory";
+export * from "./legalPolicy";
+export * from "./legalPolicyKey";
+export * from "./legalPolicyManifest";

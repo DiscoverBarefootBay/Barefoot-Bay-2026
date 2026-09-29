@@ -19,6 +19,18 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { useLegalPolicies } from "@/hooks/use-legal";
+import { PolicyDocument } from "@/components/legal/policy-document";
+import {
+  LEGAL_POLICY_KEYS,
+  buildAcceptances,
+  formatPolicyDate,
+  isPolicyStaleError,
+  reconcileSelections,
+  type LegalPolicy,
+  type LegalPolicyKey,
+  type LegalSelections,
+} from "@/lib/legal";
 
 // Debounce hook for real-time validation
 function useDebounce<T>(value: T, delay: number): T {
@@ -93,10 +105,10 @@ export default function AuthPage() {
   const [showBadgeHolderQuestions, setShowBadgeHolderQuestions] = useState(false);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
-  const [showTermsModal, setShowTermsModal] = useState(false);
-  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
-  const [termsAccepted, setTermsAccepted] = useState(false);
-  const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  // Explicit, per-policy acceptance bound to the exact version displayed.
+  const [legalSelections, setLegalSelections] = useState<LegalSelections>({});
+  const [viewingPolicyKey, setViewingPolicyKey] = useState<LegalPolicyKey | null>(null);
+  const [legalNotice, setLegalNotice] = useState<string | null>(null);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMismatch, setPasswordMismatch] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -179,16 +191,33 @@ export default function AuthPage() {
     checkEmail();
   }, [debouncedEmail]);
 
-  // Fetch terms and privacy content - always enabled for registration flow
-  const { data: termsPage, isLoading: termsLoading, isError: termsError } = useQuery<{ content: string }>({
-    queryKey: ['/api/pages/terms-and-agreements'],
-    staleTime: 5 * 60 * 1000 // Cache for 5 minutes
-  });
+  // Active published policy snapshots (same source as footer and public pages)
+  const {
+    data: legalPolicies,
+    isLoading: legalLoading,
+    isError: legalError,
+    refetch: refetchLegalPolicies,
+    isFetching: legalFetching,
+  } = useLegalPolicies();
+  const orderedPolicies = useMemo(
+    () => (legalPolicies ? LEGAL_POLICY_KEYS.map((k) => legalPolicies.find((p) => p.key === k)).filter((p): p is LegalPolicy => !!p) : []),
+    [legalPolicies],
+  );
+  const legalAcceptances = buildAcceptances(orderedPolicies, legalSelections);
+  const allLegalAccepted = !!legalAcceptances && legalAcceptances.length === 3;
+  const viewingPolicy = orderedPolicies.find((p) => p.key === viewingPolicyKey) || null;
 
-  const { data: privacyPage, isLoading: privacyLoading, isError: privacyError } = useQuery<{ content: string }>({
-    queryKey: ['/api/pages/privacy-policy'],
-    staleTime: 5 * 60 * 1000 // Cache for 5 minutes
-  });
+  // If a policy is republished while the form is open, drop outdated checks.
+  const legalSignature = orderedPolicies.map((p) => `${p.key}:${p.versionId}`).join("|");
+  useEffect(() => {
+    if (!legalSignature) return;
+    setLegalSelections((cur) => {
+      const { selections, dropped } = reconcileSelections(cur, orderedPolicies);
+      if (dropped) setLegalNotice("A policy was updated while you were signing up. Please review the new version and check it again.");
+      return dropped ? selections : cur;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [legalSignature]);
 
   // Fetch social clubs for club membership selection
   const { data: socialClubs } = useQuery<{ id: number; slug: string; title: string }[]>({
@@ -239,10 +268,10 @@ export default function AuthPage() {
   // "I Accept" in each modal). This is the single source of truth so the
   // z.boolean() schema can never receive a string and silently fail.
   useEffect(() => {
-    registerForm.setValue("acceptedTerms", termsAccepted && privacyAccepted, {
+    registerForm.setValue("acceptedTerms", allLegalAccepted, {
       shouldValidate: registerForm.formState.isSubmitted,
     });
-  }, [termsAccepted, privacyAccepted]);
+  }, [allLegalAccepted]);
 
   // Auto-calculate resident status based on survey answers
   useEffect(() => {
@@ -431,13 +460,23 @@ export default function AuthPage() {
                     });
                     return;
                   }
-                  // Include explicit acceptance tracking from modal interactions
+                  if (!legalAcceptances || legalAcceptances.length !== 3) {
+                    toast({
+                      title: "Policy acceptance required",
+                      description: "Please check each of the three policy boxes to continue.",
+                      variant: "destructive",
+                    });
+                    return;
+                  }
+                  setLegalNotice(null);
                   registerMutation.mutate({ 
                     ...data, 
                     recaptchaToken,
                     // Track that user explicitly accepted terms via modal
-                    termsAcceptedViaModal: termsAccepted,
-                    privacyAcceptedViaModal: privacyAccepted,
+                    termsAcceptedViaModal: legalSelections.terms !== undefined,
+                    privacyAcceptedViaModal: legalSelections.privacy !== undefined,
+                    // Exact versions the user explicitly accepted
+                    legalAcceptances,
                     // Include selected club memberships
                     clubMemberships: selectedClubs
                   } as any, {
@@ -455,7 +494,12 @@ export default function AuthPage() {
                         setShowSuccessModal(false); // Close modal to trigger redirect
                       }, 4000);
                     },
-                    onError: () => {
+                    onError: (err: unknown) => {
+                      if (isPolicyStaleError(err)) {
+                        setLegalSelections({});
+                        setLegalNotice("One or more policies changed before your account was created. Nothing was saved. Please review the current versions and check each box again.");
+                        refetchLegalPolicies();
+                      }
                       // reCAPTCHA tokens are single-use and consumed on the server side
                       // regardless of whether registration succeeds or fails.
                       // Always reset the CAPTCHA widget so user can re-verify for retry.
@@ -1093,48 +1137,66 @@ export default function AuthPage() {
                     </Accordion>
                   )}
 
-                  {/* Terms and Conditions Checkbox - Moved to bottom */}
-                  <div className="flex flex-row items-center space-x-3 rounded-md border p-4 mt-4 cursor-pointer hover:bg-slate-50 transition-colors"
-                    onClick={() => !termsAccepted && setShowTermsModal(true)}
-                  >
-                    <Checkbox
-                      checked={termsAccepted}
-                      onCheckedChange={() => !termsAccepted && setShowTermsModal(true)}
-                      data-testid="checkbox-accept-terms"
-                      className="pointer-events-none"
-                    />
-                    <div className="space-y-1 leading-none flex-1">
-                      <span className="text-sm font-medium flex items-center gap-2">
-                        I accept the Terms and Conditions
-                        {termsAccepted && <span className="text-green-600 text-xs font-normal">(accepted)</span>}
-                      </span>
-                      {!termsAccepted && (
-                        <p className="text-xs text-muted-foreground">Click to read and accept</p>
-                      )}
-                    </div>
-                  </div>
+                  {/* Policy acceptance: three separate, unchecked, version-bound boxes */}
+                  <fieldset className="mt-4 space-y-2" data-testid="fieldset-legal-acceptance">
+                    <legend className="text-sm font-medium mb-1">Policies</legend>
+                    {legalNotice && (
+                      <div role="alert" className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900" data-testid="text-legal-notice">
+                        {legalNotice}
+                      </div>
+                    )}
+                    {legalLoading ? (
+                      <div className="space-y-2 animate-pulse" aria-busy="true">
+                        {[0, 1, 2].map((i) => <div key={i} className="h-14 rounded-md bg-slate-100" />)}
+                      </div>
+                    ) : legalError || orderedPolicies.length !== 3 ? (
+                      <div role="alert" className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+                        Current policies could not be loaded, so registration is paused.{" "}
+                        <button type="button" className="font-semibold underline" onClick={() => refetchLegalPolicies()} disabled={legalFetching}>
+                          {legalFetching ? "Retrying..." : "Try again"}
+                        </button>
+                      </div>
+                    ) : (
+                      orderedPolicies.map((p) => {
+                        const checked = legalSelections[p.key] === p.versionId;
+                        return (
+                          <div key={p.key} className="flex items-start gap-3 rounded-md border p-4 hover:bg-slate-50 transition-colors">
+                            <Checkbox
+                              id={`accept-${p.key}`}
+                              checked={checked}
+                              onCheckedChange={(v) =>
+                                setLegalSelections((cur) => {
+                                  const next = { ...cur };
+                                  if (v === true) next[p.key] = p.versionId;
+                                  else delete next[p.key];
+                                  return next;
+                                })
+                              }
+                              className="mt-0.5"
+                              data-testid={`checkbox-accept-${p.key}`}
+                            />
+                            <div className="space-y-1 leading-snug flex-1">
+                              <label htmlFor={`accept-${p.key}`} className="text-sm font-medium cursor-pointer">
+                                I have read and accept the {p.title}
+                              </label>
+                              <p className="text-xs text-muted-foreground">
+                                Version {p.versionId}, published {formatPolicyDate(p.publishedAt)}.{" "}
+                                <button
+                                  type="button"
+                                  className="text-primary underline"
+                                  onClick={() => setViewingPolicyKey(p.key)}
+                                  data-testid={`button-read-${p.key}`}
+                                >
+                                  Read it
+                                </button>
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })
+                    )}
+                  </fieldset>
 
-                  {/* Privacy Policy Checkbox */}
-                  <div className="flex flex-row items-center space-x-3 rounded-md border p-4 mt-2 cursor-pointer hover:bg-slate-50 transition-colors"
-                    onClick={() => !privacyAccepted && setShowPrivacyModal(true)}
-                  >
-                    <Checkbox
-                      checked={privacyAccepted}
-                      onCheckedChange={() => !privacyAccepted && setShowPrivacyModal(true)}
-                      data-testid="checkbox-accept-privacy"
-                      className="pointer-events-none"
-                    />
-                    <div className="space-y-1 leading-none flex-1">
-                      <span className="text-sm font-medium flex items-center gap-2">
-                        I accept the Privacy Policy
-                        {privacyAccepted && <span className="text-green-600 text-xs font-normal">(accepted)</span>}
-                      </span>
-                      {!privacyAccepted && (
-                        <p className="text-xs text-muted-foreground">Click to read and accept</p>
-                      )}
-                    </div>
-                  </div>
-                  
                   {/* acceptedTerms is kept in sync as a real boolean via the
                       useEffect tied to termsAccepted + privacyAccepted above,
                       so no hidden string-valued input is needed here. */}
@@ -1171,7 +1233,7 @@ export default function AuthPage() {
                   <Button 
                     type="submit" 
                     className="w-full py-6 mt-4 rounded-md text-base font-medium bg-coral hover:bg-coral/90 text-white border-0 shadow-none disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]" 
-                    disabled={registerMutation.isPending || !termsAccepted || !privacyAccepted || passwordMismatch || emailMismatch || !recaptchaToken || usernameStatus === 'taken' || emailStatus === 'taken'}
+                    disabled={registerMutation.isPending || !allLegalAccepted || passwordMismatch || emailMismatch || !recaptchaToken || usernameStatus === 'taken' || emailStatus === 'taken'}
                     variant="coral"
                   >
                     {registerMutation.isPending ? (
@@ -1184,7 +1246,7 @@ export default function AuthPage() {
                       emailStatus === 'taken' ? "Email Already Registered" :
                       passwordMismatch ? "Passwords Must Match" :
                       emailMismatch ? "Emails Must Match" :
-                      (!termsAccepted || !privacyAccepted) ? "Accept Terms & Privacy to Register" :
+                      !allLegalAccepted ? "Accept All Three Policies to Register" :
                       !recaptchaToken ? "Complete CAPTCHA to Register" : "Register"}
                   </Button>
                 </form>
@@ -1194,87 +1256,32 @@ export default function AuthPage() {
         </CardContent>
       </Card>
 
-      {/* Terms and Conditions Modal */}
-      <Dialog open={showTermsModal} onOpenChange={setShowTermsModal}>
-        <DialogContent className="max-w-2xl max-h-[80vh]">
+      {/* Policy reading dialog: renders the exact snapshot being accepted */}
+      <Dialog open={!!viewingPolicy} onOpenChange={(o) => !o && setViewingPolicyKey(null)}>
+        <DialogContent className="max-w-2xl max-h-[85vh]">
           <DialogHeader>
-            <DialogTitle>Terms and Conditions</DialogTitle>
+            <DialogTitle>{viewingPolicy?.title}</DialogTitle>
             <DialogDescription>
-              Please read and accept our Terms and Conditions to continue.
+              {viewingPolicy ? `Version ${viewingPolicy.versionId}, published ${formatPolicyDate(viewingPolicy.publishedAt)}` : ""}
             </DialogDescription>
           </DialogHeader>
           <ScrollArea className="h-[400px] pr-4">
-            {termsLoading ? (
-              <div className="flex items-center justify-center h-full">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-              </div>
-            ) : termsError ? (
-              <div className="text-center text-destructive p-4">
-                Failed to load Terms and Conditions. Please try again later.
-              </div>
-            ) : (
-              <div 
-                className="prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: termsPage?.content || '' }}
-              />
-            )}
+            {viewingPolicy && <PolicyDocument policy={viewingPolicy} showHeader={false} />}
           </ScrollArea>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowTermsModal(false)}>
-              Cancel
+            <Button variant="outline" onClick={() => setViewingPolicyKey(null)}>
+              Close
             </Button>
-            <Button 
+            <Button
               onClick={() => {
-                setTermsAccepted(true);
-                setShowTermsModal(false);
+                if (viewingPolicy) {
+                  setLegalSelections((cur) => ({ ...cur, [viewingPolicy.key]: viewingPolicy.versionId }));
+                }
+                setViewingPolicyKey(null);
               }}
-              data-testid="button-accept-terms"
-              disabled={termsLoading || termsError || !termsPage?.content}
+              data-testid="button-accept-viewing-policy"
             >
-              I Accept
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Privacy Policy Modal */}
-      <Dialog open={showPrivacyModal} onOpenChange={setShowPrivacyModal}>
-        <DialogContent className="max-w-2xl max-h-[80vh]">
-          <DialogHeader>
-            <DialogTitle>Privacy Policy</DialogTitle>
-            <DialogDescription>
-              Please read and accept our Privacy Policy to continue.
-            </DialogDescription>
-          </DialogHeader>
-          <ScrollArea className="h-[400px] pr-4">
-            {privacyLoading ? (
-              <div className="flex items-center justify-center h-full">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-              </div>
-            ) : privacyError ? (
-              <div className="text-center text-destructive p-4">
-                Failed to load Privacy Policy. Please try again later.
-              </div>
-            ) : (
-              <div 
-                className="prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: privacyPage?.content || '' }}
-              />
-            )}
-          </ScrollArea>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowPrivacyModal(false)}>
-              Cancel
-            </Button>
-            <Button 
-              onClick={() => {
-                setPrivacyAccepted(true);
-                setShowPrivacyModal(false);
-              }}
-              data-testid="button-accept-privacy"
-              disabled={privacyLoading || privacyError || !privacyPage?.content}
-            >
-              I Accept
+              Check this box
             </Button>
           </DialogFooter>
         </DialogContent>
