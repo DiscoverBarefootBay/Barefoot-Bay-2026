@@ -52,6 +52,11 @@ export const LEGAL_QUERY_KEYS = {
   history: (page: number, filter: string) => ["legal", "history", page, filter] as const,
 };
 
+/** Check more often while unavailable so an existing session can recover in place. */
+export function consentCheckInterval(queryStatus: string): number {
+  return queryStatus === "error" ? 15_000 : 90_000;
+}
+
 export class LegalApiError extends Error {
   status: number;
   code: string | null;

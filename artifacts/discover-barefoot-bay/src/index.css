@@ -1101,6 +1101,14 @@
     padding: 0.75rem !important;
     width: 100%;
   }
+
+  /* Legal acknowledgement checkboxes must stay beside their labels. */
+  [data-legal-consent] input[type="checkbox"] {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    padding: 0 !important;
+    flex: 0 0 1.25rem;
+  }
   
   /* Mobile form optimization in dialogs */
   [role="dialog"] form {
@@ -1108,9 +1116,9 @@
     overflow-x: hidden !important;
   }
   
-  [role="dialog"] input,
-  [role="dialog"] select,
-  [role="dialog"] textarea {
+  [role="dialog"]:not([data-legal-consent]) input,
+  [role="dialog"]:not([data-legal-consent]) select,
+  [role="dialog"]:not([data-legal-consent]) textarea {
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
@@ -1118,13 +1126,13 @@
   }
   
   /* Fix for dialog form labels and text elements */
-  [role="dialog"] label,
-  [role="dialog"] .form-label,
-  [role="dialog"] .space-y-0\.5 div,
-  [role="dialog"] .text-base,
-  [role="dialog"] .text-sm,
-  [role="dialog"] h3,
-  [role="dialog"] h4 {
+  [role="dialog"]:not([data-legal-consent]) label,
+  [role="dialog"]:not([data-legal-consent]) .form-label,
+  [role="dialog"]:not([data-legal-consent]) .space-y-0\.5 div,
+  [role="dialog"]:not([data-legal-consent]) .text-base,
+  [role="dialog"]:not([data-legal-consent]) .text-sm,
+  [role="dialog"]:not([data-legal-consent]) h3,
+  [role="dialog"]:not([data-legal-consent]) h4 {
     writing-mode: horizontal-tb !important;
     text-orientation: mixed !important;
     direction: ltr !important;
@@ -1176,7 +1184,7 @@
   /* Dialog button styling for mobile.
      Vaul drawers excluded: full-width/stacked buttons defeat the Filters
      drawer's horizontal Reset/Done footer and its compact controls. */
-  [role="dialog"]:not([data-vaul-drawer]) button,
+  [role="dialog"]:not([data-vaul-drawer]):not([data-legal-consent]) button,
   [role="alertdialog"] button {
     min-height: 44px !important;
     padding: 0.75rem 1rem !important;
@@ -1245,13 +1253,13 @@
      centering them like a modal detached the Filters drawer from the bottom
      edge, clipped its title, and left dead space. Drawers manage their own
      position/size. */
-  [role="dialog"]:not([data-vaul-drawer]) > div {
+  [role="dialog"]:not([data-vaul-drawer]):not([data-legal-consent]) > div {
     max-height: 90vh !important;
     overflow-y: auto !important;
   }
   
   /* Mobile dialog responsiveness for event forms */
-  [role="dialog"]:not([data-vaul-drawer]) {
+  [role="dialog"]:not([data-vaul-drawer]):not([data-legal-consent]) {
     width: calc(100vw - 1rem) !important;
     max-width: 95vw !important;
     max-height: 90vh !important;
@@ -1274,7 +1282,7 @@
   }
   
   /* Dialog content scrolling (Vaul drawers excluded — see note above) */
-  [role="dialog"]:not([data-vaul-drawer]) > div,
+  [role="dialog"]:not([data-vaul-drawer]):not([data-legal-consent]) > div,
   [role="alertdialog"] > div {
     overflow-y: auto !important;
     overflow-x: hidden !important;
@@ -1358,9 +1366,9 @@
     }
 
     /* Force flex containers to be column layout (Vaul drawers excluded) */
-    html body div[role="dialog"]:not([data-vaul-drawer]) .flex,
-    html body div[role="dialog"]:not([data-vaul-drawer]) .flex-col,
-    html body div[role="dialog"]:not([data-vaul-drawer]) .space-y-4 > div {
+    html body div[role="dialog"]:not([data-vaul-drawer]):not([data-legal-consent]) .flex,
+    html body div[role="dialog"]:not([data-vaul-drawer]):not([data-legal-consent]) .flex-col,
+    html body div[role="dialog"]:not([data-vaul-drawer]):not([data-legal-consent]) .space-y-4 > div {
       display: flex !important;
       flex-direction: column !important;
       writing-mode: horizontal-tb !important;

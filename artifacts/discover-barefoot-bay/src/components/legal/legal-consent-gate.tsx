@@ -45,23 +45,26 @@ function GateSkeleton() {
 
 function GateError({ message, onRetry, retrying }: { message: string; onRetry: () => void; retrying: boolean }) {
   const { logoutMutation } = useAuth();
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => { headingRef.current?.focus(); }, []);
   return (
     <GateShell>
-      <div role="alert" className="w-full max-w-xl rounded-xl bg-white p-8 shadow text-center">
-        <AlertTriangle className="w-9 h-9 text-amber-500 mx-auto mb-3" />
-        <h1 className="text-2xl mb-2">We could not confirm your policy status</h1>
-        <p className="text-gray-600 mb-6">{message} Normal site access stays paused until this check succeeds.</p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Button onClick={onRetry} disabled={retrying} data-testid="button-retry-consent">
-            {retrying ? "Checking..." : "Try again"}
+      <div role="alert" className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-lg" data-testid="legal-consent-error">
+        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-amber-50 mb-5">
+          <AlertTriangle className="w-6 h-6 text-amber-600" aria-hidden="true" />
+        </div>
+        <h1 ref={headingRef} tabIndex={-1} className="text-2xl font-semibold text-slate-900 mb-3 outline-none">Policy review is temporarily unavailable</h1>
+        <p className="text-slate-700 mb-3">You do not need to sign out. We can’t show the acknowledgement form until the current policies are confirmed.</p>
+        <p className="text-sm text-slate-600 mb-6">{message} We’ll check again automatically and show the review form when it’s ready.</p>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Button onClick={onRetry} disabled={retrying} className="sm:min-w-32" data-testid="button-retry-consent">
+            {retrying ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Checking...</> : "Check again"}
           </Button>
           <Link href="/copyright-notices" className="inline-flex items-center justify-center rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted" data-testid="link-consent-copyright-notices">
             Copyright notices and counter-notices
           </Link>
-          <Button variant="outline" onClick={() => logoutMutation.mutate()} disabled={logoutMutation.isPending} data-testid="button-consent-logout">
-            Sign out
-          </Button>
         </div>
+        <button type="button" className="mt-6 text-sm text-slate-600 underline hover:text-slate-900" onClick={() => logoutMutation.mutate()} disabled={logoutMutation.isPending} data-testid="button-consent-logout">Sign out of this account</button>
       </div>
     </GateShell>
   );
@@ -88,9 +91,10 @@ function ConsentPrompt({ outstanding, onRecheck, userId }: { outstanding: LegalP
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signature]);
 
-  // Focus management: move focus in, trap Tab, block Escape.
+  // Focus management: move focus in, trap Tab, block Escape, restore on close.
   useEffect(() => {
     const el = dialogRef.current;
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     el?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -122,6 +126,7 @@ function ConsentPrompt({ outstanding, onRecheck, userId }: { outstanding: LegalP
     return () => {
       document.removeEventListener("keydown", onKey, true);
       document.body.style.overflow = prevOverflow;
+      previousFocus?.focus();
     };
   }, []);
 
@@ -147,14 +152,15 @@ function ConsentPrompt({ outstanding, onRecheck, userId }: { outstanding: LegalP
       <div className="min-h-[100dvh] flex items-start sm:items-center justify-center p-3 sm:p-6">
         <div
           ref={dialogRef}
+          data-legal-consent
           role="dialog"
           aria-modal="true"
           aria-labelledby="legal-consent-title"
           aria-describedby="legal-consent-desc"
           tabIndex={-1}
-          className="w-full max-w-2xl rounded-xl bg-white shadow-xl outline-none"
+          className="w-full max-w-2xl max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-3rem)] flex flex-col rounded-xl bg-white shadow-xl outline-none"
         >
-          <div className="border-b px-5 py-5 sm:px-7">
+          <div className="shrink-0 border-b px-5 py-4 sm:px-7">
             <div className="flex items-center gap-2 text-sky-700 mb-2">
               <ShieldCheck className="w-5 h-5" aria-hidden="true" />
               <span className="text-sm font-semibold uppercase tracking-wide">Action needed</span>
@@ -168,7 +174,7 @@ function ConsentPrompt({ outstanding, onRecheck, userId }: { outstanding: LegalP
             </p>
           </div>
 
-          <div className="px-5 py-5 sm:px-7 space-y-4">
+          <div className="min-h-0 overflow-y-auto overscroll-contain px-5 py-5 sm:px-7 space-y-4">
             {notice && (
               <div role="alert" className="rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900" data-testid="text-consent-notice">
                 {notice}
@@ -245,18 +251,20 @@ function ConsentPrompt({ outstanding, onRecheck, userId }: { outstanding: LegalP
             )}
           </div>
 
-          <div className="flex flex-col-reverse sm:flex-row sm:justify-between gap-3 border-t px-5 py-4 sm:px-7">
-            <Link href="/copyright-notices" className="inline-flex items-center justify-center rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted" data-testid="link-prompt-copyright-notices">
-            Copyright notices and counter-notices
-          </Link>
-          <Button variant="outline" onClick={() => logoutMutation.mutate()} disabled={logoutMutation.isPending} data-testid="button-consent-signout">
-              Sign out instead
-            </Button>
-            <Button onClick={submit} disabled={!acceptances || accept.isPending} data-testid="button-consent-accept">
+          <div className="shrink-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-t px-5 py-4 sm:px-7">
+            <Button onClick={submit} disabled={!acceptances || accept.isPending} className="sm:order-last" data-testid="button-consent-accept">
               {accept.isPending ? (
                 <span className="flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Saving...</span>
               ) : "Accept and continue"}
             </Button>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+              <Link href="/copyright-notices" className="text-center text-sm font-medium text-sky-700 underline py-2" data-testid="link-prompt-copyright-notices">
+                Copyright notices
+              </Link>
+              <button type="button" className="text-sm text-slate-600 underline py-2" onClick={() => logoutMutation.mutate()} disabled={logoutMutation.isPending} data-testid="button-consent-signout">
+                Sign out
+              </button>
+            </div>
           </div>
         </div>
       </div>

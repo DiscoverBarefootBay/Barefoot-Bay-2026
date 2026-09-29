@@ -2,6 +2,7 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
   buildAcceptances,
+  consentCheckInterval,
   isConsentExemptPath,
   isPolicyStaleError,
   parseConsentStatus,
@@ -110,6 +111,18 @@ describe("gate decision freshness and identity", () => {
   });
   it("errors instead of granting on fetch failure even with old accepted data", () => {
     assert.equal(decideGate({ ...base, isError: true }), "error");
+  });
+  it("recovers in the same session when a valid current status arrives", () => {
+    const unavailable = { ...base, isError: true, status: undefined, dataUpdatedAt: 0 };
+    assert.equal(decideGate(unavailable), "error");
+    assert.equal(consentCheckInterval("error"), 15_000);
+    assert.equal(consentCheckInterval("success"), 90_000);
+    const needsReview = parseConsentStatus({ policies: all, outstanding: [all[2]], requiresAcceptance: true });
+    assert.equal(decideGate({ ...unavailable, isError: false, status: needsReview, dataUpdatedAt: 200 }), "prompt");
+    assert.equal(buildAcceptances(needsReview.outstanding, {}), null);
+    assert.deepEqual(buildAcceptances(needsReview.outstanding, { dmca: 3 }), [{ key: "dmca", versionId: 3, accepted: true }]);
+    const accepted = parseConsentStatus({ policies: all, outstanding: [], requiresAcceptance: false });
+    assert.equal(decideGate({ ...unavailable, isError: false, status: accepted, dataUpdatedAt: 201 }), "children");
   });
   it("prompts on outstanding, errors on inconsistent status", () => {
     assert.equal(decideGate({ ...base, status: { policies: all, outstanding: [all[0]], requiresAcceptance: true } }), "prompt");

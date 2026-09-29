@@ -24,3 +24,4 @@
 - [DMCA foundation](dmca-foundation.md) — reversible takedowns, production grants, and policy SQL that embeds legal text and reports writes; Publish transfers schema, not grant rows.
 - [UI theme quirks](ui-theme-quirks.md) — shadcn `destructive` button variant is invisible in this theme; use explicit red classes.
 - [Legal acceptance scope](legal-consent-decisions.md) — every published change requires reacceptance; snapshot publication is not a newly assigned legal effective date.
+- [Legal policy rollout gap](legal-policy-rollout-gap.md) — live schema tables may exist without policy publication functions; a 503 cannot be fixed by re-login or a client-only modal.

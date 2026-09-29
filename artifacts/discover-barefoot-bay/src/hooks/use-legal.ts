@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   LEGAL_QUERY_KEYS,
+  consentCheckInterval,
   LEGAL_SYNC_CHANNEL,
   LEGAL_SYNC_STORAGE_KEY,
   fetchLegalConsent,
@@ -32,7 +33,7 @@ export function useLegalConsent(userId: number | null) {
     queryFn: fetchLegalConsent,
     enabled,
     staleTime: 0,
-    refetchInterval: enabled ? 90 * 1000 : false,
+    refetchInterval: enabled ? (query) => consentCheckInterval(query.state.status) : false,
     refetchIntervalInBackground: false,
     // Focus refetch is driven by the gate so it can require freshness.
     refetchOnWindowFocus: false,
