@@ -90,6 +90,13 @@ export const ListMessageSendProgressResponse = zod.object({
 });
 
 /**
+ * @summary Admin sender dismisses a recent send progress entry without changing its send state
+ */
+export const DismissMessageSendProgressParams = zod.object({
+  id: zod.coerce.string().uuid(),
+});
+
+/**
  * @summary Authorized publication and acceptance history
  */
 export const getLegalHistoryQueryPageDefault = 1;

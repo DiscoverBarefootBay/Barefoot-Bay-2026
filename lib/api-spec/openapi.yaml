@@ -94,6 +94,23 @@ paths:
                         unknown: { type: integer }
         "401":
           description: Authentication required
+  /messages/send-progress/{id}:
+    delete:
+      operationId: dismissMessageSendProgress
+      summary: Admin sender dismisses a recent send progress entry without changing its send state
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "204":
+          description: Entry dismissed; request, attempts, and message are preserved
+        "400":
+          description: Invalid send progress ID
+        "401":
+          description: Authentication required
+        "403":
+          description: Administrator permission required
+        "404":
+          description: Entry is missing, expired, already dismissed, or not owned by this sender
   /legal/history:
     get:
       operationId: getLegalHistory

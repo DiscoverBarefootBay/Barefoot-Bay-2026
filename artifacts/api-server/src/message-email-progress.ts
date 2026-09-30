@@ -132,9 +132,21 @@ export async function listSendProgress(senderId: number) {
       count(a.id) FILTER (WHERE a.state='failed')::int AS failed,
       count(a.id) FILTER (WHERE a.state='unknown')::int AS unknown
      FROM message_send_requests r LEFT JOIN message_email_attempts a ON a.request_id=r.id
-     WHERE r.sender_id=$1 GROUP BY r.id
+     WHERE r.sender_id=$1 AND r.dismissed_at IS NULL AND r.created_at > now()-interval '24 hours'
+     GROUP BY r.id
      ORDER BY (r.state IN ('preparing','sending')) DESC, r.created_at DESC LIMIT 20`, [senderId]);
   return rows;
+}
+
+export async function dismissSendProgress(senderId: number, requestId: string): Promise<boolean> {
+  // Display-only tombstone: keep the request, attempts, and underlying message
+  // intact so worker state and duplicate-submission protection are unchanged.
+  const { rowCount } = await pool.query(
+    `UPDATE message_send_requests SET dismissed_at=COALESCE(dismissed_at, now())
+     WHERE id=$1 AND sender_id=$2 AND dismissed_at IS NULL
+       AND created_at > now()-interval '24 hours'`,
+    [requestId, senderId]);
+  return (rowCount ?? 0) > 0;
 }
 
 let busy = false;

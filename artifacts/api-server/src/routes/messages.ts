@@ -11,8 +11,8 @@ import { isAdmin } from '../utils/role-utils';
 import * as fs from 'fs';
 import * as path from 'path';
 import { uploadAttachmentToObjectStorage, getAttachmentUrl } from '../attachment-storage-proxy';
-import { reserveMessageSend, recordCreatedMessage, enqueueMessageEmail, listSendProgress } from "../message-email-progress";
-import { ListMessageSendProgressResponse } from "@workspace/api-zod";
+import { reserveMessageSend, recordCreatedMessage, enqueueMessageEmail, listSendProgress, dismissSendProgress } from "../message-email-progress";
+import { DismissMessageSendProgressParams, ListMessageSendProgressResponse } from "@workspace/api-zod";
 
 const router = express.Router();
 const upload = multer({ dest: 'temp_upload/' });
@@ -21,6 +21,29 @@ router.get('/send-progress', authenticateUser, async (req, res) => {
   if (!req.user?.id) return res.sendStatus(401);
   // Sender scope is derived exclusively from authentication, never query input.
   return res.json(ListMessageSendProgressResponse.parse({ jobs: await listSendProgress(req.user.id) }));
+});
+
+router.delete('/send-progress/:id', authenticateUser, async (req, res): Promise<void> => {
+  if (!req.user?.id) {
+    res.sendStatus(401);
+    return;
+  }
+  if (!isAdmin(req.user.role)) {
+    res.status(403).json({ error: 'Administrator permission required' });
+    return;
+  }
+  const params = DismissMessageSendProgressParams.safeParse(req.params);
+  if (!params.success) {
+    res.status(400).json({ error: 'Invalid send progress ID' });
+    return;
+  }
+  const dismissed = await dismissSendProgress(req.user.id, params.data.id);
+  if (!dismissed) {
+    // Same response for missing, expired, dismissed, or another sender's job.
+    res.status(404).json({ error: 'Send progress not found' });
+    return;
+  }
+  res.sendStatus(204);
 });
 
 // Ensure temp upload directory exists

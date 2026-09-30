@@ -334,6 +334,90 @@ export function useListMessageSendProgress<
 }
 
 /**
+ * @summary Admin sender dismisses a recent send progress entry without changing its send state
+ */
+export const getDismissMessageSendProgressUrl = (id: string) => {
+  return `/api/messages/send-progress/${id}`;
+};
+
+export const dismissMessageSendProgress = async (
+  id: string,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getDismissMessageSendProgressUrl(id), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getDismissMessageSendProgressMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof dismissMessageSendProgress>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof dismissMessageSendProgress>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationKey = ["dismissMessageSendProgress"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof dismissMessageSendProgress>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return dismissMessageSendProgress(id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DismissMessageSendProgressMutationResult = NonNullable<
+  Awaited<ReturnType<typeof dismissMessageSendProgress>>
+>;
+
+export type DismissMessageSendProgressMutationError = ErrorType<void>;
+
+/**
+ * @summary Admin sender dismisses a recent send progress entry without changing its send state
+ */
+export const useDismissMessageSendProgress = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof dismissMessageSendProgress>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof dismissMessageSendProgress>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  return useMutation(getDismissMessageSendProgressMutationOptions(options));
+};
+
+/**
  * @summary Authorized publication and acceptance history
  */
 export const getGetLegalHistoryUrl = (params?: GetLegalHistoryParams) => {

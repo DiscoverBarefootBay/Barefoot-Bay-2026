@@ -14,6 +14,7 @@ export const messageSendRequests = pgTable("message_send_requests", {
   responseCode: integer("response_code"),
   skipped: integer("skipped").notNull().default(0),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  dismissedAt: timestamp("dismissed_at", { withTimezone: true }),
 }, t => [uniqueIndex("message_send_requests_sender_key").on(t.senderId, t.requestKey)]);
 export const messageEmailAttempts = pgTable("message_email_attempts", {
   id: text("id").primaryKey(),

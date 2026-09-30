@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
-import { beforeEach, mock, test } from "node:test";
+import { after, beforeEach, mock, test } from "node:test";
+import express from "express";
+import { createServer, type Server } from "node:http";
 import * as schema from "../../../../lib/db/src/schema/index";
 
 process.env.NODE_ENV = "test";
@@ -25,7 +27,7 @@ mock.module("../object-storage-service.ts", { namedExports: {
   objectStorageService: { getFile: async () => Buffer.from("attachment stub"), uploadFile: async () => "stored" },
 }});
 mock.module("../lib/logger.ts", { namedExports: { logger: { warn() {}, error() {} } } });
-const { selectMailboxes, reserveMessageSend, processMessageEmailQueue, listSendProgress, enqueueMessageEmail } = await import("../message-email-progress");
+const { selectMailboxes, reserveMessageSend, processMessageEmailQueue, listSendProgress, dismissSendProgress, enqueueMessageEmail } = await import("../message-email-progress");
 
 beforeEach(() => {
   queries = []; selections = []; providerCalls = [];
@@ -133,6 +135,71 @@ test("progress query scopes by sender and only projects counts, not addresses", 
   assert.deepEqual(queries[0].args, [88]);
   assert.ok(!queries[0].sql.includes("a.address"));
   assert.ok(queries[0].sql.includes("WHERE r.sender_id=$1"));
+  assert.ok(queries[0].sql.includes("r.dismissed_at IS NULL"));
+  assert.ok(queries[0].sql.includes("r.created_at > now()-interval '24 hours'"));
+  assert.ok(queries[0].sql.includes("GROUP BY r.id"));
+});
+
+test("dismissing progress only sets the display timestamp and is sender-scoped and age-limited", async () => {
+  queryImpl = () => ({ rows: [], rowCount: 1 });
+  assert.equal(await dismissSendProgress(88, "request-id"), true);
+  assert.equal(queries[0].sql.startsWith("UPDATE message_send_requests SET dismissed_at="), true);
+  assert.match(queries[0].sql, /WHERE id=\$1 AND sender_id=\$2/);
+  assert.match(queries[0].sql, /created_at > now\(\)-interval '24 hours'/);
+  assert.deepEqual(queries[0].args, ["request-id", 88]);
+  assert.doesNotMatch(queries[0].sql, /\bDELETE\b|state\s*=/i);
+  queryImpl = () => ({ rows: [], rowCount: 0 });
+  assert.equal(await dismissSendProgress(99, "another-sender-request"), false);
+});
+
+test("send-progress dismissal route requires authentication and an admin who owns the request", async () => {
+  const requestId = "00000000-0000-4000-8000-000000000001";
+  const { default: chatRouter } = await import("../routes/chat");
+  const app = express();
+  app.use((req: any, _res, next) => {
+    const identity = req.header("x-test-identity");
+    req.isAuthenticated = () => identity !== "anonymous";
+    if (identity === "admin-sender") req.user = { id: 42, role: "admin" };
+    if (identity === "other-admin") req.user = { id: 43, role: "admin" };
+    if (identity === "member") req.user = { id: 44, role: "registered" };
+    next();
+  });
+  app.use("/api", chatRouter);
+  const server: Server = createServer(app);
+  await new Promise<void>(resolve => server.listen(0, "127.0.0.1", resolve));
+  const address = server.address();
+  assert.ok(address && typeof address !== "string");
+  const origin = `http://127.0.0.1:${address.port}`;
+  try {
+    queryImpl = (_sql, args) => ({ rows: [], rowCount: args[1] === 42 ? 1 : 0 });
+
+    const anonymous = await fetch(`${origin}/api/messages/send-progress/${requestId}`, {
+      method: "DELETE", headers: { "x-test-identity": "anonymous" },
+    });
+    assert.equal(anonymous.status, 401);
+    assert.equal(queries.length, 0);
+
+    const member = await fetch(`${origin}/api/messages/send-progress/${requestId}`, {
+      method: "DELETE", headers: { "x-test-identity": "member" },
+    });
+    assert.equal(member.status, 403);
+    assert.equal(queries.length, 0);
+
+    const otherAdmin = await fetch(`${origin}/api/messages/send-progress/${requestId}`, {
+      method: "DELETE", headers: { "x-test-identity": "other-admin" },
+    });
+    assert.equal(otherAdmin.status, 404);
+    assert.deepEqual(queries[0].args, [requestId, 43]);
+    assert.match(queries[0].sql, /sender_id=\$2/);
+
+    const ownerAdmin = await fetch(`${origin}/api/messages/send-progress/${requestId}`, {
+      method: "DELETE", headers: { "x-test-identity": "admin-sender" },
+    });
+    assert.equal(ownerAdmin.status, 204);
+    assert.deepEqual(queries[1].args, [requestId, 42]);
+  } finally {
+    await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
+  }
 });
 
 test("no eligible recipients persists a terminal zero-send job and no provider calls", async () => {
