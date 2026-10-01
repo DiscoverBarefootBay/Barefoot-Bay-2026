@@ -12,7 +12,7 @@ import { memoryLocation } from "wouter/memory-location";
 
 const wait = (milliseconds: number) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
-test("branded check feedback is accessible, delayed, and never imposes a minimum loading time", async () => {
+test("account checks stay visually silent, accessible, and never impose a minimum loading time", async () => {
   const directory = await mkdtemp(path.join(process.cwd(), ".legal-check-status-"));
   const output = path.join(directory, "status.mjs");
   const dom = new JSDOM("<div id='root'></div>", { url: "https://barefoot.test/" });
@@ -54,8 +54,8 @@ test("branded check feedback is accessible, delayed, and never imposes a minimum
       ["/terms", "/privacy", "/copyright-notices"]);
 
     await act(async () => wait(210));
-    assert.ok(mark(), "a noticeable initial check gets custom branded feedback");
-    assert.equal(mark()?.getAttribute("aria-hidden"), "true", "decorative motion is not repeatedly announced");
+    assert.equal(mark(), null, "even a slow initial check has no visual animation");
+    assert.equal(initial.querySelector("svg"), null, "no replacement graphic is introduced");
     assert.equal(initial.querySelectorAll("img").length, 0, "the pending indicator does not duplicate the full logo");
     assert.equal(initial.textContent?.trim(), "Loading", "there is no visible loading sentence");
     assert.equal(initial.querySelector(".animate-spin"), null, "generic spinning feedback is gone");
@@ -75,11 +75,12 @@ test("branded check feedback is accessible, delayed, and never imposes a minimum
 
     await render(React.createElement(LegalCheckStatus, { overlay: true }));
     await act(async () => wait(210));
-    assert.ok(mark(), "noticeable routine checks share the branded decoration");
+    assert.equal(mark(), null, "slow routine checks remain visually silent");
+    assert.equal(document.querySelector('[data-testid="legal-gate-verifying"] svg'), null);
     assert.equal(document.querySelector('[data-testid="legal-check-shell"]'), null, "routine checks do not create a separate loading page");
     assert.doesNotMatch(document.body.textContent ?? "", /checking your account|account loading/i);
     await render(React.createElement("main", { "data-testid": "ready" }, "Ready"));
-    assert.equal(mark(), null, "even a visible animation ends immediately when the check completes");
+    assert.equal(document.querySelector('[data-testid="legal-gate-verifying"]'), null, "completion immediately removes the transparent blocker");
   } finally {
     await act(async () => root.unmount());
     dom.window.close();

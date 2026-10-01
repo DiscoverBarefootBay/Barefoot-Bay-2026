@@ -1,6 +1,5 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { Link } from "wouter";
-import { BrandedLoadingMark } from "@/components/shared/branded-loading-mark";
 
 /** Public branding only: no account, mailbox, or permission-bound queries. */
 export function LegalCheckShell({ children }: { children: ReactNode }) {
@@ -19,13 +18,8 @@ export function LegalCheckShell({ children }: { children: ReactNode }) {
   );
 }
 
-/** Delays feedback, never the request or access once a check finishes. */
+/** Silent visual feedback; preserve accessible status and the interaction blocker. */
 export function LegalCheckStatus({ overlay = false }: { overlay?: boolean }) {
-  const [noticeable, setNoticeable] = useState(false);
-  useEffect(() => {
-    const timer = setTimeout(() => setNoticeable(true), 180);
-    return () => clearTimeout(timer);
-  }, []);
   return (
     <div
       role="status"
@@ -34,13 +28,6 @@ export function LegalCheckStatus({ overlay = false }: { overlay?: boolean }) {
       className={overlay ? "fixed inset-0 z-[999] cursor-wait" : "min-h-12 flex justify-center"}
     >
       <span className="sr-only">Loading</span>
-      {noticeable && (
-        <div className={overlay
-          ? "absolute left-1/2 top-24 h-6 w-11 -translate-x-1/2"
-          : "flex h-6 w-11 items-center justify-center"}>
-          <BrandedLoadingMark />
-        </div>
-      )}
     </div>
   );
 }

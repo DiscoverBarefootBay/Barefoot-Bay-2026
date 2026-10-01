@@ -36,14 +36,13 @@ test("all messaging aliases share one stable lazy page and launch keeps a local 
   assert.match(source, /const \[location\] = useLocation\(\)/);
 });
 
-test("generic route feedback reuses the decorative wave with a neutral accessible status", () => {
+test("generic route feedback is visually silent with a neutral accessible status", () => {
   const fallback = source.slice(source.indexOf("function RouteLoading"), source.indexOf("function LaunchPageRoute"));
-  assert.match(source, /import \{ BrandedLoadingMark \} from "\.\/components\/shared\/branded-loading-mark"/);
+  assert.doesNotMatch(source, /BrandedLoadingMark|branded-loading-mark/);
   assert.match(fallback, /role="status" aria-live="polite" data-testid="status-route-loading"/);
   assert.match(fallback, /<span className="sr-only">Loading<\/span>/);
-  assert.match(fallback, /<BrandedLoadingMark \/>/);
+  assert.doesNotMatch(fallback, /<svg|<img|animate-|bg-white/);
   assert.match(fallback, /min-h-24/);
-  assert.match(fallback, /bg-white/, "opaque backing preserves wave contrast on the black launch screen");
   assert.doesNotMatch(fallback, /Loading page|account|policy|setTimeout|useEffect|useState/);
   assert.equal((source.match(/fallback=\{<RouteLoading \/>\}/g) ?? []).length, 2);
 });
@@ -53,15 +52,4 @@ test("route suspense remains inside the mounted layout and does not enclose the 
   assert.match(router, /<NavBar \/>[\s\S]*<main[^>]*>[\s\S]*<ErrorBoundary key=\{location\}>[\s\S]*<Suspense fallback=\{<RouteLoading \/>\}>[\s\S]*<Switch>/);
   const suspense = router.slice(router.indexOf("<Suspense"), router.indexOf("</Suspense>"));
   assert.doesNotMatch(suspense, /<NavBar|<BackgroundVideo|<LegalConsentGate/);
-});
-
-test("shared wave reserves its geometry and only animates without reduced motion", () => {
-  const mark = readFileSync(new URL("../components/shared/branded-loading-mark.tsx", import.meta.url), "utf8");
-  const css = readFileSync(new URL("../components/shared/branded-loading-mark.css", import.meta.url), "utf8");
-  assert.match(mark, /aria-hidden="true"/);
-  assert.match(mark, /focusable="false"/);
-  assert.match(css, /width: 44px; height: 24px/);
-  const motion = css.slice(css.indexOf("@media (prefers-reduced-motion: no-preference)"), css.indexOf("@media (prefers-reduced-motion: reduce)"));
-  assert.equal((css.match(/animation:/g) ?? []).length, (motion.match(/animation:/g) ?? []).length);
-  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*opacity: 0\.35/);
 });
