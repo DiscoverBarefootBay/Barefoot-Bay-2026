@@ -1,5 +1,5 @@
 import { useEffect, lazy, Suspense } from "react";
-import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
+import { Switch, Route, Redirect, Router as WouterRouter, useLocation } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
 // import { Toaster } from "@/components/ui/toaster";
@@ -15,6 +15,7 @@ import { AnalyticsProvider } from "@/lib/analytics";
 import ErrorBoundary from "@/components/error/error-boundary";
 // Chat messaging feature
 import { installUnreadInvalidation } from "./lib/message-unread";
+import { useInternalNavigation } from "./hooks/use-internal-navigation";
 // Rocket easter egg provider
 import { RocketEasterEggProvider } from "@/contexts/rocket-easter-egg-context";
 // Removed StorePageOverride import - no longer needed
@@ -137,6 +138,7 @@ function LaunchPageRoute() {
 }
 
 function Router() {
+  useInternalNavigation(import.meta.env.BASE_URL);
   // Check URL to determine if we're on the launch page
   const [location] = useLocation();
   const isLaunchPage = location === '/launch';
@@ -255,8 +257,7 @@ function Router() {
             <ProtectedRoute path="/admin/enhanced-analytics-dashboard" component={EnhancedAnalyticsDashboard} requiredFeature="ADMIN" />
 
             <Route path="/direct-analytics" component={() => {
-              window.location.href = '/analytics-dashboard';
-              return null;
+              return <Redirect to="/analytics-dashboard" replace />;
             }} />
 
             
@@ -277,13 +278,11 @@ function Router() {
             {/* Legacy /more routes - redirect to /community */}
             <Route path="/more/:category" component={({ params }) => {
               // Redirect from /more/category to /community/category
-              window.location.replace(`/community/${params.category}`);
-              return null;
+              return <Redirect to={`/community/${params.category}`} replace />;
             }} />
             <Route path="/more/:category/:page" component={({ params }) => {
               // Redirect from /more/category/page to /community/category/page
-              window.location.replace(`/community/${params.category}/${params.page}`);
-              return null;
+              return <Redirect to={`/community/${params.category}/${params.page}`} replace />;
             }} />
             
             {/* Terms & Privacy pages */}
@@ -300,40 +299,35 @@ function Router() {
             <Route path="/vendors/home/services-:vendor" component={({ params }) => {
               const vendor = params.vendor;
               console.log(`Redirecting from malformed URL /vendors/home/services-${vendor} to correct URL /vendors/home-services/${vendor}`);
-              window.location.replace(`/vendors/home-services/${vendor}`);
-              return null;
+              return <Redirect to={`/vendors/home-services/${vendor}`} replace />;
             }} />
             
             {/* Additional special case for /vendors/home-services/services-vendor-name */}
             <Route path="/vendors/home-services/services-:vendor" component={({ params }) => {
               const vendor = params.vendor;
               console.log(`Handling duplicated services prefix: /vendors/home-services/services-${vendor} → /vendors/home-services/${vendor}`);
-              window.location.replace(`/vendors/home-services/${vendor}`);
-              return null;
+              return <Redirect to={`/vendors/home-services/${vendor}`} replace />;
             }} />
 
             {/* Special handling for compound categories that get split incorrectly */}
             <Route path="/vendors/home/services/:vendor" component={({ params }) => {
               const vendor = params.vendor;
               console.log(`Handling incorrectly split category: /vendors/home/services/${vendor} → /vendors/home-services/${vendor}`);
-              window.location.replace(`/vendors/home-services/${vendor}`);
-              return null;
+              return <Redirect to={`/vendors/home-services/${vendor}`} replace />;
             }} />
             
             {/* Special handling for technology-and-electronics that gets split incorrectly */}
             <Route path="/vendors/technology/and-electronics-:vendor" component={({ params }) => {
               const vendor = params.vendor;
               console.log(`Handling incorrectly split technology category: /vendors/technology/and-electronics-${vendor} → /vendors/technology-and-electronics/${vendor}`);
-              window.location.replace(`/vendors/technology-and-electronics/${vendor}`);
-              return null;
+              return <Redirect to={`/vendors/technology-and-electronics/${vendor}`} replace />;
             }} />
             
             {/* Special handling for technology-and-electronics that gets split incorrectly */}
             <Route path="/vendors/technology/and-electronics/:vendor" component={({ params }) => {
               const vendor = params.vendor;
               console.log(`Handling incorrectly split technology category: /vendors/technology/and-electronics/${vendor} → /vendors/technology-and-electronics/${vendor}`);
-              window.location.replace(`/vendors/technology-and-electronics/${vendor}`);
-              return null;
+              return <Redirect to={`/vendors/technology-and-electronics/${vendor}`} replace />;
             }} />
             
             {/* Universal handler for all vendor pages with undefined vendor */}
@@ -343,8 +337,7 @@ function Router() {
               // Redirect back to category listing page
               const fixedUrl = `/vendors/${category}`.replace(/\/\//g, '/');
               console.log(`Redirecting to fixed URL: ${fixedUrl}`);
-              window.location.replace(fixedUrl);
-              return null;
+              return <Redirect to={fixedUrl} replace />;
             }} />
             
             {/* Universal handler for all vendor pages to ensure proper loading */}
@@ -386,8 +379,7 @@ function Router() {
               const part2 = params.part2;
               const vendor = params.vendor;
               console.log(`Handling split "and" compound category: /vendors/${part1}/and-${part2}-${vendor} → /vendors/${part1}-and-${part2}/${vendor}`);
-              window.location.replace(`/vendors/${part1}-and-${part2}/${vendor}`);
-              return null;
+              return <Redirect to={`/vendors/${part1}-and-${part2}/${vendor}`} replace />;
             }} />
             
             {/* Generic redirect for compound categories with "and" that get split differently */}
@@ -396,8 +388,7 @@ function Router() {
               const part2 = params.part2;
               const vendor = params.vendor;
               console.log(`Handling split "and" compound category: /vendors/${part1}/and-${part2}/${vendor} → /vendors/${part1}-and-${part2}/${vendor}`);
-              window.location.replace(`/vendors/${part1}-and-${part2}/${vendor}`);
-              return null;
+              return <Redirect to={`/vendors/${part1}-and-${part2}/${vendor}`} replace />;
             }} />
             
             {/* Generic redirect for other categories that might have the same issue */}
@@ -406,7 +397,7 @@ function Router() {
               const vendor = params.vendor;
               if (part1 !== 'home-services' && part1 !== 'home') {
                 console.log(`Redirecting from malformed URL /vendors/${part1}/services-${vendor} to correct URL /vendors/${part1}-services/${vendor}`);
-                window.location.replace(`/vendors/${part1}-services/${vendor}`);
+                return <Redirect to={`/vendors/${part1}-services/${vendor}`} replace />;
               }
               return null;
             }} />
@@ -444,8 +435,7 @@ function Router() {
                 if (parts.length >= 2 && parts[0] === part1) {
                   const correctCategory = compound;
                   console.log(`Fixing likely broken compound category URL: /vendors/${part1}/${part2}-${vendor} → /vendors/${correctCategory}/${vendor}`);
-                  window.location.replace(`/vendors/${correctCategory}/${vendor}`);
-                  return null;
+                  return <Redirect to={`/vendors/${correctCategory}/${vendor}`} replace />;
                 }
               }
               

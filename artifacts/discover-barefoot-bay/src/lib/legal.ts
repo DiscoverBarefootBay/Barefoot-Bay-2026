@@ -208,8 +208,8 @@ export async function fetchLegalPolicies(): Promise<LegalPolicy[]> {
   return parsePolicies(await legalFetch("/api/legal/policies"));
 }
 
-export async function fetchLegalConsent(): Promise<LegalConsentStatus> {
-  return parseConsentStatus(await legalFetch("/api/legal/consent"));
+export async function fetchLegalConsent(signal?: AbortSignal): Promise<LegalConsentStatus> {
+  return parseConsentStatus(await legalFetch("/api/legal/consent", { signal }));
 }
 
 export async function submitLegalConsent(acceptances: LegalAcceptance[]): Promise<LegalConsentStatus> {

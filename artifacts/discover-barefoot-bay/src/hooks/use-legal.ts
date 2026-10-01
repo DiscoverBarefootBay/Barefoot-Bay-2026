@@ -30,7 +30,7 @@ export function useLegalConsent(userId: number | null) {
   const enabled = userId !== null;
   return useQuery({
     queryKey: LEGAL_QUERY_KEYS.consent(userId),
-    queryFn: fetchLegalConsent,
+    queryFn: ({ signal }) => fetchLegalConsent(signal),
     enabled,
     staleTime: 0,
     // The global gate owns mount/navigation freshness. Do not also restart
@@ -64,11 +64,15 @@ export function broadcastLegalChange() {
 }
 
 /** Listens for consent/policy changes from other tabs and refetches. */
-export function useLegalTabSync() {
+export function useLegalTabSync(onChange?: () => void) {
   const queryClient = useQueryClient();
   useEffect(() => {
     const refresh = () => {
-      queryClient.invalidateQueries({ queryKey: ["legal"] });
+      // The gate must block immediately, before any old in-flight result.
+      // Let its batched freshness check own the request rather than starting
+      // another automatic consent request alongside it.
+      queryClient.invalidateQueries({ queryKey: ["legal"], refetchType: onChange ? "none" : "active" });
+      onChange?.();
     };
     let ch: BroadcastChannel | null = null;
     try {
@@ -87,15 +91,18 @@ export function useLegalTabSync() {
       window.removeEventListener("storage", onStorage);
       ch?.close();
     };
-  }, [queryClient]);
+  }, [queryClient, onChange]);
 }
 
 export function useAcceptLegalPolicies(userId: number | null) {
   const queryClient = useQueryClient();
   return useMutation<LegalConsentStatus, Error, LegalAcceptance[]>({
     mutationFn: submitLegalConsent,
-    onSuccess: (status) => {
-      queryClient.setQueryData(LEGAL_QUERY_KEYS.consent(userId), status);
+    onSuccess: () => {
+      // A delayed POST is not proof of *current* policy acceptance. Never
+      // overwrite a newer GET (or another account's cache) with its response.
+      // The mounted prompt asks the gate for a fresh, cancelable GET instead.
+      queryClient.invalidateQueries({ queryKey: LEGAL_QUERY_KEYS.consent(userId), exact: true, refetchType: "none" });
       queryClient.invalidateQueries({ queryKey: LEGAL_QUERY_KEYS.policies });
       broadcastLegalChange();
     },

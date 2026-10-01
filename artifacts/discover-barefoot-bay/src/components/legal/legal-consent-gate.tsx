@@ -20,6 +20,7 @@ import {
 } from "@/lib/legal";
 import { LEGAL_REQUIRED_EVENT, installLegalIntercept } from "@/lib/legal-intercept";
 import { createLegalRecheckBatcher } from "@/lib/legal-recheck";
+import { LegalCheckShell, LegalCheckStatus } from "./legal-check-status";
 
 installLegalIntercept();
 
@@ -31,16 +32,9 @@ function GateShell({ children }: { children: ReactNode }) {
   );
 }
 
-function GateSkeleton() {
+function GateInitialCheck() {
   return (
-    <GateShell>
-      <div className="w-full max-w-xl rounded-xl bg-white p-8 shadow animate-pulse" aria-busy="true" aria-label="Checking your account">
-        <div className="h-6 w-1/2 rounded bg-slate-200 mb-4" />
-        <div className="h-4 w-full rounded bg-slate-100 mb-2" />
-        <div className="h-4 w-4/5 rounded bg-slate-100" />
-        <span className="sr-only">Checking your account status</span>
-      </div>
-    </GateShell>
+    <LegalCheckShell><LegalCheckStatus /></LegalCheckShell>
   );
 }
 
@@ -138,6 +132,9 @@ function ConsentPrompt({ outstanding, onRecheck, userId }: { outstanding: LegalP
     if (!acceptances) return;
     setNotice(null);
     accept.mutate(acceptances, {
+      // Per-call callbacks do not run after this account's prompt unmounts.
+      // Only a fresh GET, not the acceptance POST, can reopen the gate.
+      onSuccess: onRecheck,
       onError: (err) => {
         if (isPolicyStaleError(err)) {
           setSelections({});
@@ -291,12 +288,14 @@ export function LegalConsentGate({ children }: { children: ReactNode }) {
 
   // Results older than this timestamp do not count as current consent.
   const [freshAfter, setFreshAfter] = useState(Infinity);
+  const [authorizedUser, setAuthorizedUser] = useState<number | null>(null);
 
   // Mark stale synchronously during the render that sees a new location or
   // identity, so no commit shows children against an older result.
   const navKey = `${userId ?? "anon"}|${location}`;
   const [seenNavKey, setSeenNavKey] = useState(navKey);
   if (seenNavKey !== navKey) {
+    if (seenNavKey.split("|")[0] !== navKey.split("|")[0]) setAuthorizedUser(null);
     setSeenNavKey(navKey);
     setFreshAfter(Infinity);
   }
@@ -316,7 +315,7 @@ export function LegalConsentGate({ children }: { children: ReactNode }) {
   useEffect(() => () => rechecks.dispose(), [rechecks]);
   const requireFresh = useCallback(() => rechecks.request(), [rechecks]);
 
-  useLegalTabSync();
+  useLegalTabSync(requireFresh);
 
   // Navigation and identity change require a fresh check.
   useEffect(() => {
@@ -358,22 +357,15 @@ export function LegalConsentGate({ children }: { children: ReactNode }) {
     freshAfter,
   });
 
-  // Children stay mounted during a recheck but cannot be used.
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  // Only retain content that this gate has actually authorized for this
+  // account. A cached acceptance from another mount is not an initial grant.
+  if (decision === "children" && signedIn && !exempt && authorizedUser !== userId) {
+    setAuthorizedUser(userId);
+  }
+  if (!signedIn && authorizedUser !== null) setAuthorizedUser(null);
   const verifying = decision === "verifying";
-  useEffect(() => {
-    const el = wrapperRef.current;
-    if (!el) return;
-    if (verifying) {
-      el.setAttribute("inert", "");
-      el.setAttribute("aria-hidden", "true");
-    } else {
-      el.removeAttribute("inert");
-      el.removeAttribute("aria-hidden");
-    }
-  }, [verifying]);
 
-  if (decision === "skeleton") return <GateSkeleton />;
+  if (decision === "skeleton" || (verifying && authorizedUser !== userId)) return <GateInitialCheck />;
   if (decision === "error") {
     const incomplete = !consent.isError;
     return (
@@ -385,7 +377,7 @@ export function LegalConsentGate({ children }: { children: ReactNode }) {
     );
   }
   if (decision === "prompt" && consent.data) {
-    return <ConsentPrompt outstanding={consent.data.outstanding} onRecheck={requireFresh} userId={userId} />;
+    return <ConsentPrompt key={userId} outstanding={consent.data.outstanding} onRecheck={requireFresh} userId={userId} />;
   }
 
   const showBanner = signedIn && exempt && consent.data?.requiresAcceptance && !consent.isError;
@@ -394,21 +386,14 @@ export function LegalConsentGate({ children }: { children: ReactNode }) {
       {showBanner && (
         <div className="relative z-20 bg-amber-100 text-amber-900 text-sm px-4 py-2 text-center" role="status">
           You have policies to review. Normal site features resume after you accept them.{" "}
-          <a href="/" className="font-semibold underline">Review now</a>
+          <Link href="/" className="font-semibold underline">Review now</Link>
         </div>
       )}
-      <div ref={wrapperRef} data-testid="legal-gate-content">
+      <div key={userId ?? "anon"} inert={verifying} aria-hidden={verifying || undefined} data-testid="legal-gate-content">
         {children}
       </div>
       {verifying && (
-        <div
-          className="fixed inset-0 z-[999] cursor-wait bg-white/0 animate-in fade-in duration-300 delay-200"
-          role="status"
-          aria-live="polite"
-          data-testid="legal-gate-verifying"
-        >
-          <span className="sr-only">Checking your account status</span>
-        </div>
+        <LegalCheckStatus overlay />
       )}
     </>
   );
