@@ -14,6 +14,7 @@ import { useVendorCategoryCounts } from "@/hooks/use-vendor-category-counts";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { useCopyrightActivity } from "@/hooks/use-copyright-activity";
+import { useUnreadMessages } from "@/hooks/use-unread-messages";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -39,33 +40,11 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
   } = useFlags();
   const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({});
   
-  // Fetch messages and count unread ones - using same logic as Messages page
-  const { data: messagesData } = useQuery({
-    queryKey: ['/api/messages'],
-    enabled: !isViewingAsGuest,
-    refetchInterval: 5000, // Refresh every 5 seconds
-    staleTime: 0, // Always fetch fresh data - no caching
-    refetchOnWindowFocus: true, // Refresh when window regains focus
-    refetchOnMount: true, // Always refetch on mount
-    retry: 2 // Retry failed requests up to 2 times
-  });
-  
-  // Count unread messages including replies - same logic as Messages page
-  const unreadMessagesCount = messagesData ? (() => {
-    let count = 0;
-    (messagesData as any[]).forEach(message => {
-      // Count the main message if unread
-      if (message.read === false) {
-        count++;
-      }
-      // Count unread replies
-      if (message.replies && message.replies.length > 0) {
-        const unreadReplies = message.replies.filter((reply: any) => reply.read === false).length;
-        count += unreadReplies;
-      }
-    });
-    return count;
-  })() : 0;
+  const { data: unreadCounts, error: unreadError } = useUnreadMessages(
+    isViewingAsGuest || logoutMutation.isPending ? null : user?.id ?? null,
+  );
+  // Preserve mobile's individual-message count (desktop counts threads).
+  const unreadMessagesCount = unreadCounts?.messageCount ?? 0;
   
   // Fetch vendor categories directly from the API
   const { data: vendorCategories } = useQuery({
@@ -252,6 +231,11 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
               <Link href="/messages" onClick={onClose}>
                 <div className="py-2 text-navy hover:text-coral flex items-center justify-between">
                   <span>Messages</span>
+                  {unreadError && (
+                    <span role="status" data-testid="status-mobile-unread-error" className="text-xs text-red-600" title={unreadError.message}>
+                      Count unavailable
+                    </span>
+                  )}
                   {unreadMessagesCount > 0 && (
                     <div className="flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-xs font-medium text-white">
                       {unreadMessagesCount > 99 ? "99+" : unreadMessagesCount}

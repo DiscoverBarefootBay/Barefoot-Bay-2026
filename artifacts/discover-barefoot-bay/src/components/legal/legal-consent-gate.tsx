@@ -19,6 +19,7 @@ import {
   type LegalSelections,
 } from "@/lib/legal";
 import { LEGAL_REQUIRED_EVENT, installLegalIntercept } from "@/lib/legal-intercept";
+import { createLegalRecheckBatcher } from "@/lib/legal-recheck";
 
 installLegalIntercept();
 
@@ -289,7 +290,7 @@ export function LegalConsentGate({ children }: { children: ReactNode }) {
   refetchRef.current = consent.refetch;
 
   // Results older than this timestamp do not count as current consent.
-  const [freshAfter, setFreshAfter] = useState(() => Date.now());
+  const [freshAfter, setFreshAfter] = useState(Infinity);
 
   // Mark stale synchronously during the render that sees a new location or
   // identity, so no commit shows children against an older result.
@@ -297,15 +298,23 @@ export function LegalConsentGate({ children }: { children: ReactNode }) {
   const [seenNavKey, setSeenNavKey] = useState(navKey);
   if (seenNavKey !== navKey) {
     setSeenNavKey(navKey);
-    setFreshAfter(Date.now());
+    setFreshAfter(Infinity);
   }
 
-  /** Require a fresh successful check; cancels any older in-flight fetch. */
-  const requireFresh = useCallback(() => {
-    setFreshAfter(Date.now());
-    // cancelRefetch (default true) restarts the request after this point.
-    void refetchRef.current({ cancelRefetch: true });
-  }, []);
+  const rechecks = useMemo(() => createLegalRecheckBatcher(
+    // Keep old children inert even if an earlier request completes while the
+    // clustered focus/visibility signals are waiting to start their check.
+    () => setFreshAfter(Infinity),
+    async () => {
+      // Explicit cancellation also handles an initial request without cached
+      // data, where refetch's cancelRefetch alone would reuse the old promise.
+      await queryClient.cancelQueries({ queryKey: LEGAL_QUERY_KEYS.consent(userId), exact: true });
+      return refetchRef.current({ cancelRefetch: true });
+    },
+    setFreshAfter,
+  ), [queryClient, userId]);
+  useEffect(() => () => rechecks.dispose(), [rechecks]);
+  const requireFresh = useCallback(() => rechecks.request(), [rechecks]);
 
   useLegalTabSync();
 

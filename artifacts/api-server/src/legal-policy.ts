@@ -66,6 +66,27 @@ export async function consentStatus(userId: number, executor: Executor = db) {
   const outstanding = policies.filter(p => !accepted.has(p.versionId));
   return { policies, outstanding, requiresAcceptance: outstanding.length > 0 };
 }
+/** Fresh authorization metadata only: never fetch or sanitize policy HTML here. */
+export async function requiresLegalAcceptance(userId: number, executor: Executor = db) {
+  await ensureLegalDefaults();
+  const rows = (await executor.execute(sql`
+    SELECT c.policy_key, v.id AS version_id,
+      EXISTS (
+        SELECT 1 FROM legal_policy_acceptances a
+        WHERE a.user_id=${userId} AND a.version_id=v.id AND a.policy_key=c.policy_key
+      ) AS accepted
+    FROM legal_policy_current c
+    JOIN legal_policy_versions v ON v.id=c.version_id AND v.policy_key=c.policy_key
+  `)).rows as { policy_key: string; version_id: unknown; accepted: unknown }[];
+  // A missing/dangling pointer or malformed result must never authorize.
+  if (rows.length !== 3 || !["terms", "privacy", "dmca"].every(key => rows.some(row => row.policy_key === key))) {
+    throw new Error("All three published legal policies are required");
+  }
+  if (rows.some(row => !Number.isSafeInteger(Number(row.version_id)) || Number(row.version_id) <= 0 || typeof row.accepted !== "boolean")) {
+    throw new Error("Invalid legal policy acceptance metadata");
+  }
+  return rows.some(row => row.accepted !== true);
+}
 export async function recordAcceptance(executor: Executor, userId: number, input: unknown, source: "signup" | "subsequent") {
   const acceptances = acceptanceSchema.parse(input);
   const policies = await currentPolicies(executor);
@@ -111,8 +132,12 @@ export async function legalGate(req: Request, res: Response, next: NextFunction)
   if (!userId || legalException(req.method, req.path)) return next();
   res.set("Cache-Control", "no-store");
   try {
-    const status = await consentStatus(Number(userId));
-    if (status.requiresAcceptance) return res.status(428).json({ code: "POLICY_ACCEPTANCE_REQUIRED", message: "Please review and accept current legal policies.", ...status });
+    if (await requiresLegalAcceptance(Number(userId))) {
+      // Only blocked requests need the full review documents. Re-read current
+      // versions so a concurrent publication cannot produce mismatched text.
+      const status = await consentStatus(Number(userId));
+      if (status.requiresAcceptance) return res.status(428).json({ code: "POLICY_ACCEPTANCE_REQUIRED", message: "Please review and accept current legal policies.", ...status });
+    }
     next();
   } catch (error) { legalFailure(res, error); }
 }

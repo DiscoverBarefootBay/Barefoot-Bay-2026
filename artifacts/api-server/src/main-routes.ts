@@ -4,6 +4,7 @@ import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { setupAuth, requireAuth, requireAdmin, hashPassword } from "./auth";
 import { storage, db } from "./storage";
+import { parseEventReadOptions } from "./event-read-model";
 import { sql } from "drizzle-orm";
 import { LegalHoldError } from "./dmca/legal-hold";
 import { assertCanPermanentDelete, PermanentDeletePermissionError } from "./dmca/permanent-delete";
@@ -3674,26 +3675,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   app.get("/api/events", async (req, res) => {
-    const events = await storage.getEvents();
+    let options;
+    try {
+      options = parseEventReadOptions(req.query);
+    } catch (error) {
+      res.status(400).json({ message: (error as Error).message });
+      return;
+    }
+    const events = await storage.getEvents(options);
     // DMCA/moderation visibility: public sees published only; owners see their own hidden events flagged.
     const viewer = await getViewerContext(req);
+    res.set("Cache-Control", "private, no-store");
     res.json(filterForViewer(events, viewer, (e: any) => e.createdBy));
   });
 
   app.get("/api/events/platinum-sponsors", async (_req, res) => {
     try {
-      const allEvents = publicOnly(await storage.getEvents());
-      const now = new Date();
-      const activePlatinumSponsors = allEvents
-        .filter(event => {
-          if (event.category !== 'platinum_sponsor') return false;
-          if (event.parentEventId) return false;
-          const start = new Date(event.startDate);
-          const end = new Date(event.endDate);
-          return start <= now && end >= now;
-        })
-        .sort((a, b) => new Date(a.createdAt!).getTime() - new Date(b.createdAt!).getTime())
-        .slice(0, 3);
+      const activePlatinumSponsors = publicOnly(await storage.getActivePlatinumSponsors());
       res.json(activePlatinumSponsors);
     } catch (error) {
       console.error("Error fetching platinum sponsors:", error);

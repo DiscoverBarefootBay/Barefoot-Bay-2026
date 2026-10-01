@@ -1,5 +1,5 @@
-import React, { useEffect, lazy, Suspense } from "react";
-import { Switch, Route, Router as WouterRouter } from "wouter";
+import { useEffect, lazy, Suspense } from "react";
+import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
 // import { Toaster } from "@/components/ui/toaster";
@@ -14,73 +14,70 @@ import { AnalyticsProvider } from "@/lib/analytics";
 // New Error Boundary component for improved error handling
 import ErrorBoundary from "@/components/error/error-boundary";
 // Chat messaging feature
-import { ChatProvider } from "./context/ChatContext";
+import { installUnreadInvalidation } from "./lib/message-unread";
 // Rocket easter egg provider
 import { RocketEasterEggProvider } from "@/contexts/rocket-easter-egg-context";
 // Removed StorePageOverride import - no longer needed
-import NotFound from "@/pages/not-found";
-import AuthPage from "@/pages/auth-page";
-import HomePage from "@/pages/home-page";
-import CalendarPage from "@/pages/calendar-page";
-import EventDetailPage from "@/pages/event-detail-page";
-import ForSalePage from "@/pages/for-sale-page";
-import MyListingsPage from "@/pages/my-listings-page";
-import RealEstatePage from "@/pages/real-estate-page";
-import ListingDetailPage from "@/pages/listing-detail-page";
+const NotFound = lazy(() => import("@/pages/not-found"));
+const AuthPage = lazy(() => import("@/pages/auth-page"));
+const HomePage = lazy(() => import("@/pages/home-page"));
+const CalendarPage = lazy(() => import("@/pages/calendar-page"));
+const EventDetailPage = lazy(() => import("@/pages/event-detail-page"));
+const ForSalePage = lazy(() => import("@/pages/for-sale-page"));
+const MyListingsPage = lazy(() => import("@/pages/my-listings-page"));
+const RealEstatePage = lazy(() => import("@/pages/real-estate-page"));
+const ListingDetailPage = lazy(() => import("@/pages/listing-detail-page"));
 // Edit listing functionality now implemented directly in listing-detail-page
-import PaymentCompletePage from "@/pages/payment-complete-page";
-import ForgotPasswordPage from "@/pages/forgot-password";
-import ResetPasswordPage from "@/pages/reset-password";
-import ProfileSettings from "@/pages/profile-settings";
-import SubscriptionsPage from "@/pages/subscriptions";
-import CopyrightNoticesPage from "@/pages/copyright-notices/list-page";
-import CopyrightNoticeDetailPage from "@/pages/copyright-notices/detail-page";
-import CounterNoticePage from "@/pages/copyright-notices/counter-notice-page";
-import MessagesPage from "@/pages/messages";
-import CommunitySettings from "@/pages/community-settings";
+const PaymentCompletePage = lazy(() => import("@/pages/payment-complete-page"));
+const ForgotPasswordPage = lazy(() => import("@/pages/forgot-password"));
+const ResetPasswordPage = lazy(() => import("@/pages/reset-password"));
+const ProfileSettings = lazy(() => import("@/pages/profile-settings"));
+const SubscriptionsPage = lazy(() => import("@/pages/subscriptions"));
+const CopyrightNoticesPage = lazy(() => import("@/pages/copyright-notices/list-page"));
+const CopyrightNoticeDetailPage = lazy(() => import("@/pages/copyright-notices/detail-page"));
+const CounterNoticePage = lazy(() => import("@/pages/copyright-notices/counter-notice-page"));
+const CommunitySettings = lazy(() => import("@/pages/community-settings"));
 // Analytics direct access page
-import DirectAnalyticsAccess from "@/pages/direct-analytics-access";
-import AdvancedSettings from "@/pages/advanced-settings";
-import AmenitiesPage from "@/pages/amenities-page";
-import BannerPage from "@/pages/banner-page";
-import StorePage from "@/pages/store-page";
-import ContactUsPage from "@/pages/contact-us";
-import DMCAPolicyPage from "@/pages/dmca/dmca-policy-page";
-import DMCANoticePage from "@/pages/dmca/dmca-notice-page";
-import DMCAStatusPage from "@/pages/dmca/dmca-status-page";
-import ProductDetailPage from "@/pages/product-detail-page";
-import OrderCompletePage from "@/pages/store/order-complete-page";
-import { OrderTrackingPage } from "@/pages/store/order-tracking-page";
-import TrackOrderPage from "@/pages/store/track-order";
-import PaymentPage from "@/pages/store/pay";
-import MyReturnsPage from "@/pages/store/my-returns-page";
-import ProductManagementPage from "@/pages/admin/product-management";
-import OrderManagementPage from "@/pages/admin/order-management";
-import ManageReturnsPage from "@/pages/admin/manage-returns-page";
-import ProductImageTest from "@/pages/admin/product-image-test";
-import VersionFixPage from "@/pages/admin/version-fix";
-import FormSubmissionsAdmin from "@/pages/admin/form-submissions";
-import ManagePagesAdmin from "@/pages/admin/manage-pages";
-import ManageVendorsAdmin from "@/pages/admin/manage-vendors";
-import ManageForumCategories from "@/pages/admin/manage-forum";
-import ManageCommunityCategoriesPage from "@/pages/admin/manage-community-categories";
-import SubscriptionTestPage from "@/pages/subscription-test";
-import SubscriptionSuccessPage from "@/pages/subscription-success";
-import SubscriptionErrorPage from "@/pages/subscription-error";
-import SubscriptionCancelledPage from "@/pages/subscription-cancelled";
-import BannerDiagnostic from "@/pages/banner-diagnostic";
+const AdvancedSettings = lazy(() => import("@/pages/advanced-settings"));
+const AmenitiesPage = lazy(() => import("@/pages/amenities-page"));
+const BannerPage = lazy(() => import("@/pages/banner-page"));
+const StorePage = lazy(() => import("@/pages/store-page"));
+const ContactUsPage = lazy(() => import("@/pages/contact-us"));
+const DMCAPolicyPage = lazy(() => import("@/pages/dmca/dmca-policy-page"));
+const DMCANoticePage = lazy(() => import("@/pages/dmca/dmca-notice-page"));
+const DMCAStatusPage = lazy(() => import("@/pages/dmca/dmca-status-page"));
+const ProductDetailPage = lazy(() => import("@/pages/product-detail-page"));
+const OrderCompletePage = lazy(() => import("@/pages/store/order-complete-page"));
+const TrackOrderPage = lazy(() => import("@/pages/store/track-order"));
+const PaymentPage = lazy(() => import("@/pages/store/pay"));
+const MyReturnsPage = lazy(() => import("@/pages/store/my-returns-page"));
+const ProductManagementPage = lazy(() => import("@/pages/admin/product-management"));
+const OrderManagementPage = lazy(() => import("@/pages/admin/order-management"));
+const ManageReturnsPage = lazy(() => import("@/pages/admin/manage-returns-page"));
+const ProductImageTest = lazy(() => import("@/pages/admin/product-image-test"));
+const VersionFixPage = lazy(() => import("@/pages/admin/version-fix"));
+const FormSubmissionsAdmin = lazy(() => import("@/pages/admin/form-submissions"));
+const ManagePagesAdmin = lazy(() => import("@/pages/admin/manage-pages"));
+const ManageVendorsAdmin = lazy(() => import("@/pages/admin/manage-vendors"));
+const ManageForumCategories = lazy(() => import("@/pages/admin/manage-forum"));
+const ManageCommunityCategoriesPage = lazy(() => import("@/pages/admin/manage-community-categories"));
+const SubscriptionTestPage = lazy(() => import("@/pages/subscription-test"));
+const SubscriptionSuccessPage = lazy(() => import("@/pages/subscription-success"));
+const SubscriptionErrorPage = lazy(() => import("@/pages/subscription-error"));
+const SubscriptionCancelledPage = lazy(() => import("@/pages/subscription-cancelled"));
+const BannerDiagnostic = lazy(() => import("@/pages/banner-diagnostic"));
 
-import AdminDashboard from "@/pages/admin/dashboard";
-import CalendarManagement from "@/pages/admin/calendar-management";
-import FeatureManagementPage from "@/pages/admin/feature-management";
-import PlatinumSponsorSettingsPage from "@/pages/admin/platinum-sponsor-settings";
-import MembershipManagementPage from "@/pages/admin/membership-management";
-import AnalyticsDashboard from "@/pages/admin/analytics-dashboard";
-import EnhancedAnalyticsDashboard from "@/pages/admin/enhanced-analytics-dashboard";
-import AdminMessagesPage from "@/pages/admin/admin-messages";
-import EmailActivityPage from "@/pages/admin/email-activity";
-import OnTheMarketEmailsPage from "@/pages/admin/on-the-market-emails";
-import ManageListingsPage from "@/pages/admin/manage-listings";
+const AdminDashboard = lazy(() => import("@/pages/admin/dashboard"));
+const CalendarManagement = lazy(() => import("@/pages/admin/calendar-management"));
+const FeatureManagementPage = lazy(() => import("@/pages/admin/feature-management"));
+const PlatinumSponsorSettingsPage = lazy(() => import("@/pages/admin/platinum-sponsor-settings"));
+const MembershipManagementPage = lazy(() => import("@/pages/admin/membership-management"));
+const AnalyticsDashboard = lazy(() => import("@/pages/admin/analytics-dashboard"));
+const EnhancedAnalyticsDashboard = lazy(() => import("@/pages/admin/enhanced-analytics-dashboard"));
+const AdminMessagesPage = lazy(() => import("@/pages/admin/admin-messages"));
+const EmailActivityPage = lazy(() => import("@/pages/admin/email-activity"));
+const OnTheMarketEmailsPage = lazy(() => import("@/pages/admin/on-the-market-emails"));
+const ManageListingsPage = lazy(() => import("@/pages/admin/manage-listings"));
 
 const DmcaDashboard = lazy(() => import("@/pages/admin/dmca/dashboard"));
 const DmcaNewCase = lazy(() => import("@/pages/admin/dmca/new-case"));
@@ -91,48 +88,58 @@ const DmcaSettings = lazy(() => import("@/pages/admin/dmca/settings"));
 const DmcaPermissions = lazy(() => import("@/pages/admin/dmca/permissions"));
 const ModeratedPosts = lazy(() => import("@/pages/admin/moderated-posts"));
 
-import GenericContentPage from "@/pages/generic-content-page";
-import FormPage from "@/pages/form-page";
-import MockTrackingPage from "@/pages/testing/mock-tracking";
-import ForumPage from "@/pages/forum/forum-page";
-import ForumCategoryRedirect from "@/pages/forum/forum-category-redirect";
-import ForumPostPage from "@/pages/forum/forum-post-page";
-import NewPostPage from "@/pages/forum/new-post-page";
-import EditPostPage from "@/pages/forum/edit-post-page";
-import WeatherPage from "@/pages/weather";
-import PaymentDiagnostics from "@/pages/payment-diagnostics";
-import AuthDebugPage from "@/pages/admin/auth-debug";
-import ProductionAuthFixPage from "@/pages/production-auth-fix-page";
-import EmergencyAuthFixPage from "@/pages/emergency-auth-fix-page";
-import DeploymentDiagnosticPage from "@/pages/deployment-diagnostic";
-import MapsTestPage from "@/pages/maps-test-page";
-import AvatarTestPage from "@/pages/avatar-test-page";
-import LaunchPage from "@/pages/launch-page";
-import MapTestPage from "@/pages/map-test-page";
-import VendorUrlTestPage from "@/pages/vendor-url-test";
-import UnsubscribePage from "@/pages/unsubscribe-page";
+const GenericContentPage = lazy(() => import("@/pages/generic-content-page"));
+const FormPage = lazy(() => import("@/pages/form-page"));
+const MockTrackingPage = lazy(() => import("@/pages/testing/mock-tracking"));
+const ForumPage = lazy(() => import("@/pages/forum/forum-page"));
+const ForumCategoryRedirect = lazy(() => import("@/pages/forum/forum-category-redirect"));
+const ForumPostPage = lazy(() => import("@/pages/forum/forum-post-page"));
+const NewPostPage = lazy(() => import("@/pages/forum/new-post-page"));
+const EditPostPage = lazy(() => import("@/pages/forum/edit-post-page"));
+const WeatherPage = lazy(() => import("@/pages/weather"));
+const PaymentDiagnostics = lazy(() => import("@/pages/payment-diagnostics"));
+const AuthDebugPage = lazy(() => import("@/pages/admin/auth-debug"));
+const ProductionAuthFixPage = lazy(() => import("@/pages/production-auth-fix-page"));
+const EmergencyAuthFixPage = lazy(() => import("@/pages/emergency-auth-fix-page"));
+const DeploymentDiagnosticPage = lazy(() => import("@/pages/deployment-diagnostic"));
+const MapsTestPage = lazy(() => import("@/pages/maps-test-page"));
+const AvatarTestPage = lazy(() => import("@/pages/avatar-test-page"));
+const LaunchPage = lazy(() => import("@/pages/launch-page"));
+const MapTestPage = lazy(() => import("@/pages/map-test-page"));
+const VendorUrlTestPage = lazy(() => import("@/pages/vendor-url-test"));
+const UnsubscribePage = lazy(() => import("@/pages/unsubscribe-page"));
+const ChatPage = lazy(() => import("@/pages/chat"));
+const AnalyticsStandalone = lazy(() => import("@/pages/analytics-standalone"));
+const ObjectStorageDebugPage = lazy(() => import("@/pages/object-storage-debug"));
 import { NavBar } from "./components/layout/nav-bar";
 import { Footer } from "./components/layout/footer";
 import { ProtectedRoute } from "./lib/protected-route";
 import { BackgroundVideo } from "./components/shared/background-video";
 import { ViewAsSwitcher } from "./components/admin/view-as-switcher";
 import { LegalConsentGate } from "./components/legal/legal-consent-gate";
-import LegalPolicyPage from "@/pages/legal/legal-policy-page";
-import LegalHistoryPage from "@/pages/admin/legal-history";
+const LegalPolicyPage = lazy(() => import("@/pages/legal/legal-policy-page"));
+const LegalHistoryPage = lazy(() => import("@/pages/admin/legal-history"));
+
+function RouteLoading() {
+  return <div role="status" data-testid="status-route-loading" className="text-center p-8">Loading page...</div>;
+}
 
 // Custom route for the launch page - rendered outside main layout without any navigation
 function LaunchPageRoute() {
   // Completely full-screen with no other app elements
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden bg-black z-50">
-      <LaunchPage />
+      <ErrorBoundary>
+        <Suspense fallback={<RouteLoading />}><LaunchPage /></Suspense>
+      </ErrorBoundary>
     </div>
   );
 }
 
 function Router() {
   // Check URL to determine if we're on the launch page
-  const isLaunchPage = window.location.pathname === '/launch';
+  const [location] = useLocation();
+  const isLaunchPage = location === '/launch';
   
   // If we're on the launch page, render only the launch page without regular layout
   if (isLaunchPage) {
@@ -149,7 +156,8 @@ function Router() {
       <div className="relative z-10 bg-transparent flex-grow flex flex-col">
         <NavBar />
         <main className="container mx-auto px-4 py-4 md:py-8 flex-grow">
-          <ErrorBoundary>
+          <ErrorBoundary key={location}>
+          <Suspense fallback={<RouteLoading />}>
           <Switch>
             <Route path="/" component={HomePage} />
             <Route path="/auth" component={AuthPage} />
@@ -201,21 +209,9 @@ function Router() {
             <ProtectedRoute path="/community-settings" component={CommunitySettings} />
             <ProtectedRoute path="/advanced-settings" component={AdvancedSettings} />
             {/* Chat Interface - New messaging system */}
-            <Route path="/messaging">
-              <Suspense fallback={<div className="text-center p-8">Loading chat...</div>}>
-                {React.createElement(lazy(() => import('./pages/chat')))}
-              </Suspense>
-            </Route>
-            <Route path="/messages">
-              <Suspense fallback={<div className="text-center p-8">Loading chat...</div>}>
-                {React.createElement(lazy(() => import('./pages/chat')))}
-              </Suspense>
-            </Route>
-            <Route path="/chat">
-              <Suspense fallback={<div className="text-center p-8">Loading chat...</div>}>
-                {React.createElement(lazy(() => import('./pages/chat')))}
-              </Suspense>
-            </Route>
+            <Route path="/messaging" component={ChatPage} />
+            <Route path="/messages" component={ChatPage} />
+            <Route path="/chat" component={ChatPage} />
             <Route path="/contact-us" component={ContactUsPage} />
             <Route path="/forms/:slug" component={FormPage} />
             
@@ -477,37 +473,17 @@ function Router() {
             <Route path="/deployment-diagnostic" component={DeploymentDiagnosticPage} />
             
             {/* Direct Analytics Access - Added as a fail-safe since regular analytics links are not working */}
-            <Route path="/analytics-access" component={() => {
-              const AnalyticsStandalone = require('@/pages/analytics-standalone').default;
-              return <AnalyticsStandalone />;
-            }} />
+            <Route path="/analytics-access" component={AnalyticsStandalone} />
             
             {/* Banner diagnostic tool - publicly accessible */}
-            <Route path="/banner-diagnostic">
-              {() => {
-                const BannerDiagnosticPage = React.lazy(() => import('@/pages/banner-diagnostic'));
-                return (
-                  <React.Suspense fallback={<div className="flex justify-center items-center min-h-screen">
-                    <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
-                  </div>}>
-                    <BannerDiagnosticPage />
-                  </React.Suspense>
-                );
-              }}
-            </Route>
+            <Route path="/banner-diagnostic" component={BannerDiagnostic} />
             
             {/* Object Storage debugging tool - admin access */}
-            <ProtectedRoute path="/admin/object-storage-debug" component={() => {
-              const ObjectStorageDebugPage = React.lazy(() => import('@/pages/object-storage-debug'));
-              return (
-                <React.Suspense fallback={<div>Loading...</div>}>
-                  <ObjectStorageDebugPage />
-                </React.Suspense>
-              );
-            }} requiredFeature="ADMIN" />
+            <ProtectedRoute path="/admin/object-storage-debug" component={ObjectStorageDebugPage} requiredFeature="ADMIN" />
             
             <Route component={() => <NotFound />} />
           </Switch>
+          </Suspense>
           </ErrorBoundary>
         </main>
         <Footer />
@@ -524,6 +500,7 @@ function AppRouter() {
 }
 
 function App() {
+  useEffect(() => installUnreadInvalidation(queryClient), []);
   // Critical diagnostic log - confirm App component is mounting
   console.log('🔍 [MOBILE DEBUG] App component is mounting');
   

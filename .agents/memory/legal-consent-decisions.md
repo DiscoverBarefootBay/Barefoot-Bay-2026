@@ -19,3 +19,9 @@ Statutory exceptions must include a discoverable route through the uploader's ow
 **Why:** An uploader without email may otherwise receive the case link only in the blocked site inbox. A technically exempt direct URL is not accessible if the user cannot discover it.
 
 **How to apply:** Keep the owned copyright-case navigation reachable from both the consent prompt and its error screen, without exempting ordinary inbox or administrative features.
+
+Optimize consent checks by reducing the data read, not by caching authorization across requests.
+
+**Why:** Performance work must preserve the owner's requirement that every newly published version immediately requires renewed acceptance; a short-lived acceptance cache would still create an unauthorized grace period.
+
+**How to apply:** Routine accepted requests need fresh current-version/acceptance metadata, while review screens need complete documents. Batch redundant client triggers only if protected content remains blocked until the fresh result arrives.

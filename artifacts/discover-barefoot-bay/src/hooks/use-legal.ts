@@ -33,6 +33,9 @@ export function useLegalConsent(userId: number | null) {
     queryFn: fetchLegalConsent,
     enabled,
     staleTime: 0,
+    // The global gate owns mount/navigation freshness. Do not also restart
+    // a cached mount check here; polling and reconnect remain enabled.
+    refetchOnMount: false,
     refetchInterval: enabled ? (query) => consentCheckInterval(query.state.status) : false,
     refetchIntervalInBackground: false,
     // Focus refetch is driven by the gate so it can require freshness.

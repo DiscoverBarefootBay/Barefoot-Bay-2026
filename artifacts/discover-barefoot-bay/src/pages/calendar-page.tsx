@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from 'zod';
 import { Calendar as CalendarIcon, Plus, Trash2, ChevronLeft, ChevronRight, ChevronDown, CreditCard, BanIcon, MapPin, Info, ArrowUpDown, ArrowUp, ArrowDown, Search, X } from "lucide-react";
-import { format, addHours, isSameDay, startOfWeek, endOfWeek, eachDayOfInterval, addDays, subDays, addWeeks, subWeeks } from "date-fns";
+import { format, addHours, startOfWeek, endOfWeek, eachDayOfInterval, addDays, subDays, addWeeks, subWeeks } from "date-fns";
 import { formatInTimeZone, toZonedTime } from "date-fns-tz";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
@@ -54,6 +54,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { useRotatingList } from "@/hooks/use-rotating-list";
 import { usePlatinumSponsorSettings, PLATINUM_SPONSOR_DEFAULT_SETTINGS } from "@/hooks/use-platinum-sponsor-settings";
 import { FilterSortDrawer, DrawerFilterSection } from "@/components/shared/filter-sort-drawer";
+import { bucketCalendarEvents, calendarDayKey, calendarDayWindow, calendarEventsKey, calendarSearchKey, calendarVisibleWindow, fetchCalendarEvents, filterCalendarEvents, windowContains } from "@/lib/calendar-events";
 
 // Helper function to strip HTML tags from text
 const stripHtmlTags = (html: string | null) => {
@@ -229,9 +230,73 @@ export default function CalendarPage() {
     }
   }, [viewType, selectedEventId, setSelectedEventId]);
 
-  const { data: events = [], isLoading } = useQuery<Event[]>({
-    queryKey: ["/api/events"],
+  const visibleWindow = useMemo(
+    () => calendarVisibleWindow(viewType, displayedMonth, selectedDate),
+    [viewType, displayedMonth, selectedDate],
+  );
+  const selectedWindow = useMemo(() => calendarDayWindow(selectedDate), [selectedDate]);
+  const needsSelectedQuery = !windowContains(visibleWindow, selectedWindow);
+  const visibleEventsQuery = useQuery<Event[]>({
+    queryKey: calendarEventsKey(user?.id, visibleWindow),
+    queryFn: ({ signal }) => fetchCalendarEvents(visibleWindow, signal),
+    placeholderData: undefined,
+    staleTime: 60_000,
   });
+  // Month arrows intentionally preserve the selected date. Fetch that day's
+  // sidebar separately if it is no longer in the displayed month's window.
+  const selectedEventsQuery = useQuery<Event[]>({
+    queryKey: calendarEventsKey(user?.id, selectedWindow),
+    queryFn: ({ signal }) => fetchCalendarEvents(selectedWindow, signal),
+    enabled: needsSelectedQuery,
+    placeholderData: undefined,
+    staleTime: 60_000,
+  });
+  const selectedDayQuery = needsSelectedQuery ? selectedEventsQuery : visibleEventsQuery;
+  const events = useMemo(() => {
+    const byId = new Map<number, Event>();
+    for (const event of visibleEventsQuery.data ?? []) byId.set(event.id, event);
+    if (needsSelectedQuery) {
+      for (const event of selectedEventsQuery.data ?? []) byId.set(event.id, event);
+    }
+    return [...byId.values()];
+  }, [visibleEventsQuery.data, selectedEventsQuery.data, needsSelectedQuery]);
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchQuery.trim()), 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+  const searchEventsQuery = useQuery<Event[]>({
+    queryKey: calendarSearchKey(user?.id, debouncedSearch),
+    queryFn: ({ signal }) => fetchCalendarEvents({ search: debouncedSearch }, signal),
+    enabled: debouncedSearch.length > 0,
+    placeholderData: undefined,
+    staleTime: 60_000,
+  });
+  const searchPending = searchQuery.trim() !== debouncedSearch || searchEventsQuery.isLoading;
+  const dayBuckets = useMemo(() => bucketCalendarEvents(
+    filterCalendarEvents(events, selectedCategory, badgeFilter, searchQuery),
+    sortOrder,
+    Date.now(),
+  ), [events, selectedCategory, badgeFilter, searchQuery, sortOrder]);
+  const matchingSuggestions = useMemo(() => filterCalendarEvents(
+    searchEventsQuery.data ?? [], selectedCategory, badgeFilter, searchQuery,
+  ).slice(0, 10), [searchEventsQuery.data, selectedCategory, badgeFilter, searchQuery]);
+
+  const renderQueryError = (error: Error | null, retry: () => unknown) => (
+    <div role="alert" className="p-4 space-y-2 border rounded-md" data-testid="status-calendar-error">
+      <p>{error?.message || "Unable to load events."}</p>
+      <Button variant="outline" onClick={() => retry()} data-testid="button-retry-calendar">Retry</Button>
+    </div>
+  );
+  const renderLoading = () => (
+    <div role="status" data-testid="status-calendar-loading">
+      <span className="sr-only">Loading events…</span>
+      <EventCardSkeletonGroup count={3} />
+    </div>
+  );
+  const renderEmpty = (message: string) => (
+    <p role="status" className="p-4 text-sm text-muted-foreground" data-testid="status-calendar-empty">{message}</p>
+  );
 
   const platinumSponsorsForDate = useMemo(() => {
     return (events ?? []).filter((e) => {
@@ -507,118 +572,8 @@ export default function CalendarPage() {
     return formatInTimeZone(date, 'America/New_York', "h:mm a");
   };
   
-  const isPriorityCategory = (cat: string) => cat === 'promotional' || cat === 'platinum_sponsor';
-
-  const sortEventsWithPromotionalFirst = (events: Event[], ascending: boolean = true) => {
-    return [...events].sort((a, b) => {
-      const aPriority = isPriorityCategory(a.category);
-      const bPriority = isPriorityCategory(b.category);
-      if (aPriority && !bPriority) return -1;
-      if (!aPriority && bPriority) return 1;
-      if (aPriority && bPriority) {
-        if (a.category === 'platinum_sponsor' && b.category !== 'platinum_sponsor') return -1;
-        if (a.category !== 'platinum_sponsor' && b.category === 'platinum_sponsor') return 1;
-      }
-
-      const timeA = new Date(a.startDate).getTime();
-      const timeB = new Date(b.startDate).getTime();
-      return ascending ? timeA - timeB : timeB - timeA;
-    });
-  };
-
-  const getFilteredEvents = (events: Event[]) => {
-    // Apply category filter
-    let filteredEvents = selectedCategory === "all"
-      ? events
-      : events.filter(event => event.category === selectedCategory);
-
-    // Apply badge requirement filter if set
-    if (badgeFilter !== null) {
-      filteredEvents = filteredEvents.filter(event => {
-        // Check if event has badgeRequired property and it matches the filter
-        return event.badgeRequired === badgeFilter;
-      });
-    }
-
-    // Apply search filter if search query exists
-    if (searchQuery.trim()) {
-      filteredEvents = filteredEvents.filter(event => 
-        event.title.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    return filteredEvents;
-  };
-
-  const getEventsForSelectedDate = () => {
-    const filteredEvents = getFilteredEvents(events)
-      .filter((event) => isSameDay(new Date(event.startDate), selectedDate));
-    
-    const platinumEvents = filteredEvents.filter(event => event.category === 'platinum_sponsor');
-    const nonPlatinumEvents = filteredEvents.filter(event => event.category !== 'platinum_sponsor');
-    const ascending = sortOrder !== 'desc';
-    const sortedPlatinum = [...platinumEvents].sort((a, b) => {
-      const diff = new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
-      return ascending ? diff : -diff;
-    });
-    
-    if (sortOrder === 'now') {
-      const now = new Date();
-      const currentTime = now.getTime();
-      
-      const promotionalEvents = nonPlatinumEvents.filter(event => event.category === 'promotional');
-      const nonPromoNonPlatinum = nonPlatinumEvents.filter(event => event.category !== 'promotional');
-      
-      const currentAndFuture = nonPromoNonPlatinum.filter(event => {
-        const eventEnd = new Date(event.endDate).getTime();
-        return eventEnd >= currentTime;
-      }).sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
-      
-      const past = nonPromoNonPlatinum.filter(event => {
-        const eventEnd = new Date(event.endDate).getTime();
-        return eventEnd < currentTime;
-      }).sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
-      
-      return [...sortedPlatinum, ...promotionalEvents, ...currentAndFuture, ...past];
-    }
-    
-    return [...sortedPlatinum, ...sortEventsWithPromotionalFirst(nonPlatinumEvents, sortOrder === 'asc')];
-  };
-
-  const getEventsForDay = (date: Date) => {
-    const filteredEvents = getFilteredEvents(events)
-      .filter((event) => isSameDay(new Date(event.startDate), date));
-    
-    const platinumEvents = filteredEvents.filter(event => event.category === 'platinum_sponsor');
-    const nonPlatinumEvents = filteredEvents.filter(event => event.category !== 'platinum_sponsor');
-    const ascending = sortOrder !== 'desc';
-    const sortedPlatinum = [...platinumEvents].sort((a, b) => {
-      const diff = new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
-      return ascending ? diff : -diff;
-    });
-    
-    if (sortOrder === 'now') {
-      const now = new Date();
-      const currentTime = now.getTime();
-      
-      const promotionalEvents = nonPlatinumEvents.filter(event => event.category === 'promotional');
-      const nonPromoNonPlatinum = nonPlatinumEvents.filter(event => event.category !== 'promotional');
-      
-      const currentAndFuture = nonPromoNonPlatinum.filter(event => {
-        const eventEnd = new Date(event.endDate).getTime();
-        return eventEnd >= currentTime;
-      }).sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
-      
-      const past = nonPromoNonPlatinum.filter(event => {
-        const eventEnd = new Date(event.endDate).getTime();
-        return eventEnd < currentTime;
-      }).sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
-      
-      return [...sortedPlatinum, ...promotionalEvents, ...currentAndFuture, ...past];
-    }
-    
-    return [...sortedPlatinum, ...sortEventsWithPromotionalFirst(nonPlatinumEvents, sortOrder === 'asc')];
-  };
+  const getEventsForDay = (date: Date) => dayBuckets.get(calendarDayKey(date)) ?? [];
+  const getEventsForSelectedDate = () => getEventsForDay(selectedDate);
 
   const renderDayContent = (date: Date) => {
     const dayEvents = getEventsForDay(date);
@@ -749,20 +704,10 @@ export default function CalendarPage() {
 
         {/* Chronological list view */}
         <div className="border rounded-lg overflow-hidden bg-white shadow-sm">
-          {isLoading || sortedEvents.length === 0 ? (
-            <div className="p-4 space-y-4">
-              <div className="animate-pulse space-y-4">
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <div key={index} className="flex gap-3 items-start">
-                    <div className="w-20 h-12 bg-gray-200 rounded"></div>
-                    <div className="flex-1 space-y-2">
-                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                      <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+          {selectedDayQuery.isError ? (
+            renderQueryError(selectedDayQuery.error, selectedDayQuery.refetch)
+          ) : selectedDayQuery.isLoading ? (
+            renderLoading()
           ) : (
             <div className="w-full">
               {rotatedPlatinumSponsors.length > 0 && (
@@ -772,6 +717,8 @@ export default function CalendarPage() {
                   ))}
                 </div>
               )}
+              {sortedEvents.filter(e => e.category !== 'platinum_sponsor').length === 0 &&
+                renderEmpty("No events for this day match your filters.")}
             <ul className="divide-y w-full">
               {sortedEvents.filter(e => e.category !== 'platinum_sponsor').map((event) => {
                 const startTime = new Date(event.startDate);
@@ -963,6 +910,10 @@ export default function CalendarPage() {
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
+
+        {visibleEventsQuery.isError ? renderQueryError(visibleEventsQuery.error, visibleEventsQuery.refetch) :
+          visibleEventsQuery.isLoading ? renderLoading() :
+          daysInWeek.every(day => getEventsForDay(day).length === 0) ? renderEmpty("No events for this week match your filters.") : null}
 
         {/* Timeline view */}
         <div className="border rounded-lg overflow-x-auto relative -mx-4 md:mx-0 md:overflow-visible">
@@ -1552,25 +1503,13 @@ export default function CalendarPage() {
               {showSearchSuggestions && searchQuery.trim() && (
                 <div className="absolute z-50 w-full mt-1 bg-white border rounded-md shadow-lg max-h-[300px] overflow-auto">
                   {(() => {
-                    // Get filtered events first (respecting category and badge filters)
-                    let filteredForSuggestions = selectedCategory === "all"
-                      ? events
-                      : events.filter(event => event.category === selectedCategory);
-
-                    if (badgeFilter !== null) {
-                      filteredForSuggestions = filteredForSuggestions.filter(event => 
-                        event.badgeRequired === badgeFilter
-                      );
+                    if (searchPending) {
+                      return <p role="status" className="px-3 py-2 text-sm" data-testid="status-calendar-search-loading">Searching events…</p>;
                     }
-
-                    // Then filter by search query
-                    const matchingEvents = filteredForSuggestions
-                      .filter(event => 
-                        event.title.toLowerCase().includes(searchQuery.toLowerCase())
-                      )
-                      .slice(0, 10);
-
-                    if (matchingEvents.length === 0) {
+                    if (searchEventsQuery.isError) {
+                      return renderQueryError(searchEventsQuery.error, searchEventsQuery.refetch);
+                    }
+                    if (matchingSuggestions.length === 0) {
                       return (
                         <div className="px-3 py-2 text-sm text-gray-500">
                           No events found
@@ -1578,12 +1517,15 @@ export default function CalendarPage() {
                       );
                     }
 
-                    return matchingEvents.map((event) => (
+                    return matchingSuggestions.map((event) => (
                       <button
                         key={event.id}
                         onClick={() => {
                           setSearchQuery(event.title);
                           setShowSearchSuggestions(false);
+                          updateSelectedDate(new Date(event.startDate));
+                          setSelectedEventId(event.id);
+                          setViewType('day');
                         }}
                         className="w-full text-left px-3 py-2 hover:bg-gray-100 border-b last:border-b-0 transition-colors"
                         data-testid={`suggestion-${event.id}`}
@@ -1600,6 +1542,15 @@ export default function CalendarPage() {
             </div>
           </div>
 
+          {viewType === 'month' && (
+            visibleEventsQuery.isError ? renderQueryError(visibleEventsQuery.error, visibleEventsQuery.refetch) :
+            visibleEventsQuery.isLoading ? (
+              <p role="status" className="p-2 text-sm" data-testid="status-calendar-month-loading">Loading events…</p>
+            ) : ![...dayBuckets.entries()].some(([key, bucket]) => {
+              const date = new Date(`${key}T00:00:00`);
+              return bucket.length > 0 && date >= visibleWindow.start && date < visibleWindow.end;
+            }) ? renderEmpty("No events for this month match your filters.") : null
+          )}
           {viewType === 'month' ? (
             <Calendar
               mode="single"
@@ -1683,10 +1634,10 @@ export default function CalendarPage() {
               </div>
             </div>
 
-            {isLoading || getEventsForSelectedDate().length === 0 ? (
-              <div className="grid grid-cols-1 gap-4">
-                <EventCardSkeletonGroup count={3} />
-              </div>
+            {selectedDayQuery.isError ? (
+              renderQueryError(selectedDayQuery.error, selectedDayQuery.refetch)
+            ) : selectedDayQuery.isLoading ? (
+              renderLoading()
             ) : (
               <div className="grid grid-cols-1 gap-4">
                 {rotatedPlatinumSponsors.length > 0 && (
@@ -1699,6 +1650,8 @@ export default function CalendarPage() {
                 {getEventsForSelectedDate().filter(e => e.category !== 'platinum_sponsor').map((event) => (
                   <EventCard key={event.id} event={event} returnDate={selectedDate.toISOString().split('T')[0]} />
                 ))}
+                {getEventsForSelectedDate().filter(e => e.category !== 'platinum_sponsor').length === 0 &&
+                  renderEmpty("No events for this day match your filters.")}
               </div>
             )}
           </div>

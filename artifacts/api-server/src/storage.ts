@@ -43,6 +43,7 @@ import {
 // Import SendGrid service for email notifications
 import { sendForumPostNotificationEmail } from "./sendgrid-service";
 import { canonicalizeAvatarUrl } from "./lib/avatar-url";
+import { readEvents, readActiveSponsors, type EventReadOptions } from "./event-read-model";
 
 // Re-export db for direct use in routes
 export { db };
@@ -122,7 +123,8 @@ export interface IStorage {
   getUsersByRole(role: string): Promise<User[]>;
 
   // Event operations
-  getEvents(): Promise<Event[]>;
+  getEvents(options?: EventReadOptions): Promise<Event[]>;
+  getActivePlatinumSponsors(): Promise<Event[]>;
   getEvent(id: number): Promise<Event | undefined>;
   createEvent(event: InsertEvent): Promise<Event>;
   deleteEvent(id: number): Promise<void>;
@@ -1856,36 +1858,12 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Event operations
-  async getEvents(): Promise<Event[]> {
-    console.log("Getting all events");
-    try {
-      const results = await db.select().from(events);
-      
-      // Add child event counts to parent events
-      const eventsWithCounts = await Promise.all(
-        results.map(async (event) => {
-          if (event.isRecurring && !event.parentEventId) {
-            // This is a parent event, count its children
-            const childCount = await db
-              .select({ count: sql<number>`count(*)` })
-              .from(events)
-              .where(eq(events.parentEventId, event.id));
-            
-            return {
-              ...event,
-              childCount: Number(childCount[0]?.count || 0)
-            };
-          }
-          return event;
-        })
-      );
-      
-      console.log("Events retrieved successfully with child counts");
-      return eventsWithCounts;
-    } catch (error) {
-      console.error("Error retrieving events:", error);
-      throw error;
-    }
+  async getEvents(options?: EventReadOptions): Promise<Event[]> {
+    return readEvents(db, options);
+  }
+
+  async getActivePlatinumSponsors(): Promise<Event[]> {
+    return readActiveSponsors(db);
   }
 
   async getEvent(id: number): Promise<Event | undefined> {

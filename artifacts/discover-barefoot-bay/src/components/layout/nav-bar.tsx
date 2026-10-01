@@ -53,6 +53,8 @@ import { VendorCategoryBadge } from "@/components/shared/vendor-category-badge";
 import { useVendorCategoryCounts } from "@/hooks/use-vendor-category-counts";
 import { MobileMenu } from "./mobile-menu";
 import { useCopyrightActivity } from "@/hooks/use-copyright-activity";
+import { useUnreadMessages } from "@/hooks/use-unread-messages";
+import { unreadQueryKey } from "@/lib/message-unread";
 import { 
   FaHome, FaBriefcase, FaLeaf, FaStore, FaUtensils, FaCar, FaWrench, 
   FaHammer, FaPaintBrush, FaShoppingCart, FaWater, FaSwimmingPool,
@@ -126,37 +128,11 @@ export function NavBar() {
   const queryClient = useQueryClient();
   const { countsByCategory } = useVendorCategoryCounts();
   
-  // Fetch messages and count unread ones - using same logic as Messages page
-  const { data: messagesData } = useQuery({
-    queryKey: ['/api/messages'],
-    enabled: !!user,
-    refetchInterval: 5000, // Refresh every 5 seconds
-    staleTime: 0, // Always fetch fresh data - no caching
-    refetchOnWindowFocus: true, // Refresh when window regains focus
-    refetchOnMount: true, // Always refetch on mount
-    retry: 2, // Retry failed requests up to 2 times
-    onError: (error: any) => {
-      console.error('Error fetching messages for unread count:', error);
-    }
-  });
-  
-  // Count unread messages including replies - same logic as Messages page
-  const unreadMessagesCount = messagesData ? (() => {
-    let count = 0;
-    (messagesData as any[]).forEach(message => {
-      // Check if thread has any unread messages (main message or any replies) - same logic as MessageList
-      const hasReplies = message.replies && Array.isArray(message.replies) && message.replies.length > 0;
-      const hasUnreadInThread = !message.read || (hasReplies && message.replies.some((reply: any) => !reply.read));
-      
-      if (hasUnreadInThread) {
-        count++;
-      }
-    });
-    return count;
-  })() : 0;
-  
-  // Debug log for troubleshooting notification issues
-  console.log('Unread messages count:', unreadMessagesCount);
+  const unreadUserId = effectiveRole === "guest" || logoutMutation.isPending ? null : user?.id ?? null;
+  const unreadKey = unreadQueryKey(unreadUserId);
+  const { data: unreadCounts, error: unreadError } = useUnreadMessages(unreadUserId);
+  // Desktop has always counted unread threads, not individual replies.
+  const unreadMessagesCount = unreadCounts?.count ?? 0;
   
   // Mutation to mark all messages as read
   const markAllReadMutation = useMutation({
@@ -176,6 +152,9 @@ export function NavBar() {
       return response.json();
     },
     onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: unreadKey });
+      const previousUnread = queryClient.getQueryData(unreadKey);
+      queryClient.setQueryData(unreadKey, { count: 0, messageCount: 0 });
       // Cancel any outgoing refetches so they don't overwrite our optimistic update
       await queryClient.cancelQueries({ queryKey: ['/api/messages'] });
       
@@ -199,19 +178,21 @@ export function NavBar() {
       // Reset the X mode state immediately
       setShowMarkReadX(false);
       
-      return { previousMessages };
+      return { previousMessages, previousUnread, unreadKey };
     },
     onSuccess: (data) => {
       console.log('Successfully marked all messages as read:', data);
-      // Don't invalidate immediately - let the optimistic update persist
-      // The query will naturally refetch on its interval (5 seconds)
-      // This prevents the badge from reappearing immediately after clicking X
+      void queryClient.invalidateQueries({ queryKey: unreadKey });
+      void queryClient.invalidateQueries({ queryKey: ['/api/messages'] });
     },
     onError: (error, variables, context) => {
       console.error('Error marking all messages as read:', error);
       // Rollback optimistic update
       if (context?.previousMessages) {
         queryClient.setQueryData(['/api/messages'], context.previousMessages);
+      }
+      if (context?.previousUnread !== undefined) {
+        queryClient.setQueryData(context.unreadKey, context.previousUnread);
       }
       // Reset the X mode state on error too
       setShowMarkReadX(false);
@@ -858,6 +839,11 @@ export function NavBar() {
                         <MessageSquare className="mr-2 h-4 w-4" />
                         <span>Messages</span>
                       </Link>
+                      {unreadError && (
+                        <span role="status" data-testid="status-unread-error" className="text-xs text-red-600" title={unreadError.message}>
+                          Count unavailable
+                        </span>
+                      )}
                       {unreadMessagesCount > 0 && (
                         <div 
                           className={`flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs font-medium text-white cursor-pointer transition-colors z-50 ${

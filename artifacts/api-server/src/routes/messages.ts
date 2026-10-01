@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { authenticateUser } from '../middleware/auth';
 import { isAdmin } from '../utils/role-utils';
 import { assembleMessageHistory, getVisibleDescendants } from './message-history';
+import { countVisibleUnreadHistory } from './message-unread';
 import * as fs from 'fs';
 import * as path from 'path';
 import { uploadAttachmentToObjectStorage, getAttachmentUrl } from '../attachment-storage-proxy';
@@ -1435,17 +1436,30 @@ router.get('/unread/count', authenticateUser, async (req, res) => {
       return res.status(401).json({ error: 'Authentication required' });
     }
     
-    // Count unread messages
-    const unreadCount = await db.select({
-      count: sql`count(*)`
-    })
-    .from(messageRecipients)
-    .where(and(
-      eq(messageRecipients.recipientId, currentUserId),
-      eq(messageRecipients.readAt, null)
-    ));
-    
-    return res.json({ count: parseInt(unreadCount[0].count.toString(), 10) || 0 });
+    // Fetch only IDs, parent links and read timestamps; never message bodies,
+    // users or attachments. Keep visibility identical to the mailbox loader.
+    const recipientRows = await db.select({
+      messageId: messageRecipients.messageId,
+      readAt: messageRecipients.readAt,
+    }).from(messageRecipients).where(visibleRecipientWhere(currentUserId));
+    const receivedIds = [...new Set(recipientRows.map(row => row.messageId))];
+    const messageQuery = db.select({
+      id: messages.id,
+      inReplyTo: messages.inReplyTo,
+      senderId: messages.senderId,
+    }).from(messages);
+    const visibleMessages = await messageQuery.where(receivedIds.length > 0
+      ? or(
+        eq(messages.senderId, currentUserId),
+        and(
+          inArray(messages.id, receivedIds),
+          or(eq(messages.deletedBySender, false), sql`${messages.deletedBySender} IS NULL`)
+        )
+      )
+      : eq(messages.senderId, currentUserId));
+
+    res.setHeader('Cache-Control', 'no-store');
+    return res.json(countVisibleUnreadHistory(visibleMessages, recipientRows, currentUserId));
   } catch (error) {
     console.error('Error getting unread count:', error);
     return res.status(500).json({ error: 'Internal server error' });

@@ -13,6 +13,7 @@ let activeRole = 'registered';
 let requestMessageId: number | undefined;
 let userLimitCalls = 0;
 let updates: Array<{ values: unknown; condition: unknown }> = [];
+let selections: Array<{ fields: unknown; table: unknown }> = [];
 
 const stamp = (day: number) => new Date(`2025-01-${String(day).padStart(2, '0')}T12:00:00.000Z`);
 const fixtureMessages = [
@@ -63,7 +64,7 @@ function rowsFor(table: unknown, mode: 'await' | 'order' | 'limit', limit?: numb
       row.deletedByRecipient !== true && row.deletedAt == null);
   }
   if (table === schema.messages) {
-    if (mode === 'order') {
+    if (mode === 'order' || mode === 'await') {
       const receivedIds = new Set(fixtureRecipients
         .filter(row => row.recipientId === activeUserId &&
           row.deletedByRecipient !== true && row.deletedAt == null)
@@ -98,8 +99,9 @@ function rowsFor(table: unknown, mode: 'await' | 'order' | 'limit', limit?: numb
 }
 
 const mockedDb = {
-  select: () => ({
+  select: (fields?: unknown) => ({
     from: (table: unknown) => {
+      selections.push({ fields, table });
       const query: any = {
         where() { return query; },
         orderBy() { return Promise.resolve(rowsFor(table, 'order')); },
@@ -263,4 +265,24 @@ test('administrator retains individual message detail access without reading oth
   assert.equal(detail.id, 5);
   assert.equal(detail.content, 'PRIVATE SIBLING REPLY');
   assert.equal(JSON.stringify(detail).includes('PRIVATE NESTED REPLY'), false);
+});
+
+test('mounted unread endpoint matches mailbox threads and mobile messages using only skinny selections', async () => {
+  selections = [];
+  const response = await fetch(`${origin}/api/messages/unread/count`, { headers: { 'x-test-user': 'resident' } });
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get('cache-control'), 'no-store');
+  assert.deepEqual(await response.json(), { count: 1, messageCount: 3 });
+  assert.equal(selections.length, 2, 'no attachment or sender-profile queries');
+  assert.deepEqual(Object.keys(selections[0].fields as object).sort(), ['messageId', 'readAt']);
+  assert.deepEqual(Object.keys(selections[1].fields as object).sort(), ['id', 'inReplyTo', 'senderId']);
+
+  const mailbox = await fetch(`${origin}/api/messages`, { headers: { 'x-test-user': 'resident' } }).then(r => r.json()) as any[];
+  assert.equal(mailbox.filter(thread => !thread.read || thread.replies.some((reply: any) => !reply.read)).length, 1);
+  assert.equal(mailbox.flatMap(thread => [thread, ...thread.replies]).filter(message => !message.read).length, 3);
+});
+
+test('mounted unread endpoint requires authentication', async () => {
+  const response = await fetch(`${origin}/api/messages/unread/count`, { headers: { 'x-test-user': 'anonymous' } });
+  assert.equal(response.status, 401);
 });
