@@ -15,7 +15,7 @@ const ChatPage: React.FC = () => {
         <meta name="description" content="Chat with our community support team" />
       </Helmet>
 
-      <div className="min-h-screen bg-gray-100 pt-4 pb-8 px-4 md:px-0">
+      <div className="min-h-screen bg-transparent pt-4 pb-8 px-4 md:px-0">
         <div className="max-w-5xl mx-auto">
           <ChatProvider>
             {isMobile ? <MobileChat /> : <Chat />}

@@ -163,7 +163,7 @@ const MobileChat: React.FC = () => {
   // Detail view
   if (view === 'detail' && selectedMessage) {
     return (
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col h-full bg-white">
         <MessageSendProgress />
         <div className="sticky top-0 bg-white p-4 border-b z-10">
           <Button 
@@ -200,7 +200,7 @@ const MobileChat: React.FC = () => {
 
   // List view
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-white">
       <MessageSendProgress />
       <div className="flex justify-between items-center mb-4 sticky top-0 bg-white p-4 border-b z-10">
         {selectionMode ? (
