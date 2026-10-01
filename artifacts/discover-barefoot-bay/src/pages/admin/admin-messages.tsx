@@ -32,59 +32,21 @@ import {
   User,
   Clock,
   Mail,
-  Filter,
   Eye,
   AlertTriangle
 } from "lucide-react";
 import { format } from "date-fns";
-
-interface MessageSender {
-  id: number;
-  username: string;
-  fullName: string;
-  email: string;
-  role: string;
-}
-
-interface MessageRecipient {
-  id: number;
-  username: string;
-  fullName: string;
-  email: string;
-  role: string;
-  readAt: string | null;
-  status: string | null;
-}
-
-interface MessageAttachment {
-  id: string;
-  filename: string;
-  url: string;
-  size: string;
-  contentType: string;
-}
-
-interface AdminMessage {
-  id: number;
-  subject: string;
-  content: string;
-  senderId: number;
-  messageType: string;
-  inReplyTo: number | null;
-  deletedAt: string | null;
-  deletedBySender: boolean;
-  createdAt: string;
-  updatedAt: string;
-  sender: MessageSender;
-  recipients: MessageRecipient[];
-  attachments: MessageAttachment[];
-}
+import { fetchAdminMessages, filterAdminMessages, type AdminMessage } from "@/lib/admin-messages";
 
 export default function AdminMessagesPage() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [messages, setMessages] = useState<AdminMessage[]>([]);
+  const [totalMessages, setTotalMessages] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [hasLoadedMessages, setHasLoadedMessages] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMessage, setSelectedMessage] = useState<AdminMessage | null>(null);
   const [showDetails, setShowDetails] = useState(false);
@@ -102,31 +64,30 @@ export default function AdminMessagesPage() {
   }, [user, toast]);
 
   const fetchMessages = async () => {
+    const isFirstLoad = !hasLoadedMessages;
     try {
-      setLoading(true);
-      const response = await fetch('/api/admin/messages', {
-        credentials: 'include'
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch messages');
-      }
-      
-      const result = await response.json();
-      if (result.success) {
-        setMessages(result.data);
-      } else {
-        throw new Error(result.message || 'Failed to fetch messages');
-      }
+      setLoading(isFirstLoad);
+      setRefreshing(!isFirstLoad);
+      setLoadError(null);
+      const result = await fetchAdminMessages();
+      setMessages(result.messages);
+      setTotalMessages(result.total);
+      setHasLoadedMessages(true);
+      setSelectedMessage((current) =>
+        current ? result.messages.find((message) => message.id === current.id) ?? null : null
+      );
     } catch (error) {
       console.error('Error fetching messages:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      setLoadError(errorMessage);
       toast({
         title: "Error",
-        description: "Failed to fetch messages. Please try again.",
+        description: `Failed to fetch messages: ${errorMessage}`,
         variant: "destructive",
       });
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -136,46 +97,30 @@ export default function AdminMessagesPage() {
         method: 'DELETE',
         credentials: 'include'
       });
-      
-      if (!response.ok) {
-        throw new Error('Failed to delete message');
-      }
-      
       const result = await response.json();
-      if (result.success) {
-        setMessages(messages.filter(msg => msg.id !== messageId));
-        toast({
-          title: "Success",
-          description: "Message deleted successfully.",
-        });
-      } else {
+      if (!response.ok || !result.success) {
         throw new Error(result.message || 'Failed to delete message');
       }
+      setMessages((current) => current.filter((message) => message.id !== messageId));
+      setTotalMessages((current) => Math.max(0, current - 1));
+      setSelectedMessage((current) => current?.id === messageId ? null : current);
+      setShowDetails((current) => selectedMessage?.id === messageId ? false : current);
+      toast({
+        title: "Success",
+        description: "Message deleted successfully.",
+      });
     } catch (error) {
       console.error('Error deleting message:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       toast({
         title: "Error",
-        description: "Failed to delete message. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     }
   };
 
-  const filteredMessages = messages.filter(message => {
-    // Hide messages from specific user
-    if (message.sender.email === 'malgatitx@gmail.com') {
-      return false;
-    }
-    
-    const searchLower = searchTerm.toLowerCase();
-    return (
-      message.subject.toLowerCase().includes(searchLower) ||
-      message.content.toLowerCase().includes(searchLower) ||
-      message.sender.username.toLowerCase().includes(searchLower) ||
-      message.sender.fullName.toLowerCase().includes(searchLower) ||
-      message.sender.email.toLowerCase().includes(searchLower)
-    );
-  });
+  const filteredMessages = filterAdminMessages(messages, searchTerm);
 
   const getRoleBadgeVariant = (role: string) => {
     switch (role) {
@@ -188,7 +133,9 @@ export default function AdminMessagesPage() {
     }
   };
 
-  const MessageDetailsDialog = ({ message }: { message: AdminMessage }) => (
+  const MessageDetailsDialog = ({ message }: { message: AdminMessage }) => {
+    const senderRole = message.sender?.role ?? "unknown";
+    return (
     <AlertDialog open={showDetails} onOpenChange={setShowDetails}>
       <AlertDialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto w-[95vw] sm:w-full">
         <AlertDialogHeader>
@@ -199,12 +146,12 @@ export default function AdminMessagesPage() {
             <div>
               <h4 className="font-semibold mb-2 text-sm sm:text-base">Sender Information</h4>
               <div className="space-y-1 text-xs sm:text-sm">
-                <p><span className="font-medium">Username:</span> {message.sender.username}</p>
-                <p><span className="font-medium">Full Name:</span> {message.sender.fullName}</p>
-                <p className="break-all"><span className="font-medium">Email:</span> {message.sender.email}</p>
+                <p><span className="font-medium">Username:</span> {message.sender?.username || "Unknown sender"}</p>
+                <p><span className="font-medium">Full Name:</span> {message.sender?.fullName || "Unavailable"}</p>
+                <p className="break-all"><span className="font-medium">Email:</span> {message.sender?.email || "Unavailable"}</p>
                 <p><span className="font-medium">Role:</span> 
-                  <Badge variant={getRoleBadgeVariant(message.sender.role)} className="ml-2">
-                    {message.sender.role}
+                  <Badge variant={getRoleBadgeVariant(senderRole)} className="ml-2">
+                    {senderRole}
                   </Badge>
                 </p>
               </div>
@@ -236,10 +183,10 @@ export default function AdminMessagesPage() {
                 {message.recipients.map((recipient, index) => (
                   <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2 bg-gray-50 rounded">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                      <span className="font-medium text-xs sm:text-sm">{recipient.fullName || recipient.username}</span>
-                      <span className="text-xs text-gray-500 break-all">({recipient.email})</span>
-                      <Badge variant={getRoleBadgeVariant(recipient.role)} className="w-fit">
-                        {recipient.role}
+                      <span className="font-medium text-xs sm:text-sm">{recipient.fullName || recipient.username || "Unknown recipient"}</span>
+                      {recipient.email && <span className="text-xs text-gray-500 break-all">({recipient.email})</span>}
+                      <Badge variant={getRoleBadgeVariant(recipient.role ?? "unknown")} className="w-fit">
+                        {recipient.role || "unknown"}
                       </Badge>
                     </div>
                     <div className="text-xs sm:text-sm text-gray-500">
@@ -277,17 +224,8 @@ export default function AdminMessagesPage() {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  );
-
-  if (loading) {
-    return (
-      <AdminLayout>
-        <div className="container p-6">
-          <div className="text-center">Loading messages...</div>
-        </div>
-      </AdminLayout>
     );
-  }
+  };
 
   return (
     <AdminLayout>
@@ -302,10 +240,18 @@ export default function AdminMessagesPage() {
         <Card>
           <CardHeader>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <CardTitle className="flex items-center gap-2">
-                <MessageSquare className="h-5 w-5" />
-                All Messages ({filteredMessages.length})
-              </CardTitle>
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5" />
+                  All Messages {hasLoadedMessages ? `(${totalMessages})` : loading ? "(loading...)" : "(unavailable)"}
+                </CardTitle>
+                {hasLoadedMessages && (
+                  <p className="text-sm text-muted-foreground mt-1" data-testid="text-message-count">
+                    Showing {filteredMessages.length} matching of {messages.length} loaded messages
+                    {totalMessages > messages.length ? `; ${totalMessages} total messages` : ""}
+                  </p>
+                )}
+              </div>
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
                 <div className="relative">
                   <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -314,30 +260,51 @@ export default function AdminMessagesPage() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-8 w-full sm:w-64"
+                    data-testid="input-search-messages"
                   />
                 </div>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={fetchMessages}
-                  disabled={loading}
+                  disabled={loading || refreshing}
                   className="w-full sm:w-auto"
+                  data-testid="button-refresh-messages"
                 >
-                  Refresh
+                  {refreshing ? "Refreshing..." : "Refresh"}
                 </Button>
               </div>
             </div>
           </CardHeader>
           <CardContent>
-            {filteredMessages.length === 0 ? (
-              <div className="text-center py-8">
-                <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">
-                  {searchTerm ? 'No messages match your search criteria.' : 'No messages found.'}
-                </p>
+            {loading ? (
+              <div className="text-center py-8" role="status" data-testid="status-loading-messages">
+                Loading messages...
+              </div>
+            ) : !hasLoadedMessages && loadError ? (
+              <div className="text-center py-8 space-y-3" role="alert" data-testid="status-message-load-error">
+                <p className="text-destructive">Could not load messages: {loadError}</p>
+                <Button onClick={fetchMessages} data-testid="button-retry-message-load">Retry</Button>
               </div>
             ) : (
               <>
+                {loadError && (
+                  <div className="mb-4 rounded-md border border-destructive/50 p-3 text-sm" role="alert" data-testid="status-message-refresh-error">
+                    <p>Could not refresh messages: {loadError}. Showing previously loaded data.</p>
+                    <Button variant="outline" size="sm" className="mt-2" onClick={fetchMessages} data-testid="button-retry-message-refresh">
+                      Retry
+                    </Button>
+                  </div>
+                )}
+                {filteredMessages.length === 0 ? (
+                  <div className="text-center py-8" data-testid="status-empty-messages">
+                    <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-muted-foreground">
+                      {searchTerm ? 'No messages match your search criteria.' : 'No messages found.'}
+                    </p>
+                  </div>
+                ) : (
+                <>
                 {/* Desktop Table View */}
                 <div className="hidden lg:block overflow-x-auto">
                   <Table>
@@ -353,7 +320,7 @@ export default function AdminMessagesPage() {
                     </TableHeader>
                     <TableBody>
                       {filteredMessages.map((message) => (
-                        <TableRow key={message.id}>
+                          <TableRow key={message.id} data-testid={`row-message-${message.id}`}>
                           <TableCell>
                             <div className="flex items-center gap-2">
                               {message.deletedBySender && (
@@ -371,10 +338,10 @@ export default function AdminMessagesPage() {
                             <div className="flex items-center gap-2">
                               <User className="h-4 w-4" />
                               <div>
-                                <p className="font-medium">{message.sender.fullName || message.sender.username}</p>
-                                <p className="text-sm text-muted-foreground">{message.sender.email}</p>
-                                <Badge variant={getRoleBadgeVariant(message.sender.role)} className="text-xs">
-                                  {message.sender.role}
+                                <p className="font-medium">{message.sender?.fullName || message.sender?.username || "Unknown sender"}</p>
+                                <p className="text-sm text-muted-foreground">{message.sender?.email || "Unavailable"}</p>
+                                <Badge variant={getRoleBadgeVariant(message.sender?.role ?? "unknown")} className="text-xs">
+                                  {message.sender?.role ?? "unknown"}
                                 </Badge>
                               </div>
                             </div>
@@ -405,12 +372,13 @@ export default function AdminMessagesPage() {
                                   setSelectedMessage(message);
                                   setShowDetails(true);
                                 }}
+                                data-testid={`button-view-message-desktop-${message.id}`}
                               >
                                 <Eye className="h-4 w-4" />
                               </Button>
                               <AlertDialog>
                                 <AlertDialogTrigger asChild>
-                                  <Button variant="outline" size="sm">
+                                  <Button variant="outline" size="sm" data-testid={`button-delete-message-desktop-${message.id}`}>
                                     <Trash2 className="h-4 w-4" />
                                   </Button>
                                 </AlertDialogTrigger>
@@ -427,6 +395,7 @@ export default function AdminMessagesPage() {
                                     <AlertDialogAction
                                       onClick={() => handleDeleteMessage(message.id)}
                                       className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                      data-testid={`button-confirm-delete-message-desktop-${message.id}`}
                                     >
                                       Delete Message
                                     </AlertDialogAction>
@@ -444,7 +413,7 @@ export default function AdminMessagesPage() {
                 {/* Mobile Card View */}
                 <div className="lg:hidden space-y-4">
                   {filteredMessages.map((message) => (
-                    <Card key={message.id} className="p-4">
+                    <Card key={message.id} className="p-4" data-testid={`card-message-${message.id}`}>
                       <div className="space-y-3">
                         {/* Header with subject and status */}
                         <div className="flex items-start justify-between gap-2">
@@ -469,14 +438,14 @@ export default function AdminMessagesPage() {
                           <User className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                           <div className="min-w-0 flex-1">
                             <p className="font-medium text-sm truncate">
-                              {message.sender.fullName || message.sender.username}
+                              {message.sender?.fullName || message.sender?.username || "Unknown sender"}
                             </p>
                             <p className="text-xs text-muted-foreground truncate">
-                              {message.sender.email}
+                              {message.sender?.email || "Unavailable"}
                             </p>
                           </div>
-                          <Badge variant={getRoleBadgeVariant(message.sender.role)} className="text-xs flex-shrink-0">
-                            {message.sender.role}
+                          <Badge variant={getRoleBadgeVariant(message.sender?.role ?? "unknown")} className="text-xs flex-shrink-0">
+                            {message.sender?.role ?? "unknown"}
                           </Badge>
                         </div>
 
@@ -504,13 +473,14 @@ export default function AdminMessagesPage() {
                               setShowDetails(true);
                             }}
                             className="flex-1"
+                            data-testid={`button-view-message-mobile-${message.id}`}
                           >
                             <Eye className="h-4 w-4 mr-2" />
                             View Details
                           </Button>
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
-                              <Button variant="outline" size="sm" className="px-3">
+                              <Button variant="outline" size="sm" className="px-3" data-testid={`button-delete-message-mobile-${message.id}`}>
                                 <Trash2 className="h-4 w-4" />
                               </Button>
                             </AlertDialogTrigger>
@@ -527,6 +497,7 @@ export default function AdminMessagesPage() {
                                 <AlertDialogAction
                                   onClick={() => handleDeleteMessage(message.id)}
                                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                  data-testid={`button-confirm-delete-message-mobile-${message.id}`}
                                 >
                                   Delete Message
                                 </AlertDialogAction>
@@ -538,6 +509,8 @@ export default function AdminMessagesPage() {
                     </Card>
                   ))}
                 </div>
+                </>
+                )}
               </>
             )}
           </CardContent>

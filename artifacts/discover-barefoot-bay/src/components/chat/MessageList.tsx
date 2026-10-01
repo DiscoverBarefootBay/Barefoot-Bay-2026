@@ -1,5 +1,6 @@
 import React from 'react';
 import { Message } from '../../context/ChatContext';
+import { threadActivityDate } from './thread-state';
 
 interface MessageListProps {
   messages: Message[];
@@ -60,8 +61,8 @@ export const MessageList: React.FC<MessageListProps> = ({
     );
   }
 
-  // Filter out messages that are replies (they'll be shown with their parent)
-  const rootMessages = messages.filter(message => !message.inReplyTo);
+   // API rows are display heads, including visible replies with a hidden parent.
+   const rootMessages = messages;
 
   // Calculate selection state for "select all" checkbox
   const allSelected = rootMessages.length > 0 && rootMessages.every(msg => selectedMessageIds.has(msg.id));
@@ -143,9 +144,8 @@ export const MessageList: React.FC<MessageListProps> = ({
             )}
             <div className="flex justify-between items-start mb-1">
               <h3 className="text-base font-medium truncate">{message.subject || 'No Subject'}</h3>
-              <span className="text-xs text-gray-500 whitespace-nowrap ml-2">
-                {message.timestamp || message.createdAt ? 
-                  formatDateSafe(message.timestamp || message.createdAt) : 'Unknown date'}
+              <span className="text-xs text-gray-500 whitespace-nowrap ml-2" title="Latest conversation activity">
+                {hasReplies ? 'Latest: ' : ''}{formatDateSafe(threadActivityDate(message))}
               </span>
             </div>
             

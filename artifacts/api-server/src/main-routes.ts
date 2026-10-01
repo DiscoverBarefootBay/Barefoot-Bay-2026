@@ -103,7 +103,7 @@ interface ExtendedWebSocket extends WebSocket {
   isAlive: boolean;
   userId?: string;
 }
-import { insertEventSchema, insertListingSchema, insertPageContentSchema, contentVersions, insertFeatureFlagSchema, UserRole, type PageContent, insertListingPaymentSchema, type User, type FeatureFlag, users } from "@workspace/db";
+import { insertEventSchema, insertListingSchema, insertPageContentSchema, contentVersions, insertFeatureFlagSchema, UserRole, type PageContent, insertListingPaymentSchema, type User, type FeatureFlag, users, messages, messageAttachments, messageRecipients } from "@workspace/db";
 import { eq, desc, inArray } from "drizzle-orm";
 import logger from "./logger";
 import multer from "multer";
@@ -113,6 +113,7 @@ import os from "os";
 import express from "express";
 import { fileURLToPath } from 'url';
 import printfulRoutes from './routes/printful';
+import adminMessagesRouter from './routes/admin-messages';
 import { dirname } from 'path';
 import { normalizeMediaUrl } from './shared-compat/url-normalizer';
 import { isVendorPage } from './shared-compat/vendor-url-utils';
@@ -14717,154 +14718,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Admin message management endpoint
-  app.get("/api/admin/messages", requireAuth, requireAdmin, async (req, res) => {
-    console.log("Admin message management requested by:", req.user.username);
-    try {
-      const { messages, messageAttachments, messageRecipients } = await import('../shared/schema-messages');
-      const { users } = await import('../shared/schema');
-      
-      // Get all messages with sender and recipient information
-      const allMessages = await db
-        .select({
-          id: messages.id,
-          subject: messages.subject,
-          content: messages.content,
-          senderId: messages.senderId,
-          messageType: messages.messageType,
-          inReplyTo: messages.inReplyTo,
-          deletedAt: messages.deletedAt,
-          deletedBySender: messages.deletedBySender,
-          createdAt: messages.createdAt,
-          updatedAt: messages.updatedAt,
-          senderUsername: users.username,
-          senderFullName: users.fullName,
-          senderEmail: users.email,
-          senderRole: users.role
-        })
-        .from(messages)
-        .leftJoin(users, eq(messages.senderId, users.id))
-        .orderBy(desc(messages.createdAt))
-        .limit(1000); // Limit to most recent 1000 messages
-
-      // Get recipients for each message
-      const messageIds = allMessages.map(msg => msg.id);
-      const recipients = messageIds.length > 0 ? await db
-        .select({
-          messageId: messageRecipients.messageId,
-          recipientId: messageRecipients.recipientId,
-          readAt: messageRecipients.readAt,
-          status: messageRecipients.status,
-          recipientUsername: users.username,
-          recipientFullName: users.fullName,
-          recipientEmail: users.email,
-          recipientRole: users.role
-        })
-        .from(messageRecipients)
-        .leftJoin(users, eq(messageRecipients.recipientId, users.id))
-        .where(inArray(messageRecipients.messageId, messageIds)) : [];
-
-      // Group recipients by message ID
-      const recipientsByMessage = recipients.reduce((acc, recipient) => {
-        if (!acc[recipient.messageId]) {
-          acc[recipient.messageId] = [];
-        }
-        acc[recipient.messageId].push({
-          id: recipient.recipientId,
-          username: recipient.recipientUsername,
-          fullName: recipient.recipientFullName,
-          email: recipient.recipientEmail,
-          role: recipient.recipientRole,
-          readAt: recipient.readAt,
-          status: recipient.status
-        });
-        return acc;
-      }, {});
-
-      // Get attachments for messages
-      const attachments = messageIds.length > 0 ? await db
-        .select()
-        .from(messageAttachments)
-        .where(inArray(messageAttachments.messageId, messageIds)) : [];
-
-      // Group attachments by message ID
-      const attachmentsByMessage = attachments.reduce((acc, attachment) => {
-        if (!acc[attachment.messageId]) {
-          acc[attachment.messageId] = [];
-        }
-        acc[attachment.messageId].push(attachment);
-        return acc;
-      }, {});
-
-      // Combine all data with enhanced recipient handling
-      const messagesWithDetails = allMessages.map(message => {
-        let messageRecipients = recipientsByMessage[message.id] || [];
-        
-        // For messages with no recipients, infer likely recipients based on message type and sender role
-        if (messageRecipients.length === 0) {
-          // If this is a message from a regular user, it was likely sent to admins
-          if (message.senderRole !== 'admin') {
-            messageRecipients = [{
-              id: null,
-              username: 'admin-group',
-              fullName: 'All Administrators',
-              email: null,
-              role: 'admin',
-              readAt: null,
-              status: 'inferred'
-            }];
-          } else {
-            // If this is from an admin with no recipients, it might be a broadcast message
-            messageRecipients = [{
-              id: null,
-              username: 'all-users',
-              fullName: 'All Users (Inferred)',
-              email: null,
-              role: 'inferred',
-              readAt: null,
-              status: 'inferred'
-            }];
-          }
-        }
-        
-        return {
-          ...message,
-          sender: {
-            id: message.senderId,
-            username: message.senderUsername,
-            fullName: message.senderFullName,
-            email: message.senderEmail,
-            role: message.senderRole
-          },
-          recipients: messageRecipients,
-          attachments: attachmentsByMessage[message.id] || [],
-          hasInferredRecipients: (recipientsByMessage[message.id] || []).length === 0
-        };
-      });
-
-      console.log(`Found ${messagesWithDetails.length} messages for admin review`);
-      
-      res.json({ 
-        success: true, 
-        data: messagesWithDetails,
-        total: messagesWithDetails.length
-      });
-    } catch (error) {
-      console.error("Error fetching admin messages:", error);
-      res.status(500).json({ 
-        success: false, 
-        message: "Failed to fetch messages for admin review",
-        error: error instanceof Error ? error.message : String(error)
-      });
-    }
-  });
-
   // User endpoint to delete their own message
   app.delete("/api/messages/:messageId", requireAuth, async (req, res) => {
-    console.log("Message deletion requested by:", req.user.username, "for message:", req.params.messageId);
+    const user = req.user;
+    if (!user) {
+      res.status(401).json({ success: false, message: "Authentication required" });
+      return;
+    }
+    console.log("Message deletion requested by:", user.username, "for message:", req.params.messageId);
     try {
-      const { messages, messageAttachments, messageRecipients } = await import('../shared/schema-messages');
-      const messageId = parseInt(req.params.messageId);
+      const rawMessageId = Array.isArray(req.params.messageId) ? req.params.messageId[0] : req.params.messageId;
+      const messageId = /^[1-9]\d*$/.test(rawMessageId) ? Number(rawMessageId) : NaN;
       
       if (isNaN(messageId)) {
         return res.status(400).json({ 
@@ -14888,7 +14752,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Check if the user is the sender
-      if (messageToDelete[0].senderId !== req.user.id) {
+      if (messageToDelete[0].senderId !== user.id) {
         return res.status(403).json({ 
           success: false, 
           message: "You can only delete messages you sent" 
@@ -14907,7 +14771,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Delete the message
       const deletedMessage = await db.delete(messages).where(eq(messages.id, messageId)).returning();
       
-      console.log(`User ${req.user.username} deleted their message ${messageId}`);
+      console.log(`User ${user.username} deleted their message ${messageId}`);
       
       res.json({ 
         success: true, 
@@ -14923,54 +14787,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Admin endpoint to delete a message
-  app.delete("/api/admin/messages/:messageId", requireAuth, requireAdmin, async (req, res) => {
-    console.log("Admin message deletion requested by:", req.user.username, "for message:", req.params.messageId);
-    try {
-      const { messages, messageAttachments, messageRecipients } = await import('../shared/schema-messages');
-      const messageId = parseInt(req.params.messageId);
-      
-      if (isNaN(messageId)) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Invalid message ID" 
-        });
-      }
-
-      // Legal hold: refuse before deleting attachments/recipients.
-      await assertMessageDeletable(messageId);
-
-      // Delete message attachments first
-      await db.delete(messageAttachments).where(eq(messageAttachments.messageId, messageId));
-      
-      // Delete message recipients
-      await db.delete(messageRecipients).where(eq(messageRecipients.messageId, messageId));
-      
-      // Delete the message
-      const deletedMessage = await db.delete(messages).where(eq(messages.id, messageId)).returning();
-      
-      if (deletedMessage.length === 0) {
-        return res.status(404).json({ 
-          success: false, 
-          message: "Message not found" 
-        });
-      }
-
-      console.log(`Admin deleted message ${messageId}`);
-      
-      res.json({ 
-        success: true, 
-        message: "Message deleted successfully"
-      });
-    } catch (error) {
-      console.error("Error deleting message:", error);
-      res.status(500).json({ 
-        success: false, 
-        message: "Failed to delete message",
-        error: error instanceof Error ? error.message : String(error)
-      });
-    }
-  });
+  app.use("/api/admin/messages", adminMessagesRouter);
   
   // Create a custom middleware to ensure JSON response 
   const ensureJsonResponse = (req, res, next) => {

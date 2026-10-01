@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Message } from '../../types/chat';
+import { useChat, type Message } from '../../context/ChatContext';
 import { Button } from '../ui/button';
 import { PlusIcon, RefreshCw, ArrowLeft, Trash2, CheckSquare, X } from 'lucide-react';
 import { MessageList } from './MessageList';
@@ -13,114 +13,52 @@ import { MessageSendProgress } from "./MessageSendProgress";
 
 const MobileChat: React.FC = () => {
   const { user } = useAuth();
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
-  const [loading, setLoading] = useState(true);
+  const {
+    messages, selectedMessage, loading, error: historyError,
+    recipients, fetchMessages, selectMessage,
+  } = useChat();
   const [sending, setSending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [recipients, setRecipients] = useState<Array<{id: string, name: string}>>([]);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const error = actionError || historyError;
   const [showComposer, setShowComposer] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
   const [view, setView] = useState<'list' | 'detail'>('list');
-  const [unreadCount, setUnreadCount] = useState(0);
   
   // Bulk selection state
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedMessageIds, setSelectedMessageIds] = useState<Set<number>>(new Set());
   const [bulkDeleting, setBulkDeleting] = useState(false);
 
-  // Fetch messages on component mount
+  // Both layouts share the same authoritative history and selected thread.
   useEffect(() => {
-    fetchMessages();
-    fetchRecipients();
-  }, []);
-
-  const fetchMessages = async () => {
-    try {
-      setLoading(true);
-      setRefreshing(true);
-      
-      const response = await fetch('/api/messages');
-      if (!response.ok) {
-        throw new Error('Failed to fetch messages');
-      }
-      const data = await response.json();
-      setMessages(data);
-      
-      // Count unread messages
-      const unread = data.filter((msg: Message) => !msg.read).length;
-      setUnreadCount(unread);
-      
-      setLoading(false);
-      setRefreshing(false);
-    } catch (err) {
-      setError('Error fetching messages. Please try again later.');
-      setLoading(false);
-      setRefreshing(false);
-      console.error('Error fetching messages:', err);
-    }
-  };
-
-  const fetchRecipients = async () => {
-    try {
-      const response = await fetch('/api/chat/recipients');
-      if (!response.ok) {
-        throw new Error('Failed to fetch recipients');
-      }
-      const data = await response.json();
-      setRecipients(data);
-    } catch (err) {
-      console.error('Error fetching recipients:', err);
-    }
-  };
+    void fetchMessages();
+  }, [fetchMessages]);
 
   const handleSelectMessage = async (message: Message) => {
-    try {
-      // Mark as read if it's unread
-      if (!message.read) {
-        const response = await fetch(`/api/messages/${message.id}/read`, {
-          method: 'PUT',
-        });
-        
-        if (response.ok) {
-          // Update the message in the list
-          setMessages(messages.map(msg => 
-            msg.id === message.id ? { ...msg, read: true } : msg
-          ));
-          
-          // Update unread count
-          setUnreadCount(prev => Math.max(0, prev - 1));
-          
-          // Invalidate React Query cache to update navbar badge on mobile
-          queryClient.invalidateQueries({ queryKey: ['/api/messages'] });
-        }
-      }
-      
-      setSelectedMessage(message);
-      setView('detail');
-    } catch (err) {
-      console.error('Error marking message as read:', err);
-    }
+    selectMessage(message);
+    setView('detail');
+    queryClient.invalidateQueries({ queryKey: ['/api/messages'] });
   };
 
-  const handleDeleteMessage = async (messageId: string) => {
+  const handleDeleteMessage = async (messageId: number) => {
+    setActionError(null);
     try {
       const response = await fetch(`/api/messages/${messageId}`, {
         method: 'DELETE',
       });
       
       if (response.ok) {
-        // Remove from messages list
-        setMessages(messages.filter(msg => msg.id !== messageId));
-        
         // If this was the selected message, clear selection and go back to list
         if (selectedMessage && selectedMessage.id === messageId) {
-          setSelectedMessage(null);
+          selectMessage(null);
           setView('list');
         }
+        await fetchMessages();
+      } else {
+        throw new Error('Failed to delete message');
       }
     } catch (err) {
       console.error('Error deleting message:', err);
+      setActionError(err instanceof Error ? err.message : 'Failed to delete message');
     }
   };
 
@@ -175,8 +113,7 @@ const MobileChat: React.FC = () => {
 
   const handleSelectAll = (selected: boolean) => {
     if (selected) {
-      const rootMessages = messages.filter(message => !message.inReplyTo);
-      const allIds = new Set(rootMessages.map(msg => msg.id));
+      const allIds = new Set(messages.map(msg => msg.id));
       setSelectedMessageIds(allIds);
     } else {
       setSelectedMessageIds(new Set());
@@ -186,6 +123,7 @@ const MobileChat: React.FC = () => {
   const handleBulkDelete = async () => {
     if (selectedMessageIds.size === 0) return;
 
+    setActionError(null);
     setBulkDeleting(true);
     try {
       const messageIdsArray = Array.from(selectedMessageIds);
@@ -216,7 +154,7 @@ const MobileChat: React.FC = () => {
       }
     } catch (err) {
       console.error('Error deleting messages:', err);
-      setError('Failed to delete selected messages');
+      setActionError('Failed to delete selected messages');
     } finally {
       setBulkDeleting(false);
     }
@@ -241,6 +179,7 @@ const MobileChat: React.FC = () => {
         
         <div className="flex-1 overflow-hidden">
           <MessageDetail
+            key={selectedMessage.id}
             message={selectedMessage}
             onBack={handleBackToList}
             onDelete={() => handleDeleteMessage(selectedMessage.id)}

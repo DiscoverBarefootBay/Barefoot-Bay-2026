@@ -27,3 +27,4 @@
 - [Legal policy rollout gap](legal-policy-rollout-gap.md) — live schema tables may exist without policy publication functions; a 503 cannot be fixed by re-login or a client-only modal.
 - [Message body formats](message-body-formats.md) — messages lack a saved text/HTML format marker; favor escaped plain text with preserved newlines and treat only recognizable legacy rich text as sanitized HTML.
 - [Send progress retention](send-progress-retention.md) — hiding progress must never delete submission records; unknown provider outcomes and idempotency rely on keeping those records after UI expiry.
+- [Completion validation timeouts](completion-validation-timeouts.md) — the project-wide test command can outlast completion polling; inspect logs and report independent verification instead of repeating the same wait.

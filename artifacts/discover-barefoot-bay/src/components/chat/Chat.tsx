@@ -744,6 +744,7 @@ const Chat = () => {
             />
           ) : selectedMessage ? (
             <MessageDetail 
+              key={selectedMessage.id}
               message={selectedMessage}
               onBack={() => selectMessage(null)}
               onDelete={handleDeleteMessage}

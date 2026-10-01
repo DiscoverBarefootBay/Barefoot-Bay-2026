@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef, ReactNode } from 'react';
 import { useAuth } from '@/components/providers/auth-provider';
 import type { ChatRecipient } from '../components/chat/recipient-options';
 import { submitMessageForm } from '../components/chat/message-submission';
+import { appendThreadReply, normalizeConversationResponse, refreshedSelection, sortConversations } from '../components/chat/thread-state';
 
 // Message type
 export type Message = {
@@ -13,6 +14,8 @@ export type Message = {
   read: boolean;
   timestamp: string;
   createdAt?: string | Date; // Added createdAt field which might exist in some responses
+  lastActivityAt?: string | Date;
+  threadRoot?: boolean;
   senderName?: string;
   recipientName?: string;
   inReplyTo?: number;  // Foreign key to parent message
@@ -34,7 +37,7 @@ type ChatContextType = {
   loading: boolean;
   error: string | null;
   sendMessage: (message: any) => Promise<any>;
-  replyToMessage: (originalMessageId: number, content: string, attachments?: any[]) => Promise<any>;
+  replyToMessage: (originalMessageId: number, content: string, attachments?: any[], sendEmail?: boolean) => Promise<any>;
   deleteMessage: (messageId: number) => Promise<void>;
   markAsRead: (messageId: number) => Promise<void>;
   selectMessage: (message: Message | null) => void;
@@ -55,17 +58,13 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [error, setError] = useState<string | null>(null);
   const [recipients, setRecipients] = useState<ChatRecipient[]>([]);
   const { user } = useAuth();
-
-  // Fetch messages when component mounts
-  useEffect(() => {
-    if (user) {
-      fetchMessages();
-      fetchRecipients();
-    }
-  }, [user]);
+  const messageRequest = useRef(0);
+  const userIdRef = useRef(user?.id);
+  userIdRef.current = user?.id;
 
   // Fetch recipients
   const fetchRecipients = async () => {
+    const requestingUser = user?.id;
     try {
       const response = await fetch('/api/chat/recipients');
       
@@ -76,6 +75,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       
       const data = await response.json();
+      if (requestingUser !== userIdRef.current) return;
       
       if (Array.isArray(data)) {
         setRecipients(data);
@@ -91,16 +91,17 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   // Fetch all messages
-  const fetchMessages = async () => {
-    if (!user) return;
+  const fetchMessages = useCallback(async (background = false) => {
+    if (!user || user.id !== userIdRef.current) return;
     
     // Skip message fetching on admin pages to avoid conflicts
     if (window.location.pathname.includes('/admin/')) {
       return;
     }
     
-    setLoading(true);
-    setError(null);
+    const request = ++messageRequest.current;
+    const requestingUser = user.id;
+    if (!background) setLoading(true);
     
     try {
       console.log('📩 Fetching messages...');
@@ -110,52 +111,10 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         throw new Error('Failed to fetch messages');
       }
       
-      const data = await response.json();
-      let rawMessages = [];
-      
-      // Ensure we have a messages array
-      if (Array.isArray(data)) {
-        rawMessages = data;
-        console.log(`📩 Received ${rawMessages.length} messages from API`);
-      } else if (data.messages && Array.isArray(data.messages)) {
-        rawMessages = data.messages;
-        console.log(`📩 Received ${rawMessages.length} messages from API (in messages property)`);
-      } else {
-        console.warn('Invalid messages format received:', data);
-        setMessages([]);
-        setUnreadCount(0);
-        return;
-      }
-      
-      // Server already processes threads, just use the data directly
-      console.log('Using server-processed messages, total count:', rawMessages.length);
-      
-      // Ensure each message has replies array initialized and log what we received
-      const processedMessages = rawMessages.map(message => ({
-        ...message,
-        replies: message.replies || []
-      }));
-      
-      // Log the threading info for debugging
-      processedMessages.forEach(message => {
-        if (message.replies && message.replies.length > 0) {
-          console.log(`✅ Message ${message.id} has ${message.replies.length} replies from server:`, message.replies.map(r => r.id));
-        }
-      });
-      
-      // Sort messages by creation date (newest first)
-      const sortedMessages = processedMessages.sort((a, b) => {
-        const dateA = new Date(a.timestamp || a.createdAt || '');
-        const dateB = new Date(b.timestamp || b.createdAt || '');
-        
-        if (isNaN(dateA.getTime()) && isNaN(dateB.getTime())) return 0;
-        if (isNaN(dateA.getTime())) return 1;
-        if (isNaN(dateB.getTime())) return -1;
-        
-        return dateB.getTime() - dateA.getTime();
-      });
-      
+      const sortedMessages = normalizeConversationResponse<Message>(await response.json());
+      if (request !== messageRequest.current || requestingUser !== userIdRef.current) return;
       setMessages(sortedMessages);
+      setError(null);
       
       // Count unread messages including replies
       let unreadCount = 0;
@@ -177,12 +136,50 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       // Debug logging to verify threading is working
       console.log('Processed message threads:', sortedMessages.length, 'root messages');
     } catch (error) {
+      if (request !== messageRequest.current || requestingUser !== userIdRef.current) return;
       console.error('Error fetching messages:', error);
       setError(error instanceof Error ? error.message : 'Failed to fetch messages');
     } finally {
-      setLoading(false);
+      if (request === messageRequest.current && requestingUser === userIdRef.current) setLoading(false);
     }
-  };
+  }, [user?.id]);
+
+  useEffect(() => {
+    ++messageRequest.current;
+    setMessages([]);
+    setSelectedMessage(null);
+    setUnreadCount(0);
+    setError(null);
+    setRecipients([]);
+    setLoading(false);
+    if (user) {
+      void fetchMessages();
+      void fetchRecipients();
+    }
+    return () => { ++messageRequest.current; };
+  }, [user?.id, fetchMessages]);
+
+  useEffect(() => {
+    setSelectedMessage(current => refreshedSelection(messages, current));
+  }, [messages]);
+
+  // Another participant can reply while this page stays open.
+  useEffect(() => {
+    if (!user) return;
+    const refresh = () => {
+      if (document.visibilityState === 'visible' && window.location.pathname.endsWith('/messages')) {
+        void fetchMessages(true);
+      }
+    };
+    const timer = window.setInterval(refresh, 30_000);
+    window.addEventListener('focus', refresh);
+    document.addEventListener('visibilitychange', refresh);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener('focus', refresh);
+      document.removeEventListener('visibilitychange', refresh);
+    };
+  }, [user?.id, fetchMessages]);
 
   // Send a message
   const sendMessage = async (message: any) => {
@@ -210,6 +207,8 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       
       const data = await submitMessageForm('/api/messages', formData, user.id);
+      if (user.id !== userIdRef.current) return null;
+      ++messageRequest.current;
       // Legacy servers return a success string in message and the record in data.
       data.message = typeof data.message === "object" ? data.message : data.data;
       console.log('Message sent successfully, API response:', data);
@@ -307,9 +306,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setUnreadCount(prev => Math.max(0, prev - 1));
       
       // Update selected message if needed
-      if (selectedMessage && selectedMessage.id === messageId) {
-        setSelectedMessage({ ...selectedMessage, read: true });
-      }
+      setSelectedMessage(current => current?.id === messageId ? { ...current, read: true } : current);
     } catch (error) {
       console.error('Error marking message as read:', error);
       // Don't show this error to user since it's not critical
@@ -330,6 +327,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       
       const result = await response.json();
       console.log(`Marked ${result.markedCount} messages as read in thread ${messageId}`);
+      const markedIds = Array.isArray(result.markedMessageIds) ? new Set<number>(result.markedMessageIds) : null;
       
       // Update local state - mark both the main message and all replies as read
       setMessages(prev => 
@@ -338,8 +336,11 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             // Mark main message and all its replies as read
             return {
               ...msg,
-              read: true,
-              replies: msg.replies.map(reply => ({ ...reply, read: true }))
+              read: markedIds ? markedIds.has(msg.id) || msg.read : true,
+              replies: msg.replies.map(reply => ({
+                ...reply,
+                read: markedIds ? markedIds.has(reply.id) || reply.read : true
+              }))
             };
           }
           return msg;
@@ -361,6 +362,8 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // Select a message
   const selectMessage = async (message: Message | null) => {
     if (message) {
+      // Select immediately: a slow read receipt must not undo a later click.
+      setSelectedMessage(message);
       console.log('Selecting message:', message.id);
       console.log('Message data structure:', message);
       console.log('Message already has replies:', message.replies?.length || 0);
@@ -377,8 +380,6 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         console.warn('Error marking thread as read:', readError);
       }
       
-      // Use the message data we already have - replies are included from the main fetch
-      setSelectedMessage(message);
     } else {
       setSelectedMessage(null);
     }
@@ -390,11 +391,11 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   // Reply to a message
-  const replyToMessage = async (originalMessageId: number, content: string, attachments: any[] = []) => {
+  const replyToMessage = async (originalMessageId: number, content: string, attachments: any[] = [], sendEmail = false) => {
     if (!user) return null;
     
     // Find the original message
-    const originalMessage = messages.find(msg => msg.id === originalMessageId);
+    const originalMessage = messages.flatMap(msg => [msg, ...msg.replies]).find(msg => msg.id === originalMessageId);
     if (!originalMessage) {
       setError('Cannot reply: original message not found');
       return null;
@@ -415,6 +416,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       formData.append('subject', subject);
       formData.append('content', content);
       formData.append('inReplyTo', String(originalMessageId));
+      formData.append('sendEmail', sendEmail ? 'true' : 'false');
       
       // Add attachments if any
       if (attachments.length > 0) {
@@ -425,6 +427,9 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       
       // Send the reply to the correct endpoint (/:id/reply)
       const data = await submitMessageForm(`/api/messages/${originalMessageId}/reply`, formData, user.id);
+      if (user.id !== userIdRef.current) return null;
+      ++messageRequest.current;
+      data.message = typeof data.message === 'object' ? data.message : data.data;
       
       // Handle the reply message from the server
       if (data.message) {
@@ -433,40 +438,40 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         // Add inReplyTo property explicitly to ensure the reply is linked to its parent
         const replyMessage = {
           ...data.message,
-          inReplyTo: originalMessageId
+          inReplyTo: originalMessageId,
+          senderName: data.message.senderName || user.fullName || user.username,
+          read: true,
+          replies: data.message.replies || []
         };
         
         // First add the reply to the parent message in our local state
         setMessages(prev => {
-          return prev.map(msg => {
-            if (msg.id === originalMessageId) {
-              console.log(`Adding reply to message ${msg.id}`);
-              return {
-                ...msg,
-                replies: [...(msg.replies || []), replyMessage]
-              };
+          return sortConversations(prev.map(msg => {
+            if (msg.id === originalMessageId || msg.replies.some(reply => reply.id === originalMessageId)) {
+              return appendThreadReply(msg, replyMessage);
             }
             return msg;
-          });
+          }));
         });
         
         // Force a complete refresh from the server to update all messages
         setTimeout(() => {
           console.log('Refreshing messages to get updated threads...');
-          fetchMessages();
+          void fetchMessages(true);
         }, 300);
         
         // Do another refresh after a delay as a fallback
         setTimeout(() => {
-          fetchMessages();
+          void fetchMessages(true);
         }, 1500);
       }
       
+      if (!data.message?.id) throw new Error('Reply response was incomplete. Refresh before trying again.');
       return data.message;
     } catch (error) {
       console.error('Error sending reply:', error);
       setError(error instanceof Error ? error.message : 'Failed to send reply');
-      return null;
+      throw error;
     } finally {
       setLoading(false);
     }

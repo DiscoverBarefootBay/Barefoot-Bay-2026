@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Message } from '../../types/chat';
+import type { Message } from '../../context/ChatContext';
 import AttachmentViewer from './AttachmentViewer';
 import { getMediaUrl } from '../../lib/media-helper';
 import { useChat } from '../../context/ChatContext';
 import { useAuth } from "@/components/providers/auth-provider";
-import { submitMessageForm } from "./message-submission";
 import { MessageBody } from './MessageBody';
 
 interface MessageDetailProps {
@@ -48,7 +47,7 @@ const formatDateSafe = (dateString: string | Date | undefined) => {
 
 // Component for displaying a single reply
 const MessageReply: React.FC<{ 
-  reply: any; 
+  reply: Message;
   formatDate: (date: any) => string;
   onViewAttachment: (attachments: any[], initialIndex: number) => void;
 }> = ({ reply, formatDate, onViewAttachment }) => {
@@ -74,7 +73,7 @@ const MessageReply: React.FC<{
               return (
                 <div
                   key={attachment.id}
-                  onClick={() => onViewAttachment(reply.attachments, index)}
+                  onClick={() => onViewAttachment(reply.attachments!, index)}
                   className="border rounded hover:bg-gray-100 cursor-pointer flex items-center p-2"
                 >
                   {isImage ? (
@@ -122,8 +121,8 @@ export const MessageDetail: React.FC<MessageDetailProps> = ({
   onBack
 }) => {
   const { user } = useAuth();
-  const [replies, setReplies] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+  const { replyToMessage } = useChat();
+  const replies = Array.isArray(message.replies) ? message.replies : [];
   const [viewerOpen, setViewerOpen] = useState(false);
   const [selectedAttachmentIndex, setSelectedAttachmentIndex] = useState(0);
   const [currentAttachments, setCurrentAttachments] = useState<any[]>([]);
@@ -201,19 +200,8 @@ export const MessageDetail: React.FC<MessageDetailProps> = ({
 
     setReplyLoading(true);
     try {
-      const formData = new FormData();
-      formData.append('recipient', String(message.senderId));
-      formData.append('subject', `Re: ${message.subject}`);
-      formData.append('content', replyContent);
-      formData.append('inReplyTo', String(message.id));
-      formData.append('sendEmail', sendEmail ? 'true' : 'false');
-
-      // Add attachments if any
-      attachments.forEach((file, index) => {
-        formData.append('attachments', file);
-      });
-
-      const result = await submitMessageForm(`/api/messages/${message.id}/reply`, formData, user!.id);
+      const result = await replyToMessage(message.id, replyContent, attachments, sendEmail);
+      if (!result?.id) throw new Error("Reply was not confirmed. Refresh before trying again.");
       {
         console.log('Reply sent successfully:', result);
         
@@ -224,10 +212,6 @@ export const MessageDetail: React.FC<MessageDetailProps> = ({
         setShowReplyForm(false);
         setReplySent(true);
 
-        // Add the new reply to the current replies list instead of reloading
-        if (result.message) {
-          setReplies(prev => [...prev, result.message]);
-        }
       }
 
       // Auto-hide the success message after 3 seconds
@@ -258,19 +242,6 @@ export const MessageDetail: React.FC<MessageDetailProps> = ({
       setShowDeleteConfirm(false);
     }
   };
-
-  // Use replies that come with the message data
-  useEffect(() => {
-    if (message && message.replies) {
-      console.log(`Message ${message.id} has ${message.replies.length} replies:`, message.replies);
-      setReplies(message.replies);
-      setLoading(false);
-    } else {
-      console.log(`Message ${message?.id || 'unknown'} has no replies`);
-      setReplies([]);
-      setLoading(false);
-    }
-  }, [message]);
 
   // Debug output with extra attachment information
   console.log('MessageDetail - Full message data:', message);
@@ -492,12 +463,7 @@ export const MessageDetail: React.FC<MessageDetailProps> = ({
           Conversation Replies ({replies.length})
         </h3>
         
-        {loading ? (
-          <div className="text-center py-4">
-            <div className="inline-block animate-spin w-6 h-6 border-2 border-gray-300 border-t-blue-600 rounded-full"></div>
-            <p className="mt-2 text-gray-600">Loading replies...</p>
-          </div>
-        ) : replies.length > 0 ? (
+        {replies.length > 0 ? (
           <div className="space-y-4">
             {replies.map((reply) => (
               <MessageReply 

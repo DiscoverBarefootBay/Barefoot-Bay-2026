@@ -4,10 +4,11 @@ import multer from 'multer';
 import { db } from '../db';
 import { users } from '@workspace/db';
 import { messages, messageAttachments, messageRecipients } from '@workspace/db';
-import { eq, and, or, desc, asc, inArray, sql } from 'drizzle-orm';
+import { eq, and, or, desc, inArray, isNull, sql } from 'drizzle-orm';
 import { v4 as uuidv4 } from 'uuid';
 import { authenticateUser } from '../middleware/auth';
 import { isAdmin } from '../utils/role-utils';
+import { assembleMessageHistory, getVisibleDescendants } from './message-history';
 import * as fs from 'fs';
 import * as path from 'path';
 import { uploadAttachmentToObjectStorage, getAttachmentUrl } from '../attachment-storage-proxy';
@@ -186,161 +187,99 @@ router.get('/', authenticateUser, async (req, res) => {
     if (!currentUserId) {
       return res.status(401).json({ error: 'Authentication required' });
     }
-    
-    const isUserAdmin = isAdmin(req.user?.role);
-    
-    // Get message IDs where this user is a recipient
-    const receivedMessageIds = await db.select({
-      messageId: messageRecipients.messageId
-    })
-    .from(messageRecipients)
-    .where(eq(messageRecipients.recipientId, currentUserId));
-    
-    // Extract just the message IDs
-    const messageIdsList = receivedMessageIds.map(m => m.messageId);
-    
-    // Get all messages sent by this user or where this user is a recipient
-    // Filter out messages deleted by sender when current user is not the sender
-    const userMessages = await db.select()
-      .from(messages)
-      .where(
-        or(
-          // Messages sent by this user (show even if deleted by sender, for their sent items)
-          eq(messages.senderId, currentUserId),
-          // Messages received by this user (only show if not deleted by sender)
-          and(
-            inArray(messages.id, messageIdsList),
-            or(
-              eq(messages.deletedBySender, false),
-              sql`${messages.deletedBySender} IS NULL`
-            )
-          )
-        )
-      )
-      .orderBy(desc(messages.createdAt));
-    
-    // Get info about read status for these messages
-    let messageReadStatus = [];
-    
-    if (messageIdsList.length > 0) {
-      messageReadStatus = await db.select()
-        .from(messageRecipients)
-        .where(
-          and(
-            inArray(messageRecipients.messageId, messageIdsList),
-            eq(messageRecipients.recipientId, currentUserId)
-          )
-        );
-    }
-    
-    // Create a map of message IDs to read status
-    const readStatusMap = {};
-    messageReadStatus.forEach(status => {
-      readStatusMap[status.messageId] = status.readAt !== null;
-    });
-    
-    // Get sender names for each message
-    const senderIds = userMessages.map(msg => msg.senderId);
-    const messageAttachmentsList = await db.select()
-      .from(messageAttachments)
-      .where(inArray(messageAttachments.messageId, userMessages.map(m => m.id)));
-    
-    // Group attachments by message ID
-    const attachmentsByMessage = {};
-    messageAttachmentsList.forEach(attachment => {
-      if (!attachmentsByMessage[attachment.messageId]) {
-        attachmentsByMessage[attachment.messageId] = [];
-      }
-      attachmentsByMessage[attachment.messageId].push(attachment);
-    });
-    
-    // Get sender information for all messages
-    const senderInfo = await db.select()
-      .from(users)
-      .where(inArray(users.id, senderIds));
-    
-    // Create a map of user IDs to user names
-    const userNameMap = {};
-    senderInfo.forEach(user => {
-      userNameMap[user.id] = user.fullName || user.username;
-    });
-    
-    // Process all messages
-    const messagesWithReadStatus = userMessages.map(message => {
-      return {
-        ...message,
-        senderName: userNameMap[message.senderId] || 'Unknown',
-        read: message.senderId === currentUserId || readStatusMap[message.id] || false,
-        attachments: attachmentsByMessage[message.id] || []
-      };
-    });
-    
-    // Sort messages by date (newest first) and handle parent-child relationships
-    const processedMessages = processMessageThreads(messagesWithReadStatus);
-    
-    return res.json(processedMessages);
+
+    const history = await loadVisibleMessageHistory(currentUserId);
+    return res.json(assembleMessageHistory(history.messages));
   } catch (error) {
     console.error('Error fetching messages:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// Helper function to organize messages into threads
-function processMessageThreads(messages) {
-  console.log(`Processing ${messages.length} messages into threads`);
-  
-  // First, create a map of parent messages to their replies
-  const messageThreads = {};
-  const topLevelMessages = [];
-  
-  // Create a map of all messages by ID for easier lookup
-  const messagesById = {};
-  messages.forEach(message => {
-    messagesById[message.id] = message;
-  });
-  
-  // Identify parent and child messages
-  messages.forEach(message => {
-    // Use inReplyTo for camelCase (TypeScript) and in_reply_to for snake_case (database)
-    const replyToId = message.inReplyTo || message.in_reply_to;
-    
-    if (replyToId) {
-      // This is a reply message
-      console.log(`Message ID ${message.id} is a reply to ${replyToId}`);
-      
-      if (!messageThreads[replyToId]) {
-        messageThreads[replyToId] = [];
-      }
-      messageThreads[replyToId].push(message);
-    } else {
-      // This is a top-level message
-      topLevelMessages.push(message);
-    }
-  });
-  
-  // Sort all replies by date (newest first)
-  Object.keys(messageThreads).forEach(threadId => {
-    messageThreads[threadId].sort((a, b) => 
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-    console.log(`Thread ${threadId} has ${messageThreads[threadId].length} replies`);
-  });
-  
-  // Add replies to their parent messages
-  const result = topLevelMessages.map(message => {
-    return {
-      ...message,
-      replies: messageThreads[message.id] || []
-    };
-  });
-  
-  // Sort parent messages by date (newest first)
-  result.sort((a, b) => 
-    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+async function loadVisibleMessageHistory(currentUserId: number) {
+  // Only fetch message rows that the caller sent or actually received. In
+  // particular, being a recipient of a broadcast parent does not grant access
+  // to a different participant's private reply.
+  const recipientRows = await db.select()
+    .from(messageRecipients)
+    .where(visibleRecipientWhere(currentUserId));
+  const receivedIds = [...new Set(recipientRows.map(row => row.messageId))];
+
+  const messageQuery = db.select().from(messages);
+  const visibleMessages = receivedIds.length > 0
+    ? await messageQuery.where(or(
+      eq(messages.senderId, currentUserId),
+      and(
+        inArray(messages.id, receivedIds),
+        or(eq(messages.deletedBySender, false), sql`${messages.deletedBySender} IS NULL`)
+      )
+    )).orderBy(desc(messages.createdAt))
+    : await messageQuery.where(eq(messages.senderId, currentUserId)).orderBy(desc(messages.createdAt));
+
+  const messageIds = visibleMessages.map(message => message.id);
+  const senderIds = [...new Set(visibleMessages.map(message => message.senderId))];
+  const attachmentRows = messageIds.length > 0
+    ? await db.select().from(messageAttachments).where(inArray(messageAttachments.messageId, messageIds))
+    : [];
+  const senderRows = senderIds.length > 0
+    ? await db.select().from(users).where(inArray(users.id, senderIds))
+    : [];
+
+  const attachmentsByMessage = new Map<number, typeof attachmentRows>();
+  for (const attachment of attachmentRows) {
+    const attachments = attachmentsByMessage.get(attachment.messageId) ?? [];
+    attachments.push(attachment);
+    attachmentsByMessage.set(attachment.messageId, attachments);
+  }
+  const senderNames = new Map(senderRows.map(user => [user.id, user.fullName || user.username]));
+  const readStatus = new Map(recipientRows.map(row => [row.messageId, row.readAt !== null]));
+  const messagesWithMetadata = visibleMessages.map(message => ({
+    ...message,
+    senderName: senderNames.get(message.senderId) || 'Unknown',
+    read: message.senderId === currentUserId || readStatus.get(message.id) === true,
+    attachments: attachmentsByMessage.get(message.id) || [],
+  }));
+
+  return { messages: messagesWithMetadata, recipientRows, senderNames };
+}
+
+function visibleRecipientWhere(currentUserId: number) {
+  return and(
+    eq(messageRecipients.recipientId, currentUserId),
+    or(
+      eq(messageRecipients.deletedByRecipient, false),
+      sql`${messageRecipients.deletedByRecipient} IS NULL`
+    ),
+    isNull(messageRecipients.deletedAt)
   );
-  
-  console.log(`Processed ${result.length} top-level messages with their replies`);
-  return result;
+}
+
+async function markVisibleThreadRead(
+  currentUserId: number,
+  history: Awaited<ReturnType<typeof loadVisibleMessageHistory>>,
+  messageIds: number[],
+): Promise<{ markedCount: number; markedMessageIds: number[] }> {
+  const requestedIds = new Set(messageIds);
+  const unreadIds = [...new Set(history.recipientRows
+    .filter(row => requestedIds.has(row.messageId) && row.readAt === null)
+    .map(row => row.messageId))];
+  if (unreadIds.length === 0) return { markedCount: 0, markedMessageIds: [] };
+
+  const readAt = new Date();
+  const updatedRows = await db.update(messageRecipients)
+    .set({ readAt, status: 'read', updatedAt: readAt })
+    .where(and(
+      visibleRecipientWhere(currentUserId),
+      inArray(messageRecipients.messageId, unreadIds)
+    ))
+    .returning({ messageId: messageRecipients.messageId });
+
+  const markedMessageIds = updatedRows.map(row => row.messageId);
+  const unread = new Set(markedMessageIds);
+  history.messages.forEach(message => {
+    if (unread.has(message.id)) message.read = true;
+  });
+  return { markedCount: markedMessageIds.length, markedMessageIds };
 }
 
 // Get a specific message
@@ -352,146 +291,95 @@ router.get('/:id', authenticateUser, async (req, res) => {
     if (!currentUserId) {
       return res.status(401).json({ error: 'Authentication required' });
     }
-    
-    // Get the message details
-    const message = await db.select()
-      .from(messages)
-      .where(eq(messages.id, messageId))
-      .limit(1);
-    
-    if (message.length === 0) {
-      return res.status(404).json({ error: 'Message not found' });
+    if (!Number.isInteger(messageId)) {
+      return res.status(400).json({ error: 'Invalid message ID' });
     }
-    
-    const msg = message[0];
-    
-    // Check if user has access to this message (using messageRecipients for access check)
-    const isRecipient = await db.select()
-      .from(messageRecipients)
-      .where(and(
-        eq(messageRecipients.messageId, messageId),
-        eq(messageRecipients.recipientId, currentUserId)
-      ))
-      .limit(1);
-      
-    if (msg.senderId !== currentUserId && isRecipient.length === 0 && !isAdmin(req.user?.role)) {
-      return res.status(403).json({ error: 'Access denied' });
-    }
-    
-    // Mark message as read if user is a recipient
-    if (isRecipient.length > 0 && isRecipient[0].readAt === null) {
-      await db.update(messageRecipients)
-        .set({ 
-          readAt: new Date(),
-          status: 'read'
-        })
-        .where(and(
-          eq(messageRecipients.messageId, messageId),
-          eq(messageRecipients.recipientId, currentUserId)
-        ));
-    }
-    
-    // Fetch attachments
-    const attachments = await db.select()
-      .from(messageAttachments)
-      .where(eq(messageAttachments.messageId, messageId));
-    
-    // Get sender info
-    const sender = await db.select()
-      .from(users)
-      .where(eq(users.id, msg.senderId))
-      .limit(1);
-    
-    // Determine recipient info
-    let recipientInfo = { name: 'Unknown' };
-    
-    if (msg.messageType === 'user') {
-      // For user type, we need to check the messageRecipients table
-      const recipients = await db.select()
-        .from(messageRecipients)
-        .leftJoin(users, eq(messageRecipients.recipientId, users.id))
-        .where(eq(messageRecipients.messageId, messageId))
-        .limit(1);
-      
-      if (recipients.length > 0 && recipients[0].users) {
-        recipientInfo = {
-          id: recipients[0].users.id,
-          name: recipients[0].users.fullName || recipients[0].users.username
-        };
+
+    const history = await loadVisibleMessageHistory(currentUserId);
+    const userIsAdmin = isAdmin(req.user?.role);
+    let message = history.messages.find(item => item.id === messageId);
+    if (!message && userIsAdmin) {
+      // Preserve administrator access to an individual message without
+      // loading its invisible ancestors or unrelated conversation contents.
+      const requested = await db.select().from(messages).where(eq(messages.id, messageId)).limit(1);
+      if (requested[0]) {
+        const attachments = await db.select().from(messageAttachments)
+          .where(eq(messageAttachments.messageId, messageId));
+        message = { ...requested[0], senderName: 'Unknown', read: true, attachments };
       }
-    } else if (msg.messageType === 'admin') {
+    }
+    if (!message) {
+      return res.status(userIsAdmin ? 404 : 403).json({ error: userIsAdmin ? 'Message not found' : 'Access denied' });
+    }
+
+    const descendants = getVisibleDescendants(history.messages, messageId);
+    await markVisibleThreadRead(currentUserId, history, [messageId, ...descendants.map(reply => reply.id)]);
+
+    const presentationMessages = history.messages.some(item => item.id === messageId)
+      ? history.messages
+      : [...history.messages, message];
+    const presentationHistory = assembleMessageHistory(presentationMessages);
+    const containingThread = presentationHistory.find(thread =>
+      thread.id === messageId || thread.replies.some(reply => reply.id === messageId)
+    );
+    const targetPresentation = containingThread?.id === messageId
+      ? containingThread
+      : containingThread?.replies.find(reply => reply.id === messageId);
+    const fallbackPresentation = {
+      ...message,
+      threadRoot: true as const,
+      displayRootId: message.id,
+      orphanedReply: message.inReplyTo != null && !history.messages.some(item => item.id === message.inReplyTo),
+    };
+    const displayedMessage = targetPresentation ?? fallbackPresentation;
+    const displayRootId = targetPresentation?.displayRootId ?? message.id;
+    const attachments = message.attachments || [];
+    let senderName = history.senderNames.get(message.senderId);
+    if (!senderName) {
+      const sender = await db.select().from(users).where(eq(users.id, message.senderId)).limit(1);
+      senderName = sender.length > 0 ? sender[0].fullName || sender[0].username : 'Unknown';
+    }
+
+    let recipientInfo: Record<string, unknown> = { name: 'Unknown' };
+    if (message.messageType === 'user') {
+      const recipients = await db.select().from(messageRecipients)
+        .where(eq(messageRecipients.messageId, messageId)).limit(1);
+      if (recipients.length > 0) {
+        const recipient = await db.select().from(users)
+          .where(eq(users.id, recipients[0].recipientId)).limit(1);
+        if (recipient.length > 0) {
+          recipientInfo = {
+            id: recipient[0].id,
+            name: recipient[0].fullName || recipient[0].username,
+          };
+        }
+      }
+    } else if (message.messageType === 'admin' || message.messageType === 'admins') {
       recipientInfo = { name: 'Admin Team' };
-    } else if (msg.messageType === 'all') {
+    } else if (message.messageType === 'all') {
       recipientInfo = { name: 'All Users' };
-    } else if (msg.messageType === 'registered') {
+    } else if (message.messageType === 'registered') {
       recipientInfo = { name: 'All Registered Users' };
-    } else if (msg.messageType === 'badge_holders') {
+    } else if (message.messageType === 'badge_holders') {
       recipientInfo = { name: 'All Badge Holders' };
     }
-    
-    // Fetch message replies with better debugging
-    console.log(`Fetching replies for message ID: ${messageId}`);
-    const replies = await db.select()
-      .from(messages)
-      .where(eq(messages.in_reply_to, messageId));
-    
-    console.log(`Found ${replies.length} replies for message ID ${messageId}:`, replies);
-    
-    // Format replies with sender info and attachments
-    const formattedReplies = await Promise.all(replies.map(async (reply) => {
-      console.log(`Processing reply ID ${reply.id} to message ${messageId}`);
-      
-      // Get sender info for this reply
-      const replySender = await db.select()
-        .from(users)
-        .where(eq(users.id, reply.senderId))
-        .limit(1);
-      
-      const senderName = replySender.length > 0 
-        ? (replySender[0].fullName || replySender[0].username) 
-        : 'Unknown';
-        
-      console.log(`Reply ${reply.id} sender: ${senderName}`);
-      
-      // Get any attachments for this reply
-      const replyAttachments = await db.select()
-        .from(messageAttachments)
-        .where(eq(messageAttachments.messageId, reply.id));
-      
-      // Create a properly formatted reply object with all fields needed by UI
-      const formattedReply = {
-        id: reply.id,
-        senderId: reply.senderId,
-        senderName: senderName,
-        subject: reply.subject || msg.subject,
-        content: reply.content,
-        messageType: reply.messageType,
-        createdAt: reply.createdAt,
-        updatedAt: reply.updatedAt,
-        timestamp: reply.createdAt,
-        recipientName: 'You',
-        read: true,
-        in_reply_to: reply.in_reply_to,
-        inReplyTo: reply.in_reply_to,
-        attachments: replyAttachments || []
-      };
-      
-      console.log(`Formatted reply:`, formattedReply);
-      return formattedReply;
-    }));
-    
-    // Return the message with additional details including replies
+
     return res.json({
-      ...msg,
+      ...displayedMessage,
+      senderName,
       attachments,
-      sender: sender.length > 0 ? {
-        id: sender[0].id,
-        name: sender[0].fullName || sender[0].username
-      } : { name: 'Unknown' },
+      sender: { id: message.senderId, name: senderName },
       recipient: recipientInfo,
-      replies: formattedReplies,
-      // Add both versions for compatibility
-      inReplyTo: msg.in_reply_to
+      replies: descendants.map(reply => ({
+        ...reply,
+        threadRoot: false as const,
+        displayRootId,
+        timestamp: reply.createdAt,
+        in_reply_to: reply.inReplyTo,
+        inReplyTo: reply.inReplyTo,
+      })),
+      in_reply_to: message.inReplyTo,
+      inReplyTo: message.inReplyTo,
     });
   } catch (error) {
     console.error('Error fetching message:', error);
@@ -1295,6 +1183,41 @@ router.put('/:id/read', authenticateUser, async (req, res) => {
   }
 });
 
+// Mark only this caller-visible thread (including nested descendants) as read.
+router.post('/:id/read-thread', authenticateUser, async (req, res) => {
+  try {
+    const messageId = parseInt(req.params.id, 10);
+    const currentUserId = req.user?.id;
+    if (!currentUserId) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+    if (!Number.isInteger(messageId)) {
+      return res.status(400).json({ error: 'Invalid message ID' });
+    }
+
+    const history = await loadVisibleMessageHistory(currentUserId);
+    if (!history.messages.some(message => message.id === messageId)) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    const descendants = getVisibleDescendants(history.messages, messageId);
+    const result = await markVisibleThreadRead(
+      currentUserId,
+      history,
+      [messageId, ...descendants.map(message => message.id)]
+    );
+    return res.json({
+      success: true,
+      threadId: messageId,
+      markedCount: result.markedCount,
+      markedMessageIds: result.markedMessageIds,
+    });
+  } catch (error) {
+    console.error('Error marking visible message thread as read:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Get replies for a specific message
 router.get('/:id/replies', authenticateUser, async (req, res) => {
   try {
@@ -1304,61 +1227,37 @@ router.get('/:id/replies', authenticateUser, async (req, res) => {
     if (!currentUserId) {
       return res.status(401).json({ error: 'Authentication required' });
     }
-    
-    // First, verify the original message exists and user has access to it
-    const originalMessage = await db.select()
-      .from(messages)
-      .where(eq(messages.id, messageId))
-      .limit(1);
-      
-    if (originalMessage.length === 0) {
-      return res.status(404).json({ error: 'Original message not found' });
+    if (!Number.isInteger(messageId)) {
+      return res.status(400).json({ error: 'Invalid message ID' });
     }
-    
-    console.log(`Fetching replies for message ID: ${messageId}`);
-    
-    // Fetch all replies to this message
-    const replies = await db.select()
-      .from(messages)
-      .where(eq(messages.inReplyTo, messageId))
-      .orderBy(asc(messages.createdAt));
-    
-    console.log(`Found ${replies.length} replies for message ${messageId}`);
-    
-    // Format replies with sender info
-    const formattedReplies = await Promise.all(replies.map(async (reply) => {
-      // Get sender info
-      const senderInfo = await db.select()
-        .from(users)
-        .where(eq(users.id, reply.senderId))
-        .limit(1);
-      
-      const senderName = senderInfo.length > 0 
-        ? (senderInfo[0].fullName || senderInfo[0].username) 
-        : 'Unknown';
-      
-      // Get attachments
-      const attachments = await db.select()
-        .from(messageAttachments)
-        .where(eq(messageAttachments.messageId, reply.id));
-      
-      return {
-        id: reply.id,
-        senderId: reply.senderId,
-        senderName,
-        subject: reply.subject,
-        content: reply.content,
-        messageType: reply.messageType,
-        read: true,
-        timestamp: reply.createdAt,
-        createdAt: reply.createdAt,
-        updatedAt: reply.updatedAt,
-        inReplyTo: reply.inReplyTo,
-        attachments: attachments || []
-      };
-    }));
-    
-    return res.json(formattedReplies);
+
+    const history = await loadVisibleMessageHistory(currentUserId);
+    const userIsAdmin = isAdmin(req.user?.role);
+    let message = history.messages.find(item => item.id === messageId);
+    if (!message && userIsAdmin) {
+      const requested = await db.select().from(messages).where(eq(messages.id, messageId)).limit(1);
+      if (requested[0]) {
+        message = { ...requested[0], senderName: 'Unknown', read: true, attachments: [] };
+      }
+    }
+    if (!message) {
+      return res.status(userIsAdmin ? 404 : 403).json({ error: userIsAdmin ? 'Message not found' : 'Access denied' });
+    }
+
+    const descendants = getVisibleDescendants(history.messages, messageId);
+    await markVisibleThreadRead(currentUserId, history, descendants.map(reply => reply.id));
+    const containingThread = assembleMessageHistory(history.messages).find(thread =>
+      thread.id === messageId || thread.replies.some(reply => reply.id === messageId)
+    );
+    const displayRootId = containingThread?.displayRootId ?? messageId;
+    return res.json(descendants.map(reply => ({
+      ...reply,
+      threadRoot: false as const,
+      displayRootId,
+      timestamp: reply.createdAt,
+      in_reply_to: reply.inReplyTo,
+      inReplyTo: reply.inReplyTo,
+    })));
   } catch (error) {
     console.error('Error fetching message replies:', error);
     return res.status(500).json({ error: 'Internal server error' });
