@@ -118,11 +118,19 @@ import { ProtectedRoute } from "./lib/protected-route";
 import { BackgroundVideo } from "./components/shared/background-video";
 import { ViewAsSwitcher } from "./components/admin/view-as-switcher";
 import { LegalConsentGate } from "./components/legal/legal-consent-gate";
+import { BrandedLoadingMark } from "./components/shared/branded-loading-mark";
 const LegalPolicyPage = lazy(() => import("@/pages/legal/legal-policy-page"));
 const LegalHistoryPage = lazy(() => import("@/pages/admin/legal-history"));
 
 function RouteLoading() {
-  return <div role="status" data-testid="status-route-loading" className="text-center p-8">Loading page...</div>;
+  return (
+    <div role="status" aria-live="polite" data-testid="status-route-loading" className="flex min-h-24 items-center justify-center p-8">
+      <span className="sr-only">Loading</span>
+      <div className="rounded-md bg-white p-3">
+        <BrandedLoadingMark />
+      </div>
+    </div>
+  );
 }
 
 // Custom route for the launch page - rendered outside main layout without any navigation

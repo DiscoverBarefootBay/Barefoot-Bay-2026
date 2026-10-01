@@ -107,10 +107,66 @@ try {
   await send("Fetch.continueRequest", { requestId: heldRequest });
   await send("Fetch.disable");
   await waitFor("!document.querySelector('[data-testid=\"legal-gate-initial-check\"]')");
+  await waitFor("!document.querySelector('[data-testid=\"status-route-loading\"]')");
   assert.equal(await evaluate("!!document.querySelector('[data-testid=\"branded-loading-mark\"]')"), false,
     "real request completion removes the animation");
+
+  // Hold actual lazy page modules, not auth/policy responses. The header must
+  // remain the same DOM node while Suspense replaces only the route body.
+  for (const scenario of [
+    { path: "/contact-us", module: "contact-us", width: 1440, height: 900, mobile: false, reduced: false },
+    { path: "/privacy", module: "legal/legal-policy-page", width: 390, height: 844, mobile: true, reduced: true },
+    { path: "/launch", module: "launch-page", width: 390, height: 844, mobile: true, reduced: false },
+  ]) {
+    await send("Emulation.setDeviceMetricsOverride", {
+      width: scenario.width, height: scenario.height, deviceScaleFactor: 1, mobile: scenario.mobile,
+    });
+    await send("Emulation.setEmulatedMedia", {
+      features: [{ name: "prefers-reduced-motion", value: scenario.reduced ? "reduce" : "no-preference" }],
+    });
+    await evaluate("window.__routeHeader = document.querySelector('nav'); void 0");
+    heldRequest = undefined;
+    await send("Fetch.enable", {
+      patterns: [{ urlPattern: `*/src/pages/${scenario.module}.tsx*`, requestStage: "Request" }],
+    });
+    await evaluate(`history.pushState(null, '', ${JSON.stringify(scenario.path)}); dispatchEvent(new PopStateEvent('popstate'))`);
+    await waitFor("!!document.querySelector('[data-testid=\"status-route-loading\"]')");
+    assert.ok(heldRequest, `real lazy page request held for ${scenario.path}`);
+    const loadingState = await evaluate(`(() => {
+      const status = document.querySelector('[data-testid="status-route-loading"]');
+      const mark = status.querySelector('[data-testid="branded-loading-mark"]');
+      const r = mark.getBoundingClientRect();
+      return {
+        text: status.textContent.trim(), role: status.getAttribute('role'), live: status.getAttribute('aria-live'),
+        width: r.width, height: r.height, hidden: mark.getAttribute('aria-hidden'),
+        backing: getComputedStyle(mark.parentElement).backgroundColor,
+        sameHeader: !!window.__routeHeader && window.__routeHeader === document.querySelector('nav'),
+        overflow: document.documentElement.scrollWidth > innerWidth,
+        animations: Array.from(status.querySelectorAll('.bbl-drift, .bbl-ripple')).map(el => getComputedStyle(el).animationName),
+      };
+    })()`);
+    assert.equal(loadingState.text, "Loading");
+    assert.equal(loadingState.role, "status");
+    assert.equal(loadingState.live, "polite");
+    assert.equal(loadingState.hidden, "true");
+    assert.equal(loadingState.width, 44);
+    assert.equal(loadingState.height, 24);
+    assert.equal(loadingState.backing, "rgb(255, 255, 255)");
+    assert.equal(loadingState.overflow, false);
+    if (scenario.path !== "/launch") assert.equal(loadingState.sameHeader, true, "header is not remounted");
+    assert.deepEqual(loadingState.animations, scenario.reduced
+      ? ["none", "none", "none"] : ["bbl-ripple", "bbl-drift", "bbl-drift"]);
+    const screenshot = await send("Page.captureScreenshot", { format: "png" });
+    await writeFile(`/tmp/route-loading-${scenario.module.replaceAll("/", "-")}.png`, Buffer.from(screenshot.data, "base64"));
+    await send("Fetch.continueRequest", { requestId: heldRequest });
+    await send("Fetch.disable");
+    await waitFor("!document.querySelector('[data-testid=\"status-route-loading\"]')");
+    assert.equal(await evaluate("!!document.querySelector('[data-testid=\"branded-loading-mark\"]')"), false,
+      "page arrival removes the mark without a minimum waiting time");
+    assert.equal(await evaluate("/Something went wrong/.test(document.body.textContent)"), false);
+  }
   console.log(JSON.stringify({
-    result: "PASS", scope: "real anonymous pending request, desktop/mobile, reduced motion and completion",
+    result: "PASS", scope: "real anonymous pending request and delayed lazy routes, desktop/mobile, stable header, launch contrast, reduced motion and completion",
     screenshots: ["/tmp/branded-loading-desktop.png", "/tmp/branded-loading-mobile.png"],
   }));
 } finally {
