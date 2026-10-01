@@ -175,6 +175,8 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
     assert.equal(hasInitialShell(), true);
     assert.equal(document.querySelector('[data-testid="legal-gate-initial-check"]')?.getAttribute("role"), "status");
     assert.equal(content(), null, "private children are not mounted before the first server confirmation");
+    assert.doesNotMatch(document.querySelector('[data-testid="legal-gate-initial-check"]')?.textContent ?? "",
+      /checking your account|account loading/i, "initial checks use neutral accessible feedback, not account-loading copy");
     await resolveUntilAuthorized(0);
     assert.ok(content());
     assert.equal(hasInitialShell(), false, "a fast successful check is not held for the delayed status notice");
@@ -200,6 +202,8 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
     assert.equal(hasInitialShell(), false, "navigation revalidation does not replace retained content with a skeleton");
     assert.equal(gateContent()?.hasAttribute("inert"), true, "retained subtree is synchronously inert");
     assert.equal(document.querySelector('[data-testid="legal-gate-verifying"]')?.getAttribute("aria-live"), "polite");
+    assert.doesNotMatch(document.querySelector('[data-testid="legal-gate-verifying"]')?.textContent ?? "",
+      /checking your account|account loading/i, "routine checks do not reintroduce account-status copy");
     await act(async () => {
       location.navigate("/");
       window.dispatchEvent(new dom.window.Event("focus"));

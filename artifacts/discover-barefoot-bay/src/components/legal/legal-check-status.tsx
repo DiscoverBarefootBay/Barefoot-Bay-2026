@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Link } from "wouter";
-import { Loader2 } from "lucide-react";
+import { BrandedLoadingMark } from "@/components/shared/branded-loading-mark";
 
 /** Public branding only: no account, mailbox, or permission-bound queries. */
 export function LegalCheckShell({ children }: { children: ReactNode }) {
@@ -33,13 +33,12 @@ export function LegalCheckStatus({ overlay = false }: { overlay?: boolean }) {
       data-testid={overlay ? "legal-gate-verifying" : "legal-gate-initial-check"}
       className={overlay ? "fixed inset-0 z-[999] cursor-wait" : "min-h-12 flex justify-center"}
     >
-      <span className="sr-only">Checking your account status</span>
+      <span className="sr-only">Loading</span>
       {noticeable && (
         <div className={overlay
-          ? "absolute left-1/2 top-24 -translate-x-1/2 flex items-center gap-2 rounded-full border bg-white px-4 py-2 text-sm text-slate-600 shadow-sm"
-          : "flex items-center gap-2 text-sm text-slate-600"}>
-          <Loader2 aria-hidden="true" className="h-4 w-4 motion-safe:animate-spin" />
-          <span aria-hidden="true">Checking your account…</span>
+          ? "absolute left-1/2 top-24 h-6 w-11 -translate-x-1/2"
+          : "flex h-6 w-11 items-center justify-center"}>
+          <BrandedLoadingMark />
         </div>
       )}
     </div>
