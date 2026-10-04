@@ -11,6 +11,61 @@ tags:
   - name: health
     description: Health operations
 paths:
+  /events/month-previews:
+    get:
+      operationId: getCalendarMonthPreviews
+      summary: Up to three viewer-visible previews and a filtered count per local start-day
+      description: Private, bounded summary. Full selected-day cards use the existing events endpoint.
+      parameters:
+        - { in: query, name: start, required: true, schema: { type: string, format: date-time } }
+        - { in: query, name: end, required: true, schema: { type: string, format: date-time }, description: Exclusive end; window must be positive and at most 93 days. }
+        - { in: query, name: timeZone, required: true, schema: { type: string, maxLength: 100 }, description: Browser IANA time zone. }
+        - { in: query, name: category, schema: { type: string, enum: [all, entertainment, government, social, promotional, bulletin, platinum_sponsor, other], default: all } }
+        - { in: query, name: badge, schema: { type: boolean } }
+        - { in: query, name: search, schema: { type: string, maxLength: 200 } }
+        - { in: query, name: order, schema: { type: string, enum: [asc, desc, now], default: now } }
+      responses:
+        '200':
+          description: Authorized counts and lightweight previews; no full descriptions or media.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [days]
+                properties:
+                  days:
+                    type: object
+                    additionalProperties:
+                      type: object
+                      required: [total, previews]
+                      properties:
+                        total: { type: integer, minimum: 1 }
+                        previews:
+                          type: array
+                          maxItems: 3
+                          items:
+                            type: object
+                            required: [id, title, category, startDate, endDate, badgeRequired]
+                            properties:
+                              id: { type: integer }
+                              title: { type: string }
+                              category: { type: string }
+                              startDate: { type: string, format: date-time }
+                              endDate: { type: string, format: date-time }
+                              badgeRequired: { type: [boolean, 'null'] }
+                              contentVisibility:
+                                type: object
+                                properties:
+                                  removed: { type: boolean }
+                                  status: { type: string }
+                                  dmcaCaseId: { type: [integer, 'null'] }
+                                  hiddenAt: { type: [string, 'null'] }
+                                  reason: { type: [string, 'null'] }
+                                  legalHold: { type: boolean }
+        '400':
+          description: Invalid window, timezone or filters.
+        '500':
+          description: Summary unavailable; never returned as an empty calendar.
   /messages:
     post:
       operationId: submitMessage

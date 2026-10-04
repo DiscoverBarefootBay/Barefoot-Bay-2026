@@ -8,6 +8,81 @@
 import * as zod from "zod";
 
 /**
+ * Private, bounded summary. Full selected-day cards use the existing events endpoint.
+ * @summary Up to three viewer-visible previews and a filtered count per local start-day
+ */
+export const getCalendarMonthPreviewsQueryTimeZoneMax = 100;
+
+export const getCalendarMonthPreviewsQueryCategoryDefault = `all`;
+export const getCalendarMonthPreviewsQuerySearchMax = 200;
+
+export const getCalendarMonthPreviewsQueryOrderDefault = `now`;
+
+export const GetCalendarMonthPreviewsQueryParams = zod.object({
+  start: zod.date(),
+  end: zod
+    .date()
+    .describe("Exclusive end; window must be positive and at most 93 days."),
+  timeZone: zod.coerce
+    .string()
+    .max(getCalendarMonthPreviewsQueryTimeZoneMax)
+    .describe("Browser IANA time zone."),
+  category: zod
+    .enum([
+      "all",
+      "entertainment",
+      "government",
+      "social",
+      "promotional",
+      "bulletin",
+      "platinum_sponsor",
+      "other",
+    ])
+    .default(getCalendarMonthPreviewsQueryCategoryDefault),
+  badge: zod.coerce.boolean().optional(),
+  search: zod.coerce
+    .string()
+    .max(getCalendarMonthPreviewsQuerySearchMax)
+    .optional(),
+  order: zod
+    .enum(["asc", "desc", "now"])
+    .default(getCalendarMonthPreviewsQueryOrderDefault),
+});
+
+export const getCalendarMonthPreviewsResponseDaysPreviewsMax = 3;
+
+export const GetCalendarMonthPreviewsResponse = zod.object({
+  days: zod.record(
+    zod.string(),
+    zod.object({
+      total: zod.number().min(1),
+      previews: zod
+        .array(
+          zod.object({
+            id: zod.number(),
+            title: zod.string(),
+            category: zod.string(),
+            startDate: zod.coerce.date(),
+            endDate: zod.coerce.date(),
+            badgeRequired: zod.boolean().nullable(),
+            contentVisibility: zod
+              .object({
+                removed: zod.boolean().optional(),
+                status: zod.string().optional(),
+                dmcaCaseId: zod.number().nullish(),
+                hiddenAt: zod.string().nullish(),
+                reason: zod.string().nullish(),
+                legalHold: zod.boolean().optional(),
+              })
+              .optional(),
+          }),
+        )
+        .max(getCalendarMonthPreviewsResponseDaysPreviewsMax),
+    }),
+  ),
+});
+
+/**
  * @summary Create an in-site message and durably enqueue optional email
  */
 export const submitMessageHeaderIdempotencyKeyMin = 16;

@@ -131,7 +131,7 @@ describe("calendar API requests", () => {
 
   it("locks page wiring for explicit queries, debounce, separate selected-day fetch and empty/error states", () => {
     const page = readFileSync(new URL("../pages/calendar-page.tsx", import.meta.url), "utf8");
-    assert.equal((page.match(/placeholderData: undefined/g) ?? []).length, 3);
+    assert.equal((page.match(/placeholderData: undefined/g) ?? []).length, 4);
     assert.match(page, /enabled: needsSelectedQuery/);
     assert.match(page, /setDebouncedSearch\(searchQuery\.trim\(\)\), 300/);
     assert.match(page, /fetchCalendarEvents\(\{ search: debouncedSearch \}, signal\)/);

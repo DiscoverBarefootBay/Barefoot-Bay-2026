@@ -30,3 +30,4 @@
 - [Completion validation timeouts](completion-validation-timeouts.md) — the project-wide test command can outlast completion polling; inspect logs and report independent verification instead of repeating the same wait.
 - [Loading feedback ownership](loading-feedback-ownership.md) — browser checks must distinguish account-check feedback from lazy-route feedback; one finishing can immediately start the other.
 - [Startup measurement isolation](startup-measurement-isolation.md) — tests/builds/screenshot capture share CPU with browser probes; compare idle sequential samples, not contended preview timings.
+- [Source capture reliability](source-capture-reliability.md) — validate complete source when making isolated browser baselines; shell-captured output was incomplete despite a false truncation flag.

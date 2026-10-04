@@ -5,6 +5,7 @@ import { createServer, type Server } from "http";
 import { setupAuth, requireAuth, requireAdmin, hashPassword } from "./auth";
 import { storage, db } from "./storage";
 import { parseEventReadOptions } from "./event-read-model";
+import { parseMonthPreviewOptions, readMonthPreviewRows, summarizeMonthPreviews } from "./event-month-previews";
 import { sql } from "drizzle-orm";
 import { LegalHoldError } from "./dmca/legal-hold";
 import { assertCanPermanentDelete, PermanentDeletePermissionError } from "./dmca/permanent-delete";
@@ -3674,6 +3675,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  app.get("/api/events/month-previews", async (req, res) => {
+    let options;
+    try {
+      options = parseMonthPreviewOptions(req.query);
+    } catch (error) {
+      return res.status(400).json({ message: (error as Error).message });
+    }
+    const viewer = await getViewerContext(req);
+    const rows = await readMonthPreviewRows(db, options);
+    const authorized = filterForViewer(rows, viewer, row => row.createdBy);
+    res.set("Cache-Control", "private, no-store");
+    res.json(summarizeMonthPreviews(authorized, options));
+  });
+
   app.get("/api/events", async (req, res) => {
     let options;
     try {

@@ -1,10 +1,10 @@
 import React from 'react';
 import { format } from 'date-fns';
-import { type Event } from '@shared/schema';
+import type { CalendarPreview } from "@/lib/calendar-month-previews";
 
 interface MobileDayViewProps {
   date: Date;
-  events: Event[];
+  events: CalendarPreview[];
 }
 
 /**

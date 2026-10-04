@@ -55,6 +55,7 @@ import { useRotatingList } from "@/hooks/use-rotating-list";
 import { usePlatinumSponsorSettings, PLATINUM_SPONSOR_DEFAULT_SETTINGS } from "@/hooks/use-platinum-sponsor-settings";
 import { FilterSortDrawer, DrawerFilterSection } from "@/components/shared/filter-sort-drawer";
 import { bucketCalendarEvents, calendarDayKey, calendarDayWindow, calendarEventsKey, calendarSearchKey, calendarVisibleWindow, fetchCalendarEvents, filterCalendarEvents, windowContains } from "@/lib/calendar-events";
+import { calendarMonthKey, fetchCalendarMonthPreviews } from "@/lib/calendar-month-previews";
 
 // Helper function to strip HTML tags from text
 const stripHtmlTags = (html: string | null) => {
@@ -115,7 +116,7 @@ export default function CalendarPage() {
     const urlParams = new URLSearchParams(window.location.search);
     const dateFromUrl = urlParams.get('date');
     if (dateFromUrl) {
-      const parsedDate = new Date(dateFromUrl);
+       const parsedDate = new Date(`${dateFromUrl}T00:00:00`);
       if (!isNaN(parsedDate.getTime())) {
         setSelectedDate(parsedDate);
         setDisplayedMonth(parsedDate); // Also set displayed month to match
@@ -136,7 +137,7 @@ export default function CalendarPage() {
     
     // Update URL with date parameter
     const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set('date', newDate.toISOString().split('T')[0]); // Format as YYYY-MM-DD
+    urlParams.set('date', calendarDayKey(newDate));
     
     const newUrl = '/calendar' + (urlParams.toString() ? '?' + urlParams.toString() : '');
     // Use replace instead of push to avoid adding to browser history
@@ -149,7 +150,7 @@ export default function CalendarPage() {
     
     // Update URL with the displayed month (first day of month)
     const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set('date', newMonth.toISOString().split('T')[0]);
+    urlParams.set('date', calendarDayKey(newMonth));
     
     const newUrl = '/calendar' + (urlParams.toString() ? '?' + urlParams.toString() : '');
     window.history.replaceState({}, '', newUrl);
@@ -211,34 +212,16 @@ export default function CalendarPage() {
   });
 
 
-  // Effect to scroll to the selected event when the view loads
-  useEffect(() => {
-    if (viewType === 'day' && selectedEventId !== null) {
-      // Add a slight delay to ensure the DOM is ready
-      setTimeout(() => {
-        // Use DOM selector to find the selected event
-        const selectedElement = document.getElementById(`event-${selectedEventId}`);
-        if (selectedElement) {
-          selectedElement.scrollIntoView({ 
-            behavior: 'smooth',
-            block: 'center'  
-          });
-          // Clear the selected event ID after scrolling
-          setSelectedEventId(null);
-        }
-      }, 100);
-    }
-  }, [viewType, selectedEventId, setSelectedEventId]);
-
   const visibleWindow = useMemo(
     () => calendarVisibleWindow(viewType, displayedMonth, selectedDate),
     [viewType, displayedMonth, selectedDate],
   );
   const selectedWindow = useMemo(() => calendarDayWindow(selectedDate), [selectedDate]);
-  const needsSelectedQuery = !windowContains(visibleWindow, selectedWindow);
+  const needsSelectedQuery = viewType === "month" || !windowContains(visibleWindow, selectedWindow);
   const visibleEventsQuery = useQuery<Event[]>({
     queryKey: calendarEventsKey(user?.id, visibleWindow),
     queryFn: ({ signal }) => fetchCalendarEvents(visibleWindow, signal),
+    enabled: viewType !== "month",
     placeholderData: undefined,
     staleTime: 60_000,
   });
@@ -252,19 +235,46 @@ export default function CalendarPage() {
     staleTime: 60_000,
   });
   const selectedDayQuery = needsSelectedQuery ? selectedEventsQuery : visibleEventsQuery;
+  // Search can select an uncached day; wait for its cards before scrolling.
+  useEffect(() => {
+    if (viewType !== "day" || selectedEventId === null || !selectedDayQuery.data) return;
+    const timer = setTimeout(() => {
+      const element = document.getElementById(`event-${selectedEventId}`);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
+        setSelectedEventId(null);
+      }
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [viewType, selectedEventId, selectedDayQuery.data]);
   const events = useMemo(() => {
     const byId = new Map<number, Event>();
-    for (const event of visibleEventsQuery.data ?? []) byId.set(event.id, event);
+    if (viewType !== "month") {
+      for (const event of visibleEventsQuery.data ?? []) byId.set(event.id, event);
+    }
     if (needsSelectedQuery) {
       for (const event of selectedEventsQuery.data ?? []) byId.set(event.id, event);
     }
     return [...byId.values()];
-  }, [visibleEventsQuery.data, selectedEventsQuery.data, needsSelectedQuery]);
+  }, [visibleEventsQuery.data, selectedEventsQuery.data, needsSelectedQuery, viewType]);
   const [debouncedSearch, setDebouncedSearch] = useState("");
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(searchQuery.trim()), 300);
     return () => clearTimeout(timer);
   }, [searchQuery]);
+  const timeZone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, []);
+  const monthParams = useMemo(() => ({
+    ...visibleWindow, timeZone, category: selectedCategory, badge: badgeFilter,
+    search: debouncedSearch, order: sortOrder,
+  }), [visibleWindow, timeZone, selectedCategory, badgeFilter, debouncedSearch, sortOrder]);
+  const monthPreviewsQuery = useQuery({
+    queryKey: calendarMonthKey(user?.id, monthParams),
+    queryFn: ({ signal }) => fetchCalendarMonthPreviews(monthParams, signal),
+    enabled: viewType === "month",
+    placeholderData: undefined,
+    staleTime: 60_000,
+  });
+  const monthPending = monthPreviewsQuery.isLoading || searchQuery.trim() !== debouncedSearch;
   const searchEventsQuery = useQuery<Event[]>({
     queryKey: calendarSearchKey(user?.id, debouncedSearch),
     queryFn: ({ signal }) => fetchCalendarEvents({ search: debouncedSearch }, signal),
@@ -576,7 +586,8 @@ export default function CalendarPage() {
   const getEventsForSelectedDate = () => getEventsForDay(selectedDate);
 
   const renderDayContent = (date: Date) => {
-    const dayEvents = getEventsForDay(date);
+    const summary = !monthPending ? monthPreviewsQuery.data?.days[calendarDayKey(date)] : undefined;
+    const dayEvents = summary?.previews ?? [];
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
     // Use the dedicated mobile component on mobile devices
@@ -587,7 +598,7 @@ export default function CalendarPage() {
     // Desktop view rendering
     const MAX_VISIBLE_EVENTS = 3;
     const displayEvents = dayEvents.slice(0, MAX_VISIBLE_EVENTS);
-    const remainingCount = dayEvents.length - MAX_VISIBLE_EVENTS;
+    const remainingCount = Math.max(0, (summary?.total ?? 0) - MAX_VISIBLE_EVENTS);
     const hasMoreEvents = remainingCount > 0;
 
     return (
@@ -607,7 +618,7 @@ export default function CalendarPage() {
           {displayEvents.map((event) => (
             <Link
               key={event.id}
-              href={`/events/${event.id}?returnDate=${displayedMonth.toISOString().split('T')[0]}`}
+              href={`/events/${event.id}?returnDate=${calendarDayKey(displayedMonth)}`}
               className={`mobile-calendar-event overflow-hidden hover:opacity-90 transition-opacity cursor-pointer flex-shrink-0 w-full ${event.category === 'promotional' ? 'animate-gold-shine-compact' : ''}`}
               style={{ 
                 width: '100%', 
@@ -1543,13 +1554,11 @@ export default function CalendarPage() {
           </div>
 
           {viewType === 'month' && (
-            visibleEventsQuery.isError ? renderQueryError(visibleEventsQuery.error, visibleEventsQuery.refetch) :
-            visibleEventsQuery.isLoading ? (
+            monthPreviewsQuery.isError ? renderQueryError(monthPreviewsQuery.error, monthPreviewsQuery.refetch) :
+            monthPending ? (
               <p role="status" className="p-2 text-sm" data-testid="status-calendar-month-loading">Loading events…</p>
-            ) : ![...dayBuckets.entries()].some(([key, bucket]) => {
-              const date = new Date(`${key}T00:00:00`);
-              return bucket.length > 0 && date >= visibleWindow.start && date < visibleWindow.end;
-            }) ? renderEmpty("No events for this month match your filters.") : null
+            ) : Object.keys(monthPreviewsQuery.data?.days ?? {}).length === 0 ?
+              renderEmpty("No events for this month match your filters.") : null
           )}
           {viewType === 'month' ? (
             <Calendar

@@ -11,6 +11,6 @@ Keep account-check and generic page-download states visually silent; do not rein
 
 Scope assertions about loading completion to the status that owns the pending operation, rather than to a global loading decoration or status.
 
-**Why:** Finishing the anonymous account check can immediately mount a lazy route whose download has its own pending status. A global loading assertion can wrongly report that the account check still blocks content.
+**Why:** Finishing the anonymous account check can immediately mount a lazy route whose download has its own pending status. A global loading assertion can wrongly report that the account check still blocks content. The shared navigation header also appears before page-owned requests finish; clicking it too soon produced a false homepage/calendar cache-sharing failure.
 
-**How to apply:** In browser verification, wait separately for account-check completion and route-download completion. Hold actual page-module requests when checking route feedback, without fabricating authenticated users or changing consent responses.
+**How to apply:** In browser verification, wait separately for account-check completion and route-download completion. Before timing a transition or checking cache reuse, await the current page's successful-content or confirmed-empty marker, not merely a shared header link. Hold actual page-module requests when checking route feedback, without fabricating authenticated users or changing consent responses.

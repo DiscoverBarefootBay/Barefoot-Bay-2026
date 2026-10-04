@@ -61,10 +61,10 @@ try {
     let ready = false;
     while (performance.now() - start < 75000) {
       ready = await evaluate(`(() => {
-        const requests = performance.getEntriesByType('resource').filter(e => /\\/api\\/events(?:\\?|$)/.test(e.name));
+         const requests = performance.getEntriesByType('resource').filter(e => /\\/api\\/events(?:\\/month-previews)?(?:\\?|$)/.test(e.name));
         const text = document.body?.innerText || '';
         const calendarVisible = /Calendar|Events|No events/i.test(text) || !!document.querySelector('input[placeholder="Search events..."]');
-        return requests.some(e => e.responseEnd > 0) && calendarVisible && !document.querySelector('[data-testid="status-calendar-loading"],[data-testid="status-calendar-error"]') && !/Checking your account status|Something went wrong/.test(text);
+         return requests.some(e => e.responseEnd > 0) && calendarVisible && !document.querySelector('[data-testid="status-calendar-loading"],[data-testid="status-calendar-month-loading"],[data-testid="status-calendar-error"]') && !/Checking your account status|Something went wrong/.test(text);
       })()`);
       if (ready) break;
       await sleep(100);
@@ -77,7 +77,7 @@ try {
       const entries=performance.getEntriesByType('resource');
       return {
         htmlTtfbMs:Math.round(nav.responseStart-nav.requestStart),
-        eventRequests:entries.filter(e=>/\\/api\\/events(?:\\?|$)/.test(e.name)).map(e=>({
+         eventRequests:entries.filter(e=>/\\/api\\/events(?:\\/month-previews)?(?:\\?|$)/.test(e.name)).map(e=>({
           path:new URL(e.name).pathname + new URL(e.name).search,
           startMs:Math.round(e.startTime),ttfbMs:Math.round(e.responseStart-e.requestStart),
           downloadMs:Math.round(e.responseEnd-e.responseStart),decodedBytes:e.decodedBodySize,

@@ -17,6 +17,8 @@ import type {
 } from "@tanstack/react-query";
 
 import type {
+  GetCalendarMonthPreviews200,
+  GetCalendarMonthPreviewsParams,
   GetLegalHistoryParams,
   HealthStatus,
   LegalConsentInput,
@@ -36,6 +38,110 @@ type AwaitedInput<T> = PromiseLike<T> | T;
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+/**
+ * Private, bounded summary. Full selected-day cards use the existing events endpoint.
+ * @summary Up to three viewer-visible previews and a filtered count per local start-day
+ */
+export const getGetCalendarMonthPreviewsUrl = (
+  params: GetCalendarMonthPreviewsParams,
+) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/events/month-previews?${stringifiedParams}`
+    : `/api/events/month-previews`;
+};
+
+export const getCalendarMonthPreviews = async (
+  params: GetCalendarMonthPreviewsParams,
+  options?: RequestInit,
+): Promise<GetCalendarMonthPreviews200> => {
+  return customFetch<GetCalendarMonthPreviews200>(
+    getGetCalendarMonthPreviewsUrl(params),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+export const getGetCalendarMonthPreviewsQueryKey = (
+  params?: GetCalendarMonthPreviewsParams,
+) => {
+  return [`/api/events/month-previews`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetCalendarMonthPreviewsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCalendarMonthPreviews>>,
+  TError = ErrorType<void>,
+>(
+  params: GetCalendarMonthPreviewsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getCalendarMonthPreviews>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetCalendarMonthPreviewsQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getCalendarMonthPreviews>>
+  > = ({ signal }) =>
+    getCalendarMonthPreviews(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getCalendarMonthPreviews>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetCalendarMonthPreviewsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCalendarMonthPreviews>>
+>;
+export type GetCalendarMonthPreviewsQueryError = ErrorType<void>;
+
+/**
+ * @summary Up to three viewer-visible previews and a filtered count per local start-day
+ */
+
+export function useGetCalendarMonthPreviews<
+  TData = Awaited<ReturnType<typeof getCalendarMonthPreviews>>,
+  TError = ErrorType<void>,
+>(
+  params: GetCalendarMonthPreviewsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getCalendarMonthPreviews>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetCalendarMonthPreviewsQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
 
 /**
  * @summary Create an in-site message and durably enqueue optional email

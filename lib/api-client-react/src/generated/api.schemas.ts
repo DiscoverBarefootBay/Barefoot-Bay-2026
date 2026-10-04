@@ -131,6 +131,85 @@ export interface HealthStatus {
   status: string;
 }
 
+export type GetCalendarMonthPreviewsParams = {
+  start: string;
+  /**
+   * Exclusive end; window must be positive and at most 93 days.
+   */
+  end: string;
+  /**
+   * Browser IANA time zone.
+   * @maxLength 100
+   */
+  timeZone: string;
+  category?: GetCalendarMonthPreviewsCategory;
+  badge?: boolean;
+  /**
+   * @maxLength 200
+   */
+  search?: string;
+  order?: GetCalendarMonthPreviewsOrder;
+};
+
+export type GetCalendarMonthPreviewsCategory =
+  (typeof GetCalendarMonthPreviewsCategory)[keyof typeof GetCalendarMonthPreviewsCategory];
+
+export const GetCalendarMonthPreviewsCategory = {
+  all: "all",
+  entertainment: "entertainment",
+  government: "government",
+  social: "social",
+  promotional: "promotional",
+  bulletin: "bulletin",
+  platinum_sponsor: "platinum_sponsor",
+  other: "other",
+} as const;
+
+export type GetCalendarMonthPreviewsOrder =
+  (typeof GetCalendarMonthPreviewsOrder)[keyof typeof GetCalendarMonthPreviewsOrder];
+
+export const GetCalendarMonthPreviewsOrder = {
+  asc: "asc",
+  desc: "desc",
+  now: "now",
+} as const;
+
+export type GetCalendarMonthPreviews200DaysPreviewsItemContentVisibility = {
+  removed?: boolean;
+  status?: string;
+  /** @nullable */
+  dmcaCaseId?: number | null;
+  /** @nullable */
+  hiddenAt?: string | null;
+  /** @nullable */
+  reason?: string | null;
+  legalHold?: boolean;
+};
+
+export type GetCalendarMonthPreviews200DaysPreviewsItem = {
+  id: number;
+  title: string;
+  category: string;
+  startDate: string;
+  endDate: string;
+  /** @nullable */
+  badgeRequired: boolean | null;
+  contentVisibility?: GetCalendarMonthPreviews200DaysPreviewsItemContentVisibility;
+};
+
+export type GetCalendarMonthPreviews200Days = {
+  [key: string]: {
+    /** @minimum 1 */
+    total: number;
+    /** @maxItems 3 */
+    previews: GetCalendarMonthPreviews200DaysPreviewsItem[];
+  };
+};
+
+export type GetCalendarMonthPreviews200 = {
+  days: GetCalendarMonthPreviews200Days;
+};
+
 export type ListMessageSendProgress200JobsItem = {
   id: string;
   /** @nullable */
