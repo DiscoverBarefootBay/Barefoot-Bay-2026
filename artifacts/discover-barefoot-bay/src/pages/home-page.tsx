@@ -1,59 +1,25 @@
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CommunityShowcase } from "@/components/home/community-showcase";
 import { PlatinumSponsorsSection } from "@/components/home/platinum-sponsors-section";
 import { UnifiedSearch } from "@/components/home/unified-search";
 import { useQuery } from "@tanstack/react-query";
-import { type Event } from "@shared/schema";
 import { EventCard } from "@/components/calendar/event-card";
 import { EventCardSkeletonGroup } from "@/components/calendar/event-card-skeleton";
 import { CalendarIcon } from "lucide-react";
-import { format, isSameDay } from "date-fns";
+import { format } from "date-fns";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
+import { useHomepageClock } from "@/hooks/use-homepage-clock";
+import { homepageEventsOptions, selectHomepageEvents } from "@/lib/homepage-events";
 
 export default function HomePage() {
-  // Critical diagnostic log - confirm HomePage is rendering
-  console.log('🔍 [MOBILE DEBUG] HomePage component is rendering');
-  
   const { user } = useAuth();
-  const today = new Date();
+  const today = useHomepageClock();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-
-  const { data: events = [], isLoading } = useQuery<Event[]>({
-    queryKey: ["/api/events"],
-  });
-
-  const getFilteredEvents = (events: Event[]) => {
-    if (selectedCategory === "all") return events;
-    return events.filter(event => event.category === selectedCategory);
-  };
-
-  const todaysEvents = getFilteredEvents(events).filter((event) =>
-    isSameDay(new Date(event.startDate), today)
-  );
-
-  const sortedTodaysEvents = (() => {
-    const now = new Date();
-    const currentTime = now.getTime();
-    
-    const promotionalEvents = todaysEvents.filter(event => event.category === 'promotional');
-    const nonPromotional = todaysEvents.filter(event => event.category !== 'promotional');
-    
-    const currentAndFuture = nonPromotional.filter(event => {
-      const eventEnd = new Date(event.endDate).getTime();
-      return eventEnd >= currentTime;
-    }).sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
-    
-    const past = nonPromotional.filter(event => {
-      const eventEnd = new Date(event.endDate).getTime();
-      return eventEnd < currentTime;
-    }).sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
-    
-    return [...promotionalEvents, ...currentAndFuture, ...past];
-  })();
+  const eventsQuery = useQuery(homepageEventsOptions(user?.id, today));
+  const sortedTodaysEvents = selectHomepageEvents(eventsQuery.data ?? [], selectedCategory, today);
 
   return (
     <div className="space-y-6">
@@ -76,7 +42,7 @@ export default function HomePage() {
         <CommunityShowcase />
       </section>
 
-      <section className="max-w-6xl mx-auto px-8">
+      <section className="max-w-6xl mx-auto px-8" data-testid="section-home-events">
         <div className="space-y-6">
           {/* Mobile: Stacked layout - Title first, then filter */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -123,13 +89,25 @@ export default function HomePage() {
 
           <PlatinumSponsorsSection fullWidth buttonLayout="horizontal" />
 
-          {isLoading || sortedTodaysEvents.filter(e => e.category !== 'platinum_sponsor').length === 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {eventsQuery.isError ? (
+            <div role="alert" className="p-4 space-y-2 border rounded-md" data-testid="status-home-events-error">
+              <p>Unable to load today’s events. Please try again.</p>
+              <Button variant="outline" onClick={() => eventsQuery.refetch()} disabled={eventsQuery.isFetching} data-testid="button-retry-home-events">
+                {eventsQuery.isFetching ? "Retrying…" : "Retry"}
+              </Button>
+            </div>
+          ) : eventsQuery.isLoading ? (
+            <div role="status" className="grid grid-cols-1 md:grid-cols-2 gap-6" data-testid="status-home-events-loading">
+              <span className="sr-only">Loading today’s events…</span>
               <EventCardSkeletonGroup count={2} />
             </div>
+          ) : sortedTodaysEvents.length === 0 ? (
+            <p role="status" className="p-4 text-muted-foreground" data-testid="status-home-events-empty">
+              {selectedCategory === "all" ? "No events scheduled for today." : "No events in this category today."}
+            </p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {sortedTodaysEvents.filter(e => e.category !== 'platinum_sponsor').map((event) => (
+              {sortedTodaysEvents.map((event) => (
                 <EventCard key={event.id} event={event} />
               ))}
             </div>

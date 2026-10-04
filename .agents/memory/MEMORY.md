@@ -29,3 +29,4 @@
 - [Send progress retention](send-progress-retention.md) — hiding progress must never delete submission records; unknown provider outcomes and idempotency rely on keeping those records after UI expiry.
 - [Completion validation timeouts](completion-validation-timeouts.md) — the project-wide test command can outlast completion polling; inspect logs and report independent verification instead of repeating the same wait.
 - [Loading feedback ownership](loading-feedback-ownership.md) — browser checks must distinguish account-check feedback from lazy-route feedback; one finishing can immediately start the other.
+- [Startup measurement isolation](startup-measurement-isolation.md) — tests/builds/screenshot capture share CPU with browser probes; compare idle sequential samples, not contended preview timings.

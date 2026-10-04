@@ -9,7 +9,7 @@ import { BannerSlideEditor } from "./banner-slide-editor";
 import { useToast } from "@/hooks/use-toast";
 import { usePermissions } from "@/hooks/use-permissions";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { cacheMedia, getCachedMedia, isMediaUrl, prefetchCriticalMedia, normalizeMediaUrl } from "@/lib/media-cache";
+import { shouldLoadBannerMedia } from "@/lib/banner-media-window";
 import { convertBannerSlidePaths, getEnvironmentAppropriateUrl } from "@/lib/media-path-utils";
 import { BannerVideo } from "./banner-video";
 import { BannerErrorBoundary } from "./banner-error-boundary";
@@ -514,19 +514,6 @@ export function CommunityShowcase() {
     });
   };
 
-  // Prefetch initial critical media on component mount
-  useEffect(() => {
-    // Find all banner slide media URLs
-    const criticalMediaUrls = communityImages
-      .map(slide => slide.src)
-      .filter(url => !!url && isMediaUrl(url));
-
-    // Prefetch the critical media
-    if (criticalMediaUrls.length > 0) {
-      prefetchCriticalMedia(criticalMediaUrls);
-    }
-  }, [communityImages]);
-
   // Load slides - first try from backend, then from localStorage, finally use defaults
   useEffect(() => {
     const fetchBannerContent = async () => {
@@ -700,101 +687,14 @@ export function CommunityShowcase() {
     fetchBannerContent();
   }, [isAdmin]);
 
-  // Function to preload the slide images for better performance
-  const preloadAdjacentSlides = useCallback((currentIndex: number) => {
-    const slidesToPreload: number[] = [];
-    const totalSlides = communityImages.length;
-
-    // Add current slide
-    slidesToPreload.push(currentIndex);
-
-    // Add next slide (with wraparound)
-    const nextIndex = (currentIndex + 1) % totalSlides;
-    slidesToPreload.push(nextIndex);
-
-    // Add previous slide (with wraparound)
-    const prevIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-    slidesToPreload.push(prevIndex);
-
-    // Preload the media for upcoming slides using our cache system
-    slidesToPreload.forEach(slideIndex => {
-      const slide = communityImages[slideIndex];
-      if (!slide) return;
-
-      // Skip current slide as it's already loaded
-      if (slideIndex === currentIndex) return;
-
-      // Check for video media type or video file extension
-      const isVideoSlide = slide.mediaType === 'video' || 
-                         (slide.src && slide.src.match(/\.(mp4|webm|ogg|mov)$/i));
-
-      if (isVideoSlide && slide.src) {
-        // For videos, use a hidden video element to preload
-        console.log('Preloading video slide:', slide.src, 'mediaType:', slide.mediaType || 'detected from extension');
-
-        if (!getCachedMedia(`${slide.src}-loaded`)) {
-          // Create temporary video element to preload in background
-          const tempVideo = document.createElement('video');
-          const normalizedSrc = normalizeMediaUrl(slide.src);
-          console.log('Using normalized video src:', normalizedSrc);
-
-          tempVideo.src = normalizedSrc;
-          tempVideo.preload = 'metadata'; // Start with just metadata
-          tempVideo.muted = true;
-          tempVideo.style.display = 'none';
-
-          // When metadata is loaded, add it to cache
-          tempVideo.addEventListener('loadedmetadata', () => {
-            cacheMedia(`${slide.src}-loaded`, 'metadata');
-          });
-
-          // Append temporarily to document to start loading
-          document.body.appendChild(tempVideo);
-
-          // Remove after a moment
-          setTimeout(() => {
-            document.body.removeChild(tempVideo);
-          }, 5000);
-        }
-      } else if (slide.src && isMediaUrl(slide.src)) {
-        // For images, preload using Image object
-        if (!getCachedMedia(slide.src)) {
-          const img = new Image();
-          img.src = slide.src;
-
-          img.onload = () => {
-            try {
-              // Add to our cache system
-              const canvas = document.createElement('canvas');
-              canvas.width = img.naturalWidth;
-              canvas.height = img.naturalHeight;
-
-              const ctx = canvas.getContext('2d');
-              if (ctx) {
-                ctx.drawImage(img, 0, 0);
-                // Lower quality for cache to save space
-                const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-                cacheMedia(slide.src, dataUrl);
-              }
-            } catch (e) {
-              console.error('Error caching image:', e);
-            }
-          };
-        }
-      }
-    });
-  }, [communityImages]);
-
   useEffect(() => {
     if (!api) return;
 
     const handleSelect = () => {
       const selectedIndex = api.selectedScrollSnap();
       setCurrent(selectedIndex);
-      preloadAdjacentSlides(selectedIndex);
     };
 
-    preloadAdjacentSlides(current);
     api.on("select", handleSelect);
 
     // Auto-advance timer, gated on tab visibility so the Replit mobile app
@@ -832,7 +732,7 @@ export function CommunityShowcase() {
         document.removeEventListener("visibilitychange", onVisibilityChange);
       }
     };
-  }, [api, autoAdvanceEnabled, preloadAdjacentSlides, current]);
+  }, [api, autoAdvanceEnabled]);
 
   // When editing starts, pause auto-advance
   useEffect(() => {
@@ -894,7 +794,7 @@ export function CommunityShowcase() {
                   current === index ? 'opacity-100 z-10' : 'opacity-0 z-0'
                 }`}
               >
-                {image.mediaType === 'video' ? (
+                {!shouldLoadBannerMedia(index, current, communityImages.length) ? null : image.mediaType === 'video' ? (
                   <div className="w-full h-full relative">
                     <BannerErrorBoundary>
                       <BannerVideo 
@@ -982,16 +882,13 @@ export function CommunityShowcase() {
               mediaType: image.mediaType || 'image'
             });
             
-            // FORCE RERENDER by adding timestamp
-            const forceRerender = Date.now();
-            
             return (
-            <CarouselItem key={`${index}-${forceRerender}`}>
+            <CarouselItem key={`${index}-${image.src}`}>
               <div className="relative overflow-hidden rounded-xl shadow-xl transition-all hover:shadow-2xl">
                 <div className="relative md:aspect-[16/9] aspect-[4/3] max-h-[400px] md:min-h-[400px] min-h-[250px] w-full overflow-hidden">
 
                   
-                  {image.mediaType === 'video' ? (
+                  {!shouldLoadBannerMedia(index, current, communityImages.length) ? null : image.mediaType === 'video' ? (
                     <div data-slide-index={index} className="absolute inset-0 flex items-center justify-center transform scale-110">
                       <BannerErrorBoundary className="w-full h-full">
                         <BannerVideo 

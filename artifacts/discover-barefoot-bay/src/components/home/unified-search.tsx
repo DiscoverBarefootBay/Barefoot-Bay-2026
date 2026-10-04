@@ -113,26 +113,43 @@ export function UnifiedSearch() {
   const [showDropdown, setShowDropdown] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   
-  // Fetch all data
-  const { data: events = [] } = useQuery<Event[]>({
+  // Search-only archives must not compete with today's events on startup.
+  // Keep the existing one-character search and full historical matching.
+  const hasSearch = query.trim().length > 0;
+  const eventsQuery = useQuery<Event[]>({
     queryKey: ["/api/events"],
+    enabled: hasSearch,
+    placeholderData: undefined,
   });
+  const events = eventsQuery.data ?? [];
 
-  const { data: listings = [] } = useQuery<any[]>({
+  const listingsQuery = useQuery<any[]>({
     queryKey: ["/api/listings"],
+    enabled: hasSearch,
+    placeholderData: undefined,
   });
+  const listings = listingsQuery.data ?? [];
 
-  const { data: forumCategories = [] } = useQuery<any[]>({
+  const forumCategoriesQuery = useQuery<any[]>({
     queryKey: ["/api/forum/categories"],
+    enabled: hasSearch,
+    placeholderData: undefined,
   });
+  const forumCategories = forumCategoriesQuery.data ?? [];
 
-  const { data: pages = [] } = useQuery<any[]>({
+  const pagesQuery = useQuery<any[]>({
     queryKey: ["/api/pages"],
+    enabled: hasSearch,
+    placeholderData: undefined,
   });
+  const pages = pagesQuery.data ?? [];
 
-  const { data: vendorCategories = [] } = useQuery<any[]>({
+  const vendorCategoriesQuery = useQuery<any[]>({
     queryKey: ["/api/vendor-categories"],
+    enabled: hasSearch,
+    placeholderData: undefined,
   });
+  const vendorCategories = vendorCategoriesQuery.data ?? [];
 
   // Fetch forum posts using useQueries for all categories in parallel
   const forumPostQueries = useQueries({
@@ -150,7 +167,7 @@ export function UnifiedSearch() {
           categorySlug: category.slug
         }));
       },
-      enabled: !!category.id,
+      enabled: hasSearch && !!category.id,
     })),
   });
 
@@ -159,6 +176,9 @@ export function UnifiedSearch() {
     .filter(query => query.data)
     .flatMap(query => query.data || []);
 
+  const searchQueries = [eventsQuery, listingsQuery, forumCategoriesQuery, pagesQuery, vendorCategoriesQuery, ...forumPostQueries];
+  const searchLoading = hasSearch && searchQueries.some(result => result.isFetching);
+  const searchFailed = hasSearch && searchQueries.some(result => result.isError);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -438,7 +458,20 @@ export function UnifiedSearch() {
       {/* Dropdown suggestions */}
       {showDropdown && query.trim() && (
         <div className="absolute z-[9999] w-full mt-2 bg-white border rounded-lg shadow-lg max-h-[500px] overflow-auto">
-          {results.length === 0 ? (
+          {searchLoading && (
+            <p role="status" className="px-4 py-3 text-gray-500">Searching…</p>
+          )}
+          {searchFailed && (
+            <div role="alert" className="px-4 py-3 text-gray-600">
+              <p>Some search results couldn’t be loaded.</p>
+              <button
+                className="mt-2 underline"
+                disabled={searchLoading}
+                onClick={() => searchQueries.filter(result => result.isError).forEach(result => result.refetch())}
+              >Retry search</button>
+            </div>
+          )}
+          {results.length === 0 && !searchLoading && !searchFailed ? (
             <div className="px-4 py-8 text-center text-gray-500">
               <Search className="h-8 w-8 mx-auto mb-2 text-gray-300" />
               <p>No results found for "{query}"</p>
