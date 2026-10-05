@@ -49,7 +49,9 @@ test("generic route feedback is visually silent with a neutral accessible status
 
 test("route suspense remains inside the mounted layout and does not enclose the header", () => {
   const router = source.slice(source.indexOf("function Router"));
-  assert.match(router, /<NavBar \/>[\s\S]*<main[^>]*>[\s\S]*<ErrorBoundary key=\{location\}>[\s\S]*<Suspense fallback=\{<RouteLoading \/>\}>[\s\S]*<Switch>/);
+  assert.match(router, /<LegalConsentGate navigation=\{\(accountReady\) => <NavBar publicOnly=\{!accountReady\} \/>/);
+  assert.match(router, /<main[^>]*>[\s\S]*<ErrorBoundary key=\{location\}>[\s\S]*<Suspense fallback=\{<RouteLoading \/>\}>[\s\S]*<Switch>/);
+  assert.equal((router.match(/<NavBar /g) ?? []).length, 1, "only the gate-owned persistent header is rendered");
   const suspense = router.slice(router.indexOf("<Suspense"), router.indexOf("</Suspense>"));
   assert.doesNotMatch(suspense, /<NavBar|<BackgroundVideo|<LegalConsentGate/);
 });

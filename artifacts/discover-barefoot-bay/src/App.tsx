@@ -154,13 +154,12 @@ function Router() {
   
   // Otherwise render the regular app layout
   return (
-    <LegalConsentGate>
-    <div className="min-h-screen relative flex flex-col">
+    <LegalConsentGate navigation={(accountReady) => <NavBar publicOnly={!accountReady} />}>
+    <div className="min-h-[calc(100dvh-5rem)] xl:min-h-[calc(100dvh-8rem)] relative flex flex-col">
       <BackgroundVideo 
         videoUrl="/static/videos/BackgroundVideo.mp4"
       />
       <div className="relative z-10 bg-transparent flex-grow flex flex-col">
-        <NavBar />
         <main className="container mx-auto px-4 py-4 md:py-8 flex-grow">
           <ErrorBoundary key={location}>
           <Suspense fallback={<RouteLoading />}>

@@ -275,8 +275,11 @@ function ConsentPrompt({ outstanding, onRecheck, userId }: { outstanding: LegalP
  * mounted until the server confirms current acceptance. Legal reading,
  * recovery, and statutory copyright routes stay available.
  */
-export function LegalConsentGate({ children }: { children: ReactNode }) {
-  const { user, isLoading: authLoading } = useAuth();
+export function LegalConsentGate({ children, navigation }: {
+  children: ReactNode;
+  navigation?: (accountReady: boolean) => ReactNode;
+}) {
+  const { user, isLoading: authLoading, error: authError } = useAuth();
   const [location] = useLocation();
   const queryClient = useQueryClient();
   const rawId = (user as any)?.id;
@@ -365,23 +368,34 @@ export function LegalConsentGate({ children }: { children: ReactNode }) {
   if (!signedIn && authorizedUser !== null) setAuthorizedUser(null);
   const verifying = decision === "verifying";
 
-  if (decision === "skeleton" || (verifying && authorizedUser !== userId)) return <GateInitialCheck />;
-  if (decision === "error") {
+  const initialCheck = decision === "skeleton" || (verifying && authorizedUser !== userId);
+  const retainedRecheck = verifying && !initialCheck;
+  // The shared header stays at the same tree position across the initial check,
+  // authorization, and account switches. Only its account-aware features change.
+  const accountReady = !authLoading && !authError && !initialCheck &&
+    (decision === "children" || retainedRecheck) &&
+    (!signedIn || !exempt || (
+      !consent.isPlaceholderData && !consent.isError &&
+      consent.data?.requiresAcceptance === false &&
+      consent.dataUpdatedAt >= freshAfter
+    ));
+  let body: ReactNode;
+  if (initialCheck) {
+    body = <GateInitialCheck />;
+  } else if (decision === "error") {
     const incomplete = !consent.isError;
-    return (
+    body = (
       <GateError
         message={incomplete ? "Your policy status is incomplete." : (consent.error as Error)?.message || "Something went wrong."}
         onRetry={requireFresh}
         retrying={consent.isFetching}
       />
     );
-  }
-  if (decision === "prompt" && consent.data) {
-    return <ConsentPrompt key={userId} outstanding={consent.data.outstanding} onRecheck={requireFresh} userId={userId} />;
-  }
-
-  const showBanner = signedIn && exempt && consent.data?.requiresAcceptance && !consent.isError;
-  return (
+  } else if (decision === "prompt" && consent.data) {
+    body = <ConsentPrompt key={userId} outstanding={consent.data.outstanding} onRecheck={requireFresh} userId={userId} />;
+  } else {
+    const showBanner = signedIn && exempt && consent.data?.requiresAcceptance && !consent.isError;
+    body = (
     <>
       {showBanner && (
         <div className="relative z-20 bg-amber-100 text-amber-900 text-sm px-4 py-2 text-center" role="status">
@@ -395,6 +409,17 @@ export function LegalConsentGate({ children }: { children: ReactNode }) {
       {verifying && (
         <LegalCheckStatus overlay />
       )}
+    </>
+    );
+  }
+  return (
+    <>
+      {navigation && (
+        <div className="relative z-10" inert={retainedRecheck || undefined} aria-hidden={retainedRecheck || undefined} data-testid="legal-gate-navigation">
+          {navigation(accountReady)}
+        </div>
+      )}
+      {body}
     </>
   );
 }

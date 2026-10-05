@@ -48,10 +48,9 @@ test("account checks stay visually silent, accessible, and never impose a minimu
     assert.match(initial.textContent ?? "", /Loading/i, "neutral assistive status is available immediately");
     assert.doesNotMatch(document.body.textContent ?? "", /checking your account|account loading/i);
     assert.equal(mark(), null, "quick checks do not flash an animation");
-    assert.equal(document.querySelector("header img")?.getAttribute("src"), "/brand-prefix/assets/DiscoverBFBText.png");
-    assert.equal(document.querySelectorAll("header img").length, 1, "the safe header retains its original logo");
-    assert.deepEqual(Array.from(document.querySelectorAll("header a")).map(a => a.getAttribute("href")),
-      ["/terms", "/privacy", "/copyright-notices"]);
+    assert.equal(document.querySelector("header"), null, "the pending content does not introduce a replacement header");
+    assert.equal(document.querySelectorAll("img").length, 0, "the shared navigation owns the single site logo");
+    assert.equal(document.querySelectorAll("a").length, 0, "legal links no longer masquerade as site navigation");
 
     await act(async () => wait(210));
     assert.equal(mark(), null, "even a slow initial check has no visual animation");

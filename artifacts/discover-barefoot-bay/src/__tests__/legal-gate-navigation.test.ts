@@ -35,6 +35,7 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
     fetch: globalThis.fetch,
     HTMLElement: globalThis.HTMLElement,
     CustomEvent: globalThis.CustomEvent,
+    localStorage: globalThis.localStorage,
     IS_REACT_ACT_ENVIRONMENT: (globalThis as any).IS_REACT_ACT_ENVIRONMENT,
   };
   Object.assign(globalThis, {
@@ -42,6 +43,7 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
     document: dom.window.document,
     HTMLElement: dom.window.HTMLElement,
     CustomEvent: dom.window.CustomEvent,
+    localStorage: dom.window.localStorage,
     IS_REACT_ACT_ENVIRONMENT: true,
   });
 
@@ -52,9 +54,17 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
     method: string;
     body: string | undefined;
   }> = [];
+  const navigationRequests: string[] = [];
   const apiFetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
     const url = String(input);
     if (url === "/api/resource-requiring-policy") return jsonResponse({ message: "Review required" }, 428);
+    if (!url.startsWith("/api/legal/")) {
+      navigationRequests.push(url);
+      if (url.includes("unvisited")) return jsonResponse({ unvisitedSlugs: [] });
+      if (url.includes("unread") || url.includes("count")) return jsonResponse({ count: 0, messageCount: 0, unreadCount: 0 });
+      if (url.includes("my-activity")) return jsonResponse({ hasActivity: false });
+      return jsonResponse([]);
+    }
     return new Promise<Response>((resolve) => {
       requests.push({
         signal: init?.signal as AbortSignal | undefined,
@@ -71,16 +81,25 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
   const directory = await mkdtemp(path.join(process.cwd(), ".legal-gate-navigation-"));
   const bundlePath = path.join(directory, "gate-harness.mjs");
   let root: Root | undefined;
-  const client = new QueryClient({ defaultOptions: { queries: { retry: false, retryDelay: 0, gcTime: Infinity } } });
+  const client = new QueryClient({ defaultOptions: { queries: {
+    retry: false, retryDelay: 0, gcTime: Infinity,
+    queryFn: async ({ queryKey, signal }) => (await apiFetch(String(queryKey[0]), { signal })).json(),
+  } } });
+  client.setQueryData(["/api/feature-flags"], ["calendar", "forum", "for-sale", "store", "vendors", "community"].map(name => ({
+    name: `nav-${name}`, isActive: true, enabledForRoles: ["guest", "user", "staff"],
+  })));
+  client.setQueryData(["/api/pages"], [{ id: 99, category: "community", slug: "community-private", title: "Previous account private page" }]);
+  client.setQueryData(["/api/vendors/unvisited"], { unvisitedSlugs: ["vendors-home-private"] });
   try {
     const entry = `
       import React from "react";
       import { Router, useLocation } from "wouter";
       import { memoryLocation } from "wouter/memory-location";
       import { LegalConsentGate } from "./src/components/legal/legal-consent-gate.tsx";
+      import { NavBar } from "./src/components/layout/nav-bar.tsx";
       import { QueryClientProvider } from "@tanstack/react-query";
       import { setTestAuth } from "@/hooks/use-auth";
-      export { LegalConsentGate, Router, memoryLocation, QueryClientProvider, setTestAuth };
+      export { LegalConsentGate, NavBar, Router, memoryLocation, QueryClientProvider, setTestAuth };
       export function ProtectedContent() {
         const [location] = useLocation();
         return React.createElement("main", { "data-testid": "protected-content" },
@@ -101,6 +120,14 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
         name: "test-only-auth-state",
         setup(buildApi) {
           buildApi.onResolve({ filter: /^@\/hooks\/use-auth$/ }, () => ({ path: "test-auth", namespace: "test-auth" }));
+          buildApi.onResolve({ filter: /^@\/components\/providers\/auth-provider$/ }, () => ({ path: "test-auth", namespace: "test-auth" }));
+          // External-service widgets are not part of this navigation/gate test.
+          // Badge, permission, menu, and query hooks use their actual sources.
+          buildApi.onResolve({ filter: /^@\/components\/shared\/(weather-widget|rocket-launch-viewer|live-chat-bubble|user-avatar)$/ }, () => ({ path: "widgets", namespace: "test-widgets" }));
+          buildApi.onLoad({ filter: /.*/, namespace: "test-widgets" }, () => ({
+            contents: "export const WeatherWidget = () => null; export const RocketLaunchViewer = () => null; export const LiveChatBubble = () => null; export const UserAvatar = () => null;",
+            loader: "js",
+          }));
           buildApi.onResolve({ filter: /^@\// }, (args) => ({
             path: (() => {
               const base = path.resolve(process.cwd(), "src", args.path.slice(2));
@@ -109,22 +136,27 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
           }));
           buildApi.onLoad({ filter: /.*/, namespace: "test-auth" }, () => ({
             contents: `
+              import { createContext, useContext } from "react";
+              export const AuthContext = createContext(null);
               let currentUser = { id: 1, role: "user" };
-              export function setTestAuth(user) { currentUser = user; }
+              let loading = false;
+              export function setTestAuth(user, pending = false) { currentUser = user; loading = pending; }
               export function useAuth() {
-                return {
-                  user: currentUser, isLoading: false,
+                return useContext(AuthContext) ?? {
+                  user: currentUser, isLoading: loading,
+                  actualRole: currentUser?.role ?? "guest", effectiveRole: currentUser?.role ?? "guest",
                   logoutMutation: { isPending: false, mutate: () => { currentUser = null; } }
                 };
               }
             `,
             loader: "js",
+            resolveDir: process.cwd(),
           }));
         },
       }],
     });
     const harness = await import(pathToFileURL(bundlePath).href);
-    const { LegalConsentGate, Router, memoryLocation, QueryClientProvider, setTestAuth, ProtectedContent } = harness;
+    const { LegalConsentGate, NavBar, Router, memoryLocation, QueryClientProvider, setTestAuth, ProtectedContent } = harness;
     const container = document.getElementById("root")!;
 
     const start = async (pathName = "/") => {
@@ -133,7 +165,9 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
       const render = () => root!.render(
         React.createElement(QueryClientProvider, { client },
           React.createElement(Router, { hook: location.hook },
-            React.createElement(LegalConsentGate, null, React.createElement(ProtectedContent)),
+            React.createElement(LegalConsentGate, {
+              navigation: ready => React.createElement(NavBar, { publicOnly: !ready }),
+            }, React.createElement(ProtectedContent)),
           ),
         ),
       );
@@ -170,14 +204,41 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
 
     // Slow initial check shows only the public shell; a quick response removes
     // the status immediately rather than honoring the 180ms notice as a minimum.
+    setTestAuth(null, true);
     let location = await start("/");
+    const initialHeader = document.querySelector(".nav-container");
+    assert.ok(initialHeader, "the real header renders while account identity is unknown");
+    assert.equal(content(), null);
+    assert.equal(requests.length, 0);
+    assert.ok(initialHeader.querySelector('a[href="/calendar"]'));
+    assert.equal(initialHeader.querySelector('a[href="/terms"]'), null);
+    assert.equal(initialHeader.querySelector('a[href="/privacy"]'), null);
+    assert.equal(initialHeader.querySelector('a[href="/copyright-notices"]'), null);
+    assert.equal(initialHeader.querySelector('a[href="/auth"]'), null, "unknown identity is not shown as a logged-out account");
+    const menuButton = initialHeader.querySelector('[aria-label="Open navigation menu"]') as HTMLButtonElement;
+    await act(async () => menuButton.click());
+    assert.ok(document.querySelector('[aria-label="Close navigation menu"]'), "mobile menu works during account loading");
+    assert.equal(document.querySelector('[data-testid="button-mobile-login"]'), null);
+    assert.doesNotMatch(initialHeader.textContent ?? "", /Previous account private page|My Listings|Messages|Admin Dashboard/);
+    const mobileCalendar = Array.from(initialHeader.querySelectorAll('a[href="/calendar"]')).at(-1) as HTMLAnchorElement;
+    await act(async () => mobileCalendar.click());
+    assert.equal(location.history.at(-1), "/calendar", "public navigation works before the account response arrives");
+    assert.equal(document.querySelector('[aria-label="Close navigation menu"]'), null);
+    setTestAuth({ id: 1, role: "user" });
+    await act(async () => location.render());
     await untilRequestCount(1);
+    assert.equal(document.querySelector(".nav-container"), initialHeader, "account resolution does not remount the header");
+    assert.equal(document.querySelector('[data-testid="legal-gate-navigation"]')?.hasAttribute("inert"), false,
+      "the initial consent check leaves public navigation usable");
+    assert.deepEqual(navigationRequests.filter(url => url !== "/api/feature-flags"), [],
+      "unknown identity and pending consent start no private or menu-data requests");
     assert.equal(hasInitialShell(), true);
     assert.equal(document.querySelector('[data-testid="legal-gate-initial-check"]')?.getAttribute("role"), "status");
     assert.equal(content(), null, "private children are not mounted before the first server confirmation");
     assert.doesNotMatch(document.querySelector('[data-testid="legal-gate-initial-check"]')?.textContent ?? "",
       /checking your account|account loading/i, "initial checks use neutral accessible feedback, not account-loading copy");
     await resolveUntilAuthorized(0);
+    assert.equal(document.querySelector(".nav-container"), initialHeader, "authorization preserves the same header");
     assert.ok(content());
     assert.equal(hasInitialShell(), false, "a fast successful check is not held for the delayed status notice");
     await act(async () => delay(200));
@@ -255,12 +316,17 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
     // An A -> B -> A transition must not restore A's cached grant while B's
     // request is pending. A late B result must also never affect A.
     const beforeB = requests.length;
+    const beforeBNavigation = navigationRequests.length;
     setTestAuth({ id: 2, role: "staff" });
     await act(async () => location.render());
     await untilRequestCount(beforeB + 1);
     const pendingB = requests[beforeB];
     assert.equal(hasInitialShell(), true, "switching A to B starts in the safe initial shell");
     assert.equal(content(), null);
+    assert.equal(document.querySelector(".nav-container"), document.querySelector('[data-testid="legal-gate-navigation"] .nav-container'));
+    assert.doesNotMatch(document.querySelector(".nav-container")?.textContent ?? "", /Previous account private page|My Listings|Messages|Admin Dashboard|Log In|Sign Up/);
+    assert.deepEqual(navigationRequests.slice(beforeBNavigation).filter(url => url !== "/api/feature-flags"), [],
+      "switching accounts starts no account-bound navigation requests before the new consent check");
 
     const beforeReturnToA = requests.length;
     setTestAuth({ id: 1, role: "user" });
@@ -371,6 +437,13 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
     await resolveRequest(bConfirmation, currentAccepted);
     assert.ok(content(), "the fresh accepted GET releases the staff account immediately");
     assert.equal(document.querySelector('[data-testid="legal-gate-verifying"]'), null);
+    for (const endpoint of ["/api/vendors/unvisited", "/api/products/new-products-count", "/api/real-estate/new-listings-count", "/api/forum/unread-count"]) {
+      assert.ok(client.getQueryCache().find({ queryKey: [endpoint, 2], exact: true }),
+        `${endpoint} is isolated to the currently authorized account`);
+    }
+    assert.ok(client.getQueryCache().find({
+      queryKey: ["/api/pages", { userId: 2, role: "staff" }], exact: true,
+    }), "permission-bound menu data is isolated by account and effective role");
 
     // Staff accounts retain the same narrow statutory-route exemption.
     client.setQueryData(["legal", "consent", 3], reviewRequired(9));
@@ -379,9 +452,13 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
     await act(async () => delay(10));
     assert.ok(content(), "legal reading is exempt while consent is outstanding");
     assert.ok(document.querySelector('[role="status"]')?.textContent?.includes("policies to review"));
+    assert.equal(document.querySelector('.nav-container a[href="/messages"]'), null,
+      "a statutory exemption does not expose ordinary account navigation for an unaccepted account");
     setTestAuth(null);
     await act(async () => location.render());
     assert.ok(content(), "logout returns to public children without retaining the signed-in gate");
+    assert.ok(document.querySelector('.nav-container a[href="/auth"]'),
+      "confirmed guest navigation shows login, unlike the unknown-account state");
   } finally {
     if (root) await act(async () => root!.unmount());
     client.clear();

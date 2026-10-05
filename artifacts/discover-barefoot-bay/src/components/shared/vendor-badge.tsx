@@ -9,6 +9,7 @@ interface VendorBadgeProps {
 
 export function VendorBadge({ inMobileMenu = false }: VendorBadgeProps) {
   const { user } = useAuth();
+  const unvisitedKey = ["/api/vendors/unvisited", user?.id ?? null] as const;
   const queryClient = useQueryClient();
   const [showX, setShowX] = useState(false);
   const [isMarking, setIsMarking] = useState(false);
@@ -27,7 +28,7 @@ export function VendorBadge({ inMobileMenu = false }: VendorBadgeProps) {
   
   // Fetch unvisited vendor pages count
   const { data: unvisitedVendorsData } = useQuery<{ unvisitedSlugs: string[] }>({
-    queryKey: ['/api/vendors/unvisited'],
+    queryKey: unvisitedKey,
     queryFn: async () => {
       console.log("🏬 [VENDOR BADGE] Making API call to /api/vendors/unvisited");
       const response = await fetch("/api/vendors/unvisited", {
@@ -64,7 +65,7 @@ export function VendorBadge({ inMobileMenu = false }: VendorBadgeProps) {
       setShowX(false);
       
       // Immediately update the query cache to show 0 unvisited vendors
-      queryClient.setQueryData(['/api/vendors/unvisited'], { unvisitedSlugs: [] });
+      queryClient.setQueryData(unvisitedKey, { unvisitedSlugs: [] });
       
       const response = await fetch("/api/vendors/visit", {
         method: "POST",

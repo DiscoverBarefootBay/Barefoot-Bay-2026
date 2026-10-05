@@ -9,6 +9,7 @@ interface ForSaleBadgeProps {
 
 export function ForSaleBadge({ inMobileMenu = false }: ForSaleBadgeProps) {
   const { user } = useAuth();
+  const newListingsKey = ["/api/real-estate/new-listings-count", user?.id ?? null] as const;
   const queryClient = useQueryClient();
   const [showX, setShowX] = useState(false);
   const [isMarking, setIsMarking] = useState(false);
@@ -27,7 +28,7 @@ export function ForSaleBadge({ inMobileMenu = false }: ForSaleBadgeProps) {
   
   // Fetch new real estate listings count since last visit
   const { data: newListingsData } = useQuery({
-    queryKey: [`/api/real-estate/new-listings-count`],
+    queryKey: newListingsKey,
     queryFn: async () => {
       console.log("🏠 [FOR SALE BADGE] Making API call to /api/real-estate/new-listings-count");
       const response = await fetch("/api/real-estate/new-listings-count", {

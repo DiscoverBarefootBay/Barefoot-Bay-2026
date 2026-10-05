@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { AuthContext } from "@/components/providers/auth-provider";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
@@ -110,7 +111,27 @@ import {
   FaSearchLocation, FaRoute, FaMapSigns, FaStreetView
 } from "react-icons/fa";
 
-export function NavBar() {
+export function NavBar({ publicOnly = false }: { publicOnly?: boolean }) {
+  const auth = useAuth();
+  // Every descendant (including permissions and badge hooks) sees no identity
+  // until the gate authorizes it. This does not change the real account state.
+  const navigationAuth = publicOnly ? {
+    ...auth,
+    user: null,
+    isLoading: true,
+    error: null,
+    viewAsRole: null,
+    effectiveRole: "guest",
+    actualRole: "guest",
+  } : auth;
+  return (
+    <AuthContext.Provider value={navigationAuth}>
+      <NavigationContent accountPending={publicOnly} />
+    </AuthContext.Provider>
+  );
+}
+
+function NavigationContent({ accountPending }: { accountPending: boolean }) {
   const { user, effectiveRole, logoutMutation } = useAuth();
   const hasCopyrightActivity = useCopyrightActivity(effectiveRole === "guest" ? null : user?.id ?? null);
   const { isAdmin } = usePermissions();
@@ -126,7 +147,7 @@ export function NavBar() {
   const [showMarkReadX, setShowMarkReadX] = useState(false);
   
   const queryClient = useQueryClient();
-  const { countsByCategory } = useVendorCategoryCounts();
+  const { countsByCategory } = useVendorCategoryCounts(!accountPending);
   
   const unreadUserId = effectiveRole === "guest" || logoutMutation.isPending ? null : user?.id ?? null;
   const unreadKey = unreadQueryKey(unreadUserId);
@@ -248,8 +269,9 @@ export function NavBar() {
   };
   
   // Fetch vendor categories from the database (filtered to non-hidden ones)
-  const { data: vendorCategories, isLoading: isLoadingCategories } = useQuery({
-    queryKey: ['/api/vendor-categories'],
+  const { data: loadedVendorCategories, isLoading: isLoadingCategories } = useQuery({
+    queryKey: ['/api/vendor-categories', { userId: user?.id ?? null, role: effectiveRole }],
+    enabled: !accountPending,
     staleTime: 1000 * 60, // 1 minute - reduced stale time to stay more responsive to admin changes
     select: (data: any) => {
       // Check if data is an array before using it
@@ -262,8 +284,9 @@ export function NavBar() {
   });
   
   // Fetch community pages to use in the dropdown menu
-  const { data: communityPages } = useQuery({
-    queryKey: ['/api/pages'],
+  const { data: loadedCommunityPages } = useQuery({
+    queryKey: ['/api/pages', { userId: user?.id ?? null, role: effectiveRole }],
+    enabled: !accountPending,
     staleTime: 1000 * 60 * 5, // 5 minutes
     select: (data: any) => {
       if (!Array.isArray(data)) {
@@ -275,8 +298,9 @@ export function NavBar() {
   });
 
   // Fetch community categories from the database to display in the administrator defined order
-  const { data: communityCategories } = useQuery({
-    queryKey: ['/api/community-categories'],
+  const { data: loadedCommunityCategories } = useQuery({
+    queryKey: ['/api/community-categories', { userId: user?.id ?? null, role: effectiveRole }],
+    enabled: !accountPending,
     staleTime: 1000 * 60 * 5, // 5 minutes
     select: (data: any) => {
       if (!Array.isArray(data)) {
@@ -291,8 +315,9 @@ export function NavBar() {
   // Fetch the flat list of social clubs (page_contents rows whose slug starts
   // with `social-`) for the dedicated Social Clubs nav tab. The endpoint
   // already returns the list sorted alphabetically by title.
-  const { data: socialClubs, isLoading: isLoadingSocialClubs } = useQuery({
-    queryKey: ['/api/social-clubs'],
+  const { data: loadedSocialClubs, isLoading: isLoadingSocialClubs } = useQuery({
+    queryKey: ['/api/social-clubs', { userId: user?.id ?? null, role: effectiveRole }],
+    enabled: !accountPending,
     staleTime: 1000 * 60 * 5, // 5 minutes
     select: (data: any) => {
       if (!Array.isArray(data)) {
@@ -302,6 +327,13 @@ export function NavBar() {
       return data;
     },
   });
+
+  // Disabled queries can still return cached data. Never display a previous
+  // account's menu contents while the new identity/consent check is pending.
+  const vendorCategories = accountPending ? undefined : loadedVendorCategories;
+  const communityPages = accountPending ? undefined : loadedCommunityPages;
+  const communityCategories = accountPending ? undefined : loadedCommunityCategories;
+  const socialClubs = accountPending ? undefined : loadedSocialClubs;
 
   // Helper function to get pages for a specific category
   // Uses the database 'category' field to match pages to categories
@@ -426,23 +458,25 @@ export function NavBar() {
             <Link href="/">
               <div className="flex items-center cursor-pointer">
                 <img 
-                  src="/assets/DiscoverBFBText.png" 
+                  src={`${import.meta.env.BASE_URL}assets/DiscoverBFBText.png`}
                   alt="Discover Barefoot Bay"
                   className="h-16 xl:h-24 w-auto"
                 />
               </div>
             </Link>
-            <NavigationTooltipProvider>
+            {!accountPending && <NavigationTooltipProvider>
               <div className="ml-2 sm:ml-4 flex items-center gap-1 sm:gap-2 md:gap-3">
                 <RocketLaunchViewer />
                 <WeatherWidget />
                 <LiveChatBubble />
               </div>
-            </NavigationTooltipProvider>
+            </NavigationTooltipProvider>}
           </div>
 
           {/* Mobile menu button - shows more aggressively when signed out to prevent crowding */}
           <button 
+            aria-label="Open navigation menu"
+            aria-expanded={isMobileMenuOpen}
             className={`${!user ? '2xl:hidden' : 'xl:hidden'} p-2 text-navy focus:outline-none`}
             onClick={() => setIsMobileMenuOpen(true)}
           >
@@ -468,7 +502,7 @@ export function NavBar() {
                     Extra!!!
                   </span>
                 </Link>
-                <ForumBadge />
+                {!accountPending && <ForumBadge />}
               </div>
             )}
             
@@ -498,7 +532,7 @@ export function NavBar() {
                   )}
                 </DropdownMenuContent>
                 </DropdownMenu>
-                <ForSaleBadge />
+                {!accountPending && <ForSaleBadge />}
               </div>
             )}
             
@@ -526,7 +560,7 @@ export function NavBar() {
                   </Link>
                 </DropdownMenuContent>
               </DropdownMenu>
-              <StoreBadge />
+              {!accountPending && <StoreBadge />}
             </div>
             )}
             
@@ -648,7 +682,7 @@ export function NavBar() {
                   )}
                 </DropdownMenuContent>
               </DropdownMenu>
-              <VendorBadge />
+              {!accountPending && <VendorBadge />}
             </div>
             )}
 
@@ -699,7 +733,7 @@ export function NavBar() {
                           </Link>
                         );
                       })
-                    ) : isLoadingSocialClubs ? (
+                    ) : accountPending ? null : isLoadingSocialClubs ? (
                       <p className="text-navy/50 italic text-sm p-2">Loading clubs...</p>
                     ) : (
                       <p className="text-navy/50 italic text-sm p-2">No clubs available.</p>
@@ -906,7 +940,7 @@ export function NavBar() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            ) : (
+            ) : !accountPending ? (
               <div className="flex items-center gap-2">
                 <Button 
                   asChild
@@ -926,13 +960,14 @@ export function NavBar() {
                   </Link>
                 </Button>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       </nav>
       
       {/* Mobile menu */}
-      <MobileMenu 
+      <MobileMenu
+        accountPending={accountPending}
         isOpen={isMobileMenuOpen} 
         onClose={() => setIsMobileMenuOpen(false)}
         isAdmin={isAdmin}

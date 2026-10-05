@@ -9,6 +9,7 @@ interface ForumBadgeProps {
 
 export function ForumBadge({ inMobileMenu = false }: ForumBadgeProps) {
   const { user } = useAuth();
+  const unreadKey = ["/api/forum/unread-count", user?.id ?? null] as const;
   const queryClient = useQueryClient();
   const [showX, setShowX] = useState(false);
   const [isMarking, setIsMarking] = useState(false);
@@ -27,7 +28,7 @@ export function ForumBadge({ inMobileMenu = false }: ForumBadgeProps) {
   
   // Fetch total unread forum content count across all categories
   const { data: unreadData } = useQuery({
-    queryKey: [`/api/forum/unread-count`],
+    queryKey: unreadKey,
     enabled: !!user,
     refetchInterval: 30000, // Refresh every 30 seconds (less frequent than chat)
     staleTime: 10000, // Consider data stale after 10 seconds
@@ -51,7 +52,7 @@ export function ForumBadge({ inMobileMenu = false }: ForumBadgeProps) {
       setShowX(false);
       
       // Immediately update the query cache to show 0 unread
-      queryClient.setQueryData(["/api/forum/unread-count"], { unreadCount: 0 });
+      queryClient.setQueryData(unreadKey, { unreadCount: 0 });
       
       const response = await fetch("/api/forum/mark-all-read", {
         method: "POST",

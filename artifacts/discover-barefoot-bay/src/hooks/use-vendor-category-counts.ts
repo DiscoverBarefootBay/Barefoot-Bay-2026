@@ -15,11 +15,11 @@ interface VendorCategoryCountsResult {
   isLoading: boolean;
 }
 
-export function useVendorCategoryCounts(): VendorCategoryCountsResult {
+export function useVendorCategoryCounts(enabled = true): VendorCategoryCountsResult {
   const { user } = useAuth();
 
   const { data: unvisitedVendorsData, isLoading: unvisitedLoading } = useQuery<{ unvisitedSlugs: string[] }>({
-    queryKey: ['/api/vendors/unvisited'],
+    queryKey: ['/api/vendors/unvisited', user?.id ?? null],
     queryFn: async () => {
       const response = await fetch("/api/vendors/unvisited", {
         credentials: "include",
@@ -29,7 +29,7 @@ export function useVendorCategoryCounts(): VendorCategoryCountsResult {
       }
       return response.json();
     },
-    enabled: !!user,
+    enabled: enabled && !!user,
     refetchInterval: 30000,
     staleTime: 10000,
     refetchOnWindowFocus: false,
@@ -39,11 +39,12 @@ export function useVendorCategoryCounts(): VendorCategoryCountsResult {
 
   const { data: vendorCategories, isLoading: categoriesLoading } = useQuery<VendorCategory[]>({
     queryKey: ['/api/vendor-categories'],
+    enabled,
     staleTime: 1000 * 60,
   });
 
   const countsByCategory: Record<string, number> = {};
-  const unvisitedSlugs = unvisitedVendorsData?.unvisitedSlugs || [];
+  const unvisitedSlugs = enabled && user ? unvisitedVendorsData?.unvisitedSlugs || [] : [];
   const categorySlugs = (vendorCategories || []).map(c => c.slug).sort((a, b) => b.length - a.length);
 
   for (const slug of unvisitedSlugs) {

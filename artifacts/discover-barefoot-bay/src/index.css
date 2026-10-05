@@ -230,6 +230,8 @@
 
 @layer base {
   :root {
+    /* Keep the shared header in place as page content introduces a scrollbar. */
+    scrollbar-gutter: stable;
     --ocean: 144 201 212;     /* #90C9D4 - Vibrant blue */
     --coral: 225 90 79;       /* #e15a4f - Warm accent */
     --navy: 67 64 84;         /* #434054 - Deep contrast */

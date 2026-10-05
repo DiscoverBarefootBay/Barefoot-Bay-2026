@@ -7,7 +7,13 @@ Keep account-check and generic page-download states visually silent; do not rein
 
 **Why:** The owner rejected the branded microanimation after seeing it and explicitly asked to remove it entirely, rather than replace it with another design.
 
-**How to apply:** Preserve screen-reader status, the public-only initial shell, and the transparent interaction blocker during consent rechecks. This applies to these two pending surfaces, not every unrelated page-specific loader.
+**How to apply:** Preserve screen-reader status, public-safe initial navigation, and the transparent interaction blocker during consent rechecks. This applies to these two pending surfaces, not every unrelated page-specific loader.
+
+Show the normal site navigation first rather than a logo-only or legal-links placeholder, or waiting to reveal navigation and page content together.
+
+**Why:** On 2026-10-05 the owner explicitly chose normal navigation first after comparing these options; the temporary Terms/Privacy header looked like incorrect site navigation.
+
+**How to apply:** Keep the public navigation usable during initial checks, with account-specific controls deferred until authorization. Unknown identity must not be presented as confirmed logged-out status. This does not waive consent checks or permit protected content to mount early.
 
 Scope assertions about loading completion to the status that owns the pending operation, rather than to a global loading decoration or status.
 

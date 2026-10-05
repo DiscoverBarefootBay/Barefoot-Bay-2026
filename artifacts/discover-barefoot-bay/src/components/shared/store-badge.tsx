@@ -9,6 +9,7 @@ interface StoreBadgeProps {
 
 export function StoreBadge({ inMobileMenu = false }: StoreBadgeProps) {
   const { user } = useAuth();
+  const newProductsKey = ["/api/products/new-products-count", user?.id ?? null] as const;
   const queryClient = useQueryClient();
   const [showX, setShowX] = useState(false);
   const [isMarking, setIsMarking] = useState(false);
@@ -27,7 +28,7 @@ export function StoreBadge({ inMobileMenu = false }: StoreBadgeProps) {
   
   // Fetch new store products count since last visit
   const { data: newProductsData } = useQuery({
-    queryKey: [`/api/products/new-products-count`],
+    queryKey: newProductsKey,
     queryFn: async () => {
       console.log("🏪 [STORE BADGE] Making API call to /api/products/new-products-count");
       const response = await fetch("/api/products/new-products-count", {
@@ -64,7 +65,7 @@ export function StoreBadge({ inMobileMenu = false }: StoreBadgeProps) {
       setShowX(false);
       
       // Immediately update the query cache to show 0 new products
-      queryClient.setQueryData(["/api/products/new-products-count"], { count: 0 });
+      queryClient.setQueryData(newProductsKey, { count: 0 });
       
       const response = await fetch("/api/products/visit", {
         method: "POST",

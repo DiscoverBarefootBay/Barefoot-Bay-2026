@@ -20,12 +20,13 @@ interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
   isAdmin?: boolean;
+  accountPending?: boolean;
 }
 
-export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
+export function MobileMenu({ isOpen, onClose, isAdmin, accountPending = false }: MobileMenuProps) {
   const { user, logoutMutation, effectiveRole } = useAuth();
   const { isAdmin: hasAdminPermission } = usePermissions();
-  const { countsByCategory } = useVendorCategoryCounts();
+  const { countsByCategory } = useVendorCategoryCounts(!accountPending);
   
   // Check if we're viewing as a guest (or not logged in)
   const isViewingAsGuest = effectiveRole === 'guest' || !user;
@@ -47,8 +48,9 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
   const unreadMessagesCount = unreadCounts?.messageCount ?? 0;
   
   // Fetch vendor categories directly from the API
-  const { data: vendorCategories } = useQuery({
-    queryKey: ['/api/vendor-categories'],
+  const { data: loadedVendorCategories } = useQuery({
+    queryKey: ['/api/vendor-categories', { userId: user?.id ?? null, role: effectiveRole }],
+    enabled: !accountPending,
     staleTime: 1000 * 60, // 1 minute - shorter stale time to stay more up-to-date with changes
     select: (data: any) => {
       if (!Array.isArray(data)) {
@@ -60,8 +62,9 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
   });
   
   // Fetch community pages to use in the menu
-  const { data: communityPages } = useQuery({
-    queryKey: ['/api/pages'],
+  const { data: loadedCommunityPages } = useQuery({
+    queryKey: ['/api/pages', { userId: user?.id ?? null, role: effectiveRole }],
+    enabled: !accountPending,
     staleTime: 1000 * 60 * 5, // 5 minutes
     select: (data: any) => {
       if (!Array.isArray(data)) {
@@ -73,8 +76,9 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
   });
 
   // Fetch community categories from the database to display in the administrator defined order
-  const { data: communityCategoriesData } = useQuery({
-    queryKey: ['/api/community-categories'],
+  const { data: loadedCommunityCategories } = useQuery({
+    queryKey: ['/api/community-categories', { userId: user?.id ?? null, role: effectiveRole }],
+    enabled: !accountPending,
     staleTime: 1000 * 60 * 5, // 5 minutes
     select: (data: any) => {
       if (!Array.isArray(data)) {
@@ -89,8 +93,9 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
   // Fetch the flat list of social clubs for the dedicated Social Clubs nav
   // tab. Mirrors the desktop nav-bar query so both surfaces show the same
   // alphabetised, non-hidden list returned by /api/social-clubs.
-  const { data: socialClubs, isLoading: isLoadingSocialClubs } = useQuery({
-    queryKey: ['/api/social-clubs'],
+  const { data: loadedSocialClubs, isLoading: isLoadingSocialClubs } = useQuery({
+    queryKey: ['/api/social-clubs', { userId: user?.id ?? null, role: effectiveRole }],
+    enabled: !accountPending,
     staleTime: 1000 * 60 * 5, // 5 minutes
     select: (data: any) => {
       if (!Array.isArray(data)) {
@@ -100,6 +105,11 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
       return data;
     },
   });
+
+  const vendorCategories = accountPending ? undefined : loadedVendorCategories;
+  const communityPages = accountPending ? undefined : loadedCommunityPages;
+  const communityCategoriesData = accountPending ? undefined : loadedCommunityCategories;
+  const socialClubs = accountPending ? undefined : loadedSocialClubs;
 
   // Helper function to get pages with a specific category prefix
   // Helper function to get pages for a category
@@ -187,7 +197,7 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
         {/* Header with close button */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-navy">Menu</h2>
-          <button className="p-1 rounded-full hover:bg-gray-100" onClick={onClose}>
+          <button aria-label="Close navigation menu" className="p-1 rounded-full hover:bg-gray-100" onClick={onClose}>
             <X size={24} className="text-navy" />
           </button>
         </div>
@@ -278,7 +288,7 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
         )}
         
         {/* Login button for guests or non-logged in users */}
-        {isViewingAsGuest && (
+        {!accountPending && isViewingAsGuest && (
           <div className="mb-6 pb-6 border-b border-gray-200 flex justify-center">
             <Link href="/auth" onClick={onClose}>
               <Button 
@@ -310,7 +320,7 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
             <Link href="/forum" onClick={onClose}>
               <div className="py-2 text-navy hover:text-coral font-medium flex items-center justify-between">
                 <span>Extra!!!</span>
-                <ForumBadge inMobileMenu />
+                {!accountPending && <ForumBadge inMobileMenu />}
               </div>
             </Link>
           )}
@@ -324,7 +334,7 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
               >
                 <div className="flex items-center gap-2">
                   <span>Store</span>
-                  <StoreBadge inMobileMenu />
+                  {!accountPending && <StoreBadge inMobileMenu />}
                 </div>
                 {expandedMenus['store'] ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
               </div>
@@ -351,7 +361,7 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
               >
                 <div className="flex items-center gap-2">
                   <span>On The Market</span>
-                  <ForSaleBadge inMobileMenu />
+                  {!accountPending && <ForSaleBadge inMobileMenu />}
                 </div>
                 {expandedMenus['forSale'] ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
               </div>
@@ -380,7 +390,7 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
               >
                 <div className="flex items-center gap-2">
                   <span>Vendors</span>
-                  <VendorBadge inMobileMenu />
+                  {!accountPending && <VendorBadge inMobileMenu />}
                 </div>
                 {expandedMenus['vendors'] ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
               </div>
@@ -468,7 +478,7 @@ export function MobileMenu({ isOpen, onClose, isAdmin }: MobileMenuProps) {
                         </Link>
                       );
                     })
-                  ) : isLoadingSocialClubs ? (
+                  ) : accountPending ? null : isLoadingSocialClubs ? (
                     <div className="py-1 text-navy/50 italic text-sm">Loading clubs...</div>
                   ) : (
                     <div className="py-1 text-navy/50 italic text-sm">No clubs available.</div>
