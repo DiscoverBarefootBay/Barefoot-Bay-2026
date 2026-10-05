@@ -208,6 +208,8 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
     let location = await start("/");
     const initialHeader = document.querySelector(".nav-container");
     assert.ok(initialHeader, "the real header renders while account identity is unknown");
+    assert.ok(document.querySelector('[data-testid="legal-gate-navigation"]')?.classList.contains("z-50"),
+      "the navigation stacking context stays above ordinary page content, not at the same z-10 layer");
     assert.equal(content(), null);
     assert.equal(requests.length, 0);
     assert.ok(initialHeader.querySelector('a[href="/calendar"]'));
@@ -218,7 +220,10 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
     const menuButton = initialHeader.querySelector('[aria-label="Open navigation menu"]') as HTMLButtonElement;
     await act(async () => menuButton.click());
     assert.ok(document.querySelector('[aria-label="Close navigation menu"]'), "mobile menu works during account loading");
+    assert.equal(document.querySelector('[data-testid="mobile-menu-overlay"]')?.closest('[data-testid="legal-gate-navigation"]'),
+      initialHeader.closest('[data-testid="legal-gate-navigation"]'), "the menu remains inside the scoped consent/navigation boundary");
     assert.equal(document.querySelector('[data-testid="button-mobile-login"]'), null);
+    assert.equal(initialHeader.querySelector('a[href="/auth"]'), null, "neither mobile login entry appears before the account check finishes");
     assert.doesNotMatch(initialHeader.textContent ?? "", /Previous account private page|My Listings|Messages|Admin Dashboard/);
     const mobileCalendar = Array.from(initialHeader.querySelectorAll('a[href="/calendar"]')).at(-1) as HTMLAnchorElement;
     await act(async () => mobileCalendar.click());
@@ -254,6 +259,9 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
     await resolveUntilAuthorized(beforeRemount);
     const retained = content()!;
     assert.ok(retained);
+    await act(async () => (document.querySelector('[aria-label="Open navigation menu"]') as HTMLButtonElement).click());
+    const retainedMenu = document.querySelector('[data-testid="mobile-menu-overlay"]');
+    assert.ok(retainedMenu);
 
     // Navigation/focus/storage bursts make the retained subtree inert
     // synchronously, preserve its DOM identity, and batch the server check.
@@ -262,6 +270,9 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
     assert.equal(content(), retained, "authorized subtree remains mounted during revalidation");
     assert.equal(hasInitialShell(), false, "navigation revalidation does not replace retained content with a skeleton");
     assert.equal(gateContent()?.hasAttribute("inert"), true, "retained subtree is synchronously inert");
+    assert.equal(document.querySelector('[data-testid="mobile-menu-overlay"]'), retainedMenu, "the open menu does not remount during consent rechecks");
+    assert.equal(retainedMenu.closest('[data-testid="legal-gate-navigation"]')?.hasAttribute("inert"), true,
+      "raising the navigation layer does not let an open menu escape the recheck blocker");
     assert.equal(document.querySelector('[data-testid="legal-gate-verifying"]')?.getAttribute("aria-live"), "polite");
     assert.doesNotMatch(document.querySelector('[data-testid="legal-gate-verifying"]')?.textContent ?? "",
       /checking your account|account loading/i, "routine checks do not reintroduce account-status copy");
@@ -276,6 +287,8 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
     await resolveRequest(beforeNavigation, accepted());
     assert.equal(content(), retained, "fresh acceptance restores the same DOM subtree");
     assert.equal(gateContent()?.hasAttribute("inert"), false);
+    assert.equal(document.querySelector('[data-testid="mobile-menu-overlay"]'), retainedMenu, "successful revalidation preserves the open menu");
+    assert.equal(retainedMenu.closest('[data-testid="legal-gate-navigation"]')?.hasAttribute("inert"), false);
     assert.equal(document.querySelector('[data-testid="legal-gate-verifying"]'), null, "a completed check removes its status immediately without a minimum spinner duration");
 
     // Cross-tab storage and a real intercepted 428 both synchronously
@@ -288,6 +301,9 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
     const dialog = document.querySelector('[role="dialog"][aria-modal="true"]') as HTMLElement | null;
     assert.ok(dialog);
     assert.ok(dialog?.getAttribute("aria-labelledby"));
+    assert.equal(document.querySelector('[data-testid="mobile-menu-overlay"]'), retainedMenu,
+      "the mandatory policy overlay can cover an existing menu without moving it outside the gate");
+    assert.equal(document.activeElement, dialog, "the policy prompt retains focus ownership over the open menu");
     assert.ok(document.querySelector('[data-testid="checkbox-consent-terms"]'));
 
     const before428 = requests.length;

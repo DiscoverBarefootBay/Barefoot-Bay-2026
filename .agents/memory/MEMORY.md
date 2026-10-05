@@ -31,3 +31,4 @@
 - [Loading feedback ownership](loading-feedback-ownership.md) — browser checks must distinguish account-check feedback from lazy-route feedback; one finishing can immediately start the other.
 - [Startup measurement isolation](startup-measurement-isolation.md) — tests/builds/screenshot capture share CPU with browser probes; compare idle sequential samples, not contended preview timings.
 - [Source capture reliability](source-capture-reliability.md) — validate complete source when making isolated browser baselines; shell-captured output was incomplete despite a false truncation flag.
+- [Navigation overlay safeguards](navigation-overlay-safeguards.md) — retain consent ownership when fixing layering; DOM presence alone misses menus covered by page content.

@@ -185,15 +185,16 @@ export function MobileMenu({ isOpen, onClose, isAdmin, accountPending = false }:
   if (!isOpen) return null;
   
   return (
-    <div className="fixed inset-0 z-50 flex justify-end">
+    <div className="fixed inset-0 z-50 flex justify-end" data-testid="mobile-menu-overlay">
       {/* Backdrop */}
       <div 
+        data-testid="mobile-menu-backdrop"
         className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300"
         onClick={onClose}
       />
       
       {/* Mobile menu panel */}
-      <div className="relative w-4/5 max-w-sm bg-white h-full overflow-y-auto p-6 shadow-lg transform transition-transform duration-300">
+      <div className="relative w-4/5 max-w-sm bg-white h-full overflow-y-auto p-6 shadow-lg transform transition-transform duration-300" data-testid="mobile-menu-panel">
         {/* Header with close button */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-navy">Menu</h2>
@@ -724,7 +725,7 @@ export function MobileMenu({ isOpen, onClose, isAdmin, accountPending = false }:
           )}
           
           {/* Login/Register for guest users */}
-          {!user && (
+          {!accountPending && !user && (
             <div className="mt-6 pt-6 border-t border-gray-200">
               <div className="mb-6">
                 <Link href="/auth" onClick={onClose} className="block w-full">

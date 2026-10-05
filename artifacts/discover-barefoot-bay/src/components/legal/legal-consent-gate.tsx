@@ -415,7 +415,9 @@ export function LegalConsentGate({ children, navigation }: {
   return (
     <>
       {navigation && (
-        <div className="relative z-10" inert={retainedRecheck || undefined} aria-hidden={retainedRecheck || undefined} data-testid="legal-gate-navigation">
+        // Keep the entire navigation context above page content (z-10), not
+        // just the menu inside it. Consent overlays (z-999/1000) stay above both.
+        <div className="relative z-50" inert={retainedRecheck || undefined} aria-hidden={retainedRecheck || undefined} data-testid="legal-gate-navigation">
           {navigation(accountReady)}
         </div>
       )}
