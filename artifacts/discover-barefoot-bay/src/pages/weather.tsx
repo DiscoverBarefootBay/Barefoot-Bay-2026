@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'wouter';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { WeatherBadge } from '@/components/shared/weather-badge';
 
 interface WeatherData {
   temperature: number;
@@ -370,10 +371,11 @@ export default function WeatherPage() {
             Connect with your neighbors to discuss weather patterns, share local observations, and stay informed about upcoming conditions affecting Barefoot Bay.
           </p>
           <Link href="/forum?categoryId=4">
-            <div className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors cursor-pointer group">
+            <div className="relative inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors cursor-pointer group" data-testid="weather-discussion-button">
               <MessageSquare className="h-5 w-5 mr-2" />
               Join the Discussion
               <ExternalLink className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              <WeatherBadge />
             </div>
           </Link>
         </CardContent>
