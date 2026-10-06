@@ -20,6 +20,10 @@ import type {
   GetCalendarMonthPreviews200,
   GetCalendarMonthPreviewsParams,
   GetLegalHistoryParams,
+  GetPageNavigation200Item,
+  GetPageNavigationParams,
+  GetVendorDirectory200,
+  GetVendorDirectoryParams,
   HealthStatus,
   LegalConsentInput,
   LegalConsentStatus,
@@ -38,6 +42,203 @@ type AwaitedInput<T> = PromiseLike<T> | T;
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+/**
+ * @summary Viewer-visible vendor card summaries without CMS detail HTML
+ */
+export const getGetVendorDirectoryUrl = (params?: GetVendorDirectoryParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/vendors/directory?${stringifiedParams}`
+    : `/api/vendors/directory`;
+};
+
+export const getVendorDirectory = async (
+  params?: GetVendorDirectoryParams,
+  options?: RequestInit,
+): Promise<GetVendorDirectory200> => {
+  return customFetch<GetVendorDirectory200>(getGetVendorDirectoryUrl(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetVendorDirectoryQueryKey = (
+  params?: GetVendorDirectoryParams,
+) => {
+  return [`/api/vendors/directory`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetVendorDirectoryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getVendorDirectory>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetVendorDirectoryParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getVendorDirectory>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetVendorDirectoryQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getVendorDirectory>>
+  > = ({ signal }) => getVendorDirectory(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getVendorDirectory>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetVendorDirectoryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getVendorDirectory>>
+>;
+export type GetVendorDirectoryQueryError = ErrorType<void>;
+
+/**
+ * @summary Viewer-visible vendor card summaries without CMS detail HTML
+ */
+
+export function useGetVendorDirectory<
+  TData = Awaited<ReturnType<typeof getVendorDirectory>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetVendorDirectoryParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getVendorDirectory>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetVendorDirectoryQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary CMS menu metadata without full HTML or vendor details
+ */
+export const getGetPageNavigationUrl = (params?: GetPageNavigationParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/pages/navigation?${stringifiedParams}`
+    : `/api/pages/navigation`;
+};
+
+export const getPageNavigation = async (
+  params?: GetPageNavigationParams,
+  options?: RequestInit,
+): Promise<GetPageNavigation200Item[]> => {
+  return customFetch<GetPageNavigation200Item[]>(
+    getGetPageNavigationUrl(params),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+export const getGetPageNavigationQueryKey = (
+  params?: GetPageNavigationParams,
+) => {
+  return [`/api/pages/navigation`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetPageNavigationQueryOptions = <
+  TData = Awaited<ReturnType<typeof getPageNavigation>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetPageNavigationParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getPageNavigation>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetPageNavigationQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getPageNavigation>>
+  > = ({ signal }) => getPageNavigation(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getPageNavigation>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetPageNavigationQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getPageNavigation>>
+>;
+export type GetPageNavigationQueryError = ErrorType<void>;
+
+/**
+ * @summary CMS menu metadata without full HTML or vendor details
+ */
+
+export function useGetPageNavigation<
+  TData = Awaited<ReturnType<typeof getPageNavigation>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetPageNavigationParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getPageNavigation>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetPageNavigationQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
 
 /**
  * Private, bounded summary. Full selected-day cards use the existing events endpoint.

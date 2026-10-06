@@ -458,7 +458,7 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
         `${endpoint} is isolated to the currently authorized account`);
     }
     assert.ok(client.getQueryCache().find({
-      queryKey: ["/api/pages", { userId: 2, role: "staff" }], exact: true,
+      queryKey: ["/api/pages", "navigation", { userId: 2, role: "staff" }], exact: true,
     }), "permission-bound menu data is isolated by account and effective role");
 
     // Staff accounts retain the same narrow statutory-route exemption.

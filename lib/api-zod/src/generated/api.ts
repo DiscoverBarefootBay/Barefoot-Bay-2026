@@ -8,6 +8,79 @@
 import * as zod from "zod";
 
 /**
+ * @summary Viewer-visible vendor card summaries without CMS detail HTML
+ */
+export const getVendorDirectoryQueryIncludeHiddenDefault = false;
+
+export const GetVendorDirectoryQueryParams = zod.object({
+  includeHidden: zod.coerce
+    .boolean()
+    .default(getVendorDirectoryQueryIncludeHiddenDefault)
+    .describe("Only honored for an authenticated administrator."),
+});
+
+export const getVendorDirectoryResponseVendorsItemDescriptionMax = 220;
+
+export const GetVendorDirectoryResponse = zod.object({
+  categories: zod.array(
+    zod.object({
+      slug: zod.string(),
+      label: zod.string(),
+    }),
+  ),
+  vendors: zod.array(
+    zod.object({
+      slug: zod.string(),
+      title: zod.string(),
+      description: zod
+        .string()
+        .max(getVendorDirectoryResponseVendorsItemDescriptionMax),
+      image: zod.string().nullable(),
+      href: zod.string(),
+      categorySlug: zod.string(),
+      categoryLabel: zod.string(),
+      showInDirectory: zod
+        .boolean()
+        .describe("Preserved main-directory membership."),
+      showInCategory: zod
+        .boolean()
+        .describe("Preserved category-page membership."),
+      isHidden: zod.boolean(),
+      createdAt: zod.string().nullable(),
+      contentVisibility: zod
+        .object({
+          removed: zod.boolean().optional(),
+          status: zod.string().optional(),
+        })
+        .optional(),
+    }),
+  ),
+});
+
+/**
+ * @summary CMS menu metadata without full HTML or vendor details
+ */
+export const getPageNavigationQueryIncludeHiddenDefault = false;
+
+export const GetPageNavigationQueryParams = zod.object({
+  includeHidden: zod.coerce
+    .boolean()
+    .default(getPageNavigationQueryIncludeHiddenDefault),
+});
+
+export const GetPageNavigationResponseItem = zod.object({
+  id: zod.number(),
+  slug: zod.string(),
+  title: zod.string(),
+  category: zod.string().nullish(),
+  order: zod.number().nullish(),
+  isHidden: zod.boolean(),
+});
+export const GetPageNavigationResponse = zod.array(
+  GetPageNavigationResponseItem,
+);
+
+/**
  * Private, bounded summary. Full selected-day cards use the existing events endpoint.
  * @summary Up to three viewer-visible previews and a filtered count per local start-day
  */

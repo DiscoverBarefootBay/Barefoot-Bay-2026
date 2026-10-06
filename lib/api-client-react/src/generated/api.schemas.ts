@@ -131,6 +131,63 @@ export interface HealthStatus {
   status: string;
 }
 
+export type GetVendorDirectoryParams = {
+  /**
+   * Only honored for an authenticated administrator.
+   */
+  includeHidden?: boolean;
+};
+
+export type GetVendorDirectory200CategoriesItem = {
+  slug: string;
+  label: string;
+};
+
+export type GetVendorDirectory200VendorsItemContentVisibility = {
+  removed?: boolean;
+  status?: string;
+};
+
+export type GetVendorDirectory200VendorsItem = {
+  slug: string;
+  title: string;
+  /** @maxLength 220 */
+  description: string;
+  /** @nullable */
+  image: string | null;
+  href: string;
+  categorySlug: string;
+  categoryLabel: string;
+  /** Preserved main-directory membership. */
+  showInDirectory: boolean;
+  /** Preserved category-page membership. */
+  showInCategory: boolean;
+  isHidden: boolean;
+  /** @nullable */
+  createdAt: string | null;
+  contentVisibility?: GetVendorDirectory200VendorsItemContentVisibility;
+};
+
+export type GetVendorDirectory200 = {
+  categories: GetVendorDirectory200CategoriesItem[];
+  vendors: GetVendorDirectory200VendorsItem[];
+};
+
+export type GetPageNavigationParams = {
+  includeHidden?: boolean;
+};
+
+export type GetPageNavigation200Item = {
+  id: number;
+  slug: string;
+  title: string;
+  /** @nullable */
+  category?: string | null;
+  /** @nullable */
+  order?: number | null;
+  isHidden: boolean;
+};
+
 export type GetCalendarMonthPreviewsParams = {
   start: string;
   /**

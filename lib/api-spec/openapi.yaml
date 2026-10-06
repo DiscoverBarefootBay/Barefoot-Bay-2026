@@ -11,6 +11,83 @@ tags:
   - name: health
     description: Health operations
 paths:
+  /vendors/directory:
+    get:
+      operationId: getVendorDirectory
+      summary: Viewer-visible vendor card summaries without CMS detail HTML
+      parameters:
+        - in: query
+          name: includeHidden
+          schema: { type: boolean, default: false }
+          description: Only honored for an authenticated administrator.
+      responses:
+        '200':
+          description: Private directory; no badge or other-account data.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [vendors, categories]
+                properties:
+                  categories:
+                    type: array
+                    items:
+                      type: object
+                      required: [slug, label]
+                      properties:
+                        slug: { type: string }
+                        label: { type: string }
+                  vendors:
+                    type: array
+                    items:
+                      type: object
+                      required: [slug, title, description, image, href, categorySlug, categoryLabel, isHidden, createdAt, showInDirectory, showInCategory]
+                      properties:
+                        slug: { type: string }
+                        title: { type: string }
+                        description: { type: string, maxLength: 220 }
+                        image: { type: [string, 'null'] }
+                        href: { type: string }
+                        categorySlug: { type: string }
+                        categoryLabel: { type: string }
+                        showInDirectory: { type: boolean, description: Preserved main-directory membership. }
+                        showInCategory: { type: boolean, description: Preserved category-page membership. }
+                        isHidden: { type: boolean }
+                        createdAt: { type: [string, 'null'] }
+                        contentVisibility:
+                          type: object
+                          properties:
+                            removed: { type: boolean }
+                            status: { type: string }
+        '401': { description: Authentication required }
+        '400': { description: Invalid includeHidden parameter }
+        '500': { description: Directory unavailable; retry is safe }
+  /pages/navigation:
+    get:
+      operationId: getPageNavigation
+      summary: CMS menu metadata without full HTML or vendor details
+      parameters:
+        - in: query
+          name: includeHidden
+          schema: { type: boolean, default: false }
+      responses:
+        '200':
+          description: Viewer-visible page menu entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required: [id, slug, title, isHidden]
+                  properties:
+                    id: { type: integer }
+                    slug: { type: string }
+                    title: { type: string }
+                    category: { type: [string, 'null'] }
+                    order: { type: [integer, 'null'] }
+                    isHidden: { type: boolean }
+        '500': { description: Navigation unavailable }
   /events/month-previews:
     get:
       operationId: getCalendarMonthPreviews

@@ -128,10 +128,11 @@ function VendorBadges({ vendor, showAdminBadge }: { vendor: VendorItem; showAdmi
   );
 }
 
-function VendorCard({ vendor, showAdminBadge }: { vendor: VendorItem; showAdminBadge: boolean }) {
+function VendorCard({ vendor, showAdminBadge, deferOffscreenLayout }: { vendor: VendorItem; showAdminBadge: boolean; deferOffscreenLayout: boolean }) {
   return (
     <Link href={vendor.href}>
       <Card
+        style={deferOffscreenLayout ? { contentVisibility: "auto", containIntrinsicSize: "auto 380px" } : undefined}
         className={`h-full flex flex-col cursor-pointer transition-all hover:shadow-lg bg-white relative ${
           vendor.isUnvisited
             ? "border-red-500 border-[3px] shadow-lg ring-2 ring-red-300"
@@ -172,16 +173,20 @@ function HorizontalVendorCard({
   vendor,
   index,
   showAdminBadge,
+  deferOffscreenLayout,
 }: {
   vendor: VendorItem;
   index: number;
   showAdminBadge: boolean;
+  deferOffscreenLayout: boolean;
 }) {
   return (
     <Link href={vendor.href}>
       <div
         className="story-banner-enter group"
-        style={{ "--story-index": Math.min(index, 8) } as CSSProperties}
+        style={{ "--story-index": Math.min(index, 8),
+          ...(deferOffscreenLayout ? { contentVisibility: "auto", containIntrinsicSize: "auto 146px" } : {})
+        } as CSSProperties}
       >
         <div
           className={`story-banner-card relative overflow-hidden rounded-xl bg-white cursor-pointer transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-0.5 border ${
@@ -242,6 +247,8 @@ interface VendorBrowseProps {
   labels?: VendorBrowseLabels;
   /** Offer an "All Categories" option in the category dropdown (default true) */
   includeAllCategories?: boolean;
+  /** Vendors-only measured layout optimization; other directory consumers stay unchanged. */
+  deferOffscreenLayout?: boolean;
 }
 
 export function VendorBrowse({
@@ -253,6 +260,7 @@ export function VendorBrowse({
   storageKey = VENDOR_VIEW_STORAGE_KEY,
   labels = DEFAULT_LABELS,
   includeAllCategories = true,
+  deferOffscreenLayout = false,
 }: VendorBrowseProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -510,12 +518,14 @@ export function VendorBrowse({
                 vendor={vendor}
                 index={index}
                 showAdminBadge={showAdminBadge}
+                deferOffscreenLayout={deferOffscreenLayout}
               />
             ) : (
               <VendorCard
                 key={`${vendor.slug}:${vendor.categorySlug}`}
                 vendor={vendor}
                 showAdminBadge={showAdminBadge}
+                deferOffscreenLayout={deferOffscreenLayout}
               />
             ),
           )}

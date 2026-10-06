@@ -10482,6 +10482,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Page content routes
+  // Navbar needs identifiers/titles, never complete CMS HTML. Shared page-list
+  // response remains unchanged for editors and detail/category consumers.
+  app.get("/api/pages/navigation", async (req, res) => {
+    try {
+      const includeHidden = req.user?.role === "admin" && req.query.includeHidden === "true";
+      const result = await db.execute(sql`
+        SELECT DISTINCT ON (slug) id, slug, title, "order", is_hidden AS "isHidden",
+          updated_by AS "updatedBy", visibility_status AS "visibilityStatus"
+        FROM page_contents
+        WHERE slug NOT LIKE 'vendors-%' AND (${includeHidden} OR is_hidden = false)
+        ORDER BY slug, "order", updated_at DESC, id DESC
+      `);
+      const visible = filterForViewer(result.rows as any[], await getViewerContext(req), p => p.updatedBy);
+      res.setHeader("Cache-Control", "private, no-store");
+      res.json(visible.map(({ id, slug, title, category, order, isHidden }) => ({ id, slug, title, category, order, isHidden })));
+    } catch (err) {
+      res.status(500).json({ message: "Unable to load navigation pages" });
+    }
+  });
+
   app.get("/api/pages", async (req, res) => {
     try {
       // Check if the user is an admin

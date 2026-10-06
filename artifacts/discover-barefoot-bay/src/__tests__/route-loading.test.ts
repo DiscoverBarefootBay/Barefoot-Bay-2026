@@ -44,13 +44,15 @@ test("generic route feedback is visually silent with a neutral accessible status
   assert.doesNotMatch(fallback, /<svg|<img|animate-|bg-white/);
   assert.match(fallback, /min-h-24/);
   assert.doesNotMatch(fallback, /Loading page|account|policy|setTimeout|useEffect|useState/);
-  assert.equal((source.match(/fallback=\{<RouteLoading \/>\}/g) ?? []).length, 2);
+  assert.equal((source.match(/fallback=\{<RouteLoading \/>\}/g) ?? []).length, 1, "launch keeps generic feedback");
+  assert.equal((source.match(/fallback=\{location === "\/vendors" \? <VendorsLoading \/> : <RouteLoading \/>\}/g) ?? []).length, 1,
+    "only the main Vendors directory gets a route skeleton; all other routes keep generic feedback");
 });
 
 test("route suspense remains inside the mounted layout and does not enclose the header", () => {
   const router = source.slice(source.indexOf("function Router"));
   assert.match(router, /<LegalConsentGate navigation=\{\(accountReady\) => <NavBar publicOnly=\{!accountReady\} \/>/);
-  assert.match(router, /<main[^>]*>[\s\S]*<ErrorBoundary key=\{location\}>[\s\S]*<Suspense fallback=\{<RouteLoading \/>\}>[\s\S]*<Switch>/);
+  assert.match(router, /<main[^>]*>[\s\S]*<ErrorBoundary key=\{location\}>[\s\S]*<Suspense fallback=\{location === "\/vendors" \? <VendorsLoading \/> : <RouteLoading \/>\}>[\s\S]*<Switch>/);
   assert.equal((router.match(/<NavBar /g) ?? []).length, 1, "only the gate-owned persistent header is rendered");
   const suspense = router.slice(router.indexOf("<Suspense"), router.indexOf("</Suspense>"));
   assert.doesNotMatch(suspense, /<NavBar|<BackgroundVideo|<LegalConsentGate/);

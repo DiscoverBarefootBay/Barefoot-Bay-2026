@@ -90,6 +90,8 @@ const DmcaPermissions = lazy(() => import("@/pages/admin/dmca/permissions"));
 const ModeratedPosts = lazy(() => import("@/pages/admin/moderated-posts"));
 
 const GenericContentPage = lazy(() => import("@/pages/generic-content-page"));
+const VendorsPage = lazy(() => import("@/pages/vendors-page"));
+import { VendorsLoading } from "@/components/vendors/vendors-loading";
 const FormPage = lazy(() => import("@/pages/form-page"));
 const MockTrackingPage = lazy(() => import("@/pages/testing/mock-tracking"));
 const ForumPage = lazy(() => import("@/pages/forum/forum-page"));
@@ -162,7 +164,7 @@ function Router() {
       <div className="relative z-10 bg-transparent flex-grow flex flex-col">
         <main className="container mx-auto px-4 py-4 md:py-8 flex-grow">
           <ErrorBoundary key={location}>
-          <Suspense fallback={<RouteLoading />}>
+           <Suspense fallback={location === "/vendors" ? <VendorsLoading /> : <RouteLoading />}>
           <Switch>
             <Route path="/" component={HomePage} />
             <Route path="/auth" component={AuthPage} />
@@ -296,7 +298,7 @@ function Router() {
             <Route path="/dmca/status/:token" component={DMCAStatusPage} />
             
             {/* Dedicated routes for Vendors pages */}
-            <ProtectedRoute path="/vendors" component={() => <GenericContentPage slug="vendors-main" />} requiredFeature="VENDORS" />
+            <ProtectedRoute path="/vendors" component={VendorsPage} requiredFeature="VENDORS" />
             
             {/* Special redirects for malformed vendor URLs with "services-" prefix */}
             <Route path="/vendors/home/services-:vendor" component={({ params }) => {

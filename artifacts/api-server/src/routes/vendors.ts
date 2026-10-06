@@ -8,9 +8,44 @@ import { sql } from "drizzle-orm";
 import { db } from "../db";
 import { LegalHoldError } from "../dmca/legal-hold";
 import { assertCanPermanentDelete, PermanentDeletePermissionError } from "../dmca/permanent-delete";
+import { readVendorDirectoryPages } from "../vendor-directory-read";
+import { projectVendorDirectory } from "../vendor-directory-summary";
+import { fixContentMediaUrl } from "../media-path-utils";
+import { logger } from "../lib/logger";
+import { GetVendorDirectoryResponse } from "@workspace/api-zod";
 
-export function createVendorRouter(storage: IStorage) {
+export function createVendorRouter(storage: IStorage, readPages = readVendorDirectoryPages) {
   const router = Router();
+
+  router.get("/directory", requireAuth, async (req, res) => {
+    if (req.query.includeHidden !== undefined && !["true", "false"].includes(req.query.includeHidden as string)) {
+      res.status(400).json({ message: "includeHidden must be true or false" });
+      return;
+    }
+    try {
+      // View-as residents must not get an administrator's hidden directory.
+      const includeHidden = req.user?.role === "admin" && req.query.includeHidden === "true";
+      const started = performance.now();
+      const [rows, categories, viewer] = await Promise.all([
+        readPages(includeHidden),
+        storage.getVendorCategories(includeHidden),
+        getViewerContext(req),
+      ]);
+      const readMs = performance.now() - started;
+      // Same default list policy as /api/pages, including owner-only flags.
+      const visible = filterForViewer(rows, viewer, p => p.updatedBy);
+      const response = projectVendorDirectory(
+        visible.map(p => ({ ...p, content: fixContentMediaUrl(p.content ?? "") })),
+        categories.filter(c => includeHidden || !c.isHidden),
+      );
+      res.setHeader("Cache-Control", "private, no-store");
+      res.setHeader("Server-Timing", `directory-read;dur=${readMs.toFixed(1)}, directory-project;dur=${(performance.now() - started - readMs).toFixed(1)}`);
+      res.json(GetVendorDirectoryResponse.parse(response));
+    } catch (err) {
+      logger.error({ err }, "Vendor directory read failed");
+      res.status(500).json({ message: "Unable to load vendors. Please try again." });
+    }
+  });
 
   // Get comments for a vendor page
   router.get("/:slug/comments", async (req, res) => {

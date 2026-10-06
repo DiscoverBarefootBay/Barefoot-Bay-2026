@@ -1,4 +1,5 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
+import { installVendorDirectoryInvalidation } from "./vendor-directory-cache";
 
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
@@ -493,3 +494,5 @@ export const queryClient = new QueryClient({
     },
   },
 });
+
+installVendorDirectoryInvalidation(queryClient);

@@ -63,7 +63,12 @@ export function MobileMenu({ isOpen, onClose, isAdmin, accountPending = false }:
   
   // Fetch community pages to use in the menu
   const { data: loadedCommunityPages } = useQuery({
-    queryKey: ['/api/pages', { userId: user?.id ?? null, role: effectiveRole }],
+    queryKey: ['/api/pages', 'navigation', { userId: user?.id ?? null, role: effectiveRole }],
+    queryFn: async () => {
+      const res = await fetch(`/api/pages/navigation?includeHidden=${effectiveRole === 'admin'}`, { credentials: 'include' });
+      if (!res.ok) throw new Error("Unable to load navigation pages");
+      return res.json();
+    },
     enabled: !accountPending,
     staleTime: 1000 * 60 * 5, // 5 minutes
     select: (data: any) => {
