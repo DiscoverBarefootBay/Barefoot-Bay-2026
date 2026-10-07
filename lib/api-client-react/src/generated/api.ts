@@ -19,6 +19,7 @@ import type {
 import type {
   CommunityCard,
   ForumStoryFeed,
+  GetBannerImageVariantParams,
   GetCalendarMonthPreviews200,
   GetCalendarMonthPreviewsParams,
   GetCommunityDirectoryParams,
@@ -46,6 +47,124 @@ type AwaitedInput<T> = PromiseLike<T> | T;
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+/**
+ * @summary Responsive WebP for a currently published banner image; original when width is absent
+ */
+export const getGetBannerImageVariantUrl = (
+  filename: string,
+  params?: GetBannerImageVariantParams,
+) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/storage-proxy/BANNER/banner-slides/${filename}?${stringifiedParams}`
+    : `/api/storage-proxy/BANNER/banner-slides/${filename}`;
+};
+
+export const getBannerImageVariant = async (
+  filename: string,
+  params?: GetBannerImageVariantParams,
+  options?: RequestInit,
+): Promise<Blob> => {
+  return customFetch<Blob>(getGetBannerImageVariantUrl(filename, params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetBannerImageVariantQueryKey = (
+  filename: string,
+  params?: GetBannerImageVariantParams,
+) => {
+  return [
+    `/api/storage-proxy/BANNER/banner-slides/${filename}`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getGetBannerImageVariantQueryOptions = <
+  TData = Awaited<ReturnType<typeof getBannerImageVariant>>,
+  TError = ErrorType<void>,
+>(
+  filename: string,
+  params?: GetBannerImageVariantParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getBannerImageVariant>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getGetBannerImageVariantQueryKey(filename, params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getBannerImageVariant>>
+  > = ({ signal }) =>
+    getBannerImageVariant(filename, params, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!filename,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getBannerImageVariant>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetBannerImageVariantQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getBannerImageVariant>>
+>;
+export type GetBannerImageVariantQueryError = ErrorType<void>;
+
+/**
+ * @summary Responsive WebP for a currently published banner image; original when width is absent
+ */
+
+export function useGetBannerImageVariant<
+  TData = Awaited<ReturnType<typeof getBannerImageVariant>>,
+  TError = ErrorType<void>,
+>(
+  filename: string,
+  params?: GetBannerImageVariantParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getBannerImageVariant>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetBannerImageVariantQueryOptions(
+    filename,
+    params,
+    options,
+  );
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
 
 /**
  * @summary Viewer-visible Community cards without CMS detail HTML

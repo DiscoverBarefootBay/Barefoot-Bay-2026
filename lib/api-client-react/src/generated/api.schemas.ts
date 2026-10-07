@@ -180,6 +180,24 @@ export interface HealthStatus {
   status: string;
 }
 
+export type GetBannerImageVariantParams = {
+  width?: GetBannerImageVariantWidth;
+  /**
+   * Required with width; current banner page ID and updated-at milliseconds separated by a hyphen
+   */
+  v?: string;
+};
+
+export type GetBannerImageVariantWidth =
+  (typeof GetBannerImageVariantWidth)[keyof typeof GetBannerImageVariantWidth];
+
+export const GetBannerImageVariantWidth = {
+  NUMBER_480: 480,
+  NUMBER_960: 960,
+  NUMBER_1440: 1440,
+  NUMBER_1920: 1920,
+} as const;
+
 export type GetCommunityDirectoryParams = {
   /**
    * @pattern ^[a-z0-9-]{1,100}$

@@ -13,6 +13,8 @@ import { shouldLoadBannerMedia } from "@/lib/banner-media-window";
 import { convertBannerSlidePaths, getEnvironmentAppropriateUrl } from "@/lib/media-path-utils";
 import { BannerVideo } from "./banner-video";
 import { BannerErrorBoundary } from "./banner-error-boundary";
+import { BannerResponsiveImage } from "./banner-responsive-image";
+import { BANNER_QUERY_KEY, bannerQueryKey, bannerImageSrcSet, readBannerSlides, useBannerSlides } from "@/hooks/use-banner-slides";
 
 // Local memory cache for direct manipulation
 const inMemoryMediaCache = new Map<string, string>();
@@ -92,13 +94,41 @@ export function CommunityShowcase() {
   
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
-  const [communityImages, setCommunityImages] = useState<BannerSlide[]>(defaultCommunityImages);
-  const [editingSlideIndex, setEditingSlideIndex] = useState<number | null>(null);
   const { user } = useAuth();
   const { isAdmin } = usePermissions();
+  const viewer = `${user?.id ?? "anonymous"}:${isAdmin ? "admin" : "public"}`;
+  const banner = useBannerSlides(viewer);
+  const [communityImages, setCommunityImages] = useState<BannerSlide[]>(() => banner.data?.slides ?? []);
+  const [seenData, setSeenData] = useState(banner.data);
+  if (seenData !== banner.data) {
+    setSeenData(banner.data);
+    setCommunityImages(banner.data?.slides ?? []);
+  }
+  const [editingSlideIndex, setEditingSlideIndex] = useState<number | null>(null);
   const { toast } = useToast();
   const [autoAdvanceEnabled, setAutoAdvanceEnabled] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const isLoading = banner.isPending;
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia("(max-width: 767px)").matches);
+  const [readySource, setReadySource] = useState<string | null>(null);
+  const [neighborsReady, setNeighborsReady] = useState(false);
+  const activeSource = communityImages[current]?.src;
+  const activeIdentity = `${activeSource}|${banner.data?.revision}`;
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 767px)");
+    const changed = () => setIsMobile(mql.matches);
+    mql.addEventListener("change", changed);
+    return () => mql.removeEventListener("change", changed);
+  }, []);
+  useEffect(() => {
+    setNeighborsReady(false);
+    // Videos don't report image readiness; keep their established preload path.
+    if (readySource !== activeIdentity && communityImages[current]?.mediaType !== "video") return;
+    const timer = setTimeout(() => setNeighborsReady(true), 150);
+    return () => clearTimeout(timer);
+  }, [activeIdentity, readySource, current, communityImages]);
+  useEffect(() => {
+    if (current >= communityImages.length) setCurrent(0);
+  }, [current, communityImages.length]);
   const [isSaving, setIsSaving] = useState(false);
 
   // Enhanced logging for mobile debugging - track state changes
@@ -161,45 +191,8 @@ export function CommunityShowcase() {
       // Save to backend
       await saveBannerSlidesToBackend(newSlides);
 
-      // Fetch fresh content from backend after saving to ensure consistency
-      try {
-        const response = await apiRequest("GET", "/api/pages/banner-slides");
-        if (response.ok) {
-          const data = await response.json();
-          if (data && data.content) {
-            const parsedSlides = JSON.parse(data.content);
-            if (Array.isArray(parsedSlides) && parsedSlides.length > 0) {
-              // Use fresh data from server
-              console.log("Using fresh banner slides data from server");
-              setCommunityImages(parsedSlides);
-              localStorage.setItem('communityBannerSlides', JSON.stringify(parsedSlides));
-            } else {
-              // Fall back to local updates
-              setCommunityImages(newSlides);
-              localStorage.setItem('communityBannerSlides', JSON.stringify(newSlides));
-            }
-          } else {
-            setCommunityImages(newSlides);
-            localStorage.setItem('communityBannerSlides', JSON.stringify(newSlides));
-          }
-        } else {
-          setCommunityImages(newSlides);
-          localStorage.setItem('communityBannerSlides', JSON.stringify(newSlides));
-        }
-      } catch (error) {
-        console.error("Error fetching fresh banner slides:", error);
-        setCommunityImages(newSlides);
-        localStorage.setItem('communityBannerSlides', JSON.stringify(newSlides));
-      }
-
-      // Force a cache refresh for the React Query cache
-      queryClient.invalidateQueries({ queryKey: ["/api/pages/banner-slides"] });
-      queryClient.refetchQueries({ queryKey: ["/api/pages/banner-slides"] });
-
-      toast({
-        title: "Success",
-        description: "Banner slide updated successfully",
-      });
+      // The shared save updates the query from a confirmed server read.
+      // The editor closes and reports success only after this promise resolves.
     } catch (error) {
       console.error("Error saving banner slide:", error);
       toast({
@@ -207,9 +200,9 @@ export function CommunityShowcase() {
         description: "Failed to save banner slide changes",
         variant: "destructive",
       });
+      throw error;
     } finally {
       setIsSaving(false);
-      setEditingSlideIndex(null);
     }
   };
 
@@ -260,13 +253,6 @@ export function CommunityShowcase() {
       // Update local state
       setCommunityImages(newSlides);
 
-      // Update localStorage
-      localStorage.setItem('communityBannerSlides', JSON.stringify(newSlides));
-
-      // Force a cache refresh for the React Query cache
-      queryClient.invalidateQueries({ queryKey: ["/api/pages/banner-slides"] });
-      queryClient.refetchQueries({ queryKey: ["/api/pages/banner-slides"] });
-
       toast({
         title: "Success",
         description: "Banner slide deleted successfully",
@@ -307,9 +293,6 @@ export function CommunityShowcase() {
       // Update local state
       setCommunityImages(newSlides);
 
-      // Update localStorage
-      localStorage.setItem('communityBannerSlides', JSON.stringify(newSlides));
-
       // Open the editor for the new slide
       setEditingSlideIndex(newSlides.length - 1);
 
@@ -324,6 +307,7 @@ export function CommunityShowcase() {
         description: "Failed to add new banner slide",
         variant: "destructive",
       });
+    } finally {
       setIsSaving(false);
     }
   };
@@ -347,9 +331,6 @@ export function CommunityShowcase() {
       // Update local state
       setCommunityImages(newSlides);
 
-      // Update localStorage
-      localStorage.setItem('communityBannerSlides', JSON.stringify(newSlides));
-
       // Update the editing index to match the new position
       setEditingSlideIndex(toIndex);
 
@@ -371,81 +352,27 @@ export function CommunityShowcase() {
 
   // Save slides to backend
   const saveBannerSlidesToBackend = async (slides: BannerSlide[]) => {
-    try {
-      // Normalize slides based on environment using our utility function
-      const normalizedSlides = convertBannerSlidePaths(slides);
-
-      // Always save to localStorage first for non-admin users
-      localStorage.setItem('communityBannerSlides', JSON.stringify(normalizedSlides));
-
-      // Only try API calls if the user is logged in and admin (to avoid 401 errors)
-      if (!user || !isAdmin) {
-        console.log("User not authenticated as admin, banner slide changes saved to localStorage only");
-        return { ok: true, status: 200 }; // Return a mock successful response
-      }
-
-      // First try to get the existing content
-      let existingContent;
-      try {
-        const getResponse = await apiRequest("GET", "/api/pages/banner-slides");
-        existingContent = await getResponse.json();
-      } catch (err) {
-        // Check if it's an auth error (401)
-        if (err && typeof err === 'object' && 'status' in err && err.status === 401) {
-          console.log("Not authorized to get banner slides, using localStorage only");
-          return { ok: true, status: 200 }; // Return a mock successful response
-        }
-        console.log("Banner slides content doesn't exist yet, will create new one");
-        existingContent = null;
-      }
-
-      const contentData = {
-        slug: "banner-slides",
-        title: "Homepage Banner Slides",
-        content: JSON.stringify(normalizedSlides)
-      };
-
-      let response;
-
-      if (existingContent && existingContent.id) {
-        // Update existing content with explicit versioning
-        console.log(`Updating existing banner slides content with ID: ${existingContent.id}`);
-
-        // Add a trigger for versioning in the payload
-        const updateData = {
-          ...contentData,
-          createVersion: true, // Signal to the backend that we want to create a version
-          versionNotes: "Banner slide update" // Optional notes for the version
-        };
-
-        response = await apiRequest("PATCH", `/api/pages/${existingContent.id}`, updateData);
-      } else {
-        // Create new content
-        console.log("Creating new banner slides content");
-        response = await apiRequest("POST", "/api/pages", contentData);
-      }
-
-      // Invalidate any cached queries for banner slides
-      queryClient.invalidateQueries({ queryKey: ["/api/pages/banner-slides"] });
-
-      // Also invalidate the content versions query
-      if (existingContent && existingContent.id) {
-        queryClient.invalidateQueries({ queryKey: ['content-versions', existingContent.id] });
-        queryClient.invalidateQueries({ queryKey: ['content-versions-by-slug', 'banner-slides'] });
-      }
-
-      return response;
-    } catch (error) {
-      // Check if it's an authentication error
-      if (error && typeof error === 'object' && 'status' in error && error.status === 401) {
-        console.log("Not authorized to save banner slides, using localStorage only");
-        return { ok: true, status: 200 }; // Return a mock successful response
-      }
-
-      // For other errors, log and rethrow
-      console.error("Error saving banner slides:", error);
-      throw error;
-    }
+    if (!user || !isAdmin) throw new Error("Administrator access is required to save banner slides.");
+    if (!banner.data || banner.isError) throw new Error("Reload the banner before saving.");
+    const normalizedSlides = convertBannerSlidePaths(slides);
+    const contentData = {
+      slug: "banner-slides", title: "Homepage Banner Slides",
+      content: JSON.stringify(normalizedSlides),
+      createVersion: true, versionNotes: "Banner slide update",
+    };
+    const id = banner.data.id;
+    const response = await apiRequest(id ? "PATCH" : "POST", id ? `/api/pages/${id}` : "/api/pages", contentData);
+    if (!response.ok) throw new Error("Banner changes were not saved.");
+    await queryClient.cancelQueries({ queryKey: [BANNER_QUERY_KEY] });
+    await queryClient.invalidateQueries({ queryKey: [BANNER_QUERY_KEY], refetchType: "none" });
+    // Drop inactive snapshots, including old public/hidden configurations.
+    queryClient.removeQueries({ queryKey: [BANNER_QUERY_KEY], type: "inactive" });
+    const fresh = await readBannerSlides();
+    queryClient.setQueryData(bannerQueryKey(viewer), fresh);
+    setCommunityImages(fresh.slides);
+    queryClient.invalidateQueries({ queryKey: ["content-versions-by-slug", "banner-slides"] });
+    if (id) queryClient.invalidateQueries({ queryKey: ["content-versions", id] });
+    return response;
   };
 
   // Default banner slides to use when none exist.
@@ -514,181 +441,11 @@ export function CommunityShowcase() {
     });
   };
 
-  // Load slides - first try from backend, then from localStorage, finally use defaults
-  useEffect(() => {
-    const fetchBannerContent = async () => {
-      console.log("🔍 [MOBILE DEBUG] Starting banner slide data fetch process");
-      setIsLoading(true);
-
-      try {
-        // First try to fetch from backend with cache-busting
-        console.log("🔍 [MOBILE DEBUG] Attempting to fetch from backend API: /api/pages/banner-slides");
-        const cacheBuster = `?t=${Date.now()}`;
-        const response = await apiRequest("GET", `/api/pages/banner-slides${cacheBuster}`);
-        console.log("🔍 [MOBILE DEBUG] API Response status:", response.status, "OK:", response.ok);
-
-        try {
-          const data = await response.json();
-          console.log("🔍 [MOBILE DEBUG] API Response data received:", data ? "YES" : "NO");
-          console.log("🔍 [MOBILE DEBUG] API Response data.content exists:", data?.content ? "YES" : "NO");
-
-          if (data && data.content) {
-            try {
-              const parsedContent = JSON.parse(data.content);
-              console.log("🔍 [MOBILE DEBUG] Parsed content type:", Array.isArray(parsedContent) ? "ARRAY" : typeof parsedContent);
-              console.log("🔍 [MOBILE DEBUG] Parsed content length:", Array.isArray(parsedContent) ? parsedContent.length : "N/A");
-              
-              if (Array.isArray(parsedContent) && parsedContent.length > 0) {
-                console.log("🔍 [MOBILE DEBUG] Backend slides data (first 3):", parsedContent.slice(0, 3).map(slide => ({
-                  src: slide.src,
-                  alt: slide.alt,
-                  caption: slide.caption
-                })));
-                
-                // Normalize URLs before setting the state
-                const normalizedSlides = normalizeSlideUrls(parsedContent);
-                console.log("🔍 [MOBILE DEBUG] Normalized slides count:", normalizedSlides.length);
-
-                // Save the normalized slides back to the database if they've changed
-                if (JSON.stringify(normalizedSlides) !== JSON.stringify(parsedContent)) {
-                  console.log("🔍 [MOBILE DEBUG] Updating banner slides with normalized URLs");
-                  saveBannerSlidesToBackend(normalizedSlides);
-                }
-
-                console.log("🔍 [MOBILE DEBUG] Setting community images from backend data");
-                setCommunityImages(normalizedSlides);
-                setIsLoading(false);
-                return;
-              } else {
-                console.log("🔍 [MOBILE DEBUG] Backend data invalid - not array or empty length");
-              }
-            } catch (error) {
-              console.error("🔍 [MOBILE DEBUG] Error parsing banner slides content:", error);
-            }
-          } else {
-            console.log("🔍 [MOBILE DEBUG] Backend response missing data or content field");
-          }
-        } catch (error) {
-          console.error("🔍 [MOBILE DEBUG] Error parsing JSON response:", error);
-        }
-
-        // If backend fetch fails, try localStorage
-        console.log("🔍 [MOBILE DEBUG] Backend fetch failed, trying localStorage fallback");
-        const savedSlides = localStorage.getItem('communityBannerSlides');
-        console.log("🔍 [MOBILE DEBUG] localStorage data exists:", savedSlides ? "YES" : "NO");
-        if (savedSlides) {
-          try {
-            const parsedSlides = JSON.parse(savedSlides);
-            console.log("🔍 [MOBILE DEBUG] localStorage parsed slides type:", Array.isArray(parsedSlides) ? "ARRAY" : typeof parsedSlides);
-            console.log("🔍 [MOBILE DEBUG] localStorage parsed slides length:", Array.isArray(parsedSlides) ? parsedSlides.length : "N/A");
-            
-            if (Array.isArray(parsedSlides) && parsedSlides.length > 0) {
-              console.log("🔍 [MOBILE DEBUG] localStorage slides data (first 3):", parsedSlides.slice(0, 3).map(slide => ({
-                src: slide.src,
-                alt: slide.alt,
-                caption: slide.caption
-              })));
-              
-              // Normalize URLs before setting the state
-              const normalizedSlides = normalizeSlideUrls(parsedSlides);
-              console.log("🔍 [MOBILE DEBUG] localStorage normalized slides count:", normalizedSlides.length);
-
-              // Update localStorage if necessary
-              if (JSON.stringify(normalizedSlides) !== JSON.stringify(parsedSlides)) {
-                console.log("🔍 [MOBILE DEBUG] Updating localStorage banner slides with normalized URLs");
-                localStorage.setItem('communityBannerSlides', JSON.stringify(normalizedSlides));
-              }
-
-              console.log("🔍 [MOBILE DEBUG] Setting community images from localStorage data");
-              setCommunityImages(normalizedSlides);
-              return;
-            } else {
-              console.log("🔍 [MOBILE DEBUG] localStorage data invalid - not array or empty length");
-            }
-          } catch (error) {
-            console.error("🔍 [MOBILE DEBUG] Error parsing saved banner slides:", error);
-          }
-        } else {
-          console.log("🔍 [MOBILE DEBUG] No localStorage data found");
-        }
-
-        // If both backend and localStorage fail, use defaults
-        console.log("Using default banner slides");
-        setCommunityImages(defaultBannerSlides);
-
-        // Save defaults to localStorage for next time
-        localStorage.setItem('communityBannerSlides', JSON.stringify(defaultBannerSlides));
-
-        // Also save to backend if admin - IMPORTANT: Create the content in the database
-        if (isAdmin) {
-          try {
-            console.log("Admin user detected, creating banner slides in database");
-            console.log("Default banner slides to save:", defaultBannerSlides);
-
-            const contentData = {
-              slug: "banner-slides",
-              title: "Homepage Banner Slides",
-              content: JSON.stringify(defaultBannerSlides)
-            };
-
-            console.log("Sending to backend:", contentData);
-
-            // Create new content directly
-            const response = await apiRequest("POST", "/api/pages", contentData);
-            console.log("API Response status:", response.status);
-
-            if (response.ok) {
-              console.log("Default banner slides saved to backend");
-
-              // Invalidate queries to ensure fresh data is fetched next time
-              queryClient.invalidateQueries({ queryKey: ["/api/pages/banner-slides"] });
-            } else {
-              const errorText = await response.text();
-              console.error("Failed to save banner slides:", errorText);
-            }
-          } catch (error) {
-            console.error("Failed to save default banner slides to backend:", error);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching banner slides:", error);
-
-        // Try localStorage as fallback
-        const savedSlides = localStorage.getItem('communityBannerSlides');
-        if (savedSlides) {
-          try {
-            const parsedSlides = JSON.parse(savedSlides);
-            if (Array.isArray(parsedSlides) && parsedSlides.length > 0) {
-              // Normalize URLs before setting the state
-              const normalizedSlides = normalizeSlideUrls(parsedSlides);
-
-              // Update localStorage if necessary
-              if (JSON.stringify(normalizedSlides) !== JSON.stringify(parsedSlides)) {
-                console.log("Updating localStorage banner slides with normalized URLs (fallback)");
-                localStorage.setItem('communityBannerSlides', JSON.stringify(normalizedSlides));
-              }
-
-              setCommunityImages(normalizedSlides);
-              return;
-            }
-          } catch (error) {
-            console.error("Error parsing saved banner slides:", error);
-          }
-        }
-
-        // If that still fails, use defaults
-        console.log("Using default banner slides after all other methods failed");
-        setCommunityImages(defaultBannerSlides);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchBannerContent();
-  }, [isAdmin]);
+  // Metadata is read by the bounded, viewer-scoped shared query above. No
+  // timestamp URLs, localStorage fallback, or writes during public reads.
 
   useEffect(() => {
-    if (!api) return;
+    if (!api || isMobile) return;
 
     const handleSelect = () => {
       const selectedIndex = api.selectedScrollSnap();
@@ -732,7 +489,7 @@ export function CommunityShowcase() {
         document.removeEventListener("visibilitychange", onVisibilityChange);
       }
     };
-  }, [api, autoAdvanceEnabled]);
+  }, [api, autoAdvanceEnabled, isMobile]);
 
   // When editing starts, pause auto-advance
   useEffect(() => {
@@ -751,16 +508,33 @@ export function CommunityShowcase() {
 
   if (isLoading) {
     return (
-      <div className="w-full min-h-[300px] flex items-center justify-center">
-        <Loader2 className="h-10 w-10 animate-spin text-primary" />
+      <div className="mx-4 min-h-[250px] md:min-h-[400px] rounded-xl bg-slate-100 flex items-center justify-center gap-2" role="status" data-testid="banner-loading">
+        <Loader2 className="h-5 w-5 motion-safe:animate-spin text-primary" aria-hidden="true" />
+        <span>Loading community banner…</span>
       </div>
     );
   }
 
+  if (banner.isError) {
+    return <div className="mx-4 min-h-[250px] md:min-h-[400px] rounded-xl bg-slate-100 flex flex-col items-center justify-center gap-3" role="alert" data-testid="banner-error">
+      <p>The community banner could not load.</p>
+      <Button onClick={() => banner.refetch()} disabled={banner.isFetching}>Try again</Button>
+    </div>;
+  }
+  if (!communityImages.length) {
+    return <div data-testid="banner-empty">
+      {isAdmin && <Button onClick={handleAddSlide} disabled={isSaving}>Add New Banner Slide</Button>}
+    </div>;
+  }
+
+  const loadMedia = (index: number) => index === current || (
+    neighborsReady && shouldLoadBannerMedia(index, current, communityImages.length)
+  );
+  const imageReady = () => setReadySource(activeIdentity);
   return (
-    <div className="w-full mx-auto px-4">
+    <div className="w-full mx-auto px-4" data-testid="community-banner">
       {/* Mobile-only direct carousel implementation with swipe navigation */}
-      <div className="md:hidden relative">
+      {isMobile && <div className="md:hidden relative">
         <div 
           className="relative overflow-hidden rounded-xl shadow-xl touch-pan-y"
           onTouchStart={(e) => {
@@ -794,25 +568,29 @@ export function CommunityShowcase() {
                   current === index ? 'opacity-100 z-10' : 'opacity-0 z-0'
                 }`}
               >
-                {!shouldLoadBannerMedia(index, current, communityImages.length) ? null : image.mediaType === 'video' ? (
+                {!loadMedia(index) ? null : image.mediaType === 'video' ? (
                   <div className="w-full h-full relative">
                     <BannerErrorBoundary>
                       <BannerVideo 
                         src={image.src}
                         currentSlide={current === index}
                         alt={image.alt}
+                         bgPosition={image.bgPosition}
                       />
                     </BannerErrorBoundary>
                   </div>
                 ) : (
                   <div className="w-full h-full relative">
-                    <img
+                    <BannerResponsiveImage
+                      key={`${image.src}:${banner.data?.revision}`}
                       src={image.src}
+                      srcSet={bannerImageSrcSet(image.src, banner.data?.revision ?? "")}
+                      sizes="calc(100vw - 32px)"
                       alt={image.alt || image.caption}
-                      className="w-full h-full object-cover"
-                      onLoad={() => {
-                        console.log(`🔍 [MOBILE DIRECT] Successfully loaded slide ${index}: ${image.src}`);
-                      }}
+                      bgPosition={image.bgPosition}
+                      active={current === index}
+                      priority={current === index}
+                      onReady={current === index ? imageReady : undefined}
                     />
                   </div>
                 )}
@@ -822,11 +600,11 @@ export function CommunityShowcase() {
                   </p>
                   {image.link && (
                     <a
-                      href={image.link.startsWith('http') ? image.link : `/${image.link}`}
+                      href={image.link === "custom" && image.customLink ? image.customLink : toRelativePath(image.link)}
                       className="px-6 py-3 bg-white/90 text-sm md:text-lg font-semibold rounded-lg hover:bg-coral hover:!text-white transition-colors duration-200 shadow-lg"
                       style={{ color: '#47759a' }}
-                      target={image.link.startsWith('http') ? '_blank' : '_self'}
-                      rel={image.link.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      target={(image.link === "custom" ? image.customLink ?? "" : image.link).startsWith('http') ? '_blank' : '_self'}
+                      rel={(image.link === "custom" ? image.customLink ?? "" : image.link).startsWith('http') ? 'noopener noreferrer' : undefined}
                     >
                       {image.buttonText || 'Learn More'}
                     </a>
@@ -856,10 +634,10 @@ export function CommunityShowcase() {
             ))}
           </div>
         </div>
-      </div>
+      </div>}
       
       {/* Desktop Embla Carousel */}
-      <Carousel 
+      {!isMobile && <Carousel
         className="relative hidden md:block"
         opts={{
           align: "start",
@@ -888,7 +666,7 @@ export function CommunityShowcase() {
                 <div className="relative md:aspect-[16/9] aspect-[4/3] max-h-[400px] md:min-h-[400px] min-h-[250px] w-full overflow-hidden">
 
                   
-                  {!shouldLoadBannerMedia(index, current, communityImages.length) ? null : image.mediaType === 'video' ? (
+                  {!loadMedia(index) ? null : image.mediaType === 'video' ? (
                     <div data-slide-index={index} className="absolute inset-0 flex items-center justify-center transform scale-110">
                       <BannerErrorBoundary className="w-full h-full">
                         <BannerVideo 
@@ -906,19 +684,16 @@ export function CommunityShowcase() {
                     </div>
                   ) : (
                     <div className="w-full h-full relative">
-                      <img
+                      <BannerResponsiveImage
+                        key={`${image.src}:${banner.data?.revision}`}
                         src={image.src}
+                        srcSet={bannerImageSrcSet(image.src, banner.data?.revision ?? "")}
+                        sizes="(min-width: 1280px) 1216px, calc(100vw - 64px)"
                         alt={image.alt || image.caption}
-                        className="w-full h-full object-cover"
-                        style={{
-                          objectPosition: image.bgPosition || 'center',
-                        }}
-                        onError={(e) => {
-                          console.log(`🔍 [BANNER DEBUG] Failed to load: ${image.src}`);
-                        }}
-                        onLoad={() => {
-                          console.log(`🔍 [BANNER DEBUG] Successfully loaded: ${image.src}`);
-                        }}
+                        bgPosition={image.bgPosition}
+                        active={current === index}
+                        priority={current === index}
+                        onReady={current === index ? imageReady : undefined}
                       />
                     </div>
                   )}
@@ -1039,10 +814,10 @@ export function CommunityShowcase() {
             />
           ))}
         </div>
-      </Carousel>
+       </Carousel>}
 
       {/* Banner Slide Editor */}
-      {editingSlideIndex !== null && (
+      {editingSlideIndex !== null && communityImages[editingSlideIndex] && (
         <BannerSlideEditor 
           slide={communityImages[editingSlideIndex]}
           index={editingSlideIndex}

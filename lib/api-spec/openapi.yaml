@@ -11,6 +11,33 @@ tags:
   - name: health
     description: Health operations
 paths:
+  /storage-proxy/BANNER/banner-slides/{filename}:
+    get:
+      operationId: getBannerImageVariant
+      summary: Responsive WebP for a currently published banner image; original when width is absent
+      parameters:
+        - in: path
+          name: filename
+          required: true
+          schema: { type: string }
+        - in: query
+          name: width
+          schema: { type: integer, enum: [480, 960, 1440, 1920] }
+        - in: query
+          name: v
+          description: Required with width; current banner page ID and updated-at milliseconds separated by a hyphen
+          schema: { type: string }
+      responses:
+        '200':
+          description: Responsive image bytes
+          content:
+            image/webp:
+              schema: { type: string, format: binary }
+        '302': { description: Original image route }
+        '304': { description: Current published variant is unchanged }
+        '400': { description: Invalid image width or filename }
+        '404': { description: Source is no longer in the published configuration or revision changed }
+        '503': { description: Variant unavailable; use the original source }
   /community-directory:
     get:
       operationId: getCommunityDirectory

@@ -11,6 +11,8 @@ export * from "./communityCardContentVisibility";
 export * from "./forumStory";
 export * from "./forumStoryContentVisibility";
 export * from "./forumStoryFeed";
+export * from "./getBannerImageVariantParams";
+export * from "./getBannerImageVariantWidth";
 export * from "./getCalendarMonthPreviews200";
 export * from "./getCalendarMonthPreviews200Days";
 export * from "./getCalendarMonthPreviews200DaysPreviewsItem";

@@ -8,6 +8,30 @@
 import * as zod from "zod";
 
 /**
+ * @summary Responsive WebP for a currently published banner image; original when width is absent
+ */
+export const GetBannerImageVariantParams = zod.object({
+  filename: zod.coerce.string(),
+});
+
+export const GetBannerImageVariantQueryParams = zod.object({
+  width: zod
+    .union([
+      zod.literal(480),
+      zod.literal(960),
+      zod.literal(1440),
+      zod.literal(1920),
+    ])
+    .optional(),
+  v: zod.coerce
+    .string()
+    .optional()
+    .describe(
+      "Required with width; current banner page ID and updated-at milliseconds separated by a hyphen",
+    ),
+});
+
+/**
  * @summary Viewer-visible Community cards without CMS detail HTML
  */
 export const getCommunityDirectoryQueryCategoryRegExp = new RegExp(

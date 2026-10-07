@@ -15,6 +15,7 @@ import fetch from 'node-fetch';
 import path from 'path';
 import fs from 'fs';
 import cors from 'cors';
+import { serveBannerImageVariant } from './banner-image-variants';
 
 const router = Router();
 
@@ -1183,7 +1184,7 @@ router.get('/api/storage-proxy/FORUM/forum/*filename', async (req: Request, res:
  * Special handler for BANNER bucket requests
  * Redirects to the working direct-banner endpoint
  */
-router.get('/BANNER/banner-slides/*filename', async (req: Request, res: Response) => {
+router.get('/BANNER/banner-slides/*filename', serveBannerImageVariant, async (req: Request, res: Response) => {
   try {
     const filename = Array.isArray(req.params.filename) ? req.params.filename.join('/') : (req.params.filename as string);
     console.log(`[StorageProxy] BANNER/banner-slides handler redirecting to direct-banner: ${filename}`);

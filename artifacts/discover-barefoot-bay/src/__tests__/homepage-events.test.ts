@@ -208,7 +208,9 @@ describe("homepage banner media budget", () => {
   });
   it("gates both image/video layouts and avoids preloading every image or timestamp remounts", () => {
     const showcase = readFileSync(new URL("../components/home/community-showcase.tsx", import.meta.url), "utf8");
-    assert.equal((showcase.match(/!shouldLoadBannerMedia\(index, current, communityImages\.length\)/g) ?? []).length, 2);
+    assert.equal((showcase.match(/!loadMedia\(index\)/g) ?? []).length, 2);
+    assert.match(showcase, /neighborsReady && shouldLoadBannerMedia\(index, current, communityImages\.length\)/);
+    assert.match(showcase, /index === current \|\|/);
     assert.doesNotMatch(showcase, /prefetchCriticalMedia|new Image|forceRerender|canvas\.toDataURL/);
     assert.match(showcase, /CarouselItem key=\{`\$\{index\}-\$\{image\.src\}`\}/);
     assert.match(showcase, /api\.scrollNext\(\)/);

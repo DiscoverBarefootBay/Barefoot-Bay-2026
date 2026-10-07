@@ -33,7 +33,7 @@ interface BannerSlideEditorProps {
   index: number;
   isOpen: boolean;
   onClose: () => void;
-  onSave: (index: number, updatedSlide: BannerSlide) => void;
+  onSave: (index: number, updatedSlide: BannerSlide) => Promise<void>;
   onDelete?: (index: number) => void;
   onAdd?: () => void;
   onReorder?: (fromIndex: number, toIndex: number) => void;
@@ -221,7 +221,7 @@ export function BannerSlideEditor({ slide, index, isOpen, onClose, onSave, onDel
       }
       
       // Save changes
-      onSave(index, finalSlideData);
+      await onSave(index, finalSlideData);
       
       toast({
         title: "Success",
