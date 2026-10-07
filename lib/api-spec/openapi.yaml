@@ -11,6 +11,64 @@ tags:
   - name: health
     description: Health operations
 paths:
+  /community-directory:
+    get:
+      operationId: getCommunityDirectory
+      summary: Viewer-visible Community cards without CMS detail HTML
+      parameters:
+        - in: query
+          name: category
+          required: true
+          schema: { type: string, pattern: '^[a-z0-9-]{1,100}$' }
+        - in: query
+          name: includeHidden
+          description: Only honored for an authenticated administrator.
+          schema: { type: boolean, default: false }
+      responses:
+        '200':
+          description: Private viewer-scoped card summaries
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/CommunityCard' }
+        '400': { description: Invalid category }
+        '500': { description: Unable to read Community pages }
+  /forum/stories:
+    get:
+      operationId: getForumStories
+      summary: Incremental published story summaries with revision protection
+      parameters:
+        - in: query
+          name: categoryId
+          schema: { type: integer, minimum: 1 }
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 50, default: 12 }
+        - in: query
+          name: offset
+          schema: { type: integer, minimum: 0, default: 0 }
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [newest_created, oldest_created, newest_comment, oldest_comment, newest_edited, oldest_edited]
+        - in: query
+          name: search
+          schema: { type: string, maxLength: 100 }
+        - in: query
+          name: revision
+          description: Revision returned by the preceding page; 409 requests a restart if ordering or membership changed.
+          schema: { type: string }
+      responses:
+        '200':
+          description: Private viewer-scoped story page
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ForumStoryFeed' }
+        '400': { description: Invalid pagination }
+        '409': { description: Feed changed; restart pagination }
+        '500': { description: Unable to read stories }
   /vendors/directory:
     get:
       operationId: getVendorDirectory
@@ -336,6 +394,54 @@ paths:
                 $ref: "#/components/schemas/HealthStatus"
 components:
   schemas:
+    CommunityCard:
+      type: object
+      required: [slug, title, description, image, href, isHidden, createdAt]
+      properties:
+        slug: { type: string }
+        title: { type: string }
+        description: { type: string }
+        image: { type: [string, 'null'] }
+        href: { type: string }
+        isHidden: { type: boolean }
+        createdAt: { type: [string, 'null'] }
+        contentVisibility:
+          type: object
+          properties:
+            removed: { type: boolean }
+            status: { type: string }
+    ForumStoryFeed:
+      type: object
+      required: [stories, total, hasMore, nextOffset, revision]
+      properties:
+        stories:
+          type: array
+          items: { $ref: '#/components/schemas/ForumStory' }
+        total: { type: integer }
+        hasMore: { type: boolean }
+        nextOffset: { type: integer }
+        revision: { type: string }
+    ForumStory:
+      type: object
+      required: [id, title, excerpt, image, categoryId, categoryName, isPinned, isEditoriallyUpdated, commentCount, isUnread, createdAt, updatedAt]
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        excerpt: { type: string }
+        image: { type: [string, 'null'] }
+        categoryId: { type: integer }
+        categoryName: { type: [string, 'null'] }
+        isPinned: { type: boolean }
+        isEditoriallyUpdated: { type: boolean }
+        commentCount: { type: integer }
+        isUnread: { type: boolean }
+        createdAt: { type: string }
+        updatedAt: { type: string }
+        contentVisibility:
+          type: object
+          properties:
+            removed: { type: boolean }
+            status: { type: string }
     MessageSubmission:
       type: object
       required: [content]

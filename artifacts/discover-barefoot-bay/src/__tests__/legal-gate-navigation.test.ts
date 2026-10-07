@@ -454,7 +454,9 @@ test("real legal gate keeps navigation and cached consent behind fresh, accessib
     assert.ok(content(), "the fresh accepted GET releases the staff account immediately");
     assert.equal(document.querySelector('[data-testid="legal-gate-verifying"]'), null);
     for (const endpoint of ["/api/vendors/unvisited", "/api/products/new-products-count", "/api/real-estate/new-listings-count", "/api/forum/unread-count"]) {
-      assert.ok(client.getQueryCache().find({ queryKey: [endpoint, 2], exact: true }),
+      const key = endpoint === "/api/forum/unread-count"
+        ? [endpoint, { userId: 2, role: "staff" }] : [endpoint, 2];
+      assert.ok(client.getQueryCache().find({ queryKey: key, exact: true }),
         `${endpoint} is isolated to the currently authorized account`);
     }
     assert.ok(client.getQueryCache().find({

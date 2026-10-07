@@ -1,5 +1,7 @@
 import { useState, useEffect, type CSSProperties } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useInfiniteQuery } from "@tanstack/react-query";
+import type { ForumStoryFeed as StoryFeedResponse, ForumStory as Story } from "@workspace/api-client-react";
+import { nextStoryPage, storyPageUrl, uniqueStories, type StoryPageParam } from "@/lib/story-pagination";
 import { Link, useLocation, useSearch } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -62,30 +64,6 @@ interface ForumDescription {
   content: string;
 }
 
-interface Story {
-  id: number;
-  title: string;
-  excerpt: string;
-  image: string | null;
-  categoryId: number;
-  categoryName: string | null;
-  isPinned: boolean;
-  isEditoriallyUpdated: boolean;
-  commentCount: number;
-  isUnread: boolean;
-  author?: { id: number; username: string; fullName?: string | null; avatarUrl?: string | null } | null;
-  createdAt: string;
-  updatedAt: string;
-  contentVisibility?: { removed?: boolean; status?: string };
-}
-
-interface StoryFeedResponse {
-  stories: Story[];
-  total: number;
-  hasMore: boolean;
-}
-
-const PAGE_SIZE = 12;
 
 type StoryView = "grid" | "dual" | "single";
 
@@ -271,7 +249,7 @@ function StoryCard({ story }: { story: Story }) {
 }
 
 export default function ForumPage() {
-  const { user } = useAuth();
+  const { user, effectiveRole } = useAuth();
   const { toast } = useToast();
   const { isAdmin, isModerator, canCreateTopic, canCreateTopicInCategory } = usePermissions();
   const [isEditingDescription, setIsEditingDescription] = useState(false);
@@ -288,7 +266,6 @@ export default function ForumPage() {
   const setSelectedCategoryId = (categoryId: number | null) => {
     navigate(categoryId ? `/forum?categoryId=${categoryId}` : "/forum");
   };
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [sortBy, setSortBy] = useState<string>("newest_created");
   const [storyView, setStoryView] = useState<StoryView>(loadStoredStoryView);
   // Text search: raw input updates instantly; debounced value drives the server query
@@ -311,27 +288,42 @@ export default function ForumPage() {
   };
 
   // Fetch categories (for filter chips)
-  const { data: categories, isLoading: categoriesLoading } = useQuery<ForumCategory[]>({
-    queryKey: ["/api/forum/categories"],
+  const { data: categories } = useQuery<ForumCategory[]>({
+    queryKey: ["/api/forum/categories", { userId: user?.id ?? null, role: effectiveRole }],
+    placeholderData: undefined,
   });
 
   // Fetch description
-  const { data: description, isLoading: descriptionLoading } = useQuery<ForumDescription>({
+  const { data: description } = useQuery<ForumDescription>({
     queryKey: ["/api/forum/description"],
   });
 
-  // Fetch story feed (paginated via limit; "Load More" grows the limit)
-  const searchParam = debouncedSearch ? `&search=${encodeURIComponent(debouncedSearch)}` : "";
-  const storiesQueryKey = selectedCategoryId
-    ? `/api/forum/stories?limit=${visibleCount}&categoryId=${selectedCategoryId}&sort=${sortBy}${searchParam}`
-    : `/api/forum/stories?limit=${visibleCount}&sort=${sortBy}${searchParam}`;
+  const storiesQueryKey = ["/api/forum/stories", {
+    categoryId: selectedCategoryId, sort: sortBy, search: debouncedSearch,
+    userId: user?.id ?? null, role: effectiveRole,
+  }] as const;
   const {
     data: feed,
     isLoading: storiesLoading,
     isFetching: storiesFetching,
     error: storiesError,
-  } = useQuery<StoryFeedResponse>({
-    queryKey: [storiesQueryKey],
+    fetchNextPage, hasNextPage, isFetchingNextPage, refetch: refetchStories,
+  } = useInfiniteQuery<StoryFeedResponse>({
+    queryKey: storiesQueryKey,
+    placeholderData: undefined,
+    initialPageParam: { offset: 0 },
+    queryFn: async ({ pageParam, signal }) => {
+      const res = await fetch(storyPageUrl(selectedCategoryId, sortBy, debouncedSearch, pageParam as StoryPageParam), {
+        credentials: "include", signal: AbortSignal.any([signal, AbortSignal.timeout(10000)]),
+      });
+      if (!res.ok) throw Object.assign(new Error("Unable to load stories"), { status: res.status });
+      const page = await res.json();
+      if (!page || !Array.isArray(page.stories) || typeof page.nextOffset !== "number" || typeof page.revision !== "string") {
+        throw new Error("Invalid story response");
+      }
+      return page;
+    },
+    getNextPageParam: nextStoryPage,
   });
 
   useEffect(() => {
@@ -340,10 +332,13 @@ export default function ForumPage() {
     }
   }, [description]);
 
-  // Reset pagination when the category filter, sort order, or search term changes
+  // Filters/identity each have a separate cache. If the server detects moving
+  // rows between pages, restart instead of quietly omitting or duplicating them.
   useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-  }, [selectedCategoryId, sortBy, debouncedSearch]);
+    if ((storiesError as any)?.status === 409) {
+      void queryClient.resetQueries({ queryKey: storiesQueryKey, exact: true });
+    }
+  }, [storiesError]);
 
   const updateDescriptionMutation = useMutation({
     mutationFn: (content: string) => {
@@ -428,11 +423,12 @@ export default function ForumPage() {
 
   // Error state takes precedence — after a failed fetch, feed stays null,
   // so checking it first would spin the loading animation forever.
-  if (storiesError) {
+  if (storiesError && !feed) {
     return (
       <div className="text-center py-8">
         <h2 className="text-2xl font-bold text-navy mb-2">Something went wrong</h2>
         <p className="text-navy/70">We couldn't load the latest stories. Please try again later.</p>
+        <Button variant="outline" onClick={() => void refetchStories()} className="mt-3">Try again</Button>
       </div>
     );
   }
@@ -441,7 +437,7 @@ export default function ForumPage() {
   // feed query while the real fetch is still in flight, which makes isLoading
   // report false. Treat a null/undefined feed as "still loading" so the empty
   // state can never flash before the first real response.
-  if (storiesLoading || feed == null || categoriesLoading || descriptionLoading) {
+  if (storiesLoading || feed == null) {
     return <ForumLoadingAnimation />;
   }
 
@@ -454,8 +450,8 @@ export default function ForumPage() {
     setIsEditingDescription(false);
   };
 
-  const stories = feed?.stories ?? [];
-  const hasMore = feed?.hasMore ?? false;
+  const stories = uniqueStories(feed.pages);
+  const hasMore = hasNextPage;
   const selectedCategory = selectedCategoryId
     ? (categories ?? []).find((c) => c.id === selectedCategoryId) ?? null
     : null;
@@ -864,15 +860,16 @@ export default function ForumPage() {
       )}
 
       {/* Load More */}
+      {storiesError && <p role="alert" className="text-center mt-4">We couldn't load more stories. Please try again.</p>}
       {hasMore && (
         <div className="flex justify-center mt-8 mb-4">
           <Button
             variant="outline"
-            onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+            onClick={() => void fetchNextPage()}
             disabled={storiesFetching}
             className="border-navy/20 hover:bg-coral/10 hover:text-coral hover:border-coral px-8"
           >
-            {storiesFetching ? (
+            {isFetchingNextPage ? (
               <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Loading…</>
             ) : (
               "Load More Stories"

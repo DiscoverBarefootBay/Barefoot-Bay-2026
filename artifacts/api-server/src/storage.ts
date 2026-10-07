@@ -1,5 +1,7 @@
 import { sql, eq, and, or, desc, asc, inArray, count, isNull, isNotNull, lt, gt, like } from "drizzle-orm";
 import { installLegalHoldGuards } from "./dmca/storage-guards";
+import { forumCountsQuery, forumUnreadStatusesQuery } from "./forum-counts";
+import { createHash } from "node:crypto";
 import { installServerOnlyFieldStripping } from "./dmca/server-only-fields";
 import { db, pool } from "./db";
 import session from "express-session";
@@ -272,7 +274,7 @@ export interface IStorage {
   getForumPosts(categoryId?: number): Promise<ForumPost[]>;
   getForumPostsWithReadState(categoryId: number, userId: number, sortBy?: string): Promise<ForumPost[]>;
   getForumPost(id: number): Promise<ForumPost | undefined>;
-  getForumStoryFeed(options: { categoryId?: number; limit?: number; offset?: number; userId?: number; sortBy?: string; search?: string }): Promise<{ stories: any[]; total: number; hasMore: boolean }>;
+  getForumStoryFeed(options: { categoryId?: number; limit?: number; offset?: number; userId?: number; sortBy?: string; search?: string; revision?: string }): Promise<{ stories: any[]; total: number; hasMore: boolean; nextOffset: number; revision: string }>;
   createForumPost(post: InsertForumPost): Promise<ForumPost>;
   updateForumPost(id: number, data: Partial<ForumPost>): Promise<ForumPost>;
   deleteForumPost(id: number): Promise<void>;
@@ -5636,80 +5638,26 @@ export class DatabaseStorage implements IStorage {
   
   // Forum Category Operations
   async getForumCategories(): Promise<ForumCategory[]> {
-    console.log("Getting all forum categories");
-    try {
-      // First, get all the categories
-      const categories = await db.select().from(forumCategories).orderBy(asc(forumCategories.order));
-      
-      // Then, for each category, count the number of posts
-      const categoriesWithCounts = await Promise.all(
-        categories.map(async (category) => {
-          // Count posts for this category
-          const postCountResult = await db.select({ 
-            count: count() 
-          })
-          .from(forumPosts)
-          .where(eq(forumPosts.categoryId, category.id));
-          
-          // Return the category with post count
-          return {
-            ...category,
-            postCount: postCountResult[0]?.count || 0
-          };
-        })
-      );
-      
-      console.log(`Retrieved ${categories.length} forum categories with post counts`);
-      return categoriesWithCounts;
-    } catch (error) {
-      console.error("Error retrieving forum categories:", error);
-      throw error;
-    }
+    const [categories, counts] = await Promise.all([
+      db.select().from(forumCategories).orderBy(asc(forumCategories.order)),
+      db.select({ categoryId: forumPosts.categoryId, postCount: count() })
+        .from(forumPosts).where(eq(forumPosts.visibilityStatus, "published"))
+        .groupBy(forumPosts.categoryId),
+    ]);
+    const byCategory = new Map(counts.map(c => [c.categoryId, c.postCount]));
+    return categories.map(c => ({ ...c, postCount: byCategory.get(c.id) ?? 0 }));
   }
 
   async getForumCategoriesWithUnreadCounts(userId: number): Promise<ForumCategory[]> {
-    console.log("Getting forum categories with unread counts for user:", userId);
-    try {
-      // First, get all the categories
-      const categories = await db.select().from(forumCategories).orderBy(asc(forumCategories.order));
-      
-      // Then, for each category, count posts and unread posts
-      const categoriesWithCounts = await Promise.all(
-        categories.map(async (category) => {
-          console.log(`Processing category ${category.name} (ID: ${category.id}) for user ${userId}`);
-          
-          // Count total posts for this category
-          const postCountResult = await db.select({ 
-            count: count() 
-          })
-          .from(forumPosts)
-          .where(eq(forumPosts.categoryId, category.id));
-          
-          const totalPosts = postCountResult[0]?.count || 0;
-          console.log(`Category ${category.name} has ${totalPosts} total posts`);
-          
-          // Get unread status for all posts in this category
-          const unreadStatuses = await this.getUnreadStatusForCategory(userId, category.id);
-          console.log(`Unread statuses for category ${category.name}:`, unreadStatuses);
-          
-          const unreadCount = unreadStatuses.filter(status => status.isUnread).length;
-          console.log(`Category ${category.name} has ${unreadCount} unread posts out of ${unreadStatuses.length} total posts`);
-          
-          // Return the category with post count and unread count
-          return {
-            ...category,
-            postCount: totalPosts,
-            unreadCount: unreadCount
-          };
-        })
-      );
-      
-      console.log(`Retrieved ${categories.length} forum categories with unread counts for user ${userId}`);
-      return categoriesWithCounts;
-    } catch (error) {
-      console.error("Error retrieving forum categories with unread counts:", error);
-      throw error;
-    }
+    const [categories, result] = await Promise.all([
+      db.select().from(forumCategories).orderBy(asc(forumCategories.order)),
+      db.execute(forumCountsQuery(userId)),
+    ]);
+    const byCategory = new Map(result.rows.map((r: any) => [r.categoryId, r]));
+    return categories.map(c => {
+      const counts = byCategory.get(c.id) as any;
+      return { ...c, postCount: counts?.postCount ?? 0, unreadCount: counts?.unreadCount ?? 0 };
+    });
   }
 
   async getForumCategory(id: number): Promise<ForumCategory | undefined> {
@@ -6191,7 +6139,7 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  async getForumStoryFeed(options: { categoryId?: number; limit?: number; offset?: number; userId?: number; sortBy?: string; search?: string }): Promise<{ stories: any[]; total: number; hasMore: boolean }> {
+  async getForumStoryFeed(options: { categoryId?: number; limit?: number; offset?: number; userId?: number; sortBy?: string; search?: string; revision?: string }): Promise<{ stories: any[]; total: number; hasMore: boolean; nextOffset: number; revision: string }> {
     const { categoryId, userId, sortBy } = options;
     const limit = Math.min(Math.max(options.limit ?? 12, 1), 50);
     const offset = Math.max(options.offset ?? 0, 0);
@@ -6225,7 +6173,12 @@ export class DatabaseStorage implements IStorage {
 
       // Server-side sorting so pagination ("Load More") stays correct across the whole feed.
       // Pinned posts stay first only for the default newest_created sort; other sorts follow the chosen order.
-      const latestCommentExpr = sql`(SELECT MAX(fc.created_at) FROM forum_comments fc WHERE fc.post_id = ${forumPosts.id})`;
+      const commentStats = db.select({
+        postId: forumComments.postId,
+        commentCount: sql<number>`COUNT(*)::int`.as("comment_count"),
+        latestCommentAt: sql<string | null>`MAX(${forumComments.createdAt})`.as("latest_comment_at"),
+      }).from(forumComments).groupBy(forumComments.postId).as("feed_comments");
+      const latestCommentExpr = commentStats.latestCommentAt;
       let orderClauses;
       switch (sortBy) {
         case 'oldest_created':
@@ -6249,10 +6202,22 @@ export class DatabaseStorage implements IStorage {
           break;
       }
 
-      const totalResult = await db.select({ count: count() })
-        .from(forumPosts)
-        .where(whereClause);
-      const total = totalResult[0]?.count || 0;
+      // A small metadata snapshot detects insertions, deletions, repins and
+      // comment/edit reordering between pages. Never silently skip a moved row.
+      orderClauses.push(desc(forumPosts.id));
+      const snapshot = await db.select({
+        id: forumPosts.id, updatedAt: forumPosts.updatedAt,
+        commentCount: commentStats.commentCount, latestCommentAt: commentStats.latestCommentAt,
+      }).from(forumPosts)
+        .leftJoin(commentStats, eq(commentStats.postId, forumPosts.id))
+        .where(whereClause).orderBy(...orderClauses);
+      const revision = createHash("sha256").update(JSON.stringify(snapshot)).digest("hex");
+      if (options.revision && options.revision !== revision) {
+        throw Object.assign(new Error("Stories changed; refresh the feed before loading more."), { status: 409 });
+      }
+      const total = snapshot.length;
+      const pageIds = snapshot.slice(offset, offset + limit).map(r => r.id);
+      if (!pageIds.length) return { stories: [], total, hasMore: false, nextOffset: offset, revision };
 
       const rows = await db.select({
         id: forumPosts.id,
@@ -6281,21 +6246,20 @@ export class DatabaseStorage implements IStorage {
           fullName: users.fullName,
           avatarUrl: users.avatarUrl
         },
-        commentCount: sql<number>`(SELECT COUNT(*)::int FROM forum_comments fc WHERE fc.post_id = ${forumPosts.id})`,
-        latestCommentAt: sql<string | null>`(SELECT MAX(fc.created_at) FROM forum_comments fc WHERE fc.post_id = ${forumPosts.id})`,
+        commentCount: commentStats.commentCount,
+        latestCommentAt: commentStats.latestCommentAt,
         lastReadAt: forumReadStates.lastReadAt
       })
       .from(forumPosts)
       .leftJoin(forumCategories, eq(forumPosts.categoryId, forumCategories.id))
       .leftJoin(users, eq(forumPosts.userId, users.id))
+      .leftJoin(commentStats, eq(commentStats.postId, forumPosts.id))
       .leftJoin(forumReadStates, and(
         eq(forumReadStates.postId, forumPosts.id),
         eq(forumReadStates.userId, userId ?? -1)
       ))
-      .where(whereClause)
-      .orderBy(...orderClauses)
-      .limit(limit)
-      .offset(offset);
+      .where(and(whereClause, inArray(forumPosts.id, pageIds)));
+      rows.sort((a, b) => pageIds.indexOf(a.id) - pageIds.indexOf(b.id));
 
       const stripHtml = (html: string): string =>
         html
@@ -6365,7 +6329,8 @@ export class DatabaseStorage implements IStorage {
         };
       });
 
-      return { stories, total, hasMore: offset + rows.length < total };
+      const nextOffset = offset + pageIds.length;
+      return { stories, total, hasMore: nextOffset < total, nextOffset, revision };
     } catch (error) {
       console.error("Error retrieving forum story feed:", error);
       throw error;
@@ -7000,25 +6965,8 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getUnreadStatusForCategory(userId: number, categoryId: number): Promise<Array<{ postId: number, isUnread: boolean }>> {
-    console.log("Getting unread status for category:", categoryId, "user:", userId);
-    try {
-      // Use the same comprehensive logic as getForumPostsWithReadState
-      const postsWithReadState = await this.getForumPostsWithReadState(categoryId, userId);
-      
-      // Extract just the unread status for each post
-      const unreadStatuses = postsWithReadState.map(post => ({
-        postId: post.id,
-        isUnread: post.isUnread || false
-      }));
-      
-      const unreadCount = unreadStatuses.filter(status => status.isUnread).length;
-      console.log(`Category ${categoryId} has ${unreadCount} unread posts out of ${postsWithReadState.length} total posts`);
-      
-      return unreadStatuses;
-    } catch (error) {
-      console.error("Error getting unread status for category:", error);
-      throw error;
-    }
+    const result = await db.execute(forumUnreadStatusesQuery(userId, categoryId));
+    return result.rows as Array<{ postId: number; isUnread: boolean }>;
   }
 
   async getUnreadCommentsCountForPost(postId: number, userId: number): Promise<number> {
@@ -7065,26 +7013,8 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getTotalForumUnreadCount(userId: number): Promise<number> {
-    console.log("Getting total forum unread count for user:", userId);
-    try {
-      // Get all forum categories
-      const categories = await this.getForumCategories();
-      
-      let totalUnreadCount = 0;
-      
-      // For each category, get unread posts count
-      for (const category of categories) {
-        const unreadStatuses = await this.getUnreadStatusForCategory(userId, category.id);
-        const unreadCount = unreadStatuses.filter(status => status.isUnread).length;
-        totalUnreadCount += unreadCount;
-      }
-      
-      console.log(`Total forum unread count for user ${userId}: ${totalUnreadCount}`);
-      return totalUnreadCount;
-    } catch (error) {
-      console.error("Error getting total forum unread count:", error);
-      return 0;
-    }
+    const result = await db.execute(forumCountsQuery(userId));
+    return result.rows.reduce((total, r: any) => total + r.unreadCount, 0);
   }
 
   // Forum subscription operations

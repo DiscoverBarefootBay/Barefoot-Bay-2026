@@ -5,6 +5,55 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+export type CommunityCardContentVisibility = {
+  removed?: boolean;
+  status?: string;
+};
+
+export interface CommunityCard {
+  slug: string;
+  title: string;
+  description: string;
+  /** @nullable */
+  image: string | null;
+  href: string;
+  isHidden: boolean;
+  /** @nullable */
+  createdAt: string | null;
+  contentVisibility?: CommunityCardContentVisibility;
+}
+
+export type ForumStoryContentVisibility = {
+  removed?: boolean;
+  status?: string;
+};
+
+export interface ForumStory {
+  id: number;
+  title: string;
+  excerpt: string;
+  /** @nullable */
+  image: string | null;
+  categoryId: number;
+  /** @nullable */
+  categoryName: string | null;
+  isPinned: boolean;
+  isEditoriallyUpdated: boolean;
+  commentCount: number;
+  isUnread: boolean;
+  createdAt: string;
+  updatedAt: string;
+  contentVisibility?: ForumStoryContentVisibility;
+}
+
+export interface ForumStoryFeed {
+  stories: ForumStory[];
+  total: number;
+  hasMore: boolean;
+  nextOffset: number;
+  revision: string;
+}
+
 export type MessageSubmissionSendEmail =
   (typeof MessageSubmissionSendEmail)[keyof typeof MessageSubmissionSendEmail];
 
@@ -130,6 +179,54 @@ export interface LegalConsentInput {
 export interface HealthStatus {
   status: string;
 }
+
+export type GetCommunityDirectoryParams = {
+  /**
+   * @pattern ^[a-z0-9-]{1,100}$
+   */
+  category: string;
+  /**
+   * Only honored for an authenticated administrator.
+   */
+  includeHidden?: boolean;
+};
+
+export type GetForumStoriesParams = {
+  /**
+   * @minimum 1
+   */
+  categoryId?: number;
+  /**
+   * @minimum 1
+   * @maximum 50
+   */
+  limit?: number;
+  /**
+   * @minimum 0
+   */
+  offset?: number;
+  sort?: GetForumStoriesSort;
+  /**
+   * @maxLength 100
+   */
+  search?: string;
+  /**
+   * Revision returned by the preceding page; 409 requests a restart if ordering or membership changed.
+   */
+  revision?: string;
+};
+
+export type GetForumStoriesSort =
+  (typeof GetForumStoriesSort)[keyof typeof GetForumStoriesSort];
+
+export const GetForumStoriesSort = {
+  newest_created: "newest_created",
+  oldest_created: "oldest_created",
+  newest_comment: "newest_comment",
+  oldest_comment: "oldest_comment",
+  newest_edited: "newest_edited",
+  oldest_edited: "oldest_edited",
+} as const;
 
 export type GetVendorDirectoryParams = {
   /**

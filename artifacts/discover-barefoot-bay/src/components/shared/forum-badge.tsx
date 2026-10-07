@@ -8,8 +8,8 @@ interface ForumBadgeProps {
 }
 
 export function ForumBadge({ inMobileMenu = false }: ForumBadgeProps) {
-  const { user } = useAuth();
-  const unreadKey = ["/api/forum/unread-count", user?.id ?? null] as const;
+  const { user, effectiveRole } = useAuth();
+  const unreadKey = ["/api/forum/unread-count", { userId: user?.id ?? null, role: effectiveRole }] as const;
   const queryClient = useQueryClient();
   const [showX, setShowX] = useState(false);
   const [isMarking, setIsMarking] = useState(false);
@@ -29,7 +29,8 @@ export function ForumBadge({ inMobileMenu = false }: ForumBadgeProps) {
   // Fetch total unread forum content count across all categories
   const { data: unreadData } = useQuery({
     queryKey: unreadKey,
-    enabled: !!user,
+    enabled: !!user && effectiveRole !== "guest",
+    placeholderData: undefined,
     refetchInterval: 30000, // Refresh every 30 seconds (less frequent than chat)
     staleTime: 10000, // Consider data stale after 10 seconds
     refetchOnWindowFocus: true,
@@ -62,7 +63,8 @@ export function ForumBadge({ inMobileMenu = false }: ForumBadgeProps) {
       if (response.ok) {
         // Invalidate and refetch forum-related queries in the background
         queryClient.invalidateQueries({ queryKey: ["/api/forum/unread-count"] });
-        queryClient.invalidateQueries({ queryKey: ["forum"] });
+        queryClient.invalidateQueries({ queryKey: ["/api/forum/stories"] });
+        queryClient.invalidateQueries({ queryKey: ["/api/forum/categories"] });
       } else {
         console.error("Failed to mark forum content as read");
         // Revert the optimistic update on error
@@ -96,7 +98,7 @@ export function ForumBadge({ inMobileMenu = false }: ForumBadgeProps) {
   };
 
   // Don't show if user is not logged in or no unread items
-  if (!user || unreadCount === 0) {
+  if (!user || effectiveRole === "guest" || unreadCount === 0) {
     return null;
   }
 

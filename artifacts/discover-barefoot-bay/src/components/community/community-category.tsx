@@ -2,22 +2,15 @@ import React, { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
 import { Skeleton } from '@/components/ui/skeleton';
-import type { PageContent } from '@shared/schema';
+import type { CommunityCard } from '@workspace/api-client-react';
+import { useAuth } from '@/hooks/use-auth';
 import { usePermissions } from '@/hooks/use-permissions';
 import {
   VendorBrowse,
-  vendorDescriptionSnippet,
-  vendorFirstImage,
   type VendorBrowseCategory,
   type VendorBrowseLabels,
   type VendorItem,
 } from '@/components/vendors/vendor-browse';
-import {
-  communityPageHref,
-  communityPageMatchesCategory,
-  communityPageName,
-  type CommunityPageLike,
-} from '@/components/community/community-page-links';
 
 interface CommunityCategoryPageProps {
   category: string;
@@ -54,23 +47,26 @@ function categoryRouteSegment(slug: string): string {
 
 export const CommunityCategoryPage: React.FC<CommunityCategoryPageProps> = ({ category }) => {
   const { isAdmin } = usePermissions();
+  const { user, effectiveRole } = useAuth();
   const [, navigate] = useLocation();
 
-  // Query for all pages to find pages in this community category
-  const { data: allPages, isLoading } = useQuery<PageContent[]>({
-    queryKey: ['/api/pages'],
-    queryFn: async () => {
-      // Fetch pages with includeHidden parameter for admins
-      const url = isAdmin ? '/api/pages?includeHidden=true' : '/api/pages';
-      const res = await fetch(url);
+  const { data: cards, isLoading, error, refetch } = useQuery<CommunityCard[]>({
+    queryKey: ['/api/community-directory', { category, userId: user?.id ?? null, role: effectiveRole }],
+    placeholderData: undefined,
+    queryFn: async ({ signal }) => {
+      const url = `/api/community-directory?category=${encodeURIComponent(category)}&includeHidden=${isAdmin}`;
+      const res = await fetch(url, { credentials: 'include', signal: AbortSignal.any([signal, AbortSignal.timeout(10000)]) });
       if (!res.ok) throw new Error('Failed to fetch pages');
-      return res.json();
+      const result = await res.json();
+      if (!Array.isArray(result)) throw new Error('Invalid Community directory response');
+      return result;
     },
   });
 
   // Community categories drive the category dropdown
   const { data: communityCategories } = useQuery<CommunityCategory[]>({
-    queryKey: ['/api/community-categories'],
+    queryKey: ['/api/community-categories', { userId: user?.id ?? null, role: effectiveRole }],
+    placeholderData: undefined,
   });
 
   // Dropdown options: one per community category, keyed by its URL segment
@@ -100,29 +96,17 @@ export const CommunityCategoryPage: React.FC<CommunityCategoryPageProps> = ({ ca
 
   // Map this category's pages to browse items
   const items = useMemo<VendorItem[]>(() => {
-    if (!Array.isArray(allPages)) return [];
-    return allPages
-      .filter(page => communityPageMatchesCategory(page as CommunityPageLike, category))
-      .map(page => {
-        const pageName = communityPageName(page.slug, category);
-        const title = page.title || titleCaseSlug(pageName);
-        return {
-          slug: page.slug,
-          title,
-          description: vendorDescriptionSnippet(page.content),
-          // Canonical community URL that round-trips GenericContentPage's
-          // slug derivation (the old /more/… links just redirect here)
-          href: communityPageHref(page.slug, category),
-          image: vendorFirstImage(page.content),
-          categorySlug: category,
-          categoryLabel,
-          isUnvisited: false,
-          isHidden: !!page.isHidden,
-          createdAt: page.createdAt ?? null,
-          contentVisibility: (page as any).contentVisibility,
-        };
-      });
-  }, [allPages, category, categoryLabel]);
+    return (cards ?? []).map(page => ({
+      ...page, categorySlug: category, categoryLabel, isUnvisited: false,
+    }));
+  }, [cards, category, categoryLabel]);
+
+  if (error) return (
+    <div role="alert" className="py-8 text-center">
+      <p>We couldn't load Community pages.</p>
+      <button onClick={() => void refetch()} className="mt-3 underline text-ocean">Try again</button>
+    </div>
+  );
 
   if (isLoading) {
     return (

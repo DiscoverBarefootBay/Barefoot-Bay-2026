@@ -17,8 +17,12 @@ import type {
 } from "@tanstack/react-query";
 
 import type {
+  CommunityCard,
+  ForumStoryFeed,
   GetCalendarMonthPreviews200,
   GetCalendarMonthPreviewsParams,
+  GetCommunityDirectoryParams,
+  GetForumStoriesParams,
   GetLegalHistoryParams,
   GetPageNavigation200Item,
   GetPageNavigationParams,
@@ -42,6 +46,200 @@ type AwaitedInput<T> = PromiseLike<T> | T;
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+/**
+ * @summary Viewer-visible Community cards without CMS detail HTML
+ */
+export const getGetCommunityDirectoryUrl = (
+  params: GetCommunityDirectoryParams,
+) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/community-directory?${stringifiedParams}`
+    : `/api/community-directory`;
+};
+
+export const getCommunityDirectory = async (
+  params: GetCommunityDirectoryParams,
+  options?: RequestInit,
+): Promise<CommunityCard[]> => {
+  return customFetch<CommunityCard[]>(getGetCommunityDirectoryUrl(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetCommunityDirectoryQueryKey = (
+  params?: GetCommunityDirectoryParams,
+) => {
+  return [`/api/community-directory`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetCommunityDirectoryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCommunityDirectory>>,
+  TError = ErrorType<void>,
+>(
+  params: GetCommunityDirectoryParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getCommunityDirectory>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetCommunityDirectoryQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getCommunityDirectory>>
+  > = ({ signal }) =>
+    getCommunityDirectory(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getCommunityDirectory>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetCommunityDirectoryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCommunityDirectory>>
+>;
+export type GetCommunityDirectoryQueryError = ErrorType<void>;
+
+/**
+ * @summary Viewer-visible Community cards without CMS detail HTML
+ */
+
+export function useGetCommunityDirectory<
+  TData = Awaited<ReturnType<typeof getCommunityDirectory>>,
+  TError = ErrorType<void>,
+>(
+  params: GetCommunityDirectoryParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getCommunityDirectory>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetCommunityDirectoryQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Incremental published story summaries with revision protection
+ */
+export const getGetForumStoriesUrl = (params?: GetForumStoriesParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/forum/stories?${stringifiedParams}`
+    : `/api/forum/stories`;
+};
+
+export const getForumStories = async (
+  params?: GetForumStoriesParams,
+  options?: RequestInit,
+): Promise<ForumStoryFeed> => {
+  return customFetch<ForumStoryFeed>(getGetForumStoriesUrl(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetForumStoriesQueryKey = (params?: GetForumStoriesParams) => {
+  return [`/api/forum/stories`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetForumStoriesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getForumStories>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetForumStoriesParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getForumStories>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetForumStoriesQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getForumStories>>> = ({
+    signal,
+  }) => getForumStories(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getForumStories>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetForumStoriesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getForumStories>>
+>;
+export type GetForumStoriesQueryError = ErrorType<void>;
+
+/**
+ * @summary Incremental published story summaries with revision protection
+ */
+
+export function useGetForumStories<
+  TData = Awaited<ReturnType<typeof getForumStories>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetForumStoriesParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getForumStories>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetForumStoriesQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
 
 /**
  * Guests may read published summaries only when the configured Vendors guest feature is enabled. Signed-in visibility remains viewer-scoped.

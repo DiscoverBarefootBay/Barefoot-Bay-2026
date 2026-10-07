@@ -8,6 +8,112 @@
 import * as zod from "zod";
 
 /**
+ * @summary Viewer-visible Community cards without CMS detail HTML
+ */
+export const getCommunityDirectoryQueryCategoryRegExp = new RegExp(
+  "^[a-z0-9-]{1,100}$",
+);
+export const getCommunityDirectoryQueryIncludeHiddenDefault = false;
+
+export const GetCommunityDirectoryQueryParams = zod.object({
+  category: zod.coerce.string().regex(getCommunityDirectoryQueryCategoryRegExp),
+  includeHidden: zod.coerce
+    .boolean()
+    .default(getCommunityDirectoryQueryIncludeHiddenDefault)
+    .describe("Only honored for an authenticated administrator."),
+});
+
+export const GetCommunityDirectoryResponseItem = zod.object({
+  slug: zod.string(),
+  title: zod.string(),
+  description: zod.string(),
+  image: zod.string().nullable(),
+  href: zod.string(),
+  isHidden: zod.boolean(),
+  createdAt: zod.string().nullable(),
+  contentVisibility: zod
+    .object({
+      removed: zod.boolean().optional(),
+      status: zod.string().optional(),
+    })
+    .optional(),
+});
+export const GetCommunityDirectoryResponse = zod.array(
+  GetCommunityDirectoryResponseItem,
+);
+
+/**
+ * @summary Incremental published story summaries with revision protection
+ */
+
+export const getForumStoriesQueryLimitDefault = 12;
+export const getForumStoriesQueryLimitMax = 50;
+
+export const getForumStoriesQueryOffsetDefault = 0;
+export const getForumStoriesQueryOffsetMin = 0;
+
+export const getForumStoriesQuerySearchMax = 100;
+
+export const GetForumStoriesQueryParams = zod.object({
+  categoryId: zod.coerce.number().min(1).optional(),
+  limit: zod.coerce
+    .number()
+    .min(1)
+    .max(getForumStoriesQueryLimitMax)
+    .default(getForumStoriesQueryLimitDefault),
+  offset: zod.coerce
+    .number()
+    .min(getForumStoriesQueryOffsetMin)
+    .default(getForumStoriesQueryOffsetDefault),
+  sort: zod
+    .enum([
+      "newest_created",
+      "oldest_created",
+      "newest_comment",
+      "oldest_comment",
+      "newest_edited",
+      "oldest_edited",
+    ])
+    .optional(),
+  search: zod.coerce.string().max(getForumStoriesQuerySearchMax).optional(),
+  revision: zod.coerce
+    .string()
+    .optional()
+    .describe(
+      "Revision returned by the preceding page; 409 requests a restart if ordering or membership changed.",
+    ),
+});
+
+export const GetForumStoriesResponse = zod.object({
+  stories: zod.array(
+    zod.object({
+      id: zod.number(),
+      title: zod.string(),
+      excerpt: zod.string(),
+      image: zod.string().nullable(),
+      categoryId: zod.number(),
+      categoryName: zod.string().nullable(),
+      isPinned: zod.boolean(),
+      isEditoriallyUpdated: zod.boolean(),
+      commentCount: zod.number(),
+      isUnread: zod.boolean(),
+      createdAt: zod.string(),
+      updatedAt: zod.string(),
+      contentVisibility: zod
+        .object({
+          removed: zod.boolean().optional(),
+          status: zod.string().optional(),
+        })
+        .optional(),
+    }),
+  ),
+  total: zod.number(),
+  hasMore: zod.boolean(),
+  nextOffset: zod.number(),
+  revision: zod.string(),
+});
+
+/**
  * Guests may read published summaries only when the configured Vendors guest feature is enabled. Signed-in visibility remains viewer-scoped.
  * @summary Viewer-visible vendor card summaries without CMS detail HTML
  */

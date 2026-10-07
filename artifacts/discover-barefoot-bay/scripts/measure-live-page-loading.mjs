@@ -57,10 +57,10 @@ try {
         : location.pathname==='/calendar' ? 'main [data-event-title],main .event-title,main a[href^="/events/"],[data-testid="status-calendar-empty"]'
         : location.pathname.startsWith('/vendors')||location.pathname.startsWith('/community')
           ? '[data-testid^="vendor-card-"],[data-testid^="vendor-banner-"],[data-testid^="community-card-"],[data-testid^="community-banner-"]'
-          : null;
+          : location.pathname.startsWith('/forum') ? '[data-testid="story-grid"] a' : null;
       if(window.__firstUsable===null&&selector&&document.querySelector(selector))window.__firstUsable=performance.now();
     }).observe(document,{childList:true,subtree:true});` });
-  for (const path of firstEntry ? ["/vendors"] : routes) {
+  for (const path of firstEntry ? [routeArg ? routes[0] : "/vendors"] : routes) {
     await send("Network.setCacheDisabled", { cacheDisabled: true });
     let since = 0;
     if (firstEntry) {

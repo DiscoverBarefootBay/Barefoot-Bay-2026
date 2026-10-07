@@ -13,7 +13,6 @@ import {
 import { filterByHiddenIndex, getViewerContext, resolveDetailForViewer, isContentIdPublic, canViewerSee, sendContentUnavailable, filterForViewer } from "../dmca/content-visibility";
 import { sendForumPostNotificationEmail, sendForumCommentNotificationEmail, groupNotifiedUsersByEmail } from "../sendgrid-service";
 import { LegalHoldError } from "../dmca/legal-hold";
-import { assertCanPermanentDelete, PermanentDeletePermissionError } from "../dmca/permanent-delete";
 
 console.log("🚨🚨🚨 FORUM MODULE LOADED - This proves TypeScript file is being executed! 🚨🚨🚨");
 
@@ -172,7 +171,7 @@ export function createForumRouter(storage: IStorage) {
     try {
       const categoryIdRaw = req.query.categoryId as string | undefined;
       const categoryId = categoryIdRaw ? parseInt(categoryIdRaw, 10) : undefined;
-      if (categoryIdRaw && isNaN(categoryId!)) {
+      if (categoryIdRaw && (!/^\d+$/.test(categoryIdRaw) || !Number.isSafeInteger(categoryId) || categoryId! < 1)) {
         return res.status(400).json({ message: "Invalid category ID" });
       }
 
@@ -180,7 +179,8 @@ export function createForumRouter(storage: IStorage) {
       const offsetRaw = req.query.offset as string | undefined;
       const limit = limitRaw ? parseInt(limitRaw, 10) : 12;
       const offset = offsetRaw ? parseInt(offsetRaw, 10) : 0;
-      if ((limitRaw && isNaN(limit)) || (offsetRaw && isNaN(offset))) {
+      if ((limitRaw && (!/^\d+$/.test(limitRaw) || !Number.isSafeInteger(limit) || limit < 1)) ||
+          (offsetRaw && (!/^\d+$/.test(offsetRaw) || !Number.isSafeInteger(offset)))) {
         return res.status(400).json({ message: "Invalid pagination parameters" });
       }
 
@@ -197,11 +197,14 @@ export function createForumRouter(storage: IStorage) {
         offset,
         userId: req.user?.id,
         sortBy,
-        search
+        search,
+        revision: typeof req.query.revision === "string" ? req.query.revision : undefined,
       });
 
+      res.setHeader("Cache-Control", "private, no-store");
       res.json(feed);
     } catch (error) {
+      if ((error as any).status === 409) return res.status(409).json({ message: (error as Error).message });
       console.error("Error fetching story feed:", error);
       res.status(500).json({ message: "Failed to fetch story feed" });
     }

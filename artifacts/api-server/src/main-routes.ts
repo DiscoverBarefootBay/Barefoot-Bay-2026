@@ -181,6 +181,7 @@ import calendarMediaMigration from './calendar-media-migration';
 import { calendarDiagnosticsRouter } from './routes/calendar-diagnostics';
 import { productionSyncRouter } from "./production-sync";
 import { createCommunityCategoryRouter } from "./routes/community-categories";
+import { readCommunityDirectory, projectCommunityCard } from "./community-directory";
 import { productionAuthRouter } from "./fix-production-auth";
 import storageBrowserRouter from './routes/storage-browser';
 import bannerSlideHelpersRouter from './routes/banner-slide-helpers';
@@ -10483,6 +10484,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Page content routes
+  app.get("/api/community-directory", async (req, res) => {
+    const category = req.query.category;
+    if (typeof category !== "string" || !/^[a-z0-9-]{1,100}$/.test(category)) {
+      return res.status(400).json({ message: "Invalid community category" });
+    }
+    try {
+      const includeHidden = req.user?.role === "admin" && req.query.includeHidden === "true";
+      const rows = await readCommunityDirectory(category, includeHidden);
+      const visible = filterForViewer(rows, await getViewerContext(req), (p: any) => p.updatedBy);
+      res.setHeader("Cache-Control", "private, no-store");
+      res.json(visible.map(p => projectCommunityCard({ ...p, content: fixContentMediaUrl(p.content ?? "") }, category)));
+    } catch (error) {
+      console.error("Unable to load Community directory", error);
+      res.status(500).json({ message: "Unable to load Community pages" });
+    }
+  });
   // Navbar needs identifiers/titles, never complete CMS HTML. Shared page-list
   // response remains unchanged for editors and detail/category consumers.
   app.get("/api/pages/navigation", async (req, res) => {
