@@ -54,6 +54,19 @@ export function useFlags() {
   // Fetch feature flags from the API
   const { data: flags, isLoading, isError } = useQuery({
     queryKey: ['/api/feature-flags'],
+    // A fabricated [] makes protected routes think the guest flag is denied
+    // before the real response arrives. Wait for authoritative access settings.
+    placeholderData: undefined,
+    queryFn: async ({ signal }) => {
+      const response = await fetch("/api/feature-flags", {
+        credentials: "include",
+        signal: AbortSignal.any([signal, AbortSignal.timeout(10_000)]),
+      });
+      if (!response.ok) throw new Error("Unable to check available features.");
+      const data = await response.json();
+      if (!Array.isArray(data)) throw new Error("Invalid feature settings response.");
+      return data;
+    },
     // Always fetch flags regardless of authentication status
     staleTime: 1000 * 60 * 5, // 5 minutes
   });

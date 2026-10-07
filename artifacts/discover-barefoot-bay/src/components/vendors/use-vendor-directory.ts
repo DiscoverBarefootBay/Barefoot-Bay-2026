@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
 import type { VendorItem, VendorBrowseCategory } from "./vendor-browse";
 import { vendorDirectoryKey } from "@/lib/vendor-directory-cache";
+import { requestVendorDirectory } from "@/lib/vendor-directory-request";
 
 export interface VendorDirectory {
   vendors: (Omit<VendorItem, "isUnvisited"> & { showInDirectory: boolean; showInCategory: boolean })[];
@@ -10,7 +11,7 @@ export interface VendorDirectory {
 }
 
 export function useVendorDirectory() {
-  const { user, effectiveRole } = useAuth();
+  const { user, effectiveRole, isLoading: accountLoading } = useAuth();
   const client = useQueryClient();
   const key = vendorDirectoryKey(user?.id ?? null, effectiveRole);
   useEffect(() => {
@@ -23,14 +24,10 @@ export function useVendorDirectory() {
   }, [client, user?.id, effectiveRole]);
   const directory = useQuery<VendorDirectory>({
     queryKey: key,
-    queryFn: async ({ signal }) => {
-      const res = await fetch(`/api/vendors/directory?includeHidden=${effectiveRole === "admin"}`, { credentials: "include", signal });
-      if (!res.ok) throw new Error("Unable to load vendors");
-      const data = await res.json();
-      if (!Array.isArray(data?.vendors) || !Array.isArray(data?.categories)) throw new Error("Invalid vendor directory response");
-      return data;
-    },
-    enabled: !!user,
+    queryFn: ({ signal }) => requestVendorDirectory(`/api/vendors/directory?includeHidden=${effectiveRole === "admin"}`, signal),
+    // Route admission and the server enforce guest permissions. Guests need the
+    // public directory too; only their private badges/visit writes stay disabled.
+    enabled: !accountLoading,
     placeholderData: undefined,
     staleTime: 60_000,
     gcTime: 5 * 60_000,
@@ -70,6 +67,6 @@ export function useVendorDirectory() {
     return (directory.data?.vendors ?? []).map(v => ({ ...v, isUnvisited: slugs.has(v.slug) }));
   }, [directory.data?.vendors, badge.data]);
   const items = useMemo(() => allItems.filter(v => v.showInDirectory), [allItems]);
-  return { data: directory.data, isError: directory.isError, isFetching: directory.isFetching,
+  return { data: directory.data, isError: directory.isError, error: directory.error, isFetching: directory.isFetching,
     refetch: directory.refetch, items, allItems, isAdmin: effectiveRole === "admin", badgeError: badge.isError };
 }

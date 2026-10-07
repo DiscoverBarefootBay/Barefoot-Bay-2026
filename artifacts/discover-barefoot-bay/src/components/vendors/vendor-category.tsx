@@ -20,7 +20,7 @@ export function VendorCategoryPage({ category }: { category: string }) {
   return <div className="space-y-4">
     <h2 className="text-lg font-bold text-navy capitalize">{label} Vendors</h2>
     {directory.isError && <div role="alert" data-testid="status-vendors-error">
-      <p>{directory.data ? "Unable to refresh vendors. The last loaded directory is still shown." : "Unable to load vendors. Please try again."}</p>
+      <p>{directory.data ? "Unable to refresh vendors. The last loaded directory is still shown." : directory.error?.message ?? "Unable to load vendors. Please try again."}</p>
       <Button data-testid="button-retry-vendors" onClick={() => directory.refetch()} disabled={directory.isFetching}>Try again</Button>
     </div>}
     {directory.data && <VendorBrowse deferOffscreenLayout vendors={items} categories={directory.data.categories}

@@ -9,6 +9,7 @@ import { existsSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { vendorDirectoryKey } from "../lib/vendor-directory-cache";
 
 test("real directory shows delayed loading, retry and true empty; refresh/account changes never flash privileged cards", async () => {
   const dir = await mkdtemp(path.join(process.cwd(), ".vendor-ui-test-"));
@@ -47,10 +48,14 @@ test("real directory shows delayed loading, retry and true empty; refresh/accoun
         import React from "react";
         import { QueryClientProvider } from "@tanstack/react-query";
         import { AllVendorsPage } from "@/components/vendors/all-vendors-page";
+        import { ProtectedRoute } from "@/lib/protected-route";
+        import { Router } from "wouter";
+        import { memoryLocation } from "wouter/memory-location";
         import { AuthContext } from "@/hooks/use-auth";
-        export default function Harness({client,user,role}) {
-          return <QueryClientProvider client={client}><AuthContext.Provider value={{user,effectiveRole:role}}>
-            <AllVendorsPage />
+        const location=memoryLocation({path:"/vendors"});
+        export default function Harness({client,user,role,guestAllowed=true}) {
+          return <QueryClientProvider client={client}><AuthContext.Provider value={{user,effectiveRole:role,isLoading:false,guestAllowed}}>
+            <Router hook={location.hook}><ProtectedRoute path="/vendors" component={AllVendorsPage} requiredFeature="VENDORS" /></Router>
           </AuthContext.Provider></QueryClientProvider>;
         }`,resolveDir:process.cwd(),sourcefile:"harness.tsx",loader:"tsx"},
       outfile,bundle:true,format:"esm",platform:"node",packages:"external",jsx:"automatic",
@@ -58,8 +63,11 @@ test("real directory shows delayed loading, retry and true empty; refresh/accoun
         b.onResolve({filter:/^react(?:\/.*)?$/},args=>({path:args.path,external:true}));
         b.onResolve({filter:/^@assets\//},()=>({path:"image",namespace:"test-assets"}));
         b.onLoad({filter:/.*/,namespace:"test-assets"},()=>({contents:'export default "/test-image.png";',loader:"js"}));
-        b.onResolve({filter:/^@\/hooks\/use-auth$/},()=>({path:"auth",namespace:"test"}));
-        b.onLoad({filter:/.*/,namespace:"test"},()=>({contents:'import {createContext,useContext} from "react";export const AuthContext=createContext(null);export const useAuth=()=>useContext(AuthContext);',loader:"js"}));
+        b.onResolve({filter:/^(?:@\/hooks\/use-auth|\.\.\/components\/providers\/auth-provider)$/},()=>({path:"auth",namespace:"test"}));
+        b.onResolve({filter:/^@\/hooks\/use-flags$/},()=>({path:"flags",namespace:"test"}));
+        b.onLoad({filter:/.*/,namespace:"test"},args=>({contents:args.path==="flags"
+          ? 'import {useAuth} from "@/hooks/use-auth";export const useFlags=()=>{const a=useAuth();return {isLoading:false,isFeatureEnabled:()=>!!a.user||a.guestAllowed};};'
+          : 'import {createContext,useContext} from "react";export const AuthContext=createContext(null);export const useAuth=()=>useContext(AuthContext);',loader:"js"}));
         b.onResolve({filter:/^@\//},args=>{
           const base=path.resolve(process.cwd(),"src",args.path.slice(2));
           return {path:[base,base+".tsx",base+".ts"].find(existsSync)??base};
@@ -69,8 +77,8 @@ test("real directory shows delayed loading, retry and true empty; refresh/accoun
     });
     const Harness=(await import(pathToFileURL(outfile).href)).default;
     root=createRoot(dom.window.document.getElementById("root")!);
-    const render=async(id:number,role="registered")=>{
-      await act(async()=>root!.render(createElement(Harness,{client,user:{id,role},role})));
+    const render=async(id:number|null,role="registered",guestAllowed=true)=>{
+      await act(async()=>root!.render(createElement(Harness,{client,user:id===null?null:{id,role},role,guestAllowed})));
       await tick();
     };
     await render(1);
@@ -102,6 +110,18 @@ test("real directory shows delayed loading, retry and true empty; refresh/accoun
     await settle(5,{message:"Unavailable"},503);
     assert.ok(text().includes("Unable to refresh vendors"));assert.ok(text().includes("Acme"));
     assert.ok(!text().includes("No vendors found"));
+    // The real route guard admits allowed guests; their directory must actually
+    // request public data rather than remain on a disabled-query skeleton.
+    await render(null,"guest");
+    assert.ok(skeleton());assert.ok(!text().includes("Acme"));
+    await settle(6,response([card("Public guest vendor")]));
+    assert.equal(skeleton(),null);assert.ok(text().includes("Public guest vendor"));
+    assert.equal(client.getQueryData(vendorDirectoryKey(2,"admin")),undefined);
+    const afterGuest=requests.length;
+    await render(null,"guest",false);
+    assert.equal(skeleton(),null);
+    assert.ok(!text().includes("Public guest vendor"));
+    assert.equal(requests.length,afterGuest,"denied guest route never mounts the directory");
   } finally {
     if(root)await act(async()=>root!.unmount());
     client.clear();dom.window.close();Object.assign(globalThis,prior);

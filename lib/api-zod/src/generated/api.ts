@@ -8,6 +8,7 @@
 import * as zod from "zod";
 
 /**
+ * Guests may read published summaries only when the configured Vendors guest feature is enabled. Signed-in visibility remains viewer-scoped.
  * @summary Viewer-visible vendor card summaries without CMS detail HTML
  */
 export const getVendorDirectoryQueryIncludeHiddenDefault = false;

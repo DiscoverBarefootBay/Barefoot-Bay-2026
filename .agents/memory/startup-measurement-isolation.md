@@ -17,3 +17,15 @@ time, not only navigation-to-content time.
 **Why:** Even without concurrent tests, the first preview sample after regeneration
 spent much longer before auth requests began than subsequent fresh-browser samples.
 Treating this as directory/network latency would misidentify the bottleneck.
+
+Validate content-timing selectors against the actual DOM before treating a missing
+timestamp as a stalled page. Keep a separate rendered-state or screenshot check.
+
+**Why:** Initial live probes reported no usable-content timestamp on fully rendered
+home/calendar pages because their selectors did not match the real event markup.
+The Vendors skeleton was a genuine stall, but the same null metric alone could
+not distinguish that from a faulty detector.
+
+**How to apply:** Establish a positive control for each route, restrict selectors
+to that route's content, and distinguish cold direct entry, first-ever in-app
+entry, and a return to an already cached page in performance reports.

@@ -1,3 +1,4 @@
+import { readSocialClubSummaries } from "./social-club-summary";
 console.log("🚨🚨🚨 MODULE LEVEL: server/routes.ts IS BEING LOADED! 🚨🚨🚨");
 
 import type { Express, Request, Response, NextFunction } from "express";
@@ -10645,15 +10646,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Public endpoint to get all social clubs for registration/profile selection
   app.get("/api/social-clubs", async (req, res) => {
     try {
-      const allPages = publicOnly(await storage.getAllPageContents(false));
-      const socialClubs = allPages
-        .filter(page => page.slug.startsWith('social-') && !page.isHidden)
-        .map(page => ({
-          id: page.id,
-          slug: page.slug,
-          title: page.title
-        }))
-        .sort((a, b) => a.title.localeCompare(b.title));
+      const socialClubs = await readSocialClubSummaries();
       
       res.json(socialClubs);
     } catch (err) {

@@ -17,12 +17,22 @@ import { GetVendorDirectoryResponse } from "@workspace/api-zod";
 export function createVendorRouter(storage: IStorage, readPages = readVendorDirectoryPages) {
   const router = Router();
 
-  router.get("/directory", requireAuth, async (req, res) => {
+  router.get("/directory", async (req, res) => {
     if (req.query.includeHidden !== undefined && !["true", "false"].includes(req.query.includeHidden as string)) {
       res.status(400).json({ message: "includeHidden must be true or false" });
       return;
     }
     try {
+      // The route guard uses nav-vendors in preference to vendors. Public
+      // summaries must honor that same guest policy, not require a session.
+      if (!req.isAuthenticated()) {
+        const flags = await storage.getFeatureFlags();
+        const flag = flags.find(f => f.name === "nav-vendors") ?? flags.find(f => f.name === "vendors");
+        if (!flag?.isActive || !flag.enabledForRoles.includes("guest")) {
+          res.status(401).json({ message: "Please sign in to view vendors." });
+          return;
+        }
+      }
       // View-as residents must not get an administrator's hidden directory.
       const includeHidden = req.user?.role === "admin" && req.query.includeHidden === "true";
       const started = performance.now();

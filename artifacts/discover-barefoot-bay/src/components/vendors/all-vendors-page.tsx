@@ -9,7 +9,7 @@ export function AllVendorsPage() {
   const directory = useVendorDirectory();
   if (!directory.data && !directory.isError) return <VendorsLoading />;
   const error = directory.isError && <div role="alert" data-testid="status-vendors-error" className="mb-4 rounded-lg border p-4">
-    <p>{directory.data ? "Unable to refresh vendors. The last loaded directory is still shown." : "Unable to load vendors. Please try again."}</p>
+    <p>{directory.data ? "Unable to refresh vendors. The last loaded directory is still shown." : directory.error?.message ?? "Unable to load vendors. Please try again."}</p>
     <Button data-testid="button-retry-vendors" disabled={directory.isFetching} onClick={() => directory.refetch()}>Try again</Button>
   </div>;
   return <div>

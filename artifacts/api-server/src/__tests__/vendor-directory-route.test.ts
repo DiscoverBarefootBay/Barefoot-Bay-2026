@@ -4,9 +4,11 @@ import express from "express";
 import { createVendorRouter } from "../routes/vendors";
 import type { IStorage } from "../storage";
 
-test("directory HTTP contract rejects anonymous callers, enforces hidden scope and fails explicitly", async () => {
+test("directory HTTP contract honors guest flags, enforces hidden scope and fails explicitly", async () => {
   const includes: boolean[] = [];
   let fail = false;
+  let guestAllowed = false;
+  let navActive = true;
   const rows = [
     {id:1,slug:"vendors-landscaping-public",title:"Public",content:'<p>Hello</p>',isHidden:false,visibilityStatus:"published"},
     {id:2,slug:"vendors-landscaping-hidden",title:"Admin hidden",content:"Private HTML",isHidden:true,visibilityStatus:"published"},
@@ -23,6 +25,10 @@ test("directory HTTP contract rejects anonymous callers, enforces hidden scope a
     next();
   });
   app.use("/api/vendors", createVendorRouter({
+    getFeatureFlags: async () => [
+      { name: "vendors", isActive: true, enabledForRoles: ["guest"] },
+      { name: "nav-vendors", isActive: navActive, enabledForRoles: guestAllowed ? ["guest"] : [] },
+    ],
     getVendorCategories: async () => [{slug:"landscaping",name:"Landscaping",isHidden:false}],
   } as unknown as IStorage, async includeHidden => {
     includes.push(includeHidden);
@@ -34,6 +40,15 @@ test("directory HTTP contract rejects anonymous callers, enforces hidden scope a
   const base = `http://127.0.0.1:${(server.address() as any).port}/api/vendors/directory`;
   try {
     assert.equal((await fetch(base)).status,401);
+    guestAllowed = true;
+    const guest = await fetch(`${base}?includeHidden=true`);
+    assert.equal(guest.status,200);
+    const publicBody = await guest.json();
+    assert.deepEqual(publicBody.vendors.map((v: any) => v.title),["Public"]);
+    assert.ok(!JSON.stringify(publicBody).includes("Must not leak"));
+    navActive = false;
+    assert.equal((await fetch(base)).status,401);
+    navActive = true;
     for (const role of ["registered","admin","owner"]) {
       const res = await fetch(`${base}?includeHidden=true`,{headers:{"x-test-role":role}});
       assert.equal(res.status,200);
@@ -44,7 +59,7 @@ test("directory HTTP contract rejects anonymous callers, enforces hidden scope a
       assert.ok(!JSON.stringify(body).includes("Must not leak") || role === "owner");
       assert.ok(!body.vendors.some((v:any)=>v.slug.endsWith("moderated")));
     }
-    assert.deepEqual(includes,[false,true,false]);
+    assert.deepEqual(includes,[false,false,true,false]);
     const viewAs = await fetch(`${base}?includeHidden=false`,{headers:{"x-test-role":"admin"}});
     assert.equal((await viewAs.json()).vendors.length,1);
     assert.equal((await fetch(`${base}?includeHidden=oops`,{headers:{"x-test-role":"admin"}})).status,400);
