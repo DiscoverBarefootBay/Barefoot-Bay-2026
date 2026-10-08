@@ -21,6 +21,7 @@ import { ShareButton } from "@/components/shared/share-button";
 import { DisclaimerLink } from "@/components/shared/filter-sort-drawer";
 import type { DetailsDisclosureState } from "@/lib/details-disclosure-state";
 import { RemovedContentNotice } from "@/components/dmca/removed-content-notice";
+import { invalidateCommunityPages } from "@/lib/community-page-freshness";
 
 // Need to include RouteComponentProps to properly handle wouter route params
 import { RouteComponentProps } from "wouter";
@@ -520,7 +521,7 @@ export default function GenericContentPage(props: GenericContentPageProps) {
 
               // Only force a refetch if it's explicitly requested and not editing
               if (event.detail.forceRefetch !== false && !isEditing) {
-                queryClient.invalidateQueries({ queryKey: ["/api/pages", derivedSlug] });
+                void invalidateCommunityPages(queryClient);
                 refetch();
               }
             }
@@ -664,7 +665,7 @@ export default function GenericContentPage(props: GenericContentPageProps) {
 
           // Always force a refetch after cache update to ensure fresh content
           console.log(`🔄 [GenericContentPage] Invalidating cache and refetching for "${derivedSlug}"`);
-          queryClient.invalidateQueries({ queryKey: ["/api/pages", derivedSlug] });
+          void invalidateCommunityPages(queryClient);
           refetch().finally(() => {
             // Reset the refreshing flag when done
             setTimeout(() => setIsSpecialPageRefreshing(false), 300);
@@ -677,7 +678,7 @@ export default function GenericContentPage(props: GenericContentPageProps) {
           console.log(`🌿 [GenericContentPage] On a /${urlParts[0]}/${slugCategory} route, checking for category match`);
 
           // We need to update the navigation menus since they show all pages in this category
-          queryClient.invalidateQueries({ queryKey: ["/api/pages"] });
+          void invalidateCommunityPages(queryClient);
 
           // If we're showing the exact page being updated
           if (urlParts.length > 2) {
@@ -697,7 +698,7 @@ export default function GenericContentPage(props: GenericContentPageProps) {
               }
 
               // Force a refetch to ensure fresh content
-              queryClient.invalidateQueries({ queryKey: ["/api/pages", currentPageSlug] });
+              void invalidateCommunityPages(queryClient);
               refetch().finally(() => {
                 // Reset the refreshing flag when done
                 setTimeout(() => setIsSpecialPageRefreshing(false), 300);
@@ -827,7 +828,7 @@ export default function GenericContentPage(props: GenericContentPageProps) {
       });
 
       // Step 2: Invalidate current query to force fresh fetch
-      queryClient.invalidateQueries({ queryKey: ["/api/pages", derivedSlug] });
+      void invalidateCommunityPages(queryClient);
       
       // Step 3: Force immediate refetch with cache bypassing
       refetch();
@@ -844,7 +845,7 @@ export default function GenericContentPage(props: GenericContentPageProps) {
       // REMOVED: persistedVendorContent fallback - relying on React Query cache
 
       // Only invalidate the specific slug query, not all page queries
-      queryClient.invalidateQueries({ queryKey: ["/api/pages", derivedSlug] });
+      void invalidateCommunityPages(queryClient);
 
       // Finally, trigger the refetch to get the latest data
       refetch();

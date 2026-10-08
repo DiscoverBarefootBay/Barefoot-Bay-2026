@@ -36,6 +36,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import { DmcaApiError, DmcaPerm, dmcaFetch, useDmcaMe } from "@/lib/dmca-admin";
+import { invalidateCommunityPages } from "@/lib/community-page-freshness";
 
 export type ModeratedContentType =
   | "forum_post"
@@ -183,6 +184,7 @@ export function ContentModerationMenu({
         body: { hidden: !isModerationHidden, reason: reason.trim() },
       });
       await queryClient.invalidateQueries({ queryKey: ["dmca-content-status", contentType, String(contentId)] });
+      if (contentType === "page") await invalidateCommunityPages(queryClient);
       toast({ title: isModerationHidden ? "Content unhidden" : "Content hidden" });
       resetAndClose();
     } catch (error) {

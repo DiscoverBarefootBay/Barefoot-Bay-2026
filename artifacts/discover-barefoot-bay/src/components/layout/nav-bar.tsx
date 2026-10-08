@@ -56,6 +56,7 @@ import { MobileMenu } from "./mobile-menu";
 import { useCopyrightActivity } from "@/hooks/use-copyright-activity";
 import { useUnreadMessages } from "@/hooks/use-unread-messages";
 import { unreadQueryKey } from "@/lib/message-unread";
+import { socialClubOptions } from "@/lib/social-clubs";
 import { 
   FaHome, FaBriefcase, FaLeaf, FaStore, FaUtensils, FaCar, FaWrench, 
   FaHammer, FaPaintBrush, FaShoppingCart, FaWater, FaSwimmingPool,
@@ -321,9 +322,8 @@ function NavigationContent({ accountPending }: { accountPending: boolean }) {
   // with `social-`) for the dedicated Social Clubs nav tab. The endpoint
   // already returns the list sorted alphabetically by title.
   const { data: loadedSocialClubs, isLoading: isLoadingSocialClubs } = useQuery({
-    queryKey: ['/api/social-clubs', { userId: user?.id ?? null, role: effectiveRole }],
+    ...socialClubOptions(user?.id ?? null, effectiveRole),
     enabled: !accountPending,
-    staleTime: 1000 * 60 * 5, // 5 minutes
     select: (data: any) => {
       if (!Array.isArray(data)) {
         console.error("Expected social clubs data to be an array, but got:", typeof data);

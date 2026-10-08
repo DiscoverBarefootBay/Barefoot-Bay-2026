@@ -1,4 +1,6 @@
-import { readSocialClubSummaries } from "./social-club-summary";
+import { readSocialClubIdentities, readSocialClubSummaries } from "./social-club-summary";
+import { LEGACY_CLUB_SLUG, withoutLegacyClubAlias } from "./social-club-alias";
+import { createSocialClubLinkHandler } from "./social-club-link";
 console.log("🚨🚨🚨 MODULE LEVEL: server/routes.ts IS BEING LOADED! 🚨🚨🚨");
 
 import type { Express, Request, Response, NextFunction } from "express";
@@ -10512,7 +10514,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         WHERE slug NOT LIKE 'vendors-%' AND (${includeHidden} OR is_hidden = false)
         ORDER BY slug, "order", updated_at DESC, id DESC
       `);
-      const visible = filterForViewer(result.rows as any[], await getViewerContext(req), p => p.updatedBy);
+      let visible = filterForViewer(result.rows as any[], await getViewerContext(req), p => p.updatedBy);
+      if (visible.some(p => p.slug === LEGACY_CLUB_SLUG)) {
+        visible = withoutLegacyClubAlias(visible, await readSocialClubIdentities());
+      }
       res.setHeader("Cache-Control", "private, no-store");
       res.json(visible.map(({ id, slug, title, category, order, isHidden }) => ({ id, slug, title, category, order, isHidden })));
     } catch (err) {
@@ -10537,6 +10542,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       let contents = await storage.getAllPageContents(includeHidden);
       contents = filterForViewer(contents, await getViewerContext(req), (p: any) => p.updatedBy ?? p.updated_by);
+      if (!isAdmin && contents.some(p => p.slug === LEGACY_CLUB_SLUG)) {
+        contents = withoutLegacyClubAlias(contents, await readSocialClubIdentities());
+      }
       
       // Handle type filtering for vendor pages
       const typeFilter = req.query.type as string;
@@ -10665,6 +10673,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const socialClubs = await readSocialClubSummaries();
       
+      res.setHeader("Cache-Control", "private, no-store");
       res.json(socialClubs);
     } catch (err) {
       console.error("Error fetching social clubs:", err);
@@ -10702,7 +10711,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  app.get("/api/pages/:slug", async (req, res) => {
+  app.get("/api/pages/:slug", createSocialClubLinkHandler(), async (req, res) => {
     try {
       // DMCA/moderation visibility applies to every response path below.
       await enforceVisibilityOnJson(req, res, (p: any) => p.updatedBy ?? p.updated_by, "Page");

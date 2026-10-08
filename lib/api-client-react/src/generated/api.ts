@@ -27,6 +27,7 @@ import type {
   GetLegalHistoryParams,
   GetPageNavigation200Item,
   GetPageNavigationParams,
+  GetSocialClubs200Item,
   GetVendorDirectory200,
   GetVendorDirectoryParams,
   HealthStatus,
@@ -47,6 +48,81 @@ type AwaitedInput<T> = PromiseLike<T> | T;
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+/**
+ * @summary Published club choices; the confirmed legacy Golf Cart Club record is an alias, not a second club
+ */
+export const getGetSocialClubsUrl = () => {
+  return `/api/social-clubs`;
+};
+
+export const getSocialClubs = async (
+  options?: RequestInit,
+): Promise<GetSocialClubs200Item[]> => {
+  return customFetch<GetSocialClubs200Item[]>(getGetSocialClubsUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetSocialClubsQueryKey = () => {
+  return [`/api/social-clubs`] as const;
+};
+
+export const getGetSocialClubsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSocialClubs>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getSocialClubs>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetSocialClubsQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSocialClubs>>> = ({
+    signal,
+  }) => getSocialClubs({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getSocialClubs>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetSocialClubsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSocialClubs>>
+>;
+export type GetSocialClubsQueryError = ErrorType<void>;
+
+/**
+ * @summary Published club choices; the confirmed legacy Golf Cart Club record is an alias, not a second club
+ */
+
+export function useGetSocialClubs<
+  TData = Awaited<ReturnType<typeof getSocialClubs>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getSocialClubs>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSocialClubsQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
 
 /**
  * @summary Responsive WebP for a currently published banner image; original when width is absent

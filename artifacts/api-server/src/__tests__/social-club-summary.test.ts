@@ -16,7 +16,8 @@ test("social club choices select only public metadata and preserve duplicate pre
   } } as any);
   assert.deepEqual(result, [{ id: 2, slug: "social-a", title: "A Club" }, { id: 1, slug: "social-z", title: "Z Club" }]);
   assert.match(statement, /DISTINCT ON \(slug\)/);
-  assert.match(statement, /slug LIKE 'social-%' AND is_hidden = false/);
+  assert.match(statement, /slug LIKE 'social-%'/);
+  assert.ok(!statement.includes("AND is_hidden = false"), "visibility must follow authoritative-row selection");
   assert.match(statement, /ORDER BY slug, "order", updated_at DESC, id DESC/);
   assert.ok(!statement.includes("content,"));
   assert.ok(!statement.includes("visibility_status ="), "do not filter takedowns before deduplication");

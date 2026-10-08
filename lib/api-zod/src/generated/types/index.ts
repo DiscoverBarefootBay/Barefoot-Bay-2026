@@ -27,6 +27,7 @@ export * from "./getLegalHistoryParams";
 export * from "./getLegalHistoryPolicyKey";
 export * from "./getPageNavigation200Item";
 export * from "./getPageNavigationParams";
+export * from "./getSocialClubs200Item";
 export * from "./getVendorDirectory200";
 export * from "./getVendorDirectory200CategoriesItem";
 export * from "./getVendorDirectory200VendorsItem";

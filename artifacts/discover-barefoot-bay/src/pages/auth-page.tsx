@@ -20,6 +20,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { useLegalPolicies } from "@/hooks/use-legal";
+import { socialClubOptions, clubMembershipSelected, toggleClubMembership } from "@/lib/social-clubs";
 import { PolicyDocument } from "@/components/legal/policy-document";
 import {
   LEGAL_POLICY_KEYS,
@@ -220,9 +221,7 @@ export default function AuthPage() {
   }, [legalSignature]);
 
   // Fetch social clubs for club membership selection
-  const { data: socialClubs } = useQuery<{ id: number; slug: string; title: string }[]>({
-    queryKey: ['/api/social-clubs']
-  });
+  const { data: socialClubs } = useQuery(socialClubOptions());
 
   // Track selected club memberships
   const [selectedClubs, setSelectedClubs] = useState<string[]>([]);
@@ -1113,12 +1112,12 @@ export default function AuthPage() {
                                 >
                                   <Checkbox
                                     id={`club-${club.slug}`}
-                                    checked={selectedClubs.includes(club.slug)}
+                                    checked={clubMembershipSelected(club, selectedClubs)}
                                     onCheckedChange={(checked) => {
                                       if (checked) {
-                                        setSelectedClubs([...selectedClubs, club.slug]);
+                                        setSelectedClubs(toggleClubMembership(club, selectedClubs, true));
                                       } else {
-                                        setSelectedClubs(selectedClubs.filter(s => s !== club.slug));
+                                        setSelectedClubs(toggleClubMembership(club, selectedClubs, false));
                                       }
                                     }}
                                   />

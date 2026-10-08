@@ -34,3 +34,4 @@
 - [Source capture reliability](source-capture-reliability.md) — validate complete source when making isolated browser baselines; shell-captured output was incomplete despite a false truncation flag.
 - [Navigation overlay safeguards](navigation-overlay-safeguards.md) — retain consent ownership when fixing layering; DOM presence alone misses menus covered by page content.
 - [Forum unread compatibility](forum-read-semantics.md) — badge ID markers and card timestamps are intentionally distinct; incremental feeds must handle concurrent reordering.
+- [Legacy club addresses](legacy-club-addresses.md) — generic club addresses collide across unrelated clubs and environments; preserve historical content and saved preferences.

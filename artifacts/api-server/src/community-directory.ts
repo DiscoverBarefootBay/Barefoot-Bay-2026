@@ -1,5 +1,7 @@
 import { sql } from "drizzle-orm";
 import { db } from "./db";
+import { readSocialClubIdentities } from "./social-club-summary";
+import { withoutLegacyClubAlias } from "./social-club-alias";
 
 export function communityDirectoryQuery(category: string, includeHidden: boolean) {
   const prefix = `${category.replace(/[%_\\]/g, "\\$&")}-%`;
@@ -22,7 +24,19 @@ export function communityDirectoryQuery(category: string, includeHidden: boolean
 }
 
 export async function readCommunityDirectory(category: string, includeHidden: boolean) {
-  return (await db.execute(communityDirectoryQuery(category, includeHidden))).rows;
+  const rows = (await db.execute(communityDirectoryQuery(category, includeHidden))).rows;
+  if (category === "social") {
+    const identities = await readSocialClubIdentities();
+    const authoritative = new Map(identities.map(p => [p.slug, p]));
+    // The generic directory loader skips manually hidden rows before grouping.
+    // For clubs, do not let that expose an older copy of a hidden current row.
+    const current = includeHidden ? rows as any[] : (rows as any[]).filter(p => {
+      const identity = authoritative.get(p.slug);
+      return !identity || identity.id === p.id;
+    });
+    return withoutLegacyClubAlias(current, identities);
+  }
+  return rows;
 }
 
 export function projectCommunityCard(page: any, category: string) {

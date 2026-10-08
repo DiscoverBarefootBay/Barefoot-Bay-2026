@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { useCopyrightActivity } from "@/hooks/use-copyright-activity";
 import { useUnreadMessages } from "@/hooks/use-unread-messages";
+import { socialClubOptions } from "@/lib/social-clubs";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -99,9 +100,8 @@ export function MobileMenu({ isOpen, onClose, isAdmin, accountPending = false }:
   // tab. Mirrors the desktop nav-bar query so both surfaces show the same
   // alphabetised, non-hidden list returned by /api/social-clubs.
   const { data: loadedSocialClubs, isLoading: isLoadingSocialClubs } = useQuery({
-    queryKey: ['/api/social-clubs', { userId: user?.id ?? null, role: effectiveRole }],
+    ...socialClubOptions(user?.id ?? null, effectiveRole),
     enabled: !accountPending,
-    staleTime: 1000 * 60 * 5, // 5 minutes
     select: (data: any) => {
       if (!Array.isArray(data)) {
         console.error("Expected social clubs data to be an array, but got:", typeof data);

@@ -76,6 +76,7 @@ import { GenericPageLoading } from "@/components/shared/generic-page-loading";
 import { Badge } from "@/components/ui/badge";
 import ManageCommunityCategories from "@/components/admin/manage-community-categories";
 import { ContentModerationMenu } from "@/components/admin/dmca/content-moderation-menu";
+import { communityPageHref, invalidateCommunityPages, managementCategoryNames, managementPagesKey, isManagedLegacyGolfCartPage } from "@/lib/community-page-freshness";
 
 // Instead of hardcoded categories, we'll fetch them from the API
 // This is just a fallback in case the API call fails
@@ -126,9 +127,12 @@ export default function ManagePagesPage() {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["/api/pages"],
-    queryFn: async () => {
-      const response = await fetch("/api/pages");
+    queryKey: managementPagesKey(user?.id ?? null, user?.role ?? "guest"),
+    enabled: isAdmin,
+    staleTime: 0,
+    placeholderData: undefined,
+    queryFn: async ({ signal }) => {
+      const response = await fetch(`${import.meta.env.BASE_URL}api/pages?includeHidden=true`, { credentials: "include", signal });
       if (!response.ok) throw new Error("Failed to fetch pages");
       return response.json();
     },
@@ -270,20 +274,11 @@ export default function ManagePagesPage() {
   
   // Function to format page URLs to match navigation format
   const getFormattedPageUrl = (slug: string, categoryPrefix: string): string => {
-    // If the slug already contains the category prefix (like "religion-submissions")
-    // Format it as "/community/categoryPrefix/pageName" (like "/community/religion/submissions")
-    
-    if (slug.includes('-')) {
-      const pageName = slug.split('-')[1];
-      return `/community/${categoryPrefix}/${pageName}`;
-    }
-    
-    // If the slug doesn't follow the expected format, return the default path
-    return `/community/${slug}`;
+    return communityPageHref(slug, categoryPrefix);
   };
   
   // Group pages by category
-  const pagesByCategory = pages ? pages.reduce((acc: Record<string, any[]>, page: any) => {
+  const pagesByCategory = Array.isArray(pages) ? pages.reduce((acc: Record<string, any[]>, page: any) => {
     // Extract category from slug using the same function as form
     let category = getCategoryFromSlug(page.slug);
     
@@ -294,6 +289,7 @@ export default function ManagePagesPage() {
     acc[category].push(page);
     return acc;
   }, {}) : {};
+  const displayedCategories = managementCategoryNames(communityCategories ?? FALLBACK_CATEGORIES, pagesByCategory);
   
   // Sort each category's pages by order (ascending)
   Object.keys(pagesByCategory).forEach(category => {
@@ -339,7 +335,7 @@ export default function ManagePagesPage() {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/pages"] });
+      void invalidateCommunityPages(queryClient);
       toast({
         title: "Success",
         description: "Page created successfully",
@@ -375,7 +371,7 @@ export default function ManagePagesPage() {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/pages"] });
+      void invalidateCommunityPages(queryClient);
       const wasLegal = LEGAL_PAGE_SLUGS.includes(selectedPage?.slug);
       if (wasLegal) {
         queryClient.invalidateQueries({ queryKey: ["legal"] });
@@ -405,7 +401,7 @@ export default function ManagePagesPage() {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/pages"] });
+      void invalidateCommunityPages(queryClient);
       toast({
         title: "Success",
         description: "Page deleted successfully",
@@ -502,7 +498,7 @@ export default function ManagePagesPage() {
     },
     onSuccess: () => {
       // Force a refetch of the data to update the UI
-      queryClient.invalidateQueries({ queryKey: ["/api/pages"] });
+      void invalidateCommunityPages(queryClient);
       
       // Add a slight delay and then refetch to ensure we get the latest data
       setTimeout(() => {
@@ -627,7 +623,7 @@ export default function ManagePagesPage() {
     },
     onSuccess: () => {
       // Force a refetch of the data to update the UI
-      queryClient.invalidateQueries({ queryKey: ["/api/pages"] });
+      void invalidateCommunityPages(queryClient);
       
       // Add a slight delay and then refetch to ensure we get the latest data
       setTimeout(() => {
@@ -938,7 +934,7 @@ export default function ManagePagesPage() {
           </div>
 
           <div className="space-y-8">
-            {(communityCategories || FALLBACK_CATEGORIES).map((category) => (
+            {displayedCategories.map((category) => (
               <Card key={category}>
                 <CardHeader>
                   <CardTitle>{category}</CardTitle>
@@ -959,7 +955,14 @@ export default function ManagePagesPage() {
                   {pagesByCategory[category]?.length > 0 ? (
                     pagesByCategory[category].map((page, index) => (
                       <TableRow key={page.id}>
-                        <TableCell>{page.title}</TableCell>
+                        <TableCell>
+                          {page.title}
+                          {isManagedLegacyGolfCartPage(page) && (
+                            <Badge variant="outline" className="ml-2" title="Retained for administration. The confirmed legacy Golf Cart Club record is not a second public club.">
+                              Legacy club address
+                            </Badge>
+                          )}
+                        </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
                             <code className="bg-gray-100 px-2 py-1 rounded text-sm">

@@ -180,6 +180,14 @@ export interface HealthStatus {
   status: string;
 }
 
+export type GetSocialClubs200Item = {
+  id: number;
+  slug: string;
+  title: string;
+  /** Historical membership values accepted for this same club; stored preferences are not rewritten */
+  aliases?: string[];
+};
+
 export type GetBannerImageVariantParams = {
   width?: GetBannerImageVariantWidth;
   /**

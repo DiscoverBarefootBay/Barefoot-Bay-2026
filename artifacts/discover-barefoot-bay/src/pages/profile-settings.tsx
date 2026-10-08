@@ -54,6 +54,7 @@ import { UserRole } from "@shared/schema";
 import { usePermissions } from "@/hooks/use-permissions";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import { socialClubOptions, clubMembershipSelected, toggleClubMembership } from "@/lib/social-clubs";
 
 const passwordSchema = z.object({
   currentPassword: z.string().min(1, "Current password is required"),
@@ -94,9 +95,7 @@ export default function ProfileSettings() {
   const [selectedClubs, setSelectedClubs] = useState<string[]>(user?.clubMemberships || []);
   
   // Fetch social clubs for club membership selection
-  const { data: socialClubs } = useQuery<{ id: number; slug: string; title: string }[]>({
-    queryKey: ['/api/social-clubs']
-  });
+  const { data: socialClubs } = useQuery(socialClubOptions(user?.id ?? null, effectiveRole));
   
   // Update selected clubs when user data changes
   useEffect(() => {
@@ -667,12 +666,12 @@ export default function ProfileSettings() {
                             >
                               <Checkbox
                                 id={`profile-club-${club.slug}`}
-                                checked={selectedClubs.includes(club.slug)}
+                                checked={clubMembershipSelected(club, selectedClubs)}
                                 onCheckedChange={(checked) => {
                                   if (checked) {
-                                    setSelectedClubs([...selectedClubs, club.slug]);
+                                    setSelectedClubs(toggleClubMembership(club, selectedClubs, true));
                                   } else {
-                                    setSelectedClubs(selectedClubs.filter(s => s !== club.slug));
+                                    setSelectedClubs(toggleClubMembership(club, selectedClubs, false));
                                   }
                                 }}
                               />

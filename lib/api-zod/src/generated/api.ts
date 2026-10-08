@@ -8,6 +8,22 @@
 import * as zod from "zod";
 
 /**
+ * @summary Published club choices; the confirmed legacy Golf Cart Club record is an alias, not a second club
+ */
+export const GetSocialClubsResponseItem = zod.object({
+  id: zod.number(),
+  slug: zod.string(),
+  title: zod.string(),
+  aliases: zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      "Historical membership values accepted for this same club; stored preferences are not rewritten",
+    ),
+});
+export const GetSocialClubsResponse = zod.array(GetSocialClubsResponseItem);
+
+/**
  * @summary Responsive WebP for a currently published banner image; original when width is absent
  */
 export const GetBannerImageVariantParams = zod.object({
