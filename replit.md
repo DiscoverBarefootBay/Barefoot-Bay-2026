@@ -77,6 +77,22 @@ The dev (and prod) database is a **legacy database created outside Drizzle** (pr
 - **Production:** the app uses the runtime-managed `DATABASE_URL`. Agent database access with `environment: "production"` is read-only; it cannot apply migrations. Replit Publish manages schema differences, so inspect its proposed changes rather than assuming no migration occurs. For an approved, narrowly scoped SQL rollout that includes functions/triggers, the owner must back up production and run the reviewed SQL through the production SQL runner, then have Agent verify it before publishing. Never bypass read-only access with alternate secrets, copy development data into production, or use blind/forced Drizzle push.
 - The stale `*_backup_*` / `*_recovery_backup` tables are now ignored by push (out of `tablesFilter`). They are harmless; drop them manually only if you deliberately want the space back.
 
+### Content-free `fresh-main` transfers
+
+The owner wants GitHub transfers to include database structure and service setup
+without residents, content, uploads, settings rows or credentials. Keep the
+tracked `clean-setup/` package with the app; see its README before a transfer.
+It is a development-schema snapshot, not a production backup or initialized site.
+After database changes, run `scripts/clean-setup-catalog.sql` via read-only
+development database access, recapture with `pnpm export:clean <catalog.json>`,
+and run `pnpm export:verify`. Stage new schema source files before capture.
+Never bypass production access restrictions to refresh this package.
+For new service variable names, run `pnpm export:services`.
+`pnpm export:install-hooks` installs a native Git pre-push check for `fresh-main`
+in each checkout; it validates the actual pushed commit without reading database
+records, committing files, or exporting credentials. Out-of-band SQL changes
+still require explicit recapture; Git itself is not a live database export.
+
 ### Express 5 Compatibility
 - Optional route params (`:id?`) must use `{id}` syntax instead
 - Wildcard routes (`/*filename`) return `req.params.filename` as an **array** — always normalize: `Array.isArray(p) ? p.join('/') : p`

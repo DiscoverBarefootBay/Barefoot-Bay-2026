@@ -7,7 +7,12 @@
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
     "typecheck:libs": "tsc --build",
     "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck",
-    "test": "pnpm -r --if-present run test"
+    "test": "pnpm -r --if-present run test",
+    "export:clean": "node scripts/clean-setup.mjs --capture",
+    "export:services": "node scripts/clean-setup.mjs --services",
+    "export:verify": "node scripts/clean-setup.mjs --verify",
+    "export:install-hooks": "node scripts/clean-setup.mjs --install-hooks",
+    "export:test": "node --test scripts/clean-setup.test.mjs"
   },
   "private": true,
   "devDependencies": {
