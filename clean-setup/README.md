@@ -81,6 +81,9 @@ deletions are unaffected. Existing custom hooks are preserved rather than overwr
 Hooks are local Git configuration, not transferred by Git; install them on each
 new checkout. Tools that bypass native Git hooks cannot be forced to run them.
 The tracked package still travels with ordinary commits/pushes.
+The installed hook uses the installer's absolute Node runtime path, so it also
+works when the Git UI cannot find `node` on its own `PATH`. Reinstall the hook
+after replacing the checkout's Node runtime.
 
 This check does **not** connect to the database during a push, export content,
 stage/commit files, push recursively, or claim to detect out-of-band SQL edits.

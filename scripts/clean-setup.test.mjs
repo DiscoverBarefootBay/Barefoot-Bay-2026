@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { mkdtempSync, cpSync, writeFileSync, mkdirSync, readFileSync, rmSync } from "node:fs";
+import { mkdtempSync, cpSync, writeFileSync, mkdirSync, readFileSync, rmSync, symlinkSync } from "node:fs";
 import { execFileSync, spawnSync } from "node:child_process";
 import os from "node:os";
 import path from "node:path";
@@ -104,6 +104,19 @@ test("fresh-main checks the committed package, detects stale/missing snapshots, 
     cli("--install-hooks");
     const hook = path.join(dir, ".git/hooks/pre-push");
     assert.match(readFileSync(hook, "utf8"), /managed-clean-setup-check/);
+    const gitOnly = path.join(dir, "git-only");
+    mkdirSync(gitOnly);
+    symlinkSync(run("sh", ["-c", "command -v git"]).trim(), path.join(gitOnly, "git"));
+    const limitedEnv = { ...process.env, PATH: gitOnly };
+    assert.equal(spawnSync("node", ["--version"], { env: limitedEnv }).error?.code, "ENOENT");
+    const limitedHook = revision => spawnSync(hook, ["local", "unused"], {
+      cwd: dir, env: limitedEnv, encoding: "utf8",
+      input: `refs/heads/local ${revision} refs/heads/fresh-main ${"0".repeat(40)}\n`,
+    });
+    assert.equal(limitedHook(sha).status, 0, "UI-like PATH without Node must still verify a valid snapshot");
+    const limitedRefused = limitedHook(run("git", ["rev-parse", "HEAD"]).trim());
+    assert.notEqual(limitedRefused.status, 0);
+    assert.match(limitedRefused.stderr, /Database-related code changed/);
     run("git", ["init", "--bare", "-q", path.join(dir, "remote.git")]);
     run("git", ["remote", "add", "local", path.join(dir, "remote.git")]);
     run("git", ["push", "local", `${sha}:refs/heads/fresh-main`]);

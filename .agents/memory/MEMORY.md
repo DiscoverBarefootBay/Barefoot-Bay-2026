@@ -35,3 +35,4 @@
 - [Navigation overlay safeguards](navigation-overlay-safeguards.md) — retain consent ownership when fixing layering; DOM presence alone misses menus covered by page content.
 - [Forum unread compatibility](forum-read-semantics.md) — badge ID markers and card timestamps are intentionally distinct; incremental feeds must handle concurrent reordering.
 - [Legacy club addresses](legacy-club-addresses.md) — generic club addresses collide across unrelated clubs and environments; preserve historical content and saved preferences.
+- [Git hook runtimes](git-hook-runtime.md) — UI-launched pushes may lack Node on PATH; install hooks with an absolute runtime and test without shell PATH assumptions.

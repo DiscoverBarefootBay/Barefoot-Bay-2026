@@ -38,12 +38,15 @@ function verify(load, files) {
 function installHook() {
   const hookPath = path.resolve(root, git("rev-parse", "--git-path", "hooks/pre-push").trim());
   const marker = "# managed-clean-setup-check";
+  const node = "'" + process.execPath.replaceAll("'", "'\\''") + "'";
   if (existsSync(hookPath) && !readFileSync(hookPath, "utf8").includes(marker)) {
-    console.log("Existing pre-push hook preserved. Add node scripts/clean-setup.mjs --verify-push to it manually.");
+    console.log(`Existing pre-push hook preserved. Add ${node} scripts/clean-setup.mjs --verify-push to it manually.`);
     return;
   }
   mkdirSync(path.dirname(hookPath), { recursive: true });
-  writeFileSync(hookPath, `#!/bin/sh\n${marker}\nnode "$(git rev-parse --show-toplevel)/scripts/clean-setup.mjs" --verify-push "$@"\n`);
+  // UI-launched Git may not inherit the shell's Node PATH. Hooks are local to
+  // each checkout, so use the runtime actually running this installer.
+  writeFileSync(hookPath, `#!/bin/sh\n${marker}\n${node} "$(git rev-parse --show-toplevel)/scripts/clean-setup.mjs" --verify-push "$@"\n`);
   chmodSync(hookPath, 0o755);
   console.log("Installed fresh-main clean-setup push check; other branches are unchanged.");
 }
