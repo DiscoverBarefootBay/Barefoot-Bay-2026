@@ -50,3 +50,20 @@ test("Community uses existing viewer visibility before projecting summaries", ()
   assert.equal(owned.length, 2);
   assert.equal(projectCommunityCard(owned[1], "community").contentVisibility?.removed, true);
 });
+
+test("Community cards derive readable excerpts without rewriting HTML, media or public metadata", () => {
+  const page = { slug: "social-artists", title: "Artists", content:
+    '<style>.club-master{color:red}</style><img src="/club.jpg"><h1>Artists</h1><p>Create art together.</p>',
+    isHidden: false, createdAt: "2026-01-01", hiddenReason: "private",
+    contentVisibility: { removed: false, status: "published", reason: "private" } };
+  const before = structuredClone(page);
+  const card = projectCommunityCard(page, "social");
+  assert.equal(card.description, "Create art together.");
+  assert.equal(card.image, "/club.jpg");
+  assert.equal(card.href, "/community/social/artists");
+  assert.equal(card.title, "Artists");
+  assert.deepEqual(card.contentVisibility, { removed: false, status: "published" });
+  assert.ok(!("content" in card));
+  assert.ok(!("hiddenReason" in card));
+  assert.deepEqual(page, before);
+});

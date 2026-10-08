@@ -2,6 +2,7 @@ import { sql } from "drizzle-orm";
 import { db } from "./db";
 import { readSocialClubIdentities } from "./social-club-summary";
 import { withoutLegacyClubAlias } from "./social-club-alias";
+import { communityExcerpt } from "./community-excerpt";
 
 export function communityDirectoryQuery(category: string, includeHidden: boolean) {
   const prefix = `${category.replace(/[%_\\]/g, "\\$&")}-%`;
@@ -42,13 +43,13 @@ export async function readCommunityDirectory(category: string, includeHidden: bo
 export function projectCommunityCard(page: any, category: string) {
   const name = page.slug.startsWith(`${category}-`) ? page.slug.slice(category.length + 1) : page.slug;
   const html = page.content ?? "";
-  const description = html.replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&").replace(/\s+/g, " ").trim().substring(0, 220);
+  const title = page.title || name.split("-").map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+  const description = communityExcerpt(html, title);
   const rawImage = html.match(/<img[^>]+src=["']([^"']+)["']/i)?.[1] ?? null;
   const image = rawImage && /^(https?:\/\/|\/(?!\/)|[a-z0-9._-][^:]*(?:$))/i.test(rawImage) ? rawImage : null;
   return {
     slug: page.slug,
-    title: page.title || name.split("-").map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+    title,
     description, image,
     href: page.slug.startsWith(`${category}-`) ? `/community/${category}/${name}` :
       page.slug.includes("-") && !page.slug.endsWith("-") ?

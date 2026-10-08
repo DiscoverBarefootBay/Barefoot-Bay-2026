@@ -51,6 +51,7 @@
     "geoip-lite": "^2.0.1",
     "googleapis": "^171.4.0",
     "helmet": "^8.1.0",
+    "htmlparser2": "12.0.0",
     "memory-cache": "^0.2.0",
     "memorystore": "^1.6.8",
     "mime-types": "^3.0.2",
